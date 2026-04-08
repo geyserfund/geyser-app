@@ -11,7 +11,6 @@ import { getPath } from '@/shared/constants/index.ts'
 
 import { useMobileMode } from '../../../../../utils'
 import { ProfileError } from '../../../components/ProfileError'
-import { useUserProfile } from '../../../hooks/useUserProfile'
 import { ProfileSettingsMenuDesktop } from '../navigation/ProfileSettingsMenu'
 
 export const ProfileSettings = () => {
@@ -20,11 +19,9 @@ export const ProfileSettings = () => {
     return params.userId
   }, [params])
 
-  const { error } = useUserProfile({ userId })
-
   const isMobile = useMobileMode()
 
-  if (error || !userId) {
+  if (!userId) {
     return <ProfileError />
   }
 
@@ -58,5 +55,3 @@ export const ProfileSettings = () => {
     </VStack>
   )
 }
-
-export default ProfileSettings

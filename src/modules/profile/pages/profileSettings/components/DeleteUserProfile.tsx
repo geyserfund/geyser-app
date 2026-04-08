@@ -61,21 +61,37 @@ export const DeleteUserProfile = () => {
   return (
     <>
       <VStack w="full" spacing="10px" alignItems="start">
-        <HStack w="full" justifyContent={'space-between'}>
-          <H3 size="lg">{t('Delete profile')}</H3>
+        <H3 size="lg">{t('Danger Zone')}</H3>
 
-          <Tooltip label={isUserAProjectCreator ? t('As a project creator, you cannot delete your profile') : ''}>
-            <Button
-              variant="outline"
-              colorScheme="error"
-              onClick={deleteProfile.onOpen}
-              isDisabled={isUserAProjectCreator}
-            >
-              {t('Delete')}
-            </Button>
-          </Tooltip>
-        </HStack>
-        <Body size="sm">{t('Delete your profile permanently from Geyser.')}</Body>
+        <VStack w="full" spacing="6px" alignItems="start">
+          <Body medium color="secondary.red">
+            {t('Delete profile')}
+          </Body>
+
+          <HStack
+            w="full"
+            justifyContent="space-between"
+            alignItems={{ base: 'flex-start', md: 'center' }}
+            spacing={4}
+            flexDirection={{ base: 'column', md: 'row' }}
+          >
+            <Body size="sm" color="secondary.red">
+              {t('Delete your profile permanently from Geyser.')}
+            </Body>
+
+            <Tooltip label={isUserAProjectCreator ? t('As a project creator, you cannot delete your profile') : ''}>
+              <Button
+                variant="outline"
+                colorScheme="error"
+                onClick={deleteProfile.onOpen}
+                isDisabled={isUserAProjectCreator}
+                flexShrink={0}
+              >
+                {t('Delete')}
+              </Button>
+            </Tooltip>
+          </HStack>
+        </VStack>
       </VStack>
 
       <DeleteTextConfirm isOpen={deleteProfile.isOpen} onClose={deleteProfile.onClose} {...deleteTextProps} />

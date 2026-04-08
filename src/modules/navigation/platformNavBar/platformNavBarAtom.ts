@@ -7,6 +7,7 @@ import {
   guardiansRoutes,
   heroProfileRoutes,
   manifestoRoutes,
+  platformNavBarShadowRoutes,
   profileRoutes,
   projectDashboardRoutes,
   projectFundingRoutes,
@@ -87,6 +88,9 @@ export const isDiscoveryRoutesAtom = atom(routeMatchForAtom(discoveryRoutes))
 
 /** True if current route is the landing page */
 export const isLandingPageRouteAtom = atom(routeMatchForAtom([getPath('discoveryLanding')]))
+
+/** True if current route should display the platform nav shadow. */
+export const isPlatformNavShadowRouteAtom = atom(routeMatchForAtom(platformNavBarShadowRoutes))
 
 const platformNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)

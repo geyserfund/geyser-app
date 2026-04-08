@@ -31,6 +31,7 @@ import {
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
+import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
 import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
 export const ProjectBody = () => {
@@ -72,6 +73,7 @@ export const ProjectBody = () => {
 
         <AonNotification />
         <TiaContributionRefundNotification />
+        <PausedRecurringContributionNotice />
 
         <ControlPanel />
 

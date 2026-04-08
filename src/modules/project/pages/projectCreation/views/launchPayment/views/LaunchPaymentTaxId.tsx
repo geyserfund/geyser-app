@@ -19,9 +19,10 @@ export const LaunchPaymentTaxId = () => {
   const { user } = useAuthContext()
   const { project } = useProjectAtom()
   const navigate = useNavigate()
+  const isAon = isAllOrNothing(project)
 
   const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
-  const shouldShowAccountPasswordStep = isAllOrNothing(project) || shouldConfigureProjectWallet
+  const shouldShowAccountPasswordStep = isAon || shouldConfigureProjectWallet
   const shouldShowFiatContributionsStep = shouldShowCreationFiatStep(project)
   let nextPath = getPath('launchFinalize', project.id)
   let lastCreationStepOverride: ProjectCreationStep | undefined = ProjectCreationStep.Launch

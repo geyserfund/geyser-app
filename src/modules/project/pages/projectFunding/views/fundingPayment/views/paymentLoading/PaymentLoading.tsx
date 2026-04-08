@@ -2,7 +2,7 @@ import { Button, HStack, Tooltip, useColorModeValue, VStack } from '@chakra-ui/r
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -23,6 +23,7 @@ import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
 import { PaymentLoadingContribution } from './PaymentLoadingContribution.tsx'
 
 export const PaymentLoading = () => {
+  const location = useLocation()
   const navigate = useNavigate()
 
   const { user, loading: authLoading } = useAuthContext()
@@ -34,6 +35,8 @@ export const PaymentLoading = () => {
   const [currentContributionId, setCurrentContributionId] = useState('')
   const hasStripePaymentMethod =
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(project?.paymentMethods?.fiat?.stripe)
+  const shouldUseProtectedPaymentLoading =
+    isAllOrNothing(project) || (isPrismEnabled && intendedPaymentMethod !== PaymentMethods.fiatSwap)
 
   const handleNext = (contributionId?: string, forceCardRoute?: boolean) => {
     const paymentPath =
@@ -45,10 +48,13 @@ export const PaymentLoading = () => {
           : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingPaymentLightning', project.name)
 
+    const searchParams = new URLSearchParams(location.search)
+    searchParams.set('transactionId', contributionId || currentContributionId)
+
     navigate(
       {
         pathname: paymentPath,
-        search: `?transactionId=${contributionId || currentContributionId}`,
+        search: `?${searchParams.toString()}`,
       },
       { replace: true },
     )
@@ -67,7 +73,7 @@ export const PaymentLoading = () => {
     return null
   }
 
-  if (isAllOrNothing(project) || isPrismEnabled) {
+  if (shouldUseProtectedPaymentLoading) {
     if (user?.id && !passwordConfirmed) {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }

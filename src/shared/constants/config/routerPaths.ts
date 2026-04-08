@@ -128,7 +128,9 @@ export enum PathName {
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
   dashboardPromote = 'promotions',
+  dashboardMatching = 'matching',
   dashboardRewards = 'rewards',
+  dashboardMemberships = 'memberships',
   dashboardFundingGoal = 'goal',
 
   grantApply = 'apply',
@@ -328,8 +330,12 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardPromote: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardPromote}`,
+  dashboardMatching: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardMatching}`,
   dashboardRewards: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+  dashboardMemberships: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardMemberships}`,
   dashboardFundingGoal: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardFundingGoal}`,
 

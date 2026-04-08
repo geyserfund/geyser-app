@@ -55,6 +55,7 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardSettings', PathName.projectName),
   getPath('dashboardNotifications', PathName.projectName),
   getPath('dashboardPromote', PathName.projectName),
+  getPath('dashboardMatching', PathName.projectName),
   getPath('dashboardRewards', PathName.projectName),
   getPath('dashboardFundingGoal', PathName.projectName),
 ]
@@ -219,6 +220,34 @@ export const discoveryRoutes = [
   getPath('legalGiveawayAcelerandoVipTerms'),
   getPath('legalTerms'),
   getPath('discoveryNews'),
+]
+
+export const platformNavBarShadowRoutes = [
+  getPath('discoveryLanding'),
+  getPath('discoveryProjects'),
+  getPath('discoveryProjectsInYourRegion'),
+  getPath('discoveryProjectsCategory', PathName.categoryName),
+  getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
+  getPath('discoveryProjectCategory', PathName.categoryName),
+  getPath('discoveryProjectSubCategory', PathName.subCategoryName),
+  getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
+  getPath('discoveryCampaigns'),
+  getPath('discoveryAllOrNothing'),
+  getPath('discoveryCampaignsAlmostFunded'),
+  getPath('discoveryCampaignsAlmostOver'),
+  getPath('discoveryCampaignsLatest'),
+  getPath('discoveryCampaignsInYourRegion'),
+  getPath('discoveryCampaignsCategory', PathName.categoryName),
+  getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
+  getPath('discoveryFundraisers'),
+  getPath('discoveryFundraisersLatest'),
+  getPath('discoveryFundraisersInYourRegion'),
+  getPath('discoveryFundraisersCategory', PathName.categoryName),
+  getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
+  getPath('discoveryImpactFunds'),
+  getPath('discoveryNews'),
+  getPath('ambassadorProgram'),
 ]
 
 export const profileSettingsRoutes = [

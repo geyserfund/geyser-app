@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants'
@@ -30,7 +30,13 @@ export const useListenFundingContributionSuccess = () => {
   const { project } = useFundingFormAtom()
 
   const { refetch } = useFundingContributionPolling()
-  useFundingContributionSubscription({ onComplete: () => refetch })
+  const handleComplete = useCallback(() => {
+    void refetch()
+  }, [refetch])
+
+  useFundingContributionSubscription({
+    onComplete: handleComplete,
+  })
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
 

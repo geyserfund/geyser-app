@@ -12,10 +12,14 @@ import { LandingProjectCard } from '../../../../components/LandingProjectCard.ts
 import { LandingPostCard } from './LandingPostCard.tsx'
 import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout.tsx'
 
+export type ProjectDisplayItem = ProjectForLandingPageFragment & {
+  contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
+  hideContributionContent?: boolean
+  statusPillLabel?: string
+}
+
 interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
-  projects: (ProjectForLandingPageFragment & {
-    contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
-  })[]
+  projects: ProjectDisplayItem[]
   onSubtitleClick?: () => void
   subtitleId?: string
   rightContent?: React.ReactNode
@@ -57,7 +61,12 @@ export const ProjectDisplayBody = ({
         {projects.map((project) => {
           return (
             <GridItem key={project.id}>
-              <LandingProjectCard key={project.id} project={project} />
+              <LandingProjectCard
+                key={project.id}
+                project={project}
+                hideContributionContent={project.hideContributionContent}
+                statusPillLabel={project.statusPillLabel}
+              />
             </GridItem>
           )
         })}

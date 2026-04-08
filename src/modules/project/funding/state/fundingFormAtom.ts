@@ -1,7 +1,15 @@
+import { t } from 'i18next'
 import { atom } from 'jotai'
 
 import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards.ts'
 import { guardianRewardsMap, GuardianRewardType } from '@/modules/guardians/utils/constants.ts'
+import {
+  ProjectSubscriptionPlan,
+  RecurringFundingMode,
+  recurringFundingModes,
+  RecurringInterval,
+  recurringIntervals,
+} from '@/modules/project/recurring/graphql.ts'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
   ContributionFeesFragment,
@@ -12,15 +20,15 @@ import {
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectShippingConfigType,
-  ProjectSubscriptionPlansFragment,
   RewardCurrency,
   ShippingDestination,
-  SubscriptionCurrencyType,
-  UserSubscriptionInterval,
 } from '@/types'
 import { commaFormatted, convertAmount, isProjectAnException, toInt, validateEmail } from '@/utils'
 
 import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
   paymentMethodAtom,
   PaymentMethods,
 } from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
@@ -30,6 +38,7 @@ import { subscriptionsAtom } from '../../state/subscriptionAtom'
 import { walletAtom } from '../../state/walletAtom'
 import { fundingInputAfterRequestAtom } from './fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsAtom } from './fundingPaymentAtom.ts'
+import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
 import { shippingAddressAtom, shippingCountryAtom } from './shippingAddressAtom.ts'
 
 export type FundingProject = Pick<
@@ -44,6 +53,7 @@ export type FundingProject = Pick<
   | 'subCategory'
   | 'fundingStrategy'
   | 'rskEoa'
+  | 'activeMatching'
 >
 
 export enum FundingUserInfoError {
@@ -59,10 +69,12 @@ export const DEFAULT_GEYSER_TIP_PERCENT = 5
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment
   rewards: ProjectRewardFragment[]
-  subscriptions?: ProjectSubscriptionPlansFragment[]
+  subscriptions?: ProjectSubscriptionPlan[]
 }
 
 export type FundFormType = {
+  fundingMode: RecurringFundingMode
+  recurringInterval: RecurringInterval
   donationAmount: number
   donationAmountUsdCent: number
   shippingCost: number
@@ -77,17 +89,19 @@ export type FundFormType = {
   followProject: boolean
   subscribeToGeyserEmails: boolean
   subscription: {
-    cost: number
     subscriptionId?: number
-    currency?: SubscriptionCurrencyType
-    interval: UserSubscriptionInterval
+    interval: RecurringInterval
     name?: string
+    amountUsdCent: number
+    amountBtcSat: number
   }
   geyserTipPercent: number
   guardianBadges: GuardianType[]
 }
 
 const initialState: FundFormType = {
+  fundingMode: recurringFundingModes.oneTime,
+  recurringInterval: recurringIntervals.monthly,
   donationAmount: 0,
   donationAmountUsdCent: 0,
   shippingCost: 0,
@@ -99,11 +113,11 @@ const initialState: FundFormType = {
   subscribeToGeyserEmails: false,
   rewardsByIDAndCount: undefined,
   subscription: {
-    cost: 0,
     subscriptionId: undefined,
-    currency: SubscriptionCurrencyType.Usdcent,
-    interval: UserSubscriptionInterval.Monthly,
+    interval: recurringIntervals.monthly,
     name: '',
+    amountUsdCent: 0,
+    amountBtcSat: 0,
   },
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
@@ -127,13 +141,17 @@ export const fundingFormWarningAtom = atom<{ [key in keyof FundFormType]: string
 
 /** Derived atom for calculating rewards costs in both units */
 export const rewardsCostAtoms = atom((get) => {
-  const { rewardsByIDAndCount } = get(fundingFormStateAtom)
+  const { rewardsByIDAndCount, fundingMode } = get(fundingFormStateAtom)
   const { rewards, rewardCurrency } = get(fundingProjectAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
 
   let totalCostInSatoshi = 0
   let totalCostInUsdCent = 0
   let baseCostTotal = 0 // Accumulates cost in the project's reward currency
+
+  if (fundingMode !== recurringFundingModes.oneTime) {
+    return { sats: 0, usdCents: 0, base: 0 }
+  }
 
   if (rewards && rewardsByIDAndCount) {
     Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
@@ -161,13 +179,17 @@ export const rewardsCostAtoms = atom((get) => {
 })
 
 export const shippingCostAtom = atom((get) => {
-  const { rewardsByIDAndCount } = get(fundingFormStateAtom)
+  const { rewardsByIDAndCount, fundingMode } = get(fundingFormStateAtom)
   const { rewards } = get(fundingProjectAtom)
   const shippingAddress = get(shippingAddressAtom)
   const shippingCountry = get(shippingCountryAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
 
   const response = { sats: 0, usdCents: 0 }
+
+  if (fundingMode !== recurringFundingModes.oneTime) {
+    return response
+  }
 
   if (rewards && rewardsByIDAndCount) {
     Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
@@ -214,25 +236,22 @@ export const shippingCostAtom = atom((get) => {
 export const subscriptionCostAtoms = atom((get): { sats: number; usdCents: number; base: number } => {
   const { subscription } = get(fundingFormStateAtom)
   const { subscriptions } = get(fundingProjectAtom)
-  const bitcoinQuote = get(bitcoinQuoteAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
+  const paymentMethod = get(paymentMethodAtom)
 
-  const selectedSubscription = subscriptions?.find((sub) => sub.id === subscription.subscriptionId)
+  const selectedSubscription = subscriptions?.find((sub) => toInt(sub.id) === subscription.subscriptionId)
 
   if (!selectedSubscription) {
     return { sats: 0, usdCents: 0, base: 0 }
   }
 
-  const base = selectedSubscription.cost
-  let sats = 0
-  let usdCents = 0
-
-  // Compare against the value defined in the SubscriptionCurrencyType enum ('USDCENT')
-  // Note: The enum definition provided only includes Usdcent.
-  if (selectedSubscription.currency === 'USDCENT') {
-    // Using the correct uppercase string
-    usdCents = base // Base cost is already in USD cents
-    sats = convertAmount.usdCentsToSats({ usdCents: base, bitcoinQuote })
-  }
+  const shouldUseUsd =
+    paymentMethod === PaymentMethods.fiatSwap ||
+    (!paymentMethod && intendedPaymentMethod === PaymentMethods.fiatSwap) ||
+    (!paymentMethod && !intendedPaymentMethod)
+  const usdCents = selectedSubscription.amountUsdCent
+  const sats = selectedSubscription.amountBtcSat
+  const base = shouldUseUsd ? usdCents : sats
 
   return {
     sats,
@@ -243,10 +262,15 @@ export const subscriptionCostAtoms = atom((get): { sats: number; usdCents: numbe
 
 /** Derived atom for calculating tip amounts in both units */
 export const tipAtoms = atom((get) => {
-  const { donationAmount, geyserTipPercent } = get(fundingFormStateAtom)
+  const renewalContext = get(recurringContributionRenewalAtom)
+  const { donationAmount, geyserTipPercent, fundingMode } = get(fundingFormStateAtom)
   const rewardsCosts = get(rewardsCostAtoms) // Use derived rewards cost
   const shippingCosts = get(shippingCostAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
+
+  if (renewalContext || fundingMode === recurringFundingModes.membership) {
+    return { sats: 0, usdCents: 0 }
+  }
 
   // Calculate tip based on satoshi value of donation + rewards
   const tipBaseSats = donationAmount + rewardsCosts.sats + shippingCosts.sats
@@ -293,9 +317,13 @@ export const networkFeeAtom = atom((get) => {
 })
 
 export const guardianBadgesCostAtoms = atom((get) => {
-  const { guardianBadges } = get(fundingFormStateAtom)
+  const { guardianBadges, fundingMode } = get(fundingFormStateAtom)
   const guardianRewards = get(guardianRewardsAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
+
+  if (fundingMode !== recurringFundingModes.oneTime) {
+    return { sats: 0, usdCents: 0 }
+  }
 
   const guardianBadgesCost = guardianRewards
     .filter((reward) =>
@@ -396,6 +424,39 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
   const bitcoinQuote = get(bitcoinQuoteAtom)
   let newState = { ...currentState, [name]: value }
 
+  if (name === 'fundingMode') {
+    const nextMode = value as RecurringFundingMode
+
+    newState = {
+      ...newState,
+      rewardsByIDAndCount: {},
+      needsShipping: false,
+      guardianBadges: [],
+      shippingCost: 0,
+    }
+
+    if (nextMode === recurringFundingModes.membership) {
+      newState = {
+        ...newState,
+        donationAmount: 0,
+        donationAmountUsdCent: 0,
+      }
+    }
+
+    if (nextMode !== recurringFundingModes.membership) {
+      newState = {
+        ...newState,
+        subscription: {
+          subscriptionId: undefined,
+          interval: recurringIntervals.monthly,
+          name: '',
+          amountUsdCent: 0,
+          amountBtcSat: 0,
+        },
+      }
+    }
+  }
+
   // Synchronize donation amounts
   if (name === 'donationAmount') {
     const sats = Number(value) || 0
@@ -415,6 +476,10 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
 /* Boolean to check if the funding form has rewards */
 export const fundingFormHasRewardsAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
+  if (fundingFormState.fundingMode !== recurringFundingModes.oneTime) {
+    return false
+  }
+
   return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
 })
 
@@ -455,7 +520,10 @@ export const cannotCompleteShippingForThisOrderAtom = atom((get) => {
 /** Boolean to check if the funding form has a subscription */
 export const fundingFormHasSubscriptionAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
-  return fundingFormState.subscription && fundingFormState.subscription.cost > 0
+  return (
+    fundingFormState.fundingMode === recurringFundingModes.membership &&
+    Boolean(fundingFormState.subscription?.subscriptionId)
+  )
 })
 
 /* Boolean to check if the funding form has rewards that require a private comment */
@@ -540,13 +608,18 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
 
     return {
       ...current,
-      // Update only the subscription details in the main state
+      fundingMode: recurringFundingModes.membership,
+      donationAmount: 0,
+      donationAmountUsdCent: 0,
+      rewardsByIDAndCount: {},
+      needsShipping: false,
+      guardianBadges: [],
       subscription: {
-        cost: selectedSubscription?.cost ?? 0, // Put base cost back
-        subscriptionId: selectedSubscription?.id,
-        interval: selectedSubscription?.interval || UserSubscriptionInterval.Monthly,
+        subscriptionId: selectedSubscription ? toInt(selectedSubscription.id) : undefined,
+        interval: (selectedSubscription?.interval as RecurringInterval | undefined) || recurringIntervals.monthly,
         name: selectedSubscription?.name,
-        currency: selectedSubscription?.currency,
+        amountUsdCent: selectedSubscription?.amountUsdCent ?? 0,
+        amountBtcSat: selectedSubscription?.amountBtcSat ?? 0,
       },
     }
   })
@@ -623,43 +696,65 @@ const MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT = 1000 // 10 USD in cents
 export const isFundingInputAmountValidAtom = atom((get) => {
   const fundingProjectState = get(fundingProjectAtom)
   const totalAmount: number = get(totalAmountSatsAtom)
-  const { donationAmountUsdCent } = get(fundingFormStateAtom)
+  const { donationAmountUsdCent, fundingMode, subscription } = get(fundingFormStateAtom)
   const rewardsCosts = get(rewardsCostAtoms)
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
   const isException = isProjectAnException(fundingProjectState.name)
 
+  if (fundingMode === recurringFundingModes.membership && !subscription.subscriptionId) {
+    return {
+      title: t('Select a membership plan.'),
+      description: t('Choose a plan before continuing.'),
+      valid: false,
+    }
+  }
+
   if (
+    fundingMode !== recurringFundingModes.oneTime &&
+    fundingProjectState.fundingStrategy !== ProjectFundingStrategy.TakeItAll
+  ) {
+    return {
+      title: t('Recurring contributions are only available on Take-it-all projects.'),
+      description: t('Choose a one-time contribution instead.'),
+      valid: false,
+    }
+  }
+
+  if (
+    fundingMode === recurringFundingModes.oneTime &&
     fundingProjectState.fundingStrategy === ProjectFundingStrategy.AllOrNothing &&
     donationAmountUsdCent + rewardsCosts.usdCents < MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT
   ) {
     return {
-      title: `Amount less than $10.`,
-      description: 'The minimum amount for an All-or-Nothing project is $10.',
+      title: t('Amount less than $10.'),
+      description: t('The minimum amount for an All-or-Nothing project is $10.'),
       valid: false,
     }
   }
 
   if (totalAmount < 1000) {
     return {
-      title: `The payment minimum is 1000 satoshi.`,
-      description: 'Please update the amount.',
+      title: t('The payment minimum is 1000 satoshi.'),
+      description: t('Please update the amount.'),
       valid: false,
     }
   }
 
   if (!isException && walletLimits?.max && totalAmount >= walletLimits.max) {
     return {
-      title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
-      description: 'Please update the amount, or contact us for donating a higher amount.',
+      title: t('Amount above the project wallet limit: {{amount}} sats.', {
+        amount: commaFormatted(walletLimits.max),
+      }),
+      description: t('Please update the amount, or contact us for donating a higher amount.'),
       valid: false,
     }
   }
 
   if (walletLimits?.min && totalAmount < walletLimits.min) {
     return {
-      title: `The payment minimum is ${walletLimits.min} satoshi.`,
-      description: 'Please update the amount.',
+      title: t('The payment minimum is {{amount}} satoshi.', { amount: walletLimits.min }),
+      description: t('Please update the amount.'),
       valid: false,
     }
   }
@@ -670,6 +765,7 @@ export const isFundingInputAmountValidAtom = atom((get) => {
 /** Check if the funding user info is valid */
 export const isFundingUserInfoValidAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
+  const renewalContext = get(recurringContributionRenewalAtom)
 
   const hasSelectedRewards = get(fundingFormHasRewardsAtom)
 
@@ -679,17 +775,21 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if (hasSelectedRewards && !formState.email) {
     return {
-      title: 'Email is required when purchasing a product.',
-      description: 'Please enter an email.',
+      title: t('Email is required when purchasing a product.'),
+      description: t('Please enter an email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
   }
 
-  if (hasSubscription && !formState.email) {
+  if (
+    !renewalContext &&
+    (hasSubscription || formState.fundingMode === recurringFundingModes.recurringDonation) &&
+    !formState.email
+  ) {
     return {
-      title: 'Email is required when subscribing to a project.',
-      description: 'Please enter an email.',
+      title: t('Email is required for recurring payments.'),
+      description: t('Please enter an email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
@@ -697,17 +797,24 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if ((formState.followProject || formState.subscribeToGeyserEmails) && !formState.email) {
     return {
-      title: 'Email is required when subscribing to updates.',
-      description: 'Please enter an email.',
+      title: t('Email is required when subscribing to updates.'),
+      description: t('Please enter an email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
   }
 
-  if (hasSelectedRewards && !validateEmail(formState.email)) {
+  const requiresEmailValidation =
+    hasSelectedRewards ||
+    hasSubscription ||
+    formState.fundingMode === recurringFundingModes.recurringDonation ||
+    formState.followProject ||
+    formState.subscribeToGeyserEmails
+
+  if (!renewalContext && requiresEmailValidation && !validateEmail(formState.email)) {
     return {
-      title: 'A valid email is required.',
-      description: 'Please enter a valid email.',
+      title: t('A valid email is required.'),
+      description: t('Please enter a valid email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
@@ -715,14 +822,25 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if (hasRewardsThatRequirePrivateComment && !formState.privateComment) {
     return {
-      title: 'Private message is required.',
-      description: 'Please enter a private message.',
+      title: t('Private message is required.'),
+      description: t('Please enter a private message.'),
       error: FundingUserInfoError.PRIVATE_COMMENT,
       valid: false,
     }
   }
 
   return { title: '', description: '', error: '', valid: true }
+})
+
+export const fundingModeAtom = atom((get) => get(fundingFormStateAtom).fundingMode)
+export const isOneTimeFundingModeAtom = atom((get) => get(fundingModeAtom) === recurringFundingModes.oneTime)
+export const isRecurringDonationModeAtom = atom(
+  (get) => get(fundingModeAtom) === recurringFundingModes.recurringDonation,
+)
+export const isMembershipFundingModeAtom = atom((get) => get(fundingModeAtom) === recurringFundingModes.membership)
+export const canUseRecurringFundingAtom = atom((get) => {
+  const project = get(fundingProjectAtom)
+  return project.fundingStrategy === ProjectFundingStrategy.TakeItAll
 })
 
 /** Atom to store the launch project id */
@@ -732,6 +850,9 @@ export const launchContributionProjectIdAtom = atom<string>('')
 export const resetFundingFormAtom = atom(null, (_, set) => {
   set(fundingFormStateAtom, initialState)
   set(fundingInputAfterRequestAtom, null)
+  set(recurringContributionRenewalAtom, null)
+  set(intendedPaymentMethodAtom, undefined)
+  set(fiatPaymentMethodAtom, fiatCheckoutMethods.creditCard)
   set(fundingFormErrorAtom, {} as { [key in keyof FundFormType]: string })
   set(fundingFormWarningAtom, {} as { [key in keyof FundFormType]: string })
   set(launchContributionProjectIdAtom, '')

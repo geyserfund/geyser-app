@@ -2,22 +2,24 @@ import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { getPath } from '@/shared/constants'
 import { toInt } from '@/utils'
 
 export const useSubscriptionBuy = () => {
-  const { updateSubscription, project } = useFundingFormAtom()
+  const { setState, updateSubscription, project } = useFundingFormAtom()
 
   const navigate = useNavigate()
 
   const addSubscriptionAction = useCallback(
     (id: string, onCompleted?: Function) => {
+      setState('fundingMode', recurringFundingModes.membership)
       updateSubscription({ id: toInt(id) })
       if (onCompleted) {
         onCompleted()
       }
     },
-    [updateSubscription],
+    [setState, updateSubscription],
   )
 
   /** Adds subscription to the funding basket */
@@ -35,7 +37,7 @@ export const useSubscriptionBuy = () => {
         if (project?.name) {
           navigate({
             pathname: getPath('projectFunding', project?.name),
-            search: `?isSub=true`,
+            search: `?mode=membership&planId=${id}`,
           })
         }
       })

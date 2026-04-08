@@ -16,14 +16,21 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDown, PiCaretLeft, PiCaretRight, PiCheck } from 'react-icons/pi'
-import { useLocation, useNavigate, useSearchParams } from 'react-router'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useFilterContext } from '@/context/filter.tsx'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '@/modules/discovery/graphql/queries/projectsQuery.ts'
+import {
+  ProjectCategoryLabel,
+  ProjectCategoryList,
+  ProjectSubCategoryMap,
+  ProjectSubCategoryLabel,
+  ProjectSubCategoryList,
+} from '@/shared/constants/platform/projectCategory.ts'
 import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import {
@@ -54,15 +61,66 @@ import { ProjectsRegionCountryFilter } from './ProjectsRegionCountryFilter.tsx'
 
 type SortOption = 'most_funded_this_month' | 'most_funded' | 'most_recent'
 type ProjectTypeFilter = 'all' | 'fundraisers' | 'campaigns'
+type CategoryFilterOptionValue = 'all' | `category:${ProjectCategory}` | `subCategory:${ProjectSubCategory}`
 type FilterDropdownOption<T extends string> = {
+  dividerBefore?: boolean
   label: string
   value: T
+}
+type CategoryTab = {
+  category?: ProjectCategory
+  label: string
+  path: string
+  subCategory?: ProjectSubCategory
+}
+type EmptyStateSuggestion = {
+  ctaLabel: string
+  to: {
+    pathname: string
+    search: string
+  }
 }
 type TranslateFn = (key: string) => string
 
 const PAGE_SIZE = 20
 const SORT_SEARCH_PARAM = 'sort'
 const MOST_FUNDED_THIS_MONTH_PAGE_SIZE = 30
+
+const getBaseProjectsPath = (projectTypeFilter: ProjectTypeFilter) => {
+  if (projectTypeFilter === 'campaigns') {
+    return getPath('discoveryCampaigns')
+  }
+
+  if (projectTypeFilter === 'fundraisers') {
+    return getPath('discoveryFundraisers')
+  }
+
+  return getPath('discoveryProjects')
+}
+
+const getProjectsCategoryPath = (projectTypeFilter: ProjectTypeFilter, category: ProjectCategory) => {
+  if (projectTypeFilter === 'campaigns') {
+    return getPath('discoveryCampaignsCategory', category)
+  }
+
+  if (projectTypeFilter === 'fundraisers') {
+    return getPath('discoveryFundraisersCategory', category)
+  }
+
+  return getPath('discoveryProjectsCategory', category)
+}
+
+const getProjectsSubCategoryPath = (projectTypeFilter: ProjectTypeFilter, subCategory: ProjectSubCategory) => {
+  if (projectTypeFilter === 'campaigns') {
+    return getPath('discoveryCampaignsSubCategory', subCategory)
+  }
+
+  if (projectTypeFilter === 'fundraisers') {
+    return getPath('discoveryFundraisersSubCategory', subCategory)
+  }
+
+  return getPath('discoveryProjectsSubCategory', subCategory)
+}
 
 const getProjectTypeFilter = (pathname: string): ProjectTypeFilter => {
   const rootSegment = pathname.split('/').filter(Boolean)[0]
@@ -132,127 +190,118 @@ const getSortOption = (sortParam: string | null, supportsMostFundedThisMonth: bo
   return supportsMostFundedThisMonth ? 'most_funded_this_month' : 'most_funded'
 }
 
+const ProjectCategoryEmoji: Record<ProjectCategory, string> = {
+  [ProjectCategory.Education]: '🎓',
+  [ProjectCategory.Community]: '🤝',
+  [ProjectCategory.Culture]: '🎨',
+  [ProjectCategory.Advocacy]: '⚖️',
+  [ProjectCategory.Tool]: '🛠',
+  [ProjectCategory.Cause]: '🤲',
+  [ProjectCategory.Other]: '✨',
+}
+
+const ProjectSubCategoryEmoji: Record<ProjectSubCategory, string> = {
+  [ProjectSubCategory.Course]: '📚',
+  [ProjectSubCategory.ContentCreator]: '🎥',
+  [ProjectSubCategory.Journalism]: '📰',
+  [ProjectSubCategory.Podcast]: '🎙️',
+  [ProjectSubCategory.Book]: '📖',
+  [ProjectSubCategory.Event]: '🎉',
+  [ProjectSubCategory.Meetup]: '🍻',
+  [ProjectSubCategory.HackerSpace]: '💻',
+  [ProjectSubCategory.CircularEconomy]: '🌊',
+  [ProjectSubCategory.Film]: '🎬',
+  [ProjectSubCategory.Collectible]: '🧩',
+  [ProjectSubCategory.Game]: '🎮',
+  [ProjectSubCategory.Art]: '🎨',
+  [ProjectSubCategory.Music]: '🎵',
+  [ProjectSubCategory.Lobby]: '📣',
+  [ProjectSubCategory.LegalFund]: '⚖️',
+  [ProjectSubCategory.Promotion]: '🚀',
+  [ProjectSubCategory.OsSoftware]: '🛠',
+  [ProjectSubCategory.Hardware]: '🔧',
+  [ProjectSubCategory.App]: '📱',
+  [ProjectSubCategory.Humanitarian]: '🌍',
+  [ProjectSubCategory.Fundraiser]: '💸',
+  [ProjectSubCategory.Travel]: '✈️',
+  [ProjectSubCategory.Medical]: '🩺',
+  [ProjectSubCategory.Other]: '✨',
+}
+
 const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
-  if (projectTypeFilter === 'campaigns') {
-    return [
-      {
-        label: `🔥 ${t('Trending')}`,
-        path: getPath('discoveryCampaigns'),
-      },
-      {
-        label: `📍 ${t('In your region')}`,
-        path: getPath('discoveryCampaignsInYourRegion'),
-      },
-      {
-        label: `🌊 ${t('Circular Economies')}`,
-        path: getPath('discoveryCampaignsSubCategory', ProjectSubCategory.CircularEconomy),
-      },
-      {
-        label: `🎓 ${t('Education')}`,
-        path: getPath('discoveryCampaignsCategory', ProjectCategory.Education),
-      },
-      {
-        label: `🛠 ${t('Open Source')}`,
-        path: getPath('discoveryCampaignsSubCategory', ProjectSubCategory.OsSoftware),
-      },
-      {
-        label: `🌍 ${t('Humanitarian')}`,
-        path: getPath('discoveryCampaignsSubCategory', ProjectSubCategory.Humanitarian),
-      },
-      {
-        label: `🤲 ${t('Causes')}`,
-        path: getPath('discoveryCampaignsCategory', ProjectCategory.Cause),
-      },
-      {
-        label: `⚖️ ${t('Legal & Advocacy')}`,
-        path: getPath('discoveryCampaignsCategory', ProjectCategory.Advocacy),
-      },
-      {
-        label: `🤝 ${t('Community')}`,
-        path: getPath('discoveryCampaignsCategory', ProjectCategory.Community),
-      },
-    ]
-  }
-
-  if (projectTypeFilter === 'fundraisers') {
-    return [
-      {
-        label: `🔥 ${t('Trending')}`,
-        path: getPath('discoveryFundraisers'),
-      },
-      {
-        label: `📍 ${t('In your region')}`,
-        path: getPath('discoveryFundraisersInYourRegion'),
-      },
-      {
-        label: `🌊 ${t('Circular Economies')}`,
-        path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.CircularEconomy),
-      },
-      {
-        label: `🎓 ${t('Education')}`,
-        path: getPath('discoveryFundraisersCategory', ProjectCategory.Education),
-      },
-      {
-        label: `🛠 ${t('Open Source')}`,
-        path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.OsSoftware),
-      },
-      {
-        label: `🌍 ${t('Humanitarian')}`,
-        path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
-      },
-      {
-        label: `🤲 ${t('Causes')}`,
-        path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
-      },
-      {
-        label: `⚖️ ${t('Legal & Advocacy')}`,
-        path: getPath('discoveryFundraisersCategory', ProjectCategory.Advocacy),
-      },
-      {
-        label: `🤝 ${t('Community')}`,
-        path: getPath('discoveryFundraisersCategory', ProjectCategory.Community),
-      },
-    ]
-  }
-
-  return [
+  const featuredTabs: CategoryTab[] = [
     {
       label: `🔥 ${t('Trending')}`,
-      path: getPath('discoveryProjects'),
+      path: getBaseProjectsPath(projectTypeFilter),
     },
     {
       label: `📍 ${t('In your region')}`,
-      path: getPath('discoveryProjectsInYourRegion'),
+      path:
+        projectTypeFilter === 'campaigns'
+          ? getPath('discoveryCampaignsInYourRegion')
+          : projectTypeFilter === 'fundraisers'
+          ? getPath('discoveryFundraisersInYourRegion')
+          : getPath('discoveryProjectsInYourRegion'),
     },
     {
       label: `🌊 ${t('Circular Economies')}`,
-      path: getPath('discoveryProjectsSubCategory', ProjectSubCategory.CircularEconomy),
+      path: getProjectsSubCategoryPath(projectTypeFilter, ProjectSubCategory.CircularEconomy),
+      subCategory: ProjectSubCategory.CircularEconomy,
     },
     {
       label: `🎓 ${t('Education')}`,
-      path: getPath('discoveryProjectsCategory', ProjectCategory.Education),
+      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Education),
+      category: ProjectCategory.Education,
     },
     {
       label: `🛠 ${t('Open Source')}`,
-      path: getPath('discoveryProjectsSubCategory', ProjectSubCategory.OsSoftware),
+      path: getProjectsSubCategoryPath(projectTypeFilter, ProjectSubCategory.OsSoftware),
+      subCategory: ProjectSubCategory.OsSoftware,
     },
     {
       label: `🌍 ${t('Humanitarian')}`,
-      path: getPath('discoveryProjectsSubCategory', ProjectSubCategory.Humanitarian),
+      path: getProjectsSubCategoryPath(projectTypeFilter, ProjectSubCategory.Humanitarian),
+      subCategory: ProjectSubCategory.Humanitarian,
     },
     {
       label: `🤲 ${t('Causes')}`,
-      path: getPath('discoveryProjectsCategory', ProjectCategory.Cause),
+      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Cause),
+      category: ProjectCategory.Cause,
     },
     {
       label: `⚖️ ${t('Legal & Advocacy')}`,
-      path: getPath('discoveryProjectsCategory', ProjectCategory.Advocacy),
+      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Advocacy),
+      category: ProjectCategory.Advocacy,
     },
     {
       label: `🤝 ${t('Community')}`,
-      path: getPath('discoveryProjectsCategory', ProjectCategory.Community),
+      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Community),
+      category: ProjectCategory.Community,
     },
   ]
+
+  const existingPaths = new Set(featuredTabs.map((tab) => tab.path))
+  const getProjectCategoryLabel = (category: ProjectCategory) => ProjectCategoryLabel[category] ?? category
+  const getProjectSubCategoryLabel = (subCategory: ProjectSubCategory) =>
+    ProjectSubCategoryLabel[subCategory] ?? subCategory
+  const remainingTabs: CategoryTab[] = [
+    ...ProjectCategoryList.map((category) => ({
+      label: `${ProjectCategoryEmoji[category]} ${t(getProjectCategoryLabel(category))}`,
+      path: getProjectsCategoryPath(projectTypeFilter, category),
+      category,
+    })),
+    ...ProjectSubCategoryList.map((subCategory) => ({
+      label: `${ProjectSubCategoryEmoji[subCategory]} ${t(getProjectSubCategoryLabel(subCategory))}`,
+      path: getProjectsSubCategoryPath(projectTypeFilter, subCategory),
+      subCategory,
+    })),
+  ].filter((tab) => !existingPaths.has(tab.path))
+
+  return [...featuredTabs, ...remainingTabs]
+}
+
+const getParentCategoryForSubCategory = (subCategory: ProjectSubCategory) => {
+  return ProjectCategoryList.find((category) => ProjectSubCategoryMap[category].includes(subCategory))
 }
 
 const getProjectTypePath = ({
@@ -283,38 +332,14 @@ const getProjectTypePath = ({
   }
 
   if (isSubCategoryRoute && subCategory) {
-    if (nextProjectTypeFilter === 'fundraisers') {
-      return getPath('discoveryFundraisersSubCategory', subCategory)
-    }
-
-    if (nextProjectTypeFilter === 'campaigns') {
-      return getPath('discoveryCampaignsSubCategory', subCategory)
-    }
-
-    return getPath('discoveryProjectsSubCategory', subCategory)
+    return getProjectsSubCategoryPath(nextProjectTypeFilter, subCategory as ProjectSubCategory)
   }
 
   if (isCategoryRoute && category) {
-    if (nextProjectTypeFilter === 'fundraisers') {
-      return getPath('discoveryFundraisersCategory', category)
-    }
-
-    if (nextProjectTypeFilter === 'campaigns') {
-      return getPath('discoveryCampaignsCategory', category)
-    }
-
-    return getPath('discoveryProjectsCategory', category)
+    return getProjectsCategoryPath(nextProjectTypeFilter, category as ProjectCategory)
   }
 
-  if (nextProjectTypeFilter === 'campaigns') {
-    return getPath('discoveryCampaigns')
-  }
-
-  if (nextProjectTypeFilter === 'fundraisers') {
-    return getPath('discoveryFundraisers')
-  }
-
-  return getPath('discoveryProjects')
+  return getBaseProjectsPath(nextProjectTypeFilter)
 }
 
 /** Renders the unified discovery projects page with funding-strategy URL filters. */
@@ -324,6 +349,7 @@ export const Projects = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const tabListRef = useRef<HTMLDivElement | null>(null)
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
   const {
@@ -350,6 +376,32 @@ export const Projects = () => {
   const currentTabIndex = Math.max(
     categoryTabs.findIndex((tab) => tab.path === location.pathname),
     0,
+  )
+  const selectedCategoryFilterValue = useMemo<CategoryFilterOptionValue>(() => {
+    if (subCategory) {
+      return `subCategory:${subCategory as ProjectSubCategory}`
+    }
+
+    if (category) {
+      return `category:${category as ProjectCategory}`
+    }
+
+    return 'all'
+  }, [category, subCategory])
+  const categoryFilterOptions = useMemo<FilterDropdownOption<CategoryFilterOptionValue>[]>(
+    () => [
+      { value: 'all', label: t('All Categories') },
+      ...ProjectCategoryList.map((projectCategory) => ({
+        value: `category:${projectCategory}` as const,
+        label: t(ProjectCategoryLabel[projectCategory] ?? projectCategory),
+      })),
+      ...ProjectSubCategoryList.map((projectSubCategory) => ({
+        dividerBefore: projectSubCategory === ProjectSubCategoryList[0],
+        value: `subCategory:${projectSubCategory}` as const,
+        label: t(ProjectSubCategoryLabel[projectSubCategory] ?? projectSubCategory),
+      })),
+    ],
+    [t],
   )
 
   const {
@@ -483,6 +535,17 @@ export const Projects = () => {
     }
   }, [categoryTabs, location.pathname])
 
+  useEffect(() => {
+    const activeTab = tabRefs.current[currentTabIndex]
+    if (!activeTab) return
+
+    activeTab.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    })
+  }, [currentTabIndex])
+
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
 
@@ -567,6 +630,238 @@ export const Projects = () => {
     )
   }
 
+  const getNextSearchParamsWithCategorySelection = ({
+    category,
+    subCategory,
+  }: {
+    category?: ProjectCategory
+    subCategory?: ProjectSubCategory
+  }) => {
+    const nextSearchParams = new URLSearchParams(searchParams)
+
+    if (category) {
+      nextSearchParams.set('category', category)
+      nextSearchParams.delete('subCategory')
+    } else if (subCategory) {
+      nextSearchParams.set('subCategory', subCategory)
+      nextSearchParams.delete('category')
+    } else {
+      nextSearchParams.delete('category')
+      nextSearchParams.delete('subCategory')
+    }
+
+    return nextSearchParams
+  }
+
+  const handleCategoryFilterChange = (nextValue: CategoryFilterOptionValue) => {
+    const nextCategory = nextValue.startsWith('category:')
+      ? (nextValue.replace('category:', '') as ProjectCategory)
+      : undefined
+    const nextSubCategory = nextValue.startsWith('subCategory:')
+      ? (nextValue.replace('subCategory:', '') as ProjectSubCategory)
+      : undefined
+    const nextSearchParams = getNextSearchParamsWithCategorySelection({
+      category: nextCategory,
+      subCategory: nextSubCategory,
+    })
+
+    navigate(
+      {
+        pathname: nextSubCategory
+          ? getProjectsSubCategoryPath(projectTypeFilter, nextSubCategory)
+          : nextCategory
+          ? getProjectsCategoryPath(projectTypeFilter, nextCategory)
+          : getBaseProjectsPath(projectTypeFilter),
+        search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
+      },
+      {
+        preventScrollReset: true,
+      },
+    )
+  }
+
+  const getSuggestedViewDestination = useCallback(
+    (options: {
+      nextCategory?: ProjectCategory
+      nextCountryCode?: string
+      nextProjectTypeFilter?: ProjectTypeFilter
+      nextRegion?: string
+      nextShouldFilterByUserRegion?: boolean
+      nextSubCategory?: ProjectSubCategory
+    }) => {
+      const resolvedCategory =
+        'nextCategory' in options ? options.nextCategory : (category as ProjectCategory | undefined)
+      const resolvedSubCategory =
+        'nextSubCategory' in options ? options.nextSubCategory : (subCategory as ProjectSubCategory | undefined)
+      const resolvedCountryCode = 'nextCountryCode' in options ? options.nextCountryCode : filterCountryCode
+      const resolvedRegion = 'nextRegion' in options ? options.nextRegion : region
+      const resolvedProjectTypeFilter = options.nextProjectTypeFilter ?? projectTypeFilter
+      const resolvedShouldFilterByUserRegion = options.nextShouldFilterByUserRegion ?? shouldFilterByUserRegion
+      const nextSearchParams = new URLSearchParams(searchParams)
+
+      if (resolvedCategory) {
+        nextSearchParams.set('category', resolvedCategory)
+      } else {
+        nextSearchParams.delete('category')
+      }
+
+      if (resolvedSubCategory) {
+        nextSearchParams.set('subCategory', resolvedSubCategory)
+      } else {
+        nextSearchParams.delete('subCategory')
+      }
+
+      if (resolvedCountryCode) {
+        nextSearchParams.set('countryCode', resolvedCountryCode)
+      } else {
+        nextSearchParams.delete('countryCode')
+      }
+
+      if (resolvedRegion) {
+        nextSearchParams.set('region', resolvedRegion)
+      } else {
+        nextSearchParams.delete('region')
+      }
+
+      const nextPathname = resolvedShouldFilterByUserRegion
+        ? getProjectTypePath({
+            category: resolvedCategory,
+            isCategoryRoute: Boolean(resolvedCategory),
+            isSubCategoryRoute: Boolean(resolvedSubCategory),
+            nextProjectTypeFilter: resolvedProjectTypeFilter,
+            shouldFilterByUserRegion: true,
+            subCategory: resolvedSubCategory,
+          })
+        : resolvedSubCategory
+        ? getProjectsSubCategoryPath(resolvedProjectTypeFilter, resolvedSubCategory)
+        : resolvedCategory
+        ? getProjectsCategoryPath(resolvedProjectTypeFilter, resolvedCategory)
+        : getBaseProjectsPath(resolvedProjectTypeFilter)
+
+      return {
+        pathname: nextPathname,
+        search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
+      }
+    },
+    [category, filterCountryCode, projectTypeFilter, region, searchParams, shouldFilterByUserRegion, subCategory],
+  )
+
+  const emptyStateMessage = useMemo(() => {
+    const resultsLabel =
+      sort === 'most_funded_this_month'
+        ? t('trending {{projectType}}', {
+            projectType:
+              projectTypeFilter === 'campaigns'
+                ? t('campaigns')
+                : projectTypeFilter === 'fundraisers'
+                ? t('fundraisers')
+                : t('projects'),
+          })
+        : sort === 'most_recent'
+        ? t('recent {{projectType}}', {
+            projectType:
+              projectTypeFilter === 'campaigns'
+                ? t('campaigns')
+                : projectTypeFilter === 'fundraisers'
+                ? t('fundraisers')
+                : t('projects'),
+          })
+        : t('{{projectType}}', {
+            projectType:
+              projectTypeFilter === 'campaigns'
+                ? t('campaigns')
+                : projectTypeFilter === 'fundraisers'
+                ? t('fundraisers')
+                : t('projects'),
+          })
+
+    if (subCategory) {
+      return t('There are no {{resultsLabel}} in {{filterLabel}}', {
+        resultsLabel,
+        filterLabel: t(ProjectSubCategoryLabel[subCategory] ?? subCategory),
+      })
+    }
+
+    if (category) {
+      return t('There are no {{resultsLabel}} in {{filterLabel}}', {
+        resultsLabel,
+        filterLabel: t(ProjectCategoryLabel[category] ?? category),
+      })
+    }
+
+    if (shouldFilterByUserRegion) {
+      return t('There are no {{resultsLabel}} in your region', {
+        resultsLabel,
+      })
+    }
+
+    return t('There are no {{resultsLabel}} matching this filter', {
+      resultsLabel,
+    })
+  }, [category, projectTypeFilter, shouldFilterByUserRegion, sort, subCategory, t])
+
+  const emptyStateSuggestion = useMemo<EmptyStateSuggestion | undefined>(() => {
+    if (projectTypeFilter === 'campaigns') {
+      return {
+        ctaLabel: t('Fundraisers'),
+        to: getSuggestedViewDestination({ nextProjectTypeFilter: 'fundraisers' }),
+      }
+    }
+
+    if (projectTypeFilter === 'fundraisers') {
+      return {
+        ctaLabel: t('All project types'),
+        to: getSuggestedViewDestination({ nextProjectTypeFilter: 'all' }),
+      }
+    }
+
+    if (subCategory) {
+      const parentCategory = getParentCategoryForSubCategory(subCategory as ProjectSubCategory)
+
+      if (parentCategory) {
+        return {
+          ctaLabel: t(ProjectCategoryLabel[parentCategory] ?? parentCategory),
+          to: getSuggestedViewDestination({
+            nextCategory: parentCategory,
+            nextSubCategory: undefined,
+          }),
+        }
+      }
+    }
+
+    if (category) {
+      return {
+        ctaLabel: t('All Categories'),
+        to: getSuggestedViewDestination({
+          nextCategory: undefined,
+          nextSubCategory: undefined,
+        }),
+      }
+    }
+
+    if (shouldFilterByUserRegion || filterCountryCode || region) {
+      return {
+        ctaLabel: t('Worldwide'),
+        to: getSuggestedViewDestination({
+          nextCountryCode: undefined,
+          nextRegion: undefined,
+          nextShouldFilterByUserRegion: false,
+        }),
+      }
+    }
+
+    return undefined
+  }, [
+    category,
+    filterCountryCode,
+    getSuggestedViewDestination,
+    projectTypeFilter,
+    region,
+    shouldFilterByUserRegion,
+    subCategory,
+    t,
+  ])
+
   const scrollTabs = (direction: 'left' | 'right') => {
     const element = tabListRef.current
     if (!element) return
@@ -604,17 +899,23 @@ export const Projects = () => {
           w="full"
           variant="secondary"
           index={currentTabIndex}
-          onChange={(index) =>
+          onChange={(index) => {
+            const nextTab = categoryTabs[index] ?? categoryTabs[0]
+            const nextSearchParams = getNextSearchParamsWithCategorySelection({
+              category: nextTab?.category,
+              subCategory: nextTab?.subCategory,
+            })
+
             navigate(
               {
-                pathname: categoryTabs[index]?.path ?? categoryTabs[0]?.path ?? getPath('discoveryProjects'),
-                search: location.search,
+                pathname: nextTab?.path ?? getBaseProjectsPath(projectTypeFilter),
+                search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
               },
               {
                 preventScrollReset: true,
               },
             )
-          }
+          }}
         >
           <HStack w="full" spacing={2} alignItems="center">
             {canScrollLeft ? (
@@ -637,9 +938,12 @@ export const Projects = () => {
                 msOverflowStyle: 'none',
               }}
             >
-              {categoryTabs.map((tab) => (
+              {categoryTabs.map((tab, index) => (
                 <Tab
                   key={tab.path}
+                  ref={(element) => {
+                    tabRefs.current[index] = element
+                  }}
                   fontSize={{ base: 'xs', sm: 'md' }}
                   color="neutral1.11"
                   _selected={{
@@ -695,6 +999,18 @@ export const Projects = () => {
               height="24px"
               borderColor={toolbarDividerColor}
             />
+            <ProjectsToolbarSelect
+              defaultLabel={t('All Categories')}
+              options={categoryFilterOptions}
+              value={selectedCategoryFilterValue}
+              onChange={handleCategoryFilterChange}
+            />
+            <Divider
+              display={{ base: 'none', md: 'block' }}
+              orientation="vertical"
+              height="24px"
+              borderColor={toolbarDividerColor}
+            />
             <ProjectsRegionCountryFilter
               countryCode={filterCountryCode}
               region={region}
@@ -740,6 +1056,7 @@ export const Projects = () => {
             projects={projects}
             loading={projectsLoading}
             projectRows={projectRows}
+            emptyState={<ProjectsFilterEmptyState message={emptyStateMessage} suggestion={emptyStateSuggestion} />}
             trendingAmountLabel={t('raised this month')}
             hideTrendingBelowUsd={100}
             isLoadingMore={shouldUseMostFundedThisMonth ? undefined : isLoadingMore}
@@ -752,15 +1069,74 @@ export const Projects = () => {
   )
 }
 
+type ProjectsFilterEmptyStateProps = {
+  message: string
+  suggestion?: EmptyStateSuggestion
+}
+
+const ProjectsFilterEmptyState = ({ message, suggestion }: ProjectsFilterEmptyStateProps) => {
+  const { t } = useTranslation()
+  const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
+
+  return (
+    <VStack w="full" borderWidth="1px" borderColor={borderColor} borderRadius="12px" padding={{ base: 4, md: 5 }}>
+      <HStack
+        w="full"
+        justifyContent="center"
+        spacing={1}
+        whiteSpace="nowrap"
+        overflowX="auto"
+        color="neutral1.11"
+        fontSize="sm"
+      >
+        <Body>{message}.</Body>
+        {suggestion ? (
+          <>
+            <Body>{t('See')}</Body>
+            <Button
+              as={Link}
+              to={suggestion.to}
+              variant="unstyled"
+              minWidth="unset"
+              height="auto"
+              lineHeight="inherit"
+              fontSize="sm"
+              fontWeight={400}
+              color="neutral1.11"
+              cursor="pointer"
+              textDecoration="underline"
+              _hover={{ textDecoration: 'underline' }}
+              _active={{ textDecoration: 'underline' }}
+              padding={0}
+            >
+              {suggestion.ctaLabel}
+            </Button>
+            <Body>{t('instead')}.</Body>
+          </>
+        ) : (
+          <Body>{t('Try a broader filter or clear your current selection')}.</Body>
+        )}
+      </HStack>
+    </VStack>
+  )
+}
+
 type ProjectsToolbarSelectProps<T extends string> = {
+  defaultLabel?: string
   onChange: (value: T) => void
   options: Array<FilterDropdownOption<T>>
   value: T
 }
 
-const ProjectsToolbarSelect = <T extends string>({ onChange, options, value }: ProjectsToolbarSelectProps<T>) => {
+const ProjectsToolbarSelect = <T extends string>({
+  defaultLabel,
+  onChange,
+  options,
+  value,
+}: ProjectsToolbarSelectProps<T>) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const selectedOption = options.find((option) => option.value === value) ?? options[0]
+  const selectedOption = options.find((option) => option.value === value)
+  const buttonLabel = selectedOption?.label ?? defaultLabel ?? ''
 
   return (
     <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} placement="bottom-start" closeOnBlur>
@@ -776,32 +1152,34 @@ const ProjectsToolbarSelect = <T extends string>({ onChange, options, value }: P
           minWidth="unset"
           color="neutral1.11"
         >
-          {selectedOption?.label}
+          {buttonLabel}
         </Button>
       </PopoverTrigger>
 
       <PopoverContent width="240px" maxWidth="calc(100vw - 32px)">
         <PopoverBody padding={2}>
-          <VStack align="stretch" spacing={1}>
+          <VStack align="stretch" spacing={1} maxHeight="360px" overflowY="auto" paddingRight={1}>
             {options.map((option) => {
               const isSelected = option.value === value
 
               return (
-                <Button
-                  key={option.value}
-                  variant="ghost"
-                  justifyContent="space-between"
-                  width="full"
-                  fontWeight={isSelected ? 600 : 400}
-                  paddingX={3}
-                  onClick={() => {
-                    onChange(option.value)
-                    onClose()
-                  }}
-                >
-                  <Body>{option.label}</Body>
-                  <Box minWidth="16px">{isSelected ? <Icon as={PiCheck} /> : null}</Box>
-                </Button>
+                <VStack key={option.value} align="stretch" spacing={1}>
+                  {option.dividerBefore ? <Divider borderColor="blackAlpha.200" /> : null}
+                  <Button
+                    variant="ghost"
+                    justifyContent="space-between"
+                    width="full"
+                    fontWeight={isSelected ? 600 : 400}
+                    paddingX={3}
+                    onClick={() => {
+                      onChange(option.value)
+                      onClose()
+                    }}
+                  >
+                    <Body>{option.label}</Body>
+                    <Box minWidth="16px">{isSelected ? <Icon as={PiCheck} /> : null}</Box>
+                  </Button>
+                </VStack>
               )
             })}
           </VStack>

@@ -1,9 +1,9 @@
-import { Box, Button, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, LinkBox, LinkOverlay, useColorModeValue, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { IconType } from 'react-icons'
-import { PiCoins, PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
+import { PiArrowUpRight, PiCoins, PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
@@ -150,25 +150,32 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
   const textureBlendMode = useColorModeValue('overlay' as const, 'soft-light' as const)
   const badgeBackground = useColorModeValue('warning.2', 'warning.3')
   const badgeColor = useColorModeValue('warning.11', 'warning.11')
-  const buttonBackground = useColorModeValue('neutralAlpha.1', 'neutralAlpha.3')
-  const buttonColor = useColorModeValue('neutral1.11', 'neutral1.12')
-  const buttonBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
-  const buttonHoverBackground = useColorModeValue('neutralAlpha.2', 'neutralAlpha.4')
-  const buttonBoxShadow = useColorModeValue(
-    '0 8px 24px var(--chakra-colors-blackAlpha-200)',
-    '0 10px 28px var(--chakra-colors-blackAlpha-500)',
-  )
+  const cardBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
+  const actionColor = useColorModeValue('neutral1.11', 'neutral1.12')
 
   return (
     <CardLayout
+      as={LinkBox}
       w="full"
       spacing={4}
-      borderColor="transparent"
+      borderColor={cardBorderColor}
       background={cardBackground}
       mb={2}
       px={{ base: 4, lg: 5 }}
       py={4}
+      hover
     >
+      <LinkOverlay
+        as={Link}
+        to={affiliateDashboardPath}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={t('Open ambassador program')}
+        position="absolute"
+        inset={0}
+        zIndex={0}
+      />
+
       <Box
         position="absolute"
         inset={0}
@@ -180,36 +187,24 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
         mixBlendMode={textureBlendMode}
       />
 
-      <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full">
-        <HStack spacing={2} alignItems="center" flexWrap="wrap">
-          <Icon as={PiCoins} color="warning.9" boxSize={5} />
-          <H2 size="lg" color={titleColor}>
-            {t('Ambassador Program')}
-          </H2>
-          <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor={badgeBackground} color={badgeColor}>
-            {t('New')}
-          </Body>
+      <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full" pointerEvents="none">
+        <HStack w="full" justifyContent="space-between" alignItems="start" spacing={3}>
+          <HStack spacing={2} alignItems="center" flexWrap="wrap" minW={0}>
+            <Icon as={PiCoins} color="warning.9" boxSize={5} />
+            <H2 size="lg" color={titleColor}>
+              {t('Ambassador Program')}
+            </H2>
+            <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor={badgeBackground} color={badgeColor}>
+              {t('New')}
+            </Body>
+          </HStack>
+
+          <Icon as={PiArrowUpRight} color={actionColor} boxSize={6} flexShrink={0} />
         </HStack>
 
         <Body size="sm" color={subtitleColor} whiteSpace={{ base: 'normal', md: 'nowrap' }}>
           {t('Help projects launch or get funded, earn Bitcoin.')}
         </Body>
-
-        <Button
-          as={Link}
-          to={affiliateDashboardPath}
-          bg={buttonBackground}
-          color={buttonColor}
-          borderWidth="1px"
-          borderColor={buttonBorderColor}
-          _hover={{ bg: buttonHoverBackground }}
-          backdropFilter="blur(8px)"
-          boxShadow={buttonBoxShadow}
-          size="md"
-          w="full"
-        >
-          {t('Learn more')}
-        </Button>
       </VStack>
     </CardLayout>
   )

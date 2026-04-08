@@ -1,21 +1,34 @@
 /* eslint-disable complexity */
-import { ApolloError } from '@apollo/client'
+import { ApolloError, useMutation } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import {
+  MUTATION_PROJECT_SUBSCRIPTION_START,
+  MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE,
+  MUTATION_RECURRING_DONATION_CREATE,
+  ProjectSubscriptionStartMutation,
+  ProjectSubscriptionStartMutationVariables,
+  RecurringContributionCheckoutPayload,
+  RecurringContributionRenewalCreateMutation,
+  RecurringContributionRenewalCreateMutationVariables,
+  RecurringDonationCreateMutation,
+  RecurringDonationCreateMutationVariables,
+  recurringFundingModes,
+} from '@/modules/project/recurring/graphql'
 import {
   ORIGIN,
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
 } from '@/shared/constants/config/env.ts'
-import { __development__ } from '@/shared/constants/index.ts'
+import { __development__, getPath } from '@/shared/constants/index.ts'
 import {
   ContributionCreateInput,
   ContributionCreateMutation,
   ContributionLightningToRskSwapPaymentDetailsFragment,
   ContributionOnChainToRskSwapPaymentDetailsFragment,
+  ContributionPaymentsInput,
   FundingContributionFragment,
   PaymentFeePayer,
   PaymentFeeType,
@@ -26,7 +39,11 @@ import {
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
-import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
+import {
+  generateAccountKeys,
+  generatePreImageHash,
+  isValidRskPrivateKey,
+} from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import {
   createCallDataForBoltzClaimCall,
@@ -39,6 +56,9 @@ import {
   contributionCreatePreImagesAtom,
   fiatOnlyPaymentsInputAtom,
   formattedFundingInputAtom,
+  formattedProjectSubscriptionStartInputAtom,
+  formattedRecurringContributionRenewalInputAtom,
+  formattedRecurringDonationInputAtom,
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
@@ -75,18 +95,107 @@ const isRetryableClaimTxSetError = (error: unknown) => {
   )
 }
 
+const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
+  Boolean(
+    payments.lightning ||
+      payments.onChainSwap ||
+      payments.fiat ||
+      payments.fiatToLightningSwap ||
+      payments.lightningToRskSwap ||
+      payments.onChainToRskSwap,
+  )
+
+const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): ContributionPaymentsInput => ({
+  ...(paymentsInput?.fiat && {
+    fiat: {
+      ...paymentsInput.fiat,
+      ...(paymentsInput.fiat.stripe && {
+        stripe: {
+          ...paymentsInput.fiat.stripe,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.fiatToLightningSwap && {
+    fiatToLightningSwap: {
+      ...paymentsInput.fiatToLightningSwap,
+      ...(paymentsInput.fiatToLightningSwap.banxa && {
+        banxa: {
+          ...paymentsInput.fiatToLightningSwap.banxa,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.lightning && {
+    lightning: {
+      ...paymentsInput.lightning,
+    },
+  }),
+  ...(paymentsInput?.onChainSwap && {
+    onChainSwap: {
+      ...paymentsInput.onChainSwap,
+      ...(paymentsInput.onChainSwap.boltz && {
+        boltz: {
+          ...paymentsInput.onChainSwap.boltz,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.lightningToRskSwap && {
+    lightningToRskSwap: {
+      ...paymentsInput.lightningToRskSwap,
+      ...(paymentsInput.lightningToRskSwap.boltz && {
+        boltz: {
+          ...paymentsInput.lightningToRskSwap.boltz,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.onChainToRskSwap && {
+    onChainToRskSwap: {
+      ...paymentsInput.onChainToRskSwap,
+      ...(paymentsInput.onChainToRskSwap.boltz && {
+        boltz: {
+          ...paymentsInput.onChainToRskSwap.boltz,
+        },
+      }),
+    },
+  }),
+})
+
+type UnifiedFundingResponse = {
+  contribution: FundingContributionFragment
+  payments: RecurringContributionCheckoutPayload['payments']
+}
+
+type ClaimPreImages = {
+  lightning: { preimageHex: string; preimageHash: string }
+  onChain: { preimageHex: string; preimageHash: string }
+}
+
+type FundingRequestContext = {
+  accountKeys: { publicKey: string; address: string; privateKey: string }
+  preImages: ClaimPreImages
+}
+
+const getInitialClaimPreImages = (): ClaimPreImages => ({
+  lightning: { preimageHex: '', preimageHash: '' },
+  onChain: { preimageHex: '', preimageHash: '' },
+})
+
 export const useFundingAPI = () => {
   const toast = useNotification()
 
-  const { project } = useFundingFormAtom()
+  const { project, formState } = useFundingFormAtom()
   const stripeEmbeddedTheme = useStripeEmbeddedTheme()
-
-  const { isLoggedIn } = useAuthContext()
 
   const { generateTransactionForLightningToRskSwap, generateTransactionForOnChainToRskSwap } =
     useGenerateTransactionDataForClaimingRBTCToContract()
 
   const formattedFundingInput = useAtomValue(formattedFundingInputAtom)
+  const formattedRecurringDonationInput = useAtomValue(formattedRecurringDonationInputAtom)
+  const formattedProjectSubscriptionStartInput = useAtomValue(formattedProjectSubscriptionStartInputAtom)
+  const formattedRecurringContributionRenewalInput = useAtomValue(formattedRecurringContributionRenewalInputAtom)
   const fiatOnlyPaymentsInput = useAtomValue(fiatOnlyPaymentsInputAtom)
 
   const setFundingInputAfterRequest = useSetAtom(setFundingInputAfterRequestAtom)
@@ -108,6 +217,9 @@ export const useFundingAPI = () => {
 
   const setKeyPair = useSetAtom(keyPairAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
+  const userAccountKeys = useAtomValue(userAccountKeysAtom)
+  const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
+  const rskAccountKeys = useAtomValue(rskAccountKeysAtom)
 
   const applyStripePaymentConfig = useCallback(
     (input: ContributionCreateInput): ContributionCreateInput => {
@@ -123,7 +235,7 @@ export const useFundingAPI = () => {
             ...input.paymentsInput.fiat,
             stripe: {
               ...input.paymentsInput.fiat.stripe,
-              returnUrl: `${ORIGIN}/project/${project.name}/funding/success`,
+              returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', project.name)}`,
               theme: stripeEmbeddedTheme,
             },
           },
@@ -133,66 +245,64 @@ export const useFundingAPI = () => {
     [project?.name, stripeEmbeddedTheme],
   )
 
-  const preImages = useMemo(
+  const defaultAccountKeys = useMemo(
     () => ({
-      lightning: { preimageHex: '', preimageHash: '' },
-      onChain: { preimageHex: '', preimageHash: '' },
+      publicKey:
+        userAccountKeys?.rskKeyPair?.publicKey || userAccountKeyPair?.publicKey || rskAccountKeys?.publicKey || '',
+      address: userAccountKeys?.rskKeyPair?.address || rskAccountKeys?.address || '',
+      privateKey: userAccountKeyPair?.privateKey || rskAccountKeys?.privateKey || '',
     }),
-    [],
+    [
+      rskAccountKeys?.address,
+      rskAccountKeys?.privateKey,
+      rskAccountKeys?.publicKey,
+      userAccountKeyPair?.privateKey,
+      userAccountKeyPair?.publicKey,
+      userAccountKeys?.rskKeyPair?.address,
+      userAccountKeys?.rskKeyPair?.publicKey,
+    ],
   )
 
-  // Used when user is logged out and does not have account keys
-  const currentAccountKeys = useMemo(
-    () => ({
-      publicKey: '',
-      address: '',
-      privateKey: '',
-    }),
-    [],
-  )
+  const handleFundingCompleted = useCallback(
+    (payload: UnifiedFundingResponse, requestContext: FundingRequestContext) => {
+      const { accountKeys, preImages } = requestContext
 
-  const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
-    onCompleted(data) {
       try {
-        if (!data.contributionCreate || !data.contributionCreate.contribution) {
-          throw new Error('Undefined funding tx')
-        }
+        fundingContributionPartialUpdate(payload.contribution)
+        fundingPaymentDetailsPartialUpdate(payload.payments)
 
-        fundingContributionPartialUpdate(data.contributionCreate.contribution)
-        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatToLightningSwap: undefined })
-
-        if (data.contributionCreate.payments.onChainSwap?.swapJson) {
+        if (payload.payments.onChainSwap?.swapJson) {
           parseResponseToSwap(
-            data.contributionCreate.payments.onChainSwap,
+            payload.payments.onChainSwap,
             {
               projectTitle: project?.title,
               projectId: project?.id,
-              reference: data.contributionCreate.contribution.uuid,
-              contributionId: data.contributionCreate.contribution.id,
-              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-              datetime: data.contributionCreate.contribution.createdAt,
+              reference: payload.contribution.uuid,
+              contributionId: payload.contribution.id,
+              bitcoinQuote: payload.contribution.bitcoinQuote,
+              datetime: payload.contribution.createdAt,
             },
-            currentAccountKeys,
+            accountKeys,
           )
         }
 
-        if (data.contributionCreate.payments.onChainToRskSwap?.swapJson) {
+        if (payload.payments.onChainToRskSwap?.swapJson) {
           parseResponseToOnChainToRskSwap(
-            data.contributionCreate.payments.onChainToRskSwap,
+            payload.payments.onChainToRskSwap,
             {
               projectTitle: project?.title,
               projectId: project?.id,
-              reference: data.contributionCreate.contribution.uuid,
-              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-              contributionId: data.contributionCreate.contribution.id,
-              datetime: data.contributionCreate.contribution.createdAt,
+              reference: payload.contribution.uuid,
+              bitcoinQuote: payload.contribution.bitcoinQuote,
+              contributionId: payload.contribution.id,
+              datetime: payload.contribution.createdAt,
             },
-            currentAccountKeys,
+            accountKeys,
           )
           generateTransactionForOnChainToRskSwap({
-            payment: data.contributionCreate.payments.onChainToRskSwap,
+            payment: payload.payments.onChainToRskSwap,
             preImages: preImages.onChain,
-            accountKeys: currentAccountKeys,
+            accountKeys,
           }).catch((error) => {
             setFundingRequestErrored(true)
             toast.error({
@@ -202,24 +312,24 @@ export const useFundingAPI = () => {
           })
         }
 
-        if (data.contributionCreate.payments.lightningToRskSwap?.swapJson) {
+        if (payload.payments.lightningToRskSwap?.swapJson) {
           parseResponseToLightningToRskSwap(
-            data.contributionCreate.payments.lightningToRskSwap,
+            payload.payments.lightningToRskSwap,
             {
               projectTitle: project?.title,
               projectId: project?.id,
-              reference: data.contributionCreate.contribution.uuid,
-              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-              datetime: data.contributionCreate.contribution.createdAt,
-              contributionId: data.contributionCreate.contribution.id,
+              reference: payload.contribution.uuid,
+              bitcoinQuote: payload.contribution.bitcoinQuote,
+              datetime: payload.contribution.createdAt,
+              contributionId: payload.contribution.id,
             },
-            currentAccountKeys,
+            accountKeys,
           )
           generateTransactionForLightningToRskSwap({
-            contribution: data.contributionCreate.contribution,
-            payment: data.contributionCreate.payments.lightningToRskSwap,
+            contribution: payload.contribution,
+            payment: payload.payments.lightningToRskSwap,
             preImages: preImages.lightning,
-            accountKeys: currentAccountKeys,
+            accountKeys,
           }).catch((error) => {
             setFundingRequestErrored(true)
             toast.error({
@@ -229,15 +339,8 @@ export const useFundingAPI = () => {
           })
         }
 
-        if (
-          hasBolt11 &&
-          hasWebLN &&
-          webln &&
-          data.contributionCreate.payments.lightning &&
-          !data.contributionCreate.contribution.isSubscription &&
-          !__development__
-        ) {
-          startWebLNFlow(data.contributionCreate.payments.lightning).catch(() => {
+        if (hasBolt11 && hasWebLN && webln && payload.payments.lightning && !__development__) {
+          startWebLNFlow(payload.payments.lightning).catch(() => {
             toast.error({
               title: 'Something went wrong1',
               description: 'Please refresh the page and try again',
@@ -246,13 +349,29 @@ export const useFundingAPI = () => {
         }
       } catch (e) {
         setFundingRequestErrored(true)
-        console.log('e', e)
         toast.error({
           title: 'Something went wrong2',
           description: e instanceof Error ? e.message : JSON.stringify(e),
         })
       }
     },
+    [
+      fundingContributionPartialUpdate,
+      fundingPaymentDetailsPartialUpdate,
+      generateTransactionForLightningToRskSwap,
+      generateTransactionForOnChainToRskSwap,
+      parseResponseToLightningToRskSwap,
+      parseResponseToOnChainToRskSwap,
+      parseResponseToSwap,
+      project?.id,
+      project?.title,
+      setFundingRequestErrored,
+      startWebLNFlow,
+      toast,
+    ],
+  )
+
+  const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onError(error: ApolloError) {
       if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code) {
         setError(error?.graphQLErrors[0].extensions)
@@ -267,11 +386,91 @@ export const useFundingAPI = () => {
     },
   })
 
-  const requestFunding = useCallback(
-    async (input: ContributionCreateInput, onCompleted?: (data: ContributionCreateMutation) => void) => {
-      const { isValid, error } = validateFundingInput(input)
+  const buildFundingRequestContext = useCallback(
+    (): FundingRequestContext => ({
+      accountKeys: { ...defaultAccountKeys },
+      preImages: getInitialClaimPreImages(),
+    }),
+    [defaultAccountKeys],
+  )
 
-      if (!isValid) {
+  const handleRequestError = useCallback(
+    (error: unknown, fallbackTitle: string) => {
+      setFundingRequestErrored(true)
+      toast.error({
+        title: fallbackTitle,
+        description: error instanceof Error ? error.message : 'Please refresh the page and try again',
+      })
+    },
+    [setFundingRequestErrored, toast],
+  )
+
+  const [recurringDonationCreate, recurringDonationOptions] = useMutation<
+    RecurringDonationCreateMutation,
+    RecurringDonationCreateMutationVariables
+  >(MUTATION_RECURRING_DONATION_CREATE, {
+    onError(error: ApolloError) {
+      if (error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error.graphQLErrors[0].extensions)
+      }
+
+      setFundingRequestErrored(true)
+      toast.error({
+        title: 'Something went wrong3',
+        description: 'Please refresh the page and try again',
+      })
+    },
+  })
+
+  const [projectSubscriptionStart, projectSubscriptionStartOptions] = useMutation<
+    ProjectSubscriptionStartMutation,
+    ProjectSubscriptionStartMutationVariables
+  >(MUTATION_PROJECT_SUBSCRIPTION_START, {
+    onError(error: ApolloError) {
+      if (error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error.graphQLErrors[0].extensions)
+      }
+
+      setFundingRequestErrored(true)
+      toast.error({
+        title: 'Something went wrong3',
+        description: 'Please refresh the page and try again',
+      })
+    },
+  })
+
+  const [recurringContributionRenewalCreate, recurringContributionRenewalCreateOptions] = useMutation<
+    RecurringContributionRenewalCreateMutation,
+    RecurringContributionRenewalCreateMutationVariables
+  >(MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE, {
+    onError(error: ApolloError) {
+      if (error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error.graphQLErrors[0].extensions)
+      }
+
+      setFundingRequestErrored(true)
+      toast.error({
+        title: 'Something went wrong3',
+        description: 'Please refresh the page and try again',
+      })
+    },
+  })
+
+  const requestFunding = useCallback(
+    async (
+      input: ContributionCreateInput,
+      onCompleted?: (
+        data:
+          | ContributionCreateMutation
+          | RecurringDonationCreateMutation
+          | ProjectSubscriptionStartMutation
+          | RecurringContributionRenewalCreateMutation,
+      ) => void,
+    ) => {
+      const { isValid, error } = validateFundingInput(input)
+      const requestContext = buildFundingRequestContext()
+
+      if (formState.fundingMode === recurringFundingModes.oneTime && !isValid) {
         toast.error({
           title: 'failed to generate invoice',
           description: error,
@@ -279,85 +478,330 @@ export const useFundingAPI = () => {
         return
       }
 
+      if (
+        formState.fundingMode === recurringFundingModes.recurringDonation &&
+        (!formattedRecurringDonationInput.input.projectId ||
+          !formattedRecurringDonationInput.input.paymentMethod ||
+          formattedRecurringDonationInput.input.amount <= 0)
+      ) {
+        toast.error({
+          title: 'Unable to create recurring payment',
+          description: 'Please refresh the page and try again',
+        })
+        return
+      }
+
+      if (
+        formState.fundingMode === recurringFundingModes.membership &&
+        (!formattedProjectSubscriptionStartInput.input.projectSubscriptionPlanId ||
+          !formattedProjectSubscriptionStartInput.input.paymentMethod)
+      ) {
+        toast.error({
+          title: 'Unable to create recurring payment',
+          description: 'Please refresh the page and try again',
+        })
+        return
+      }
+
+      if (
+        formattedRecurringContributionRenewalInput &&
+        !formattedRecurringContributionRenewalInput.input.managementNonce &&
+        !formattedRecurringContributionRenewalInput.input.id
+      ) {
+        toast.error({
+          title: 'Unable to create recurring payment',
+          description: 'Please refresh the page and try again',
+        })
+        return
+      }
+
       resetContribution()
 
       const finalInput = { ...input }
+      const recurringDonationVariables: RecurringDonationCreateMutationVariables = {
+        input: {
+          ...formattedRecurringDonationInput.input,
+          paymentsInput: clonePaymentsInput(formattedRecurringDonationInput.input.paymentsInput),
+          ...(formattedRecurringDonationInput.input.metadataInput && {
+            metadataInput: {
+              ...formattedRecurringDonationInput.input.metadataInput,
+            },
+          }),
+        },
+      }
+      const projectSubscriptionStartVariables: ProjectSubscriptionStartMutationVariables = {
+        input: {
+          ...formattedProjectSubscriptionStartInput.input,
+          paymentsInput: clonePaymentsInput(formattedProjectSubscriptionStartInput.input.paymentsInput),
+          ...(formattedProjectSubscriptionStartInput.input.metadataInput && {
+            metadataInput: {
+              ...formattedProjectSubscriptionStartInput.input.metadataInput,
+            },
+          }),
+        },
+      }
+      const recurringContributionRenewalVariables: RecurringContributionRenewalCreateMutationVariables | null =
+        formattedRecurringContributionRenewalInput
+          ? {
+              input: {
+                ...formattedRecurringContributionRenewalInput.input,
+                paymentsInput: clonePaymentsInput(formattedRecurringContributionRenewalInput.input.paymentsInput),
+              },
+            }
+          : null
+
+      const paymentsInputToPrepare = recurringContributionRenewalVariables
+        ? recurringContributionRenewalVariables.input.paymentsInput
+        : formState.fundingMode === recurringFundingModes.recurringDonation
+        ? recurringDonationVariables.input.paymentsInput
+        : formState.fundingMode === recurringFundingModes.membership
+        ? projectSubscriptionStartVariables.input.paymentsInput
+        : finalInput.paymentsInput
 
       if (
-        finalInput?.paymentsInput?.onChainSwap?.boltz &&
-        !finalInput?.paymentsInput?.onChainSwap?.boltz.swapPublicKey
+        formState.fundingMode !== recurringFundingModes.oneTime &&
+        project?.name &&
+        paymentsInputToPrepare?.fiat?.stripe
       ) {
-        const keyPair = generatePrivatePublicKeyPair()
-        setKeyPair(keyPair)
-        currentAccountKeys.publicKey = keyPair.publicKey.toString('hex')
-        currentAccountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
-        finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+        paymentsInputToPrepare.fiat.stripe.returnUrl = `${ORIGIN}${getPath('fundingAwaitingSuccess', project.name)}`
+        paymentsInputToPrepare.fiat.stripe.theme = stripeEmbeddedTheme
       }
 
-      if (finalInput?.paymentsInput?.lightningToRskSwap?.boltz && finalInput.paymentsInput.onChainToRskSwap?.boltz) {
-        const lightningPreImage = generatePreImageHash()
-        const onChainPreImage = generatePreImageHash()
+      if (paymentsInputToPrepare?.onChainSwap?.boltz && !paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey) {
+        const keyPair = generatePrivatePublicKeyPair()
+        setKeyPair(keyPair)
+        requestContext.accountKeys.publicKey = keyPair.publicKey.toString('hex')
+        requestContext.accountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
+        paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+      }
 
-        setContributionCreatePreImages({
-          lightning: lightningPreImage,
-          onChain: onChainPreImage,
-        })
+      const lightningToRskSwapInput = paymentsInputToPrepare?.lightningToRskSwap?.boltz
+      const onChainToRskSwapInput = paymentsInputToPrepare?.onChainToRskSwap?.boltz
 
-        preImages.lightning = lightningPreImage
-        preImages.onChain = onChainPreImage
+      if (lightningToRskSwapInput || onChainToRskSwapInput) {
+        const ensureAccountKeys = () => {
+          if (
+            requestContext.accountKeys.publicKey &&
+            requestContext.accountKeys.address &&
+            isValidRskPrivateKey(requestContext.accountKeys.privateKey)
+          ) {
+            return requestContext.accountKeys
+          }
 
-        finalInput.paymentsInput.lightningToRskSwap.boltz.preimageHash = lightningPreImage.preimageHash
-        finalInput.paymentsInput.onChainToRskSwap.boltz.preimageHash = onChainPreImage.preimageHash
+          const generatedKeys = generateAccountKeys()
+          setRskAccountKeys(generatedKeys)
+          requestContext.accountKeys.publicKey = generatedKeys.publicKey
+          requestContext.accountKeys.address = generatedKeys.address
+          requestContext.accountKeys.privateKey = generatedKeys.privateKey
 
-        // If the claim public key is not set (i.e user is not logged in or doesnot have one), generate a new account keys
-        if (!isLoggedIn) {
-          const accountKeys = generateAccountKeys()
-          setRskAccountKeys(accountKeys)
-
-          finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
-          finalInput.paymentsInput.lightningToRskSwap.boltz.claimAddress = accountKeys.address
-          finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
-          finalInput.paymentsInput.onChainToRskSwap.boltz.claimAddress = accountKeys.address
-
-          currentAccountKeys.publicKey = accountKeys.publicKey
-          currentAccountKeys.address = accountKeys.address
-          currentAccountKeys.privateKey = accountKeys.privateKey
+          return requestContext.accountKeys
         }
+
+        const contributionPreImages: {
+          lightning?: { preimageHex: string; preimageHash: string }
+          onChain?: { preimageHex: string; preimageHash: string }
+        } = {}
+
+        if (lightningToRskSwapInput && !lightningToRskSwapInput.preimageHash) {
+          const lightningPreImage = generatePreImageHash()
+          contributionPreImages.lightning = lightningPreImage
+          requestContext.preImages.lightning = lightningPreImage
+          lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
+        }
+
+        if (onChainToRskSwapInput && !onChainToRskSwapInput.preimageHash) {
+          const onChainPreImage = generatePreImageHash()
+          contributionPreImages.onChain = onChainPreImage
+          requestContext.preImages.onChain = onChainPreImage
+          onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
+        }
+
+        if (contributionPreImages.lightning || contributionPreImages.onChain) {
+          setContributionCreatePreImages(contributionPreImages)
+        }
+
+        if (lightningToRskSwapInput || onChainToRskSwapInput) {
+          const accountKeys = ensureAccountKeys()
+          if (lightningToRskSwapInput) {
+            lightningToRskSwapInput.claimPublicKey = accountKeys.publicKey
+            lightningToRskSwapInput.claimAddress = accountKeys.address
+          }
+
+          if (onChainToRskSwapInput) {
+            onChainToRskSwapInput.claimPublicKey = accountKeys.publicKey
+            onChainToRskSwapInput.claimAddress = accountKeys.address
+          }
+        }
+      }
+
+      if (recurringContributionRenewalVariables) {
+        try {
+          setFundingInputAfterRequest({ ...finalInput, fundingMode: formState.fundingMode })
+
+          const result = await recurringContributionRenewalCreate({
+            variables: recurringContributionRenewalVariables,
+          })
+
+          if (result.data?.recurringContributionRenewalCreate?.contribution) {
+            const recurringCheckoutPayload = result.data.recurringContributionRenewalCreate
+            if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
+              throw new Error('Could not create a renewal payment for this recurring contribution')
+            }
+
+            handleFundingCompleted(recurringCheckoutPayload, requestContext)
+
+            if (onCompleted) {
+              onCompleted({ recurringContributionRenewalCreate: recurringCheckoutPayload })
+            }
+          }
+        } catch (error) {
+          handleRequestError(error, 'Unable to create recurring payment')
+        }
+
+        return
+      }
+
+      if (formState.fundingMode === recurringFundingModes.recurringDonation) {
+        try {
+          setFundingInputAfterRequest({ ...finalInput, fundingMode: formState.fundingMode })
+
+          const result = await recurringDonationCreate({
+            variables: recurringDonationVariables,
+          })
+
+          if (result.data?.recurringDonationCreate?.contribution) {
+            const recurringCheckoutPayload = result.data.recurringDonationCreate
+            if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
+              throw new Error('Could not create a recurring payment for this contribution')
+            }
+
+            handleFundingCompleted(recurringCheckoutPayload, requestContext)
+
+            if (onCompleted) {
+              onCompleted({ recurringDonationCreate: recurringCheckoutPayload })
+            }
+          }
+        } catch (error) {
+          handleRequestError(error, 'Unable to create recurring payment')
+        }
+
+        return
+      }
+
+      if (formState.fundingMode === recurringFundingModes.membership) {
+        try {
+          setFundingInputAfterRequest({ ...finalInput, fundingMode: formState.fundingMode })
+
+          const result = await projectSubscriptionStart({
+            variables: projectSubscriptionStartVariables,
+          })
+
+          if (result.data?.projectSubscriptionStart?.contribution) {
+            const recurringCheckoutPayload = result.data.projectSubscriptionStart
+            if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
+              throw new Error('Could not create a recurring payment for this membership')
+            }
+
+            handleFundingCompleted(recurringCheckoutPayload, requestContext)
+
+            if (onCompleted) {
+              onCompleted({ projectSubscriptionStart: recurringCheckoutPayload })
+            }
+          }
+        } catch (error) {
+          handleRequestError(error, 'Unable to create recurring payment')
+        }
+
+        return
       }
 
       const inputWithStripePaymentConfig = applyStripePaymentConfig(finalInput)
       setFundingInputAfterRequest(inputWithStripePaymentConfig)
 
-      await contributionCreate({ variables: { input: inputWithStripePaymentConfig }, onCompleted })
+      await contributionCreate({
+        variables: { input: inputWithStripePaymentConfig },
+        onCompleted(data) {
+          if (!data.contributionCreate || !data.contributionCreate.contribution) {
+            setFundingRequestErrored(true)
+            return
+          }
+
+          handleFundingCompleted(data.contributionCreate, requestContext)
+          onCompleted?.(data)
+        },
+      })
     },
     [
+      applyStripePaymentConfig,
+      buildFundingRequestContext,
       contributionCreate,
+      formState.fundingMode,
+      formattedProjectSubscriptionStartInput,
+      formattedRecurringContributionRenewalInput,
+      formattedRecurringDonationInput,
+      handleFundingCompleted,
+      handleRequestError,
+      projectSubscriptionStart,
+      recurringContributionRenewalCreate,
+      recurringDonationCreate,
       toast,
       setKeyPair,
       setFundingInputAfterRequest,
-      applyStripePaymentConfig,
+      setFundingRequestErrored,
+      project?.name,
       resetContribution,
       setRskAccountKeys,
       setContributionCreatePreImages,
-      currentAccountKeys,
-      preImages,
-      isLoggedIn,
+      stripeEmbeddedTheme,
     ],
   )
 
   const requestFundingFromContext = useCallback(
-    (onCompleted?: (data: ContributionCreateMutation) => void) => requestFunding(formattedFundingInput, onCompleted),
+    (
+      onCompleted?: (
+        data:
+          | ContributionCreateMutation
+          | RecurringDonationCreateMutation
+          | ProjectSubscriptionStartMutation
+          | RecurringContributionRenewalCreateMutation,
+      ) => void,
+    ) => requestFunding(formattedFundingInput, onCompleted),
     [requestFunding, formattedFundingInput],
   )
 
   const requestFiatOnlyFundingFromContext = useCallback(
-    (onCompleted?: (data: ContributionCreateMutation) => void) =>
-      requestFunding({ ...formattedFundingInput, paymentsInput: fiatOnlyPaymentsInput }, onCompleted),
-    [requestFunding, formattedFundingInput, fiatOnlyPaymentsInput],
+    (
+      onCompleted?: (
+        data:
+          | ContributionCreateMutation
+          | RecurringDonationCreateMutation
+          | ProjectSubscriptionStartMutation
+          | RecurringContributionRenewalCreateMutation,
+      ) => void,
+    ) =>
+      requestFunding(
+        formState.fundingMode === recurringFundingModes.oneTime
+          ? { ...formattedFundingInput, paymentsInput: fiatOnlyPaymentsInput }
+          : formattedFundingInput,
+        onCompleted,
+      ),
+    [requestFunding, formattedFundingInput, fiatOnlyPaymentsInput, formState.fundingMode],
   )
 
   return {
-    requestFundingOptions,
+    requestFundingOptions: {
+      ...requestFundingOptions,
+      loading:
+        requestFundingOptions.loading ||
+        recurringDonationOptions.loading ||
+        projectSubscriptionStartOptions.loading ||
+        recurringContributionRenewalCreateOptions.loading,
+      error:
+        requestFundingOptions.error ||
+        recurringDonationOptions.error ||
+        projectSubscriptionStartOptions.error ||
+        recurringContributionRenewalCreateOptions.error,
+    },
     requestFunding,
     requestFundingFromContext,
     requestFiatOnlyFundingFromContext,
