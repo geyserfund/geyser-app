@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
+import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
@@ -35,6 +36,7 @@ type RenderGoalsProps = {
 
 export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
   const { t } = useTranslation()
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
 
   const { project, loading: projectLoading } = useProjectAtom()
 
@@ -92,6 +94,11 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
       const newGoalsOrder = newItems?.map((item) => Number(item.id))
 
       if (!compareProjectGoalOrder(initialGoalsOrder, newGoalsOrder)) {
+        if (guardProjectEditAttempt()) {
+          setActiveId(null)
+          return
+        }
+
         setItems(newItems)
 
         updateProjectGoalOrdering({
