@@ -1,6 +1,6 @@
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 import { toInt, useNotification } from '@/utils'
 
@@ -18,7 +18,7 @@ export const useUserProfile = ({ userId, heroId }: { userId?: string; heroId?: s
   const { user: currentAppUser } = useAuthContext()
   const shouldFetch = Boolean(userId || heroId)
   const requestedUserId = userId ? toInt(userId) : undefined
-  const hasShownError = useRef(false)
+  const [hasShownError, setHasShownError] = useState(false)
 
   const whereVariable = userId ? { id: requestedUserId } : { heroId }
 
@@ -42,7 +42,7 @@ export const useUserProfile = ({ userId, heroId }: { userId?: string; heroId?: s
   }, [heroId, requestedUserId, setIsLoading, setUserProfile, shouldFetch, userProfile?.heroId, userProfile?.id])
 
   useEffect(() => {
-    hasShownError.current = false
+    setHasShownError(false)
   }, [heroId, requestedUserId])
 
   const { data, error, loading } = useUserForProfilePageQuery({
@@ -68,15 +68,15 @@ export const useUserProfile = ({ userId, heroId }: { userId?: string; heroId?: s
   }, [data, loading, setIsLoading, setUserProfile, shouldFetch])
 
   useEffect(() => {
-    if (!error || hasShownError.current) return
+    if (!error || hasShownError) return
 
-    hasShownError.current = true
+    setHasShownError(true)
     setIsLoading(false)
     toast.error({
       title: t('Error fetching user profile'),
       description: t('Please refresh the page and try again.'),
     })
-  }, [error, setIsLoading, toast])
+  }, [error, hasShownError, setIsLoading, toast])
 
   useEffect(() => {
     if (isViewingOwnProfile) {

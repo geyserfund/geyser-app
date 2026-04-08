@@ -1,9 +1,9 @@
-import { useLazyQuery } from '@apollo/client'
-import { useAtom, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
+import { useProjectRecurringContextQuery } from '@/types/index.ts'
+
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { ProjectRecurringContextQuery, QUERY_PROJECT_RECURRING_CONTEXT } from '../recurring/graphql'
 import {
   initialSubscriptionLoadAtom,
   recurringContributionSupportAtom,
@@ -17,41 +17,40 @@ import {
 export const useProjectSubscriptionsAPI = (load?: boolean) => {
   const setSubscriptions = useSetAtom(subscriptionsAtom)
   const setRecurringContributionSupport = useSetAtom(recurringContributionSupportAtom)
-
-  const [initialSubscriptionLoad, setInitialSubscriptionLoad] = useAtom(initialSubscriptionLoadAtom)
+  const setInitialSubscriptionLoad = useSetAtom(initialSubscriptionLoadAtom)
 
   const { project, loading } = useProjectAtom()
-
-  const [queryProjectSubscriptions, queryProjectSubscriptionsOptions] = useLazyQuery<ProjectRecurringContextQuery>(
-    QUERY_PROJECT_RECURRING_CONTEXT,
-    {
-      fetchPolicy: 'network-only',
-      onCompleted(data) {
-        if (data?.projectGet) {
-          setSubscriptions(data.projectGet.subscriptionPlans ?? [])
-          setRecurringContributionSupport(data.projectGet.recurringContributionSupport ?? undefined)
-          setInitialSubscriptionLoad(true)
+  const queryVariables =
+    project.id || project.name
+      ? {
+          where: {
+            id: project.id ? Number(project.id) : undefined,
+            name: project.name || undefined,
+          },
         }
-      },
-    },
-  )
+      : undefined
+
+  const queryProjectSubscriptions = useProjectRecurringContextQuery({
+    variables: queryVariables,
+    skip: !load || loading || !queryVariables,
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+  })
 
   useEffect(() => {
-    if (project.id && !loading && load && !initialSubscriptionLoad) {
-      queryProjectSubscriptions({
-        variables: {
-          where: {
-            id: Number(project.id),
-          },
-        },
-      })
+    if (queryProjectSubscriptions.data?.projectGet) {
+      setSubscriptions(queryProjectSubscriptions.data.projectGet.subscriptionPlans ?? [])
+      setRecurringContributionSupport(
+        queryProjectSubscriptions.data.projectGet.recurringContributionSupport ?? undefined,
+      )
+      setInitialSubscriptionLoad(true)
     }
-  }, [project.id, load, loading, initialSubscriptionLoad, queryProjectSubscriptions])
+  }, [queryProjectSubscriptions.data, setInitialSubscriptionLoad, setRecurringContributionSupport, setSubscriptions])
 
   return {
     queryProjectSubscriptions: {
-      execute: queryProjectSubscriptions,
-      ...queryProjectSubscriptionsOptions,
+      execute: () => (queryVariables ? queryProjectSubscriptions.refetch(queryVariables) : Promise.resolve()),
+      ...queryProjectSubscriptions,
     },
   }
 }

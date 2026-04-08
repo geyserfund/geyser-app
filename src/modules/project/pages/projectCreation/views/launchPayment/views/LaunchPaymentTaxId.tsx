@@ -1,6 +1,5 @@
 import { ButtonProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
@@ -21,7 +20,6 @@ export const LaunchPaymentTaxId = () => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
   const isAon = isAllOrNothing(project)
-  const countryCode = project.location?.country?.code?.toUpperCase()
 
   const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
   const shouldShowAccountPasswordStep = isAon || shouldConfigureProjectWallet
@@ -42,47 +40,7 @@ export const LaunchPaymentTaxId = () => {
     nextPath,
   )
 
-  useEffect(() => {
-    if (!import.meta.env.DEV) {
-      return
-    }
-
-    console.debug('[LaunchPaymentTaxId] next-step decision', {
-      projectId: project.id,
-      lastCreationStep: project.lastCreationStep,
-      fundingStrategy: project.fundingStrategy,
-      isAon,
-      rskEoa: project.rskEoa,
-      countryCode: countryCode || null,
-      shouldConfigureProjectWallet,
-      shouldShowAccountPasswordStep,
-      shouldShowFiatContributionsStep,
-      nextPath,
-      lastCreationStepOverride,
-    })
-  }, [
-    countryCode,
-    isAon,
-    lastCreationStepOverride,
-    nextPath,
-    project.fundingStrategy,
-    project.id,
-    project.lastCreationStep,
-    project.rskEoa,
-    shouldConfigureProjectWallet,
-    shouldShowAccountPasswordStep,
-    shouldShowFiatContributionsStep,
-  ])
-
   const handleTaxIdComplete = () => {
-    if (import.meta.env.DEV) {
-      console.debug('[LaunchPaymentTaxId] continue', {
-        projectId: project.id,
-        nextPath,
-        lastCreationStepOverride,
-      })
-    }
-
     updateProjectWithLastCreationStep(undefined, undefined, lastCreationStepOverride)
   }
 

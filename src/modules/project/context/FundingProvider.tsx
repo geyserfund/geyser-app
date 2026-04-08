@@ -1,15 +1,15 @@
 import { captureException } from '@sentry/react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import React, { PropsWithChildren, useEffect, useRef } from 'react'
+import React, { PropsWithChildren, useEffect } from 'react'
 import { useLocation } from 'react-router'
 
+import { useProjectActiveMatchingGetLazyQuery } from '../../../types'
 import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
 import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
 import { useProjectSubscriptionsAPI } from '../API/useProjectSubscriptionsAPI'
 import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'
 import { FundingProject } from '../funding/state/fundingFormAtom'
 import { partialUpdateProjectAtom, projectAtom } from '../state/projectAtom'
-import { useProjectActiveMatchingGetLazyQuery } from '../../../types'
 
 interface FundingProviderProps extends PropsWithChildren {
   project: FundingProject
@@ -18,26 +18,15 @@ interface FundingProviderProps extends PropsWithChildren {
 // Used if the project context is not available
 export const FundingProvider = ({ children, project }: FundingProviderProps) => {
   const resetFundingFlow = useResetFundingFlow()
-  const previousProjectKeyRef = useRef<string | null>(project.id ? String(project.id) : project.name)
+  const projectKey = project.id ? String(project.id) : project.name
 
   useEffect(() => {
     return () => {
-      resetFundingFlow()
+      if (projectKey) {
+        resetFundingFlow()
+      }
     }
-  }, [resetFundingFlow])
-
-  useEffect(() => {
-    const currentProjectKey = project.id ? String(project.id) : project.name
-    if (
-      previousProjectKeyRef.current &&
-      currentProjectKey &&
-      previousProjectKeyRef.current !== currentProjectKey
-    ) {
-      resetFundingFlow()
-    }
-
-    previousProjectKeyRef.current = currentProjectKey
-  }, [project.id, project.name, resetFundingFlow])
+  }, [projectKey, resetFundingFlow])
 
   return <>{children}</>
 }

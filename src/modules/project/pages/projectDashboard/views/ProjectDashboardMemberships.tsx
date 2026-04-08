@@ -1,9 +1,6 @@
 import {
   Button,
-  FormControl,
-  FormLabel,
   HStack,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,12 +8,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Switch,
-  Textarea,
   VStack,
 } from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
 import { useProjectSubscriptionsAPI } from '@/modules/project/API/useProjectSubscriptionsAPI.ts'
 import {
@@ -25,6 +23,10 @@ import {
   useSubscriptionsAtom,
 } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectSubscriptionPlan, recurringIntervals } from '@/modules/project/recurring/graphql.ts'
+import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
+import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput.tsx'
+import { ControlledTextArea } from '@/shared/components/controlledInput/ControlledTextArea.tsx'
+import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
@@ -44,8 +46,8 @@ type PlanFormState = {
   name: string
   description: string
   interval: RecurringInterval
-  amountUsdCent: number
-  amountBtcSat: number
+  amountUsd: string
+  amountBtcSat: string
   isHidden: boolean
 }
 
@@ -53,8 +55,8 @@ const defaultPlanFormState: PlanFormState = {
   name: '',
   description: '',
   interval: RecurringInterval.Monthly,
-  amountUsdCent: 1000,
-  amountBtcSat: 40000,
+  amountUsd: '10',
+  amountBtcSat: '40000',
   isHidden: false,
 }
 
@@ -65,11 +67,44 @@ export const ProjectDashboardMemberships = () => {
   const { recurringContributionSupport } = useRecurringContributionSupportAtom()
   const { queryProjectSubscriptions } = useProjectSubscriptionsAPI(true)
   const deleteModal = useModal()
+  const membershipIntervalOptions = useMemo(
+    () => [
+      { label: t('Monthly'), value: RecurringInterval.Monthly },
+      { label: t('Yearly'), value: RecurringInterval.Yearly },
+    ],
+    [],
+  )
+  const membershipPlanSchema = useMemo(
+    () =>
+      yup.object({
+        name: yup.string().trim().required(t('Name is required')),
+        description: yup.string().default(''),
+        interval: yup
+          .mixed<RecurringInterval>()
+          .oneOf(Object.values(RecurringInterval), t('Interval is required'))
+          .required(t('Interval is required')),
+        amountUsd: yup
+          .string()
+          .required(t('USD amount is required'))
+          .test('positive-usd', t('USD amount must be greater than 0'), (value) => Number(value) > 0),
+        amountBtcSat: yup
+          .string()
+          .required(t('Bitcoin amount is required'))
+          .matches(/^\d+$/, t('Bitcoin amount must be a whole number'))
+          .test('positive-sats', t('Bitcoin amount must be greater than 0'), (value) => Number(value) > 0),
+        isHidden: yup.boolean().default(false),
+      }),
+    [],
+  )
 
   const [selectedPlan, setSelectedPlan] = useState<ProjectSubscriptionPlan | null>(null)
   const [planToDelete, setPlanToDelete] = useState<ProjectSubscriptionPlan | null>(null)
-  const [formState, setFormState] = useState<PlanFormState>(defaultPlanFormState)
   const [isOpen, setIsOpen] = useState(false)
+  const form = useForm<PlanFormState>({
+    resolver: yupResolver(membershipPlanSchema),
+    mode: 'onBlur',
+    defaultValues: defaultPlanFormState,
+  })
 
   const [createPlan, createPlanState] = useProjectSubscriptionPlanCreateMutation()
   const [updatePlan, updatePlanState] = useProjectSubscriptionPlanUpdateMutation()
@@ -95,35 +130,50 @@ export const ProjectDashboardMemberships = () => {
 
   const openCreateModal = () => {
     setSelectedPlan(null)
-    setFormState(defaultPlanFormState)
+    form.reset(defaultPlanFormState)
     setIsOpen(true)
   }
 
   const openEditModal = (plan: ProjectSubscriptionPlan) => {
     setSelectedPlan(plan)
-    setFormState({
+    form.reset({
       name: plan.name,
       description: plan.description || '',
       interval: plan.interval === recurringIntervals.yearly ? RecurringInterval.Yearly : RecurringInterval.Monthly,
-      amountUsdCent: plan.amountUsdCent,
-      amountBtcSat: plan.amountBtcSat,
+      amountUsd: `${plan.amountUsdCent / 100}`,
+      amountBtcSat: `${plan.amountBtcSat}`,
       isHidden: Boolean(plan.isHidden),
     })
     setIsOpen(true)
+  }
+
+  const closeFormModal = () => {
+    setIsOpen(false)
+    setSelectedPlan(null)
+    form.reset(defaultPlanFormState)
   }
 
   const refetchPlans = () => {
     queryProjectSubscriptions.execute()
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = form.handleSubmit(async (values) => {
+    const input = {
+      name: values.name.trim(),
+      description: values.description.trim() || undefined,
+      interval: values.interval,
+      amountUsdCent: Math.round(Number(values.amountUsd) * 100),
+      amountBtcSat: Math.round(Number(values.amountBtcSat)),
+      isHidden: values.isHidden,
+    }
+
     try {
       if (selectedPlan) {
         await updatePlan({
           variables: {
             input: {
               id: toInt(selectedPlan.id),
-              ...formState,
+              ...input,
             },
           },
         })
@@ -133,14 +183,14 @@ export const ProjectDashboardMemberships = () => {
           variables: {
             input: {
               projectId: toInt(project.id),
-              ...formState,
+              ...input,
             },
           },
         })
         toast.success({ title: t('Membership plan created') })
       }
 
-      setIsOpen(false)
+      closeFormModal()
       refetchPlans()
     } catch (error) {
       toast.error({
@@ -148,7 +198,7 @@ export const ProjectDashboardMemberships = () => {
         description: error instanceof Error ? error.message : t('Please try again.'),
       })
     }
-  }
+  })
 
   const handleDelete = async () => {
     if (!planToDelete) return
@@ -243,93 +293,59 @@ export const ProjectDashboardMemberships = () => {
         </VStack>
       </VStack>
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
+      <Modal isOpen={isOpen} onClose={closeFormModal} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{selectedPlan ? t('Edit membership plan') : t('Create membership plan')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={4}>
-              <FormControl>
-                <FormLabel>{t('Name')}</FormLabel>
-                <Input
-                  value={formState.name}
-                  onChange={(event) => setFormState((current) => ({ ...current, name: event.target.value }))}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>{t('Description')}</FormLabel>
-                <Textarea
-                  value={formState.description}
-                  onChange={(event) => setFormState((current) => ({ ...current, description: event.target.value }))}
-                />
-              </FormControl>
+              <ControlledTextInput name="name" control={form.control} label={t('Name')} />
+              <ControlledTextArea name="description" control={form.control} label={t('Description')} />
               <HStack w="full" spacing={4}>
-                <FormControl>
-                  <FormLabel>{t('USD amount')}</FormLabel>
-                  <Input
-                    type="number"
-                    value={formState.amountUsdCent / 100}
-                    onChange={(event) =>
-                      setFormState((current) => ({
-                        ...current,
-                        amountUsdCent: Math.round(Number(event.target.value || 0) * 100),
-                      }))
-                    }
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>{t('Bitcoin amount (sats)')}</FormLabel>
-                  <Input
-                    type="number"
-                    value={formState.amountBtcSat}
-                    onChange={(event) =>
-                      setFormState((current) => ({
-                        ...current,
-                        amountBtcSat: Math.round(Number(event.target.value || 0)),
-                      }))
-                    }
-                  />
-                </FormControl>
+                <ControlledTextInput
+                  name="amountUsd"
+                  control={form.control}
+                  label={t('USD amount')}
+                  inputMode="decimal"
+                />
+                <ControlledTextInput
+                  name="amountBtcSat"
+                  control={form.control}
+                  label={t('Bitcoin amount (sats)')}
+                  numberOnly
+                />
               </HStack>
               <HStack w="full" spacing={4}>
-                <FormControl>
-                  <FormLabel>{t('Interval')}</FormLabel>
-                  <HStack>
-                    <Button
-                      variant={formState.interval === recurringIntervals.monthly ? 'solid' : 'outline'}
-                      colorScheme="primary1"
-                      onClick={() => setFormState((current) => ({ ...current, interval: RecurringInterval.Monthly }))}
-                    >
-                      {t('Monthly')}
-                    </Button>
-                    <Button
-                      variant={formState.interval === recurringIntervals.yearly ? 'solid' : 'outline'}
-                      colorScheme="primary1"
-                      onClick={() => setFormState((current) => ({ ...current, interval: RecurringInterval.Yearly }))}
-                    >
-                      {t('Yearly')}
-                    </Button>
-                  </HStack>
-                </FormControl>
-                <FormControl display="flex" alignItems="center" gap={3} pt={8}>
-                  <FormLabel mb={0}>{t('Hidden')}</FormLabel>
-                  <Switch
-                    isChecked={formState.isHidden}
-                    onChange={(event) => setFormState((current) => ({ ...current, isHidden: event.target.checked }))}
-                  />
-                </FormControl>
+                <ControlledCustomSelect<PlanFormState, (typeof membershipIntervalOptions)[number], false>
+                  name="interval"
+                  control={form.control}
+                  label={t('Interval')}
+                  options={membershipIntervalOptions}
+                />
+                <ControlledSwitchInput
+                  name="isHidden"
+                  control={form.control}
+                  label={t('Hidden')}
+                  isChecked={form.watch('isHidden')}
+                  containerProps={{ pt: 8 }}
+                />
               </HStack>
             </VStack>
           </ModalBody>
           <ModalFooter gap={3}>
-            <Button variant="soft" colorScheme="neutral1" onClick={() => setIsOpen(false)}>
+            <Button variant="soft" colorScheme="neutral1" onClick={closeFormModal}>
               {t('Cancel')}
             </Button>
             <Button
               colorScheme="primary1"
               onClick={handleSubmit}
-              isLoading={createPlanState.loading || updatePlanState.loading || deletePlanState.loading}
+              isLoading={
+                form.formState.isSubmitting ||
+                createPlanState.loading ||
+                updatePlanState.loading ||
+                deletePlanState.loading
+              }
             >
               {selectedPlan ? t('Save changes') : t('Create plan')}
             </Button>
