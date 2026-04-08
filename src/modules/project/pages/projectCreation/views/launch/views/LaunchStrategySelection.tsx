@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/sections/GeyserPromotionSection.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { __production__, __staging__ } from '@/shared/constants/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
@@ -27,7 +26,7 @@ export const LaunchStrategySelection = ({
 
   const isStarterLaunch = strategy === ProjectLaunchStrategy.STARTER_LAUNCH
   const isGrowthLaunch = strategy === ProjectLaunchStrategy.GROWTH_LAUNCH
-  const isProLaunch = strategy === ProjectLaunchStrategy.PRO_LAUNCH
+  const isCatalystLaunch = strategy === ProjectLaunchStrategy.PRO_LAUNCH
 
   const continueButtonProps = {
     onClick: () => handleNext(strategy),
@@ -50,7 +49,7 @@ export const LaunchStrategySelection = ({
           onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
           title={t('Starter Launch')}
           subtitle={t('do it yourself, get the basic exposure')}
-          body={`${t('Access to all Geyser tooling and get discovered through the Geyser platform')} `}
+          body={t('Access to all Geyser tooling and get discovered through the Geyser platform')}
           price={t('$25')}
         />
         <ProjectCreateStrategyCard
@@ -58,36 +57,42 @@ export const LaunchStrategySelection = ({
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
           title={t('Growth Launch')}
-          subtitle={t('Visibility boost')}
+          subtitle={t('visibility + distribution boost')}
           price={t('$60')}
           points={[
+            [t('Everything in Starter')],
             [t('Landing Page Feature'), t('1 week front-page spotlight')],
-            [
-              t('Geyser Newsletter feature'),
-              t('get featured at the top of our monthly newsletter going out to 5000+ subscribers'),
-            ],
-            [t('Social Media post'), t('1 social media post on Geyser’s X account with 15k+ followers')],
+            [t('Project Feedback'), t('1-time expert feedback on your project story and structure')],
+            [t('Geyser Newsletter Feature'), t('featured in our monthly newsletter')],
+            [t('Social Media Post'), t('1 post on Geyser’s X account')],
+            [t('Social Amplification'), t('additional reposts and visibility boosts')],
           ]}
         />
         <ProjectCreateStrategyCard
           flex={1}
-          isSelected={isProLaunch}
+          isSelected={isCatalystLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
-          title={t('Pro Launch')}
-          subtitle={t('Maximum visibility + product feedback')}
-          body={t('Limited to 5 per month, subject to selection')}
-          price={t('$90')}
-          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
+          title={t('Catalyst Launch')}
+          subtitle={t('guided strategy + targeted amplification')}
+          body={t(
+            'A strategic launch package with content, network access, and dedicated support - with expected reach of ~100k impressions depending on project potential',
+          )}
+          price={t('$300')}
+          highlightedText={t('Most Popular')}
           points={[
-            [t('Everything in Growth')],
+            [t('Strategy Call'), t('1 session to define goals, audience, and launch plan')],
+            [t('Content Strategy Plan'), t('1 session with clear deliverable of what to post and when')],
             [
-              t('Spotlight Email'),
-              t('Your project featured in a dedicated email sent to Geyser users most interested in your category'),
+              t('Rapidfire Q&A for Content'),
+              t('1 session to create 10 pieces of content to help clarify your project'),
             ],
-            [
-              t('Project feedback'),
-              t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
-            ],
+            [t('Social Amplification'), t('additional reposts and visibility boosts')],
+            [t('Deep Social Promotion'), t('high-quality dedicated post + ongoing retweets')],
+            [t('Newsletter Spotlight'), t('featured placement in newsletter')],
+            [t('Email Campaign'), t('promotion sent to relevant Geyser users/projects')],
+            [t('Network Access'), t('introductions to relevant partners when aligned')],
+            [t('1-Month Support'), t('async support in shared Telegram group')],
+            [t('Mid-Campaign Check-in'), t('progress review + optimization suggestions')],
           ]}
         />
         <ProjectCreateStrategyCard
@@ -98,11 +103,20 @@ export const LaunchStrategySelection = ({
           }
           isExternal
           title={t('Geyser Partnership')}
-          subtitle={t('hands on support + network amplification')}
+          subtitle={t('hands-on support + network amplification')}
           body={t(
-            'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support. If you click ',
+            'Geyser becomes your partner providing personalized launch strategy, project feedback, and marketing support',
           )}
           price={t('starting at $1,000')}
+          points={[
+            [t('Dedicated Strategy & Planning'), t('ongoing alignment on goals and execution')],
+            [t('Content Planning & Creation Support'), t('hands-on help crafting your campaign')],
+            [t('Full Network Access'), t('direct amplification through Geyser ecosystem')],
+            [t('Newsletter Features Across Campaign'), t('multiple placements during your campaign')],
+            [t('Weekly Discussions & Check-ins'), t('continuous guidance from Geyser team')],
+            [t('Campaign Iteration & Improvements'), t('ongoing optimization based on performance')],
+            [t('Dedicated Telegram Group'), t('ongoing support and coordination')],
+          ]}
         />
       </VStack>
       <VStack w="full" alignItems="flex-start">
@@ -181,7 +195,7 @@ export const ProjectCreateStrategyCard = ({
           )}
           {points && (
             <UnorderedList alignItems="flex-start" spacing={1}>
-              {points.map((point, index) => (
+              {points.map((point) => (
                 <ListItem key={point[0]}>
                   <Body size="sm" bold display="inline">
                     {point[0]}

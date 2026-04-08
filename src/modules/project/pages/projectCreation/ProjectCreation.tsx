@@ -1,4 +1,6 @@
+import { useSetAtom } from 'jotai'
 import { ScopeProvider } from 'jotai-scope'
+import { useEffect } from 'react'
 import { Outlet, useParams } from 'react-router'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -11,6 +13,7 @@ import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '@/mo
 import { toInt } from '@/utils'
 
 import { ProjectProvider } from '../../context/ProjectProvider.tsx'
+import { creationReviewLockEnabledAtom, projectReviewsAtom } from './states/projectReviewAtom.ts'
 
 const listOfAtoms = [
   projectAtom,
@@ -24,6 +27,8 @@ const listOfAtoms = [
   walletLoadingAtom,
   formProjectAtom,
   projectFormErrorAtom,
+  projectReviewsAtom,
+  creationReviewLockEnabledAtom,
 ]
 
 export const ProjectCreation = () => {
@@ -34,9 +39,25 @@ export const ProjectCreation = () => {
 
   return (
     <ScopeProvider atoms={listOfAtoms}>
-      <ProjectProvider projectId={isProjectId ? toInt(projectId) : undefined}>
-        <Outlet />
-      </ProjectProvider>
+      <ProjectCreationScopedContent projectId={isProjectId ? toInt(projectId) : undefined} />
     </ScopeProvider>
+  )
+}
+
+const ProjectCreationScopedContent = ({ projectId }: { projectId?: number }) => {
+  const setCreationReviewLockEnabled = useSetAtom(creationReviewLockEnabledAtom)
+
+  useEffect(() => {
+    setCreationReviewLockEnabled(true)
+
+    return () => {
+      setCreationReviewLockEnabled(false)
+    }
+  }, [setCreationReviewLockEnabled])
+
+  return (
+    <ProjectProvider projectId={projectId}>
+      <Outlet />
+    </ProjectProvider>
   )
 }
