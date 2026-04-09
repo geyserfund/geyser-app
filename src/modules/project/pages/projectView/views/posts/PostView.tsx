@@ -68,7 +68,7 @@ export const PostView = () => {
 
       handlePostQuery()
     }
-  }, [postId, queryPost, toast])
+  }, [postId, queryPost])
 
   const post = data?.post
 
