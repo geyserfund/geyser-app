@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Input, Spinner, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Spinner, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { PiArrowLeft, PiCaretDown, PiImages } from 'react-icons/pi'
@@ -16,7 +16,7 @@ import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, ProjectPostValidations } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks'
-import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { FileUpload } from '@/shared/molecules'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
@@ -45,16 +45,6 @@ export const PostCreateEdit = () => {
   const linkedRewardUuid = searchParams.get('rewardUuid')
 
   const [focusFlag, setFocusFlag] = useState(false)
-
-  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
-  const [isStoryLoading, setIsStoryLoading] = useState(false)
-  const handleToggleEditorMode = () => {
-    toggleEditorMode()
-    setIsStoryLoading(true)
-    setTimeout(() => {
-      setIsStoryLoading(false)
-    }, 1)
-  }
 
   const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm({
     projectId: project.id,
@@ -333,22 +323,13 @@ export const PostCreateEdit = () => {
             </VStack>
 
             <Box flex={1} width="100%" paddingX={6}>
-              {isStoryLoading ? null : (
-                <MarkdownField
-                  initialContentReady={!loading}
-                  initialContent={() => postForm.markdown || ''}
-                  content={postForm.markdown || ''}
-                  name="markdown"
-                  flex
-                  control={control}
-                  isFloatingToolbar
-                  toolbarMaxWidth={dimensions.project.posts.view.maxWidth}
-                  enableRawMode
-                  autoFocus={Boolean(focusFlag)}
-                  isEditorMode={isEditorMode}
-                  toggleEditorMode={handleToggleEditorMode}
-                />
-              )}
+              <MdxMarkdownEditor
+                mode="edit"
+                name="markdown"
+                control={control}
+                autoFocus={Boolean(focusFlag)}
+                minHeight="240px"
+              />
             </Box>
           </VStack>
         </CardLayout>

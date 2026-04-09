@@ -2,7 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 
 import { Modal } from '@/shared/components/layouts'
 import { UseModalReturn } from '@/shared/hooks'
-import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
+import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal.tsx'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { fonts } from '@/shared/styles'
@@ -41,7 +41,14 @@ export const MediaCarouselForGuardianRewards = ({
         aspectRatio={ImageCropAspectRatio.Reward}
       />
       <VStack w="full" fontFamily={fonts.cormorant} alignItems="flex-start">
-        {data.description && <MarkdownField content={data.description || ''} preview fontFamily={fonts.cormorant} />}
+        {data.description && (
+          <MdxMarkdownEditor
+            mode="preview"
+            value={data.description || ''}
+            minHeight="0px"
+            fontFamily={fonts.cormorant}
+          />
+        )}
       </VStack>
       <HStack paddingTop={4} w="full" justifyContent="center" position="absolute" bottom={6} left={0}>
         {bottomContent}
