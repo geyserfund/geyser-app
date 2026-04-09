@@ -75,7 +75,7 @@ export const LaunchPlansSection = () => {
       badge: t('Partnership'),
       title: t('Geyser Partnership'),
       subtitle: t('hands-on support + network amplification'),
-      price: t('starting at $1,000 per month'),
+      price: t('starting at $1,000'),
       points: [
         t('Geyser becomes your partner providing personalized launch strategy, project feedback, and marketing support'),
         t('Dedicated Strategy & Planning: ongoing alignment on goals and execution'),
@@ -123,10 +123,11 @@ export const LaunchPlansSection = () => {
                 <VStack alignItems="flex-start" spacing={2} flex={1}>
                   {plan.points.map((point, index) => {
                     const isHighlight = plan.cardVariant === 'catalyst' && index === 0
+                    const shouldShowTick = !(plan.cardVariant === 'catalyst' && index === 0)
 
                     return (
                       <Body key={point} size="sm" fontStyle={isHighlight ? 'italic' : 'normal'}>
-                        <PiCheckCircle style={{ display: 'inline', marginRight: '8px' }} />
+                        {shouldShowTick ? <PiCheckCircle style={{ display: 'inline', marginRight: '8px' }} /> : null}
                         {point}
                       </Body>
                     )

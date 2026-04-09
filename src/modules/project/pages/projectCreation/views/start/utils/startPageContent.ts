@@ -124,7 +124,7 @@ export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] => [
   {
     title: translate('Geyser Partnership'),
     subtitle: translate('hands-on support + network amplification'),
-    price: translate('starting at $1,000 per month'),
+    price: translate('starting at $1,000'),
     points: [
       translate('Geyser becomes your partner providing personalized launch strategy, project feedback, and marketing support'),
       translate('Dedicated Strategy & Planning: ongoing alignment on goals and execution'),
