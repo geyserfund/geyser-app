@@ -92,6 +92,7 @@ const otherFunds = [
 const FEATURED_IMPACT_FUND_NAMES = ['latam-impact-fund', 'africa-impact-fund', 'asia-impact-fund'] as const
 const SECONDARY_IMPACT_FUND_NAMES = ['europe-impact-fund', 'north-america-impact-fund'] as const
 const PRIORITIZED_IMPACT_FUND_NAMES = [...FEATURED_IMPACT_FUND_NAMES, ...SECONDARY_IMPACT_FUND_NAMES] as const
+const LATAM_IMPACT_FUND_NAME = 'latam-impact-fund'
 const featuredImpactFundNameSet = new Set<string>(FEATURED_IMPACT_FUND_NAMES)
 const secondaryImpactFundNameSet = new Set<string>(SECONDARY_IMPACT_FUND_NAMES)
 const prioritizedImpactFundNameSet = new Set<string>(PRIORITIZED_IMPACT_FUND_NAMES)
@@ -269,35 +270,45 @@ export const ImpactFundsMainPage = () => {
   const additionalImpactFunds = orderedImpactFunds.filter(
     (fund) => !featuredImpactFundNameSet.has(fund.name) && !secondaryImpactFundNameSet.has(fund.name),
   )
+  const latamImpactFund = featuredImpactFunds.find((fund) => fund.name === LATAM_IMPACT_FUND_NAME)
+  const secondaryFeaturedImpactFunds = featuredImpactFunds.filter((fund) => fund.name !== LATAM_IMPACT_FUND_NAME)
   const compactImpactFunds = [...secondaryImpactFunds, ...additionalImpactFunds]
 
   const getImpactFundImageProps = (fundName: string) => {
     if (fundName === 'latam-impact-fund') {
       return {
         objectFit: 'cover' as const,
-        objectPosition: 'calc(50% + 40px) center',
-        transform: undefined,
+        objectPosition: 'center',
+        transform: { base: 'scale(1.22)', lg: 'scale(1.34)' },
       }
     }
 
     return {
-      objectFit: 'contain' as const,
+      objectFit: 'cover' as const,
       objectPosition: 'center',
-      transform: { base: 'scale(1.08)', md: 'scale(1.02)' },
+      transform: { base: 'scale(1.12)', lg: 'scale(1.18)' },
     }
   }
 
-  const renderImpactFundCard = (fund: ImpactFundListItem, variant: 'featured' | 'compact') => {
+  const renderImpactFundCard = (fund: ImpactFundListItem, variant: 'hero' | 'featured' | 'compact') => {
     const amountDisplay = getFundAmountDisplay(fund)
+    const isHero = variant === 'hero'
     const isFeatured = variant === 'featured'
     const isCompact = variant === 'compact'
+    const isMobileHorizontalCompact = isCompact && secondaryImpactFundNameSet.has(fund.name)
     const imageProps = getImpactFundImageProps(fund.name)
-    const compactImageProps = isCompact
+    const cardImageProps = isCompact
       ? {
           objectFit: 'cover' as const,
           objectPosition: 'center',
           transform: { lg: 'scale(1.06)' },
         }
+      : isHero
+        ? {
+            objectFit: 'cover' as const,
+            objectPosition: imageProps.objectPosition,
+            transform: imageProps.transform,
+          }
       : imageProps
 
     return (
@@ -321,19 +332,34 @@ export const ImpactFundsMainPage = () => {
         }}
       >
         <LinkBox w="full" h="full">
-          <Flex w="full" h="full" direction={{ base: 'column', lg: isCompact ? 'row' : 'column' }}>
+          <Flex
+            w="full"
+            h="full"
+            direction={{ base: isMobileHorizontalCompact ? 'row' : 'column', lg: isCompact || isHero ? 'row' : 'column' }}
+            align="stretch"
+            minH={isHero ? { lg: '360px' } : undefined}
+          >
             <Box
               h={
-                isFeatured
+                isHero
+                  ? { base: '260px', lg: 'auto' }
+                  : isFeatured
                   ? { base: '220px', lg: '280px' }
-                  : { base: '160px', lg: '100%' }
+                  : { base: isMobileHorizontalCompact ? 'auto' : '160px', lg: 'auto' }
               }
-              w={isCompact ? { base: 'full', lg: '200px' } : 'full'}
-              minW={isCompact ? { lg: '200px' } : undefined}
+              w={
+                isHero
+                  ? { base: 'full', lg: '44%' }
+                  : isCompact
+                    ? { base: isMobileHorizontalCompact ? '132px' : 'full', lg: '220px' }
+                    : 'full'
+              }
+              minW={isHero ? { lg: '44%' } : isCompact ? { base: isMobileHorizontalCompact ? '132px' : undefined, lg: '220px' } : undefined}
               bg={cardImageBg}
               overflow="hidden"
               position="relative"
               flexShrink={0}
+              alignSelf="stretch"
             >
               {fund.heroImage && (
                 <Image
@@ -342,9 +368,9 @@ export const ImpactFundsMainPage = () => {
                   w="full"
                   h="full"
                   display="block"
-                  objectFit={compactImageProps.objectFit}
-                  objectPosition={compactImageProps.objectPosition}
-                  transform={compactImageProps.transform}
+                  objectFit={cardImageProps.objectFit}
+                  objectPosition={cardImageProps.objectPosition}
+                  transform={cardImageProps.transform}
                 />
               )}
             </Box>
@@ -358,15 +384,15 @@ export const ImpactFundsMainPage = () => {
               align="stretch"
               spacing={4}
               flex={1}
-              minH={isCompact ? { lg: '190px' } : undefined}
+              minH={isCompact ? { base: isMobileHorizontalCompact ? '132px' : undefined, lg: '190px' } : isHero ? { lg: '360px' } : undefined}
             >
               <Flex
-                direction={{ base: 'column', sm: 'row' }}
+                direction={{ base: isMobileHorizontalCompact ? 'column' : 'column', sm: 'row' }}
                 justifyContent="space-between"
                 align={{ base: 'start', sm: 'start' }}
                 gap={3}
               >
-                <H2 size={isFeatured ? 'xl' : 'lg'} bold lineHeight={1.2} flex={1}>
+                <H2 size={isHero || isFeatured ? 'xl' : 'lg'} bold lineHeight={1.2} flex={1}>
                   <LinkOverlay as={Link} to={getPath('impactFunds', encodeURIComponent(fund.name))}>
                     {fund.title}
                   </LinkOverlay>
@@ -384,7 +410,7 @@ export const ImpactFundsMainPage = () => {
                     minW={{ base: 'auto', sm: '140px' }}
                   >
                     <Body
-                      size={isFeatured ? 'md' : 'sm'}
+                      size={isHero || isFeatured ? 'md' : 'sm'}
                       bold
                       whiteSpace="nowrap"
                       lineHeight={1.2}
@@ -409,13 +435,13 @@ export const ImpactFundsMainPage = () => {
               </Flex>
 
               {fund.subtitle && (
-                <Body size={isFeatured ? 'md' : 'sm'} lineHeight={1.5} color={sectionSecondaryTextColor}>
+                <Body size={isHero || isFeatured ? 'md' : 'sm'} lineHeight={1.5} color={sectionSecondaryTextColor}>
                   {fund.subtitle}
                 </Body>
               )}
 
               <Flex mt="auto" justifyContent="space-between" alignItems="center" gap={4} flexWrap="wrap">
-                {isCompact ? (
+                {isMobileHorizontalCompact ? null : isCompact ? (
                   <HStack spacing={2} align="baseline">
                     <Body size="xs" color={sectionMutedTextColor} textTransform="uppercase" letterSpacing="wide">
                       {t('Projects supported')}
@@ -429,7 +455,7 @@ export const ImpactFundsMainPage = () => {
                     <Body size="xs" color={sectionMutedTextColor} textTransform="uppercase" letterSpacing="wide">
                       {t('Projects supported')}
                     </Body>
-                    <Body size={isFeatured ? 'md' : 'sm'} bold color={sectionPrimaryTextColor}>
+                    <Body size={isHero || isFeatured ? 'md' : 'sm'} bold color={sectionPrimaryTextColor}>
                       {numberFormatter.format(fund.metrics.projectsFundedCount || 0)}
                     </Body>
                   </VStack>
@@ -586,35 +612,24 @@ export const ImpactFundsMainPage = () => {
             <Body color={sectionSecondaryTextColor}>
               {t('Explore region-led pools of capital on Geyser.')}
             </Body>
+            <Body size="sm" color={sectionSecondaryTextColor}>
+              {t('The following funds are actively accepting applications and have committed capital ready for deployment.')}
+            </Body>
           </VStack>
 
-          {featuredImpactFunds.length > 0 && (
-            <VStack align="stretch" spacing={4}>
-              <VStack align="stretch" spacing={1}>
-                <H2 size="lg" bold>
-                  {t('Active Funds')}
-                </H2>
-                <Body size="sm" color={sectionSecondaryTextColor}>
-                  {t('These funds are actively accepting applications and have committed capital ready for deployment.')}
-                </Body>
-              </VStack>
+          {latamImpactFund && renderImpactFundCard(latamImpactFund, 'hero')}
 
-              <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={6}>
-                {featuredImpactFunds.map((fund) => renderImpactFundCard(fund, 'featured'))}
-              </SimpleGrid>
-            </VStack>
+          {secondaryFeaturedImpactFunds.length > 0 && (
+            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+              {secondaryFeaturedImpactFunds.map((fund) => renderImpactFundCard(fund, 'featured'))}
+            </SimpleGrid>
           )}
 
           {compactImpactFunds.length > 0 && (
             <VStack align="stretch" spacing={4}>
-              <VStack align="stretch" spacing={1}>
-                <H2 size="lg" bold>
-                  {t('Other funds')}
-                </H2>
-                <Body size="sm" color={sectionSecondaryTextColor}>
-                  {t('These funds are not currently allocating capital.')}
-                </Body>
-              </VStack>
+              <Body size="sm" color={sectionSecondaryTextColor}>
+                {t('The following funds are not currently allocating capital.')}
+              </Body>
 
               <SimpleGrid columns={1} spacing={5}>
                 {compactImpactFunds.map((fund) => renderImpactFundCard(fund, 'compact'))}

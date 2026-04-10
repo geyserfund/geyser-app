@@ -9,37 +9,16 @@ import { Head } from '@/config/Head.tsx'
 import { NotAuthorized } from '@/modules/general/fallback'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import type { ImpactFundQuery } from '@/types'
+import type { ImpactFundDashboardApplicationsQuery, ImpactFundQuery } from '@/types'
+import { ProjectFundingStrategy } from '@/types'
 
 import { QUERY_IMPACT_FUND, QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS } from '../graphql/queries/impactFundsQuery.ts'
 
 const APPLICATIONS_PAGE_SIZE = 25
 
 type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
-type DashboardApplication = {
-  applicationId: string
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED' | 'FUNDED' | 'ONGOING' | 'IN_REVIEW'
-  fundingModel: 'DIRECT_GRANT' | 'MATCHING' | 'AON_COFUNDING'
-  project: {
-    id: string
-    name: string
-    title: string
-    thumbnailImage?: string | null
-    shortDescription?: string | null
-  }
-  creator?: {
-    id: string
-    username: string
-    email?: string | null
-  } | null
-  projectPath: string
-}
-type ImpactFundDashboardApplicationsData = {
-  impactFundDashboardApplications: {
-    totalCount: number
-    applications: DashboardApplication[]
-  }
-}
+type DashboardApplication = ImpactFundDashboardApplicationsQuery['impactFundDashboardApplications']['applications'][number]
+type ImpactFundDashboardApplicationsData = ImpactFundDashboardApplicationsQuery
 
 const applicationStatusLabels: Record<DashboardApplication['status'], string> = {
   PENDING: 'Pending',
@@ -65,8 +44,21 @@ function getApplicationStatusLabel(status: DashboardApplication['status']) {
   return applicationStatusLabels[status] ?? status
 }
 
+const projectFundingStrategyLabels: Record<ProjectFundingStrategy, string> = {
+  [ProjectFundingStrategy.AllOrNothing]: 'All-or-nothing',
+  [ProjectFundingStrategy.TakeItAll]: 'Open Funding',
+}
+
+function getProjectFundingStrategyLabel(fundingStrategy?: ProjectFundingStrategy | null) {
+  if (!fundingStrategy) {
+    return null
+  }
+
+  return projectFundingStrategyLabels[fundingStrategy] ?? fundingStrategy
+}
+
 function ApplicationsTable({ applications }: { applications: DashboardApplication[] }) {
-  const [expandedApplicationId, setExpandedApplicationId] = useState<string | null>(null)
+  const [expandedApplicationId, setExpandedApplicationId] = useState<DashboardApplication['applicationId'] | null>(null)
 
   if (applications.length === 0) {
     return (
@@ -81,86 +73,104 @@ function ApplicationsTable({ applications }: { applications: DashboardApplicatio
       <Table variant="simple">
         <Thead>
           <Tr>
-            <Th>{t('Project title')}</Th>
-            <Th w="320px" minW="320px" maxW="320px">
+            <Th textAlign="left">{t('Project title')}</Th>
+            <Th textAlign="left">{t('Project country')}</Th>
+            <Th textAlign="left">{t('Funding strategy')}</Th>
+            <Th textAlign="left" w="320px" minW="320px" maxW="320px">
               {t('Short description')}
             </Th>
-            <Th>{t('Creator Username')}</Th>
-            <Th>{t('Creator Email')}</Th>
-            <Th>{t('Application status')}</Th>
-            <Th>{t('View Project')}</Th>
+            <Th textAlign="left">{t('Creator Username')}</Th>
+            <Th textAlign="left">{t('Creator Email')}</Th>
+            <Th textAlign="left">{t('Identity verified')}</Th>
+            <Th textAlign="left">{t('Application status')}</Th>
+            <Th textAlign="left">{t('View Project')}</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {applications.map((application) => (
-            <Tr
-              key={application.applicationId}
-              cursor="pointer"
-              verticalAlign="top"
-              onClick={() =>
-                setExpandedApplicationId((current) =>
-                  current === application.applicationId ? null : application.applicationId
-                )
-              }
-            >
-              <Td whiteSpace="nowrap" verticalAlign="top">
-                <HStack align="start" spacing={3}>
-                  <Box
-                    w="40px"
-                    h="40px"
-                    borderRadius="md"
+          {applications.map((application) => {
+            const fundingStrategyLabel = getProjectFundingStrategyLabel(application.project.fundingStrategy)
+
+            return (
+              <Tr
+                key={application.applicationId}
+                cursor="pointer"
+                verticalAlign="top"
+                onClick={() =>
+                  setExpandedApplicationId((current: DashboardApplication['applicationId'] | null) =>
+                    current === application.applicationId ? null : application.applicationId
+                  )
+                }
+              >
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <HStack align="start" spacing={3}>
+                    <Box
+                      w="40px"
+                      h="40px"
+                      borderRadius="md"
+                      overflow="hidden"
+                      bg="neutral1.100"
+                      flexShrink={0}
+                    >
+                      {application.project.thumbnailImage ? (
+                        <Image
+                          src={application.project.thumbnailImage}
+                          alt={application.project.title}
+                          w="full"
+                          h="full"
+                          objectFit="cover"
+                        />
+                      ) : null}
+                    </Box>
+                    <Body size="sm" whiteSpace="nowrap">
+                      {application.project.title}
+                    </Body>
+                  </HStack>
+                </Td>
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <Body size="sm">{application.project.country || ' - '}</Body>
+                </Td>
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <Body size="sm">{fundingStrategyLabel ? t(fundingStrategyLabel) : ' - '}</Body>
+                </Td>
+                <Td textAlign="left" w="320px" minW="320px" maxW="320px" verticalAlign="top">
+                  <Body
+                    size="sm"
+                    whiteSpace={expandedApplicationId === application.applicationId ? 'normal' : 'nowrap'}
                     overflow="hidden"
-                    bg="neutral1.100"
-                    flexShrink={0}
+                    textOverflow="ellipsis"
                   >
-                    {application.project.thumbnailImage ? (
-                      <Image
-                        src={application.project.thumbnailImage}
-                        alt={application.project.title}
-                        w="full"
-                        h="full"
-                        objectFit="cover"
-                      />
-                    ) : null}
-                  </Box>
-                  <Body size="sm" whiteSpace="nowrap">
-                    {application.project.title}
+                    {application.project.shortDescription || ' - '}
                   </Body>
-                </HStack>
-              </Td>
-              <Td w="320px" minW="320px" maxW="320px" verticalAlign="top">
-                <Body
-                  size="sm"
-                  whiteSpace={expandedApplicationId === application.applicationId ? 'normal' : 'nowrap'}
-                  overflow="hidden"
-                  textOverflow="ellipsis"
-                >
-                  {application.project.shortDescription || ' - '}
-                </Body>
-              </Td>
-              <Td whiteSpace="nowrap" verticalAlign="top">
-                {application.creator?.username || 'Unknown'}
-              </Td>
-              <Td whiteSpace="nowrap" verticalAlign="top">
-                {application.creator?.email || ' - '}
-              </Td>
-              <Td whiteSpace="nowrap" verticalAlign="top">
-                {getApplicationStatusLabel(application.status)}
-              </Td>
-              <Td verticalAlign="top">
-                <Button
-                  as={Link}
-                  to={application.projectPath}
-                  variant="link"
-                  colorScheme="primary1"
-                  onClick={(event) => event.stopPropagation()}
-                  aria-label={t('View project')}
-                >
-                  <PiArrowUpRightBold />
-                </Button>
-              </Td>
-            </Tr>
-          ))}
+                </Td>
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <Body size="sm">{application.creator?.username || t('Unknown')}</Body>
+                </Td>
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <Body size="sm">{application.creator?.email || ' - '}</Body>
+                </Td>
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <Body size="sm">
+                    {application.creator ? (application.creator.isIdentityVerified ? t('Yes') : t('No')) : ' - '}
+                  </Body>
+                </Td>
+                <Td textAlign="left" whiteSpace="nowrap" verticalAlign="top">
+                  <Body size="sm">{t(getApplicationStatusLabel(application.status))}</Body>
+                </Td>
+                <Td textAlign="left" verticalAlign="top">
+                  <Button
+                    as={Link}
+                    to={application.projectPath}
+                    variant="link"
+                    colorScheme="primary1"
+                    onClick={(event) => event.stopPropagation()}
+                    aria-label={t('View project')}
+                  >
+                    <PiArrowUpRightBold />
+                  </Button>
+                </Td>
+              </Tr>
+            )
+          })}
         </Tbody>
       </Table>
     </TableContainer>

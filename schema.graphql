@@ -3499,12 +3499,15 @@ type ImpactFundDashboardProject {
   title: String!
   thumbnailImage: String
   shortDescription: String
+  country: String
+  fundingStrategy: ProjectFundingStrategy!
 }
 
 type ImpactFundDashboardCreator {
   id: BigInt!
   username: String!
   email: String
+  isIdentityVerified: Boolean!
 }
 
 type ImpactFundMetrics {
