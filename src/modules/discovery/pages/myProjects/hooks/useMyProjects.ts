@@ -11,6 +11,8 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
+import { isProjectInPostLaunchReview, isProjectPendingLaunch } from '../utils/projectState.ts'
+
 export const sortProjectsByActivity = (
   projects: ProjectForMyProjectsFragment[],
   activities: ProjectActivitiesCount[],
@@ -31,14 +33,7 @@ export const sortProjectsByActivity = (
     })
 }
 
-export const inDraftStatus = [
-  ProjectStatus.Draft,
-  ProjectStatus.InReview,
-  ProjectStatus.PreLaunch,
-  ProjectStatus.Accepted,
-] as ProjectStatus[]
-
-export const inactiveStatus = [ProjectStatus.Closed, ProjectStatus.Inactive]
+const inactiveStatuses = [ProjectStatus.Closed, ProjectStatus.Inactive]
 
 export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
@@ -96,7 +91,7 @@ export const useMyProjects = (userId: number) => {
 
       setInDraftProjects(
         projects
-          .filter((project) => !project?.launchedAt)
+          .filter((project) => isProjectPendingLaunch(project))
           .sort((a, b) => {
             const aIsAccepted = a?.status === ProjectStatus.Accepted
             const bIsAccepted = b?.status === ProjectStatus.Accepted
@@ -105,11 +100,9 @@ export const useMyProjects = (userId: number) => {
             return 0
           }),
       )
-      setInReviewProjects(
-        projects.filter((project) => project?.launchedAt && project?.status === ProjectStatus.InReview),
-      )
+      setInReviewProjects(projects.filter((project) => isProjectInPostLaunchReview(project)))
       setInPrelaunchProjects(projects.filter((project) => project?.status === ProjectStatus.PreLaunch))
-      setInActiveProjects(projects.filter((project) => project?.status && inactiveStatus.includes(project.status)))
+      setInActiveProjects(projects.filter((project) => project?.status && inactiveStatuses.includes(project.status)))
 
       setLoading(false)
     },

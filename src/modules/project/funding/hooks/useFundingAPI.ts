@@ -808,8 +808,17 @@ export const useFundingAPI = () => {
   }
 }
 
-export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
-  const { project } = useProjectAtom()
+type ClaimTargetProject = {
+  fundingStrategy?: ProjectFundingStrategy | null
+  rskEoa?: string | null
+  aonGoal?: {
+    contractAddress?: string | null
+  } | null
+}
+
+export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverride?: ClaimTargetProject | null) => {
+  const { project: activeProject } = useProjectAtom()
+  const project = projectOverride || activeProject
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
