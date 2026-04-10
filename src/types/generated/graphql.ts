@@ -1382,11 +1382,14 @@ export type ImpactFundDashboardCreator = {
   __typename?: 'ImpactFundDashboardCreator';
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigInt']['output'];
+  isIdentityVerified: Scalars['Boolean']['output'];
   username: Scalars['String']['output'];
 };
 
 export type ImpactFundDashboardProject = {
   __typename?: 'ImpactFundDashboardProject';
+  country?: Maybe<Scalars['String']['output']>;
+  fundingStrategy: ProjectFundingStrategy;
   id: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
   shortDescription?: Maybe<Scalars['String']['output']>;
@@ -7495,11 +7498,14 @@ export type ImpactFundDashboardApplicationsResponseResolvers<ContextType = any, 
 export type ImpactFundDashboardCreatorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardCreator'] = ResolversParentTypes['ImpactFundDashboardCreator']> = {
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  isIdentityVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ImpactFundDashboardProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardProject'] = ResolversParentTypes['ImpactFundDashboardProject']> = {
+  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fundingStrategy?: Resolver<ResolversTypes['ProjectFundingStrategy'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -10068,7 +10074,7 @@ export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, projectPath: string, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, projectPath: string, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, country?: string | null, fundingStrategy: ProjectFundingStrategy }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
