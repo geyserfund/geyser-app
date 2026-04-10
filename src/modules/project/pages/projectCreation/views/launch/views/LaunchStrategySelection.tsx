@@ -47,52 +47,46 @@ export const LaunchStrategySelection = ({
           flex={1}
           isSelected={isStarterLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
-          title={t('Starter Launch')}
-          subtitle={t('do it yourself, get the basic exposure')}
-          body={t('Access to all Geyser tooling and get discovered through the Geyser platform')}
+          title={t('Basic')}
+          subtitle={t('Do it yourself. Get listed and start collecting support.')}
           price={t('$25')}
+          points={[[t('Access to all Geyser tools')], [t('Discoverability on the platform')]]}
         />
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
-          title={t('Growth Launch')}
-          subtitle={t('visibility + distribution boost')}
+          title={t('Visibility Boost')}
+          subtitle={t(
+            'Get eyes on your project. Best for projects that already have an audience and are confident about your project.',
+          )}
           price={t('$60')}
-          points={[
-            [t('Everything in Starter')],
-            [t('Landing Page Feature'), t('1 week front-page spotlight')],
-            [t('Project Feedback'), t('1-time expert feedback on your project story and structure')],
-            [t('Geyser Newsletter Feature'), t('featured in our monthly newsletter')],
-            [t('Social Media Post'), t('1 post on Geyser’s X account')],
-            [t('Social Amplification'), t('additional reposts and visibility boosts')],
-          ]}
+          points={[[t('1 week front-page feature')], [t('Newsletter placement')], [t('1 social post by Geyser socials')]]}
         />
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isCatalystLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
-          title={t('Catalyst Launch')}
-          subtitle={t('guided strategy + targeted amplification')}
+          title={t('Growth')}
+          subtitle={t('Turn your project into a real launch with traction.')}
           body={t(
-            'A strategic launch package with content, network access, and dedicated support - with expected reach of ~100k impressions depending on project potential',
+            'Designed to generate your first wave of supporters and momentum (~50k–100k targeted impressions)',
           )}
           price={t('$300')}
-          highlightedText={t('Most Popular')}
+          highlightedText={t('Picked by 40% of the Top 100 projects on Geyser')}
           points={[
-            [t('Strategy Call'), t('1 session to define goals, audience, and launch plan')],
-            [t('Content Strategy Plan'), t('1 session with clear deliverable of what to post and when')],
             [
-              t('Rapidfire Q&A for Content'),
-              t('1 session to create 10 pieces of content to help clarify your project'),
+              t('Strategy & Positioning'),
+              t(
+                'We help you define your goals, audience, and launch plan starting with a strategy and content call.',
+              ),
             ],
-            [t('Social Amplification'), t('additional reposts and visibility boosts')],
-            [t('Deep Social Promotion'), t('high-quality dedicated post + ongoing retweets')],
-            [t('Newsletter Spotlight'), t('featured placement in newsletter')],
-            [t('Email Campaign'), t('promotion sent to relevant Geyser users/projects')],
-            [t('Network Access'), t('introductions to relevant partners when aligned')],
-            [t('1-Month Support'), t('async support in shared Telegram group')],
-            [t('Mid-Campaign Check-in'), t('progress review + optimization suggestions')],
+            [t('Content Engine'), t('10 high-signal posts + clear posting plan')],
+            [
+              t('Distribution'),
+              t('Social amplification, newsletter spotlight, and targeted email campaign'),
+            ],
+            [t('Ongoing Optimization'), t('1 month support, mid-campaign check-in, and performance improvements')],
           ]}
         />
         <ProjectCreateStrategyCard
@@ -102,20 +96,15 @@ export const LaunchStrategySelection = ({
             'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'
           }
           isExternal
-          title={t('Geyser Partnership')}
-          subtitle={t('hands-on support + network amplification')}
-          body={t(
-            'Geyser becomes your partner providing personalized launch strategy, project feedback, and marketing support',
-          )}
-          price={t('starting at $1,000')}
+          title={t('Partnership')}
+          subtitle={t('Hands-on execution and full ecosystem amplification. For teams scaling serious initiatives.')}
+          price={t('starting at $2,500')}
           points={[
-            [t('Dedicated Strategy & Planning'), t('ongoing alignment on goals and execution')],
-            [t('Content Planning & Creation Support'), t('hands-on help crafting your campaign')],
-            [t('Full Network Access'), t('direct amplification through Geyser ecosystem')],
-            [t('Newsletter Features Across Campaign'), t('multiple placements during your campaign')],
-            [t('Weekly Discussions & Check-ins'), t('continuous guidance from Geyser team')],
-            [t('Campaign Iteration & Improvements'), t('ongoing optimization based on performance')],
-            [t('Dedicated Telegram Group'), t('ongoing support and coordination')],
+            [t('Dedicated strategy and execution')],
+            [t('Content creation and campaign management')],
+            [t('Full network access and amplification')],
+            [t('Continuous optimization and support')],
+            [t('Direct collaboration with the Geyser team')],
           ]}
         />
       </VStack>
@@ -166,21 +155,15 @@ export const ProjectCreateStrategyCard = ({
       padding={4}
       position="relative"
     >
-      <HStack w="full">
-        <HStack
-          flex={1}
-          flexDirection={{ base: 'column', lg: 'row' }}
-          alignItems={{ base: 'start', lg: 'center' }}
-          justifyContent={'start'}
-          spacing={{ base: 0, lg: 2 }}
-        >
+      <HStack w="full" alignItems="flex-start">
+        <VStack flex={1} alignItems="flex-start" spacing={0}>
           <Body size="lg" bold>
             {title}
           </Body>
-          <Body size={{ base: 'md', lg: 'lg' }} light medium>
-            - {subtitle}
+          <Body size="sm" light medium>
+            {subtitle}
           </Body>
-        </HStack>
+        </VStack>
         <Body size="lg" muted medium>
           {price}
         </Body>
