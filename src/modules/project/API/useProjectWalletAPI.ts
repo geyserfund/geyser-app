@@ -8,6 +8,7 @@ import {
   useProjectWalletConnectionDetailsLazyQuery,
   useUpdateWalletMutation,
 } from '../../../types'
+import { useProjectCreationEditGuard } from '../hooks/useProjectCreationEditGuard.ts'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../state/walletAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
@@ -18,6 +19,7 @@ import { useCustomMutation } from './custom/useCustomMutation'
  * @param load - Load wallet on mount
  */
 export const useProjectWalletAPI = (load?: boolean) => {
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
   const setWallet = useSetAtom(walletAtom)
   const setWalletLoading = useSetAtom(walletLoadingAtom)
   const setWalletConnectionDetails = useSetAtom(walletConnectionDetailsAtom)
@@ -91,11 +93,23 @@ export const useProjectWalletAPI = (load?: boolean) => {
       ...queryProjectWalletConnectionDetailsOptions,
     },
     createWallet: {
-      execute: createWallet,
+      execute: (...args: Parameters<typeof createWallet>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return createWallet(...args)
+      },
       ...createWalletOptions,
     },
     updateWallet: {
-      execute: updateWallet,
+      execute: (...args: Parameters<typeof updateWallet>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return updateWallet(...args)
+      },
       ...updateWalletOptions,
     },
   }

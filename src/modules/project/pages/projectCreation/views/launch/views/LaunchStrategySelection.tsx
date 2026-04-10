@@ -5,9 +5,9 @@ import { useState } from 'react'
 import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/sections/GeyserPromotionSection.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { __production__, __staging__ } from '@/shared/constants/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
+import { getLaunchPlansData, type LaunchPlanData } from '../constants/launchPlansData.ts'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 
 export enum ProjectLaunchStrategy {
@@ -23,7 +23,16 @@ export const LaunchStrategySelection = ({
   handleNext: (strategy: ProjectLaunchStrategy) => void
   handleBack: () => void
 }) => {
-  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
+  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.PRO_LAUNCH)
+
+  const [basicPlan, visibilityBoostPlan, growthPlan, partnershipPlan] = getLaunchPlansData(t) as [
+    LaunchPlanData,
+    LaunchPlanData,
+    LaunchPlanData,
+    LaunchPlanData,
+  ]
+  const getCardPoints = (points: LaunchPlanData['points']): string[][] =>
+    points.map((point) => (point.description ? [point.title, point.description] : [point.title]))
 
   const isStarterLaunch = strategy === ProjectLaunchStrategy.STARTER_LAUNCH
   const isGrowthLaunch = strategy === ProjectLaunchStrategy.GROWTH_LAUNCH
@@ -48,47 +57,30 @@ export const LaunchStrategySelection = ({
           flex={1}
           isSelected={isStarterLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
-          title={t('Starter Launch')}
-          subtitle={t('do it yourself, get the basic exposure')}
-          body={`${t('Access to all Geyser tooling and get discovered through the Geyser platform')} `}
-          price={t('$25')}
+          title={basicPlan.title}
+          subtitle={basicPlan.subtitle}
+          price={basicPlan.price}
+          points={getCardPoints(basicPlan.points)}
         />
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
-          title={t('Growth Launch')}
-          subtitle={t('Visibility boost')}
-          price={t('$60')}
-          points={[
-            [t('Landing Page Feature'), t('1 week front-page spotlight')],
-            [
-              t('Geyser Newsletter feature'),
-              t('get featured at the top of our monthly newsletter going out to 5000+ subscribers'),
-            ],
-            [t('Social Media post'), t('1 social media post on Geyser’s X account with 15k+ followers')],
-          ]}
+          title={visibilityBoostPlan.title}
+          subtitle={visibilityBoostPlan.subtitle}
+          price={visibilityBoostPlan.price}
+          points={getCardPoints(visibilityBoostPlan.points)}
         />
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isProLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
-          title={t('Pro Launch')}
-          subtitle={t('Maximum visibility + product feedback')}
-          body={t('Limited to 5 per month, subject to selection')}
-          price={t('$90')}
-          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
-          points={[
-            [t('Everything in Growth')],
-            [
-              t('Spotlight Email'),
-              t('Your project featured in a dedicated email sent to Geyser users most interested in your category'),
-            ],
-            [
-              t('Project feedback'),
-              t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
-            ],
-          ]}
+          title={growthPlan.title}
+          subtitle={growthPlan.subtitle}
+          body={growthPlan.body}
+          price={growthPlan.price}
+          highlightedText={growthPlan.highlightedText}
+          points={getCardPoints(growthPlan.points)}
         />
         <ProjectCreateStrategyCard
           flex={1}
@@ -97,12 +89,11 @@ export const LaunchStrategySelection = ({
             'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'
           }
           isExternal
-          title={t('Geyser Partnership')}
-          subtitle={t('hands on support + network amplification')}
-          body={t(
-            'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support. If you click ',
-          )}
-          price={t('starting at $1,000')}
+          title={partnershipPlan.title}
+          subtitle={partnershipPlan.subtitle}
+          body={partnershipPlan.body}
+          price={partnershipPlan.price}
+          points={getCardPoints(partnershipPlan.points)}
         />
       </VStack>
       <VStack w="full" alignItems="flex-start">
@@ -150,23 +141,18 @@ export const ProjectCreateStrategyCard = ({
       }}
       overflow={'visible'}
       padding={4}
+      paddingBottom={highlightedText ? 8 : 4}
       position="relative"
     >
-      <HStack w="full">
-        <HStack
-          flex={1}
-          flexDirection={{ base: 'column', lg: 'row' }}
-          alignItems={{ base: 'start', lg: 'center' }}
-          justifyContent={'start'}
-          spacing={{ base: 0, lg: 2 }}
-        >
+      <HStack w="full" alignItems="flex-start">
+        <VStack flex={1} alignItems="flex-start" spacing={0}>
           <Body size="lg" bold>
             {title}
           </Body>
-          <Body size={{ base: 'md', lg: 'lg' }} light medium>
-            - {subtitle}
+          <Body size="sm" light medium>
+            {subtitle}
           </Body>
-        </HStack>
+        </VStack>
         <Body size="lg" muted medium>
           {price}
         </Body>
@@ -181,7 +167,7 @@ export const ProjectCreateStrategyCard = ({
           )}
           {points && (
             <UnorderedList alignItems="flex-start" spacing={1}>
-              {points.map((point, index) => (
+              {points.map((point) => (
                 <ListItem key={point[0]}>
                   <Body size="sm" bold display="inline">
                     {point[0]}

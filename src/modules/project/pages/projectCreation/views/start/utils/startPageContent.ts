@@ -1,5 +1,7 @@
 import type { TFunction } from 'i18next'
 
+import { getLaunchPlansData } from '../../launch/constants/launchPlansData.ts'
+
 export type KeyValueRow = {
   title: string
   description: string
@@ -79,57 +81,14 @@ export const getMomentumSteps = (translate: TFunction): KeyValueRow[] => [
   },
 ]
 
-export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] => [
-  {
-    title: translate('Starter Launch'),
-    subtitle: translate('do it yourself, get the basic exposure'),
-    price: translate('$25'),
-    points: [translate('Access to all Geyser tooling and get discovered through the Geyser platform')],
-  },
-  {
-    title: translate('Growth Launch'),
-    subtitle: translate('Visibility boost'),
-    price: translate('$60'),
-    points: [
-      `${translate('Landing Page Feature')}: ${translate('1 week front-page spotlight')}`,
-      `${translate('Geyser Newsletter feature')}: ${translate(
-        'get featured at the top of our monthly newsletter going out to 5000+ subscribers',
-      )}`,
-      `${translate('Social Media post')}: ${translate(
-        '1 social media post on Geyser’s X account with 15k+ followers',
-      )}`,
-    ],
-    badge: translate('Popular'),
-  },
-  {
-    title: translate('Pro Launch'),
-    subtitle: translate('Maximum visibility + product feedback'),
-    price: translate('$90'),
-    points: [
-      translate('Limited to 5 per month, subject to selection'),
-      translate('Everything in Growth'),
-      `${translate('Spotlight Email')}: ${translate(
-        'Your project featured in a dedicated email sent to Geyser users most interested in your category',
-      )}`,
-      `${translate('Project feedback')}: ${translate(
-        'Geyser Team Expert provides 1-time feedback on your project story and structure',
-      )}`,
-      translate('Picked by 40% of Top 100 projects on Geyser'),
-    ],
-    badge: translate('Best Value'),
-  },
-  {
-    title: translate('Geyser Partnership'),
-    subtitle: translate('hands on support + network amplification'),
-    price: translate('starting at $1,000'),
-    points: [
-      translate(
-        'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support',
-      ),
-    ],
-    badge: translate('Premium'),
-  },
-]
+export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] =>
+  getLaunchPlansData(translate).map((plan) => ({
+    title: plan.title,
+    subtitle: plan.subtitle,
+    price: plan.price,
+    points: plan.points.map((point) => (point.description ? `${point.title}: ${point.description}` : point.title)),
+    badge: plan.highlightedText,
+  }))
 
 export const getResources = (translate: TFunction): KeyValueRow[] => [
   {

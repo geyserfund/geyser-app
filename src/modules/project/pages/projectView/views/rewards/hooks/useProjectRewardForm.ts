@@ -10,6 +10,7 @@ import * as yup from 'yup'
 import { useBTCConverter } from '@/helpers'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { rewardsAtom } from '@/modules/project/state/rewardsAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
@@ -76,6 +77,7 @@ export const useProjectRewardForm = ({
 }: UseProjectRewardFormProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
 
   const setProjectRewards = useSetAtom(rewardsAtom)
 
@@ -271,6 +273,11 @@ export const useProjectRewardForm = ({
 
   const handleConfirmCurrencyChange = () => {
     if (pendingCurrency) {
+      if (guardProjectEditAttempt()) {
+        handleCurrencyModalClose()
+        return
+      }
+
       updateProjectCurrencyMutation({
         variables: {
           input: {

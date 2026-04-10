@@ -104,7 +104,7 @@ export const PromotionNetworkSettingsCard = ({
         </HStack>
         <Body size="sm" mb={4}>
           {t(
-            "When enabled your project becomes eligible to be shared through Geyser's promotion network and partner digital media companies, bringing more eyes to your project to enable more contributions.",
+            "When enabled your project becomes eligible to be shared through Geyser's promotion network — including all Geyser Ambassadors who can earn through referrals — and partner digital media companies, bringing more eyes to your project to enable more contributions.",
           )}
         </Body>
         <HStack spacing={4} mb={contributionSummary ? 4 : 0}>
