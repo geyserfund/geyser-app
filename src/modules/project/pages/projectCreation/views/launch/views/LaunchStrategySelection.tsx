@@ -7,6 +7,7 @@ import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLay
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
+import { getLaunchPlansData, type LaunchPlanData } from '../constants/launchPlansData.ts'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 
 export enum ProjectLaunchStrategy {
@@ -22,11 +23,20 @@ export const LaunchStrategySelection = ({
   handleNext: (strategy: ProjectLaunchStrategy) => void
   handleBack: () => void
 }) => {
-  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
+  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.PRO_LAUNCH)
+
+  const [basicPlan, visibilityBoostPlan, growthPlan, partnershipPlan] = getLaunchPlansData(t) as [
+    LaunchPlanData,
+    LaunchPlanData,
+    LaunchPlanData,
+    LaunchPlanData,
+  ]
+  const getCardPoints = (points: LaunchPlanData['points']): string[][] =>
+    points.map((point) => (point.description ? [point.title, point.description] : [point.title]))
 
   const isStarterLaunch = strategy === ProjectLaunchStrategy.STARTER_LAUNCH
   const isGrowthLaunch = strategy === ProjectLaunchStrategy.GROWTH_LAUNCH
-  const isCatalystLaunch = strategy === ProjectLaunchStrategy.PRO_LAUNCH
+  const isProLaunch = strategy === ProjectLaunchStrategy.PRO_LAUNCH
 
   const continueButtonProps = {
     onClick: () => handleNext(strategy),
@@ -47,47 +57,30 @@ export const LaunchStrategySelection = ({
           flex={1}
           isSelected={isStarterLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
-          title={t('Basic')}
-          subtitle={t('Do it yourself. Get listed and start collecting support.')}
-          price={t('$25')}
-          points={[[t('Access to all Geyser tools')], [t('Discoverability on the platform')]]}
+          title={basicPlan.title}
+          subtitle={basicPlan.subtitle}
+          price={basicPlan.price}
+          points={getCardPoints(basicPlan.points)}
         />
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
-          title={t('Visibility Boost')}
-          subtitle={t(
-            'Get eyes on your project. Best for projects that already have an audience and are confident about your project.',
-          )}
-          price={t('$60')}
-          points={[[t('1 week front-page feature')], [t('Newsletter placement')], [t('1 social post by Geyser socials')]]}
+          title={visibilityBoostPlan.title}
+          subtitle={visibilityBoostPlan.subtitle}
+          price={visibilityBoostPlan.price}
+          points={getCardPoints(visibilityBoostPlan.points)}
         />
         <ProjectCreateStrategyCard
           flex={1}
-          isSelected={isCatalystLaunch}
+          isSelected={isProLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
-          title={t('Growth')}
-          subtitle={t('Turn your project into a real launch with traction.')}
-          body={t(
-            'Designed to generate your first wave of supporters and momentum (~50k–100k targeted impressions)',
-          )}
-          price={t('$300')}
-          highlightedText={t('Picked by 40% of the Top 100 projects on Geyser')}
-          points={[
-            [
-              t('Strategy & Positioning'),
-              t(
-                'We help you define your goals, audience, and launch plan starting with a strategy and content call.',
-              ),
-            ],
-            [t('Content Engine'), t('10 high-signal posts + clear posting plan')],
-            [
-              t('Distribution'),
-              t('Social amplification, newsletter spotlight, and targeted email campaign'),
-            ],
-            [t('Ongoing Optimization'), t('1 month support, mid-campaign check-in, and performance improvements')],
-          ]}
+          title={growthPlan.title}
+          subtitle={growthPlan.subtitle}
+          body={growthPlan.body}
+          price={growthPlan.price}
+          highlightedText={growthPlan.highlightedText}
+          points={getCardPoints(growthPlan.points)}
         />
         <ProjectCreateStrategyCard
           flex={1}
@@ -96,16 +89,11 @@ export const LaunchStrategySelection = ({
             'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'
           }
           isExternal
-          title={t('Partnership')}
-          subtitle={t('Hands-on execution and full ecosystem amplification. For teams scaling serious initiatives.')}
-          price={t('starting at $2,500')}
-          points={[
-            [t('Dedicated strategy and execution')],
-            [t('Content creation and campaign management')],
-            [t('Full network access and amplification')],
-            [t('Continuous optimization and support')],
-            [t('Direct collaboration with the Geyser team')],
-          ]}
+          title={partnershipPlan.title}
+          subtitle={partnershipPlan.subtitle}
+          body={partnershipPlan.body}
+          price={partnershipPlan.price}
+          points={getCardPoints(partnershipPlan.points)}
         />
       </VStack>
       <VStack w="full" alignItems="flex-start">
@@ -153,6 +141,7 @@ export const ProjectCreateStrategyCard = ({
       }}
       overflow={'visible'}
       padding={4}
+      paddingBottom={highlightedText ? 8 : 4}
       position="relative"
     >
       <HStack w="full" alignItems="flex-start">

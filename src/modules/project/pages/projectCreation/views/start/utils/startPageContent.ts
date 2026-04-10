@@ -1,5 +1,7 @@
 import type { TFunction } from 'i18next'
 
+import { getLaunchPlansData } from '../../launch/constants/launchPlansData.ts'
+
 export type KeyValueRow = {
   title: string
   description: string
@@ -79,52 +81,14 @@ export const getMomentumSteps = (translate: TFunction): KeyValueRow[] => [
   },
 ]
 
-export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] => [
-  {
-    title: translate('Basic'),
-    subtitle: translate('Do it yourself. Get listed and start collecting support.'),
-    price: translate('$25'),
-    points: [translate('Access to all Geyser tools'), translate('Discoverability on the platform')],
-  },
-  {
-    title: translate('Visibility Boost'),
-    subtitle: translate(
-      'Get eyes on your project. Best for projects that already have an audience and are confident about your project.',
-    ),
-    price: translate('$60'),
-    points: [translate('1 week front-page feature'), translate('Newsletter placement'), translate('1 social post by Geyser socials')],
-    badge: translate('Visibility Boost'),
-  },
-  {
-    title: translate('Growth'),
-    subtitle: translate(
-      'Turn your project into a real launch with traction. Designed to generate your first wave of supporters and momentum (~50k–100k targeted impressions)',
-    ),
-    price: translate('$300'),
-    points: [
-      translate(
-        'Strategy & Positioning: We help you define your goals, audience, and launch plan starting with a strategy and content call.',
-      ),
-      translate('Content Engine: 10 high-signal posts + clear posting plan'),
-      translate('Distribution: Social amplification, newsletter spotlight, and targeted email campaign'),
-      translate('Ongoing Optimization: 1 month support, mid-campaign check-in, and performance improvements'),
-    ],
-    badge: translate('Picked by 40% of the Top 100 projects on Geyser'),
-  },
-  {
-    title: translate('Partnership'),
-    subtitle: translate('Hands-on execution and full ecosystem amplification. For teams scaling serious initiatives.'),
-    price: translate('starting at $2,500'),
-    points: [
-      translate('Dedicated strategy and execution'),
-      translate('Content creation and campaign management'),
-      translate('Full network access and amplification'),
-      translate('Continuous optimization and support'),
-      translate('Direct collaboration with the Geyser team'),
-    ],
-    badge: translate('Partnership'),
-  },
-]
+export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] =>
+  getLaunchPlansData(translate).map((plan) => ({
+    title: plan.title,
+    subtitle: plan.subtitle,
+    price: plan.price,
+    points: plan.points.map((point) => (point.description ? `${point.title}: ${point.description}` : point.title)),
+    badge: plan.highlightedText,
+  }))
 
 export const getResources = (translate: TFunction): KeyValueRow[] => [
   {
