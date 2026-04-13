@@ -10337,7 +10337,7 @@ export type UserProfileProjectsQueryVariables = Exact<{
 }>;
 
 
-export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
         { __typename?: 'Project' }
         & ProjectForProfilePageFragment
       ) | null }> } };
@@ -17493,6 +17493,7 @@ export type UserForProfilePageQueryResult = Apollo.QueryResult<UserForProfilePag
 export const UserProfileProjectsDocument = gql`
     query UserProfileProjects($where: UserGetInput!) {
   user(where: $where) {
+    id
     ownerOf {
       project {
         ...ProjectForProfilePage
