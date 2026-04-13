@@ -16,16 +16,16 @@ export const HeroSection = () => {
 
   const highlightCards = [
     {
-      title: t('Bitcoin is not required to start'),
-      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchStartNow.png',
+      title: t('Accessible in 120+ countries'),
+      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchWorldWide.png',
     },
     {
       title: t('5 minutes to launch'),
       imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchTimer.png',
     },
     {
-      title: t('Accessible in 120+ countries'),
-      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchWorldWide.png',
+      title: t('Bitcoin wallet is included'),
+      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchStartNow.png',
     },
   ]
 

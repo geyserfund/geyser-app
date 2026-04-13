@@ -1,5 +1,7 @@
 import type { TFunction } from 'i18next'
 
+import { getLaunchPlansData } from '../../launch/constants/launchPlansData.ts'
+
 export type KeyValueRow = {
   title: string
   description: string
@@ -79,65 +81,14 @@ export const getMomentumSteps = (translate: TFunction): KeyValueRow[] => [
   },
 ]
 
-export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] => [
-  {
-    title: translate('Starter Launch'),
-    subtitle: translate('do it yourself, get the basic exposure'),
-    price: translate('$25'),
-    points: [translate('Access to all Geyser tooling and get discovered through the Geyser platform')],
-  },
-  {
-    title: translate('Growth Launch'),
-    subtitle: translate('visibility + distribution boost'),
-    price: translate('$60'),
-    points: [
-      translate('Everything in Starter'),
-      translate('Landing Page Feature: 1 week front-page spotlight'),
-      translate('Project Feedback: 1-time expert feedback on your project story and structure'),
-      translate('Geyser Newsletter Feature: featured in our monthly newsletter'),
-      translate('Social Media Post: 1 post on Geyser’s X account'),
-      translate('Social Amplification: additional reposts and visibility boosts'),
-    ],
-    badge: translate('Growth'),
-  },
-  {
-    title: translate('Catalyst Launch'),
-    subtitle: translate('guided strategy + targeted amplification'),
-    price: translate('$300'),
-    points: [
-      translate(
-        'A strategic launch package with content, network access, and dedicated support - with expected reach of ~100k impressions depending on project potential',
-      ),
-      translate('Strategy Call: 1 session to define goals, audience, and launch plan'),
-      translate('Content Strategy Plan: 1 session with clear deliverable of what to post and when'),
-      translate('Rapidfire Q&A for Content: 1 session to create 10 pieces of content to help clarify your project'),
-      translate('Social Amplification: additional reposts and visibility boosts'),
-      translate('Deep Social Promotion: high-quality dedicated post + ongoing retweets'),
-      translate('Newsletter Spotlight: featured placement in newsletter'),
-      translate('Email Campaign: promotion sent to relevant Geyser users/projects'),
-      translate('Network Access: introductions to relevant partners when aligned'),
-      translate('1-Month Support: async support in shared Telegram group'),
-      translate('Mid-Campaign Check-in: progress review + optimization suggestions'),
-    ],
-    badge: translate('Most Popular'),
-  },
-  {
-    title: translate('Geyser Partnership'),
-    subtitle: translate('hands-on support + network amplification'),
-    price: translate('starting at $1,000'),
-    points: [
-      translate('Geyser becomes your partner providing personalized launch strategy, project feedback, and marketing support'),
-      translate('Dedicated Strategy & Planning: ongoing alignment on goals and execution'),
-      translate('Content Planning & Creation Support: hands-on help crafting your campaign'),
-      translate('Full Network Access: direct amplification through Geyser ecosystem'),
-      translate('Newsletter Features Across Campaign: multiple placements during your campaign'),
-      translate('Weekly Discussions & Check-ins: continuous guidance from Geyser team'),
-      translate('Campaign Iteration & Improvements: ongoing optimization based on performance'),
-      translate('Dedicated Telegram Group: ongoing support and coordination'),
-    ],
-    badge: translate('Premium'),
-  },
-]
+export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] =>
+  getLaunchPlansData(translate).map((plan) => ({
+    title: plan.title,
+    subtitle: plan.subtitle,
+    price: plan.price,
+    points: plan.points.map((point) => (point.description ? `${point.title}: ${point.description}` : point.title)),
+    badge: plan.highlightedText,
+  }))
 
 export const getResources = (translate: TFunction): KeyValueRow[] => [
   {

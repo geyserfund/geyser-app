@@ -31,7 +31,7 @@ export const ProfileProjectCard = ({
 
   const wallet = project?.wallets?.[0]
 
-  if (!project || !wallet) {
+  if (!project) {
     return null
   }
 
