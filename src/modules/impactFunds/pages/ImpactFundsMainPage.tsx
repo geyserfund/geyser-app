@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   Flex,
-  Grid,
+  GridItem,
   HStack,
   Icon,
   Image,
@@ -11,28 +11,19 @@ import {
   LinkOverlay,
   SimpleGrid,
   Spinner,
-  useDisclosure,
   useColorModeValue,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import {
-  PiArrowRightBold,
-  PiArrowUpRightBold,
-  PiCalendarBold,
-  PiChartBarBold,
-  PiCoinsDuotone,
-  PiRocketLaunchDuotone,
-  PiScalesBold,
-} from 'react-icons/pi'
+import { PiArrowRightBold, PiArrowUpRightBold, PiChartBarBold, PiCoinsDuotone, PiScalesBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getAiSeoPageContent, getPath } from '@/shared/constants'
@@ -41,8 +32,8 @@ import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import { type ImpactFundsQuery, ProjectSubCategory, useImpactFundsQuery } from '@/types'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
-import { ImpactFundDonationFlowModal } from '../components/ImpactFundDonationFlowModal.tsx'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
+import { ImpactFundDonationFlowModal } from '../components/ImpactFundDonationFlowModal.tsx'
 import { ImpactFundWhyDonateModal } from '../components/ImpactFundWhyDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '../utils/constants.ts'
 import { impactFundFundingModelItems, impactFundFundingOverviewItems } from '../utils/informationContent.ts'
@@ -148,6 +139,18 @@ function CardCta({ href, isExternal, to }: CardCtaProps): JSX.Element {
   )
 }
 
+type DonateCardCtaProps = {
+  to: string
+}
+
+function DonateCardCta({ to }: DonateCardCtaProps): JSX.Element {
+  return (
+    <Button as={Link} to={to} size="lg" variant="solid" colorScheme="amber" borderRadius="8px">
+      {t('Donate')}
+    </Button>
+  )
+}
+
 /** Main landing page for browsing live Impact Funds and understanding how the program works. */
 export const ImpactFundsMainPage = () => {
   const { data, loading, error } = useImpactFundsQuery()
@@ -157,12 +160,12 @@ export const ImpactFundsMainPage = () => {
   const donationModal = useDisclosure()
   const whyDonateModal = useDisclosure()
   const pageSpacing = { base: 6, lg: 8 }
-  const statMutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
+  const statCardBg = useColorModeValue('white', 'neutral1.3')
+  const statSeparatorColor = useColorModeValue('neutral1.3', 'whiteAlpha.200')
   const statIconBg = useColorModeValue('primary1.100', 'primary1.900')
   const statIconColor = useColorModeValue('primary1.600', 'primary1.300')
   const statPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const statSubtleColor = useColorModeValue('neutral1.8', 'neutral1.11')
-  const statTertiaryColor = useColorModeValue('neutral1.7', 'neutral1.10')
   const cardImageBg = useColorModeValue('neutral1.2', 'neutral1.3')
   const cardSurfaceBg = useColorModeValue('white', 'neutral1.3')
   const sectionPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
@@ -184,6 +187,9 @@ export const ImpactFundsMainPage = () => {
   const partnerSectionBorderColor = useColorModeValue('transparent', 'whiteAlpha.100')
   const partnerSectionHighlightBg = useColorModeValue('whiteAlpha.300', 'rgba(148, 163, 184, 0.14)')
   const noiseOpacity = useColorModeValue(0.18, 0.12)
+  const heroSurfaceBg = useColorModeValue('white', 'neutral1.3')
+  const heroImagePanelBg = useColorModeValue('neutral1.2', 'neutral1.4')
+  const heroLinkColor = useColorModeValue('neutral1.8', 'neutral1.10')
 
   const pageHead = (
     <Head
@@ -263,6 +269,7 @@ export const ImpactFundsMainPage = () => {
 
     return fund.amountCommitted === 0 ? awardedAmountDisplay : committedAmountDisplay
   }
+
   const impactFundsByName = new Map(impactFunds.map((fund) => [fund.name, fund] as const))
   const orderedImpactFunds = [
     ...PRIORITIZED_IMPACT_FUND_NAMES.flatMap((fundName) => {
@@ -279,6 +286,7 @@ export const ImpactFundsMainPage = () => {
   const latamImpactFund = featuredImpactFunds.find((fund) => fund.name === LATAM_IMPACT_FUND_NAME)
   const secondaryFeaturedImpactFunds = featuredImpactFunds.filter((fund) => fund.name !== LATAM_IMPACT_FUND_NAME)
   const compactImpactFunds = [...secondaryImpactFunds, ...additionalImpactFunds]
+  const heroArtwork = latamImpactFund?.heroImage || IMPACT_FUNDS_IMAGE_URL
 
   const getImpactFundImageProps = (fundName: string) => {
     if (fundName === 'latam-impact-fund') {
@@ -310,11 +318,11 @@ export const ImpactFundsMainPage = () => {
           transform: { lg: 'scale(1.06)' },
         }
       : isHero
-        ? {
-            objectFit: 'cover' as const,
-            objectPosition: imageProps.objectPosition,
-            transform: imageProps.transform,
-          }
+      ? {
+          objectFit: 'cover' as const,
+          objectPosition: imageProps.objectPosition,
+          transform: imageProps.transform,
+        }
       : imageProps
 
     return (
@@ -341,7 +349,10 @@ export const ImpactFundsMainPage = () => {
           <Flex
             w="full"
             h="full"
-            direction={{ base: isMobileHorizontalCompact ? 'row' : 'column', lg: isCompact || isHero ? 'row' : 'column' }}
+            direction={{
+              base: isMobileHorizontalCompact ? 'row' : 'column',
+              lg: isCompact || isHero ? 'row' : 'column',
+            }}
             align="stretch"
             minH={isHero ? { lg: '360px' } : undefined}
           >
@@ -357,10 +368,16 @@ export const ImpactFundsMainPage = () => {
                 isHero
                   ? { base: 'full', lg: '44%' }
                   : isCompact
-                    ? { base: isMobileHorizontalCompact ? '132px' : 'full', lg: '220px' }
-                    : 'full'
+                  ? { base: isMobileHorizontalCompact ? '132px' : 'full', lg: '220px' }
+                  : 'full'
               }
-              minW={isHero ? { lg: '44%' } : isCompact ? { base: isMobileHorizontalCompact ? '132px' : undefined, lg: '220px' } : undefined}
+              minW={
+                isHero
+                  ? { lg: '44%' }
+                  : isCompact
+                  ? { base: isMobileHorizontalCompact ? '132px' : undefined, lg: '220px' }
+                  : undefined
+              }
               bg={cardImageBg}
               overflow="hidden"
               position="relative"
@@ -390,7 +407,13 @@ export const ImpactFundsMainPage = () => {
               align="stretch"
               spacing={4}
               flex={1}
-              minH={isCompact ? { base: isMobileHorizontalCompact ? '132px' : undefined, lg: '190px' } : isHero ? { lg: '360px' } : undefined}
+              minH={
+                isCompact
+                  ? { base: isMobileHorizontalCompact ? '132px' : undefined, lg: '190px' }
+                  : isHero
+                  ? { lg: '360px' }
+                  : undefined
+              }
             >
               <Flex
                 direction={{ base: isMobileHorizontalCompact ? 'column' : 'column', sm: 'row' }}
@@ -440,12 +463,6 @@ export const ImpactFundsMainPage = () => {
                 )}
               </Flex>
 
-              {fund.subtitle && (
-                <Body size={isHero || isFeatured ? 'md' : 'sm'} lineHeight={1.5} color={sectionSecondaryTextColor}>
-                  {fund.subtitle}
-                </Body>
-              )}
-
               <Flex mt="auto" justifyContent="space-between" alignItems="center" gap={4} flexWrap="wrap">
                 {isMobileHorizontalCompact ? null : isCompact ? (
                   <HStack spacing={2} align="baseline">
@@ -466,10 +483,12 @@ export const ImpactFundsMainPage = () => {
                     </Body>
                   </VStack>
                 )}
-
-                <Box ml="auto" flexShrink={0}>
+                <HStack ml="auto" spacing={2} flexShrink={0} flexWrap="wrap" justifyContent="flex-end">
                   <CardCta to={getPath('impactFunds', encodeURIComponent(fund.name))} />
-                </Box>
+                  {fund.donateProject?.name ? (
+                    <DonateCardCta to={`${getPath('projectFunding', fund.donateProject.name)}?mode=recurring`} />
+                  ) : null}
+                </HStack>
               </Flex>
             </VStack>
           </Flex>
@@ -487,181 +506,196 @@ export const ImpactFundsMainPage = () => {
     <VStack align="stretch" spacing={pageSpacing} paddingBottom={8}>
       {pageHead}
 
-      <VStack w="full" gap={4} alignItems="start">
-        <PageSectionHeader
-          title={t('Impact Funds')}
-          subtitle={t(
-            'Impact Funds combine committed sponsor capital with a transparent process for selecting and supporting small to medium size projects in the Bitcoin ecosystem.',
-          )}
-        />
+      <CardLayout
+        w="full"
+        dense
+        spacing={6}
+        alignItems="stretch"
+        noborder
+        bg={heroSurfaceBg}
+        borderRadius="2xl"
+        overflow="hidden"
+        position="relative"
+      >
+        <Flex
+          direction={{ base: 'column', lg: 'row' }}
+          align={{ base: 'stretch', lg: 'center' }}
+          justify="space-between"
+          gap={{ base: 6, lg: 8 }}
+          position="relative"
+          minH={{ base: '320px', lg: '280px' }}
+          py={{ base: 2, lg: 3 }}
+        >
+          <VStack
+            align="stretch"
+            spacing={2}
+            flex={1}
+            maxW={{ lg: '560px' }}
+            alignSelf={{ lg: 'stretch' }}
+            pt={{ base: 7, lg: 8 }}
+          >
+            <H2 size="4xl" bold lineHeight={1.1} mb={2}>
+              {t('Support impactful Bitcoin projects worldwide')}
+            </H2>
+            <Body size="md" color={sectionSecondaryTextColor} maxW="2xl">
+              {t(
+                'Impact Funds combine committed sponsor capital with a transparent process for selecting and supporting small to medium size projects in the Bitcoin ecosystem.',
+              )}
+            </Body>
+            <VStack align="flex-start" spacing={1} mt={6}>
+              <Button
+                size="lg"
+                colorScheme="amber"
+                onClick={donationModal.onOpen}
+                fontWeight="bold"
+                h="52px"
+                px={8}
+                borderRadius="8px"
+              >
+                {t('Donate to an Impact Fund')}
+              </Button>
+
+              <Box as="button" type="button" textAlign="left" onClick={whyDonateModal.onOpen}>
+                <Body size="sm" color={heroLinkColor} textDecoration="underline">
+                  {t('Why donate to an Impact Fund?')}
+                </Body>
+              </Box>
+            </VStack>
+          </VStack>
+
+          <Flex flex={1} justify={{ base: 'center', lg: 'flex-end' }} align="center">
+            <Box
+              w={{ base: 'full', sm: '440px', lg: '520px' }}
+              maxW="full"
+              h={{ base: '260px', sm: '300px', lg: '360px' }}
+              position="relative"
+              bg={heroImagePanelBg}
+              borderRadius="xl"
+              overflow="hidden"
+            >
+              <Image
+                src={heroArtwork}
+                alt={t('Impact fund hero artwork')}
+                w="full"
+                h="full"
+                objectFit="contain"
+                objectPosition="center"
+                transform={{ base: 'scale(1.05)', lg: 'scale(1.08)' }}
+              />
+            </Box>
+          </Flex>
+        </Flex>
 
         <ImpactFlowStrip />
-      </VStack>
+      </CardLayout>
 
-      <VStack align="stretch" spacing={4}>
-        <H2 size="xl" bold>
-          {t('Achieved so far')}
-        </H2>
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
-          <Box p={6} bg={statMutedBg} borderRadius="lg">
-            <HStack spacing={4}>
-              <Flex
-                w="48px"
-                h="48px"
-                flexShrink={0}
-                borderRadius="lg"
-                alignItems="center"
-                justifyContent="center"
-                bg={statIconBg}
-              >
-                <Icon as={PiCoinsDuotone} boxSize={6} color={statIconColor} />
-              </Flex>
-              <VStack align="start" spacing={0}>
+      <VStack align="stretch" spacing={8}>
+        <VStack align="start" spacing={2}>
+          <H2 size="xl" bold>
+            {t('Proven Impact you can verify')}
+          </H2>
+          <Body size="md" color={sectionSecondaryTextColor}>
+            {t('Geyser has been funding Bitcoin projects around the world since 2021.')}
+          </Body>
+        </VStack>
+
+        <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4} alignItems="stretch">
+          <GridItem colSpan={{ base: 1, md: 2 }} display="flex">
+            <HStack
+              align="stretch"
+              spacing={0}
+              bg={statCardBg}
+              borderRadius="xl"
+              boxShadow={sectionCardShadow}
+              overflow="hidden"
+              h="100%"
+              w="100%"
+            >
+              <VStack align="start" spacing={1} p={5} flex={1.6}>
+                <H2 size="2xl" bold lineHeight={1.1} color={statPrimaryTextColor}>
+                  {`${numberFormatter.format(totalDistributedSats)} sats`}
+                </H2>
                 <HStack spacing={2} align="baseline">
-                  <H2 size="xl" bold lineHeight={1.2} color={statPrimaryTextColor}>
-                    {`${numberFormatter.format(totalDistributedSats)} sats`}
-                  </H2>
+                  <Body size="sm" color={statSubtleColor} fontWeight="medium">
+                    {t('Total distributed')}
+                  </Body>
                   {totalDistributedUsd && (
-                    <Body size="xs" color={statTertiaryColor}>
+                    <Body size="xs" color={statSubtleColor}>
                       {totalDistributedUsd}
                     </Body>
                   )}
                 </HStack>
-                <Body
-                  size="xs"
-                  fontSize={{ base: '10px', md: '12px' }}
-                  color={statSubtleColor}
-                  textTransform="uppercase"
-                  letterSpacing="wide"
-                  fontWeight="medium"
-                  noOfLines={1}
-                  whiteSpace="nowrap"
-                >
-                  {t('Total distributed')}
-                </Body>
               </VStack>
-            </HStack>
-          </Box>
-          <Box p={6} bg={statMutedBg} borderRadius="lg">
-            <HStack spacing={4}>
-              <Flex
-                w="48px"
-                h="48px"
-                flexShrink={0}
-                borderRadius="lg"
-                alignItems="center"
-                justifyContent="center"
-                bg={statIconBg}
-              >
-                <Icon as={PiRocketLaunchDuotone} boxSize={6} color={statIconColor} />
-              </Flex>
-              <VStack align="start" spacing={0}>
-                <H2 size="xl" bold lineHeight={1.2} color={statPrimaryTextColor}>
+
+              <Box w="1px" bg={statSeparatorColor} flexShrink={0} my={4} />
+
+              <VStack align="start" spacing={1} p={5} flex={1}>
+                <H2 size="2xl" bold lineHeight={1.1} color={statPrimaryTextColor}>
                   {numberFormatter.format(totalProjectsFunded)}
                 </H2>
-                <Body
-                  size="xs"
-                  fontSize={{ base: '10px', md: '12px' }}
-                  color={statSubtleColor}
-                  textTransform="uppercase"
-                  letterSpacing="wide"
-                  fontWeight="medium"
-                  noOfLines={1}
-                  whiteSpace="nowrap"
-                >
-                  {t('Total funded projects')}
+                <Body size="sm" color={statSubtleColor} fontWeight="medium">
+                  {t('Projects funded')}
                 </Body>
               </VStack>
             </HStack>
-          </Box>
-          <Box p={6} bg={statMutedBg} borderRadius="lg">
-            <HStack spacing={4}>
-              <Flex
-                w="48px"
-                h="48px"
-                flexShrink={0}
-                borderRadius="lg"
-                alignItems="center"
-                justifyContent="center"
-                bg={statIconBg}
-              >
-                <Icon as={PiCalendarBold} boxSize={6} color={statIconColor} />
-              </Flex>
-              <VStack align="start" spacing={0}>
-                <H2 size="xl" bold lineHeight={1.2} color={statPrimaryTextColor}>
-                  {t('4+ years')}
-                </H2>
-                <Body
-                  size="xs"
-                  fontSize={{ base: '10px', md: '12px' }}
-                  color={statSubtleColor}
-                  textTransform="uppercase"
-                  letterSpacing="wide"
-                  fontWeight="medium"
-                  noOfLines={1}
-                  whiteSpace="nowrap"
-                >
-                  {t('Supporting projects')}
-                </Body>
-              </VStack>
+          </GridItem>
+
+          <VStack
+            align="start"
+            spacing={1}
+            p={5}
+            bg={statCardBg}
+            borderRadius="xl"
+            boxShadow={sectionCardShadow}
+            h="100%"
+          >
+            <HStack spacing={2} align="baseline">
+              <H2 size="2xl" bold lineHeight={1.1} color={statPrimaryTextColor}>
+                {t('2021')}
+              </H2>
+              <Body size="sm" color={statSubtleColor} fontWeight="medium">
+                {t('Active since')}
+              </Body>
             </HStack>
-          </Box>
+            <Body size="sm" color={statSubtleColor}>
+              {t('4+ years supporting projects')}
+            </Body>
+          </VStack>
+
+          <VStack
+            align="start"
+            spacing={1}
+            p={5}
+            bg={statCardBg}
+            borderRadius="xl"
+            boxShadow={sectionCardShadow}
+            h="100%"
+          >
+            <H2 size="2xl" bold lineHeight={1.1} color={statPrimaryTextColor}>
+              {t('5 regions')}
+            </H2>
+            <Body size="sm" color={statSubtleColor}>
+              {t('Impact funds across 5 regions')}
+            </Body>
+          </VStack>
         </SimpleGrid>
       </VStack>
 
       {impactFunds.length > 0 ? (
         <VStack align="stretch" spacing={6}>
-          <Grid
-            templateColumns={{ base: '1fr', lg: 'minmax(0, 1fr) auto' }}
-            templateRows={{ base: 'auto', lg: 'auto auto auto' }}
-            columnGap={4}
-            rowGap={2}
-            alignItems="start"
-          >
-            <H2 size="xl" bold gridColumn={{ lg: '1 / 2' }} gridRow={{ lg: '1 / 2' }}>
+          <VStack align="stretch" spacing={2}>
+            <H2 size="xl" bold>
               {t('Regional Impact Funds')}
             </H2>
 
-            <Body color={sectionSecondaryTextColor} gridColumn={{ lg: '1 / 2' }} gridRow={{ lg: '2 / 3' }}>
-              {t('Explore region-led pools of capital on Geyser.')}
+            <Body color={sectionSecondaryTextColor}>{t('Explore region-led pools of capital on Geyser.')}</Body>
+
+            <Body size="sm" color={sectionSecondaryTextColor}>
+              {t(
+                'The following funds are actively accepting applications and have committed capital ready for deployment.',
+              )}
             </Body>
-
-            <Body
-              size="sm"
-              color={sectionSecondaryTextColor}
-              gridColumn={{ lg: '1 / 2' }}
-              gridRow={{ lg: '3 / 4' }}
-            >
-              {t('The following funds are actively accepting applications and have committed capital ready for deployment.')}
-            </Body>
-
-            <Button
-              size="lg"
-              colorScheme="primary1"
-              onClick={donationModal.onOpen}
-              justifySelf={{ lg: 'end' }}
-              alignSelf="start"
-              gridColumn={{ lg: '2 / 3' }}
-              gridRow={{ lg: '1 / 2' }}
-            >
-              {t('Donate to an Impact Fund')}
-            </Button>
-
-            <Box
-              as="button"
-              type="button"
-              textAlign={{ base: 'left', lg: 'right' }}
-              justifySelf={{ lg: 'end' }}
-              alignSelf="start"
-              gridColumn={{ lg: '2 / 3' }}
-              gridRow={{ lg: '3 / 4' }}
-              onClick={whyDonateModal.onOpen}
-            >
-              <Body size="sm" color={sectionSecondaryTextColor} textDecoration="underline">
-                {t('Why donate to an Impact Fund?')}
-              </Body>
-            </Box>
-          </Grid>
+          </VStack>
 
           {latamImpactFund && renderImpactFundCard(latamImpactFund, 'hero')}
 
