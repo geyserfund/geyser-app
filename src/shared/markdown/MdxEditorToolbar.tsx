@@ -6,7 +6,6 @@ import {
   CreateLink,
   InsertCodeBlock,
   InsertImage,
-  InsertTable,
   ListsToggle,
   Separator,
   UndoRedo,
@@ -16,6 +15,7 @@ import {
 
 import { MdxInsertTweetButton, MdxInsertVideoButton } from './MdxEditorEmbeds.tsx'
 import { MdxEditorModeToggle } from './MdxEditorModeToggle.tsx'
+import { MdxInsertTableButton, MdxTextAlignmentButtons } from './MdxEditorTableControls.tsx'
 
 /** Shared, project-wide MDX toolbar with a unified top-sticky control layout. */
 export const MdxEditorToolbar = () => {
@@ -33,12 +33,13 @@ export const MdxEditorToolbar = () => {
           <Separator />
           <ListsToggle options={['bullet', 'number']} />
           <BlockTypeSelect />
+          <MdxTextAlignmentButtons />
           <Separator />
           <CreateLink />
           <InsertImage />
           <MdxInsertVideoButton />
           <MdxInsertTweetButton />
-          <InsertTable />
+          <MdxInsertTableButton />
           <InsertCodeBlock />
         </>
       )}

@@ -1,9 +1,10 @@
-import { VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Control, FieldErrors } from 'react-hook-form'
 
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
+import { standardPadding } from '@/shared/styles'
 
 import { RewardFormValues } from '../../../pages/projectView/views/rewards/hooks/useProjectRewardForm.ts'
 
@@ -18,13 +19,22 @@ export const DescriptionFormComponent = ({ formLoaded, control, errors }: Descri
     <FieldContainer title={t('Description')} error={errors.description?.message}>
       <VStack flex={1} width="100%" backgroundColor="utils.pbg">
         {!formLoaded ? null : (
-          <MdxMarkdownEditor
-            mode="edit"
-            name="description"
-            control={control}
-            minHeight="200px"
-            placeholder={t('Describe your product in detail - features, specifications, and benefits.')}
-          />
+          <Box
+            width="100%"
+            border="1px solid"
+            borderColor="neutral1.6"
+            borderRadius="8px"
+            overflow="hidden"
+            padding={standardPadding}
+          >
+            <MdxMarkdownEditor
+              mode="edit"
+              name="description"
+              control={control}
+              minHeight="200px"
+              placeholder={t('Describe your product in detail - features, specifications, and benefits.')}
+            />
+          </Box>
         )}
       </VStack>
     </FieldContainer>

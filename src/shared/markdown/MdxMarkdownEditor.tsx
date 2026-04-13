@@ -30,6 +30,8 @@ import {
 } from './MdxMarkdownPreview.tsx'
 
 const DEFAULT_MIN_HEIGHT = '120px'
+const DEFAULT_MARKDOWN_PLACEHOLDER =
+  'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs..'
 const MDX_EDITOR_CLASS_NAME = 'geyser-mdx-editor'
 const MDX_EDITOR_TOOLBAR_CLASS_NAME = 'geyser-mdx-toolbar'
 const MDX_EDITOR_MODE_TOGGLE_CLASS_NAME = 'geyser-mdx-mode-toggle'
@@ -150,6 +152,7 @@ const MdxMarkdownEditorInternal = ({
 }: MdxMarkdownEditorInternalProps) => {
   const editorRef = useRef<MDXEditorMethods>(null)
   const lastEmittedValueRef = useRef<string>('')
+  const resolvedPlaceholder = placeholder || DEFAULT_MARKDOWN_PLACEHOLDER
 
   const { uploadFile } = useSignedUpload()
 
@@ -263,6 +266,9 @@ const MdxMarkdownEditorInternal = ({
           minHeight,
           border: 'none',
         },
+        [`& .${MDX_EDITOR_CONTENT_CLASS_NAME}[class*='_placeholder_']`]: {
+          color: 'neutral1.9',
+        },
         ...getMdxMarkdownContentStyles({ minHeight, fontFamily }),
       }}
     >
@@ -271,7 +277,7 @@ const MdxMarkdownEditorInternal = ({
         markdown={initialMarkdown}
         plugins={plugins}
         onChange={handleChange}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         autoFocus={autoFocus}
         className={MDX_EDITOR_CLASS_NAME}
         contentEditableClassName={MDX_EDITOR_CONTENT_CLASS_NAME}

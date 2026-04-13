@@ -1,7 +1,8 @@
-import { Box, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
 import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
@@ -23,18 +24,20 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, fieldContainerPro
     <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingBottom={{ base: 28, lg: 'unset' }}>
         <FieldContainer width="100%" flexGrow={1} paddingBottom={{ base: 28, lg: 10 }} {...fieldContainerProps}>
-          <Box width="100%" pt={3} flexGrow={1} display="flex" flexDirection="column">
-            {isLoading ? (
-              <MarkdownFieldSkeleton />
-            ) : (
-              <MdxMarkdownEditor
-                mode="edit"
-                autoFocus={autoFocus}
-                minHeight="120px"
-                name="description"
-                control={form.control}
-              />
-            )}
+          <VStack width="100%" pt={3} flexGrow={1} alignItems="stretch" spacing={1}>
+            <CardLayout width="100%" flexGrow={1} backgroundColor="utils.surface" overflowY="auto">
+              {isLoading ? (
+                <MarkdownFieldSkeleton />
+              ) : (
+                <MdxMarkdownEditor
+                  mode="edit"
+                  autoFocus={autoFocus}
+                  minHeight="120px"
+                  name="description"
+                  control={form.control}
+                />
+              )}
+            </CardLayout>
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
                 <Body size="xs" pt={1} color="error.9">
@@ -45,7 +48,7 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, fieldContainerPro
                 <span>{form.watch('description').length}</span>/<span>{ProjectValidations.description.maxLength}</span>
               </Body>
             </HStack>
-          </Box>
+          </VStack>
         </FieldContainer>
       </VStack>
     </FormProvider>

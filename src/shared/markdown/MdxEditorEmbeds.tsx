@@ -1,11 +1,13 @@
-import { DialogButton, insertMarkdown$, usePublisher } from '@mdxeditor/editor'
+import { ButtonWithTooltip, insertMarkdown$, readOnly$, useCellValue, usePublisher } from '@mdxeditor/editor'
 import getVideoId from 'get-video-id'
 import { t } from 'i18next'
 import { PiXLogo, PiYoutubeLogo } from 'react-icons/pi'
 
 import { useDarkMode, useNotification } from '@/utils'
 
-import { TwitterRegex, validateTwitterUrl } from './validations/twitter.ts'
+import { InsertTwitterModal, useInsertTwitterModal } from './modals/InsertTwitterModal.tsx'
+import { InsertVideoModal, useInsertVideoModal } from './modals/InsertVideoModal.tsx'
+import { extractTweetIdFromUrl, validateTwitterUrl } from './validations/twitter.ts'
 import { validateYouTubeUrl } from './validations/youtube.ts'
 
 const EMBED_MARKDOWN_PREFIX = '\n\n'
@@ -27,16 +29,9 @@ export const createYoutubeEmbedMarkdown = (url: string): string | null => {
   return `${EMBED_MARKDOWN_PREFIX}${iframe}${EMBED_MARKDOWN_SUFFIX}`
 }
 
-/** Extracts tweet ID from x.com URLs used in markdown embeds. */
+/** Extracts tweet ID from supported X/Twitter status URLs used in markdown embeds. */
 export const getTweetIdFromUrl = (url: string): string | null => {
-  const match = url.match(TwitterRegex)
-
-  if (match && match.length >= 3) {
-    const tweetId = match[2]
-    return tweetId || null
-  }
-
-  return null
+  return extractTweetIdFromUrl(url)
 }
 
 const createHiddenTweetContainer = () => {
@@ -82,8 +77,9 @@ export const createTweetEmbedMarkdown = async (url: string, isDarkMode: boolean)
 export const MdxInsertVideoButton = () => {
   const insertMarkdown = usePublisher(insertMarkdown$)
   const { toast } = useNotification()
+  const isReadOnly = useCellValue(readOnly$)
 
-  const onSubmit = (url: string) => {
+  const videoModal = useInsertVideoModal(({ url }) => {
     const markdown = createYoutubeEmbedMarkdown(url)
 
     if (!markdown) {
@@ -96,16 +92,21 @@ export const MdxInsertVideoButton = () => {
     }
 
     insertMarkdown(markdown)
-  }
+    videoModal.onClose()
+  })
 
   return (
-    <DialogButton
-      tooltipTitle={t('Insert video')}
-      buttonContent={<PiYoutubeLogo size={16} />}
-      dialogInputPlaceholder={t('Youtube URL')}
-      submitButtonTitle={t('Insert')}
-      onSubmit={onSubmit}
-    />
+    <>
+      <ButtonWithTooltip
+        title={t('Insert video')}
+        aria-label={t('Insert video')}
+        disabled={isReadOnly}
+        onClick={() => videoModal.onOpen()}
+      >
+        <PiYoutubeLogo size={16} />
+      </ButtonWithTooltip>
+      {videoModal.isOpen ? <InsertVideoModal {...videoModal} /> : null}
+    </>
   )
 }
 
@@ -114,31 +115,43 @@ export const MdxInsertTweetButton = () => {
   const insertMarkdown = usePublisher(insertMarkdown$)
   const { toast } = useNotification()
   const isDarkMode = useDarkMode()
+  const isReadOnly = useCellValue(readOnly$)
 
-  const onSubmit = async (url: string) => {
-    const markdown = await createTweetEmbedMarkdown(url, isDarkMode)
+  const tweetModal = useInsertTwitterModal(async ({ url }) => {
+    try {
+      const markdown = await createTweetEmbedMarkdown(url, isDarkMode)
 
-    if (!markdown) {
+      if (!markdown) {
+        toast({
+          status: 'error',
+          title: t('Invalid tweet URL'),
+          description: t('Please try again'),
+        })
+        return
+      }
+
+      insertMarkdown(markdown)
+      tweetModal.onClose()
+    } catch {
       toast({
         status: 'error',
-        title: t('Invalid tweet URL'),
+        title: t('Failed to insert tweet'),
         description: t('Please try again'),
       })
-      return
     }
-
-    insertMarkdown(markdown)
-  }
+  })
 
   return (
-    <DialogButton
-      tooltipTitle={t('Insert tweet')}
-      buttonContent={<PiXLogo size={16} />}
-      dialogInputPlaceholder={t('Tweet URL')}
-      submitButtonTitle={t('Insert')}
-      onSubmit={(url) => {
-        onSubmit(url).catch(() => undefined)
-      }}
-    />
+    <>
+      <ButtonWithTooltip
+        title={t('Insert tweet')}
+        aria-label={t('Insert tweet')}
+        disabled={isReadOnly}
+        onClick={() => tweetModal.onOpen()}
+      >
+        <PiXLogo size={16} />
+      </ButtonWithTooltip>
+      {tweetModal.isOpen ? <InsertTwitterModal {...tweetModal} /> : null}
+    </>
   )
 }
