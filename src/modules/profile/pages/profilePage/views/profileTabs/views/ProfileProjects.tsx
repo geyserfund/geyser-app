@@ -19,6 +19,7 @@ export const ProfileProjects = () => {
   const { userProfile } = useUserProfileAtom()
 
   const { data, loading } = useUserProfileProjectsQuery({
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         id: userProfile.id,
