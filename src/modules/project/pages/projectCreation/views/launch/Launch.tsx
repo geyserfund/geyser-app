@@ -1,8 +1,8 @@
+import { HStack, Spinner } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import Loader from '@/components/ui/Loader.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -143,7 +143,13 @@ export const Launch = () => {
     [createContribution],
   )
 
-  if (projectLoading || loading || launchPaymentProjectLoading) return <Loader />
+  if (projectLoading || loading || launchPaymentProjectLoading) {
+    return (
+      <HStack h="80%" minH="320px" justify="center" align="center">
+        <Spinner size="xl" color="primary.400" />
+      </HStack>
+    )
+  }
 
   switch (step) {
     case LaunchStep.Review:

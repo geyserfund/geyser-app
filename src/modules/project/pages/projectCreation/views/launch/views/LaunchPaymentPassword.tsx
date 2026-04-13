@@ -41,7 +41,7 @@ export const LaunchPaymentPassword = ({
 
   const continueButtonProps: ButtonProps = {
     type: 'submit',
-    isLoading: Boolean(currentForm.isSubmitting || currentForm.formState?.isSubmitting || isLoading),
+    isLoading: Boolean(currentForm.formState?.isSubmitting || isLoading),
   }
 
   const backButtonProps: ButtonProps = {

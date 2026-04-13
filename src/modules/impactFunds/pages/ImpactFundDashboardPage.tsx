@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { Box, Button, Card, HStack, Image, Spinner, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
@@ -10,15 +9,12 @@ import { NotAuthorized } from '@/modules/general/fallback'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import type { ImpactFundDashboardApplicationsQuery, ImpactFundQuery } from '@/types'
-import { ProjectFundingStrategy } from '@/types'
-
-import { QUERY_IMPACT_FUND, QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS } from '../graphql/queries/impactFundsQuery.ts'
+import { ProjectFundingStrategy, useImpactFundDashboardApplicationsQuery, useImpactFundQuery } from '@/types'
 
 const APPLICATIONS_PAGE_SIZE = 25
 
 type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
 type DashboardApplication = ImpactFundDashboardApplicationsQuery['impactFundDashboardApplications']['applications'][number]
-type ImpactFundDashboardApplicationsData = ImpactFundDashboardApplicationsQuery
 
 const applicationStatusLabels: Record<DashboardApplication['status'], string> = {
   PENDING: 'Pending',
@@ -182,7 +178,7 @@ export function ImpactFundDashboardPage() {
   const decodedImpactFundName = impactFundName ? decodeURIComponent(impactFundName) : ''
   const [isLoadingMoreApplications, setIsLoadingMoreApplications] = useState(false)
 
-  const { data, loading, error } = useQuery<{ impactFund: ImpactFundDetails }>(QUERY_IMPACT_FUND, {
+  const { data, loading, error } = useImpactFundQuery({
     variables: { input: { where: { name: decodedImpactFundName } } },
     skip: !impactFundName,
   })
@@ -195,7 +191,7 @@ export function ImpactFundDashboardPage() {
     loading: applicationsLoading,
     error: applicationsError,
     fetchMore,
-  } = useQuery<ImpactFundDashboardApplicationsData>(QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS, {
+  } = useImpactFundDashboardApplicationsQuery({
     skip: !impactFund?.id || !canAccessDashboard,
     variables: {
       input: buildDashboardApplicationsInput(impactFund?.id ?? 0),

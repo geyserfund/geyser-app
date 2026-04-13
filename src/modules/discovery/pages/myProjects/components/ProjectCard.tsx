@@ -60,7 +60,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       : undefined
 
   const hasRevisionsRequested = latestReview?.status === ProjectReviewStatus.RevisionsRequested
-  const shouldRouteToFinalize = isProjectPendingLaunch(project)
+  const shouldRouteToFinalize = isDraft || hasRevisionsRequested
 
   /** Get project type badge configuration */
   const getProjectTypeBadge = () => {

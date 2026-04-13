@@ -106,7 +106,9 @@ export const LaunchFees = ({
       : ''
   const requiresRefundDownload = Boolean(paymentsData.onChainSwap?.swapJson)
   const launchSwapId =
-    paymentMethod === LaunchPaymentMethod.Onchain ? currentOnChainToRskSwapId : currentLightningToRskSwapId
+    paymentMethod === LaunchPaymentMethod.Onchain
+      ? currentOnChainToRskSwapId || undefined
+      : currentLightningToRskSwapId || undefined
 
   useEffect(() => {
     setHasUnlockedOnchainFlow(!requiresRefundDownload)
@@ -155,7 +157,7 @@ export const LaunchFees = ({
   }
 
   useTransactionStatusUpdate({
-    swapId: launchSwapId || undefined,
+    swapId: launchSwapId,
     handleProcessing: handleSwapProcessing,
     handleConfirmed: handleSwapProcessing,
     handleClaimCoins: handleSwapProcessing,

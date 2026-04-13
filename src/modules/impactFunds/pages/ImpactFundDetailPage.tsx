@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import {
   Accordion,
   AccordionButton,
@@ -35,6 +34,7 @@ import {
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { PiArrowUpRightBold, PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link, useParams } from 'react-router'
 
@@ -57,12 +57,12 @@ import {
   ProjectStatus,
   useImpactFundApplicationsQuery,
   useImpactFundApplyMutation,
+  useImpactFundQuery,
   useProjectPageFundersQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
-import { QUERY_IMPACT_FUND } from '../graphql/queries/impactFundsQuery.ts'
 import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 import {
   impactFundFundingModelItems,
@@ -175,7 +175,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
   const previousAuthQueryKeyRef = useRef<string | null>(null)
 
-  const { data, loading, error, refetch } = useQuery<{ impactFund: ImpactFundDetails }>(QUERY_IMPACT_FUND, {
+  const { data, loading, error, refetch } = useImpactFundQuery({
     variables: { input: { where: { name: decodedImpactFundName } } },
     skip: !impactFundName,
   })
@@ -812,8 +812,11 @@ function ImpactFundOverviewSection({
                 borderColor={applicationInfoBorderColor}
               >
                 <Body size="sm" color={colors.secondaryTextColor}>
-                  {t('You have applied to this impact fund with')} <strong>{application.project.title}</strong>
-                  {t('. Your application is under review and a moderator will reach if more details are needed.')}
+                  <Trans
+                    i18nKey="You have applied to this impact fund with <strong>{{projectTitle}}</strong>. Your application is under review and a moderator will reach out if more details are needed."
+                    values={{ projectTitle: application.project.title }}
+                    components={{ strong: <strong /> }}
+                  />
                 </Body>
               </Box>
             ))}
