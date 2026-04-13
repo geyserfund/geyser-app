@@ -21,6 +21,7 @@ import { useSignedUpload } from '@/shared/hooks/useSignedUpload.tsx'
 
 import { decodeMarkdownWhitespaceFromEditor, encodeMarkdownWhitespaceForEditor } from './markdownWhitespace.ts'
 import { mdxEditorIconComponentFor } from './MdxEditorIcons.tsx'
+import { MdxEditorImageDialog } from './MdxEditorImageDialog.tsx'
 import { MdxEditorToolbar } from './MdxEditorToolbar.tsx'
 import {
   getMdxMarkdownContentStyles,
@@ -31,6 +32,7 @@ import {
 const DEFAULT_MIN_HEIGHT = '120px'
 const MDX_EDITOR_CLASS_NAME = 'geyser-mdx-editor'
 const MDX_EDITOR_TOOLBAR_CLASS_NAME = 'geyser-mdx-toolbar'
+const MDX_EDITOR_MODE_TOGGLE_CLASS_NAME = 'geyser-mdx-mode-toggle'
 
 export type MdxMarkdownEditorProps = {
   mode?: 'edit' | 'preview'
@@ -166,6 +168,7 @@ const MdxMarkdownEditorInternal = ({
       linkDialogPlugin(),
       tablePlugin(),
       imagePlugin({
+        ImageDialog: MdxEditorImageDialog,
         async imageUploadHandler(image) {
           const upload = await uploadFile(image)
           return upload.src
@@ -213,22 +216,52 @@ const MdxMarkdownEditorInternal = ({
   return (
     <Box
       width="full"
-      border="1px solid"
-      borderColor="neutral1.6"
-      borderRadius="8px"
       backgroundColor="utils.pbg"
       sx={{
+        '& .mdxeditor': {
+          border: 'none',
+        },
+        '& .mdxeditor [class*="editorWrapper"]': {
+          border: 'none',
+        },
         [`& .${MDX_EDITOR_TOOLBAR_CLASS_NAME}[role='toolbar']`]: {
-          borderBottom: '1px solid',
-          borderColor: 'neutral1.6',
-          borderRadius: '8px 8px 0 0',
+          '--spacing-36': '100px',
+          border: 'none',
+          borderRadius: '8px',
+          minHeight: '40px',
+          paddingBlock: '4px',
+          paddingInline: '8px',
           position: 'sticky',
           top: 0,
           zIndex: 2,
-          backgroundColor: 'utils.pbg',
+          backgroundColor: 'neutral1.3',
+        },
+        [`& .${MDX_EDITOR_TOOLBAR_CLASS_NAME}[role='toolbar'] [class*='toolbarNodeKindSelectTrigger']`]: {
+          width: '100px',
+        },
+        [`& .${MDX_EDITOR_TOOLBAR_CLASS_NAME}[role='toolbar'] [data-toolbar-item='true']:not([disabled]):not([data-disabled])`]:
+          {
+            cursor: 'pointer',
+          },
+        [`& .${MDX_EDITOR_TOOLBAR_CLASS_NAME}[role='toolbar'] button:not([disabled]):not([data-disabled])`]: {
+          cursor: 'pointer',
+        },
+        [`& .${MDX_EDITOR_TOOLBAR_CLASS_NAME}[role='toolbar'] [data-disabled], & .${MDX_EDITOR_TOOLBAR_CLASS_NAME}[role='toolbar'] button:disabled`]:
+          {
+            cursor: 'not-allowed',
+          },
+        [`& .${MDX_EDITOR_MODE_TOGGLE_CLASS_NAME}`]: {
+          border: '1px solid',
+          borderColor: 'neutral1.6',
+          borderRadius: '8px',
+        },
+        [`& .${MDX_EDITOR_MODE_TOGGLE_CLASS_NAME}[data-source-mode='true']`]: {
+          borderColor: 'primary1.9',
+          color: 'primary1.9',
         },
         '& .mdxeditor-root-contenteditable': {
           minHeight,
+          border: 'none',
         },
         ...getMdxMarkdownContentStyles({ minHeight, fontFamily }),
       }}

@@ -26,7 +26,8 @@ export const getMdxMarkdownContentStyles = ({
 }): BoxProps['sx'] => ({
   [`& .${MDX_EDITOR_CONTENT_CLASS_NAME}`]: {
     minHeight,
-    padding: '12px 16px',
+    paddingBlock: '12px',
+    paddingInline: 0,
     fontFamily: fontFamily ? `${fontFamily} !important` : undefined,
   },
   [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} p:first-of-type`]: {
