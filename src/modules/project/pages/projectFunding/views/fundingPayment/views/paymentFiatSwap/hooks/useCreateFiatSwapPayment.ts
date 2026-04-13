@@ -18,6 +18,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionFiatToLightningSwapPaymentDetailsBanxaInput,
+  ProjectFundingStrategy,
   useFundingFiatSwapPaymentCreateMutation,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
@@ -44,6 +45,8 @@ export const useCreateFiatSwapPayment = () => {
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
   const { generateTransactionForLightningToRskSwap } = useGenerateTransactionDataForClaimingRBTCToContract()
+  const requiresLightningToRskSwap =
+    project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing || isPrismEnabled(project)
 
   const [createFiatSwapPaymentMutation, { loading }] = useFundingFiatSwapPaymentCreateMutation()
 
@@ -81,7 +84,7 @@ export const useCreateFiatSwapPayment = () => {
     lightningPreImage,
     accountKeys,
     fiatToLightningSwap,
-    prismEnabled,
+    requiresLightningToRskSwap,
   }: {
     checkoutUrl?: string
     lightningToRskSwap?: NonNullable<
@@ -94,7 +97,7 @@ export const useCreateFiatSwapPayment = () => {
     fiatToLightningSwap?: NonNullable<
       Awaited<ReturnType<typeof createFiatSwapPaymentMutation>>['data']
     >['contributionPaymentsAdd']['payments']['fiatToLightningSwap']
-    prismEnabled: boolean
+    requiresLightningToRskSwap: boolean
   }) => {
     if (!checkoutUrl) {
       throw new Error('Could not initialize fiat swap payment')
@@ -103,12 +106,12 @@ export const useCreateFiatSwapPayment = () => {
     window.open(checkoutUrl, '_blank')
     updateFundingPaymentDetails({
       fiatToLightningSwap,
-      ...(prismEnabled && { lightningToRskSwap }),
+      ...(requiresLightningToRskSwap && { lightningToRskSwap }),
     })
     setFiatSwapStatus(FiatSwapStatus.pending)
     setFiatFailureReason(null)
 
-    if (!prismEnabled) {
+    if (!requiresLightningToRskSwap) {
       return
     }
 
@@ -141,13 +144,12 @@ export const useCreateFiatSwapPayment = () => {
       throw new Error('Please select a currency')
     }
 
-    const prismEnabled = isPrismEnabled(project)
-    const lightningPreImage = prismEnabled ? generatePreImageHash() : undefined
+    const lightningPreImage = requiresLightningToRskSwap ? generatePreImageHash() : undefined
     if (lightningPreImage) {
       setContributionAddPaymentPreImages({ lightning: lightningPreImage })
     }
 
-    const accountKeys = prismEnabled ? resolveAccountKeys() : undefined
+    const accountKeys = requiresLightningToRskSwap ? resolveAccountKeys() : undefined
     if (accountKeys) {
       assertAccountKeysAreAvailable(accountKeys)
     }
@@ -168,7 +170,7 @@ export const useCreateFiatSwapPayment = () => {
                 create: true,
                 banxa: banxaInput,
               },
-              ...(prismEnabled &&
+              ...(requiresLightningToRskSwap &&
                 lightningPreImage &&
                 accountKeys && {
                   lightningToRskSwap: {
@@ -191,7 +193,7 @@ export const useCreateFiatSwapPayment = () => {
         lightningPreImage,
         accountKeys,
         fiatToLightningSwap: data?.contributionPaymentsAdd.payments.fiatToLightningSwap,
-        prismEnabled,
+        requiresLightningToRskSwap,
       })
     } catch (error) {
       const err = error as ApolloError
