@@ -956,7 +956,6 @@ export type GetPostsOrderByInput = {
 };
 
 export type GetPostsWhereInput = {
-  categories?: InputMaybe<Array<ProjectCategory>>;
   category?: InputMaybe<ProjectCategory>;
   postType?: InputMaybe<Array<PostType>>;
   projectFundingStrategy?: InputMaybe<ProjectFundingStrategy>;
@@ -1303,7 +1302,6 @@ export type ImpactFund = {
   subtitle?: Maybe<Scalars['String']['output']>;
   tags: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  viewerApplications: Array<ImpactFundApplication>;
 };
 
 export enum ImpactFundAmountCommittedCurrency {
@@ -1384,14 +1382,11 @@ export type ImpactFundDashboardCreator = {
   __typename?: 'ImpactFundDashboardCreator';
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigInt']['output'];
-  isIdentityVerified: Scalars['Boolean']['output'];
   username: Scalars['String']['output'];
 };
 
 export type ImpactFundDashboardProject = {
   __typename?: 'ImpactFundDashboardProject';
-  country?: Maybe<Scalars['String']['output']>;
-  fundingStrategy: ProjectFundingStrategy;
   id: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
   shortDescription?: Maybe<Scalars['String']['output']>;
@@ -3328,7 +3323,6 @@ export type Project = {
   /** Description of the project. */
   description?: Maybe<Scalars['String']['output']>;
   entriesCount?: Maybe<Scalars['Int']['output']>;
-  feedbackSuggestion?: Maybe<ProjectFeedbackSuggestion>;
   followers: Array<User>;
   followersCount?: Maybe<Scalars['Int']['output']>;
   funders: Array<Funder>;
@@ -3580,25 +3574,6 @@ export type ProjectDeleteResponse = MutationResponse & {
   message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
-
-export type ProjectFeedbackSuggestion = {
-  __typename?: 'ProjectFeedbackSuggestion';
-  emailBodyText?: Maybe<Scalars['String']['output']>;
-  emailSubject?: Maybe<Scalars['String']['output']>;
-  failureReason?: Maybe<Scalars['String']['output']>;
-  feedbackPoints: Array<Scalars['String']['output']>;
-  generatedAt?: Maybe<Scalars['Date']['output']>;
-  launchStrategy: Scalars['String']['output'];
-  mainIssue?: Maybe<Scalars['String']['output']>;
-  status: ProjectFeedbackSuggestionStatus;
-  summary?: Maybe<Scalars['String']['output']>;
-};
-
-export enum ProjectFeedbackSuggestionStatus {
-  Failed = 'FAILED',
-  Pending = 'PENDING',
-  Ready = 'READY'
-}
 
 export type ProjectFollowMutationInput = {
   projectId: Scalars['BigInt']['input'];
@@ -3891,7 +3866,6 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReview = {
   __typename?: 'ProjectReview';
-  complianceSuggestion?: Maybe<ProjectReviewComplianceSuggestion>;
   createdAt: Scalars['Date']['output'];
   id: Scalars['BigInt']['output'];
   projectId: Scalars['BigInt']['output'];
@@ -3902,25 +3876,6 @@ export type ProjectReview = {
   updatedAt: Scalars['Date']['output'];
   version: Scalars['Int']['output'];
 };
-
-export type ProjectReviewComplianceSuggestion = {
-  __typename?: 'ProjectReviewComplianceSuggestion';
-  failureReason?: Maybe<Scalars['String']['output']>;
-  feedback: Array<Scalars['String']['output']>;
-  generatedAt?: Maybe<Scalars['Date']['output']>;
-  model?: Maybe<Scalars['String']['output']>;
-  noteToCreator?: Maybe<Scalars['String']['output']>;
-  reasons: Array<Scalars['String']['output']>;
-  recommendedStatus?: Maybe<ProjectReviewStatus>;
-  status: ProjectReviewComplianceSuggestionStatus;
-  termsUrl: Scalars['String']['output'];
-};
-
-export enum ProjectReviewComplianceSuggestionStatus {
-  Failed = 'FAILED',
-  Pending = 'PENDING',
-  Ready = 'READY'
-}
 
 export type ProjectReviewRequestInput = {
   projectId: Scalars['BigInt']['input'];
@@ -4268,11 +4223,9 @@ export type ProjectsGetQueryInput = {
 };
 
 export type ProjectsGetWhereInput = {
-  categories?: InputMaybe<Array<ProjectCategory>>;
   category?: InputMaybe<ProjectCategory>;
   countryCode?: InputMaybe<Scalars['String']['input']>;
   fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
-  hasFeedbackSuggestion?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;
   ids?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   /** Unique name for the project. Used for the project URL and lightning address. */
@@ -5953,7 +5906,7 @@ export type ResolversTypes = {
   GuardianUsersGetWhereInput: GuardianUsersGetWhereInput;
   HeroStats: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['HeroStats']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
-  ImpactFund: ResolverTypeWrapper<Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications' | 'viewerApplications'> & { applications: Array<ResolversTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversTypes['Project']>, fundedApplications: Array<ResolversTypes['ImpactFundApplication']>, viewerApplications: Array<ResolversTypes['ImpactFundApplication']> }>;
+  ImpactFund: ResolverTypeWrapper<Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversTypes['Project']>, fundedApplications: Array<ResolversTypes['ImpactFundApplication']> }>;
   ImpactFundAmountCommittedCurrency: ImpactFundAmountCommittedCurrency;
   ImpactFundApplication: ResolverTypeWrapper<Omit<ImpactFundApplication, 'project'> & { project: ResolversTypes['Project'] }>;
   ImpactFundApplicationFundingModel: ImpactFundApplicationFundingModel;
@@ -6168,8 +6121,6 @@ export type ResolversTypes = {
   ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
   ProjectCreationStep: ProjectCreationStep;
   ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>;
-  ProjectFeedbackSuggestion: ResolverTypeWrapper<ProjectFeedbackSuggestion>;
-  ProjectFeedbackSuggestionStatus: ProjectFeedbackSuggestionStatus;
   ProjectFollowMutationInput: ProjectFollowMutationInput;
   ProjectFollowerStats: ResolverTypeWrapper<ProjectFollowerStats>;
   ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>;
@@ -6216,8 +6167,6 @@ export type ResolversTypes = {
   ProjectRefundablePayment: ResolverTypeWrapper<Omit<ProjectRefundablePayment, 'payments' | 'project'> & { payments: Array<ResolversTypes['Payment']>, project: ResolversTypes['Project'] }>;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReview: ResolverTypeWrapper<ProjectReview>;
-  ProjectReviewComplianceSuggestion: ResolverTypeWrapper<ProjectReviewComplianceSuggestion>;
-  ProjectReviewComplianceSuggestionStatus: ProjectReviewComplianceSuggestionStatus;
   ProjectReviewRequestInput: ProjectReviewRequestInput;
   ProjectReviewStatus: ProjectReviewStatus;
   ProjectReviewStatusInput: ProjectReviewStatusInput;
@@ -6535,7 +6484,7 @@ export type ResolversParentTypes = {
   GuardianUsersGetWhereInput: GuardianUsersGetWhereInput;
   HeroStats: ResolversInterfaceTypes<ResolversParentTypes>['HeroStats'];
   ID: Scalars['ID']['output'];
-  ImpactFund: Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications' | 'viewerApplications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversParentTypes['Project']>, fundedApplications: Array<ResolversParentTypes['ImpactFundApplication']>, viewerApplications: Array<ResolversParentTypes['ImpactFundApplication']> };
+  ImpactFund: Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversParentTypes['Project']>, fundedApplications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplication: Omit<ImpactFundApplication, 'project'> & { project: ResolversParentTypes['Project'] };
   ImpactFundApplicationsGetResponse: Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
@@ -6714,7 +6663,6 @@ export type ResolversParentTypes = {
   ProjectCountriesGetInput: ProjectCountriesGetInput;
   ProjectCountriesGetResult: ProjectCountriesGetResult;
   ProjectDeleteResponse: ProjectDeleteResponse;
-  ProjectFeedbackSuggestion: ProjectFeedbackSuggestion;
   ProjectFollowMutationInput: ProjectFollowMutationInput;
   ProjectFollowerStats: ProjectFollowerStats;
   ProjectFunderRewardStats: ProjectFunderRewardStats;
@@ -6752,7 +6700,6 @@ export type ResolversParentTypes = {
   ProjectRefundablePayment: Omit<ProjectRefundablePayment, 'payments' | 'project'> & { payments: Array<ResolversParentTypes['Payment']>, project: ResolversParentTypes['Project'] };
   ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReview: ProjectReview;
-  ProjectReviewComplianceSuggestion: ProjectReviewComplianceSuggestion;
   ProjectReviewRequestInput: ProjectReviewRequestInput;
   ProjectReviewSubmitInput: ProjectReviewSubmitInput;
   ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] };
@@ -7506,7 +7453,6 @@ export type ImpactFundResolvers<ContextType = any, ParentType extends ResolversP
   subtitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  viewerApplications?: Resolver<Array<ResolversTypes['ImpactFundApplication']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7549,14 +7495,11 @@ export type ImpactFundDashboardApplicationsResponseResolvers<ContextType = any, 
 export type ImpactFundDashboardCreatorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardCreator'] = ResolversParentTypes['ImpactFundDashboardCreator']> = {
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  isIdentityVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ImpactFundDashboardProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardProject'] = ResolversParentTypes['ImpactFundDashboardProject']> = {
-  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  fundingStrategy?: Resolver<ResolversTypes['ProjectFundingStrategy'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -8276,7 +8219,6 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  feedbackSuggestion?: Resolver<Maybe<ResolversTypes['ProjectFeedbackSuggestion']>, ParentType, ContextType>;
   followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
   followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>;
@@ -8423,19 +8365,6 @@ export type ProjectCountriesGetResultResolvers<ContextType = any, ParentType ext
 export type ProjectDeleteResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectDeleteResponse'] = ResolversParentTypes['ProjectDeleteResponse']> = {
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProjectFeedbackSuggestionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectFeedbackSuggestion'] = ResolversParentTypes['ProjectFeedbackSuggestion']> = {
-  emailBodyText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  emailSubject?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  failureReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  feedbackPoints?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  generatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  launchStrategy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mainIssue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['ProjectFeedbackSuggestionStatus'], ParentType, ContextType>;
-  summary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8586,7 +8515,6 @@ export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType exten
 };
 
 export type ProjectReviewResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReview'] = ResolversParentTypes['ProjectReview']> = {
-  complianceSuggestion?: Resolver<Maybe<ResolversTypes['ProjectReviewComplianceSuggestion']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -8596,19 +8524,6 @@ export type ProjectReviewResolvers<ContextType = any, ParentType extends Resolve
   status?: Resolver<ResolversTypes['ProjectReviewStatus'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProjectReviewComplianceSuggestionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReviewComplianceSuggestion'] = ResolversParentTypes['ProjectReviewComplianceSuggestion']> = {
-  failureReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  feedback?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  generatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  model?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  noteToCreator?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  reasons?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  recommendedStatus?: Resolver<Maybe<ResolversTypes['ProjectReviewStatus']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['ProjectReviewComplianceSuggestionStatus'], ParentType, ContextType>;
-  termsUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9437,7 +9352,6 @@ export type Resolvers<ContextType = any> = {
   ProjectContributionsStatsGraphDataAmount?: ProjectContributionsStatsGraphDataAmountResolvers<ContextType>;
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>;
   ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>;
-  ProjectFeedbackSuggestion?: ProjectFeedbackSuggestionResolvers<ContextType>;
   ProjectFollowerStats?: ProjectFollowerStatsResolvers<ContextType>;
   ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>;
   ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>;
@@ -9457,7 +9371,6 @@ export type Resolvers<ContextType = any> = {
   ProjectRefundablePayment?: ProjectRefundablePaymentResolvers<ContextType>;
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReview?: ProjectReviewResolvers<ContextType>;
-  ProjectReviewComplianceSuggestion?: ProjectReviewComplianceSuggestionResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
   ProjectRewardCatalogRow?: ProjectRewardCatalogRowResolvers<ContextType>;
   ProjectRewardMostSoldGetRow?: ProjectRewardMostSoldGetRowResolvers<ContextType>;
@@ -10368,7 +10281,7 @@ export type UserHeroStatsQueryVariables = Exact<{
 }>;
 
 
-export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
+export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
 
 export type UserWalletQueryVariables = Exact<{
   where: UserGetInput;
@@ -17623,7 +17536,6 @@ export type UserProfileContributionsQueryResult = Apollo.QueryResult<UserProfile
 export const UserHeroStatsDocument = gql`
     query UserHeroStats($where: UserGetInput!) {
   user(where: $where) {
-    id
     heroStats {
       ambassadorStats {
         contributionsCount
