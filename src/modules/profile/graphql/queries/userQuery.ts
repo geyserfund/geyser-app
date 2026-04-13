@@ -52,7 +52,6 @@ export const QUERY_USER_CONTRIBUTIONS = gql`
 export const QUERY_USER_HERO_STATS = gql`
   query UserHeroStats($where: UserGetInput!) {
     user(where: $where) {
-      id
       heroStats {
         ambassadorStats {
           contributionsCount
