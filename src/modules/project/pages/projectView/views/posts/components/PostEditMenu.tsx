@@ -1,7 +1,7 @@
 import { ButtonProps, Menu, MenuButton, MenuItem, MenuList, Portal, useDisclosure } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiNotePencil, PiTrash } from 'react-icons/pi'
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { DeleteConfirmModal } from '@/components/molecules'
 import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
@@ -21,6 +21,7 @@ type PostEditMenuProps = {
 export const PostEditMenu = ({ post, onDeleteComplete, ...props }: PostEditMenuProps) => {
   const { t } = useTranslation()
   const toast = useNotification()
+  const navigate = useNavigate()
 
   const menu = useDisclosure()
 
@@ -71,9 +72,13 @@ export const PostEditMenu = ({ post, onDeleteComplete, ...props }: PostEditMenuP
         <Portal>
           <MenuList p={2} zIndex="99" shadow="md">
             <MenuItem
-              as={Link}
-              to={getPath('projectPostEdit', project.name, post.id)}
               icon={<PiNotePencil fontSize={'16px'} />}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                menu.onClose()
+                navigate(getPath('projectPostEdit', project.name, post.id))
+              }}
             >
               {t('Edit')}
             </MenuItem>
