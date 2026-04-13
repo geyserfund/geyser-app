@@ -1,0 +1,1 @@
+export const IMPACT_FUND_DONATION_AMOUNT_SEARCH_PARAM = 'impactFundMonthlyAmountUsdCent'

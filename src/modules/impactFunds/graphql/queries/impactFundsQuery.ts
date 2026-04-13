@@ -11,6 +11,11 @@ export const QUERY_IMPACT_FUNDS = gql`
       heroImage
       amountCommitted
       amountCommittedCurrency
+      donateProjectId
+      donateProject {
+        id
+        name
+      }
       liveSponsors {
         id
         name

@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Grid,
   HStack,
   Icon,
   Image,
@@ -10,6 +11,7 @@ import {
   LinkOverlay,
   SimpleGrid,
   Spinner,
+  useDisclosure,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
@@ -39,7 +41,9 @@ import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import { type ImpactFundsQuery, ProjectSubCategory, useImpactFundsQuery } from '@/types'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
+import { ImpactFundDonationFlowModal } from '../components/ImpactFundDonationFlowModal.tsx'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
+import { ImpactFundWhyDonateModal } from '../components/ImpactFundWhyDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '../utils/constants.ts'
 import { impactFundFundingModelItems, impactFundFundingOverviewItems } from '../utils/informationContent.ts'
 
@@ -150,6 +154,8 @@ export const ImpactFundsMainPage = () => {
   const impactFundsSeoContent = getAiSeoPageContent('impactFunds')
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const donationModal = useDisclosure()
+  const whyDonateModal = useDisclosure()
   const pageSpacing = { base: 6, lg: 8 }
   const statMutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
   const statIconBg = useColorModeValue('primary1.100', 'primary1.900')
@@ -605,17 +611,57 @@ export const ImpactFundsMainPage = () => {
 
       {impactFunds.length > 0 ? (
         <VStack align="stretch" spacing={6}>
-          <VStack align="stretch" spacing={2}>
-            <H2 size="xl" bold>
-              {t('Regional Funds')}
+          <Grid
+            templateColumns={{ base: '1fr', lg: 'minmax(0, 1fr) auto' }}
+            templateRows={{ base: 'auto', lg: 'auto auto auto' }}
+            columnGap={4}
+            rowGap={2}
+            alignItems="start"
+          >
+            <H2 size="xl" bold gridColumn={{ lg: '1 / 2' }} gridRow={{ lg: '1 / 2' }}>
+              {t('Regional Impact Funds')}
             </H2>
-            <Body color={sectionSecondaryTextColor}>
+
+            <Body color={sectionSecondaryTextColor} gridColumn={{ lg: '1 / 2' }} gridRow={{ lg: '2 / 3' }}>
               {t('Explore region-led pools of capital on Geyser.')}
             </Body>
-            <Body size="sm" color={sectionSecondaryTextColor}>
+
+            <Body
+              size="sm"
+              color={sectionSecondaryTextColor}
+              gridColumn={{ lg: '1 / 2' }}
+              gridRow={{ lg: '3 / 4' }}
+            >
               {t('The following funds are actively accepting applications and have committed capital ready for deployment.')}
             </Body>
-          </VStack>
+
+            <Button
+              size="lg"
+              colorScheme="primary1"
+              onClick={donationModal.onOpen}
+              justifySelf={{ lg: 'end' }}
+              alignSelf="start"
+              gridColumn={{ lg: '2 / 3' }}
+              gridRow={{ lg: '1 / 2' }}
+            >
+              {t('Donate to an Impact Fund')}
+            </Button>
+
+            <Box
+              as="button"
+              type="button"
+              textAlign={{ base: 'left', lg: 'right' }}
+              justifySelf={{ lg: 'end' }}
+              alignSelf="start"
+              gridColumn={{ lg: '2 / 3' }}
+              gridRow={{ lg: '3 / 4' }}
+              onClick={whyDonateModal.onOpen}
+            >
+              <Body size="sm" color={sectionSecondaryTextColor} textDecoration="underline">
+                {t('Why donate to an Impact Fund?')}
+              </Body>
+            </Box>
+          </Grid>
 
           {latamImpactFund && renderImpactFundCard(latamImpactFund, 'hero')}
 
@@ -676,7 +722,7 @@ export const ImpactFundsMainPage = () => {
           ))}
         </SimpleGrid>
 
-        <VStack align="stretch" spacing={3} pt={2}>
+        <VStack id="impact-fund-funding-models" align="stretch" spacing={3} pt={2}>
           <H2 size="lg" bold color={sectionSecondaryTextColor}>
             {t('Funding Models')}
           </H2>
@@ -875,6 +921,13 @@ export const ImpactFundsMainPage = () => {
           ))}
         </SimpleGrid>
       </VStack>
+
+      <ImpactFundDonationFlowModal
+        impactFunds={orderedImpactFunds}
+        isOpen={donationModal.isOpen}
+        onClose={donationModal.onClose}
+      />
+      <ImpactFundWhyDonateModal isOpen={whyDonateModal.isOpen} onClose={whyDonateModal.onClose} />
     </VStack>
   )
 }
