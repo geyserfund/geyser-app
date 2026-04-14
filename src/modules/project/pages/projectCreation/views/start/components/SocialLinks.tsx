@@ -7,10 +7,17 @@ import {
   PiInstagramLogoBold,
   PiTelegramLogoBold,
   PiTiktokLogoBold,
+  PiWhatsappLogoBold,
   PiYoutubeLogoBold,
 } from 'react-icons/pi'
 
-import { GeyserDiscordUrl, GeyserGithubUrl, GeyserTelegramUrl, GeyserTwitterUrl } from '@/shared/constants/index.ts'
+import {
+  GeyserDiscordUrl,
+  GeyserGithubUrl,
+  GeyserTelegramUrl,
+  GeyserTwitterUrl,
+  GeyserWhatsappUrl,
+} from '@/shared/constants/index.ts'
 
 /** Shared social icon links for footer-like components. */
 export const SocialLinks = () => {
@@ -20,6 +27,9 @@ export const SocialLinks = () => {
     <HStack spacing={6}>
       <ChakraLink href={GeyserTwitterUrl} isExternal aria-label={t('social.geyser_on_x')}>
         <Icon as={FaXTwitter} boxSize={6} cursor="pointer" />
+      </ChakraLink>
+      <ChakraLink href={GeyserWhatsappUrl} isExternal aria-label={t('social.geyser_on_x')}>
+        <Icon as={PiWhatsappLogoBold} boxSize={6} cursor="pointer" />
       </ChakraLink>
       <ChakraLink href={GeyserGithubUrl} isExternal aria-label={t('social.geyser_on_github')}>
         <Icon as={PiGithubLogoBold} boxSize={6} cursor="pointer" />
