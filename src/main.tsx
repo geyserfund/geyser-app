@@ -1,4 +1,5 @@
 import './config/i18next'
+import '@mdxeditor/editor/style.css'
 
 import { ColorModeScript } from '@chakra-ui/react'
 import * as Sentry from '@sentry/react'
