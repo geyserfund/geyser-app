@@ -82,7 +82,9 @@ export const LaunchStory = () => {
               name="description"
               control={form.control}
               minHeight="40vh"
-              placeholder={t('Describe your product in detail - features, specifications, and benefits.')}
+              placeholder={t(
+                'Tell the story of your project: its origin, mission, goals, and the impact you want to make',
+              )}
             />
           </VStack>
           <Body w="full" size="xs" light flexGrow={1} textAlign="right">

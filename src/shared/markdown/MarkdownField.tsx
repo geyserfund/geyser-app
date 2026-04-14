@@ -8,6 +8,7 @@ export type MarkdownFieldProps = {
   autoFocus?: boolean
   preview?: boolean
   content?: string
+  onChange?: (value: string) => void
   placeholder?: string
   initialContent?: () => string
   initialContentReady?: boolean
@@ -32,6 +33,7 @@ export const MarkdownField = ({
   autoFocus,
   preview,
   content,
+  onChange,
   placeholder,
   initialContent,
   initialContentReady = true,
@@ -41,15 +43,16 @@ export const MarkdownField = ({
   markdownRawEditorProps,
   fontFamily,
 }: MarkdownFieldProps) => {
-  const resolvedValue = content ?? initialContent?.() ?? ''
   const minHeight = markdownRawEditorProps?.minHeight ?? editorWrapperProps?.minHeight ?? (preview ? '0px' : '120px')
+
+  if (!preview && !initialContentReady) {
+    return null
+  }
+
+  const resolvedValue = content ?? (initialContentReady ? initialContent?.() : undefined) ?? ''
 
   if (preview) {
     return <MdxMarkdownEditor mode="preview" value={resolvedValue} minHeight={minHeight} fontFamily={fontFamily} />
-  }
-
-  if (!initialContentReady) {
-    return null
   }
 
   if (control) {
@@ -66,11 +69,24 @@ export const MarkdownField = ({
     )
   }
 
+  if (onChange) {
+    return (
+      <MdxMarkdownEditor
+        mode="edit"
+        value={resolvedValue}
+        onChange={onChange}
+        autoFocus={autoFocus}
+        placeholder={placeholder}
+        minHeight={minHeight}
+        fontFamily={fontFamily}
+      />
+    )
+  }
+
   return (
     <MdxMarkdownEditor
       mode="edit"
       value={resolvedValue}
-      onChange={() => undefined}
       autoFocus={autoFocus}
       placeholder={placeholder}
       minHeight={minHeight}

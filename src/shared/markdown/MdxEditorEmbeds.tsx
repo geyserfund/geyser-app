@@ -65,6 +65,10 @@ export const createTweetEmbedMarkdown = async (url: string, isDarkMode: boolean)
       theme: isDarkMode ? 'dark' : 'light',
     })
 
+    if (!tweetElement) {
+      throw new Error('Failed to load tweet')
+    }
+
     const embedHtml = tweetElement.outerHTML
 
     return `${EMBED_MARKDOWN_PREFIX}${embedHtml}${EMBED_MARKDOWN_SUFFIX}`

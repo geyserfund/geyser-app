@@ -70,9 +70,13 @@ export const MdxEditorImageDialog = () => {
   }, [dialogState])
 
   const onClose = useCallback(() => {
+    if (isUploading) {
+      return
+    }
+
     setIsUploading(false)
     closeImageDialog()
-  }, [closeImageDialog])
+  }, [closeImageDialog, isUploading])
 
   const onSave = useCallback(() => {
     if (!hasImageSource || isUploading || dialogState.type === 'inactive') {
@@ -91,7 +95,7 @@ export const MdxEditorImageDialog = () => {
   }, [dialogState, hasImageSource, isUploading, onClose, saveImage, values.altText, values.src, values.title])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnOverlayClick={!isUploading}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnEsc={!isUploading} closeOnOverlayClick={!isUploading}>
       <ModalOverlay />
       <ModalContent backgroundColor="utils.pbg">
         <ModalHeader>{isEditing ? t('Edit image') : t('Upload an image')}</ModalHeader>

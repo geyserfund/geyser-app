@@ -18,5 +18,5 @@ export const decodeMarkdownWhitespaceFromEditor = (markdown: string): string => 
     return ''
   }
 
-  return markdown.replaceAll('&nbsp;', ' ').replaceAll(NON_BREAKING_SPACE, ' ')
+  return markdown.replaceAll(NON_BREAKING_SPACE, ' ')
 }

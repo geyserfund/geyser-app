@@ -1,12 +1,12 @@
 import {
   Box,
   HStack,
-  Portal,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Portal,
   useColorModeValue,
   useDisclosure,
   VStack,
@@ -22,8 +22,8 @@ import {
   usePublisher,
 } from '@mdxeditor/editor'
 import { t } from 'i18next'
-import { FORMAT_ELEMENT_COMMAND, type LexicalEditor } from 'lexical'
-import { useState } from 'react'
+import { type LexicalEditor, FORMAT_ELEMENT_COMMAND } from 'lexical'
+import { type KeyboardEvent, useState } from 'react'
 import { PiTable, PiTextAlignCenter, PiTextAlignLeft, PiTextAlignRight } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
@@ -114,9 +114,24 @@ export const MdxInsertTableButton = () => {
                     {row.map((_, columnIndex) => (
                       <Box
                         key={columnIndex}
+                        as="button"
+                        type="button"
                         padding="3px"
-                        onMouseEnter={() => setCurrentPosition({ row: rowIndex, column: columnIndex })}
+                        border="none"
+                        backgroundColor="transparent"
+                        onFocus={() => setCurrentPosition({ row: rowIndex, column: columnIndex })}
                         onClick={() => handleTableCreate({ row: rowIndex, column: columnIndex })}
+                        onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault()
+                            handleTableCreate({ row: rowIndex, column: columnIndex })
+                          }
+                        }}
+                        aria-label={t('Insert {{rows}} by {{columns}} table', {
+                          rows: rowIndex + 1,
+                          columns: columnIndex + 1,
+                        })}
+                        _focusVisible={{ outline: '2px solid', outlineColor: 'primary1.9', outlineOffset: '1px' }}
                       >
                         <Box
                           height="20px"
