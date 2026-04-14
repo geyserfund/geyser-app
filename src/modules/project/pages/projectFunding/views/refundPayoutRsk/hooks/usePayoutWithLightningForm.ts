@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
   AccountKeys,
@@ -46,6 +47,7 @@ export const usePayoutWithLightningForm = (
   satsAmount?: number,
 ) => {
   const toast = useNotification()
+  const { isLoading: isLoadingUserAccountKeys } = useUserAccountKeys()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
@@ -259,9 +261,14 @@ export const usePayoutWithLightningForm = (
     isValid &&
     isDirty &&
     currentLightningAddressState === LNAddressEvaluationState.SUCCEEDED &&
-    !isEvaluatingLightningAddress
+    !isEvaluatingLightningAddress &&
+    (Boolean(accountKeys) || !isLoadingUserAccountKeys)
 
   const handleFormSubmit = handleSubmit(async (data: LightningPayoutFormData) => {
+    if (!accountKeys && isLoadingUserAccountKeys) {
+      return
+    }
+
     if (!userAccountKeys?.encryptedSeed && !accountKeys) {
       toast.error({
         title: t('Unable to find your account keys'),
