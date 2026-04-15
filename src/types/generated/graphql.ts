@@ -1736,6 +1736,7 @@ export type Mutation = {
   projectShippingConfigCreate: ShippingConfig;
   projectShippingConfigUpdate: ShippingConfig;
   projectStatusUpdate: Project;
+  projectStripeInterestNotify: StripeInterestNotifyResponse;
   projectSubscriptionPlanCreate: ProjectSubscriptionPlan;
   projectSubscriptionPlanDelete: Scalars['Boolean']['output'];
   projectSubscriptionPlanUpdate: ProjectSubscriptionPlan;
@@ -2139,6 +2140,11 @@ export type MutationProjectShippingConfigUpdateArgs = {
 
 export type MutationProjectStatusUpdateArgs = {
   input: ProjectStatusUpdate;
+};
+
+
+export type MutationProjectStripeInterestNotifyArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -5126,6 +5132,11 @@ export enum StripeEmbeddedTheme {
   Light = 'LIGHT'
 }
 
+export type StripeInterestNotifyResponse = {
+  __typename?: 'StripeInterestNotifyResponse';
+  success: Scalars['Boolean']['output'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   _?: Maybe<Scalars['Boolean']['output']>;
@@ -6315,6 +6326,7 @@ export type ResolversTypes = {
   StripeConnectOnboardingPayload: ResolverTypeWrapper<StripeConnectOnboardingPayload>;
   StripeConnectStatus: ResolverTypeWrapper<StripeConnectStatus>;
   StripeEmbeddedTheme: StripeEmbeddedTheme;
+  StripeInterestNotifyResponse: ResolverTypeWrapper<StripeInterestNotifyResponse>;
   Subscription: ResolverTypeWrapper<{}>;
   SubscriptionPaymentConfirmationInput: SubscriptionPaymentConfirmationInput;
   Swap: ResolverTypeWrapper<Swap>;
@@ -6823,6 +6835,7 @@ export type ResolversParentTypes = {
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   StripeConnectOnboardingPayload: StripeConnectOnboardingPayload;
   StripeConnectStatus: StripeConnectStatus;
+  StripeInterestNotifyResponse: StripeInterestNotifyResponse;
   Subscription: {};
   SubscriptionPaymentConfirmationInput: SubscriptionPaymentConfirmationInput;
   Swap: Swap;
@@ -7740,6 +7753,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectShippingConfigCreate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigCreateArgs, 'input'>>;
   projectShippingConfigUpdate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigUpdateArgs, 'input'>>;
   projectStatusUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectStatusUpdateArgs, 'input'>>;
+  projectStripeInterestNotify?: Resolver<ResolversTypes['StripeInterestNotifyResponse'], ParentType, ContextType, RequireFields<MutationProjectStripeInterestNotifyArgs, 'projectId'>>;
   projectSubscriptionPlanCreate?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanCreateArgs, 'input'>>;
   projectSubscriptionPlanDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanDeleteArgs, 'id'>>;
   projectSubscriptionPlanUpdate?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanUpdateArgs, 'input'>>;
@@ -9037,6 +9051,11 @@ export type StripeConnectStatusResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type StripeInterestNotifyResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['StripeInterestNotifyResponse'] = ResolversParentTypes['StripeInterestNotifyResponse']> = {
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "_", ParentType, ContextType>;
   activityCreated?: SubscriptionResolver<ResolversTypes['Activity'], "activityCreated", ParentType, ContextType, Partial<SubscriptionActivityCreatedArgs>>;
@@ -9496,6 +9515,7 @@ export type Resolvers<ContextType = any> = {
   StatsInterface?: StatsInterfaceResolvers<ContextType>;
   StripeConnectOnboardingPayload?: StripeConnectOnboardingPayloadResolvers<ContextType>;
   StripeConnectStatus?: StripeConnectStatusResolvers<ContextType>;
+  StripeInterestNotifyResponse?: StripeInterestNotifyResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Swap?: SwapResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
@@ -10134,7 +10154,7 @@ export type ImpactFundApplyMutation = { __typename?: 'Mutation', impactFundApply
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
+export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, status: ImpactFundStatus, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number }, donateProject?: { __typename?: 'Project', name: string } | null }> };
 
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
@@ -11175,6 +11195,13 @@ export type RefreshStripeConnectOnboardingLinkMutationVariables = Exact<{
 
 
 export type RefreshStripeConnectOnboardingLinkMutation = { __typename?: 'Mutation', refreshStripeConnectOnboardingLink: { __typename?: 'StripeConnectOnboardingPayload', accountId: string, onboardingUrl: string, status: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } } };
+
+export type ProjectStripeInterestNotifyMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectStripeInterestNotifyMutation = { __typename?: 'Mutation', projectStripeInterestNotify: { __typename?: 'StripeInterestNotifyResponse', success: boolean } };
 
 export type ProjectTagCreateMutationVariables = Exact<{
   input: TagCreateInput;
@@ -16765,6 +16792,9 @@ export const ImpactFundsDocument = gql`
       awardedTotalSats
       projectsFundedCount
     }
+    donateProject {
+      name
+    }
     status
   }
 }
@@ -19595,6 +19625,39 @@ export function useRefreshStripeConnectOnboardingLinkMutation(baseOptions?: Apol
 export type RefreshStripeConnectOnboardingLinkMutationHookResult = ReturnType<typeof useRefreshStripeConnectOnboardingLinkMutation>;
 export type RefreshStripeConnectOnboardingLinkMutationResult = Apollo.MutationResult<RefreshStripeConnectOnboardingLinkMutation>;
 export type RefreshStripeConnectOnboardingLinkMutationOptions = Apollo.BaseMutationOptions<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>;
+export const ProjectStripeInterestNotifyDocument = gql`
+    mutation ProjectStripeInterestNotify($projectId: BigInt!) {
+  projectStripeInterestNotify(projectId: $projectId) {
+    success
+  }
+}
+    `;
+export type ProjectStripeInterestNotifyMutationFn = Apollo.MutationFunction<ProjectStripeInterestNotifyMutation, ProjectStripeInterestNotifyMutationVariables>;
+
+/**
+ * __useProjectStripeInterestNotifyMutation__
+ *
+ * To run a mutation, you first call `useProjectStripeInterestNotifyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectStripeInterestNotifyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectStripeInterestNotifyMutation, { data, loading, error }] = useProjectStripeInterestNotifyMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectStripeInterestNotifyMutation(baseOptions?: Apollo.MutationHookOptions<ProjectStripeInterestNotifyMutation, ProjectStripeInterestNotifyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectStripeInterestNotifyMutation, ProjectStripeInterestNotifyMutationVariables>(ProjectStripeInterestNotifyDocument, options);
+      }
+export type ProjectStripeInterestNotifyMutationHookResult = ReturnType<typeof useProjectStripeInterestNotifyMutation>;
+export type ProjectStripeInterestNotifyMutationResult = Apollo.MutationResult<ProjectStripeInterestNotifyMutation>;
+export type ProjectStripeInterestNotifyMutationOptions = Apollo.BaseMutationOptions<ProjectStripeInterestNotifyMutation, ProjectStripeInterestNotifyMutationVariables>;
 export const ProjectTagCreateDocument = gql`
     mutation ProjectTagCreate($input: TagCreateInput!) {
   tagCreate(input: $input) {

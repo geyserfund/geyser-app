@@ -105,3 +105,82 @@ export const postCampaignLaunchRegistration = async (data: { email: string; desc
     body: JSON.stringify(sendData),
   }).then((response) => response.json())
 }
+
+/**
+ * Same base (`appyM7XlNIWVypuP5`) as other helpers. Create a table named `Impact Fund Donations` with fields:
+ * - `Region` (single line text, optional)
+ * - `Categories` (long text)
+ * - `Target Impact Fund` (single line text) — e.g. `latam-impact-fund` / `bitcoin-adoption-impact-fund`
+ * - `Contribution UUID` (single line text, filled after successful funding)
+ */
+const IMPACT_FUND_DONATIONS_TABLE = 'Impact Fund Donations'
+
+export type PostImpactFundDonationPreferenceInput = {
+  regionLabel: string | null
+  categoriesLabels: string[]
+  targetImpactFundSlug: string
+}
+
+type AirtableCreateResponse = {
+  records?: Array<{ id?: string }>
+}
+
+/** Creates a row when the user continues from Impact Fund donate preferences (region / categories). */
+export const postImpactFundDonationPreference = async (
+  input: PostImpactFundDonationPreferenceInput,
+): Promise<{ recordId: string | null }> => {
+  const fields: Record<string, string> = {
+    'Target Impact Fund': input.targetImpactFundSlug,
+    Categories: input.categoriesLabels.length > 0 ? input.categoriesLabels.join(', ') : '',
+  }
+  if (input.regionLabel) {
+    fields.Region = input.regionLabel
+  }
+
+  const sendData = {
+    records: [{ fields }],
+  }
+
+  const response = await fetch(`${AIRTABLE_API}/${encodeURIComponent(IMPACT_FUND_DONATIONS_TABLE)}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(sendData),
+  })
+
+  if (!response.ok) {
+    return { recordId: null }
+  }
+
+  const json = (await response.json()) as AirtableCreateResponse
+  const recordId = json.records?.[0]?.id ?? null
+  return { recordId }
+}
+
+/** Attaches the completed contribution uuid to the preference row created in postImpactFundDonationPreference. */
+export const patchImpactFundDonationContributionUuid = async (input: {
+  recordId: string
+  contributionUuid: string
+}): Promise<void> => {
+  const response = await fetch(
+    `${AIRTABLE_API}/${encodeURIComponent(IMPACT_FUND_DONATIONS_TABLE)}/${encodeURIComponent(input.recordId)}`,
+    {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          'Contribution UUID': input.contributionUuid,
+        },
+      }),
+    },
+  )
+
+  if (!response.ok) {
+    throw new Error('Airtable patch failed')
+  }
+}

@@ -27,6 +27,9 @@ export const QUERY_IMPACT_FUNDS = gql`
         awardedTotalSats
         projectsFundedCount
       }
+      donateProject {
+        name
+      }
       status
     }
   }

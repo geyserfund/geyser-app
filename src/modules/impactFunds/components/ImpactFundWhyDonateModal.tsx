@@ -1,6 +1,6 @@
 import { Box, HStack, Icon, Link as ChakraLink, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowBendDownRightBold, PiCoinsBold, PiUsersThreeBold } from 'react-icons/pi'
+import { PiArrowBendDownRightBold, PiCoinsBold, PiHandshakeBold, PiUsersThreeBold } from 'react-icons/pi'
 
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -10,8 +10,8 @@ type ImpactFundWhyDonateModalProps = {
   onClose: () => void
 }
 
-/** Explains how impact funds work and why sponsors donate into them. */
-export const ImpactFundWhyDonateModal = ({ isOpen, onClose }: ImpactFundWhyDonateModalProps): JSX.Element => {
+/** Explains how the Impact Fund works, how capital is allocated, and why donations matter. */
+export function ImpactFundWhyDonateModal({ isOpen, onClose }: ImpactFundWhyDonateModalProps): JSX.Element {
   const iconBg = useColorModeValue('primary1.100', 'primary1.900')
   const iconColor = useColorModeValue('primary1.700', 'primary1.300')
   const mutedTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
@@ -20,47 +20,47 @@ export const ImpactFundWhyDonateModal = ({ isOpen, onClose }: ImpactFundWhyDonat
   const items = [
     {
       icon: PiCoinsBold,
-      title: t('What are Impact Funds?'),
+      title: t('What is the Bitcoin Adoption Impact Fund?'),
       description: (
         <Body size="sm" color={mutedTextColor}>
           {t(
-            'Impact Funds pool and distribute capital to the most promising and impactful Bitcoin projects. The focus is mainly on small to medium projects to help them get off the ground. Impact Funds aim to make it dead simple for anyone to contribute towards Bitcoin adoption.',
+            'This is a single pooled fund focused on grassroots Bitcoin adoption and awareness. You grow the pool by making a one-time or recurring donation and choosing a region and/or category you want to support.',
           )}
         </Body>
       ),
     },
     {
-      icon: PiUsersThreeBold,
+      icon: PiHandshakeBold,
       title: t('How is funding distributed?'),
       description: (
         <Body size="sm" color={mutedTextColor}>
           {t(
-            'Applications are reviewed by the fund moderators, and capital is allocated using one of four funding models: direct grant, capped matching, all-or-nothing co-funding or workshops.',
+            'Funds are deployed over time to local initiatives that promote Bitcoin adoption, awareness, and circulation. Initiatives are curated with a trust network of field partners who help source projects and keep allocations aligned with local needs.',
           )}{' '}
-          <ChakraLink href="#impact-fund-funding-models" textDecoration="underline" onClick={onClose}>
-            {t('Read more about each Funding Model')}
+          <ChakraLink href="#impact-fund-how-it-works" textDecoration="underline" onClick={onClose}>
+            {t('See how it works on this page')}
           </ChakraLink>
         </Body>
       ),
     },
     {
-      icon: PiArrowBendDownRightBold,
+      icon: PiUsersThreeBold,
       title: t('Why your donation matters'),
       description: (
         <Body size="sm" color={mutedTextColor}>
           {t(
-            'Recurring donations increase the capital available for deployment and help each fund support more builders over time. More donations means more impact, which will be shared with all contributors in our impact reports.',
+            'Your contribution increases deployable capital so the fund can sustain support for builders over time. Donors receive periodic impact reporting on how funds were distributed and the outcomes they helped enable.',
           )}
         </Body>
       ),
     },
     {
       icon: PiArrowBendDownRightBold,
-      title: t('Why were impact funds created?'),
+      title: t('Why this fund exists'),
       description: (
         <Body size="sm" color={mutedTextColor}>
           {t(
-            "There are a lot of projects that can push Bitcoin adoption forward around the world, but it's not always easy for them to get the necessary funding, as they might lack reputation or visibility. It is also difficult for contributors to do the vetting and decide which projects to trust. Operating Geyser has given us unique insights into vetting impactful projects and a broad network of both contributors and corporate partners. We created Impact Funds so you can easily support Bitcoin adoption without any effort.",
+            "Many projects that advance Bitcoin adoption still struggle with visibility and funding, while individual donors can find it hard to vet opportunities at scale. Geyser's experience reviewing projects—together with our contributor and partner networks—powers this fund so you can back adoption without doing diligence on every initiative yourself.",
           )}
         </Body>
       ),
@@ -72,7 +72,12 @@ export const ImpactFundWhyDonateModal = ({ isOpen, onClose }: ImpactFundWhyDonat
       isOpen={isOpen}
       onClose={onClose}
       size="xl"
-      title={t('Why donate to an Impact Fund?')}
+      title={
+        <>
+          {t('Why donate to the Impact Fund')}
+          ?
+        </>
+      }
       contentProps={{ maxW: { base: 'calc(100vw - 1.5rem)', lg: '720px' } }}
       bodyProps={{ gap: 4, alignItems: 'stretch' }}
     >

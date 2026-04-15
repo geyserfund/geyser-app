@@ -66,7 +66,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     bottomNav: true,
   },
   {
-    label: 'Impact Funds',
+    label: 'Adoption Impact Fund',
     key: DiscoveryNavItemKey.ImpactFunds,
     path: 'discoveryImpactFunds',
     icon: PiTrophy,
