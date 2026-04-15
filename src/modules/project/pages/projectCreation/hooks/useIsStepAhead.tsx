@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { Exact, ProjectCreationStep, UpdateProjectInput, UpdateProjectMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -14,6 +15,7 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
   const { updateProject } = useProjectAPI()
   const navigate = useNavigate()
   const toast = useNotification()
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
 
   const projectStepIsAhead = projectCreationStepIndex[project.lastCreationStep] > projectCreationStepIndex[step]
 
@@ -33,6 +35,10 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
   ) => {
     if (!projectUpdateIput && projectStepIsAhead) {
       navigate(nextPath)
+      return
+    }
+
+    if (guardProjectEditAttempt()) {
       return
     }
 

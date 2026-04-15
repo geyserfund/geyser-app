@@ -16,6 +16,7 @@ import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/sta
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
+import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
   ProjectCreationStep,
@@ -30,6 +31,7 @@ import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAh
 
 export const LaunchPaymentAccountPassword = () => {
   const { project, partialUpdateProject } = useProjectAtom()
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
   const toast = useNotification()
   const navigate = useNavigate()
   const [isSettingProjectWallet, setIsSettingProjectWallet] = useState(false)
@@ -103,6 +105,10 @@ export const LaunchPaymentAccountPassword = () => {
       }
 
       if (shouldConfigureProjectWallet) {
+        if (guardProjectEditAttempt()) {
+          return
+        }
+
         const projectKeys = generateProjectKeysFromSeedHex(decryptedSeedPayload.seed, project.id)
 
         const result = await projectRskEoaSet({

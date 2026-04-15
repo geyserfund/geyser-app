@@ -9,6 +9,7 @@ import {
   useProjectInProgressGoalsLazyQuery,
 } from '@/types'
 
+import { useProjectCreationEditGuard } from '../hooks/useProjectCreationEditGuard.ts'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import {
   addUpdateInProgressGoalsAtom,
@@ -27,6 +28,7 @@ import { useCustomMutation } from './custom/useCustomMutation'
  * @param load - Load goals on mount
  */
 export const useProjectGoalsAPI = (load?: boolean) => {
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
   const setInProgressGoals = useSetAtom(inProgressGoalsAtom)
   const setCompletedGoals = useSetAtom(completedGoalsAtom)
 
@@ -126,15 +128,33 @@ export const useProjectGoalsAPI = (load?: boolean) => {
       ...queryCompletedGoalsOptions,
     },
     createProjectGoal: {
-      execute: createProjectGoal,
+      execute: (...args: Parameters<typeof createProjectGoal>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return createProjectGoal(...args)
+      },
       ...createProjectGoalOptions,
     },
     updateProjectGoal: {
-      execute: updateProjectGoal,
+      execute: (...args: Parameters<typeof updateProjectGoal>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return updateProjectGoal(...args)
+      },
       ...updateProjectGoalOptions,
     },
     deleteProjectGoal: {
-      execute: deleteProjectGoal,
+      execute: (...args: Parameters<typeof deleteProjectGoal>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return deleteProjectGoal(...args)
+      },
       ...deleteProjectGoalOptions,
     },
   }

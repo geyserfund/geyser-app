@@ -72,6 +72,7 @@
 - Apply the same `loading`/`error` handling standard to section-level data-dependent queries and provide a clear retry path where appropriate.
 - Do not silently fall back to unrelated/global data when a scoped lookup fails (for example, region-specific discovery pages). Block rendering of the scoped result and show an explicit retry/error state instead.
 - Prefer project `useNotification` over raw Chakra `useToast` in feature code.
+- Never add the full object returned by `useNotification()` to `useEffect` dependencies. Ignore eslint warning for this specific case.
 - Prefer shared typography components (`H2`, `Body`, etc.) over raw Chakra `Text` for user-facing page copy.
 
 ## Routing & Safety

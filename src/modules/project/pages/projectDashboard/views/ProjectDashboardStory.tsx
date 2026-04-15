@@ -1,4 +1,4 @@
-import { Button, ButtonProps, VStack } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
@@ -112,9 +112,9 @@ export const ProjectDashboardStory = () => {
                 {t('Write a more in-depth description of the project. You can also add images and videos.')}
               </Body>
             </VStack>
-            <CardLayout w="full" flex={1} backgroundColor={'utils.surface'} height="calc(100% - 50px)" overflowY="auto">
+            <Box w="full" flex={1} height="calc(100% - 50px)" overflow="hidden">
               <ProjectStoryForm autoFocus form={form} isLoading={loading || !project} />
-            </CardLayout>
+            </Box>
           </VStack>
         </CardLayout>
       </VStack>

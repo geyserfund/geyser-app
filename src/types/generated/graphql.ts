@@ -10357,7 +10357,7 @@ export type UserProfileProjectsQueryVariables = Exact<{
 }>;
 
 
-export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
         { __typename?: 'Project' }
         & ProjectForProfilePageFragment
       ) | null }> } };
@@ -10388,7 +10388,7 @@ export type UserHeroStatsQueryVariables = Exact<{
 }>;
 
 
-export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
+export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
 
 export type UserWalletQueryVariables = Exact<{
   where: UserGetInput;
@@ -17540,6 +17540,7 @@ export type UserForProfilePageQueryResult = Apollo.QueryResult<UserForProfilePag
 export const UserProfileProjectsDocument = gql`
     query UserProfileProjects($where: UserGetInput!) {
   user(where: $where) {
+    id
     ownerOf {
       project {
         ...ProjectForProfilePage
@@ -17670,6 +17671,7 @@ export type UserProfileContributionsQueryResult = Apollo.QueryResult<UserProfile
 export const UserHeroStatsDocument = gql`
     query UserHeroStats($where: UserGetInput!) {
   user(where: $where) {
+    id
     heroStats {
       ambassadorStats {
         contributionsCount
