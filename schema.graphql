@@ -222,6 +222,7 @@ type Mutation {
   projectSubscriptionPlanDelete(id: BigInt!): Boolean!
   createStripeConnectAccount(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
   refreshStripeConnectOnboardingLink(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
+  projectStripeInterestNotify(projectId: BigInt!): StripeInterestNotifyResponse!
   projectShippingConfigCreate(input: CreateProjectShippingConfigInput!): ShippingConfig!
   projectShippingConfigUpdate(input: UpdateProjectShippingConfigInput!): ShippingConfig!
   shippingAddressCreate(input: ShippingAddressCreateInput!): ShippingAddress!
@@ -3499,12 +3500,15 @@ type ImpactFundDashboardProject {
   title: String!
   thumbnailImage: String
   shortDescription: String
+  country: String
+  fundingStrategy: ProjectFundingStrategy!
 }
 
 type ImpactFundDashboardCreator {
   id: BigInt!
   username: String!
   email: String
+  isIdentityVerified: Boolean!
 }
 
 type ImpactFundMetrics {
@@ -4194,6 +4198,10 @@ type StripeConnectOnboardingPayload {
   accountId: String!
   onboardingUrl: String!
   status: StripeConnectStatus!
+}
+
+type StripeInterestNotifyResponse {
+  success: Boolean!
 }
 
 input GeyserPromotionsContributionStatsWhereInput {

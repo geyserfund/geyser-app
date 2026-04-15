@@ -808,8 +808,17 @@ export const useFundingAPI = () => {
   }
 }
 
-export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
-  const { project } = useProjectAtom()
+type ClaimTargetProject = {
+  fundingStrategy?: ProjectFundingStrategy | null
+  rskEoa?: string | null
+  aonGoal?: {
+    contractAddress?: string | null
+  } | null
+}
+
+export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverride?: ClaimTargetProject | null) => {
+  const { project: activeProject } = useProjectAtom()
+  const project = projectOverride ?? activeProject
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
@@ -829,6 +838,36 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       if (!geyserFeeTypes.has(fee.feeType)) return acc
       return acc + fee.feeAmount
     }, 0)
+  }
+
+  const getValidatedClaimTargetProject = () => {
+    if (!project?.fundingStrategy) {
+      throw new Error('Missing project funding strategy for claim generation')
+    }
+
+    if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+      const aonContractAddress = project.aonGoal?.contractAddress
+
+      if (!aonContractAddress) {
+        throw new Error('Missing AON contract address for claim generation')
+      }
+
+      return {
+        fundingStrategy: project.fundingStrategy,
+        aonContractAddress,
+        rskEoa: project.rskEoa ?? null,
+      }
+    }
+
+    if (!project.rskEoa) {
+      throw new Error('Missing project RSK EOA for claim generation')
+    }
+
+    return {
+      fundingStrategy: project.fundingStrategy,
+      aonContractAddress: null,
+      rskEoa: project.rskEoa,
+    }
   }
 
   const buildPrismClaimTxCallData = (params: {
@@ -889,12 +928,14 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     claimAmountSats: number
     fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']
     contributorAddress: string
+    aonContractAddress: string
     refundAddress: string
     timelock: number
     preimage: string
     privateKey: string
   }) => {
-    const { claimAmountSats, fees, contributorAddress, refundAddress, timelock, preimage, privateKey } = params
+    const { claimAmountSats, fees, contributorAddress, aonContractAddress, refundAddress, timelock, preimage, privateKey } =
+      params
 
     const creatorFeesAmount = fees.reduce((acc, fee) => {
       if (fee.feePayer === PaymentFeePayer.Creator) {
@@ -922,7 +963,7 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       refundAddress,
       timelock,
       privateKey,
-      aonContractAddress: project?.aonGoal?.contractAddress || '',
+      aonContractAddress,
     })
   }
 
@@ -980,8 +1021,9 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       throw new Error('Missing contributor RSK address for swap claim')
     }
 
-    const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const projectRskEoa = project?.rskEoa || ''
+    const claimTargetProject = getValidatedClaimTargetProject()
+    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+    const projectRskEoa = claimTargetProject.rskEoa || ''
     const geyserFeesAmount = getGeyserFeesAmount(fees)
 
     let claimTxCallDataHex = ''
@@ -1001,6 +1043,7 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
         claimAmountSats,
         fees,
         contributorAddress,
+        aonContractAddress: claimTargetProject.aonContractAddress || '',
         refundAddress: swap.refundAddress,
         timelock: swap.timeoutBlockHeight,
         preimage: preImages.preimageHex,
@@ -1032,8 +1075,9 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       throw new Error('Missing contributor RSK address for swap claim')
     }
 
-    const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const projectRskEoa = project?.rskEoa || ''
+    const claimTargetProject = getValidatedClaimTargetProject()
+    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+    const projectRskEoa = claimTargetProject.rskEoa || ''
     const geyserFeesAmount = getGeyserFeesAmount(fees)
 
     let claimTxCallDataHex = ''
@@ -1053,6 +1097,7 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
         claimAmountSats,
         fees,
         contributorAddress,
+        aonContractAddress: claimTargetProject.aonContractAddress || '',
         refundAddress: swap.claimDetails.refundAddress,
         timelock: swap.claimDetails.timeoutBlockHeight,
         preimage: preImages.preimageHex,

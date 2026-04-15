@@ -7,6 +7,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+import { FeedBackVariant, Feedback } from '@/shared/molecules/Feedback.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
@@ -49,6 +50,15 @@ export const LaunchSummary = () => {
         return t('All-or-Nothing') // Default fallback
     }
   }
+
+  const launchInfoCopy =
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
+      ? t(
+          'Once launched, your project will be public and people can start contributing to it. You will no longer be able to update the funding strategy.',
+        )
+      : t(
+          'Once launched, your project will be public and people can start contributing to it. Some of the project details will no longer be updatable, such as the funding strategy, goal and duration.',
+        )
 
   return (
     <VStack spacing={6} w="full" alignItems="start">
@@ -108,11 +118,9 @@ export const LaunchSummary = () => {
           </HStack>
         )}
       </CardLayout>
-      <Body>
-        {t(
-          'Once the project is launched, some of the project details will not be updatable anymore, such as the funding strategy, goal and duration.',
-        )}
-      </Body>
+      <Feedback variant={FeedBackVariant.INFO}>
+        <Body>{launchInfoCopy}</Body>
+      </Feedback>
     </VStack>
   )
 }

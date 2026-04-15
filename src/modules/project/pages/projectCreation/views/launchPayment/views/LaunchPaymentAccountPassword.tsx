@@ -15,6 +15,7 @@ import {
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
 import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -27,7 +28,6 @@ import { useNotification } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
-import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 export const LaunchPaymentAccountPassword = () => {
   const { project, partialUpdateProject } = useProjectAtom()

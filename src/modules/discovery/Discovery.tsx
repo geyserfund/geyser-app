@@ -29,7 +29,8 @@ export const Discovery = () => {
   const usesLandingLayout = LANDING_LAYOUT_PATTERNS.some((pattern) => matchPath(pattern, pathname))
   const creatorRoute = getPath('discoveryCreator')
   const isCreatorRoute = pathname === creatorRoute || pathname.startsWith(`${creatorRoute}/`)
-  const usesFullWidthLayout = usesLandingLayout || isCreatorRoute
+  const isImpactFundsMainRoute = matchPath({ path: getPath('discoveryImpactFunds'), end: true }, pathname) !== null
+  const usesFullWidthLayout = usesLandingLayout || isImpactFundsMainRoute || isCreatorRoute
 
   useEffect(() => {
     if (!usesLandingLayout || !user.heroId || searchParams.get('hero')) {

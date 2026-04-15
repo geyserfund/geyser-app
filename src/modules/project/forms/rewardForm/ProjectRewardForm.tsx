@@ -146,7 +146,7 @@ export const ProjectRewardForm = ({
             error={errors.shortDescription?.message}
           />
 
-          <DescriptionFormComponent formLoaded={formLoaded} control={control} errors={errors} watch={watch} />
+          <DescriptionFormComponent formLoaded={formLoaded} control={control} errors={errors} />
 
           <Stack w="full" direction={{ base: 'column', lg: 'row' }}>
             <ControlledAmountInput

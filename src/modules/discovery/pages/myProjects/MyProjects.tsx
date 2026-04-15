@@ -12,28 +12,29 @@ import { LaunchNewProjectBanner } from './components/LaunchNewProjectBanner.tsx'
 import { ProjectCard } from './components/ProjectCard'
 import { ProjectIFollowGrid } from './components/ProjectIFollowGrid'
 import { useMyProjects } from './hooks/useMyProjects'
+import { isProjectInPostLaunchReview, isProjectPendingLaunch } from './utils/projectState.ts'
 
 export const MyProjects = () => {
   useLastVisitedMyProjects()
 
   const { user } = useAuthContext()
-  const { activeProjects, inDraftProjects, inReviewProjects, inActiveProjects, isLoading } = useMyProjects(user?.id)
+  const { activeProjects, inDraftProjects, inReviewProjects, inPrelaunchProjects, inActiveProjects, isLoading } =
+    useMyProjects(user?.id)
 
   /** Sort and combine all projects into a single list */
   const sortedProjects = useMemo(() => {
     const allProjects = Array.from(
       new Map(
-        [...activeProjects, ...inReviewProjects, ...inDraftProjects, ...inActiveProjects].map((project) => [
-          String(project.id),
-          project,
-        ]),
+        [...activeProjects, ...inReviewProjects, ...inDraftProjects, ...inPrelaunchProjects, ...inActiveProjects].map(
+          (project) => [String(project.id), project],
+        ),
       ).values(),
     )
 
     // Custom sort order: Active > InReview/RevisionsRequested > Draft > Inactive > Closed
     const getStatusPriority = (project: ProjectForMyProjectsFragment) => {
       if (project.status === ProjectStatus.Active) return 1
-      if (project.status === ProjectStatus.InReview) {
+      if (isProjectInPostLaunchReview(project)) {
         const latestReview = project.reviews?.reduce((latest, current) => {
           const latestVersion = latest?.version ?? 0
           const currentVersion = current?.version ?? 0
@@ -42,16 +43,17 @@ export const MyProjects = () => {
         return latestReview?.status === ProjectReviewStatus.RevisionsRequested ? 2 : 3
       }
 
-      if (project.status === ProjectStatus.Draft || project.status === ProjectStatus.Accepted) return 4
-      if (project.status === ProjectStatus.Inactive) return 5
-      if (project.status === ProjectStatus.Closed) return 6
-      return 7
+      if (isProjectPendingLaunch(project)) return 4
+      if (project.status === ProjectStatus.PreLaunch) return 5
+      if (project.status === ProjectStatus.Inactive) return 6
+      if (project.status === ProjectStatus.Closed) return 7
+      return 8
     }
 
     return allProjects.sort((a, b) => {
       return getStatusPriority(a) - getStatusPriority(b)
     })
-  }, [activeProjects, inReviewProjects, inDraftProjects, inActiveProjects])
+  }, [activeProjects, inReviewProjects, inDraftProjects, inPrelaunchProjects, inActiveProjects])
 
   const hasNoProjects = sortedProjects.length === 0
 
