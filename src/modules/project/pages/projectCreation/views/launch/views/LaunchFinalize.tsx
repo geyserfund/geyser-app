@@ -89,7 +89,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
     <ProjectCreationPageWrapper title={t('Ready to launch!')} backButtonProps={backProps} hideContinueButton={true}>
       <VStack w="full" spacing={0}>
         <Image src={LiveProjectsImageUrl} alt={t('Launch Now')} height="200px" />
-        <Body>
+        <Body alignSelf="stretch" textAlign="left">
           {t(
             'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',
           )}
@@ -99,8 +99,6 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
       <LaunchSummary />
 
       <VStack w="full" alignItems="start" spacing={8}>
-        <Body>{t('Once launched, your project will be public and people can start contributing to it.')}</Body>
-
         <Button
           size="xl"
           width="100%"

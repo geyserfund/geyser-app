@@ -6,6 +6,7 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { LegalEntitySelection } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/components/LegalEntitySelection.tsx'
 import { useTaxProfileForm } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/useTaxProfileForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
@@ -13,7 +14,6 @@ import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
-import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 export const LaunchPaymentTaxId = () => {
   const { user } = useAuthContext()

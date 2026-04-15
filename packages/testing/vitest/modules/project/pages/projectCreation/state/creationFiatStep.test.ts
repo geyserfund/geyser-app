@@ -4,8 +4,8 @@ import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 
 import { getProjectCreationRoute } from '../../../../../../../../src/modules/project/pages/projectCreation/utils/getProjectCreationRoute.ts'
+import { shouldShowCreationFiatStep } from '../../../../../../../../src/modules/project/utils/stripeConnect.ts'
 import { getNextProjectCreationStep } from '../../../../../../../../src/modules/project/pages/projectCreation/utils/projectCreationSteps.ts'
-import { shouldShowCreationFiatStep } from '../../../../../../../../src/modules/project/pages/projectCreation/views/launchPayment/utils/stripeConnect.ts'
 
 describe('creation fiat step eligibility', () => {
   it('shows the fiat step for take-it-all projects in supported countries', () => {

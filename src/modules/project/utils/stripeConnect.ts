@@ -1,6 +1,6 @@
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
-type CreationFiatProject = {
+type StripeConnectProject = {
   fundingStrategy?: ProjectFundingStrategy | null
   location?: {
     country?: {
@@ -57,8 +57,8 @@ export const STRIPE_CONNECT_SUPPORTED_COUNTRIES = new Set([
   'US',
 ])
 
-/** Returns whether the creation flow should show the fiat contributions step for a project. */
-export const shouldShowCreationFiatStep = (project?: CreationFiatProject | null): boolean => {
+/** Returns whether Stripe Connect is eligible for a project based on funding strategy and country. */
+export const isStripeConnectSupportedForProject = (project?: StripeConnectProject | null): boolean => {
   if (project?.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
     return false
   }
@@ -70,4 +70,9 @@ export const shouldShowCreationFiatStep = (project?: CreationFiatProject | null)
   }
 
   return STRIPE_CONNECT_SUPPORTED_COUNTRIES.has(countryCode)
+}
+
+/** Returns whether the creation flow should show the fiat contributions step for a project. */
+export const shouldShowCreationFiatStep = (project?: StripeConnectProject | null): boolean => {
+  return isStripeConnectSupportedForProject(project)
 }

@@ -8,6 +8,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
+import { useImpactFundFundingBootstrap } from './hooks/useImpactFundFundingBootstrap.ts'
 import { useRecurringContributionRenewalBootstrap } from './hooks/useRecurringContributionRenewalBootstrap.ts'
 
 export const ProjectFunding = () => {
@@ -16,6 +17,7 @@ export const ProjectFunding = () => {
   const resetFundingFlow = useResetFundingFlow()
   useUserAccountKeys()
   const { isRenewalBootstrapLoading } = useRecurringContributionRenewalBootstrap()
+  const { isImpactFundFundingBootstrapLoading } = useImpactFundFundingBootstrap()
 
   const navigate = useNavigate()
 
@@ -31,7 +33,7 @@ export const ProjectFunding = () => {
     }
   }, [resetFundingFlow])
 
-  if (isRenewalBootstrapLoading) {
+  if (isRenewalBootstrapLoading || isImpactFundFundingBootstrapLoading) {
     return (
       <HStack w="full" minH="240px" justifyContent="center" alignItems="center">
         <Spinner />

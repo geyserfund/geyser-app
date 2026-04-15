@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
+import { useSyncImpactFundDonateAirtable } from '@/modules/impactFunds/hooks/useSyncImpactFundDonateAirtable.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { getPath } from '@/shared/constants'
@@ -17,6 +18,11 @@ export const FundingSuccess = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   const navigate = useNavigate()
+
+  useSyncImpactFundDonateAirtable({
+    projectName: project.name ?? '',
+    contributionUuid: fundingContribution.uuid ?? '',
+  })
 
   useEffect(() => {
     if (!StatusForSuccess.includes(fundingContribution.status)) {
