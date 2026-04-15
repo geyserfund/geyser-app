@@ -15,7 +15,6 @@ import {
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
