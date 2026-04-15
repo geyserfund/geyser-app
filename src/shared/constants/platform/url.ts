@@ -12,6 +12,7 @@ export const GeyserTermsUrl = 'https://about.geyser.fund/T&C'
 // Geyser footer Links
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
+export const GeyserWhatsappUrl = 'https://chat.whatsapp.com/DqJHJztihTq8a0RKVbyjxp'
 export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserMetamickTelegramUrl = 'https://t.me/Metamick14'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
@@ -526,10 +527,7 @@ export const LaunchpadSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-launchpad-seo.png'
 export const GrantsSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-grants-seo-image.jpg'
-export const GeyserMainSeoImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/seo/Geyser_main.png'
-export const FundraisersSeoImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/seo/fundraisers.png'
-export const CampaignsSeoImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/seo/campaigns.png'
+export const GeyserMainSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/Geyser_main.png'
+export const FundraisersSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/fundraisers.png'
+export const CampaignsSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/campaigns.png'
 export const ShopsSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/shops.png'

@@ -1,4 +1,4 @@
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { useAccountKeysQuery } from '@/types/index.ts'
@@ -11,10 +11,12 @@ import { userAccountKeysAtom } from '../state/userAccountKeysAtom.ts'
 export const useUserAccountKeys = () => {
   const { user } = useAuthContext()
 
+  const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeys = useSetAtom(userAccountKeysAtom)
+  const shouldFetchUserAccountKeys = Boolean(user.id) && !userAccountKeys
 
-  useAccountKeysQuery({
-    skip: !user.id,
+  const { loading } = useAccountKeysQuery({
+    skip: !shouldFetchUserAccountKeys,
     variables: {
       where: {
         id: user.id,
@@ -26,4 +28,8 @@ export const useUserAccountKeys = () => {
       }
     },
   })
+
+  return {
+    isLoading: shouldFetchUserAccountKeys && loading,
+  }
 }

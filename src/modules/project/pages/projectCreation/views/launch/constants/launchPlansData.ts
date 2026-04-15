@@ -66,6 +66,10 @@ export const getLaunchPlansData = (translate: TFunction): LaunchPlanData[] => [
           '1 month support in private chat group, mid-campaign check-in, and performance improvements',
         ),
       },
+      {
+        title: translate('Weekly Accountability'),
+        description: translate('Weekly async check-ins to keep your launch on track and moving forward'),
+      },
     ],
     strategyValue: 'PRO_LAUNCH',
   },
