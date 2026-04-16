@@ -15,7 +15,7 @@ import {
 
 import { MdxInsertTweetButton, MdxInsertVideoButton } from './MdxEditorEmbeds.tsx'
 import { MdxEditorModeToggle } from './MdxEditorModeToggle.tsx'
-// import { MdxInsertTableButton } from './MdxEditorTableControls.tsx'
+import { MdxInsertTableButton } from './MdxEditorTableControls.tsx'
 import { MdxTextAlignmentButtons } from './MdxTextAlignmentButtons.tsx'
 
 /** Shared, project-wide MDX toolbar with a unified top-sticky control layout. */
@@ -40,7 +40,7 @@ export const MdxEditorToolbar = () => {
           <InsertImage />
           <MdxInsertVideoButton />
           <MdxInsertTweetButton />
-          {/* <MdxInsertTableButton /> */}
+          <MdxInsertTableButton />
           <InsertCodeBlock />
         </>
       )}

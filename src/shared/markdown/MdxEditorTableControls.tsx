@@ -1,17 +1,4 @@
 import {
-  Box,
-  HStack,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Portal,
-  useColorModeValue,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
-import {
   ButtonWithTooltip,
   editorInTable$,
   insertTable$,
@@ -20,129 +7,33 @@ import {
   usePublisher,
 } from '@mdxeditor/editor'
 import { t } from 'i18next'
-import { type KeyboardEvent, useState } from 'react'
 import { PiTable } from 'react-icons/pi'
 
-import { Body } from '@/shared/components/typography'
-import { useDebounce } from '@/shared/hooks/useDebounce.ts'
+const DEFAULT_TABLE_ROW_COUNT = 3
+const DEFAULT_TABLE_COLUMN_COUNT = 3
 
-const TABLE_ROW_COUNT = 5
-const TABLE_COLUMN_COUNT = 5
-
-const tableBoxes = Array.from({ length: TABLE_ROW_COUNT }, (_, rowIndex) =>
-  Array.from({ length: TABLE_COLUMN_COUNT }, (_, columnIndex) => `${rowIndex + 1}${columnIndex + 1}`),
-)
-
-type tablePosition = {
-  row: number
-  column: number
-}
-
-/** Table insertion button with the legacy 5x5 hover picker used in the previous editor UI. */
+/** Table insertion button that inserts a default-size table. */
 export const MdxInsertTableButton = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const debouncedIsOpen = useDebounce(isOpen, 160)
   const insertTable = usePublisher(insertTable$)
   const isReadOnly = useCellValue(readOnly$)
   const isInTable = useCellValue(editorInTable$)
-  const [currentPosition, setCurrentPosition] = useState<tablePosition>({ row: 0, column: 0 })
-
-  const selectedCellColor = useColorModeValue('neutral1.4', 'neutral1.7')
-  const unselectedCellColor = useColorModeValue('neutral1.10', 'neutral1.5')
 
   const isDisabled = isReadOnly || isInTable
-  const shouldShowPicker = debouncedIsOpen && !isDisabled
-
-  const handleTableCreate = ({ row, column }: tablePosition) => {
+  const handleInsertTable = () => {
     insertTable({
-      rows: row + 1,
-      columns: column + 1,
+      rows: DEFAULT_TABLE_ROW_COUNT,
+      columns: DEFAULT_TABLE_COLUMN_COUNT,
     })
-
-    onClose()
   }
 
   return (
-    <Popover isOpen={shouldShowPicker} onClose={onClose} placement="bottom-start" closeOnBlur>
-      <PopoverTrigger>
-        <Box display="inline-flex" onMouseEnter={isDisabled ? undefined : onOpen} onMouseLeave={onClose}>
-          <ButtonWithTooltip
-            title={t('Insert table')}
-            aria-label={t('Insert table')}
-            disabled={isDisabled}
-            onClick={() => {
-              if (shouldShowPicker) {
-                onClose()
-                return
-              }
-
-              onOpen()
-            }}
-          >
-            <PiTable size={16} />
-          </ButtonWithTooltip>
-        </Box>
-      </PopoverTrigger>
-
-      <Portal>
-        <PopoverContent
-          maxWidth="170px"
-          borderColor="primary1.6"
-          borderWidth="2px"
-          borderRadius="10px"
-          zIndex={20}
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
-        >
-          <PopoverArrow borderColor="primary1.6" />
-          <PopoverBody padding={3}>
-            <VStack spacing={2}>
-              <VStack spacing="0px" _hover={{ cursor: 'pointer' }}>
-                {tableBoxes.map((row, rowIndex) => (
-                  <HStack key={rowIndex} spacing="0px">
-                    {row.map((_, columnIndex) => (
-                      <Box
-                        key={columnIndex}
-                        as="button"
-                        type="button"
-                        padding="3px"
-                        border="none"
-                        backgroundColor="transparent"
-                        onFocus={() => setCurrentPosition({ row: rowIndex, column: columnIndex })}
-                        onClick={() => handleTableCreate({ row: rowIndex, column: columnIndex })}
-                        onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
-                          if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault()
-                            handleTableCreate({ row: rowIndex, column: columnIndex })
-                          }
-                        }}
-                        aria-label={t('Insert {{rows}} by {{columns}} table', {
-                          rows: rowIndex + 1,
-                          columns: columnIndex + 1,
-                        })}
-                        _focusVisible={{ outline: '2px solid', outlineColor: 'primary1.9', outlineOffset: '1px' }}
-                      >
-                        <Box
-                          height="20px"
-                          width="20px"
-                          borderRadius="4px"
-                          backgroundColor={
-                            rowIndex <= currentPosition.row && columnIndex <= currentPosition.column
-                              ? selectedCellColor
-                              : unselectedCellColor
-                          }
-                          transition="background-color 0.1s ease-in-out"
-                        />
-                      </Box>
-                    ))}
-                  </HStack>
-                ))}
-              </VStack>
-              <Body size="sm" medium>{`${currentPosition.row + 1}X${currentPosition.column + 1}`}</Body>
-            </VStack>
-          </PopoverBody>
-        </PopoverContent>
-      </Portal>
-    </Popover>
+    <ButtonWithTooltip
+      title={t('Insert table')}
+      aria-label={t('Insert table')}
+      disabled={isDisabled}
+      onClick={handleInsertTable}
+    >
+      <PiTable size={16} />
+    </ButtonWithTooltip>
   )
 }
