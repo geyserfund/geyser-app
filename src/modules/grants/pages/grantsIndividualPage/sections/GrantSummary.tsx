@@ -12,7 +12,7 @@ import {
   H1,
   H3,
 } from '@/shared/components/typography'
-import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 
 import { StatusLabel } from '../../../../../components/ui/StatusLabel'
@@ -164,7 +164,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             {t(grant.shortDescription)}
           </H3>
           <Box pt={4}>
-            <MdxMarkdownEditor mode="preview" value={grant.description || ''} />
+            <MarkdownField preview content={grant.description || ''} />
           </Box>
           <Box display="flex" gap={5} pt={4}>
             {grant?.__typename === 'CommunityVoteGrant' && grant.distributionSystem !== DistributionSystem.None && (

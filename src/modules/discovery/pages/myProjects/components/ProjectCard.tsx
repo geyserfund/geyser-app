@@ -1,13 +1,19 @@
 import { Badge, Button, HStack, Icon, Image, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
+import {
+  PiArrowUpRight,
+  PiHandHeart,
+  PiInfo,
+  PiNotePencil,
+  PiRocketLaunch,
+  PiStorefront,
+} from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
-import { ControlPanelNotification } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/components/ControlPanelNotification.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -15,14 +21,11 @@ import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
+import { inDraftStatus } from '../hooks/useMyProjects.ts'
 import { useProjectWithdrawalStatus } from '../hooks/useProjectWithdrawalStatus.ts'
-import {
-  isProjectInPostLaunchReview,
-  isProjectInPreLaunchReview,
-  isProjectPendingLaunch,
-} from '../utils/projectState.ts'
 import { ImpactFundNotification } from './ImpactFundNotification.tsx'
 import { WalletConfigurationPrompt } from './WalletConfigurationPrompt.tsx'
+import { ControlPanelNotification } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/components/ControlPanelNotification.tsx'
 
 interface ProjectCardProps {
   project: ProjectForMyProjectsFragment
@@ -33,10 +36,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isMobile = useMobileMode()
   const [configuredRskEoa, setConfiguredRskEoa] = useState(project.rskEoa)
 
-  const isPreLaunchReview = isProjectInPreLaunchReview(project)
-  const isPostLaunchReview = isProjectInPostLaunchReview(project)
-  const isInReview = isPreLaunchReview || isPostLaunchReview
-  const isDraft = isProjectPendingLaunch(project) && !isPreLaunchReview
+  const isInReview = project.status === ProjectStatus.InReview
+  const isDraft = project.status && inDraftStatus.includes(project.status) && !isInReview
   const isInactive = project.status === ProjectStatus.Inactive
   const isActive = project.status === ProjectStatus.Active
   const isTiaProject = project.fundingStrategy === ProjectFundingStrategy.TakeItAll
@@ -60,7 +61,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       : undefined
 
   const hasRevisionsRequested = latestReview?.status === ProjectReviewStatus.RevisionsRequested
-  const shouldRouteToFinalize = isDraft || hasRevisionsRequested
 
   /** Get project type badge configuration */
   const getProjectTypeBadge = () => {
@@ -186,7 +186,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   /** Get primary action button */
   const renderActionButton = () => {
-    if (shouldRouteToFinalize) {
+    if (isDraft || hasRevisionsRequested) {
       return (
         <Button
           variant="soft"

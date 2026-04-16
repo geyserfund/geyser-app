@@ -31,7 +31,7 @@ export const PlatformNav = () => {
         icon: <Image src={MarketplaceNavIcon} height={marketplaceButtonDimension} width={marketplaceButtonDimension} />,
       },
       {
-        name: 'Adoption Impact Fund',
+        name: 'Impact Funds',
         path: '/impact-funds',
         icon: <Image src={ImpactFundsIconUrl} height={buttonDimension} width={buttonDimension} />,
         new: true,

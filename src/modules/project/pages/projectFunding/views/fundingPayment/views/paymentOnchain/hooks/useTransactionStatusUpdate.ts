@@ -77,7 +77,6 @@ export const useTransactionStatusUpdate = ({
     async (swapStatusUpdate: SwapStatusUpdate) => {
       try {
         switch (swapStatusUpdate.status) {
-          case 'invoice.paid':
           case 'transaction.mempool':
             handleProcessing(swapStatusUpdate)
             break

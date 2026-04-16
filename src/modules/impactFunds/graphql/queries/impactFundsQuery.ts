@@ -11,11 +11,6 @@ export const QUERY_IMPACT_FUNDS = gql`
       heroImage
       amountCommitted
       amountCommittedCurrency
-      donateProjectId
-      donateProject {
-        id
-        name
-      }
       liveSponsors {
         id
         name
@@ -26,9 +21,6 @@ export const QUERY_IMPACT_FUNDS = gql`
       metrics {
         awardedTotalSats
         projectsFundedCount
-      }
-      donateProject {
-        name
       }
       status
     }
@@ -75,15 +67,6 @@ export const QUERY_IMPACT_FUND = gql`
         awardedTotalSats
         projectsFundedCount
       }
-      viewerApplications {
-        id
-        status
-        project {
-          id
-          name
-          title
-        }
-      }
       canAccessDashboard
     }
   }
@@ -126,14 +109,11 @@ export const QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS = gql`
           title
           thumbnailImage
           shortDescription
-          country
-          fundingStrategy
         }
         creator {
           id
           username
           email
-          isIdentityVerified
         }
         projectPath
       }

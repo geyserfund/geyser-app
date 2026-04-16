@@ -1,6 +1,6 @@
 import { Button, HStack, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { MIN_WIDTH_AFTER_START } from '@/modules/project/pages/projectFunding/views/fundingInit/sections/DonationInput.tsx'
 import { commaFormatted } from '@/shared/utils/formatData/index.ts'
@@ -13,39 +13,27 @@ export const AmountInput = (props: {
   satoshi: number
   dollar: number
   isSatoshi: boolean
-  suffix?: string
   handleInput?: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   onToggle: () => void
   isDisabled?: boolean
 }) => {
   const [satsPosition, setSatsPosition] = useState(MIN_WIDTH_AFTER_START)
-  const [suffixPosition, setSuffixPosition] = useState(MIN_WIDTH_AFTER_START)
-  const amountMeasureRef = useRef<HTMLSpanElement>(null)
-  const unitMeasureRef = useRef<HTMLSpanElement>(null)
 
   const isSmallSize = props.size === 'md'
-  const displayAmount = commaFormatted(props.isSatoshi ? props.satoshi || 0 : props.dollar || 0)
-  const inputFontSize = isSmallSize ? 'var(--chakra-fontSizes-xl)' : 'var(--chakra-fontSizes-5xl)'
-  const inputFontWeight = isSmallSize ? 500 : 700
-  const unitFontSize = isSmallSize ? 'var(--chakra-fontSizes-xl)' : 'var(--chakra-fontSizes-3xl)'
-  const unitFontWeight = isSmallSize ? 500 : 700
-  useEffect(() => {
-    const amountWidth = amountMeasureRef.current?.offsetWidth ?? 0
-    const unitWidth = unitMeasureRef.current?.offsetWidth ?? 0
-    const satsStart = isSmallSize ? 28 : 16
-    const satsGap = isSmallSize ? 4 : 8
-    const suffixGap = isSmallSize ? 8 : 14
 
-    if (props.isSatoshi) {
-      setSatsPosition(amountWidth + satsStart + satsGap)
-      setSuffixPosition(amountWidth + unitWidth + satsStart + satsGap + suffixGap)
+  useEffect(() => {
+    if (props.satoshi) {
+      const currentText = commaFormatted(props.satoshi)
+      const commaCount = (currentText.match(/,/g) || []).length
+      const restCount = currentText.length - commaCount
+      const textWidth = isSmallSize ? restCount * 9 + commaCount * 5 : (restCount - 1) * 28 + commaCount * 15
+
+      setSatsPosition(textWidth + MIN_WIDTH_AFTER_START)
     } else {
-      const dollarStart = 14
       setSatsPosition(MIN_WIDTH_AFTER_START)
-      setSuffixPosition(amountWidth + unitWidth + dollarStart + suffixGap)
     }
-  }, [displayAmount, props.isSatoshi, isSmallSize])
+  }, [props.satoshi, isSmallSize])
 
   return (
     <HStack w="full" position="relative">
@@ -116,8 +104,8 @@ export const AmountInput = (props: {
           stiffness: 200,
         }}
         style={{
-          fontSize: unitFontSize,
-          fontWeight: unitFontWeight,
+          fontSize: isSmallSize ? 'var(--chakra-fontSizes-xl)' : 'var(--chakra-fontSizes-3xl)',
+          fontWeight: isSmallSize ? 500 : 700,
           color: 'var(--chakra-colors-neutral1-9)',
           position: 'absolute',
           top: '49%',
@@ -127,61 +115,6 @@ export const AmountInput = (props: {
       >
         {props.isSatoshi ? 'sats' : '$'}
       </motion.p>
-
-      {props.suffix ? (
-        <motion.p
-          animate={{
-            left: `${suffixPosition}px`,
-            opacity: props.satoshi > 0 || props.dollar > 0 ? 1 : 0.7,
-          }}
-          transition={{
-            type: 'spring',
-            damping: 20,
-            stiffness: 200,
-          }}
-          style={{
-            fontSize: unitFontSize,
-            fontWeight: unitFontWeight,
-            color: 'var(--chakra-colors-neutral1-9)',
-            position: 'absolute',
-            top: '49%',
-            transform: 'translateY(-50%)',
-            pointerEvents: 'none',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {props.suffix}
-        </motion.p>
-      ) : null}
-
-      <span
-        ref={amountMeasureRef}
-        style={{
-          position: 'absolute',
-          visibility: 'hidden',
-          pointerEvents: 'none',
-          whiteSpace: 'nowrap',
-          fontSize: inputFontSize,
-          fontWeight: inputFontWeight,
-          lineHeight: '1.0',
-        }}
-      >
-        {displayAmount}
-      </span>
-      <span
-        ref={unitMeasureRef}
-        style={{
-          position: 'absolute',
-          visibility: 'hidden',
-          pointerEvents: 'none',
-          whiteSpace: 'nowrap',
-          fontSize: unitFontSize,
-          fontWeight: unitFontWeight,
-          lineHeight: '1.0',
-        }}
-      >
-        {props.isSatoshi ? 'sats' : '$'}
-      </span>
     </HStack>
   )
 }

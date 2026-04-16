@@ -10,11 +10,11 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 /** Creation-flow step for optionally enabling fiat contributions through Stripe Connect. */
 export const LaunchPaymentFiatContributions = () => {

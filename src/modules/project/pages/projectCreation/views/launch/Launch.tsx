@@ -1,8 +1,8 @@
-import { HStack, Spinner } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+import Loader from '@/components/ui/Loader.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -15,7 +15,6 @@ import {
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { useLaunchContributionCreate } from './hooks/useLaunchContributionCreate.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
-import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
 import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/LaunchPaymentMethodSelection.tsx'
@@ -26,8 +25,7 @@ enum LaunchStep {
   Review = 'review',
   Strategy = 'strategy',
   PaymentMethod = 'payment-method',
-  Password = 'password',
-  FeesBitcoin = 'fees-bitcoin',
+  FeesLightning = 'fees-lightning',
   FeesStripe = 'fees-stripe',
   Finalize = 'finalize',
 }
@@ -39,17 +37,12 @@ export const Launch = () => {
   const [step, setStep] = useState<LaunchStep>(LaunchStep.Review)
   const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
   const [paymentMethod, setPaymentMethod] = useState<LaunchPaymentMethod>(LaunchPaymentMethod.Lightning)
-  const [pendingPasswordMethod, setPendingPasswordMethod] = useState<LaunchPaymentMethod | null>(null)
   const [paymentMethodError, setPaymentMethodError] = useState('')
 
   const [contributionData, setContributionData] = useState<FundingContributionFragment>()
   const [paymentsData, setPaymentsData] = useState<FundingContributionPaymentDetailsFragment>()
 
-  const {
-    createContribution,
-    loading: contributionLoading,
-    launchPaymentProjectLoading,
-  } = useLaunchContributionCreate(strategy)
+  const { createContribution, loading: contributionLoading } = useLaunchContributionCreate(strategy)
 
   const setProjectReviews = useSetAtom(projectReviewsAtom)
 
@@ -83,7 +76,7 @@ export const Launch = () => {
       }
     }
 
-    if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
+    if (step === LaunchStep.FeesLightning || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
   }, [project.paidLaunch, step])
@@ -93,14 +86,9 @@ export const Launch = () => {
       navigate(getPath('launchPayment', project?.id))
     }
 
-    if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
+    if (step === LaunchStep.FeesLightning || step === LaunchStep.FeesStripe) {
       setContributionData(undefined)
       setPaymentsData(undefined)
-      setStep(LaunchStep.PaymentMethod)
-    }
-
-    if (step === LaunchStep.Password) {
-      setPendingPasswordMethod(null)
       setStep(LaunchStep.PaymentMethod)
     }
 
@@ -118,7 +106,7 @@ export const Launch = () => {
     setStep(LaunchStep.PaymentMethod)
   }, [])
 
-  const handleContributionResult = useCallback(
+  const handleSelectPaymentMethod = useCallback(
     async (method: LaunchPaymentMethod) => {
       setPaymentMethod(method)
       setPaymentMethodError('')
@@ -126,30 +114,18 @@ export const Launch = () => {
       const result = await createContribution(method)
 
       if (!result.ok) {
-        if (result.reason === 'password_required') {
-          setPendingPasswordMethod(method)
-          setStep(LaunchStep.Password)
-          return
-        }
-
         setPaymentMethodError(result.error)
         return
       }
 
       setContributionData(result.contribution)
       setPaymentsData(result.payments)
-      setStep(method === LaunchPaymentMethod.CreditCard ? LaunchStep.FeesStripe : LaunchStep.FeesBitcoin)
+      setStep(method === LaunchPaymentMethod.Lightning ? LaunchStep.FeesLightning : LaunchStep.FeesStripe)
     },
     [createContribution],
   )
 
-  if (projectLoading || loading || launchPaymentProjectLoading) {
-    return (
-      <HStack h="80%" minH="320px" justify="center" align="center">
-        <Spinner size="xl" color="primary.400" />
-      </HStack>
-    )
-  }
+  if (projectLoading || loading) return <Loader />
 
   switch (step) {
     case LaunchStep.Review:
@@ -162,44 +138,14 @@ export const Launch = () => {
           selectedMethod={paymentMethod}
           paymentMethodError={paymentMethodError}
           isLoading={contributionLoading}
-          handleNext={handleContributionResult}
+          handleNext={handleSelectPaymentMethod}
           onSelectMethod={setPaymentMethod}
           handleBack={handleBack}
         />
       )
-    case LaunchStep.Password:
-      return (
-        <LaunchPaymentPassword
-          isLoading={contributionLoading}
-          onBack={handleBack}
-          onComplete={async ({ password } = {}) => {
-            if (!pendingPasswordMethod) {
-              setStep(LaunchStep.PaymentMethod)
-              return
-            }
-
-            const result = await createContribution(pendingPasswordMethod, password)
-
-            if (!result.ok) {
-              setPaymentMethodError(result.error)
-              setStep(LaunchStep.PaymentMethod)
-              return
-            }
-
-            setPaymentMethod(pendingPasswordMethod)
-            setPendingPasswordMethod(null)
-            setContributionData(result.contribution)
-            setPaymentsData(result.payments)
-            setStep(
-              pendingPasswordMethod === LaunchPaymentMethod.CreditCard ? LaunchStep.FeesStripe : LaunchStep.FeesBitcoin,
-            )
-          }}
-        />
-      )
-    case LaunchStep.FeesBitcoin:
+    case LaunchStep.FeesLightning:
       return contributionData && paymentsData ? (
         <LaunchFees
-          paymentMethod={paymentMethod}
           handleNext={handleNext}
           handleBack={handleBack}
           strategy={strategy}

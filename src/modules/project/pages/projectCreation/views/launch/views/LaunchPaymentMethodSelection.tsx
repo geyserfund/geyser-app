@@ -8,7 +8,6 @@ import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationP
 
 export enum LaunchPaymentMethod {
   Lightning = 'lightning',
-  Onchain = 'onchain',
   CreditCard = 'credit-card',
 }
 
@@ -17,11 +16,6 @@ const getPaymentMethodOptions = () => [
     id: LaunchPaymentMethod.Lightning,
     title: t('Lightning'),
     description: t('Pay instantly with a Lightning invoice.'),
-  },
-  {
-    id: LaunchPaymentMethod.Onchain,
-    title: t('On-chain'),
-    description: t('Pay from a Bitcoin wallet using an on-chain transaction.'),
   },
   {
     id: LaunchPaymentMethod.CreditCard,

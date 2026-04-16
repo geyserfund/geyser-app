@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
@@ -12,6 +11,7 @@ import { ProjectCreationStep } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 type LaunchPaymentSeedWordsState = {
   seedWords?: string[]

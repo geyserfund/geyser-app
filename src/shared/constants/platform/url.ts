@@ -1,7 +1,6 @@
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/resources/project-checklist'
 export const FeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pagtedCU3NPqEjBjR/form'
-export const ImpactFundsFieldPartnerApplicationUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pag7Rcn0UeGQWAnR8/form'
 export const FAQUrl = 'https://guide.geyser.fund/geyser-docs/resources/faq'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'

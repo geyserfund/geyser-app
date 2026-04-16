@@ -1,17 +1,14 @@
-import { Button, Icon, Image, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Button, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState } from 'react'
 import { AiFillApple } from 'react-icons/ai'
 import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
-import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { getPath } from '@/shared/constants'
-import { useProjectStripeInterestNotifyMutation } from '@/types/index.ts'
-import { useMobileMode, useNotification } from '@/utils'
+import { useMobileMode } from '@/utils'
 
 import {
   fiatCheckoutMethods,
@@ -44,36 +41,31 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const location = useLocation()
   const navigate = useNavigate()
   const isMobile = useMobileMode()
-  const toast = useNotification()
   const { project } = useFundingFormAtom()
   const recurringContributionRenewal = useAtomValue(recurringContributionRenewalAtom)
   const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
   const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
-  const [notifyStripeInterest, notifyStripeInterestOptions] = useProjectStripeInterestNotifyMutation()
-  const [isStripeUnavailableDisabled, setIsStripeUnavailableDisabled] = useState(false)
-  const shouldShowStripeButton = hasFiatPaymentMethod && isStripeConnectSupportedForProject(project)
   const isApplePayVisible = hasFiatPaymentMethod && !hasStripePaymentMethod && getIsApplePayVisible()
   const showOnlyBitcoin = recurringContributionRenewal?.paymentMethod === 'BITCOIN'
-  const showOnlyFiat = Boolean(recurringContributionRenewal && recurringContributionRenewal.paymentMethod !== 'BITCOIN')
+  const showOnlyFiat = Boolean(
+    recurringContributionRenewal && recurringContributionRenewal.paymentMethod !== 'BITCOIN',
+  )
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
-  const stripeButtonBg = '#635BFF'
-  const stripeButtonText = 'white'
   const creditCardIcon = <Icon as={FaCreditCard} color="currentColor" />
   const bitcoinIcon = <Icon as={FaBitcoin} color="currentColor" />
   const applePayIcon = <Icon as={AiFillApple} />
-  const stripeIcon = (
-    <Image src="/icons/stripe-s-logo.webp" alt={t('Stripe')} h="15px" objectFit="contain" />
-  )
 
   const handleCreditCardClick = () => {
     setIntendedPaymentMethod(PaymentMethods.fiatSwap)
     setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
     if (!useFormSubmit) {
       const paymentPath = hasFiatPaymentMethod
-        ? getPath('fundingPaymentFiatBanxa', project.name)
+        ? hasStripePaymentMethod
+          ? getPath('fundingPaymentFiatStripe', project.name)
+          : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingStart', project.name)
       navigate({
         pathname: paymentPath,
@@ -92,50 +84,6 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
       navigate({
         pathname: paymentPath,
         search: location.search,
-      })
-    }
-  }
-
-  const handleStripeClick = async () => {
-    if (!hasFiatPaymentMethod) {
-      return
-    }
-
-    if (hasStripePaymentMethod) {
-      setIntendedPaymentMethod(PaymentMethods.fiatSwap)
-      setFiatPaymentMethod(fiatCheckoutMethods.stripe)
-
-      if (!useFormSubmit) {
-        navigate({
-          pathname: getPath('fundingPaymentFiatStripe', project.name),
-          search: location.search,
-        })
-      }
-
-      return
-    }
-
-    if (!project.id || isStripeUnavailableDisabled || notifyStripeInterestOptions.loading) {
-      return
-    }
-
-    try {
-      const { data } = await notifyStripeInterest({
-        variables: { projectId: project.id },
-      })
-
-      if (!data?.projectStripeInterestNotify?.success) {
-        throw new Error('Stripe interest notification did not succeed')
-      }
-
-      setIsStripeUnavailableDisabled(true)
-      toast.success({
-        title: t('the project creator has not configured Stripe on their project yet, they have been notified'),
-      })
-    } catch {
-      toast.error({
-        title: t('Failed to notify the project creator about Stripe interest'),
-        description: t('Please try again later'),
       })
     }
   }
@@ -173,28 +121,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           {isMobile ? applePayIcon : t('Continue with Apple Pay')}
         </Button>
       )}
-      {!showOnlyBitcoin && shouldShowStripeButton && (
-        <Button
-          id="continue-with-stripe"
-          size="lg"
-          w="full"
-          variant="solid"
-          bg={stripeButtonBg}
-          color={stripeButtonText}
-          _hover={{ bg: stripeButtonBg, opacity: 0.92 }}
-          onClick={handleStripeClick}
-          type={useFormSubmit && hasStripePaymentMethod ? 'submit' : 'button'}
-          isDisabled={!hasStripePaymentMethod && isStripeUnavailableDisabled}
-          isLoading={!hasStripePaymentMethod && notifyStripeInterestOptions.loading}
-          data-payment-method={PaymentMethods.fiatSwap}
-          data-fiat-checkout-method={fiatCheckoutMethods.stripe}
-          rightIcon={isMobile ? undefined : stripeIcon}
-          aria-label={t('Continue with Stripe')}
-        >
-          {isMobile ? stripeIcon : t('Continue with Stripe')}
-        </Button>
-      )}
-      {!showOnlyBitcoin && hasFiatPaymentMethod && !hasStripePaymentMethod && (
+      {!showOnlyBitcoin && hasFiatPaymentMethod && (
         <Button
           id="continue-with-credit-card"
           size="lg"

@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client'
 import {
   Accordion,
   AccordionButton,
@@ -33,10 +34,9 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Trans } from 'react-i18next'
+import { useMemo, useState } from 'react'
 import { PiArrowUpRightBold, PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
-import { Link, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
@@ -46,7 +46,7 @@ import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impac
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
+import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import type { ImpactFundApplicationsQuery, ImpactFundQuery } from '@/types'
 import {
@@ -54,15 +54,14 @@ import {
   ImpactFundApplicationStatus,
   ImpactFundSponsorTier,
   OrderByOptions,
-  ProjectStatus,
   useImpactFundApplicationsQuery,
   useImpactFundApplyMutation,
-  useImpactFundQuery,
   useProjectPageFundersQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
+import { QUERY_IMPACT_FUND } from '../graphql/queries/impactFundsQuery.ts'
 import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 import {
   impactFundFundingModelItems,
@@ -81,22 +80,10 @@ const CIRCULAR_ECONOMY_REPORT_PDF_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
+type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string }
 type SponsorItem = Pick<ImpactFundDetails['liveSponsors'][number], 'id' | 'name' | 'image' | 'url'>
-type ViewerApplication = {
-  id: string
-  status: ImpactFundApplicationStatus
-  project: {
-    id: string
-    name: string
-    title: string
-  }
-}
-type ImpactFundDetails = ImpactFundQuery['impactFund'] & {
-  canAccessDashboard: boolean
-  viewerApplications: ViewerApplication[]
-}
 type CommunitySupporter = {
   id: string
   username: string
@@ -171,11 +158,12 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { success, error: notifyError } = useNotification()
+  const navigate = useNavigate()
+
   const projectModal = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
-  const previousAuthQueryKeyRef = useRef<string | null>(null)
 
-  const { data, loading, error, refetch } = useImpactFundQuery({
+  const { data, loading, error } = useQuery<{ impactFund: ImpactFundDetails }>(QUERY_IMPACT_FUND, {
     variables: { input: { where: { name: decodedImpactFundName } } },
     skip: !impactFundName,
   })
@@ -244,58 +232,13 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     return Array.from(uniqueSupporters.values())
   }, [communitySupportersData?.fundersGet])
 
-  useEffect(() => {
-    if (!impactFundName) {
-      return
-    }
-
-    const currentAuthQueryKey = `${isLoggedIn ? 'logged-in' : 'logged-out'}:${user?.id ?? 'anonymous'}`
-
-    if (previousAuthQueryKeyRef.current === null) {
-      previousAuthQueryKeyRef.current = currentAuthQueryKey
-      return
-    }
-
-    if (previousAuthQueryKeyRef.current !== currentAuthQueryKey) {
-      previousAuthQueryKeyRef.current = currentAuthQueryKey
-      void refetch()
-    }
-  }, [impactFundName, isLoggedIn, refetch, user?.id])
-
   const ownedProjects = useMemo(
     () =>
       (user?.ownerOf || [])
         .map((owner) => owner.project)
-        .filter(
-          (project): project is NonNullable<typeof project> =>
-            Boolean(project) && project?.status === ProjectStatus.Active,
-        ),
+        .filter((project): project is NonNullable<typeof project> => Boolean(project)),
     [user?.ownerOf],
   )
-  const viewerApplicationProjectIdSet = useMemo(
-    () => new Set((impactFund?.viewerApplications ?? []).map((application) => String(application.project.id))),
-    [impactFund?.viewerApplications],
-  )
-  const availableOwnedProjects = useMemo(
-    () => ownedProjects.filter((project) => !viewerApplicationProjectIdSet.has(String(project.id))),
-    [ownedProjects, viewerApplicationProjectIdSet],
-  )
-  const hasAvailableProjects = availableOwnedProjects.length > 0
-  const shouldDisableApply = isLoggedIn && !hasAvailableProjects
-
-  useEffect(() => {
-    if (availableOwnedProjects.length === 0) {
-      if (selectedProjectId !== '') {
-        setSelectedProjectId('')
-      }
-      return
-    }
-
-    const hasSelectedAvailableProject = availableOwnedProjects.some((project) => String(project.id) === selectedProjectId)
-    if (!hasSelectedAvailableProject) {
-      setSelectedProjectId(String(availableOwnedProjects[0]?.id || ''))
-    }
-  }, [availableOwnedProjects, selectedProjectId])
 
   const handleApplyClick = () => {
     if (!isLoggedIn) {
@@ -303,11 +246,12 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       return
     }
 
-    if (!hasAvailableProjects) {
+    if (ownedProjects.length === 0) {
+      navigate(getPath('launchStart'))
       return
     }
 
-    const firstOwnedProjectId = String(availableOwnedProjects[0]?.id || '')
+    const firstOwnedProjectId = String(ownedProjects[0]?.id || '')
     setSelectedProjectId(firstOwnedProjectId)
     projectModal.onOpen()
   }
@@ -322,7 +266,6 @@ export function ImpactFundDetailPage(): JSX.Element | null {
         },
       })
 
-      await refetch()
       success({ title: t('Application submitted') })
       projectModal.onClose()
     } catch (error) {
@@ -406,10 +349,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       communitySupportersLoading={communitySupportersLoading}
       communitySupportersError={Boolean(communitySupportersError)}
       onApplyClick={handleApplyClick}
-      shouldDisableApply={shouldDisableApply}
-      viewerApplications={impactFund.viewerApplications ?? []}
-      ownedProjects={availableOwnedProjects}
-      hasOwnedProjects={ownedProjects.length > 0}
+      ownedProjects={ownedProjects}
       selectedProjectId={selectedProjectId}
       onSelectedProjectIdChange={setSelectedProjectId}
       isProjectModalOpen={projectModal.isOpen}
@@ -432,10 +372,7 @@ type ImpactFundDetailContentProps = {
   communitySupportersLoading: boolean
   communitySupportersError: boolean
   onApplyClick: () => void
-  shouldDisableApply: boolean
-  viewerApplications: ViewerApplication[]
   ownedProjects: OwnedProject[]
-  hasOwnedProjects: boolean
   selectedProjectId: string
   onSelectedProjectIdChange: (projectId: string) => void
   isProjectModalOpen: boolean
@@ -671,8 +608,6 @@ type ImpactFundOverviewSectionProps = {
   awardedAmountDisplay: ReturnType<typeof getSatsAmountDisplay>
   showAwardedAsPrimaryMetric: boolean
   onApplyClick: () => void
-  shouldDisableApply: boolean
-  viewerApplications: ViewerApplication[]
   colors: ImpactFundThemeColors
 }
 
@@ -682,8 +617,6 @@ function ImpactFundOverviewSection({
   awardedAmountDisplay,
   showAwardedAsPrimaryMetric,
   onApplyClick,
-  shouldDisableApply,
-  viewerApplications,
   colors,
 }: ImpactFundOverviewSectionProps): JSX.Element {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
@@ -696,11 +629,6 @@ function ImpactFundOverviewSection({
   )
   const primaryAmountDisplay = showAwardedAsPrimaryMetric ? awardedAmountDisplay : committedAmountDisplay
   const primaryAmountLabel = showAwardedAsPrimaryMetric ? t('Awarded so far') : t('Amount committed')
-  const applicationInfoBg = useColorModeValue('neutral1.2', 'neutral1.2')
-  const applicationInfoBorderColor = useColorModeValue('neutral1.4', 'neutral1.4')
-  const pendingViewerApplications = viewerApplications.filter(
-    (application) => application.status === ImpactFundApplicationStatus.Pending,
-  )
 
   return (
     <VStack align="stretch" spacing={6}>
@@ -742,7 +670,6 @@ function ImpactFundOverviewSection({
               size="lg"
               colorScheme="primary1"
               onClick={onApplyClick}
-              isDisabled={shouldDisableApply}
               flexShrink={0}
               px={8}
               minW="210px"
@@ -773,7 +700,6 @@ function ImpactFundOverviewSection({
           size="md"
           colorScheme="primary1"
           onClick={onApplyClick}
-          isDisabled={shouldDisableApply}
           w="full"
           fontWeight="semibold"
           fontSize="lg"
@@ -799,28 +725,6 @@ function ImpactFundOverviewSection({
               </Box>
             ))}
           </HStack>
-        )}
-        {pendingViewerApplications.length > 0 && (
-          <VStack align="stretch" spacing={3}>
-            {pendingViewerApplications.map((application) => (
-              <Box
-                key={application.id}
-                p={5}
-                bg={applicationInfoBg}
-                borderRadius="lg"
-                border="1px solid"
-                borderColor={applicationInfoBorderColor}
-              >
-                <Body size="sm" color={colors.secondaryTextColor}>
-                  <Trans
-                    i18nKey="You have applied to this impact fund with <strong>{{projectTitle}}</strong>. Your application is under review and a moderator will reach out if more details are needed."
-                    values={{ projectTitle: application.project.title }}
-                    components={{ strong: <strong /> }}
-                  />
-                </Body>
-              </Box>
-            ))}
-          </VStack>
         )}
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
           {primaryAmountDisplay && (
@@ -956,7 +860,7 @@ function ImpactFundOverviewSection({
                 maxH={isDescriptionCollapsed ? DESCRIPTION_COLLAPSED_MAX_HEIGHT : undefined}
                 overflow={isDescriptionCollapsed ? 'hidden' : undefined}
               >
-                <MdxMarkdownEditor mode="preview" value={descriptionText} />
+                <MarkdownField preview content={descriptionText} />
               </Box>
               {isDescriptionCollapsed && (
                 <Box
@@ -1547,7 +1451,6 @@ type ApplicationSubmissionModalProps = {
   isOpen: boolean
   onClose: () => void
   ownedProjects: OwnedProject[]
-  hasOwnedProjects: boolean
   selectedProjectId: string
   onSelectedProjectIdChange: (projectId: string) => void
   applying: boolean
@@ -1562,7 +1465,6 @@ function ApplicationSubmissionModal({
   isOpen,
   onClose,
   ownedProjects,
-  hasOwnedProjects,
   selectedProjectId,
   onSelectedProjectIdChange,
   applying,
@@ -1630,15 +1532,11 @@ function ApplicationSubmissionModal({
               >
                 <VStack spacing={4}>
                   <Body color={secondaryTextColor}>
-                    {hasOwnedProjects
-                      ? t('All of your projects have already applied to this impact fund.')
-                      : t("You don't have any projects yet. Create a project to apply for funding.")}
+                    {t("You don't have any projects yet. Create a project to apply for funding.")}
                   </Body>
-                  {!hasOwnedProjects && (
-                    <Button as={Link} to={getPath('launchStart')} colorScheme="primary1" size="md" onClick={onClose}>
-                      {t('Create a Project')}
-                    </Button>
-                  )}
+                  <Button as={Link} to={getPath('launchStart')} colorScheme="primary1" size="md" onClick={onClose}>
+                    {t('Create a Project')}
+                  </Button>
                 </VStack>
               </Box>
             )}
@@ -1668,10 +1566,7 @@ function ImpactFundDetailContent({
   communitySupportersLoading,
   communitySupportersError,
   onApplyClick,
-  shouldDisableApply,
-  viewerApplications,
   ownedProjects,
-  hasOwnedProjects,
   selectedProjectId,
   onSelectedProjectIdChange,
   isProjectModalOpen,
@@ -1714,8 +1609,6 @@ function ImpactFundDetailContent({
         awardedAmountDisplay={awardedAmountDisplay}
         showAwardedAsPrimaryMetric={showAwardedAsPrimaryMetric}
         onApplyClick={onApplyClick}
-        shouldDisableApply={shouldDisableApply}
-        viewerApplications={viewerApplications}
         colors={colors}
       />
 
@@ -1783,15 +1676,7 @@ function ImpactFundDetailContent({
           <Body size="md" color={colors.secondaryTextColor} maxW="480px">
             {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
           </Body>
-          <Button
-            size="lg"
-            colorScheme="primary1"
-            onClick={onApplyClick}
-            isDisabled={shouldDisableApply}
-            px={10}
-            fontWeight="semibold"
-            fontSize="lg"
-          >
+          <Button size="lg" colorScheme="primary1" onClick={onApplyClick} px={10} fontWeight="semibold" fontSize="lg">
             {t('Apply for funding')}
           </Button>
         </VStack>
@@ -1811,7 +1696,6 @@ function ImpactFundDetailContent({
         isOpen={isProjectModalOpen}
         onClose={onProjectModalClose}
         ownedProjects={ownedProjects}
-        hasOwnedProjects={hasOwnedProjects}
         selectedProjectId={selectedProjectId}
         onSelectedProjectIdChange={onSelectedProjectIdChange}
         applying={applying}

@@ -1,4 +1,4 @@
-import { Box, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { IconType } from 'react-icons'
 import { PiCheckCircle, PiStack, PiWallet } from 'react-icons/pi'
@@ -30,36 +30,51 @@ export const ImpactFlowStrip = () => {
     },
   ]
 
-  const cardBackground = useColorModeValue('white', 'neutral1.3')
-  const cardBorderColor = useColorModeValue('neutral1.3', 'neutral1.4')
-  const iconColor = useColorModeValue('neutral1.9', 'neutral1.11')
-  const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
-  const subtitleColor = useColorModeValue('neutral1.8', 'neutral1.10')
+  const cardBackground = useColorModeValue(
+    'linear-gradient(130deg, var(--chakra-colors-primary1-50) 0%, var(--chakra-colors-primary1-100) 100%)',
+    'linear-gradient(130deg, var(--chakra-colors-primary1-700) 0%, var(--chakra-colors-primary1-800) 100%)',
+  )
+  const shadow = useColorModeValue('0 2px 8px rgba(16,24,40,0.06)', '0 3px 10px rgba(0,0,0,0.22)')
+  const iconContainerBg = useColorModeValue('primary1.100', 'primary1.700')
+  const iconColor = useColorModeValue('primary1.700', 'primary1.100')
+  const subtitleColor = useColorModeValue('neutral1.7', 'neutral1.8')
 
   return (
-    <SimpleGrid w="full" columns={{ base: 1, md: 3 }} spacing={4}>
+    <HStack w="full" spacing={4} align="stretch" overflowX="auto" overflowY="visible" px={1} py={2}>
       {flowSteps.map((step) => (
         <Box
           key={step.title}
-          px={4}
-          py={4}
+          flex={1}
+          minW="320px"
+          px="14px"
+          py="10px"
           borderRadius="12px"
           bg={cardBackground}
-          borderWidth="1px"
-          borderColor={cardBorderColor}
-          minH={{ md: '150px', lg: '164px' }}
+          boxShadow={shadow}
         >
-          <VStack h="full" spacing={2} justify="center" align="center" textAlign="center">
-            <Icon as={step.icon} boxSize={7} color={iconColor} />
-            <Body size={{ base: 'md', lg: 'lg' }} bold color={titleColor}>
-              {step.title}
-            </Body>
-            <Body size="sm" color={subtitleColor}>
-              {step.subtitle}
-            </Body>
-          </VStack>
+          <HStack spacing={3} align="center">
+            <Box
+              boxSize={12}
+              borderRadius="10px"
+              bg={iconContainerBg}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexShrink={0}
+            >
+              <Icon as={step.icon} boxSize={6} color={iconColor} />
+            </Box>
+            <VStack spacing={0} align="start" flex={1}>
+              <Body size={{ base: 'md', lg: 'lg' }} bold>
+                {step.title}
+              </Body>
+              <Body size="sm" color={subtitleColor}>
+                {step.subtitle}
+              </Body>
+            </VStack>
+          </HStack>
         </Box>
       ))}
-    </SimpleGrid>
+    </HStack>
   )
 }

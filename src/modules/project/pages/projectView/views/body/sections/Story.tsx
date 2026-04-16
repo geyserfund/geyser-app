@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
-import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
 
 import { Body } from '../../../../../../../shared/components/typography'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
@@ -31,7 +31,7 @@ export const Story = () => {
         </Body>
         {project?.description && (
           <article>
-            <MdxMarkdownEditor mode="preview" value={project?.description} />
+            <MarkdownField preview content={project?.description} />
           </article>
         )}
         <HStack w="full" justifyContent={'end'}>

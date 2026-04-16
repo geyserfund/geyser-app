@@ -23,8 +23,9 @@ import {
 import { FundingMatchingBanner } from '../components/FundingMatchingBanner.tsx'
 
 export const MIN_WIDTH_AFTER_START = 60
-const ONE_TIME_PRESET_AMOUNTS = [100, 210, 500, 750, 1000] as const
-const RECURRING_PRESET_AMOUNTS = [21, 50, 100, 250, 500] as const
+const PRESET_AMOUNTS = [100, 210, 500, 750, 1000]
+const highlightedPresetAmount = PRESET_AMOUNTS[1] ?? 210
+const finalPresetAmount = PRESET_AMOUNTS[PRESET_AMOUNTS.length - 1] ?? 1000
 export const DonationInput = () => {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -52,10 +53,6 @@ export const DonationInput = () => {
   }
 
   const isRecurringMode = fundingMode === recurringFundingModes.recurringDonation
-  const presetAmounts = isRecurringMode ? RECURRING_PRESET_AMOUNTS : ONE_TIME_PRESET_AMOUNTS
-  const highlightedPresetIndex = isRecurringMode ? 0 : 1
-  const highlightedPresetAmount = presetAmounts[highlightedPresetIndex] ?? 0
-  const finalPresetAmount = presetAmounts[presetAmounts.length - 1] ?? 0
   const prefersUsd = intendedPaymentMethod === PaymentMethods.fiatSwap || !intendedPaymentMethod
   const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: !prefersUsd && isRecurringMode })
   const isDollar = !isSatoshi
@@ -195,103 +192,54 @@ export const DonationInput = () => {
       )}
 
       <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
-        {presetAmounts.slice(0, 1).map((amount, index) =>
-          highlightedPresetIndex === index ? (
-            <VStack key={amount} spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
-              <Button
-                size="md"
-                variant="outline"
-                colorScheme="neutral.9"
-                isDisabled={isRecurringRenewal}
-                onClick={() => handleDefaultAmountButtonClick(highlightedPresetAmount)}
-                w="full"
-                zIndex={1}
-              >
-                {`$${commaFormatted(highlightedPresetAmount)}`}
-              </Button>
-              <Body
-                fontSize="8px"
-                bg={satoshiBadgeBg}
-                color={satoshiBadgeColor}
-                fontWeight="bold"
-                px={2}
-                py={0.2}
-                borderRadius="md"
-                position="absolute"
-                bottom="-8px"
-                left="50%"
-                transform="translateX(-50%)"
-                zIndex={2}
-                whiteSpace="nowrap"
-              >
-                {t('SATOSHI AMOUNT')}
-              </Body>
-            </VStack>
-          ) : (
-            <Button
-              key={amount}
-              size="md"
-              variant="outline"
-              colorScheme="neutral.9"
-              isDisabled={isRecurringRenewal}
-              onClick={() => handleDefaultAmountButtonClick(amount)}
-              flexGrow={1}
-              minWidth="80px"
-            >
-              {`$${commaFormatted(amount)}`}
-            </Button>
-          ),
-        )}
+        {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
+          <Button
+            key={amount}
+            size="md"
+            variant="outline"
+            colorScheme="neutral.9"
+            isDisabled={isRecurringRenewal}
+            onClick={() => handleDefaultAmountButtonClick(amount)}
+            flexGrow={1}
+            minWidth="80px"
+          >
+            {`$${commaFormatted(amount)}`}
+          </Button>
+        ))}
 
-        {presetAmounts.slice(1, 2).map((amount, index) =>
-          highlightedPresetIndex === index + 1 ? (
-            <VStack key={amount} spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
-              <Button
-                size="md"
-                variant="outline"
-                colorScheme="neutral.9"
-                isDisabled={isRecurringRenewal}
-                onClick={() => handleDefaultAmountButtonClick(highlightedPresetAmount)}
-                w="full"
-                zIndex={1}
-              >
-                {`$${commaFormatted(highlightedPresetAmount)}`}
-              </Button>
-              <Body
-                fontSize="8px"
-                bg={satoshiBadgeBg}
-                color={satoshiBadgeColor}
-                fontWeight="bold"
-                px={2}
-                py={0.2}
-                borderRadius="md"
-                position="absolute"
-                bottom="-8px"
-                left="50%"
-                transform="translateX(-50%)"
-                zIndex={2}
-                whiteSpace="nowrap"
-              >
-                {t('SATOSHI AMOUNT')}
-              </Body>
-            </VStack>
-          ) : (
-            <Button
-              key={amount}
-              size="md"
-              variant="outline"
-              colorScheme="neutral.9"
-              isDisabled={isRecurringRenewal}
-              onClick={() => handleDefaultAmountButtonClick(amount)}
-              flexGrow={1}
-              minWidth="80px"
-            >
-              {`$${commaFormatted(amount)}`}
-            </Button>
-          ),
-        )}
+        <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
+          <Button
+            key={PRESET_AMOUNTS[1]}
+            size="md"
+            variant="outline"
+            colorScheme="neutral.9"
+            isDisabled={isRecurringRenewal}
+            onClick={() => handleDefaultAmountButtonClick(highlightedPresetAmount)}
+            w="full"
+            zIndex={1}
+          >
+            {`$${commaFormatted(highlightedPresetAmount)}`}
+          </Button>
+          <Body
+            fontSize="8px"
+            bg={satoshiBadgeBg}
+            color={satoshiBadgeColor}
+            fontWeight="bold"
+            px={2}
+            py={0.2}
+            borderRadius="md"
+            position="absolute"
+            bottom="-8px"
+            left="50%"
+            transform="translateX(-50%)"
+            zIndex={2}
+            whiteSpace="nowrap"
+          >
+            {t('SATOSHI AMOUNT')}
+          </Body>
+        </VStack>
 
-        {presetAmounts.slice(2, 4).map((amount) => (
+        {PRESET_AMOUNTS.slice(2, 4).map((amount) => (
           <Button
             key={amount}
             size="md"

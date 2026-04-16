@@ -63,7 +63,7 @@ export const ImpactFundRecipientBanner = ({ recipient }: ImpactFundRecipientBann
       <Body color={textColor} fontWeight={500} size={{ base: 'sm', lg: 'md' }} lineHeight={1.35}>
         <Trans
           i18nKey={
-            'This project has been vetted and received funds from the <1>{{impactFundTitle}}</1>. Learn more <3>here</3>.'
+            'This project has been vetted and received funds from the <1>{{impactFundTitle}}</1>. Learn more about Impact Funds <3>here</3>.'
           }
           values={{ impactFundTitle }}
         >
@@ -71,7 +71,7 @@ export const ImpactFundRecipientBanner = ({ recipient }: ImpactFundRecipientBann
           <Body as="span" color={fundTitleColor} fontWeight={700} fontSize="inherit" lineHeight="inherit">
             {impactFundTitle}
           </Body>
-          {'. Learn more'}
+          {'. Learn more about Impact Funds '}
           <ChakraLink as={Link} to={impactFundPath} textDecoration="underline" color={linkColor}>
             here
           </ChakraLink>

@@ -13,7 +13,6 @@ import {
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
-import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { FiatSwapStatus, fiatSwapStatusAtom } from '../views/paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
@@ -27,12 +26,11 @@ export enum PaymentMethods {
 export const fiatCheckoutMethods = {
   creditCard: 'creditCard',
   applePay: 'applePay',
-  stripe: 'stripe',
 } as const
 
 export type FiatCheckoutMethod = (typeof fiatCheckoutMethods)[keyof typeof fiatCheckoutMethods]
 
-/** Stores the selected fiat checkout method for the fiat checkout flow. */
+/** Stores the selected fiat checkout method for the credit card/apple pay flow */
 export const fiatPaymentMethodAtom = atom<FiatCheckoutMethod>(fiatCheckoutMethods.creditCard)
 
 export const paymentMethodAtom = atom((get) => {
@@ -81,10 +79,6 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
   if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return false
-  }
-
-  if (!isStripeConnectSupportedForProject(project)) {
     return false
   }
 

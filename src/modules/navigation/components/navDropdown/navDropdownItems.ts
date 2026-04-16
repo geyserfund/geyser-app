@@ -14,8 +14,8 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
       to: getPath('discoveryFundraisers'),
     },
     {
-      title: t('Impact Fund'),
-      description: t('Donate to a curated fund to promote grassroots adoption.'),
+      title: t('Impact Funds'),
+      description: t('Fund a category through curated funds.'),
       to: getPath('discoveryImpactFunds'),
       badge: { label: t('new'), tone: 'new' },
     },
