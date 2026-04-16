@@ -40,7 +40,7 @@ export function ImpactFundsReportsSection({
         <Flex
           position="absolute"
           inset={0}
-          align="flex-end"
+          align="flex-start"
           justify="flex-end"
           p={{ base: 4, md: 6 }}
           pointerEvents="none"
