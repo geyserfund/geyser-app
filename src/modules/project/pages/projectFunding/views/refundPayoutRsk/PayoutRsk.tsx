@@ -1,5 +1,4 @@
 /* eslint-disable complexity */
-import { useLazyQuery } from '@apollo/client'
 import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
@@ -15,7 +14,6 @@ import {
   generateProjectKeysFromSeedHex,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
-import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -25,11 +23,14 @@ import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentStatus,
   PaymentType,
+  PayoutActiveQuery,
   PayoutContractType,
   PayoutStatus,
   ProjectForProfileContributionsFragment,
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
+  usePayoutActiveLazyQuery,
+  usePayoutLatestLazyQuery,
   usePayoutPaymentInitiateMutation,
   usePayoutPaymentPrepareMutation,
   usePayoutPrepareMutation,
@@ -52,21 +53,6 @@ import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
 import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
-
-type PayoutLatestPreflightQuery = {
-  payoutLatest?: {
-    payout?: {
-      status?: PayoutStatus | null
-      payments?: Array<{
-        status?: PaymentStatus | null
-        createdAt: string
-      }> | null
-    } | null
-    payoutMetadata?: {
-      requiresUserLockTx?: boolean | null
-    } | null
-  } | null
-}
 
 type PayoutRskProps = {
   isOpen: boolean
@@ -229,7 +215,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const hasDefaultedMethodRef = useRef(false)
 
   const [payoutPrepare, { data: payoutPrepareData, loading: payoutPrepareLoading }] = usePayoutPrepareMutation()
-  const [loadLatestPayout] = useLazyQuery<PayoutLatestPreflightQuery>(QUERY_PAYOUT_LATEST)
+  const [loadLatestPayout] = usePayoutLatestLazyQuery()
+  const [loadActivePayout] = usePayoutActiveLazyQuery()
 
   const [payoutPaymentPrepare, { loading: isPayoutPaymentPrepareLoading }] = usePayoutPaymentPrepareMutation()
   const [payoutPaymentInitiate, { loading: isPayoutPaymentInitiateLoading }] = usePayoutPaymentInitiateMutation()
@@ -238,6 +225,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const [payoutPrepareError, setPayoutPrepareError] = useState<string | null>(null)
   const [isInternalRetryPayout, setIsInternalRetryPayout] = useState(false)
   const [hasFailedPreviousPayout, setHasFailedPreviousPayout] = useState(false)
+  const [activePayoutResponse, setActivePayoutResponse] = useState<PayoutActiveQuery['payoutActive'] | null>(null)
 
   useEffect(() => {
     if (!isOpen) {
@@ -245,6 +233,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       hasDefaultedMethodRef.current = false
       setIsInternalRetryPayout(false)
       setHasFailedPreviousPayout(false)
+      setActivePayoutResponse(null)
       return
     }
 
@@ -269,6 +258,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         const latestPayoutPayment = [...(latestPayout?.payments ?? [])].sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )[0]
+        const hasActivePayout = Boolean(
+          latestPayout?.status && [PayoutStatus.Pending, PayoutStatus.Processing].includes(latestPayout.status),
+        )
 
         setHasFailedPreviousPayout(
           Boolean(
@@ -277,6 +269,25 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         )
         setIsInternalRetryPayout(Boolean(latestPayoutResult.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
 
+        if (hasActivePayout) {
+          const activePayoutResult = await loadActivePayout({
+            variables: { projectId: project.id },
+            fetchPolicy: 'network-only',
+          })
+
+          if (activePayoutResult.error) {
+            throw activePayoutResult.error
+          }
+
+          const payoutActive = activePayoutResult.data?.payoutActive
+
+          if (payoutActive) {
+            setActivePayoutResponse(payoutActive)
+            return
+          }
+        }
+
+        setActivePayoutResponse(null)
         await payoutPrepare({
           variables: {
             input: {
@@ -292,11 +303,14 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
 
     preparePayout().catch(() => undefined)
-  }, [isOpen, loadLatestPayout, payoutPrepare, project.id])
+  }, [isOpen, loadActivePayout, loadLatestPayout, payoutPrepare, project.id])
 
-  const payout = payoutPrepareData?.payoutPrepare.payout
+  const payoutResponse = activePayoutResponse
+    ? { payout: activePayoutResponse.payout, payoutMetadata: activePayoutResponse.payoutMetadata }
+    : payoutPrepareData?.payoutPrepare
+  const payout = payoutResponse?.payout
   const isProcessing = payout?.status === PayoutStatus.Processing
-  const payoutMetadata = payoutPrepareData?.payoutPrepare.payoutMetadata
+  const payoutMetadata = payoutResponse?.payoutMetadata
   const contractType = payoutMetadata?.contractType
   const latestPayment = isProcessing
     ? [...(payout?.payments ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]
