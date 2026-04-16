@@ -223,6 +223,16 @@ const MdxMarkdownEditorInternal = ({
       sx={{
         '& .mdxeditor': {
           border: 'none',
+          '--basePageBg': 'var(--chakra-colors-neutral1-3)',
+          '--baseBase': 'var(--chakra-colors-neutral1-2)',
+          '--baseBgSubtle': 'var(--chakra-colors-neutral1-2)',
+          '--baseBg': 'var(--chakra-colors-neutral1-3)',
+          '--baseBgHover': 'var(--chakra-colors-neutral1-4)',
+          '--baseBgActive': 'var(--chakra-colors-neutral1-5)',
+          '--baseBorder': 'var(--chakra-colors-neutral1-7)',
+          '--baseBorderHover': 'var(--chakra-colors-neutral1-8)',
+          '--baseText': 'var(--chakra-colors-neutral1-11)',
+          '--baseTextContrast': 'var(--chakra-colors-neutral1-12)',
         },
         '& .mdxeditor [class*="editorWrapper"]': {
           border: 'none',
