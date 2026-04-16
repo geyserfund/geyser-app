@@ -1,13 +1,10 @@
-import '@mdxeditor/editor/style.css'
-
 import { HStack, SkeletonText } from '@chakra-ui/react'
-import { headingsPlugin, MDXEditor } from '@mdxeditor/editor'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
-import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 
 import { Body } from '../../../../../../../shared/components/typography'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
@@ -34,13 +31,7 @@ export const Story = () => {
         </Body>
         {project?.description && (
           <article>
-            <MarkdownField preview content={project?.description} />
-          </article>
-        )}
-        {project?.description && (
-          <article>
-            <MarkdownField preview content={project?.description} />
-            <MDXEditor readOnly markdown={project?.description} plugins={[headingsPlugin()]} />;
+            <MdxMarkdownEditor mode="preview" value={project?.description} />
           </article>
         )}
         <HStack w="full" justifyContent={'end'}>

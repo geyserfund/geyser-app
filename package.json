@@ -55,11 +55,6 @@
     "@noble/hashes": "^1.8.0",
     "@react-hookz/web": "^23.0.0",
     "@react-pdf/renderer": "^3.1.14",
-    "@remirror/extension-react-tables": "^3.0.1",
-    "@remirror/pm": "^3.0.0",
-    "@remirror/react": "^3.0.1",
-    "@remirror/react-components": "^3.0.1",
-    "@remirror/styles": "^3.0.0",
     "@scure/bip39": "^1.6.0",
     "@sentry/react": "^7.50.0",
     "@stripe/react-stripe-js": "^3.0.0",
@@ -114,7 +109,6 @@
     "react-truncate-inside": "^1.0.3",
     "react-use-websocket": "^4.8.1",
     "recharts": "^2.12.7",
-    "remirror": "^3.0.1",
     "serve-handler": "^6.1.5",
     "swiper": "^11.1.14",
     "turndown": "^7.1.2",
@@ -182,9 +176,6 @@
     "workbox-routing": "^7.3.0",
     "workbox-strategies": "^7.3.0",
     "workbox-window": "^7.1.0"
-  },
-  "resolutions": {
-    "prosemirror-model": "1.22.2"
   },
   "main": "main.tsx",
   "author": "geyser",

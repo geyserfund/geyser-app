@@ -1,11 +1,11 @@
-import { Box, HStack, useDisclosure, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { MarkdownField, MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
+import { MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
+import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 
 import { FieldContainer, FieldContainerProps } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
@@ -14,50 +14,30 @@ interface Props {
   autoFocus?: boolean
   form: UseFormReturn<{ description: string } & any>
   isLoading?: boolean
-  toolBarBottom?: string
   fieldContainerProps?: FieldContainerProps
 }
 
-export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom, fieldContainerProps }: Props) => {
+export const ProjectStoryForm = ({ autoFocus, form, isLoading, fieldContainerProps }: Props) => {
   const { t } = useTranslation()
-
-  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
-  const [isStoryLoading, setIsStoryLoading] = useState(false)
-  const handleToggleEditorMode = () => {
-    toggleEditorMode()
-    setIsStoryLoading(true)
-    setTimeout(() => {
-      setIsStoryLoading(false)
-    }, 1)
-  }
-
-  useEffect(() => {
-    setIsStoryLoading(isLoading || false)
-  }, [isLoading])
 
   return (
     <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingBottom={{ base: 28, lg: 'unset' }}>
         <FieldContainer width="100%" flexGrow={1} paddingBottom={{ base: 28, lg: 10 }} {...fieldContainerProps}>
-          <Box width="100%" pt={3} flexGrow={1} display="flex" flexDirection="column">
-            {isStoryLoading ? (
-              <MarkdownFieldSkeleton />
-            ) : (
-              <MarkdownField
-                autoFocus={autoFocus}
-                initialContentReady={!isLoading}
-                initialContent={() => form.watch('description') || ''}
-                name="description"
-                flex
-                control={form.control}
-                stickyToolbar={toolBarBottom}
-                enableRawMode
-                isFloatingToolbar
-                toolbarMaxWidth={dimensions.project.posts.view.maxWidth}
-                isEditorMode={isEditorMode}
-                toggleEditorMode={handleToggleEditorMode}
-              />
-            )}
+          <VStack width="100%" pt={3} flexGrow={1} alignItems="stretch" spacing={1}>
+            <CardLayout width="100%" flexGrow={1} backgroundColor="utils.surface" overflowY="auto">
+              {isLoading ? (
+                <MarkdownFieldSkeleton />
+              ) : (
+                <MdxMarkdownEditor
+                  mode="edit"
+                  autoFocus={autoFocus}
+                  minHeight="120px"
+                  name="description"
+                  control={form.control}
+                />
+              )}
+            </CardLayout>
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
                 <Body size="xs" pt={1} color="error.9">
@@ -68,7 +48,7 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom, fi
                 <span>{form.watch('description').length}</span>/<span>{ProjectValidations.description.maxLength}</span>
               </Body>
             </HStack>
-          </Box>
+          </VStack>
         </FieldContainer>
       </VStack>
     </FormProvider>
