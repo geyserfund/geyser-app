@@ -30,7 +30,9 @@ export const Discovery = () => {
   const creatorRoute = getPath('discoveryCreator')
   const isCreatorRoute = pathname === creatorRoute || pathname.startsWith(`${creatorRoute}/`)
   const isImpactFundsMainRoute = matchPath({ path: getPath('discoveryImpactFunds'), end: true }, pathname) !== null
-  const usesFullWidthLayout = usesLandingLayout || isImpactFundsMainRoute || isCreatorRoute
+  const isMicroLendingMainRoute = matchPath({ path: getPath('discoveryMicroLending'), end: true }, pathname) !== null
+  const usesFullWidthLayout =
+    usesLandingLayout || isImpactFundsMainRoute || isMicroLendingMainRoute || isCreatorRoute
 
   useEffect(() => {
     if (!usesLandingLayout || !user.heroId || searchParams.get('hero')) {
