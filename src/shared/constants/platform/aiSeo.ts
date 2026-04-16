@@ -1,6 +1,12 @@
 export const AI_SEO_SITE_ORIGIN = 'https://geyser.fund'
 
-export type AiSeoPageContext = 'default' | 'campaigns' | 'fundraisers' | 'grants' | 'impactFunds'
+export type AiSeoPageContext =
+  | 'default'
+  | 'campaigns'
+  | 'fundraisers'
+  | 'grants'
+  | 'impactFunds'
+  | 'microLending'
 
 export type AiSeoPageContent = {
   title: string
@@ -57,6 +63,19 @@ const pageContentByContext: Record<AiSeoPageContext, AiSeoPageContent> = {
       'Impact Funds on Geyser channel Bitcoin donations into high-impact projects and causes, supporting communities and advancing adoption worldwide.',
     keywords: [...BASE_KEYWORDS, 'impact funds', 'bitcoin donations for impact', 'bitcoin grants'].join(', '),
     about: ['Impact funds', 'Donations', 'Causes and communities'],
+  },
+  microLending: {
+    title: 'Micro-Loans for Bitcoin Communities | Geyser',
+    description:
+      'Join the waitlist for Geyser micro-loans: small, flexible loans for real-world Bitcoin communities, from local borrowers to community lenders.',
+    keywords: [
+      ...BASE_KEYWORDS,
+      'bitcoin micro loans',
+      'community lending',
+      'bitcoin small business loans',
+      'grassroots bitcoin finance',
+    ].join(', '),
+    about: ['Micro-loans', 'Bitcoin communities', 'Local impact'],
   },
 }
 

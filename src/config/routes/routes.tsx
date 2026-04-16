@@ -1221,6 +1221,13 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryMicroLending'),
+        async lazy() {
+          const { MicroLendingMainPage } = await import('@/modules/microLending/pages/MicroLendingMainPage.tsx')
+          return { Component: MicroLendingMainPage }
+        },
+      },
+      {
         path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
           const impactFundsModule = await loadImpactFundsModule()

@@ -79,7 +79,10 @@ export const ProjectStatusBar = ({ isProjectOwner, project, wallet, ...props }: 
     return null
   }
 
-  if (isProjectOwner && projectStatus === ProjectStatusLabels.INACTIVE) {
+  if (
+    isProjectOwner &&
+    [ProjectStatusLabels.INACTIVE, ProjectStatusLabels.IN_REVIEW].includes(projectStatus)
+  ) {
     return null
   }
 

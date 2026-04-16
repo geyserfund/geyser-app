@@ -60,7 +60,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       : undefined
 
   const hasRevisionsRequested = latestReview?.status === ProjectReviewStatus.RevisionsRequested
-  const shouldRouteToFinalize = isDraft || hasRevisionsRequested
+  const isReviewPending = latestReview?.status === ProjectReviewStatus.Pending
+  const shouldRouteToFinalize = isDraft || (hasRevisionsRequested && isPreLaunchReview)
 
   /** Get project type badge configuration */
   const getProjectTypeBadge = () => {
@@ -114,6 +115,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const renderContextContent = () => {
     // Check review status first
     if (isInReview) {
+      if (isReviewPending) {
+        return (
+          <Body size="sm" color="neutral1.11">
+            {t('Your project has been re-submitted for review. The team will review it promptly.')}
+          </Body>
+        )
+      }
+
       if (hasRevisionsRequested) {
         return (
           <HStack
