@@ -46,7 +46,7 @@ import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impac
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
+import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import type { ImpactFundApplicationsQuery, ImpactFundQuery } from '@/types'
 import {
@@ -956,7 +956,7 @@ function ImpactFundOverviewSection({
                 maxH={isDescriptionCollapsed ? DESCRIPTION_COLLAPSED_MAX_HEIGHT : undefined}
                 overflow={isDescriptionCollapsed ? 'hidden' : undefined}
               >
-                <MdxMarkdownEditor mode="preview" value={descriptionText} />
+                <MarkdownField preview content={descriptionText} />
               </Box>
               {isDescriptionCollapsed && (
                 <Box

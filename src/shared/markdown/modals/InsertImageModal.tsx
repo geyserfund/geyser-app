@@ -1,38 +1,37 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 
 import { Modal } from '../../../shared/components/layouts/Modal'
 import { useModal, UseModalReturn } from '../../../shared/hooks/useModal'
+import { ImageField } from '../components/ImageField'
 import { TextField } from '../components/TextField'
-import { validateYouTubeUrl } from '../validations/youtube'
 
 const schema = yup.object({
-  url: yup.string().required('URL is required').test('youtube', 'Must be a valid youtube URL', validateYouTubeUrl),
+  url: yup.string().required('Image is required'),
+  label: yup.string(),
 })
 
-export interface MarkdownVideo {
+export interface MarkdownImage {
   url: string
+  label?: string
 }
 
-export const useInsertVideoModal = (onSubmit: SubmitHandler<MarkdownVideo>) => {
-  return useModal<{ onSubmit: SubmitHandler<MarkdownVideo> }>({}, { onSubmit })
+export const useInsertImageModal = (onSubmit: SubmitHandler<MarkdownImage>) => {
+  return useModal<{ onSubmit: SubmitHandler<MarkdownImage> }>({}, { onSubmit })
 }
 
-export const InsertVideoModal = ({
+export const InsertImageModal = ({
   props: { onSubmit },
   ...modal
-}: UseModalReturn<{ onSubmit: SubmitHandler<MarkdownVideo> }>) => {
-  const { t } = useTranslation()
-
-  const form = useForm<MarkdownVideo>({
+}: UseModalReturn<{ onSubmit: SubmitHandler<MarkdownImage> }>) => {
+  const form = useForm<MarkdownImage>({
     resolver: yupResolver(schema),
   })
 
   return (
-    <Modal title={t('Insert video')} {...modal}>
+    <Modal title="Insert image" {...modal}>
       <form
         onSubmit={(e) => {
           e.stopPropagation()
@@ -41,9 +40,10 @@ export const InsertVideoModal = ({
         }}
       >
         <VStack spacing={4}>
-          <TextField control={form.control} name="url" label="Youtube URL" required />
+          <ImageField control={form.control} name="url" label="Image" required />
+          <TextField control={form.control} name="label" label="Label" />
           <Button w="100%" variant="solid" colorScheme="primary1" type="submit">
-            {t('Insert')}
+            Insert
           </Button>
         </VStack>
       </form>

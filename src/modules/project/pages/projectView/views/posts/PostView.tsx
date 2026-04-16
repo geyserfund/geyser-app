@@ -25,7 +25,7 @@ import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { FundingResourceType, useProjectPostLazyQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
-import { MdxMarkdownEditor } from '../../../../../../shared/markdown/MdxMarkdownEditor.tsx'
+import { MarkdownField } from '../../../../../../shared/markdown/MarkdownField.tsx'
 import { sourceResourceAtom } from '../../state/sourceActivityAtom.ts'
 import { LinkedRewardsAndGoals } from './components/LinkedRewardsAndGoals.tsx'
 import { PostEditMenu } from './components/PostEditMenu.tsx'
@@ -203,7 +203,7 @@ export const PostView = () => {
                 }}
                 flex={1}
               >
-                <MdxMarkdownEditor mode="preview" value={post.markdown || ''} />
+                <MarkdownField preview content={post.markdown || ''} />
               </Box>
             )}
             {showLinkedRewardsAndGoals && <LinkedRewardsAndGoals post={post} />}
