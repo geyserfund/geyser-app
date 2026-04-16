@@ -10,6 +10,7 @@ import { ImpactFundsFundSponsorsSection } from '@/modules/impactFunds/components
 import { ImpactFundsHeroSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsHeroSection.tsx'
 import { ImpactFundsHowItWorksSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsHowItWorksSection.tsx'
 import { ImpactFundsProvenImpactSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsProvenImpactSection.tsx'
+import { ImpactFundsReportsSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsReportsSection.tsx'
 import { ImpactFundsSuccessStoriesSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsSuccessStoriesSection.tsx'
 import { ImpactFundsTrustNetworkSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsTrustNetworkSection.tsx'
 import { ImpactFundsTrustPillarsSection } from '@/modules/impactFunds/components/mainPage/ImpactFundsTrustPillarsSection.tsx'
@@ -257,6 +258,7 @@ export const ImpactFundsMainPage = () => {
             </>
           )}
         </VStack>
+        <ImpactFundsReportsSection sectionPrimaryTextColor={sectionPrimaryTextColor} />
         <UserExternalLinksComponent />
       </Box>
     </>
