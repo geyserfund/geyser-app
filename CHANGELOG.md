@@ -1,3 +1,10 @@
+## [0.40.0](https://github.com/geyserfund/geyser-app/compare/v0.39.2...v0.40.0) (2026-04-16)
+
+
+### Features
+
+* micro-loans one pager and project review flow upadte ([751ef0f](https://github.com/geyserfund/geyser-app/commit/751ef0f4f1d8fe308bf33d75bfb7a11d96d8c5a1))
+
 ## [0.38.0](https://github.com/geyserfund/geyser-app/compare/v0.36.0...v0.38.0) (2026-04-15)
 
 
