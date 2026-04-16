@@ -12,7 +12,9 @@ The Geyser Front-End
 
 1. Update app version:
     Run `yarn version [ minor | major | patch ]` to enter the new app version
-2. Update `CHANGELOG.md` file:
-    Run `Yarn changelog` to update automatically based on commit history from last release version.
+2. Update `CHANGELOG.md` file for minor and major releases:
+    Run `yarn changelog` to update automatically based on commit history from last release version.
+3. For patch releases:
+    Skip the changelog update unless it is explicitly needed for the release.
 
 ### MERGE!!!
