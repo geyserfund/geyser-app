@@ -1,4 +1,7 @@
+import '@mdxeditor/editor/style.css'
+
 import { HStack, SkeletonText } from '@chakra-ui/react'
+import { headingsPlugin, MDXEditor } from '@mdxeditor/editor'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
@@ -32,6 +35,12 @@ export const Story = () => {
         {project?.description && (
           <article>
             <MarkdownField preview content={project?.description} />
+          </article>
+        )}
+        {project?.description && (
+          <article>
+            <MarkdownField preview content={project?.description} />
+            <MDXEditor readOnly markdown={project?.description} plugins={[headingsPlugin()]} />;
           </article>
         )}
         <HStack w="full" justifyContent={'end'}>
