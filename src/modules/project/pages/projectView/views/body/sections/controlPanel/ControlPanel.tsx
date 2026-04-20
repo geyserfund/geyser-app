@@ -13,14 +13,24 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
+import { useModal } from '@/shared/hooks/useModal.tsx'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
-import { ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
+import {
+  ProjectFundingStrategy,
+  ProjectReviewStatus,
+  ProjectStatus,
+  useProjectLaunchReviewsQuery,
+  useProjectReviewRequestMutation,
+} from '@/types'
+import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
 import { promotionsNoticeClosedByProjectAtom, stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
 import { ControlPanelNotification } from './components/ControlPanelNotification.tsx'
+import { ProjectReviewFeedbackModal } from './components/ProjectReviewFeedbackModal.tsx'
 import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
 import { useImpactFundEligibility } from './hooks/useImpactFundEligibility.ts'
 import { useWithdrawFunds } from './hooks/useWithdrawFunds.ts'
@@ -156,9 +166,12 @@ const ControlPanelFinancialActions = ({
 }
 
 export const ControlPanel = () => {
-  const { project, isProjectOwner } = useProjectAtom()
+  const { project, isProjectOwner, partialUpdateProject } = useProjectAtom()
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
+  const reviewFeedbackModal = useModal()
+  const resubmitConfirmModal = useModal()
+  const toast = useNotification()
   const isDraftUrl = location.pathname.includes('/draft')
   const projectNoticeKey = String(project.id)
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
@@ -212,7 +225,56 @@ export const ControlPanel = () => {
   }, [project.reviews])
 
   const hasRevisionsRequested = latestReview?.status === ProjectReviewStatus.RevisionsRequested
+  const isReviewPending = latestReview?.status === ProjectReviewStatus.Pending
   const isInactiveProject = project.status === ProjectStatus.Inactive
+  const { data: projectLaunchReviewsData } = useProjectLaunchReviewsQuery({
+    variables: {
+      where: {
+        id: project.id,
+      },
+    },
+    skip: !project.id || !isProjectOwner || !hasRevisionsRequested,
+  })
+  const latestReviewWithFeedback = useMemo(() => {
+    const reviews = projectLaunchReviewsData?.projectGet?.reviews
+
+    if (!reviews || reviews.length === 0) {
+      return latestReview
+    }
+
+    return [...reviews].sort((a, b) => (b.version ?? 0) - (a.version ?? 0))[0]
+  }, [latestReview, projectLaunchReviewsData?.projectGet?.reviews])
+  const [projectReviewRequest, { loading: isResubmittingReview }] = useProjectReviewRequestMutation({
+    onCompleted(data) {
+      const nextReview = data.projectReviewRequest
+
+      toast.success({
+        title: t('Review submitted'),
+        description: t('Your project has been submitted for review. You will be notified by email of any updates.'),
+      })
+
+      partialUpdateProject({
+        reviews: project.reviews ? [...project.reviews, nextReview] : [nextReview],
+      })
+      resubmitConfirmModal.onClose()
+    },
+    onError() {
+      toast.error({
+        title: t('Submission failed'),
+        description: t('Failed to submit project for review. Please try again.'),
+      })
+    },
+  })
+
+  const handleResubmitForReview = async () => {
+    await projectReviewRequest({
+      variables: {
+        input: {
+          projectId: project.id,
+        },
+      },
+    })
+  }
 
   /** Handle ?action=withdraw query param to auto-open withdrawal modal */
   useEffect(() => {
@@ -275,26 +337,61 @@ export const ControlPanel = () => {
 
       <TiaRskEoaSetupNotice compact />
 
+      {isReviewPending && (
+        <ControlPanelNotification
+          icon={<Icon as={PiWarning} color="info.11" boxSize="16px" flexShrink={0} />}
+          title={t('Under review.')}
+          description={t('Your project has been re-submitted for review. The team will review it promptly.')}
+          variant="info"
+        />
+      )}
+
       {hasRevisionsRequested && (
         <ControlPanelNotification
           icon={<Icon as={PiWarning} color="warning.11" boxSize="16px" flexShrink={0} />}
           title={t('Updates requested.')}
           description={t('Review feedback and resubmit your project.')}
           actionButton={
-            <Button
-              colorScheme="warning"
-              variant="soft"
-              size="sm"
-              flexShrink={0}
-              as={Link}
-              to={getPath('launchFinalize', project.id)}
-            >
-              {t('Re-submit')}
-            </Button>
+            <HStack spacing={2} w={{ base: 'full', md: 'auto' }}>
+              <Button
+                colorScheme="neutral1"
+                variant="soft"
+                size="sm"
+                px={4}
+                flex={1}
+                onClick={reviewFeedbackModal.onOpen}
+              >
+                {t('View feedback')}
+              </Button>
+              <Button
+                colorScheme="warning"
+                variant="soft"
+                size="sm"
+                px={4}
+                flex={1}
+                onClick={resubmitConfirmModal.onOpen}
+                isLoading={isResubmittingReview}
+              >
+                {t('Re-submit')}
+              </Button>
+            </HStack>
           }
           variant="warning"
         />
       )}
+
+      <ProjectReviewFeedbackModal modal={reviewFeedbackModal} review={latestReviewWithFeedback} />
+      <AlertDialogue
+        title={t('Re-submit for review')}
+        description={t('This will submit your project for further review. Have you applied the changes requested?')}
+        hasCancel
+        positiveButtonProps={{
+          children: t('Submit'),
+          isLoading: isResubmittingReview,
+          onClick: handleResubmitForReview,
+        }}
+        {...resubmitConfirmModal}
+      />
 
       {/* Financial Actions Section */}
       <ControlPanelFinancialActions

@@ -184,3 +184,47 @@ export const patchImpactFundDonationContributionUuid = async (input: {
     throw new Error('Airtable patch failed')
   }
 }
+
+/**
+ * Same base (`appyM7XlNIWVypuP5`) as other helpers. Create a table named `Micro-Lending Waitlist` with fields:
+ * - `Interest` (single select): `Borrower`, `Lender`, `Both`
+ * - `Name` (single line text)
+ * - `Email` (email)
+ * - `Country` (single line text)
+ * - `Message` (long text, optional)
+ */
+const MICRO_LENDING_WAITLIST_TABLE = 'Micro-Lending Waitlist'
+
+export type PostMicroLendingWaitlistInput = {
+  interest: 'Borrower' | 'Lender' | 'Both'
+  name: string
+  email: string
+  country: string
+  message?: string
+}
+
+/** Creates a waitlist row from the micro-loans landing page form. */
+export const postMicroLendingWaitlist = async (input: PostMicroLendingWaitlistInput): Promise<void> => {
+  const fields: Record<string, string> = {
+    Interest: input.interest,
+    Name: input.name,
+    Email: input.email,
+    Country: input.country,
+  }
+  if (input.message) {
+    fields.Message = input.message
+  }
+
+  const response = await fetch(`${AIRTABLE_API}/${encodeURIComponent(MICRO_LENDING_WAITLIST_TABLE)}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ records: [{ fields }] }),
+  })
+
+  if (!response.ok) {
+    throw new Error('Airtable waitlist post failed')
+  }
+}

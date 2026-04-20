@@ -208,6 +208,7 @@ export const discoveryRoutes = [
   getPath('discoveryLeaderboard'),
   getPath('discoveryLaunchpad'),
   getPath('discoveryImpactFunds'),
+  getPath('discoveryMicroLending'),
   getPath('discoveryImpactFund', PathName.impactFundName),
   getPath('discoveryCreator'),
   // getPath('discoveryGrantApply', PathName.grantId),
@@ -246,6 +247,7 @@ export const platformNavBarShadowRoutes = [
   getPath('discoveryFundraisersCategory', PathName.categoryName),
   getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
   getPath('discoveryImpactFunds'),
+  getPath('discoveryMicroLending'),
   getPath('discoveryNews'),
   getPath('ambassadorProgram'),
 ]

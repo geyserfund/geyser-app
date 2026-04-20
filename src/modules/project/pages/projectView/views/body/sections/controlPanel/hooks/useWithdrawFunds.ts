@@ -47,10 +47,10 @@ export const useWithdrawFunds = () => {
   const showWithdrawableBalance = isTiaProject && Boolean(projectRskEoa) && !isLoading
   const hasWithdrawableBalance = withdrawable !== null && withdrawable > 0n
   const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
+  const canResumeOrRetryWithdraw = hasOngoingWithdraw || hasFailedWithdraw
   const showWithdraw =
     showWithdrawableBalance &&
-    !isBelowMinWithdrawThreshold &&
-    (hasOngoingWithdraw || hasFailedWithdraw || hasWithdrawableBalance)
+    (canResumeOrRetryWithdraw || (!isBelowMinWithdrawThreshold && hasWithdrawableBalance))
 
   const shouldTrackLatestPayout = isProjectOwner && isTiaProject && Boolean(projectRskEoa)
   const {

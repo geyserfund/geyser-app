@@ -11,7 +11,7 @@ type ControlPanelNotificationProps = {
   icon: ReactNode
   title: string
   description: string | ReactNode
-  actionButton: ReactNode
+  actionButton?: ReactNode
   onClose?: () => void
   variant?: NotificationVariant
 }
@@ -56,9 +56,11 @@ export const ControlPanelNotification = ({
                 {description}
               </Box>
             )}
-            <Box flexShrink={0} w={{ base: 'full', md: 'auto' }}>
-              {actionButton}
-            </Box>
+            {actionButton && (
+              <Box flexShrink={0} w={{ base: 'full', md: 'auto' }}>
+                {actionButton}
+              </Box>
+            )}
           </Stack>
         </VStack>
       </HStack>
