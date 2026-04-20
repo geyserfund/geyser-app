@@ -1,5 +1,5 @@
 import { HStack } from '@chakra-ui/react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -22,20 +22,24 @@ export const Profile = () => {
 
   const isMobile = useMobileMode()
 
-  const params = useParams<{ userId: string; heroId: string }>()
-
-  const userId = useMemo(() => {
-    return params.userId
-  }, [params])
-
-  const heroId = useMemo(() => {
-    return params.heroId
-  }, [params])
+  const { userId, heroId } = useParams<{ userId: string; heroId: string }>()
+  const rewrittenProfileKeyRef = useRef<string | null>(null)
 
   const { error, userProfile, isLoading } = useUserProfile({ userId, heroId })
 
   useEffect(() => {
-    if (!isLoading && userId && userProfile.heroId && userProfile.id === userId) {
+    const isMatchingUserId = userId !== undefined && String(userProfile.id) === String(userId)
+    const rewriteKey = userId && userProfile.heroId ? `${userId}:${userProfile.heroId}` : null
+
+    if (
+      !isLoading &&
+      userId &&
+      userProfile.heroId &&
+      isMatchingUserId &&
+      rewriteKey &&
+      rewrittenProfileKeyRef.current !== rewriteKey
+    ) {
+      rewrittenProfileKeyRef.current = rewriteKey
       rewriteUrlToHero(window.location.pathname, userId, userProfile.heroId)
     }
   }, [isLoading, userId, userProfile?.heroId, userProfile?.id])
