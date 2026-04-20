@@ -5,7 +5,7 @@ import { PiArrowUpRight, PiCheckCircle, PiInfinity, PiTarget } from 'react-icons
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
-import { GuideUrl } from '@/shared/constants/index.ts'
+import { GuideFundraisingURL } from '@/shared/constants/index.ts'
 
 import { PlaybookCard } from '../components/PlaybookCard.tsx'
 import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
@@ -139,7 +139,7 @@ export const FundraiserTypeSection = () => {
         </Body>
         <Button
           as={ChakraLink}
-          href={GuideUrl}
+          href={GuideFundraisingURL}
           isExternal
           variant="link"
           colorScheme="primary1"
