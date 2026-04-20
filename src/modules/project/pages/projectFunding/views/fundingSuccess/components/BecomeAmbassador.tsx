@@ -48,7 +48,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
   const { totalSats } = useFundingFormAtom()
 
   const handleNostrPost = async () => {
-    const event = await createPostEvent(project.title, project.keys.nostrKeys.publicKey.hex, totalSats)
+    const event = await createPostEvent(project.name, project.keys.nostrKeys.publicKey.hex, totalSats)
 
     if (event) {
       await publishNostrEvent({
