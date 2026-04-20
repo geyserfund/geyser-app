@@ -1,32 +1,64 @@
 /* eslint-disable complexity */
-import { ApolloError } from '@apollo/client'
+import { ApolloError, useMutation } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { __development__ } from '@/shared/constants/index.ts'
+import {
+  MUTATION_PROJECT_SUBSCRIPTION_START,
+  MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE,
+  MUTATION_RECURRING_DONATION_CREATE,
+  ProjectSubscriptionStartMutation,
+  ProjectSubscriptionStartMutationVariables,
+  RecurringContributionCheckoutPayload,
+  RecurringContributionRenewalCreateMutation,
+  RecurringContributionRenewalCreateMutationVariables,
+  RecurringDonationCreateMutation,
+  RecurringDonationCreateMutationVariables,
+  recurringFundingModes,
+} from '@/modules/project/recurring/graphql'
+import {
+  ORIGIN,
+  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
+  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
+} from '@/shared/constants/config/env.ts'
+import { __development__, getPath } from '@/shared/constants/index.ts'
 import {
   ContributionCreateInput,
   ContributionCreateMutation,
   ContributionLightningToRskSwapPaymentDetailsFragment,
   ContributionOnChainToRskSwapPaymentDetailsFragment,
+  ContributionPaymentsInput,
   FundingContributionFragment,
   PaymentFeePayer,
+  PaymentFeeType,
+  ProjectFundingStrategy,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
-import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
+import {
+  generateAccountKeys,
+  generatePreImageHash,
+  isValidRskPrivateKey,
+} from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import { createCallDataForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
+import {
+  createCallDataForBoltzClaimCall,
+  createCallDataForBoltzClaimCallWithCallee,
+} from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
+import { createCallDataForPrismDepositFor } from '../../pages/projectFunding/utils/createCallDataForPrismDepositFor.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
   contributionCreatePreImagesAtom,
+  fiatOnlyPaymentsInputAtom,
   formattedFundingInputAtom,
+  formattedProjectSubscriptionStartInputAtom,
+  formattedRecurringContributionRenewalInputAtom,
+  formattedRecurringDonationInputAtom,
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
@@ -41,22 +73,130 @@ import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/hel
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
+import { useStripeEmbeddedTheme } from './useStripeEmbeddedTheme.ts'
 import { useWebLNFlow } from './useWebLNFlow'
 
 const hasBolt11 = true
 const hasWebLN = true
+const PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS = 3
+const PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS = 400
+
+const delay = async (ms: number) => {
+  await new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
+
+const isRetryableClaimTxSetError = (error: unknown) => {
+  if (!(error instanceof ApolloError)) return false
+
+  return error.graphQLErrors.some(
+    ({ message }) => message.includes('version conflict detected') || message.includes('OptimisticLockError'),
+  )
+}
+
+const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
+  Boolean(
+    payments.lightning ||
+      payments.onChainSwap ||
+      payments.fiat ||
+      payments.fiatToLightningSwap ||
+      payments.lightningToRskSwap ||
+      payments.onChainToRskSwap,
+  )
+
+const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): ContributionPaymentsInput => ({
+  ...(paymentsInput?.fiat && {
+    fiat: {
+      ...paymentsInput.fiat,
+      ...(paymentsInput.fiat.stripe && {
+        stripe: {
+          ...paymentsInput.fiat.stripe,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.fiatToLightningSwap && {
+    fiatToLightningSwap: {
+      ...paymentsInput.fiatToLightningSwap,
+      ...(paymentsInput.fiatToLightningSwap.banxa && {
+        banxa: {
+          ...paymentsInput.fiatToLightningSwap.banxa,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.lightning && {
+    lightning: {
+      ...paymentsInput.lightning,
+    },
+  }),
+  ...(paymentsInput?.onChainSwap && {
+    onChainSwap: {
+      ...paymentsInput.onChainSwap,
+      ...(paymentsInput.onChainSwap.boltz && {
+        boltz: {
+          ...paymentsInput.onChainSwap.boltz,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.lightningToRskSwap && {
+    lightningToRskSwap: {
+      ...paymentsInput.lightningToRskSwap,
+      ...(paymentsInput.lightningToRskSwap.boltz && {
+        boltz: {
+          ...paymentsInput.lightningToRskSwap.boltz,
+        },
+      }),
+    },
+  }),
+  ...(paymentsInput?.onChainToRskSwap && {
+    onChainToRskSwap: {
+      ...paymentsInput.onChainToRskSwap,
+      ...(paymentsInput.onChainToRskSwap.boltz && {
+        boltz: {
+          ...paymentsInput.onChainToRskSwap.boltz,
+        },
+      }),
+    },
+  }),
+})
+
+type UnifiedFundingResponse = {
+  contribution: FundingContributionFragment
+  payments: RecurringContributionCheckoutPayload['payments']
+}
+
+type ClaimPreImages = {
+  lightning: { preimageHex: string; preimageHash: string }
+  onChain: { preimageHex: string; preimageHash: string }
+}
+
+type FundingRequestContext = {
+  accountKeys: { publicKey: string; address: string; privateKey: string }
+  preImages: ClaimPreImages
+}
+
+const getInitialClaimPreImages = (): ClaimPreImages => ({
+  lightning: { preimageHex: '', preimageHash: '' },
+  onChain: { preimageHex: '', preimageHash: '' },
+})
 
 export const useFundingAPI = () => {
   const toast = useNotification()
 
-  const { project } = useFundingFormAtom()
-
-  const { isLoggedIn } = useAuthContext()
+  const { project, formState } = useFundingFormAtom()
+  const stripeEmbeddedTheme = useStripeEmbeddedTheme()
 
   const { generateTransactionForLightningToRskSwap, generateTransactionForOnChainToRskSwap } =
     useGenerateTransactionDataForClaimingRBTCToContract()
 
   const formattedFundingInput = useAtomValue(formattedFundingInputAtom)
+  const formattedRecurringDonationInput = useAtomValue(formattedRecurringDonationInputAtom)
+  const formattedProjectSubscriptionStartInput = useAtomValue(formattedProjectSubscriptionStartInputAtom)
+  const formattedRecurringContributionRenewalInput = useAtomValue(formattedRecurringContributionRenewalInputAtom)
+  const fiatOnlyPaymentsInput = useAtomValue(fiatOnlyPaymentsInputAtom)
 
   const setFundingInputAfterRequest = useSetAtom(setFundingInputAfterRequestAtom)
   const setContributionCreatePreImages = useSetAtom(contributionCreatePreImagesAtom)
@@ -77,100 +217,130 @@ export const useFundingAPI = () => {
 
   const setKeyPair = useSetAtom(keyPairAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
+  const userAccountKeys = useAtomValue(userAccountKeysAtom)
+  const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
+  const rskAccountKeys = useAtomValue(rskAccountKeysAtom)
 
-  const preImages = useMemo(
-    () => ({
-      lightning: { preimageHex: '', preimageHash: '' },
-      onChain: { preimageHex: '', preimageHash: '' },
-    }),
-    [],
+  const applyStripePaymentConfig = useCallback(
+    (input: ContributionCreateInput): ContributionCreateInput => {
+      if (!project?.name || !input.paymentsInput?.fiat?.stripe) {
+        return input
+      }
+
+      return {
+        ...input,
+        paymentsInput: {
+          ...input.paymentsInput,
+          fiat: {
+            ...input.paymentsInput.fiat,
+            stripe: {
+              ...input.paymentsInput.fiat.stripe,
+              returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', project.name)}`,
+              theme: stripeEmbeddedTheme,
+            },
+          },
+        },
+      }
+    },
+    [project?.name, stripeEmbeddedTheme],
   )
 
-  // Used when user is logged out and does not have account keys
-  const currentAccountKeys = useMemo(
+  const defaultAccountKeys = useMemo(
     () => ({
-      publicKey: '',
-      address: '',
-      privateKey: '',
+      publicKey:
+        userAccountKeys?.rskKeyPair?.publicKey || userAccountKeyPair?.publicKey || rskAccountKeys?.publicKey || '',
+      address: userAccountKeys?.rskKeyPair?.address || rskAccountKeys?.address || '',
+      privateKey: userAccountKeyPair?.privateKey || rskAccountKeys?.privateKey || '',
     }),
-    [],
+    [
+      rskAccountKeys?.address,
+      rskAccountKeys?.privateKey,
+      rskAccountKeys?.publicKey,
+      userAccountKeyPair?.privateKey,
+      userAccountKeyPair?.publicKey,
+      userAccountKeys?.rskKeyPair?.address,
+      userAccountKeys?.rskKeyPair?.publicKey,
+    ],
   )
 
-  const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
-    onCompleted(data) {
+  const handleFundingCompleted = useCallback(
+    (payload: UnifiedFundingResponse, requestContext: FundingRequestContext) => {
+      const { accountKeys, preImages } = requestContext
+
       try {
-        if (!data.contributionCreate || !data.contributionCreate.contribution) {
-          throw new Error('Undefined funding tx')
-        }
+        fundingContributionPartialUpdate(payload.contribution)
+        fundingPaymentDetailsPartialUpdate(payload.payments)
 
-        fundingContributionPartialUpdate(data.contributionCreate.contribution)
-        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatToLightningSwap: undefined })
-
-        if (data.contributionCreate.payments.onChainSwap?.swapJson) {
+        if (payload.payments.onChainSwap?.swapJson) {
           parseResponseToSwap(
-            data.contributionCreate.payments.onChainSwap,
+            payload.payments.onChainSwap,
             {
               projectTitle: project?.title,
               projectId: project?.id,
-              reference: data.contributionCreate.contribution.uuid,
-              contributionId: data.contributionCreate.contribution.id,
-              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-              datetime: data.contributionCreate.contribution.createdAt,
+              reference: payload.contribution.uuid,
+              contributionId: payload.contribution.id,
+              bitcoinQuote: payload.contribution.bitcoinQuote,
+              datetime: payload.contribution.createdAt,
             },
-            currentAccountKeys,
+            accountKeys,
           )
         }
 
-        if (data.contributionCreate.payments.onChainToRskSwap?.swapJson) {
+        if (payload.payments.onChainToRskSwap?.swapJson) {
           parseResponseToOnChainToRskSwap(
-            data.contributionCreate.payments.onChainToRskSwap,
+            payload.payments.onChainToRskSwap,
             {
               projectTitle: project?.title,
               projectId: project?.id,
-              reference: data.contributionCreate.contribution.uuid,
-              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-              contributionId: data.contributionCreate.contribution.id,
-              datetime: data.contributionCreate.contribution.createdAt,
+              reference: payload.contribution.uuid,
+              bitcoinQuote: payload.contribution.bitcoinQuote,
+              contributionId: payload.contribution.id,
+              datetime: payload.contribution.createdAt,
             },
-            currentAccountKeys,
+            accountKeys,
           )
           generateTransactionForOnChainToRskSwap({
-            payment: data.contributionCreate.payments.onChainToRskSwap,
+            payment: payload.payments.onChainToRskSwap,
             preImages: preImages.onChain,
-            accountKeys: currentAccountKeys,
+            accountKeys,
+          }).catch((error) => {
+            setFundingRequestErrored(true)
+            toast.error({
+              title: 'Unable to prepare on-chain-to-RSK claim transaction',
+              description: error instanceof Error ? error.message : 'Please refresh and try again',
+            })
           })
         }
 
-        if (data.contributionCreate.payments.lightningToRskSwap?.swapJson) {
+        if (payload.payments.lightningToRskSwap?.swapJson) {
           parseResponseToLightningToRskSwap(
-            data.contributionCreate.payments.lightningToRskSwap,
+            payload.payments.lightningToRskSwap,
             {
               projectTitle: project?.title,
               projectId: project?.id,
-              reference: data.contributionCreate.contribution.uuid,
-              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-              datetime: data.contributionCreate.contribution.createdAt,
-              contributionId: data.contributionCreate.contribution.id,
+              reference: payload.contribution.uuid,
+              bitcoinQuote: payload.contribution.bitcoinQuote,
+              datetime: payload.contribution.createdAt,
+              contributionId: payload.contribution.id,
             },
-            currentAccountKeys,
+            accountKeys,
           )
           generateTransactionForLightningToRskSwap({
-            contribution: data.contributionCreate.contribution,
-            payment: data.contributionCreate.payments.lightningToRskSwap,
+            contribution: payload.contribution,
+            payment: payload.payments.lightningToRskSwap,
             preImages: preImages.lightning,
-            accountKeys: currentAccountKeys,
+            accountKeys,
+          }).catch((error) => {
+            setFundingRequestErrored(true)
+            toast.error({
+              title: 'Unable to prepare Lightning-to-RSK claim transaction',
+              description: error instanceof Error ? error.message : 'Please refresh and try again',
+            })
           })
         }
 
-        if (
-          hasBolt11 &&
-          hasWebLN &&
-          webln &&
-          data.contributionCreate.payments.lightning &&
-          !data.contributionCreate.contribution.isSubscription &&
-          !__development__
-        ) {
-          startWebLNFlow(data.contributionCreate.payments.lightning).catch(() => {
+        if (hasBolt11 && hasWebLN && webln && payload.payments.lightning && !__development__) {
+          startWebLNFlow(payload.payments.lightning).catch(() => {
             toast.error({
               title: 'Something went wrong1',
               description: 'Please refresh the page and try again',
@@ -179,13 +349,29 @@ export const useFundingAPI = () => {
         }
       } catch (e) {
         setFundingRequestErrored(true)
-        console.log('e', e)
         toast.error({
           title: 'Something went wrong2',
           description: e instanceof Error ? e.message : JSON.stringify(e),
         })
       }
     },
+    [
+      fundingContributionPartialUpdate,
+      fundingPaymentDetailsPartialUpdate,
+      generateTransactionForLightningToRskSwap,
+      generateTransactionForOnChainToRskSwap,
+      parseResponseToLightningToRskSwap,
+      parseResponseToOnChainToRskSwap,
+      parseResponseToSwap,
+      project?.id,
+      project?.title,
+      setFundingRequestErrored,
+      startWebLNFlow,
+      toast,
+    ],
+  )
+
+  const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onError(error: ApolloError) {
       if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code) {
         setError(error?.graphQLErrors[0].extensions)
@@ -200,11 +386,91 @@ export const useFundingAPI = () => {
     },
   })
 
-  const requestFunding = useCallback(
-    async (input: ContributionCreateInput, onCompleted?: (data: ContributionCreateMutation) => void) => {
-      const { isValid, error } = validateFundingInput(input)
+  const buildFundingRequestContext = useCallback(
+    (): FundingRequestContext => ({
+      accountKeys: { ...defaultAccountKeys },
+      preImages: getInitialClaimPreImages(),
+    }),
+    [defaultAccountKeys],
+  )
 
-      if (!isValid) {
+  const handleRequestError = useCallback(
+    (error: unknown, fallbackTitle: string) => {
+      setFundingRequestErrored(true)
+      toast.error({
+        title: fallbackTitle,
+        description: error instanceof Error ? error.message : 'Please refresh the page and try again',
+      })
+    },
+    [setFundingRequestErrored, toast],
+  )
+
+  const [recurringDonationCreate, recurringDonationOptions] = useMutation<
+    RecurringDonationCreateMutation,
+    RecurringDonationCreateMutationVariables
+  >(MUTATION_RECURRING_DONATION_CREATE, {
+    onError(error: ApolloError) {
+      if (error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error.graphQLErrors[0].extensions)
+      }
+
+      setFundingRequestErrored(true)
+      toast.error({
+        title: 'Something went wrong3',
+        description: 'Please refresh the page and try again',
+      })
+    },
+  })
+
+  const [projectSubscriptionStart, projectSubscriptionStartOptions] = useMutation<
+    ProjectSubscriptionStartMutation,
+    ProjectSubscriptionStartMutationVariables
+  >(MUTATION_PROJECT_SUBSCRIPTION_START, {
+    onError(error: ApolloError) {
+      if (error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error.graphQLErrors[0].extensions)
+      }
+
+      setFundingRequestErrored(true)
+      toast.error({
+        title: 'Something went wrong3',
+        description: 'Please refresh the page and try again',
+      })
+    },
+  })
+
+  const [recurringContributionRenewalCreate, recurringContributionRenewalCreateOptions] = useMutation<
+    RecurringContributionRenewalCreateMutation,
+    RecurringContributionRenewalCreateMutationVariables
+  >(MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE, {
+    onError(error: ApolloError) {
+      if (error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error.graphQLErrors[0].extensions)
+      }
+
+      setFundingRequestErrored(true)
+      toast.error({
+        title: 'Something went wrong3',
+        description: 'Please refresh the page and try again',
+      })
+    },
+  })
+
+  const requestFunding = useCallback(
+    async (
+      input: ContributionCreateInput,
+      onCompleted?: (
+        data:
+          | ContributionCreateMutation
+          | RecurringDonationCreateMutation
+          | ProjectSubscriptionStartMutation
+          | RecurringContributionRenewalCreateMutation,
+      ) => void,
+    ) => {
+      const { isValid, error } = validateFundingInput(input)
+      const requestContext = buildFundingRequestContext()
+
+      if (formState.fundingMode === recurringFundingModes.oneTime && !isValid) {
         toast.error({
           title: 'failed to generate invoice',
           description: error,
@@ -212,91 +478,530 @@ export const useFundingAPI = () => {
         return
       }
 
+      if (
+        formState.fundingMode === recurringFundingModes.recurringDonation &&
+        (!formattedRecurringDonationInput.input.projectId ||
+          !formattedRecurringDonationInput.input.paymentMethod ||
+          formattedRecurringDonationInput.input.amount <= 0)
+      ) {
+        toast.error({
+          title: 'Unable to create recurring payment',
+          description: 'Please refresh the page and try again',
+        })
+        return
+      }
+
+      if (
+        formState.fundingMode === recurringFundingModes.membership &&
+        (!formattedProjectSubscriptionStartInput.input.projectSubscriptionPlanId ||
+          !formattedProjectSubscriptionStartInput.input.paymentMethod)
+      ) {
+        toast.error({
+          title: 'Unable to create recurring payment',
+          description: 'Please refresh the page and try again',
+        })
+        return
+      }
+
+      if (
+        formattedRecurringContributionRenewalInput &&
+        !formattedRecurringContributionRenewalInput.input.managementNonce &&
+        !formattedRecurringContributionRenewalInput.input.id
+      ) {
+        toast.error({
+          title: 'Unable to create recurring payment',
+          description: 'Please refresh the page and try again',
+        })
+        return
+      }
+
       resetContribution()
 
       const finalInput = { ...input }
+      const recurringDonationVariables: RecurringDonationCreateMutationVariables = {
+        input: {
+          ...formattedRecurringDonationInput.input,
+          paymentsInput: clonePaymentsInput(formattedRecurringDonationInput.input.paymentsInput),
+          ...(formattedRecurringDonationInput.input.metadataInput && {
+            metadataInput: {
+              ...formattedRecurringDonationInput.input.metadataInput,
+            },
+          }),
+        },
+      }
+      const projectSubscriptionStartVariables: ProjectSubscriptionStartMutationVariables = {
+        input: {
+          ...formattedProjectSubscriptionStartInput.input,
+          paymentsInput: clonePaymentsInput(formattedProjectSubscriptionStartInput.input.paymentsInput),
+          ...(formattedProjectSubscriptionStartInput.input.metadataInput && {
+            metadataInput: {
+              ...formattedProjectSubscriptionStartInput.input.metadataInput,
+            },
+          }),
+        },
+      }
+      const recurringContributionRenewalVariables: RecurringContributionRenewalCreateMutationVariables | null =
+        formattedRecurringContributionRenewalInput
+          ? {
+              input: {
+                ...formattedRecurringContributionRenewalInput.input,
+                paymentsInput: clonePaymentsInput(formattedRecurringContributionRenewalInput.input.paymentsInput),
+              },
+            }
+          : null
+
+      const paymentsInputToPrepare = recurringContributionRenewalVariables
+        ? recurringContributionRenewalVariables.input.paymentsInput
+        : formState.fundingMode === recurringFundingModes.recurringDonation
+        ? recurringDonationVariables.input.paymentsInput
+        : formState.fundingMode === recurringFundingModes.membership
+        ? projectSubscriptionStartVariables.input.paymentsInput
+        : finalInput.paymentsInput
 
       if (
-        finalInput?.paymentsInput?.onChainSwap?.boltz &&
-        !finalInput?.paymentsInput?.onChainSwap?.boltz.swapPublicKey
+        formState.fundingMode !== recurringFundingModes.oneTime &&
+        project?.name &&
+        paymentsInputToPrepare?.fiat?.stripe
       ) {
-        const keyPair = generatePrivatePublicKeyPair()
-        setKeyPair(keyPair)
-        currentAccountKeys.publicKey = keyPair.publicKey.toString('hex')
-        currentAccountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
-        finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+        paymentsInputToPrepare.fiat.stripe.returnUrl = `${ORIGIN}${getPath('fundingAwaitingSuccess', project.name)}`
+        paymentsInputToPrepare.fiat.stripe.theme = stripeEmbeddedTheme
       }
 
-      if (finalInput?.paymentsInput?.lightningToRskSwap?.boltz && finalInput.paymentsInput.onChainToRskSwap?.boltz) {
-        const lightningPreImage = generatePreImageHash()
-        const onChainPreImage = generatePreImageHash()
+      if (paymentsInputToPrepare?.onChainSwap?.boltz && !paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey) {
+        const keyPair = generatePrivatePublicKeyPair()
+        setKeyPair(keyPair)
+        requestContext.accountKeys.publicKey = keyPair.publicKey.toString('hex')
+        requestContext.accountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
+        paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+      }
 
-        setContributionCreatePreImages({
-          lightning: lightningPreImage,
-          onChain: onChainPreImage,
-        })
+      const lightningToRskSwapInput = paymentsInputToPrepare?.lightningToRskSwap?.boltz
+      const onChainToRskSwapInput = paymentsInputToPrepare?.onChainToRskSwap?.boltz
 
-        preImages.lightning = lightningPreImage
-        preImages.onChain = onChainPreImage
+      if (lightningToRskSwapInput || onChainToRskSwapInput) {
+        const ensureAccountKeys = () => {
+          if (
+            requestContext.accountKeys.publicKey &&
+            requestContext.accountKeys.address &&
+            isValidRskPrivateKey(requestContext.accountKeys.privateKey)
+          ) {
+            return requestContext.accountKeys
+          }
 
-        finalInput.paymentsInput.lightningToRskSwap.boltz.preimageHash = lightningPreImage.preimageHash
-        finalInput.paymentsInput.onChainToRskSwap.boltz.preimageHash = onChainPreImage.preimageHash
+          const generatedKeys = generateAccountKeys()
+          setRskAccountKeys(generatedKeys)
+          requestContext.accountKeys.publicKey = generatedKeys.publicKey
+          requestContext.accountKeys.address = generatedKeys.address
+          requestContext.accountKeys.privateKey = generatedKeys.privateKey
 
-        // If the claim public key is not set (i.e user is not logged in or doesnot have one), generate a new account keys
-        if (!isLoggedIn) {
-          const accountKeys = generateAccountKeys()
-          setRskAccountKeys(accountKeys)
+          return requestContext.accountKeys
+        }
 
-          finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
-          finalInput.paymentsInput.lightningToRskSwap.boltz.claimAddress = accountKeys.address
-          finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
-          finalInput.paymentsInput.onChainToRskSwap.boltz.claimAddress = accountKeys.address
+        const contributionPreImages: {
+          lightning?: { preimageHex: string; preimageHash: string }
+          onChain?: { preimageHex: string; preimageHash: string }
+        } = {}
 
-          currentAccountKeys.publicKey = accountKeys.publicKey
-          currentAccountKeys.address = accountKeys.address
-          currentAccountKeys.privateKey = accountKeys.privateKey
+        if (lightningToRskSwapInput && !lightningToRskSwapInput.preimageHash) {
+          const lightningPreImage = generatePreImageHash()
+          contributionPreImages.lightning = lightningPreImage
+          requestContext.preImages.lightning = lightningPreImage
+          lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
+        }
+
+        if (onChainToRskSwapInput && !onChainToRskSwapInput.preimageHash) {
+          const onChainPreImage = generatePreImageHash()
+          contributionPreImages.onChain = onChainPreImage
+          requestContext.preImages.onChain = onChainPreImage
+          onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
+        }
+
+        if (contributionPreImages.lightning || contributionPreImages.onChain) {
+          setContributionCreatePreImages(contributionPreImages)
+        }
+
+        if (lightningToRskSwapInput || onChainToRskSwapInput) {
+          const accountKeys = ensureAccountKeys()
+          if (lightningToRskSwapInput) {
+            lightningToRskSwapInput.claimPublicKey = accountKeys.publicKey
+            lightningToRskSwapInput.claimAddress = accountKeys.address
+          }
+
+          if (onChainToRskSwapInput) {
+            onChainToRskSwapInput.claimPublicKey = accountKeys.publicKey
+            onChainToRskSwapInput.claimAddress = accountKeys.address
+          }
         }
       }
 
-      setFundingInputAfterRequest(finalInput)
+      if (recurringContributionRenewalVariables) {
+        try {
+          setFundingInputAfterRequest({ ...finalInput, fundingMode: formState.fundingMode })
 
-      await contributionCreate({ variables: { input: finalInput }, onCompleted })
+          const result = await recurringContributionRenewalCreate({
+            variables: recurringContributionRenewalVariables,
+          })
+
+          if (result.data?.recurringContributionRenewalCreate?.contribution) {
+            const recurringCheckoutPayload = result.data.recurringContributionRenewalCreate
+            if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
+              throw new Error('Could not create a renewal payment for this recurring contribution')
+            }
+
+            handleFundingCompleted(recurringCheckoutPayload, requestContext)
+
+            if (onCompleted) {
+              onCompleted({ recurringContributionRenewalCreate: recurringCheckoutPayload })
+            }
+          }
+        } catch (error) {
+          handleRequestError(error, 'Unable to create recurring payment')
+        }
+
+        return
+      }
+
+      if (formState.fundingMode === recurringFundingModes.recurringDonation) {
+        try {
+          setFundingInputAfterRequest({ ...finalInput, fundingMode: formState.fundingMode })
+
+          const result = await recurringDonationCreate({
+            variables: recurringDonationVariables,
+          })
+
+          if (result.data?.recurringDonationCreate?.contribution) {
+            const recurringCheckoutPayload = result.data.recurringDonationCreate
+            if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
+              throw new Error('Could not create a recurring payment for this contribution')
+            }
+
+            handleFundingCompleted(recurringCheckoutPayload, requestContext)
+
+            if (onCompleted) {
+              onCompleted({ recurringDonationCreate: recurringCheckoutPayload })
+            }
+          }
+        } catch (error) {
+          handleRequestError(error, 'Unable to create recurring payment')
+        }
+
+        return
+      }
+
+      if (formState.fundingMode === recurringFundingModes.membership) {
+        try {
+          setFundingInputAfterRequest({ ...finalInput, fundingMode: formState.fundingMode })
+
+          const result = await projectSubscriptionStart({
+            variables: projectSubscriptionStartVariables,
+          })
+
+          if (result.data?.projectSubscriptionStart?.contribution) {
+            const recurringCheckoutPayload = result.data.projectSubscriptionStart
+            if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
+              throw new Error('Could not create a recurring payment for this membership')
+            }
+
+            handleFundingCompleted(recurringCheckoutPayload, requestContext)
+
+            if (onCompleted) {
+              onCompleted({ projectSubscriptionStart: recurringCheckoutPayload })
+            }
+          }
+        } catch (error) {
+          handleRequestError(error, 'Unable to create recurring payment')
+        }
+
+        return
+      }
+
+      const inputWithStripePaymentConfig = applyStripePaymentConfig(finalInput)
+      setFundingInputAfterRequest(inputWithStripePaymentConfig)
+
+      await contributionCreate({
+        variables: { input: inputWithStripePaymentConfig },
+        onCompleted(data) {
+          if (!data.contributionCreate || !data.contributionCreate.contribution) {
+            setFundingRequestErrored(true)
+            return
+          }
+
+          handleFundingCompleted(data.contributionCreate, requestContext)
+          onCompleted?.(data)
+        },
+      })
     },
     [
+      applyStripePaymentConfig,
+      buildFundingRequestContext,
       contributionCreate,
+      formState.fundingMode,
+      formattedProjectSubscriptionStartInput,
+      formattedRecurringContributionRenewalInput,
+      formattedRecurringDonationInput,
+      handleFundingCompleted,
+      handleRequestError,
+      projectSubscriptionStart,
+      recurringContributionRenewalCreate,
+      recurringDonationCreate,
       toast,
       setKeyPair,
       setFundingInputAfterRequest,
+      setFundingRequestErrored,
+      project?.name,
       resetContribution,
       setRskAccountKeys,
       setContributionCreatePreImages,
-      currentAccountKeys,
-      preImages,
-      isLoggedIn,
+      stripeEmbeddedTheme,
     ],
   )
 
   const requestFundingFromContext = useCallback(
-    (onCompleted?: (data: ContributionCreateMutation) => void) => requestFunding(formattedFundingInput, onCompleted),
+    (
+      onCompleted?: (
+        data:
+          | ContributionCreateMutation
+          | RecurringDonationCreateMutation
+          | ProjectSubscriptionStartMutation
+          | RecurringContributionRenewalCreateMutation,
+      ) => void,
+    ) => requestFunding(formattedFundingInput, onCompleted),
     [requestFunding, formattedFundingInput],
   )
 
+  const requestFiatOnlyFundingFromContext = useCallback(
+    (
+      onCompleted?: (
+        data:
+          | ContributionCreateMutation
+          | RecurringDonationCreateMutation
+          | ProjectSubscriptionStartMutation
+          | RecurringContributionRenewalCreateMutation,
+      ) => void,
+    ) =>
+      requestFunding(
+        formState.fundingMode === recurringFundingModes.oneTime
+          ? { ...formattedFundingInput, paymentsInput: fiatOnlyPaymentsInput }
+          : formattedFundingInput,
+        onCompleted,
+      ),
+    [requestFunding, formattedFundingInput, fiatOnlyPaymentsInput, formState.fundingMode],
+  )
+
   return {
-    requestFundingOptions,
+    requestFundingOptions: {
+      ...requestFundingOptions,
+      loading:
+        requestFundingOptions.loading ||
+        recurringDonationOptions.loading ||
+        projectSubscriptionStartOptions.loading ||
+        recurringContributionRenewalCreateOptions.loading,
+      error:
+        requestFundingOptions.error ||
+        recurringDonationOptions.error ||
+        projectSubscriptionStartOptions.error ||
+        recurringContributionRenewalCreateOptions.error,
+    },
     requestFunding,
     requestFundingFromContext,
+    requestFiatOnlyFundingFromContext,
   }
 }
 
-const useGenerateTransactionDataForClaimingRBTCToContract = () => {
-  const { project } = useProjectAtom()
+type ClaimTargetProject = {
+  fundingStrategy?: ProjectFundingStrategy | null
+  rskEoa?: string | null
+  aonGoal?: {
+    contractAddress?: string | null
+  } | null
+}
+
+export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverride?: ClaimTargetProject | null) => {
+  const { project: activeProject } = useProjectAtom()
+  const project = projectOverride ?? activeProject
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
 
   const [paymentSwapClaimTxSet] = usePaymentSwapClaimTxSetMutation()
 
-  const generateTransactionForLightningToRskSwap = ({
+  const geyserFeeTypes = new Set([
+    PaymentFeeType.Platform,
+    PaymentFeeType.Promotion,
+    PaymentFeeType.Ambassador,
+    PaymentFeeType.Tip,
+  ])
+
+  const getGeyserFeesAmount = (fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']) => {
+    return fees.reduce((acc, fee) => {
+      if (!fee.feeType) return acc
+      if (!geyserFeeTypes.has(fee.feeType)) return acc
+      return acc + fee.feeAmount
+    }, 0)
+  }
+
+  const getValidatedClaimTargetProject = () => {
+    if (!project?.fundingStrategy) {
+      throw new Error('Missing project funding strategy for claim generation')
+    }
+
+    if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+      const aonContractAddress = project.aonGoal?.contractAddress
+
+      if (!aonContractAddress) {
+        throw new Error('Missing AON contract address for claim generation')
+      }
+
+      return {
+        fundingStrategy: project.fundingStrategy,
+        aonContractAddress,
+        rskEoa: project.rskEoa ?? null,
+      }
+    }
+
+    if (!project.rskEoa) {
+      throw new Error('Missing project RSK EOA for claim generation')
+    }
+
+    return {
+      fundingStrategy: project.fundingStrategy,
+      aonContractAddress: null,
+      rskEoa: project.rskEoa,
+    }
+  }
+
+  const buildPrismClaimTxCallData = (params: {
+    claimAmountSats: number
+    geyserFeesAmount: number
+    contributorAddress: string
+    projectRskEoa: string
+    refundAddress: string
+    timelock: number
+    preimage: string
+    privateKey: string
+  }) => {
+    const {
+      claimAmountSats,
+      geyserFeesAmount,
+      contributorAddress,
+      projectRskEoa,
+      refundAddress,
+      timelock,
+      preimage,
+      privateKey,
+    } = params
+
+    console.log('VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS', VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS)
+    console.log('VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS', VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS)
+
+    if (!VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS || !VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
+      throw new Error('Missing Prism contract or Geyser operational address configuration')
+    }
+
+    const creatorAmountSats = claimAmountSats - geyserFeesAmount
+    if (creatorAmountSats < 0) {
+      throw new Error('Prism split amount is negative for creator')
+    }
+
+    if (creatorAmountSats + geyserFeesAmount !== claimAmountSats) {
+      throw new Error('Prism split amounts do not sum to claim amount')
+    }
+
+    const depositCallData = createCallDataForPrismDepositFor({
+      payer: contributorAddress as `0x${string}`,
+      receivers: [projectRskEoa as `0x${string}`, VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`],
+      amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
+    })
+
+    return createCallDataForBoltzClaimCallWithCallee({
+      preimage,
+      amount: satsToWei(claimAmountSats),
+      refundAddress,
+      timelock,
+      privateKey,
+      callee: VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS as string,
+      callData: depositCallData,
+    })
+  }
+
+  const buildAonClaimTxCallData = (params: {
+    claimAmountSats: number
+    fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']
+    contributorAddress: string
+    aonContractAddress: string
+    refundAddress: string
+    timelock: number
+    preimage: string
+    privateKey: string
+  }) => {
+    const { claimAmountSats, fees, contributorAddress, aonContractAddress, refundAddress, timelock, preimage, privateKey } =
+      params
+
+    const creatorFeesAmount = fees.reduce((acc, fee) => {
+      if (fee.feePayer === PaymentFeePayer.Creator) {
+        return acc + fee.feeAmount
+      }
+
+      return acc
+    }, 0)
+
+    const contributorFeesAmount = fees.reduce((acc, fee) => {
+      // Swap fees never make it to the contract, so should not be counted inside the contract
+      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
+        return acc + fee.feeAmount
+      }
+
+      return acc
+    }, 0)
+
+    return createCallDataForBoltzClaimCall({
+      contributorAddress,
+      creatorFees: satsToWei(creatorFeesAmount),
+      contributorFees: satsToWei(contributorFeesAmount),
+      preimage,
+      amount: satsToWei(claimAmountSats),
+      refundAddress,
+      timelock,
+      privateKey,
+      aonContractAddress,
+    })
+  }
+
+  const setPaymentSwapClaimTx = async (params: { paymentId: string; claimTxCallDataHex: string }) => {
+    const { paymentId, claimTxCallDataHex } = params
+
+    const attemptSet = async (attempt: number): Promise<void> => {
+      try {
+        const response = await paymentSwapClaimTxSet({
+          variables: {
+            input: {
+              paymentId,
+              claimTxCallDataHex,
+            },
+          },
+        })
+
+        if (!response.data?.paymentSwapClaimTxSet?.success) {
+          throw new Error(`Failed to set swap claim transaction for payment ${paymentId}`)
+        }
+      } catch (error) {
+        const canRetry = attempt < PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS && isRetryableClaimTxSetError(error)
+
+        if (!canRetry) {
+          throw error instanceof Error
+            ? error
+            : new Error(`Failed to set swap claim transaction for payment ${paymentId}`)
+        }
+
+        await delay(PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS * attempt)
+        await attemptSet(attempt + 1)
+      }
+    }
+
+    await attemptSet(1)
+  }
+
+  const generateTransactionForLightningToRskSwap = async ({
     payment,
     preImages,
     accountKeys,
@@ -308,47 +1013,51 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }) => {
     const { swapJson, fees } = payment
 
-    const creatorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Creator) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
-    const contributorFeesAmount = fees.reduce((acc, fee) => {
-      // Swap fees never make it to the contract, so should not be counted inside the contract
-      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
     const swap = JSON.parse(swapJson)
+    const claimAmountSats = payment.amountToClaim
 
-    const getTransactionForBoltzClaimCall = createCallDataForBoltzClaimCall({
-      contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
-      creatorFees: satsToWei(creatorFeesAmount),
-      contributorFees: satsToWei(contributorFeesAmount),
-      preimage: preImages.preimageHex,
-      amount: satsToWei(payment.amountToClaim),
-      refundAddress: swap.refundAddress,
-      timelock: swap.timeoutBlockHeight,
-      privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      aonContractAddress: project?.aonGoal?.contractAddress || '',
-    })
-    paymentSwapClaimTxSet({
-      variables: {
-        input: {
-          paymentId: payment.paymentId,
-          claimTxCallDataHex: getTransactionForBoltzClaimCall,
-        },
-      },
+    const contributorAddress = accountKeys?.address || userAccountKeys?.rskKeyPair?.address || ''
+    if (!contributorAddress) {
+      throw new Error('Missing contributor RSK address for swap claim')
+    }
+
+    const claimTargetProject = getValidatedClaimTargetProject()
+    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+    const projectRskEoa = claimTargetProject.rskEoa || ''
+    const geyserFeesAmount = getGeyserFeesAmount(fees)
+
+    let claimTxCallDataHex = ''
+    if (!isAonProject && projectRskEoa) {
+      claimTxCallDataHex = buildPrismClaimTxCallData({
+        claimAmountSats,
+        geyserFeesAmount,
+        contributorAddress,
+        projectRskEoa,
+        refundAddress: swap.refundAddress,
+        timelock: swap.timeoutBlockHeight,
+        preimage: preImages.preimageHex,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+      })
+    } else {
+      claimTxCallDataHex = buildAonClaimTxCallData({
+        claimAmountSats,
+        fees,
+        contributorAddress,
+        aonContractAddress: claimTargetProject.aonContractAddress || '',
+        refundAddress: swap.refundAddress,
+        timelock: swap.timeoutBlockHeight,
+        preimage: preImages.preimageHex,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+      })
+    }
+
+    await setPaymentSwapClaimTx({
+      paymentId: payment.paymentId,
+      claimTxCallDataHex,
     })
   }
 
-  const generateTransactionForOnChainToRskSwap = ({
+  const generateTransactionForOnChainToRskSwap = async ({
     payment,
     preImages,
     accountKeys,
@@ -359,43 +1068,46 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }) => {
     const { swapJson, fees } = payment
 
-    const creatorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Creator) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
-    const contributorFeesAmount = fees.reduce((acc, fee) => {
-      // Swap fees never make it to the contract, so should not be counted inside the contract
-      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
     const swap = JSON.parse(swapJson)
+    const claimAmountSats = swap.claimDetails.amount
+    const contributorAddress = accountKeys?.address || userAccountKeys?.rskKeyPair?.address || ''
+    if (!contributorAddress) {
+      throw new Error('Missing contributor RSK address for swap claim')
+    }
 
-    const getCallDataForBoltzClaimCall = createCallDataForBoltzClaimCall({
-      contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
-      creatorFees: satsToWei(creatorFeesAmount),
-      contributorFees: satsToWei(contributorFeesAmount),
-      preimage: preImages.preimageHex,
-      amount: satsToWei(swap.claimDetails.amount),
-      refundAddress: swap.claimDetails.refundAddress,
-      timelock: swap.claimDetails.timeoutBlockHeight,
-      privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      aonContractAddress: project?.aonGoal?.contractAddress || '',
-    })
-    paymentSwapClaimTxSet({
-      variables: {
-        input: {
-          paymentId: payment.paymentId,
-          claimTxCallDataHex: getCallDataForBoltzClaimCall,
-        },
-      },
+    const claimTargetProject = getValidatedClaimTargetProject()
+    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+    const projectRskEoa = claimTargetProject.rskEoa || ''
+    const geyserFeesAmount = getGeyserFeesAmount(fees)
+
+    let claimTxCallDataHex = ''
+    if (!isAonProject && projectRskEoa) {
+      claimTxCallDataHex = buildPrismClaimTxCallData({
+        claimAmountSats,
+        geyserFeesAmount,
+        contributorAddress,
+        projectRskEoa,
+        refundAddress: swap.claimDetails.refundAddress,
+        timelock: swap.claimDetails.timeoutBlockHeight,
+        preimage: preImages.preimageHex,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+      })
+    } else {
+      claimTxCallDataHex = buildAonClaimTxCallData({
+        claimAmountSats,
+        fees,
+        contributorAddress,
+        aonContractAddress: claimTargetProject.aonContractAddress || '',
+        refundAddress: swap.claimDetails.refundAddress,
+        timelock: swap.claimDetails.timeoutBlockHeight,
+        preimage: preImages.preimageHex,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+      })
+    }
+
+    await setPaymentSwapClaimTx({
+      paymentId: payment.paymentId,
+      claimTxCallDataHex,
     })
   }
 
@@ -406,5 +1118,13 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 }
 
 export const satsToWei = (sats: number) => {
-  return sats * 10000000000
+  if (!Number.isSafeInteger(sats)) {
+    throw new Error('Invalid sat amount for wei conversion')
+  }
+
+  return BigInt(sats) * 10000000000n
+}
+
+export const satsToWeiBigInt = (sats: number) => {
+  return satsToWei(sats)
 }

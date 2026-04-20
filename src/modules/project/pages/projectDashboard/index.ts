@@ -7,6 +7,8 @@ import { PostCreateEdit } from './views/posts/PostCreateEdit.tsx'
 import { ProjectDashboardDetails } from './views/ProjectDashboardDetails.tsx'
 import { ProjectDashboardGoals } from './views/ProjectDashboardGoals.tsx'
 import { ProjectDashboardInfo } from './views/ProjectDashboardInfo.tsx'
+import { ProjectDashboardMatching } from './views/matching/ProjectDashboardMatching.tsx'
+import { ProjectDashboardMemberships } from './views/ProjectDashboardMemberships.tsx'
 import { ProjectDashboardNotifications } from './views/ProjectDashboardNotifications.tsx'
 import { ProjectDashboardRewards } from './views/ProjectDashboardRewards.tsx'
 import { ProjectDashboardStory } from './views/ProjectDashboardStory.tsx'
@@ -15,6 +17,7 @@ import { RewardCreate } from './views/rewards/RewardCreate.tsx'
 import { RewardEdit } from './views/rewards/RewardEdit.tsx'
 import { ProjectDashboardSales } from './views/sales/ProjectDashboardSales.tsx'
 import { ProjectDashboardSettings } from './views/settings/ProjectDashboardSettings.tsx'
+import { ProjectDashboardLimitsVerification } from './views/wallet/ProjectDashboardLimitsVerification.tsx'
 import { ProjectDashboardWallet } from './views/wallet/ProjectDashboardWallet.tsx'
 
 export {
@@ -25,6 +28,9 @@ export {
   ProjectDashboardGoals,
   ProjectDashboardInfo,
   ProjectDashboardLayout,
+  ProjectDashboardLimitsVerification,
+  ProjectDashboardMatching,
+  ProjectDashboardMemberships,
   ProjectDashboardMobileLayout,
   ProjectDashboardNostr,
   ProjectDashboardNotifications,

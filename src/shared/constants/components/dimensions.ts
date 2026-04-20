@@ -1,10 +1,12 @@
 export const dimensions = {
   topNavBar: {
     desktop: {
-      height: 112, // 32 * 2 + 48,
+      height: 88, // 20 * 2 + 48
+      stickyOffset: 80, // 20 + 48 + 12
     },
     mobile: {
-      height: 80, // 20 * 2 + 40
+      height: 64, // 12 * 2 + 40
+      stickyOffset: 60, // 12 + 40 + 8
     },
   },
   topNavBarFilterOffset: {
@@ -47,7 +49,7 @@ export const dimensions = {
     },
     dashboard: {
       menu: {
-        width: 165,
+        width: 220,
       },
     },
     leftMainContainer: {

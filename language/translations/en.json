@@ -411,6 +411,9 @@
   "Zoom": "Zoom",
   "Warning! By changing this identifier your old project links will not send you to your project": "Warning! By changing this identifier your old project links will not send you to your project",
   "Private Key": "Private Key",
+  "Sort by": "Sort by",
+  "Most sold": "Most sold",
+  "Most recent": "Most recent",
   "sold": "sold",
   "Items": "Items",
   "Bitcoin Price": "Bitcoin Price",
@@ -447,6 +450,7 @@
   "Nostr settings": "Nostr settings",
   "USD ($)": "USD ($)",
   "Make a donation": "Make a donation",
+  "Make a pledge": "Make a pledge",
   "You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.": "You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.",
   "No items with this status.": "No items with this status.",
   "Category": "Category",
@@ -568,7 +572,11 @@
   "contributed towards goal": "contributed towards goal",
   "Location": "Location",
   "of": "of",
+  "Raised": "Raised",
+  "Backers": "Backers",
+  "Creator stats": "Creator stats",
   "Posts": "Posts",
+  "Joined": "Joined",
   "Delivery in": "Delivery in",
   "contributed in total": "contributed in total",
   "Title must match exactly": "Title must match exactly",
@@ -1504,7 +1512,7 @@
   "Without your account password you will not be able to refund your contribution. Store this password in a safe, permanent place like a password manager. Geyser cannot recover this password for you.": "Without your account password you will not be able to refund your contribution. Store this password in a safe, permanent place like a password manager. Geyser cannot recover this password for you.",
   "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds. ": "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds. ",
   "Configure your account password. Only you will know this password, and no one but you has access to the project funds.": "Configure your account password. Only you will know this password, and no one but you has access to the project funds.",
-  "Configure your account password. Only you will know this password, and it will be required to refund your contribution.": "Configure your account password. Only you will know this password, and it will be required to refund your contribution.",
+  "Configure your account password. Only you will know this password, and it will be required for refunds in case the contribution fails.": "Configure your account password. Only you will know this password, and it will be required for refunds in case the contribution fails.",
   "required": "required",
   "Discover and fund Bitcoin projects worldwide": "Discover and fund Bitcoin projects worldwide",
   "search projects": "search projects",
@@ -1962,5 +1970,79 @@
   "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates here": "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates here",
   "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates <1>here</1>": "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates <1>here</1>",
   "Affiliate Rate (%)": "Affiliate Rate (%)",
-  "Affiliate Rate": "Affiliate Rate"
+  "Affiliate Rate": "Affiliate Rate",
+  "shops": {
+    "limitedEdition": {
+      "alt": "Limited edition icon",
+      "title": "Limited Edition",
+      "description": "Get limited edition items"
+    },
+    "rareFinds": {
+      "alt": "Rare finds icon",
+      "title": "Rare finds",
+      "description": "Find creative indie products and rare finds"
+    },
+    "collectibles": {
+      "alt": "Collectibles icon",
+      "title": "Collectibles",
+      "description": "Buy unique Bitcoin collectibles"
+    }
+  },
+  "fundraisers": {
+    "cards": {
+      "receiveInstantly": {
+        "title": "Receive instantly",
+        "description": "Funds hit your wallet immediately"
+      },
+      "sellProducts": {
+        "title": "Sell products",
+        "description": "Easily launch your own storefront"
+      },
+      "goGlobal": {
+        "title": "Go Global",
+        "description": "Fund from anywhere."
+      }
+    }
+  },
+  "campaigns": {
+    "cards": {
+      "alignIncentives": {
+        "title": "Align the incentives",
+        "description": "Paid only if fully funded."
+      },
+      "failWithoutBurningTrust": {
+        "title": "Fail without burning trust",
+        "description": "Refunds if it fails."
+      },
+      "goGlobal": {
+        "title": "Go Global",
+        "description": "Fund from anywhere."
+      }
+    }
+  },
+  "social": {
+    "geyser_on_discord": "Geyser on Discord",
+    "geyser_on_github": "Geyser on GitHub",
+    "geyser_on_instagram": "Geyser on Instagram",
+    "geyser_on_telegram": "Geyser on Telegram",
+    "geyser_on_tiktok": "Geyser on TikTok",
+    "geyser_on_x": "Geyser on X",
+    "geyser_on_youtube": "Geyser on YouTube"
+  },
+  "impactFunds": {
+    "flow": {
+      "fundGrowth": {
+        "title": "Fund Growth",
+        "subtitle": "Growth from new sponsors and donations."
+      },
+      "continuousDistribution": {
+        "title": "Continuous Distribution",
+        "subtitle": "Funds are distributed on a regular basis."
+      },
+      "verifiedImpact": {
+        "title": "Verified Impact",
+        "subtitle": "Verified and proven track record of impact."
+      }
+    }
+  }
 }

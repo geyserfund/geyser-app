@@ -1,113 +1,429 @@
 /* eslint-disable complexity */
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { PiCheck, PiCopy, PiInfoBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
-import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
-import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import {
+  AccountKeys,
+  generatePreImageHash,
+  generateProjectKeysFromSeedHex,
+} from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentStatus,
   PaymentType,
+  PayoutActiveQuery,
+  PayoutContractType,
   PayoutStatus,
   ProjectForProfileContributionsFragment,
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
-  usePayoutInitiateMutation,
-  usePayoutPaymentCreateMutation,
-  usePayoutRequestMutation,
+  usePayoutActiveLazyQuery,
+  usePayoutLatestLazyQuery,
+  usePayoutPaymentInitiateMutation,
+  usePayoutPaymentPrepareMutation,
+  usePayoutPrepareMutation,
 } from '@/types/index.ts'
-import { commaFormatted, useNotification } from '@/utils/index.ts'
+import { useNotification } from '@/utils/index.ts'
 
 import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
+import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
+import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
+import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { createAndSignClaimMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
-import { PayoutMethod } from './types.ts'
+import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
 
 type PayoutRskProps = {
   isOpen: boolean
   onClose: () => void
   project: ProjectForProfileContributionsFragment
   rskAddress?: string
+  payoutAmountOverride?: number
   onCompleted?: () => void
 }
 
-export const MAX_SATS_FOR_LIGHTNING = 5000000 // 5,000,000 sats is the maximum amount for Lightning refunds
+type PayoutProgressStage = 'setup' | 'waiting_confirmation' | 'claim_ready' | 'completed'
 
-/** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress, onCompleted }) => {
+const getPayoutProgressSteps = (params: { method: PayoutMethod; stage: PayoutProgressStage }): PayoutProgressStep[] => {
+  const { method, stage } = params
+
+  if (method === PayoutMethod.Lightning) {
+    return [
+      {
+        title: t('Choose payout method'),
+        description: t('Choose your payout method and authorize the transfer.'),
+        status: stage === 'setup' ? 'current' : 'complete',
+      },
+      {
+        title: t('Process payout'),
+        description: t('We route the payout to your Lightning destination.'),
+        status: stage === 'completed' ? 'complete' : 'upcoming',
+      },
+      {
+        title: t('Payout sent'),
+        description: t('Your payout has been submitted successfully.'),
+        status: stage === 'completed' ? 'complete' : 'upcoming',
+      },
+    ]
+  }
+
+  if (stage === 'completed') {
+    return [
+      {
+        title: t('Choose payout method'),
+        description: t('Choose your payout method and authorize the transfer.'),
+        status: 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
+        status: 'complete',
+      },
+      {
+        title: t('Claim payout'),
+        description: t('Broadcast your claim transaction to claim the funds.'),
+        status: 'complete',
+      },
+      {
+        title: t('Payout sent'),
+        description: t('Your on-chain payout has been completed.'),
+        status: 'complete',
+      },
+    ]
+  }
+
+  if (stage === 'claim_ready') {
+    return [
+      {
+        title: t('Choose payout method'),
+        description: t('Choose your payout method and authorize the transfer.'),
+        status: 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
+        status: 'complete',
+      },
+      {
+        title: t('Claim payout'),
+        description: t('Broadcast your claim transaction to claim the funds.'),
+        status: 'current',
+      },
+      {
+        title: t('Payout sent'),
+        description: t('Your on-chain payout has been completed.'),
+        status: 'upcoming',
+      },
+    ]
+  }
+
+  if (stage === 'waiting_confirmation') {
+    return [
+      {
+        title: t('Choose payout method'),
+        description: t('Choose your payout method and authorize the transfer.'),
+        status: 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
+        status: 'current',
+      },
+      {
+        title: t('Claim payout'),
+        description: t('Broadcast your claim transaction to claim the funds.'),
+        status: 'upcoming',
+      },
+      {
+        title: t('Payout sent'),
+        description: t('Your on-chain payout has been completed.'),
+        status: 'upcoming',
+      },
+    ]
+  }
+
+  return [
+    {
+      title: t('Choose payout method'),
+      description: t('Choose your payout method and authorize the transfer.'),
+      status: 'current',
+    },
+    {
+      title: t('Wait for confirmations'),
+      description: t('Bitcoin network confirmations are required before claiming.'),
+      status: 'upcoming',
+    },
+    {
+      title: t('Claim payout'),
+      description: t('Broadcast your claim transaction to claim the funds.'),
+      status: 'upcoming',
+    },
+    {
+      title: t('Payout sent'),
+      description: t('Your on-chain payout has been completed.'),
+      status: 'upcoming',
+    },
+  ]
+}
+
+/** PayoutRsk: Component for handling payouts with Lightning or On-Chain Bitcoin */
+export const PayoutRsk: React.FC<PayoutRskProps> = ({
+  isOpen,
+  onClose,
+  project,
+  rskAddress,
+  payoutAmountOverride,
+  onCompleted,
+}) => {
   const toast = useNotification()
 
   useUserAccountKeys()
-
-  const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
+  const [isWaitingClaimReady, setIsWaitingClaimReady] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
 
   const [lockTxId, setLockTxId] = useState('')
   const [refundTxId, setRefundTxId] = useState('')
   const [payoutInvoiceId, setPayoutInvoiceId] = useState('')
 
-  const [payoutRequest, { data: payoutRequestData, loading: payoutRequestLoading }] = usePayoutRequestMutation()
+  const hasPreparedPayoutRef = useRef(false)
+  const hasDefaultedMethodRef = useRef(false)
 
-  const [payoutPaymentCreate, { loading: isPayoutPaymentCreateLoading }] = usePayoutPaymentCreateMutation()
-  const [payoutInitiate, { loading: isPayoutInitiateLoading }] = usePayoutInitiateMutation()
+  const [payoutPrepare, { data: payoutPrepareData, loading: payoutPrepareLoading }] = usePayoutPrepareMutation()
+  const [loadLatestPayout] = usePayoutLatestLazyQuery()
+  const [loadActivePayout] = usePayoutActiveLazyQuery()
 
-  const [swapData, setSwapData] = useState<any>(null)
+  const [payoutPaymentPrepare, { loading: isPayoutPaymentPrepareLoading }] = usePayoutPaymentPrepareMutation()
+  const [payoutPaymentInitiate, { loading: isPayoutPaymentInitiateLoading }] = usePayoutPaymentInitiateMutation()
+
+  const [swapData, setSwapData] = useState<PayoutFlowSwapData | null>(null)
+  const [payoutPrepareError, setPayoutPrepareError] = useState<string | null>(null)
+  const [isInternalRetryPayout, setIsInternalRetryPayout] = useState(false)
+  const [hasFailedPreviousPayout, setHasFailedPreviousPayout] = useState(false)
+  const [activePayoutResponse, setActivePayoutResponse] = useState<PayoutActiveQuery['payoutActive'] | null>(null)
 
   useEffect(() => {
-    if (isOpen) {
-      payoutRequest({
-        variables: {
-          input: {
-            projectId: project.id,
-            rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
-          },
-        },
-      })
+    if (!isOpen) {
+      hasPreparedPayoutRef.current = false
+      hasDefaultedMethodRef.current = false
+      setIsInternalRetryPayout(false)
+      setHasFailedPreviousPayout(false)
+      setActivePayoutResponse(null)
+      return
     }
-  }, [isOpen, payoutRequest, project.id, userAccountKeys?.rskKeyPair.address, rskAddress])
 
-  const isProcessing = payoutRequestData?.payoutRequest.payout.status === PayoutStatus.Processing
+    if (hasPreparedPayoutRef.current) {
+      return
+    }
+
+    hasPreparedPayoutRef.current = true
+    setPayoutPrepareError(null)
+    const preparePayout = async () => {
+      try {
+        const latestPayoutResult = await loadLatestPayout({
+          variables: { projectId: project.id },
+          fetchPolicy: 'network-only',
+        })
+
+        if (latestPayoutResult.error) {
+          throw latestPayoutResult.error
+        }
+
+        const latestPayout = latestPayoutResult.data?.payoutLatest?.payout
+        const latestPayoutPayment = [...(latestPayout?.payments ?? [])].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )[0]
+        const hasActivePayout = Boolean(
+          latestPayout?.status && [PayoutStatus.Pending, PayoutStatus.Processing].includes(latestPayout.status),
+        )
+
+        setHasFailedPreviousPayout(
+          Boolean(
+            latestPayout?.status === PayoutStatus.Failed && latestPayoutPayment?.status === PaymentStatus.Refunded,
+          ),
+        )
+        setIsInternalRetryPayout(Boolean(latestPayoutResult.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
+
+        if (hasActivePayout) {
+          const activePayoutResult = await loadActivePayout({
+            variables: { projectId: project.id },
+            fetchPolicy: 'network-only',
+          })
+
+          if (activePayoutResult.error) {
+            throw activePayoutResult.error
+          }
+
+          const payoutActive = activePayoutResult.data?.payoutActive
+
+          if (payoutActive) {
+            setActivePayoutResponse(payoutActive)
+            return
+          }
+        }
+
+        setActivePayoutResponse(null)
+        await payoutPrepare({
+          variables: {
+            input: {
+              projectId: project.id,
+            },
+          },
+        })
+      } catch (error: any) {
+        hasPreparedPayoutRef.current = false
+        const message = error?.graphQLErrors?.[0]?.message || error?.message || t('Please wait a moment and try again.')
+        setPayoutPrepareError(message)
+      }
+    }
+
+    preparePayout().catch(() => undefined)
+  }, [isOpen, loadActivePayout, loadLatestPayout, payoutPrepare, project.id])
+
+  const payoutResponse = activePayoutResponse
+    ? { payout: activePayoutResponse.payout, payoutMetadata: activePayoutResponse.payoutMetadata }
+    : payoutPrepareData?.payoutPrepare
+  const payout = payoutResponse?.payout
+  const isProcessing = payout?.status === PayoutStatus.Processing
+  const payoutMetadata = payoutResponse?.payoutMetadata
+  const contractType = payoutMetadata?.contractType
   const latestPayment = isProcessing
-    ? payoutRequestData?.payoutRequest.payout.payments.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )[0]
+    ? [...(payout?.payments ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]
     : null
-  const isClaimable =
+  const activeLightningPayment = latestPayment?.paymentType === PaymentType.RskToLightningSwap ? latestPayment : null
+  const activeOnChainPayment = latestPayment?.paymentType === PaymentType.RskToOnChainSwap ? latestPayment : null
+  const activeLightningInvoiceId = activeLightningPayment
+    ? (activeLightningPayment.paymentDetails as RskToLightningSwapPaymentDetailsFragment).lightningInvoiceId
+    : ''
+  const activeOnChainPaymentDetails = activeOnChainPayment?.paymentDetails as RskToOnChainSwapPaymentDetails | undefined
+  const persistedOnChainAddress = activeOnChainPaymentDetails?.onChainAddress || ''
+  const isClaimable = activeOnChainPayment?.status === PaymentStatus.Claimable
+  const isClaiming = activeOnChainPayment?.status === PaymentStatus.Claiming
+  const isRefundableRecovery =
     isProcessing &&
-    latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
-    latestPayment?.status === PaymentStatus.Claimable
+    (latestPayment?.status === PaymentStatus.Refundable || latestPayment?.status === PaymentStatus.Refunding)
+  const shouldResumeOnChainPayout = Boolean(
+    activeOnChainPayment && [PaymentStatus.Pending, PaymentStatus.Claimable].includes(activeOnChainPayment.status),
+  )
+  const shouldRequestBitcoinAddressOnResume = shouldResumeOnChainPayout && !persistedOnChainAddress
+  const shouldShowProcessedScreen = isProcessed || Boolean(activeLightningPayment) || isClaiming
+  const processedMethod = getProcessedMethod({
+    isProcessed,
+    selectedMethod,
+    activeLightningPayment,
+  })
+  const progressMethod = shouldShowProcessedScreen ? processedMethod : selectedMethod
+  const shouldShowFailedRetryState =
+    hasFailedPreviousPayout && !isRefundableRecovery && !shouldShowProcessedScreen && !isWaitingConfirmation
+  const progressStage = getProgressStage({
+    shouldShowProcessedScreen,
+    isWaitingConfirmation,
+    isWaitingClaimReady,
+    shouldResumeOnChainPayout,
+    isClaimable,
+    shouldShowFailedRetryState,
+  })
+  const progressSteps = getPayoutProgressSteps({
+    method: progressMethod,
+    stage: progressStage,
+  })
+  const totalAmount = payout?.amount ?? payoutAmountOverride ?? 0
+  const payoutUuid = payout?.uuid
+  const { hasCopied: hasCopiedPayoutId, onCopy: onCopyPayoutId } = useCopyToClipboard(payoutUuid || '')
+  const activeProgressStep =
+    progressSteps.find((step) => step.status === 'current') ??
+    [...progressSteps].reverse().find((step) => step.status === 'complete')
+  const activeProgressDescription = activeProgressStep?.description
+  const shouldShowMethodSelectionStep = !latestPayment && !shouldResumeOnChainPayout
+  const waitingNotice = isWaitingClaimReady ? (
+    t('Your funds are ready to be claimed')
+  ) : (
+    <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>mempool.space</1>.">
+      {
+        'We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on '
+      }
+      <ChakraLink href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
+        {'mempool.space'}
+      </ChakraLink>
+      {'.'}
+    </Trans>
+  )
+  const modalTitle = getPayoutModalTitle({
+    shouldResumeOnChainPayout,
+    shouldRequestBitcoinAddressOnResume,
+    shouldShowFailedRetryState,
+  })
+  const submitButtonLabel = getPayoutSubmitButtonLabel({
+    shouldResumeOnChainPayout,
+    shouldRequestBitcoinAddressOnResume,
+    shouldShowFailedRetryState,
+  })
+  const isPrismPayout = contractType === PayoutContractType.Prism
+  const requiresInternalLock = isPrismPayout || isInternalRetryPayout
+
+  useEffect(() => {
+    if (!isOpen || latestPayment || shouldResumeOnChainPayout || hasDefaultedMethodRef.current) {
+      return
+    }
+
+    if (!totalAmount) {
+      return
+    }
+
+    setSelectedMethod(totalAmount < DEFAULT_LIGHTNING_PAYOUT_MAX_SATS ? PayoutMethod.Lightning : PayoutMethod.OnChain)
+    hasDefaultedMethodRef.current = true
+  }, [isOpen, latestPayment, shouldResumeOnChainPayout, totalAmount])
+
+  const createPayoutSignature = (params: { lockCallData: Hex; accountKeys: AccountKeys; amount: number }) => {
+    const { lockCallData, accountKeys, amount } = params
+
+    return createAndSignClaimMessage({
+      aonContractAddress: payoutMetadata?.aonContractAddress || '',
+      swapContractAddress: payoutMetadata?.swapContractAddress || '',
+      creatorAddress: accountKeys.address,
+      amount: satsToWei(amount),
+      nonce: payoutMetadata?.nonce || 0,
+      deadline: payoutPrepareData?.payoutPrepare.payout.expiresAt || 0,
+      processingFee: 0n,
+      lockCallData,
+      rskPrivateKey: accountKeys.privateKey,
+    })
+  }
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const amount = payoutRequestData?.payoutRequest.payout.amount || 0
+      const amount = payoutPrepareData?.payoutPrepare.payout.amount || 0
 
-      const { data: payoutPaymentCreateResponse } = await payoutPaymentCreate({
+      const { data: payoutPaymentPrepareResponse } = await payoutPaymentPrepare({
         variables: {
           input: {
-            payoutId: payoutRequestData?.payoutRequest.payout.id,
+            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
             payoutPaymentInput: {
               rskToLightningSwap: {
                 lightningAddress: data.lightningAddress,
@@ -121,14 +437,14 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
       })
 
       if (
-        !payoutPaymentCreateResponse?.payoutPaymentCreate ||
-        !payoutPaymentCreateResponse.payoutPaymentCreate.payment ||
-        !payoutPaymentCreateResponse.payoutPaymentCreate.swap
+        !payoutPaymentPrepareResponse?.payoutPaymentPrepare ||
+        !payoutPaymentPrepareResponse.payoutPaymentPrepare.payment ||
+        !payoutPaymentPrepareResponse.payoutPaymentPrepare.swap
       ) {
         throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = payoutPaymentCreateResponse.payoutPaymentCreate
+      const { swap, payment } = payoutPaymentPrepareResponse.payoutPaymentPrepare
 
       const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
 
@@ -147,41 +463,50 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         timelock: swapObj?.timeoutBlockHeight || 0n,
       })
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        lockCallData: callDataHex,
-        rskPrivateKey: accountKeys.privateKey,
-      })
+      const lockAmountSats = Number(swapObj?.expectedAmount ?? amount)
+      const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
+      const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
+      const signature = requiresInternalLock
+        ? '0x'
+        : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
+      const userLockTxHex = requiresInternalLock
+        ? await createAndSignLockTransaction({
+            preimageHash: `0x${paymentDetails.swapPreimageHash}`,
+            claimAddress: swapObj?.claimAddress as Address,
+            refundAddress: accountKeys.address as Address,
+            timelock: swapObj?.timeoutBlockHeight || 0n,
+            amount: satsToWei(lockAmountSats),
+            privateKey: `0x${accountKeys.privateKey}`,
+            gasPrice: gasPriceWei,
+            gasLimit,
+          })
+        : ''
 
-      await payoutInitiate({
+      await payoutPaymentInitiate({
         variables: {
           input: {
-            payoutId: payoutRequestData?.payoutRequest.payout.id,
+            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
+            paymentId: payment.id,
             signature,
             callDataHex,
+            userLockTxHex: userLockTxHex || undefined,
+            rskAddress: requiresInternalLock ? rskAddress || accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
-          if (data.payoutInitiate.txHash) {
-            setLockTxId(data.payoutInitiate.txHash)
+          if (data.payoutPaymentInitiate.txHash) {
+            setLockTxId(data.payoutPaymentInitiate.txHash)
           }
         },
       })
 
       setIsProcessed(true)
-      onCompleted?.()
       toast.success({
-        title: t('Refund initiated successfully'),
-        description: t('Your Lightning refund will be processed shortly'),
+        title: t('Payout initiated successfully'),
+        description: t('Your Lightning payout will be processed shortly'),
       })
     } catch (error) {
-      console.error('Lightning refund error:', error)
+      console.error('Lightning payout error:', error)
       toast.error({
         title: t('Something went wrong'),
         description: t('Please try again'),
@@ -192,25 +517,30 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   }
 
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
-    if (isProcessing && isClaimable) {
-      const paymentDetails = latestPayment?.paymentDetails as RskToOnChainSwapPaymentDetails
-
+    if (activeOnChainPayment && activeOnChainPaymentDetails) {
+      const paymentDetails = activeOnChainPaymentDetails
       const swapObj = JSON.parse(paymentDetails.swapMetadata)
 
+      swapObj.id = swapObj.id || paymentDetails.swapId
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = paymentDetails.swapPreimageHash
-      swapObj.preimageHex = await decryptString({
-        encryptedString: swapObj.preimageHexEncrypted || '',
-        password: data.accountPassword || '',
-      })
-      swapObj.paymentId = latestPayment.id
+      if (isClaimable) {
+        swapObj.preimageHex = await decryptString({
+          encryptedString: swapObj.preimageHexEncrypted || '',
+          password: data.accountPassword || '',
+        })
+      }
+
+      swapObj.paymentId = activeOnChainPayment.id
       setSwapData(swapObj)
 
+      setLockTxId(paymentDetails.onChainTxId || '')
+      setIsWaitingClaimReady(isClaimable)
       setIsWaitingConfirmation(true)
-      setRefundAddress(data.bitcoinAddress)
+      setRefundAddress(paymentDetails.onChainAddress || data.bitcoinAddress || null)
       toast.info({
-        title: t('Refund initiated'),
-        description: t('Your Bitcoin on-chain refund will be processed shortly'),
+        title: t('Payout initiated'),
+        description: t('Your Bitcoin on-chain payout will be processed shortly'),
       })
 
       return
@@ -227,14 +557,15 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         password: data.accountPassword || '',
       })
 
-      const amount = payoutRequestData?.payoutRequest.payout.amount || 0
+      const amount = payoutPrepareData?.payoutPrepare.payout.amount || 0
 
-      const { data: payoutPaymentCreateResponse } = await payoutPaymentCreate({
+      const { data: payoutPaymentPrepareResponse } = await payoutPaymentPrepare({
         variables: {
           input: {
-            payoutId: payoutRequestData?.payoutRequest.payout.id,
+            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
             payoutPaymentInput: {
               rskToOnChainSwap: {
+                onChainAddress: data.bitcoinAddress || undefined,
                 boltz: {
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
@@ -247,16 +578,18 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
       })
 
       if (
-        !payoutPaymentCreateResponse?.payoutPaymentCreate ||
-        !payoutPaymentCreateResponse.payoutPaymentCreate.payment ||
-        !payoutPaymentCreateResponse.payoutPaymentCreate.swap
+        !payoutPaymentPrepareResponse?.payoutPaymentPrepare ||
+        !payoutPaymentPrepareResponse.payoutPaymentPrepare.payment ||
+        !payoutPaymentPrepareResponse.payoutPaymentPrepare.swap
       ) {
         throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = payoutPaymentCreateResponse.payoutPaymentCreate
+      const { swap, payment } = payoutPaymentPrepareResponse.payoutPaymentPrepare
+      const paymentDetails = payment?.paymentDetails as RskToOnChainSwapPaymentDetails
 
       const swapObj = JSON.parse(swap)
+      swapObj.id = swapObj.id || paymentDetails.swapId
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = preimageHash
       swapObj.preimageHex = preimageHex
@@ -270,41 +603,52 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
       })
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        lockCallData: callDataHex,
-        rskPrivateKey: accountKeys.privateKey,
-      })
+      const lockAmountSats = Number(swapObj?.lockupDetails?.amount ?? amount)
+      const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
+      const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
+      const signature = requiresInternalLock
+        ? '0x'
+        : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
+      const userLockTxHex = requiresInternalLock
+        ? await createAndSignLockTransaction({
+            preimageHash: `0x${preimageHash}` as Hex,
+            claimAddress: swapObj?.lockupDetails?.claimAddress as Address,
+            refundAddress: accountKeys.address as Address,
+            timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
+            amount: satsToWei(lockAmountSats),
+            privateKey: `0x${accountKeys.privateKey}`,
+            gasPrice: gasPriceWei,
+            gasLimit,
+          })
+        : ''
 
       // Simulate processing delay
-      await payoutInitiate({
+      await payoutPaymentInitiate({
         variables: {
           input: {
-            payoutId: payoutRequestData?.payoutRequest.payout.id,
+            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
+            paymentId: payment.id,
             signature,
             callDataHex,
+            userLockTxHex: userLockTxHex || undefined,
+            rskAddress: requiresInternalLock ? rskAddress || accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
-          if (data.payoutInitiate.txHash) {
-            setLockTxId(data.payoutInitiate.txHash)
+          if (data.payoutPaymentInitiate.txHash) {
+            setLockTxId(data.payoutPaymentInitiate.txHash)
           }
         },
       })
       setIsWaitingConfirmation(true)
-      setRefundAddress(data.bitcoinAddress)
+      setIsWaitingClaimReady(false)
+      setRefundAddress(data.bitcoinAddress || null)
       toast.info({
-        title: t('Refund initiated'),
-        description: t('Your Bitcoin on-chain refund will be processed shortly'),
+        title: t('Payout initiated'),
+        description: t('Your Bitcoin on-chain payout will be processed shortly'),
       })
     } catch (error) {
-      console.error('Bitcoin refund error:', error)
+      console.error('Bitcoin payout error:', error)
       toast.error({
         title: t('Something went wrong'),
         description: t('Please try again'),
@@ -315,12 +659,60 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   }
 
   // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit)
-  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit)
+  const keyDerivationOptions = isPrismPayout
+    ? {
+        deriveKeysFromSeed: (seedHex: string) => generateProjectKeysFromSeedHex(seedHex, project.id),
+        storeKeyPair: false,
+        requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
+      }
+    : {
+        requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
+      }
+
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions, totalAmount)
+  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, undefined, keyDerivationOptions)
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    if (activeLightningPayment) {
+      setSelectedMethod(PayoutMethod.Lightning)
+      setPayoutInvoiceId(activeLightningInvoiceId)
+      return
+    }
+
+    if (activeOnChainPaymentDetails) {
+      setSelectedMethod(PayoutMethod.OnChain)
+      bitcoinForm.form.reset({
+        bitcoinAddress: persistedOnChainAddress,
+        accountPassword: '',
+      })
+    }
+  }, [
+    isOpen,
+    activeLightningPayment,
+    activeLightningPayment?.id,
+    activeLightningInvoiceId,
+    activeOnChainPaymentDetails,
+    activeOnChainPayment?.id,
+    persistedOnChainAddress,
+    bitcoinForm.form,
+  ])
 
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
+    setIsWaitingConfirmation(false)
+    setIsWaitingClaimReady(false)
+    setSwapData(null)
+    setLockTxId('')
+    setRefundTxId('')
+    setPayoutInvoiceId('')
+    setRefundAddress(null)
+    setIsInternalRetryPayout(false)
+    setHasFailedPreviousPayout(false)
     onClose()
   }
 
@@ -330,8 +722,25 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   }
 
   const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
+  const hasPayout = Boolean(payout?.id)
 
   const handleSubmit = () => {
+    if (payoutPrepareError) {
+      toast.error({
+        title: t('Unable to load payout details'),
+        description: payoutPrepareError,
+      })
+      return
+    }
+
+    if (!hasPayout) {
+      toast.error({
+        title: t('Unable to load payout details'),
+        description: t('Please wait a moment and try again.'),
+      })
+      return
+    }
+
     if (selectedMethod === PayoutMethod.Lightning) {
       lightningForm.handleSubmit()
     } else {
@@ -339,98 +748,333 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
     }
   }
 
-  // Show processed screen after successful submission
-  if (isProcessed) {
+  function renderModalContent(params: {
+    notice?: ReactNode
+    title?: ReactNode
+    subtitle?: ReactNode
+    description?: ReactNode
+    content: ReactNode
+    footer?: ReactNode
+  }) {
+    const { notice, title, subtitle, description, content, footer } = params
+
     return (
-      <Modal
-        isOpen={isOpen}
-        onClose={handleClose}
-        size="lg"
-        title={
-          selectedMethod === PayoutMethod.Lightning
-            ? t('Payout Processed (Off-Chain)')
-            : t('Payout Processed (On-Chain)')
-        }
-      >
-        {selectedMethod === PayoutMethod.Lightning ? (
-          <LightningPayoutProcessed isRefund={true} invoiceId={payoutInvoiceId} onClose={handleCompleted} />
-        ) : (
-          <BitcoinPayoutProcessed isRefund={true} onClose={handleCompleted} refundTxId={refundTxId} />
-        )}
+      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
+        <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} />
+        <VStack flex={1} spacing={4} align="stretch" minH="100%">
+          {(title || subtitle || description) && (
+            <VStack spacing={2} align="stretch">
+              {title && (
+                <Body as="h2" size="2xl" bold color="neutral1.12">
+                  {title}
+                </Body>
+              )}
+              {subtitle && (
+                <Body size="md" bold color="neutral1.12">
+                  {subtitle}
+                </Body>
+              )}
+              {description && (
+                <Body size="md" color="neutral1.10">
+                  {description}
+                </Body>
+              )}
+            </VStack>
+          )}
+          {notice}
+          <VStack flex={1} spacing={4} align="stretch">
+            {content}
+          </VStack>
+          {footer}
+        </VStack>
+      </Stack>
+    )
+  }
+
+  if (isRefundableRecovery) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Funds are being recovered')} onClose={handleClose}>
+        <VStack spacing={4} w="full" alignItems="center">
+          <PiInfoBold fontSize="120px" color="var(--chakra-colors-info-9)" />
+          <Body size="md" textAlign="center">
+            {t(
+              'Your previous payout claim expired. The swap is being recovered in the background and the funds are on their way back to your Rootstock wallet.',
+            )}
+          </Body>
+          <Body size="md" textAlign="center">
+            {t('Once that refund completes, this payout will reset and you can start again.')}
+          </Body>
+          <Body size="sm" textAlign="center" color="neutral1.11">
+            {t('If this has not cleared within 24 hours, please contact us at')}{' '}
+            <Body as="span" size="sm" bold color="primary1.11">
+              support@geyser.fund
+            </Body>
+          </Body>
+        </VStack>
+      </Modal>
+    )
+  }
+
+  // Show processed screen after successful submission
+  if (shouldShowProcessedScreen) {
+    return (
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
+        {renderModalContent({
+          title:
+            processedMethod === PayoutMethod.Lightning
+              ? t('Payout Processed (Off-Chain)')
+              : t('Payout Processed (On-Chain)'),
+          description: processedMethod === PayoutMethod.OnChain ? undefined : activeProgressDescription,
+          content:
+            processedMethod === PayoutMethod.Lightning ? (
+              <LightningPayoutProcessed
+                invoiceId={isProcessed ? payoutInvoiceId : activeLightningInvoiceId}
+                onClose={handleCompleted}
+              />
+            ) : (
+              <BitcoinPayoutProcessed onClose={handleCompleted} refundTxId={isProcessed ? refundTxId : undefined} />
+            ),
+        })}
       </Modal>
     )
   }
 
   if (isWaitingConfirmation) {
     return (
-      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}} noClose={true}>
-        <BitcoinPayoutWaitingConfirmation
-          swapData={swapData}
-          lockTxId={lockTxId}
-          refundAddress={refundAddress || ''}
-          setIsProcessed={setIsProcessed}
-          setRefundTxId={setRefundTxId}
-        />
+      <Modal isOpen={isOpen} size="4xl" onClose={() => {}} noClose={true} contentProps={{ maxW: '980px' }}>
+        {renderModalContent({
+          notice: (
+            <Feedback variant={isWaitingClaimReady ? FeedBackVariant.SUCCESS : FeedBackVariant.INFO} w="full">
+              <Body>{waitingNotice}</Body>
+            </Feedback>
+          ),
+          title: isWaitingClaimReady ? t('Claim payout') : t('Please wait for swap confirmation'),
+          description: activeProgressDescription,
+          content: (
+            <BitcoinPayoutWaitingConfirmation
+              swapData={swapData}
+              refundAddress={refundAddress || ''}
+              setLockTxId={setLockTxId}
+              initialReadyToBeClaimed={isWaitingClaimReady}
+              onReadyToBeClaimed={() => setIsWaitingClaimReady(true)}
+              setIsProcessed={setIsProcessed}
+              setRefundTxId={setRefundTxId}
+            />
+          ),
+        })}
       </Modal>
     )
   }
 
-  const totalAmount = payoutRequestData?.payoutRequest.payout.amount || 0
+  const modalDescription = shouldResumeOnChainPayout ? undefined : activeProgressDescription
+  const failedRetryNotice = shouldShowFailedRetryState ? (
+    <Feedback variant={FeedBackVariant.ERROR} w="full">
+      <Body>
+        {t(
+          'Your previous payout attempt failed after the claim window expired. The funds have been returned to your Rootstock wallet, and you can try again now.',
+        )}
+      </Body>
+    </Feedback>
+  ) : undefined
+  const resolvedModalDescription = shouldShowFailedRetryState
+    ? t('Choose a payout method below to start a new payout.')
+    : modalDescription
+  const modalSubtitle = payoutUuid ? (
+    <HStack spacing={6} align="center" justify="space-between" w="full">
+      <HStack spacing={6} align="center" flexWrap="wrap">
+        {payoutUuid && (
+          <HStack spacing={2} align="center">
+            <Body size="md" color="neutral1.12">
+              <Body as="span" bold color="neutral1.12">
+                {t('Payout ID')}:
+              </Body>{' '}
+              {payoutUuid}
+            </Body>
+
+            <IconButton
+              aria-label={hasCopiedPayoutId ? t('Payout ID copied') : t('Copy payout ID')}
+              size="xs"
+              variant="ghost"
+              colorScheme={hasCopiedPayoutId ? 'primary1' : 'neutral1'}
+              icon={hasCopiedPayoutId ? <PiCheck /> : <PiCopy />}
+              onClick={onCopyPayoutId}
+            />
+          </HStack>
+        )}
+      </HStack>
+    </HStack>
+  ) : undefined
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      size="lg"
-      title={t('Claim Payout')}
-      subtitle={`${t('Total payout amount')}: ${commaFormatted(totalAmount)} sats`}
-      subtitleProps={{ bold: true }}
-      bodyProps={{ gap: 4 }}
-    >
-      {payoutRequestLoading ? (
-        <RefundRskSkeleton />
-      ) : (
-        <>
-          {/* Payout Method Selection */}
-          <PayoutMethodSelection
-            selectedMethod={selectedMethod}
-            setSelectedMethod={setSelectedMethod}
-            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
-          />
+    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+      {payoutPrepareLoading
+        ? renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: resolvedModalDescription,
+            content: <PayoutRskSkeleton />,
+          })
+        : payoutPrepareError
+        ? renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: resolvedModalDescription,
+            content: <Feedback variant={FeedBackVariant.ERROR} text={payoutPrepareError} />,
+          })
+        : renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: resolvedModalDescription,
+            notice: failedRetryNotice,
+            content: (
+              <>
+                {shouldShowMethodSelectionStep && (
+                  <PayoutMethodSelection
+                    selectedMethod={selectedMethod}
+                    setSelectedMethod={setSelectedMethod}
+                    disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
+                  />
+                )}
 
-          {/* Form Section */}
-          <CardLayout w="full" p={6}>
-            {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm form={lightningForm.form} satsAmount={totalAmount} />
-            ) : (
-              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={totalAmount} />
-            )}
-          </CardLayout>
-
-          <Button
-            w="full"
-            size="lg"
-            colorScheme="primary1"
-            variant="solid"
-            isLoading={isSubmitting || isPayoutInitiateLoading || isPayoutPaymentCreateLoading}
-            isDisabled={!enableSubmit}
-            onClick={handleSubmit}
-          >
-            {t('Claim Payout')}
-          </Button>
-        </>
-      )}
+                {shouldResumeOnChainPayout ? (
+                  <BitcoinPayoutForm
+                    form={bitcoinForm.form}
+                    satsAmount={totalAmount}
+                    disableBitcoinAddress={!shouldRequestBitcoinAddressOnResume}
+                    showBitcoinAddress={shouldRequestBitcoinAddressOnResume}
+                  />
+                ) : selectedMethod === PayoutMethod.Lightning ? (
+                  <LightningPayoutForm form={lightningForm.form} lightningAddress={lightningForm.lightningAddress} />
+                ) : (
+                  <BitcoinPayoutForm
+                    form={bitcoinForm.form}
+                    satsAmount={totalAmount}
+                    disableBitcoinAddress={false}
+                    showBitcoinAddress={true}
+                  />
+                )}
+              </>
+            ),
+            footer: (
+              <Button
+                w="full"
+                size="lg"
+                colorScheme="primary1"
+                variant="solid"
+                isLoading={isSubmitting || isPayoutPaymentInitiateLoading || isPayoutPaymentPrepareLoading}
+                isDisabled={!enableSubmit || payoutPrepareLoading || !hasPayout || Boolean(payoutPrepareError)}
+                onClick={handleSubmit}
+              >
+                {submitButtonLabel}
+              </Button>
+            ),
+          })}
     </Modal>
   )
 }
 
-/** RefundRskSkeleton: Loading skeleton for the refund modal with payout method selection */
-export const RefundRskSkeleton = () => {
+function getProcessedMethod(params: {
+  isProcessed: boolean
+  selectedMethod: PayoutMethod
+  activeLightningPayment: unknown
+}): PayoutMethod {
+  const { isProcessed, selectedMethod, activeLightningPayment } = params
+
+  if (isProcessed) {
+    return selectedMethod
+  }
+
+  if (activeLightningPayment) {
+    return PayoutMethod.Lightning
+  }
+
+  return PayoutMethod.OnChain
+}
+
+function getProgressStage(params: {
+  shouldShowProcessedScreen: boolean
+  isWaitingConfirmation: boolean
+  isWaitingClaimReady: boolean
+  shouldResumeOnChainPayout: boolean
+  isClaimable: boolean
+  shouldShowFailedRetryState: boolean
+}): PayoutProgressStage {
+  const {
+    shouldShowProcessedScreen,
+    isWaitingConfirmation,
+    isWaitingClaimReady,
+    shouldResumeOnChainPayout,
+    isClaimable,
+    shouldShowFailedRetryState,
+  } = params
+
+  if (shouldShowProcessedScreen) {
+    return 'completed'
+  }
+
+  if (shouldShowFailedRetryState) {
+    return 'setup'
+  }
+
+  if (isWaitingConfirmation) {
+    return isWaitingClaimReady ? 'claim_ready' : 'waiting_confirmation'
+  }
+
+  if (shouldResumeOnChainPayout) {
+    return isClaimable ? 'claim_ready' : 'waiting_confirmation'
+  }
+
+  return 'setup'
+}
+
+function getPayoutModalTitle(params: {
+  shouldResumeOnChainPayout: boolean
+  shouldRequestBitcoinAddressOnResume: boolean
+  shouldShowFailedRetryState: boolean
+}): string {
+  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume, shouldShowFailedRetryState } = params
+
+  if (shouldShowFailedRetryState) {
+    return t('Previous payout attempt failed')
+  }
+
+  if (!shouldResumeOnChainPayout) {
+    return t('Choose a payout method')
+  }
+
+  if (shouldRequestBitcoinAddressOnResume) {
+    return t('Resume your payout')
+  }
+
+  return t('Confirm your password to resume the payout')
+}
+
+function getPayoutSubmitButtonLabel(params: {
+  shouldResumeOnChainPayout: boolean
+  shouldRequestBitcoinAddressOnResume: boolean
+  shouldShowFailedRetryState: boolean
+}): string {
+  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume, shouldShowFailedRetryState } = params
+
+  if (shouldShowFailedRetryState) {
+    return t('Try again')
+  }
+
+  if (!shouldResumeOnChainPayout) {
+    return t('Confirm payout method')
+  }
+
+  if (shouldRequestBitcoinAddressOnResume) {
+    return t('Resume my payout')
+  }
+
+  return t('Confirm my password')
+}
+
+/** PayoutRskSkeleton: Loading skeleton for the payout modal with payout method selection */
+export const PayoutRskSkeleton = () => {
   return (
     <VStack w="full" spacing={4} alignItems="start">
-      {/* Payout Method Selection Label Skeleton */}
-      <SkeletonLayout height="24px" width="160px" />
-
       {/* Payout Method Buttons Skeleton */}
       <HStack w="full" spacing={4}>
         <VStack
@@ -460,14 +1104,12 @@ export const RefundRskSkeleton = () => {
       </HStack>
 
       {/* Form Section Skeleton */}
-      <CardLayout w="full" p={6}>
-        <VStack w="full" spacing={4} alignItems="start">
-          <SkeletonLayout height="20px" width="100px" />
-          <SkeletonLayout height="40px" width="100%" />
-          <SkeletonLayout height="20px" width="80px" />
-          <SkeletonLayout height="40px" width="100%" />
-        </VStack>
-      </CardLayout>
+      <VStack w="full" spacing={4} alignItems="start" pt={2}>
+        <SkeletonLayout height="20px" width="100px" />
+        <SkeletonLayout height="40px" width="100%" />
+        <SkeletonLayout height="20px" width="160px" />
+        <SkeletonLayout height="40px" width="100%" />
+      </VStack>
 
       {/* Submit Button Skeleton */}
       <SkeletonLayout height="48px" width="100%" />

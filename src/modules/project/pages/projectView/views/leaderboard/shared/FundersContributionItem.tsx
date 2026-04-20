@@ -1,4 +1,4 @@
-import { Box, HStack, Image, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Image, SkeletonText, VStack } from '@chakra-ui/react'
 
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -11,16 +11,33 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
     <HStack w="full" alignItems={'start'} spacing={1} key={contribution.id} paddingX={6} paddingY={2}>
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
-          <Body size="sm">
-            {commaFormatted(contribution.amount)}{' '}
-            <Body as="span" size="sm" muted>
-              sats{' '}
-              {`(${convertSatsToUsdFormatted({
-                sats: contribution.amount,
-                bitcoinQuote: contribution.bitcoinQuote,
-              })})`}
+          <HStack spacing={2}>
+            <Body size="sm">
+              {commaFormatted(contribution.amount)}{' '}
+              <Body as="span" size="sm" muted>
+                sats{' '}
+                {`(${convertSatsToUsdFormatted({
+                  sats: contribution.amount,
+                  bitcoinQuote: contribution.bitcoinQuote,
+                })})`}
+              </Body>
             </Body>
-          </Body>
+            {contribution.matchedAmountSats > 0 && (
+              <Badge
+                colorScheme="primary1"
+                variant="soft"
+                borderRadius="full"
+                px={2}
+                py={0.5}
+                fontSize="11px"
+                fontWeight="semibold"
+                textTransform="none"
+                lineHeight="1"
+              >
+                2x match
+              </Badge>
+            )}
+          </HStack>
           <TimeAgo date={contribution.confirmedAt} />
         </HStack>
 

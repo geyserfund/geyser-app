@@ -31,3 +31,8 @@ export const fiatSwapCurrencies = [
   { label: 'Vietnamese Dong', value: 'VND' },
   { label: 'South African Rand', value: 'ZAR' },
 ]
+
+export const banxaPaymentMethodIds = {
+  creditCard: 'credit-card',
+  applePay: 'apple-pay',
+} as const

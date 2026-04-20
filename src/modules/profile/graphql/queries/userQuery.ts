@@ -18,6 +18,7 @@ export const QUERY_USER_PROFILE_PROJECTS = gql`
   ${FRAGMENT_PROJECT_FOR_PROFILE_PAGE}
   query UserProfileProjects($where: UserGetInput!) {
     user(where: $where) {
+      id
       ownerOf {
         project {
           ...ProjectForProfilePage
@@ -52,6 +53,7 @@ export const QUERY_USER_CONTRIBUTIONS = gql`
 export const QUERY_USER_HERO_STATS = gql`
   query UserHeroStats($where: UserGetInput!) {
     user(where: $where) {
+      id
       heroStats {
         ambassadorStats {
           contributionsCount

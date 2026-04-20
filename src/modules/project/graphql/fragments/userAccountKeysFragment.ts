@@ -8,6 +8,7 @@ export const FRAGMENT_USER_ACCOUNT_KEYS = gql`
       derivationPath
       publicKey
     }
+    encryptedMnemonic
     encryptedSeed
     createdAt
     userId

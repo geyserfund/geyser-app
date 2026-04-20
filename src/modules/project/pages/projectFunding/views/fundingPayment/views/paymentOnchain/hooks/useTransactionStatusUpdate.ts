@@ -71,18 +71,19 @@ export const useTransactionStatusUpdate = ({
         }),
       )
     }
-  }, [readyState, swapId])
+  }, [readyState, sendMessage, swapId])
 
   const handleSwapStatusUpdate = useCallback(
     async (swapStatusUpdate: SwapStatusUpdate) => {
       try {
         switch (swapStatusUpdate.status) {
+          case 'invoice.paid':
           case 'transaction.mempool':
             handleProcessing(swapStatusUpdate)
             break
           case 'transaction.confirmed':
             if (handleConfirmed) {
-              handleConfirmed()
+              handleConfirmed(swapStatusUpdate)
             }
 
             break
@@ -104,7 +105,7 @@ export const useTransactionStatusUpdate = ({
         captureException(error)
       }
     },
-    [handleConfirmed, handleFailed, handleProcessing, handleClaimCoins],
+    [handleClaimCoins, handleClaimed, handleConfirmed, handleFailed, handleProcessing],
   )
 
   useEffect(() => {

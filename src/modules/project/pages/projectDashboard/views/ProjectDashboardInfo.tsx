@@ -11,7 +11,7 @@ import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useProjectForm } from '../../projectCreation/hooks/useProjectForm'
-import { ProjectCreationVariables } from '../../projectCreation/hooks/useProjectForm.tsx'
+import type { ProjectCreationVariables } from '../../projectCreation/hooks/useProjectForm.tsx'
 import { DashboardLayout } from '../common'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
 import { ProjectNameChangeConfirmModal } from '../components/ProjectNameChangeConfirmModal'
@@ -33,7 +33,14 @@ export const ProjectDashboardInfo = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
-  const handleUpdateProject = ({ category, subCategory, location, tags, ...values }: ProjectCreationVariables) => {
+  const handleUpdateProject = ({
+    category,
+    subCategory,
+    location,
+    tags,
+    referrerHeroId: _referrerHeroId,
+    ...values
+  }: ProjectCreationVariables) => {
     updateProject.execute({
       variables: {
         input: {
@@ -83,6 +90,12 @@ export const ProjectDashboardInfo = () => {
     handleUpdateProject(values)
   }
 
+  const onInvalidSubmit = () => {
+    toast.error({
+      title: t('One or more fields are missing') + '.',
+    })
+  }
+
   const SaveButton = (props: ButtonProps) => {
     return (
       <Button
@@ -101,7 +114,7 @@ export const ProjectDashboardInfo = () => {
   return (
     <DashboardLayout
       as={'form'}
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit, onInvalidSubmit)}
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
       desktopTitle={t('Project info')}

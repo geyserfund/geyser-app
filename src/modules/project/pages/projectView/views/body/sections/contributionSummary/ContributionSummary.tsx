@@ -1,18 +1,14 @@
-import { HStack, Icon, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import { PiLockSimpleFill } from 'react-icons/pi'
+import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   BitcoinLightingPaymentImageUrl,
   MasterCardPaymentImageUrl,
   VisaPaymentImageUrl,
 } from '@/shared/constants/platform/url.ts'
+import { ProjectPaymentMethodsHint } from '@/shared/molecules/project/ProjectPaymentMethodsHint.tsx'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 
 import { ContributeButton } from '../../components'
@@ -23,13 +19,11 @@ type ContributionSummaryProps = StackProps & {
 }
 
 export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
-  const projectOwner = useAtomValue(projectOwnerAtom)
   const { isAon, project } = useProjectAtom()
 
-  const isVerified = Boolean(projectOwner?.user?.complianceDetails?.verifiedDetails?.identity?.verified)
   const paymentMethods = [BitcoinLightingPaymentImageUrl]
 
-  if (isVerified) {
+  if (!isAon) {
     paymentMethods.push(VisaPaymentImageUrl)
     paymentMethods.push(MasterCardPaymentImageUrl)
   }
@@ -37,23 +31,33 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
   const { isFundingDisabled } = useProjectToolkit(project)
 
   return (
-    <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
-      <ProjectBalanceDisplay />
-
-      {!isFundingDisabled() && (
-        <VStack w="full">
-          <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
-          <HStack spacing={1} alignItems="center">
-            <Icon as={PiLockSimpleFill} fontSize="16px" color="primary1.9" />
-            <Body size="sm" light textAlign="center">
-              {paymentMethods.length > 1 && !isAon
-                ? t('Secure Bitcoin & Credit Card payments')
-                : t('Secure Bitcoin payments')}
-            </Body>
-          </HStack>
-        </VStack>
+    <VStack
+      w="100%"
+      spacing={0}
+      minHeight="fit-content"
+      flexShrink={0}
+      backgroundColor="utils.pbg"
+      border="1px solid"
+      borderColor="neutral1.6"
+      borderRadius="8px"
+      overflow="hidden"
+      {...props}
+    >
+      {project.activeMatching && (
+        <ProjectMatchingPublicBadge matching={project.activeMatching} showTooltip variant="summaryBanner" />
       )}
-    </CardLayout>
+
+      <VStack w="full" spacing={5} px={6} pt={5} pb={5}>
+        <ProjectBalanceDisplay />
+
+        {!isFundingDisabled() && (
+          <VStack w="full" spacing={4}>
+            <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
+            <ProjectPaymentMethodsHint justifyContent="center" />
+          </VStack>
+        )}
+      </VStack>
+    </VStack>
   )
 }
 

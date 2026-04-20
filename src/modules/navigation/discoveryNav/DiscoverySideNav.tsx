@@ -16,6 +16,7 @@ import { Link } from 'react-router'
 
 import { LogoDark, LogoLight } from '@/assets'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, LogoNameDark, LogoNameLight } from '@/shared/constants/index.ts'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
@@ -25,6 +26,10 @@ import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
 const InsertDividerAfterIndex = [2, 4, 6]
+const marketplaceIconHeight = '26.62px'
+const defaultNavIconHeight = '19.8px'
+const defaultNavIconFontSize = '19.8px'
+const campaignNavIconFontSize = '16px'
 
 const glowAnimation = keyframes`
   0% { filter: drop-shadow(0 0 0px #3182ce); }
@@ -102,6 +107,7 @@ type DiscoverySideNavButtonProps = {
 const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
+  const navIconFontSize = item.key === DiscoveryNavItemKey.Campaigns ? campaignNavIconFontSize : defaultNavIconFontSize
 
   if (isTabletSize) {
     return (
@@ -126,7 +132,15 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         {...rest}
       >
         <>
-          {item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+          {item.image ? (
+            <Image
+              height={item.key === DiscoveryNavItemKey.Merch ? marketplaceIconHeight : defaultNavIconHeight}
+              src={item.image}
+              alt={item.label}
+            />
+          ) : (
+            <item.icon fontSize={navIconFontSize} />
+          )}
           {activityDot ? (
             <Box
               position="absolute"
@@ -138,6 +152,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
               width="6px"
             />
           ) : null}
+          {item.new && <NavigationNewBadge position="absolute" top={-2} right={-2} />}
         </>
       </Button>
     )
@@ -150,7 +165,17 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
       size="lg"
       width={'full'}
       key={item.label}
-      leftIcon={item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+      leftIcon={
+        item.image ? (
+          <Image
+            height={item.key === DiscoveryNavItemKey.Merch ? marketplaceIconHeight : defaultNavIconHeight}
+            src={item.image}
+            alt={item.label}
+          />
+        ) : (
+          <item.icon fontSize={navIconFontSize} />
+        )
+      }
       rightIcon={
         activityDot ? (
           <Box
@@ -176,7 +201,10 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
       }}
       {...rest}
     >
-      {t(item.label)}
+      <Box position="relative" display="inline-flex" alignItems="center">
+        {t(item.label)}
+        {item.new && <NavigationNewBadge position="absolute" top={-2} right={-8} />}
+      </Box>
     </Button>
   )
 }

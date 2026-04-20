@@ -7,58 +7,84 @@ import { useAuthContext } from '../../../context'
 import { useUserEmailUpdateMutation } from '../../../types'
 import { dontAskAgainAtom, shouldPromptAtom } from '../state/emailPromptAtom'
 
-type FormValues = Record<string, any>
+type UseEmailPromptProps = {
+  afterEmailUpdate?: () => void
+  emailRequired?: boolean
+}
 
-const emailSchema = yup.object().shape({
-  dontAskAgain: yup.boolean(),
-  email: yup
-    .string()
-    .email('Invalid email')
-    .when('dontAskAgain', {
-      is: false,
-      then: (schema) => schema.required('Email is required'),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-})
+export type EmailPromptFormValues = {
+  dontAskAgain?: boolean
+  email?: string
+  receiveGeyserUpdates?: boolean
+}
 
-export const useEmailPrompt = ({ afterEmailUpdate }: { afterEmailUpdate?: () => void } = {}) => {
+const getEmailSchema = (emailRequired: boolean) =>
+  yup.object().shape({
+    dontAskAgain: yup.boolean(),
+    email: emailRequired
+      ? yup.string().email('Invalid email').required('Email is required')
+      : yup
+          .string()
+          .email('Invalid email')
+          .when('dontAskAgain', {
+            is: false,
+            then: (schema) => schema.required('Email is required'),
+            otherwise: (schema) => schema.notRequired(),
+          }),
+  })
+
+export const useEmailPrompt = ({ afterEmailUpdate, emailRequired = false }: UseEmailPromptProps = {}) => {
   const { user, setUser } = useAuthContext()
   const setDontAskAgain = useSetAtom(dontAskAgainAtom)
   const shouldPrompt = useAtomValue(shouldPromptAtom)
-  const [updateUserEmail] = useUserEmailUpdateMutation({
-    onCompleted(data) {
-      if (data?.userEmailUpdate) {
-        setUser({ ...user, email: data.userEmailUpdate.email })
-        setDontAskAgain(true)
-        afterEmailUpdate?.()
-      }
-    },
-  })
+  const [updateUserEmail] = useUserEmailUpdateMutation()
 
   const {
     handleSubmit,
     control,
     formState: { errors, isValid, isDirty },
     reset,
-  } = useForm<FormValues>({
-    resolver: yupResolver(emailSchema),
+  } = useForm<EmailPromptFormValues>({
+    resolver: yupResolver(getEmailSchema(emailRequired)),
     defaultValues: {
-      email: user.email,
+      email: user.email || '',
       dontAskAgain: false,
+      receiveGeyserUpdates: true,
     },
   })
 
   const enableSave = isValid && isDirty
 
-  const onSubmit = (data: FormValues) => {
-    if (data.email) {
-      updateUserEmail({ variables: { input: { email: data.email } } })
-      return
+  const onSubmit = async (data: EmailPromptFormValues): Promise<boolean> => {
+    const email = data.email?.trim()
+
+    if (email) {
+      try {
+        const result = await updateUserEmail({
+          variables: { input: { email } },
+        })
+        const updatedEmail = result.data?.userEmailUpdate.email
+
+        if (!updatedEmail) {
+          return false
+        }
+
+        setUser((previousUser) => ({ ...previousUser, email: updatedEmail }))
+        setDontAskAgain(true)
+        afterEmailUpdate?.()
+
+        return true
+      } catch {
+        return false
+      }
     }
 
-    if (data.dontAskAgain) {
+    if (!emailRequired && data.dontAskAgain) {
       setDontAskAgain(true)
+      return true
     }
+
+    return false
   }
 
   return { shouldPrompt, handleSubmit, control, errors, onSubmit, enableSave, reset }

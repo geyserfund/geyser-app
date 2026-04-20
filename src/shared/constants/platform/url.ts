@@ -1,15 +1,20 @@
 export const GuideUrl = 'https://guide.geyser.fund/'
-export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials'
+export const GuideFundraisingURL =
+  'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/step-by-step-how-to-create-a-project#choose-your-funding-method'
+export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/resources/project-checklist'
 export const FeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pagtedCU3NPqEjBjR/form'
+export const ImpactFundsFieldPartnerApplicationUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pag7Rcn0UeGQWAnR8/form'
 export const FAQUrl = 'https://guide.geyser.fund/geyser-docs/resources/faq'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
+export const GeyserHackathonsUrl = 'https://loot.fund'
 export const GeyserPrivacyUrl = 'https://about.geyser.fund/Privacy'
 export const GeyserTermsUrl = 'https://about.geyser.fund/T&C'
 // Geyser footer Links
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
+export const GeyserWhatsappUrl = 'https://chat.whatsapp.com/DqJHJztihTq8a0RKVbyjxp'
 export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserMetamickTelegramUrl = 'https://t.me/Metamick14'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
@@ -129,6 +134,9 @@ export const GeyserOnChainGuideUrl =
 export const GeyserOnChainFeesGuideUrl =
   'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work#fees-for-onchain-donations'
 
+export const GeyserConfigureWalletGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/configure-your-wallet-and-withdraw-funds'
+
 // UTILS
 
 export const CannotConnectAccountUrl =
@@ -202,10 +210,9 @@ export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-proje
 
 // ICONS
 
-export const CampaignIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/campaign_icon1.webp'
-export const FundraiserIconUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/navigation/fundraiser_icon1.webp'
-export const ProductsIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/products_icon1.webp'
+export const CampaignIconUrl = '/icons/campaign-icon.png'
+export const FundraiserIconUrl = '/icons/fundraiser-icon.png'
+export const ImpactFundsIconUrl = '/icons/impact-funds-icon.webp'
 export const ContributionSuccessIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
 export const ContributionSuccessIllustrationPendingUrl =
@@ -522,3 +529,7 @@ export const LaunchpadSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-launchpad-seo.png'
 export const GrantsSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-grants-seo-image.jpg'
+export const GeyserMainSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/Geyser_main.png'
+export const FundraisersSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/fundraisers.png'
+export const CampaignsSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/campaigns.png'
+export const ShopsSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/shops.png'

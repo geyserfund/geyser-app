@@ -7,14 +7,19 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+import { useModal } from '@/shared/hooks/useModal.tsx'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 import { ProjectReviewStatus, useProjectReviewRequestMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
-import { addProjectReviewAtom, latestProjectReviewAtom } from '../../../states/projectReviewAtom.ts'
-
-// Review status types including the not-submitted state
-type ReviewStatusType = ProjectReviewStatus | 'NOT_SUBMITTED'
+import {
+  addProjectReviewAtom,
+  latestProjectReviewAtom,
+  latestProjectReviewStatusAtom,
+  NOT_SUBMITTED_REVIEW_STATUS,
+  ProjectReviewStatusWithFallback,
+} from '../../../states/projectReviewAtom.ts'
 
 interface ReviewStatusInfo {
   label: string
@@ -27,8 +32,10 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
   const toast = useNotification()
+  const submitReviewConfirmModal = useModal()
 
   const latestProjectReview = useAtomValue(latestProjectReviewAtom)
+  const latestProjectReviewStatus = useAtomValue(latestProjectReviewStatusAtom)
   const addProjectReview = useSetAtom(addProjectReviewAtom)
 
   const [projectReviewRequest, { loading: submittingReview }] = useProjectReviewRequestMutation({
@@ -49,12 +56,10 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
     },
   })
 
-  // Determine actual review status from data or default to NOT_SUBMITTED
-  // If there is no latestReview or if latest review is undefined, then it is not submitted yet
-  const currentStatus: ReviewStatusType = latestProjectReview?.status || 'NOT_SUBMITTED'
+  const currentStatus: ProjectReviewStatusWithFallback = latestProjectReviewStatus
 
   /** Review status configurations */
-  const reviewStatusConfig: Record<ReviewStatusType, ReviewStatusInfo> = {
+  const reviewStatusConfig: Record<ProjectReviewStatusWithFallback, ReviewStatusInfo> = {
     [ProjectReviewStatus.Pending]: {
       label: t('Pending review'),
       colorScheme: 'info',
@@ -83,7 +88,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
       imageUrl:
         'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/rejected_illustration.png',
     },
-    NOT_SUBMITTED: {
+    [NOT_SUBMITTED_REVIEW_STATUS]: {
       label: t('Not submitted yet'),
       colorScheme: 'warning',
       variant: 'soft',
@@ -103,6 +108,11 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
     })
   }
 
+  const handleSubmitForReviewWithConfirmation = async () => {
+    submitReviewConfirmModal.onClose()
+    await handleSubmitForReview()
+  }
+
   /** Handle continue to next step after approval */
   const handleContinue = () => {
     handleNext()
@@ -111,11 +121,11 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   /** Determine button configuration based on review status */
   const getButtonConfig = () => {
     switch (currentStatus) {
-      case 'NOT_SUBMITTED':
+      case NOT_SUBMITTED_REVIEW_STATUS:
       case ProjectReviewStatus.RevisionsRequested:
         return {
           label: t('Submit for review'),
-          onClick: handleSubmitForReview,
+          onClick: submitReviewConfirmModal.onOpen,
           isDisabled: submittingReview,
           isLoading: submittingReview,
           colorScheme: 'primary1',
@@ -146,7 +156,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
       default:
         return {
           label: t('Submit for review'),
-          onClick: handleSubmitForReview,
+          onClick: submitReviewConfirmModal.onOpen,
           isDisabled: true,
           colorScheme: 'neutral1',
         }
@@ -158,7 +168,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
     const rejectionReasons = latestProjectReview?.rejectionReasons || []
 
     switch (currentStatus) {
-      case 'NOT_SUBMITTED':
+      case NOT_SUBMITTED_REVIEW_STATUS:
         return (
           <VStack spacing={4} alignItems="start" w="full">
             <Body>
@@ -283,6 +293,19 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           {renderReviewStatusContent()}
         </VStack>
       </VStack>
+      <AlertDialogue
+        title={t('Submit for review')}
+        description={t(
+          'You cannot update your project details before the project is reviewed, so make sure all of the project details are accurate before submitting.',
+        )}
+        hasCancel
+        positiveButtonProps={{
+          children: t('Submit for review'),
+          isLoading: submittingReview,
+          onClick: handleSubmitForReviewWithConfirmation,
+        }}
+        {...submitReviewConfirmModal}
+      />
     </ProjectCreationPageWrapper>
   )
 }

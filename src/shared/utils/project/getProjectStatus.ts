@@ -6,6 +6,8 @@ import { lightModeColors } from '@/shared/styles'
 import { ProjectWalletFragment, WalletStatus } from '@/types'
 import { isActive, isClosed, isDraft, isInactive, isInReview } from '@/utils'
 
+import { isPrismEnabled } from './isPrismEnabled'
+
 export enum ProjectStatusLabels {
   UNSTABLE_WALLET = 'Unstable Wallet',
   INACTIVE_WALLET = 'Inactive Wallet',
@@ -84,11 +86,13 @@ export const ProjectStatusTooltip = {
 }
 
 export type GetProjectStatusProps = {
-  project: Pick<ProjectState, 'status' | 'id' | 'name' | 'rejectionReason'>
+  project: Pick<ProjectState, 'status' | 'id' | 'name' | 'rejectionReason' | 'fundingStrategy' | 'rskEoa'>
   wallet: Pick<ProjectWalletFragment, 'state'>
 }
 
 export const getProjectStatus = ({ project, wallet }: GetProjectStatusProps) => {
+  const prismEnabled = isPrismEnabled(project)
+
   const getStatus = () => {
     if (isDraft(project.status)) {
       return ProjectStatusLabels.DRAFT
@@ -110,11 +114,11 @@ export const getProjectStatus = ({ project, wallet }: GetProjectStatusProps) => 
       return ProjectStatusLabels.PRE_LAUNCH_CLOSED
     }
 
-    if (wallet?.state.status === WalletStatus.Inactive) {
+    if (!prismEnabled && wallet?.state.status === WalletStatus.Inactive) {
       return ProjectStatusLabels.INACTIVE_WALLET
     }
 
-    if (wallet?.state.status === WalletStatus.Unstable) {
+    if (!prismEnabled && wallet?.state.status === WalletStatus.Unstable) {
       return ProjectStatusLabels.UNSTABLE_WALLET
     }
 

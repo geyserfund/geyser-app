@@ -4,6 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
   AccountKeys,
@@ -17,35 +18,45 @@ import { validateBitcoinAddress } from '../../fundingPayment/views/paymentOnchai
 
 /** Form data interface for Bitcoin On-Chain payout */
 export type BitcoinPayoutFormData = {
-  bitcoinAddress: string
+  bitcoinAddress?: string
   accountPassword?: string
+}
+
+type PayoutKeyDerivationOptions = {
+  deriveKeysFromSeed?: (seedHex: string) => AccountKeys
+  storeKeyPair?: boolean
+  requireBitcoinAddress?: boolean
 }
 
 /** Custom hook for Bitcoin On-Chain payout form management */
 export const usePayoutWithBitcoinForm = (
   onSubmit: (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
   accountKeys?: AccountKeys,
+  keyDerivationOptions?: PayoutKeyDerivationOptions,
 ) => {
   const toast = useNotification()
+  const { isLoading: isLoadingUserAccountKeys } = useUserAccountKeys()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const bitcoinPayoutSchema = yup.object({
-    bitcoinAddress: yup
-      .string()
-      .required(t('Bitcoin address is required'))
-      .test({
-        test(value) {
-          const bitcoinAddress = getBitcoinAddress(value)
-          if (bitcoinAddress.valid && bitcoinAddress.address) {
-            return validateBitcoinAddress(bitcoinAddress.address)
-          }
+    bitcoinAddress: (keyDerivationOptions?.requireBitcoinAddress ?? true)
+      ? yup
+          .string()
+          .required(t('Bitcoin address is required'))
+          .test({
+            test(value) {
+              const bitcoinAddress = getBitcoinAddress(value)
+              if (bitcoinAddress.valid && bitcoinAddress.address) {
+                return validateBitcoinAddress(bitcoinAddress.address)
+              }
 
-          return validateBitcoinAddress(value)
-        },
-        message: t('The Bitcoin address you entered is invalid'),
-      }),
+              return validateBitcoinAddress(value)
+            },
+            message: t('The Bitcoin address you entered is invalid'),
+          })
+      : yup.string(),
     accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
   })
 
@@ -66,9 +77,13 @@ export const usePayoutWithBitcoinForm = (
     watch,
   } = form
 
-  const enableSubmit = isValid && isDirty
+  const enableSubmit = isValid && isDirty && (Boolean(accountKeys) || !isLoadingUserAccountKeys)
 
   const handleFormSubmit = handleSubmit(async (data: BitcoinPayoutFormData) => {
+    if (!accountKeys && isLoadingUserAccountKeys) {
+      return
+    }
+
     if (!userAccountKeys?.encryptedSeed && !accountKeys) {
       toast.error({
         title: t('Unable to find your account keys'),
@@ -81,12 +96,14 @@ export const usePayoutWithBitcoinForm = (
       if (!accountKeys) {
         const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed || '', data.accountPassword || '')
 
-        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const deriveKeysFromSeed = keyDerivationOptions?.deriveKeysFromSeed || generateKeysFromSeedHex
+        const derivedKeys = deriveKeysFromSeed(decryptedSeed)
 
-        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-        console.log('accountKeys', accountKeys)
+        if (keyDerivationOptions?.storeKeyPair !== false) {
+          setUserAccountKeyPair({ privateKey: derivedKeys.privateKey, publicKey: derivedKeys.publicKey })
+        }
 
-        onSubmit(data, accountKeys)
+        onSubmit(data, derivedKeys)
       } else {
         onSubmit(data, accountKeys)
       }

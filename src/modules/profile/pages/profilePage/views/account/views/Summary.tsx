@@ -1,20 +1,25 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, LinkBox, LinkOverlay, useColorModeValue, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconType } from 'react-icons'
-import { PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
+import type { IconType } from 'react-icons'
+import { PiArrowUpRight, PiCoins, PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
+import { Link } from 'react-router'
 
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
-import { Body } from '@/shared/components/typography'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { HeroStats, useUserHeroStatsQuery } from '../../../../../../../types'
+import type { HeroStats } from '../../../../../../../types'
+import { useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
-import { useUserProfileAtom } from '../../../../../state'
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 
 export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   const setHeroCard = useSetAtom(heroCardAtom)
 
@@ -60,6 +65,10 @@ export const Summary = () => {
 
   return (
     <VStack w="full" alignItems={'start'}>
+      {isViewingOwnProfile && userProfile.id ? (
+        <AffiliatePromoCard affiliateDashboardPath={getPath('userProfileSettingsAffiliate', String(userProfile.id))} />
+      ) : null}
+
       <Body size="xl" medium>
         {t('Hero Rank')}
       </Body>
@@ -124,6 +133,80 @@ export const Summary = () => {
         />,
       )}
     </VStack>
+  )
+}
+
+const NOISE_TEXTURE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+
+const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath: string }) => {
+  const { t } = useTranslation()
+  const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const subtitleColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const cardBackground = useColorModeValue(
+    'linear-gradient(135deg, var(--chakra-colors-primary1-200) 0%, var(--chakra-colors-primary1-100) 30%, var(--chakra-colors-warning-100) 60%, var(--chakra-colors-warning-200) 100%)',
+    'linear-gradient(135deg, var(--chakra-colors-primary1-900) 0%, var(--chakra-colors-primary1-800) 30%, var(--chakra-colors-warning-900) 65%, var(--chakra-colors-warning-800) 100%)',
+  )
+  const textureOpacity = useColorModeValue(0.14, 0.1)
+  const textureBlendMode = useColorModeValue('overlay' as const, 'soft-light' as const)
+  const badgeBackground = useColorModeValue('warning.2', 'warning.3')
+  const badgeColor = useColorModeValue('warning.11', 'warning.11')
+  const cardBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
+  const actionColor = useColorModeValue('neutral1.11', 'neutral1.12')
+
+  return (
+    <CardLayout
+      as={LinkBox}
+      w="full"
+      spacing={4}
+      borderColor={cardBorderColor}
+      background={cardBackground}
+      mb={2}
+      px={{ base: 4, lg: 5 }}
+      py={4}
+      hover
+    >
+      <LinkOverlay
+        as={Link}
+        to={affiliateDashboardPath}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={t('Open ambassador program')}
+        position="absolute"
+        inset={0}
+        zIndex={0}
+      />
+
+      <Box
+        position="absolute"
+        inset={0}
+        backgroundImage={NOISE_TEXTURE}
+        backgroundSize="256px 256px"
+        backgroundRepeat="repeat"
+        opacity={textureOpacity}
+        pointerEvents="none"
+        mixBlendMode={textureBlendMode}
+      />
+
+      <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full" pointerEvents="none">
+        <HStack w="full" justifyContent="space-between" alignItems="start" spacing={3}>
+          <HStack spacing={2} alignItems="center" flexWrap="wrap" minW={0}>
+            <Icon as={PiCoins} color="warning.9" boxSize={5} />
+            <H2 size="lg" color={titleColor}>
+              {t('Ambassador Program')}
+            </H2>
+            <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor={badgeBackground} color={badgeColor}>
+              {t('New')}
+            </Body>
+          </HStack>
+
+          <Icon as={PiArrowUpRight} color={actionColor} boxSize={6} flexShrink={0} />
+        </HStack>
+
+        <Body size="sm" color={subtitleColor} whiteSpace={{ base: 'normal', md: 'nowrap' }}>
+          {t('Help projects launch or get funded, earn Bitcoin.')}
+        </Body>
+      </VStack>
+    </CardLayout>
   )
 }
 

@@ -18,8 +18,8 @@ import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 
 export const DONATION_AMOUNT_FOR_LAUNCH: Record<ProjectLaunchStrategy, number> = {
   [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500, // $25 in cents
-  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 5000, // $50 in cents
-  [ProjectLaunchStrategy.PRO_LAUNCH]: 35000, // $350 in cents
+  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 6000, // $60 in cents
+  [ProjectLaunchStrategy.PRO_LAUNCH]: 30000, // $300 in cents
 }
 
 export const FundingLaunchPayment = () => {

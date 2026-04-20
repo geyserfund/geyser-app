@@ -2,9 +2,15 @@ import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import { authUserAtom, followedProjectsAtom } from '@/modules/auth/state/authAtom.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import { toInt } from '@/utils'
 
-import { ProjectGrantApplicantFragment, ProjectHeaderSummaryFragment, ProjectPageBodyFragment } from '../../../types'
+import {
+  ProjectGrantApplicantFragment,
+  ProjectHeaderSummaryFragment,
+  ProjectMatchingFragment,
+  ProjectPageBodyFragment,
+} from '../../../types'
 import { resetRewardsAtom } from '../pages/projectDashboard/views/sales/state/rewardsAtom'
 import { resetSourceResourceAtom } from '../pages/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
@@ -18,9 +24,20 @@ import { resetIsWidgetAtom } from './widgetAtom.ts'
 
 export type ProjectState = ProjectPageBodyFragment &
   ProjectHeaderSummaryFragment & {
+    activeMatching?: ProjectMatchingFragment | null
     promotionsEnabled?: boolean | null
     grantApplications?: ProjectGrantApplicantFragment[]
   }
+
+export const normalizeProjectState = (project: Partial<ProjectState>): ProjectState => {
+  return {
+    ...(project as ProjectState),
+    images: Array.isArray(project.images) ? project.images : [],
+    links: Array.isArray(project.links) ? project.links : [],
+    owners: Array.isArray(project.owners) ? project.owners : [],
+    grantApplications: Array.isArray(project.grantApplications) ? project.grantApplications : [],
+  }
+}
 
 /** Project atom is the root project store */
 export const projectAtom = atom<ProjectState>({} as ProjectState)
@@ -28,7 +45,7 @@ export const projectAtom = atom<ProjectState>({} as ProjectState)
 /** Partially Update the project atom with a project */
 export const partialUpdateProjectAtom = atom(null, (get, set, updateProject: Partial<ProjectState>) => {
   const projectData = get(projectAtom)
-  set(projectAtom, { ...projectData, ...updateProject })
+  set(projectAtom, normalizeProjectState({ ...projectData, ...updateProject }))
 })
 
 /** Update count of rewards, posts and entries */
@@ -90,6 +107,12 @@ export const userFollowsProjectAtom = atom((get) => {
   const followedProjects = get(followedProjectsAtom)
 
   return followedProjects.length > 0 && followedProjects.some((followedProject) => followedProject.id === project.id)
+})
+
+export const isPrismEnabledAtom = atom((get) => {
+  const project = get(projectAtom)
+
+  return isPrismEnabled(project)
 })
 
 /** Initial load for project details, set to true after loaded */

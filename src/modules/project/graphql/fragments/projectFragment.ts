@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_PAYMENT_METHODS } from './paymentMethodsFragment'
 import { FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE } from './projectAognGoalFragment.ts'
+import { FRAGMENT_PROJECT_REVIEW, FRAGMENT_PROJECT_REVIEW_PUBLIC } from './projectReviewFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_CREATOR } from './userFragment'
 
 export const FRAGMENT_PROJECT = gql`
@@ -80,6 +81,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
   ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
+  ${FRAGMENT_PROJECT_REVIEW_PUBLIC}
   fragment ProjectPageBody on Project {
     id
     name
@@ -106,6 +108,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     followersCount
     rejectionReason
     fundingStrategy
+    rskEoa
     lastCreationStep
     launchScheduledAt
     category
@@ -114,7 +117,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     aonGoal {
       ...ProjectAonGoalForProjectPage
     }
-    launchScheduledAt
     location {
       ...ProjectLocation
     }
@@ -134,6 +136,76 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     paymentMethods {
       ...ProjectPaymentMethods
     }
+    reviews {
+      ...ProjectReviewPublic
+    }
+  }
+`
+
+export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
+  ${FRAGMENT_PROJECT_PAGE_CREATOR}
+  ${FRAGMENT_PROJECT_LOCATION}
+  ${FRAGMENT_PROJECT_KEYS}
+  ${FRAGMENT_PROJECT_PAYMENT_METHODS}
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
+  ${FRAGMENT_PROJECT_REVIEW}
+  fragment ProjectPageBodyCreator on Project {
+    id
+    name
+    title
+    type
+    thumbnailImage
+    images
+    shortDescription
+    description
+    balance
+    balanceUsdCent
+    defaultGoalId
+    status
+    rewardCurrency
+    createdAt
+    launchedAt
+    preLaunchedAt
+    preLaunchExpiresAt
+    paidLaunch
+    goalsCount
+    rewardsCount
+    entriesCount
+    promotionsEnabled
+    followersCount
+    rejectionReason
+    fundingStrategy
+    rskEoa
+    lastCreationStep
+    launchScheduledAt
+    category
+    subCategory
+    links
+    aonGoal {
+      ...ProjectAonGoalForProjectPage
+    }
+    location {
+      ...ProjectLocation
+    }
+    tags {
+      id
+      label
+    }
+    keys {
+      ...ProjectKeys
+    }
+    owners {
+      id
+      user {
+        ...ProjectPageCreator
+      }
+    }
+    paymentMethods {
+      ...ProjectPaymentMethods
+    }
+    reviews {
+      ...ProjectReview
+    }
   }
 `
 
@@ -143,6 +215,14 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
     followersCount
     fundersCount
     contributionsCount
+    impactFundRecipient {
+      impactFundId
+      impactFundName
+      impactFundTitle
+      fundingModel
+      amountAwardedInSats
+      awardedAt
+    }
     aonGoal {
       ...ProjectAonGoalForProjectPage
     }

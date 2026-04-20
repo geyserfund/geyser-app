@@ -419,7 +419,7 @@ export const AmbassadorPayoutsSection = () => {
   )
 
   return (
-    <VStack align="start">
+    <VStack align="start" display="none">
       <Body size="xl" medium>
         {t('Affiliates')}
       </Body>
@@ -467,15 +467,17 @@ export const AmbassadorPayoutsSection = () => {
           </SimpleGrid>
         </form>
 
-        {ambassadorsLoading && !ambassadors.length ? (
-          <Spinner />
-        ) : !ambassadorsLoading && ambassadors.length === 0 ? (
-          <Body size="sm" p={4} w="full" textAlign="center">
-            {t("Your project doesn't have ambassadors yet.")}
-          </Body>
-        ) : (
-          <TableWithAccordion items={ambassadors} schema={ambassadorTableSchema} />
-        )}
+        <Box display="none" w="full">
+          {ambassadorsLoading && !ambassadors.length ? (
+            <Spinner />
+          ) : !ambassadorsLoading && ambassadors.length === 0 ? (
+            <Body size="sm" p={4} w="full" textAlign="center">
+              {t("Your project doesn't have ambassadors yet.")}
+            </Body>
+          ) : (
+            <TableWithAccordion items={ambassadors} schema={ambassadorTableSchema} />
+          )}
+        </Box>
       </CardLayout>
     </VStack>
   )

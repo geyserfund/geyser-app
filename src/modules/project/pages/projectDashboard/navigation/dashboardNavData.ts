@@ -2,21 +2,25 @@ import {
   PiBag,
   PiBell,
   PiBookOpen,
+  PiCreditCard,
+  PiCoins,
   PiFlagBannerFold,
   PiGear,
   PiHandbag,
+  PiIdentificationCard,
   PiInvoice,
   PiMegaphone,
   PiPlanet,
   PiPlugs,
   PiProjectorScreenChart,
-  PiWallet,
 } from 'react-icons/pi'
 
 export enum DashboardType {
   config = 'config',
-  settings = 'settings',
+  growth = 'growth',
   analytics = 'analytics',
+  payments = 'payments',
+  settings = 'settings',
 }
 
 import { IconType } from 'react-icons'
@@ -57,10 +61,28 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiHandbag,
   },
   {
-    label: 'Wallet',
+    label: 'Promote',
+    path: 'dashboardPromote',
+    type: DashboardType.growth,
+    icon: PiMegaphone,
+  },
+  {
+    label: 'Matching',
+    path: 'dashboardMatching',
+    type: DashboardType.growth,
+    icon: PiCoins,
+  },
+  {
+    label: 'Payment Settings',
     path: 'dashboardWallet',
-    type: DashboardType.config,
-    icon: PiWallet,
+    type: DashboardType.payments,
+    icon: PiCreditCard,
+  },
+  {
+    label: 'Limits & Verification',
+    path: 'dashboardLimitsVerification',
+    type: DashboardType.payments,
+    icon: PiIdentificationCard,
   },
   // ------------------------------------------------------------ //
   {
@@ -80,12 +102,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardAccounting',
     type: DashboardType.analytics,
     icon: PiInvoice,
-  },
-  {
-    label: 'Promote',
-    path: 'dashboardPromote',
-    type: DashboardType.analytics,
-    icon: PiMegaphone,
   },
   // ------------------------------------------------------------ //
 

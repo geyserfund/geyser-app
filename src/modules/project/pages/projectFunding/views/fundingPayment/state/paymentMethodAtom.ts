@@ -1,7 +1,11 @@
 import { atom } from 'jotai'
 
 import {
-  projectFundingPaymentCardRoutes,
+  projectFundingPaymentApplePayRoutes,
+  projectFundingPaymentCreditCardRoutes,
+  projectFundingPaymentFiatBanxaApplePayRoutes,
+  projectFundingPaymentFiatBanxaRoutes,
+  projectFundingPaymentFiatStripeRoutes,
   projectFundingPaymentFiatSwapRoutes,
   projectFundingPaymentLightingRoutes,
   projectFundingPaymentOnchainRoutes,
@@ -9,6 +13,7 @@ import {
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
+import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { FiatSwapStatus, fiatSwapStatusAtom } from '../views/paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
@@ -16,9 +21,19 @@ import { FiatSwapStatus, fiatSwapStatusAtom } from '../views/paymentFiatSwap/ato
 export enum PaymentMethods {
   lightning = 'LIGHTNING',
   onChain = 'ONCHAIN',
-  card = 'CARD',
   fiatSwap = 'FIAT_SWAP',
 }
+
+export const fiatCheckoutMethods = {
+  creditCard: 'creditCard',
+  applePay: 'applePay',
+  stripe: 'stripe',
+} as const
+
+export type FiatCheckoutMethod = (typeof fiatCheckoutMethods)[keyof typeof fiatCheckoutMethods]
+
+/** Stores the selected fiat checkout method for the fiat checkout flow. */
+export const fiatPaymentMethodAtom = atom<FiatCheckoutMethod>(fiatCheckoutMethods.creditCard)
 
 export const paymentMethodAtom = atom((get) => {
   if (get(isLightingMethodAtom)) {
@@ -29,10 +44,6 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.onChain
   }
 
-  if (get(isCardMethodAtom)) {
-    return PaymentMethods.card
-  }
-
   if (get(isFiatSwapMethodAtom)) {
     return PaymentMethods.fiatSwap
   }
@@ -41,9 +52,22 @@ export const paymentMethodAtom = atom((get) => {
 })
 
 export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
-export const isCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCardRoutes))
 export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
 export const isFiatSwapMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatSwapRoutes))
+export const isCreditCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCreditCardRoutes))
+export const isApplePayMethodAtom = atom(routeMatchForAtom(projectFundingPaymentApplePayRoutes))
+export const isFiatBanxaMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatBanxaRoutes))
+export const isFiatBanxaApplePayMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatBanxaApplePayRoutes))
+export const isFiatStripeMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatStripeRoutes))
+export const isFiatPaymentRouteAtom = atom(
+  (get) =>
+    get(isFiatSwapMethodAtom) ||
+    get(isCreditCardMethodAtom) ||
+    get(isApplePayMethodAtom) ||
+    get(isFiatBanxaMethodAtom) ||
+    get(isFiatBanxaApplePayMethodAtom) ||
+    get(isFiatStripeMethodAtom),
+)
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
 
@@ -60,6 +84,10 @@ export const hasStripePaymentMethodAtom = atom((get) => {
     return false
   }
 
+  if (!isStripeConnectSupportedForProject(project)) {
+    return false
+  }
+
   if (project.paymentMethods.fiat.stripe) {
     return true
   }
@@ -67,24 +95,11 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   return false
 })
 
-const listOfProjectToRemoveFiatPaymentMethod = ['launch']
-
 export const hasFiatPaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
-  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return false
-  }
-
-  if (listOfProjectToRemoveFiatPaymentMethod.includes(project.name)) {
-    return false
-  }
-
-  return true
+  return Boolean(project.paymentMethods?.fiat?.enabled)
 })
 
 /** Stores the user's intended payment method selection before navigating to payment loading */
 export const intendedPaymentMethodAtom = atom<PaymentMethods | undefined>(undefined)
-
-/** Tracks if the credit card button was clicked (to show toast after validation) */
-export const creditCardButtonClickedAtom = atom<boolean>(false)

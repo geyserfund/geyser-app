@@ -5,7 +5,7 @@ import { ScrollInvoke } from '@/helpers'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '@/modules/discovery/graphql/queries/projectsQuery'
 import { ID } from '@/shared/constants/components/id.ts'
 import { useQueryWithPagination } from '@/shared/hooks'
-import { OrderByOptions, ProjectForLandingPageFragment, ProjectStatus } from '@/types'
+import { OrderByOptions, ProjectForLandingPageFragment, ProjectFundingStrategy, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { FilteredProjectList } from './sections/FilteredProjectList'
@@ -13,7 +13,13 @@ import { FilterTopBar } from './sections/FilterTopBar'
 
 const TOTAL_PROJECTS_TO_FETCH = 20
 
-export const PaginatedView = ({ noTitle }: { noTitle?: boolean }) => {
+export const PaginatedView = ({
+  noTitle,
+  fundingStrategy,
+}: {
+  noTitle?: boolean
+  fundingStrategy?: ProjectFundingStrategy
+}) => {
   const isMobile = useMobileMode()
 
   const {
@@ -34,6 +40,7 @@ export const PaginatedView = ({ noTitle }: { noTitle?: boolean }) => {
     where: {
       status: !restFilters.search ? ProjectStatus.Active : undefined,
       tagIds: tagIds?.length ? tagIds : undefined,
+      fundingStrategy: fundingStrategy ? fundingStrategy : undefined,
       ...restFilters,
     },
     orderBy: {

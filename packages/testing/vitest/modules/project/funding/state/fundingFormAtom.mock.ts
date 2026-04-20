@@ -3,14 +3,16 @@ import {
   FundingProjectState,
 } from '../../../../../../../src/modules/project/funding/state/fundingFormAtom.ts' // Adjust path if needed
 import {
+  ProjectSubscriptionPlan,
+  recurringFundingModes,
+  recurringIntervals,
+} from '../../../../../../../src/modules/project/recurring/graphql'
+import {
   ProjectRewardFragment,
   ProjectShippingConfigType,
-  ProjectSubscriptionPlansFragment,
   QuoteCurrency,
   RewardCurrency,
   ShippingDestination,
-  SubscriptionCurrencyType,
-  UserSubscriptionInterval,
   WalletState,
 } from '../../../../../../../src/types'
 
@@ -202,22 +204,22 @@ export const mockRewardsFull: ProjectRewardFragment[] = [
 ]
 
 // Define minimal mock subscriptions for testing calculation logic
-export const mockSubscriptionsMinimal: ProjectSubscriptionPlansFragment[] = [
+export const mockSubscriptionsMinimal: ProjectSubscriptionPlan[] = [
   {
-    id: 201,
+    id: '201',
     name: 'Monthly USD Supporter',
-    cost: 500, // $5.00
-    currency: 'USDCENT' as SubscriptionCurrencyType, // Use string literal + cast
-    interval: UserSubscriptionInterval.Monthly,
-    projectId: 1,
+    amountUsdCent: 500,
+    amountBtcSat: 20000,
+    interval: recurringIntervals.monthly,
+    projectId: '1',
   },
   {
-    id: 202,
+    id: '202',
     name: 'Annual SATS Backer',
-    cost: 100000, // 100,000 sats
-    currency: 'BTCSAT' as SubscriptionCurrencyType, // Use string literal + cast
-    interval: UserSubscriptionInterval.Yearly,
-    projectId: 1,
+    amountUsdCent: 2500,
+    amountBtcSat: 100000,
+    interval: recurringIntervals.yearly,
+    projectId: '1',
   },
 ]
 
@@ -228,7 +230,7 @@ export const mockProjectDataUsd: FundingProjectState = {
   title: 'USD Project',
   rewardCurrency: RewardCurrency.Usdcent,
   paymentMethods: {
-    fiat: { stripe: false, __typename: 'FiatPaymentMethods' },
+    fiat: { enabled: false, stripe: false, __typename: 'FiatPaymentMethods' },
     __typename: 'PaymentMethods',
   },
   owners: [],
@@ -254,6 +256,8 @@ export const mockProjectDataSats: FundingProjectState = {
 
 // Initial state used by tests
 export const initialTestState: FundFormType = {
+  fundingMode: recurringFundingModes.oneTime,
+  recurringInterval: recurringIntervals.monthly,
   donationAmount: 0,
   donationAmountUsdCent: 0,
   shippingCost: 0,
@@ -265,11 +269,11 @@ export const initialTestState: FundFormType = {
   subscribeToGeyserEmails: false,
   rewardsByIDAndCount: undefined,
   subscription: {
-    cost: 0,
     subscriptionId: undefined,
-    currency: SubscriptionCurrencyType.Usdcent,
-    interval: UserSubscriptionInterval.Monthly,
+    interval: recurringIntervals.monthly,
     name: '',
+    amountUsdCent: 0,
+    amountBtcSat: 0,
   },
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,

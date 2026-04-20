@@ -19,7 +19,8 @@ export const CreateProjectButton = ({ iconOnly, label, noIcon, ...props }: Creat
       to={getPath('launchStart')}
       size="lg"
       variant="outline"
-      colorScheme="primary1"
+      fontWeight={600}
+      fontSize={{ lg: 'sm', xl: 'md' }}
       leftIcon={iconOnly || noIcon ? undefined : <PiRocketLaunch />}
       {...props}
     >

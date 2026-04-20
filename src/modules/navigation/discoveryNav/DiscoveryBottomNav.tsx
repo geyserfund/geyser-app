@@ -1,60 +1,107 @@
-import { Button, ButtonProps, Image } from '@chakra-ui/react'
+import { type ButtonProps, Box, Button, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import { Link } from 'react-router'
+import { PiCaretUp } from 'react-icons/pi'
+import { Link, useLocation } from 'react-router'
 
-import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
+import {
+  getDonateNavDropdownItems,
+  getFundraiseNavDropdownItems,
+} from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
+import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { CampaignIconUrl, FundraiserIconUrl, getPath, PathsMap, ProductsIconUrl } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 
 import { BottomNavBarContainer } from '../components/bottomNav'
-import { currentBottomNavItemAtom } from './discoveryNavAtom'
 
 export enum BottomNavItemKey {
-  campaigns = 'campaigns',
-  fundraisers = 'fundraisers',
-  products = 'products',
+  donate = 'donate',
+  fundraise = 'fundraise',
+  earn = 'earn',
+  news = 'news',
 }
 
 export type BottomNavItem = {
   label: string
   key: BottomNavItemKey
-  path: keyof PathsMap
-  IconComponent: React.ReactNode
-  new?: boolean
+  path?: string
+  onClick?: () => void
+  isActive: boolean
 }
 
-const imageDimension = { base: '40px', sm: '45px', md: '50px' }
-
-export const bottomNavItems = [
-  {
-    label: 'Fundraisers',
-    key: BottomNavItemKey.fundraisers,
-    path: 'discoveryFundraisers',
-    IconComponent: <Image src={FundraiserIconUrl} height={imageDimension} width={imageDimension} />,
-  },
-  {
-    label: 'Campaigns',
-    key: BottomNavItemKey.campaigns,
-    path: 'discoveryCampaigns',
-    IconComponent: <Image src={CampaignIconUrl} height={imageDimension} width={imageDimension} />,
-    new: true,
-  },
-  {
-    label: 'Shop',
-    key: BottomNavItemKey.products,
-    path: 'discoveryProducts',
-    IconComponent: <Image src={ProductsIconUrl} height={imageDimension} width={imageDimension} marginRight={2} />,
-  },
-] as BottomNavItem[]
+const matchesRoute = (pathname: string, route: string) => pathname === route || pathname.startsWith(`${route}/`)
 
 export const DiscoveryBottomNav = () => {
-  const currentNavItem = useAtomValue(currentBottomNavItemAtom)
+  const location = useLocation()
+
+  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+  const bottomNavLabelFontSize = 'sm'
+  const bottomNavLabelFontWeight = 600
+  const donateItems = getDonateNavDropdownItems(t)
+  const fundraiseItems = getFundraiseNavDropdownItems(t, 'mobile')
+
+  const bottomNavItems: BottomNavItem[] = [
+    {
+      label: t('Donate'),
+      key: BottomNavItemKey.donate,
+      isActive:
+        matchesRoute(location.pathname, getPath('discoveryProjects')) ||
+        matchesRoute(location.pathname, getPath('discoveryFundraisers')) ||
+        matchesRoute(location.pathname, getPath('discoveryCampaigns')) ||
+        matchesRoute(location.pathname, getPath('discoveryImpactFunds')) ||
+        matchesRoute(location.pathname, getPath('discoveryMicroLending')),
+    },
+    {
+      label: t('Fundraise'),
+      key: BottomNavItemKey.fundraise,
+      isActive:
+        matchesRoute(location.pathname, getPath('discoveryCreator')) ||
+        matchesRoute(location.pathname, getPath('launchStart')),
+    },
+    {
+      label: t('Earn'),
+      key: BottomNavItemKey.earn,
+      path: getPath('ambassadorProgram'),
+      isActive: matchesRoute(location.pathname, getPath('ambassadorProgram')),
+    },
+    {
+      label: t('News'),
+      key: BottomNavItemKey.news,
+      path: getPath('discoveryNews'),
+      isActive: matchesRoute(location.pathname, getPath('discoveryNews')),
+    },
+  ]
 
   return (
-    <BottomNavBarContainer spacing={1} w="full" marginX={0}>
+    <BottomNavBarContainer spacing={2} w="full" marginX={0} padding={2} paddingBottom={3}>
       {bottomNavItems.map((item) => {
-        return <DiscoveryBottomNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
+        if (item.key === BottomNavItemKey.donate || item.key === BottomNavItemKey.fundraise) {
+          const navItems = item.key === BottomNavItemKey.donate ? donateItems : fundraiseItems
+
+          return (
+            <Box key={item.key} flex={1.2}>
+              <NavDropdownMenu
+                label={item.label}
+                items={navItems}
+                mode="mobile"
+                isActive={item.isActive}
+                triggerIcon={<PiCaretUp />}
+                triggerProps={{
+                  variant: 'ghost',
+                  width: 'full',
+                  paddingX: 4,
+                  minHeight: '56px',
+                  borderRadius: { base: '8px', lg: '10px' },
+                  colorScheme: 'primary1',
+                  color: bottomNavLabelColor,
+                  fontSize: bottomNavLabelFontSize,
+                  fontWeight: bottomNavLabelFontWeight,
+                }}
+              />
+            </Box>
+          )
+        }
+
+        return <DiscoveryBottomNavButton key={item.label} item={item} />
       })}
     </BottomNavBarContainer>
   )
@@ -62,31 +109,33 @@ export const DiscoveryBottomNav = () => {
 
 type DiscoveryBottomNavButtonProps = {
   item: BottomNavItem
-  currentNavItem?: BottomNavItem
 } & ButtonProps
 
-const DiscoveryBottomNavButton = ({ item, currentNavItem, ...rest }: DiscoveryBottomNavButtonProps) => {
-  const isActive = currentNavItem?.path === item.path
+const DiscoveryBottomNavButton = ({ item, ...rest }: DiscoveryBottomNavButtonProps) => {
+  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
 
   return (
     <Button
-      variant="menu"
+      variant="ghost"
       colorScheme="primary1"
-      size="xl"
+      color={bottomNavLabelColor}
       flex={1}
       key={item.label}
-      as={Link}
+      as={item.path ? Link : 'button'}
+      to={item.path}
+      onClick={item.onClick}
       paddingX={4}
-      to={getPath(item.path)}
-      isActive={isActive}
+      minHeight="56px"
+      borderRadius={{ base: '8px', lg: '10px' }}
+      isActive={item.isActive}
       justifyContent={'center'}
-      fontSize={{ base: '12px', sm: '16px', md: '18px' }}
+      alignItems="center"
       {...rest}
       position="relative"
     >
-      {item.new && <NavigationNewBadge position="absolute" top={-1} marginLeft={2} />}
-      {item.IconComponent}
-      <Body paddingTop={5}> {t(item.label)}</Body>
+      <Body fontSize="sm" color={bottomNavLabelColor} fontWeight={600} textAlign="center" lineHeight="1">
+        {item.label}
+      </Body>
     </Button>
   )
 }

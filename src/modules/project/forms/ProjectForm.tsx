@@ -1,9 +1,8 @@
-import { Box, FormErrorIcon, HStack, Stack, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, FormErrorIcon, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { PiInfo } from 'react-icons/pi'
 
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { Body } from '@/shared/components/typography'
@@ -186,26 +185,6 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                 {watch('name')}
               </Box>
             </Body>
-            <HStack w="full" justifyContent="space-between">
-              <Body color="neutral1.9">
-                {`${t('Lightning Address')}: `}
-                <Box as="span" color="primary1.11">
-                  {watch('name')}
-                </Box>
-                <Box as="span" color="neutral1.11">
-                  {'@geyser.fund'}
-                </Box>
-              </Body>
-              <Tooltip
-                label={t(
-                  `Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds.`,
-                )}
-              >
-                <span>
-                  <PiInfo color="neutral1.11" fontSize="20px" />
-                </span>
-              </Tooltip>
-            </HStack>
           </VStack>
         </VStack>
       </FieldContainer>

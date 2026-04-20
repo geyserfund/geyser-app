@@ -1,15 +1,20 @@
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { ProjectAonGoalForLandingPageFragment } from '@/types/index.ts'
+import { ProjectAonGoalForLandingPageFragment, ProjectAonGoalStatus } from '@/types/index.ts'
 
 const CREATOR_CLAIM_DAYS = 30
 const CONTRIBUTOR_CLAIM_DAYS = 60
 
 export const aonProjectTimeLeft = (
-  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'deployedAt' | 'goalDurationInDays'> | null,
+  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'deployedAt' | 'goalDurationInDays' | 'status'> | null,
 ) => {
-  if (!aonGoal || !aonGoal.deployedAt || !aonGoal.goalDurationInDays) {
+  if (
+    !aonGoal ||
+    !aonGoal.deployedAt ||
+    !aonGoal.goalDurationInDays ||
+    aonGoal.status === ProjectAonGoalStatus.Claimed
+  ) {
     return null
   }
 

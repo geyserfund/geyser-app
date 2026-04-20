@@ -1,46 +1,89 @@
-import { Button, ButtonProps, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useState } from 'react'
 
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { VerifiedButton } from '@/shared/molecules/VerifiedButton.tsx'
 
-type EnableFiatContributionsProps = CardLayoutProps & {
-  buttonProps?: ButtonProps
-  isIdentityVerified?: boolean
+import { StripeConnectOnboardingCard } from './StripeConnectOnboardingCard.tsx'
+
+type EnableFiatContributionsProps = {
+  isTiaProject: boolean
+  projectId?: string | number | bigint
+  context?: 'dashboard' | 'creation'
 }
 
 export const EnableFiatContributions = ({
-  buttonProps,
-  isIdentityVerified,
-  ...props
+  isTiaProject,
+  projectId,
+  context = 'dashboard',
 }: EnableFiatContributionsProps) => {
+  const [isStripeReady, setIsStripeReady] = useState(false)
+  const isBitcoinMode = !isStripeReady
+  const isDashboardContext = context === 'dashboard'
+
   return (
-    <CardLayout padding={4} {...props}>
-      <HStack w="full" justifyContent="space-between">
-        <Body size="lg" medium>
-          {t('Enable fiat contributions')}
-        </Body>
-        {isIdentityVerified ? (
-          <VerifiedButton />
-        ) : (
-          <Button size="lg" variant="outline" colorScheme="primary1" {...buttonProps}>
-            {t('Verify')}
-          </Button>
-        )}
-      </HStack>
-      <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={4}>
-        <VStack alignItems={'start'}>
+    <VStack w="full" alignItems="start" spacing={4}>
+      {isDashboardContext && (
+        <>
+          <HStack w="full" justifyContent="space-between">
+            <Body size="xl" medium>
+              {t('Fiat contributions') + ' (' + t('optional') + ')'}
+            </Body>
+          </HStack>
+
           <Body size="sm" light>
             {t(
-              'Enable your contributors to fund with fiat. When enabled, all payments are automatically converted to Bitcoin and instantly deposited in your connected Bitcoin wallet.',
+              'Enable contributors to pay with debit/credit card, Apple Pay, bank transfer or 20+ fiat methods. This can also be configured later from your project dashboard.',
             )}
           </Body>
-          <Body size="sm" light>
-            {t('Fiat contributions have an additional 3.5% fee charged by the third-party payment processor.')}
+        </>
+      )}
+
+      <VStack w="full" alignItems="start" spacing={3}>
+        <HStack spacing={2}>
+          <Body size="md" medium>
+            {t('Choose a configuration')}
+          </Body>
+          <Body size="sm" light color="neutral1.7">
+            {t('(only one can be selected)')}
+          </Body>
+        </HStack>
+
+        <VStack
+          w="full"
+          borderWidth="1px"
+          borderColor={isBitcoinMode ? 'primary1.8' : 'neutral1.4'}
+          borderRadius="16px"
+          p={6}
+          alignItems="start"
+          spacing={3}
+        >
+          <HStack w="full" justifyContent="space-between">
+            <Body size="lg" medium>
+              {t('Receive in Bitcoin')}
+            </Body>
+            {!isStripeReady && (
+              <Body size="sm" medium color={isBitcoinMode ? 'primary1.9' : 'neutral1.8'}>
+                {t('Default')}
+              </Body>
+            )}
+          </HStack>
+          <Body size="md" light>
+            {t(
+              'Contributors pay with fiat through credit card or bank transfer, and you receive Bitcoin in your wallet. A 3.5% third-party processing fee applies.',
+            )}
           </Body>
         </VStack>
-      </HStack>
-    </CardLayout>
+
+        <StripeConnectOnboardingCard
+          compact
+          withCard
+          selected={!isBitcoinMode}
+          isTiaProject={isTiaProject}
+          projectId={projectId}
+          onReadyStateChange={setIsStripeReady}
+        />
+      </VStack>
+    </VStack>
   )
 }

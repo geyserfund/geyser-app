@@ -1,4 +1,6 @@
-import { Avatar, AvatarBadge, Button, forwardRef, HStack, Icon, Image, StackProps } from '@chakra-ui/react'
+import type { ButtonProps } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, Button, forwardRef, HStack, Icon, Image } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiList, PiUser } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -16,7 +18,7 @@ import {
 } from '@/shared/constants'
 import { GuardianType } from '@/types'
 
-export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) => {
+export const ProfileNavButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
   const { user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
@@ -63,23 +65,23 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
           </ProfileAvatar>
         </Button>
       )}
-      <HStack
+      <Button
         ref={ref}
         data-testid="platform-dropdown-menu"
+        aria-label={t('Open profile menu')}
         height={{ base: '40px', lg: '46px' }}
         width={{ base: '40px', lg: '46px' }}
         minWidth={{ base: '40px', lg: '46px' }}
-        variant="outline"
+        type="button"
+        variant="ghost"
         backgroundColor="utils.pbg"
         zIndex={1}
         _hover={{
           backgroundColor: 'neutral1.3',
           cursor: 'pointer',
         }}
-        paddingX={'0'}
+        padding={0}
         borderRadius={'50%'}
-        justifyContent={'center'}
-        alignItems={'center'}
         {...props}
       >
         <Avatar
@@ -93,7 +95,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
             <AvatarBadge placement="bottom-end" borderWidth="3px" borderColor="utils.pbg" bg="error.9" boxSize="16px" />
           )}
         </Avatar>
-      </HStack>
+      </Button>
     </HStack>
   )
 })

@@ -21,10 +21,10 @@ export const createEIP712MessageForAon = (
   aonContractAddress: string,
   swapContractAddress: string,
   userAddress: string, // creatorAddress for Claim, contributorAddress for Refund
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
 ): string => {
   const domain = {
@@ -96,10 +96,10 @@ export const createClaimMessage = (
   aonContractAddress: string,
   swapContractAddress: string,
   creatorAddress: string,
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
 ) => {
   return createEIP712MessageForAon(
@@ -120,10 +120,10 @@ export const createRefundMessage = (
   aonContractAddress: string,
   swapContractAddress: string,
   contributorAddress: string,
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
 ) => {
   return createEIP712MessageForAon(
@@ -144,10 +144,10 @@ export const createAndSignClaimMessage = (props: {
   aonContractAddress: string
   swapContractAddress: string
   creatorAddress: string
-  amount: number
+  amount: bigint
   nonce: number
   deadline: number
-  processingFee: number
+  processingFee: bigint
   lockCallData: string
   rskPrivateKey: string
 }) => {
@@ -173,20 +173,6 @@ export const createAndSignClaimMessage = (props: {
     lockCallData,
   )
 
-  // console.log('=== Production Refund Message Debug ===')
-  // console.log('AON Contract Address:', aonContractAddress)
-  // console.log('Swap Contract Address:', swapContractAddress)
-  // console.log('Creator Address:', creatorAddress)
-  // console.log('Amount:', amount)
-  // console.log('Nonce:', nonce)
-  // console.log('Deadline:', deadline)
-  // console.log('Processing Fee:', processingFee)
-  // console.log('Lock Call Data:', lockCallData)
-  // console.log('RSK Private Key:', rskPrivateKey)
-  // console.log('===============================================')
-  // console.log('Production digest:', digest)
-  // console.log('=== End Production Debug ===')
-
   return signEIP712Message(digest, rskPrivateKey)
 }
 
@@ -195,10 +181,10 @@ export const createAndSignRefundMessage = (props: {
   aonContractAddress: string
   swapContractAddress: string
   contributorAddress: string
-  amount: number
+  amount: bigint
   nonce: number
   deadline: number
-  processingFee: number
+  processingFee: bigint
   lockCallData: string
   rskPrivateKey: string
 }) => {
@@ -245,10 +231,10 @@ export const createAndSignEIP712Message = (
   aonContractAddress: string,
   swapContractAddress: string,
   userAddress: string,
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
   rskPrivateKey: string,
 ) => {

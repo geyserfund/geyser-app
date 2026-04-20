@@ -8,6 +8,7 @@ import {
   useRewardUpdateMutation,
 } from '@/types'
 
+import { useProjectCreationEditGuard } from '../hooks/useProjectCreationEditGuard.ts'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { updateProjectItemCountsAtom } from '../state/projectAtom'
 import {
@@ -25,6 +26,7 @@ import { useCustomMutation } from './custom/useCustomMutation'
  * @param load - Load rewards on mount
  */
 export const useProjectRewardsAPI = (load?: boolean) => {
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
   const setRewards = useSetAtom(rewardsAtom)
   const setInitialRewardsLoading = useSetAtom(initialRewardsLoadingAtom)
   const addUpdateRewards = useSetAtom(addUpdateRewardsAtom)
@@ -112,15 +114,33 @@ export const useProjectRewardsAPI = (load?: boolean) => {
       ...queryProjectRewardsOptions,
     },
     createReward: {
-      execute: createReward,
+      execute: (...args: Parameters<typeof createReward>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return createReward(...args)
+      },
       ...createRewardOptions,
     },
     updateReward: {
-      execute: updateReward,
+      execute: (...args: Parameters<typeof updateReward>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return updateReward(...args)
+      },
       ...updateRewardOptions,
     },
     deleteReward: {
-      execute: deleteReward,
+      execute: (...args: Parameters<typeof deleteReward>) => {
+        if (guardProjectEditAttempt()) {
+          return undefined as any
+        }
+
+        return deleteReward(...args)
+      },
       ...deleteRewardOptions,
     },
   }

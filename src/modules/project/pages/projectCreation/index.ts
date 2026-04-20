@@ -7,6 +7,9 @@ import { Launch } from './views/launch/Launch.tsx'
 import { LaunchAboutYou } from './views/LaunchAboutYou.tsx'
 import { LaunchPayment } from './views/launchPayment/LaunchPayment.tsx'
 import { LaunchPaymentAccountPassword } from './views/launchPayment/views/LaunchPaymentAccountPassword.tsx'
+import { LaunchPaymentEmail } from './views/launchPayment/views/LaunchPaymentEmail.tsx'
+import { LaunchPaymentFiatContributions } from './views/launchPayment/views/LaunchPaymentFiatContributions.tsx'
+import { LaunchPaymentSeedWords } from './views/launchPayment/views/LaunchPaymentSeedWords.tsx'
 import { LaunchPaymentTaxId } from './views/launchPayment/views/LaunchPaymentTaxId.tsx'
 import { LaunchPaymentWallet } from './views/launchPayment/views/LaunchPaymentWallet.tsx'
 import { LaunchProducts } from './views/LaunchProducts.tsx'
@@ -26,6 +29,9 @@ export {
   LaunchFundingStrategy,
   LaunchPayment,
   LaunchPaymentAccountPassword,
+  LaunchPaymentEmail,
+  LaunchPaymentFiatContributions,
+  LaunchPaymentSeedWords,
   LaunchPaymentTaxId,
   LaunchPaymentWallet,
   LaunchProducts,

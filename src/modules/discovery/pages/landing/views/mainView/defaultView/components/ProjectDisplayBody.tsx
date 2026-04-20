@@ -1,4 +1,4 @@
-import { GridItem, HStack, SimpleGrid, Stack } from '@chakra-ui/react'
+import { GridItem, SimpleGrid, Stack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -12,10 +12,14 @@ import { LandingProjectCard } from '../../../../components/LandingProjectCard.ts
 import { LandingPostCard } from './LandingPostCard.tsx'
 import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout.tsx'
 
+export type ProjectDisplayItem = ProjectForLandingPageFragment & {
+  contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
+  hideContributionContent?: boolean
+  statusPillLabel?: string
+}
+
 interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
-  projects: (ProjectForLandingPageFragment & {
-    contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
-  })[]
+  projects: ProjectDisplayItem[]
   onSubtitleClick?: () => void
   subtitleId?: string
   rightContent?: React.ReactNode
@@ -53,27 +57,26 @@ export const ProjectDisplayBody = ({
           {description}
         </Body>
       )}
-      <SimpleGrid w="full" columns={{ base: 1, lg: 6 }} spacing={{ base: 8, lg: 6, xl: 8 }}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
         {projects.map((project) => {
           return (
             <GridItem key={project.id}>
-              <LandingProjectCard key={project.id} project={project} />
+              <LandingProjectCard
+                key={project.id}
+                project={project}
+                hideContributionContent={project.hideContributionContent}
+                statusPillLabel={project.statusPillLabel}
+              />
             </GridItem>
           )
         })}
       </SimpleGrid>
       {posts && (
-        <HStack
-          w="full"
-          alignItems="stretch"
-          spacing={{ base: 6, lg: 12 }}
-          flexDirection={{ base: 'column', lg: 'row' }}
-          paddingTop={4}
-        >
+        <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }} paddingTop={4}>
           {posts.map((post) => (
-            <LandingPostCard post={post} key={post.id} isMobile />
+            <LandingPostCard post={post} key={post.id} />
           ))}
-        </HStack>
+        </SimpleGrid>
       )}
     </ProjectRowLayout>
   )

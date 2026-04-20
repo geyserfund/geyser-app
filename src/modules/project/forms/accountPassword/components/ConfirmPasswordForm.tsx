@@ -2,14 +2,15 @@ import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { userAccountKeyPairAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
+import type { BodyProps } from '@/shared/components/typography/Body.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { Maybe, UserAccountKeysFragment } from '@/types/index.ts'
+import type { Maybe, UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { AccountKeys, decryptSeed, generateKeysFromSeedHex } from '../keyGenerationHelper.ts'
@@ -25,6 +26,11 @@ type ConfirmPasswordFormProps = {
   control: Control<ConfirmPasswordFormData>
   onForgotPassword: () => void
   isCreator?: boolean
+  introText?: string
+  introSize?: BodyProps['size']
+  importantContent?: ReactNode
+  showFeedback?: boolean
+  hidePasswordLabel?: boolean
 }
 
 const creatorText = t(
@@ -36,20 +42,36 @@ const contributorText = t(
 )
 
 /** Password confirmation form component with single password field and forgot password option */
-export const ConfirmPasswordForm = ({ control, onForgotPassword, isCreator }: ConfirmPasswordFormProps) => {
+export const ConfirmPasswordForm = ({
+  control,
+  onForgotPassword,
+  isCreator,
+  introText,
+  introSize,
+  importantContent,
+  showFeedback,
+  hidePasswordLabel,
+}: ConfirmPasswordFormProps) => {
   const [showPassword, setShowPassword] = useState(false)
+
+  const bodyText = introText ?? (isCreator ? creatorText : contributorText)
+  const hasBodyText = Boolean(bodyText?.trim())
+  const shouldRenderFeedback = !importantContent && showFeedback !== false
+  const passwordLabel = hidePasswordLabel ? undefined : t('Enter your password')
+  const passwordAriaLabel = hidePasswordLabel ? t('Enter your password') : undefined
 
   return (
     <VStack w="full" gap={4}>
       <VStack w="full" alignItems="start" gap={2}>
-        <Body>{isCreator ? creatorText : contributorText}</Body>
-        <FeedBackText isCreator={isCreator} />
+        {hasBodyText ? <Body size={introSize}>{bodyText}</Body> : null}
+        {importantContent || (shouldRenderFeedback ? <FeedBackText isCreator={isCreator} /> : null)}
       </VStack>
       <ControlledTextInput
         name="password"
         control={control}
-        label={t('Enter your password')}
+        label={passwordLabel}
         placeholder={t('Enter your password')}
+        aria-label={passwordAriaLabel}
         type={showPassword ? 'text' : 'password'}
         required
         rightAddon={
@@ -57,7 +79,8 @@ export const ConfirmPasswordForm = ({ control, onForgotPassword, isCreator }: Co
         }
       />
       <Button variant="link" size="sm" onClick={onForgotPassword} alignSelf="flex-start" color="primary1.11">
-        {t('Forgotten your password?')}
+        {t('Forgot your password')}
+        {'?'}
       </Button>
     </VStack>
   )

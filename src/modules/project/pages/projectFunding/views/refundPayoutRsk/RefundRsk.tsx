@@ -1,8 +1,9 @@
 /* eslint-disable complexity */
-import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { PiInfoBold, PiWarningCircleBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
@@ -11,10 +12,11 @@ import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
 import {
   PaymentStatus,
   PaymentType,
@@ -35,13 +37,14 @@ import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWait
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
+import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
+import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { createAndSignRefundMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
-import { MAX_SATS_FOR_LIGHTNING } from './PayoutRsk.tsx'
-import { PayoutMethod } from './types.ts'
+import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
 
 type RefundRskProps = {
   isOpen: boolean
@@ -52,6 +55,141 @@ type RefundRskProps = {
   privateKey?: string
   publicKey?: string
   onCompleted?: () => void
+}
+
+type RefundProgressStage = 'setup' | 'waiting_confirmation' | 'claim_ready' | 'completed'
+
+function getRefundProgressSteps(params: { method: PayoutMethod; stage: RefundProgressStage }): PayoutProgressStep[] {
+  const { method, stage } = params
+
+  if (method === PayoutMethod.Lightning) {
+    return [
+      {
+        title: t('Choose refund method'),
+        description: t('Choose your refund method and authorize the transfer.'),
+        status: stage === 'setup' ? 'current' : 'complete',
+      },
+      {
+        title: t('Process refund'),
+        description: t('We route the refund to your Lightning destination.'),
+        status: stage === 'completed' ? 'complete' : 'upcoming',
+      },
+      {
+        title: t('Refund sent'),
+        description: t('Your refund has been submitted successfully.'),
+        status: stage === 'completed' ? 'complete' : 'upcoming',
+      },
+    ]
+  }
+
+  if (stage === 'completed') {
+    return [
+      {
+        title: t('Choose refund method'),
+        description: t('Choose your refund method and authorize the transfer.'),
+        status: 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
+        status: 'complete',
+      },
+      {
+        title: t('Claim refund'),
+        description: t('Broadcast your claim transaction to claim the funds.'),
+        status: 'complete',
+      },
+      {
+        title: t('Refund sent'),
+        description: t('Your on-chain refund has been completed.'),
+        status: 'complete',
+      },
+    ]
+  }
+
+  if (stage === 'claim_ready') {
+    return [
+      {
+        title: t('Choose refund method'),
+        description: t('Choose your refund method and authorize the transfer.'),
+        status: 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
+        status: 'complete',
+      },
+      {
+        title: t('Claim refund'),
+        description: t('Broadcast your claim transaction to claim the funds.'),
+        status: 'current',
+      },
+      {
+        title: t('Refund sent'),
+        description: t('Your on-chain refund has been completed.'),
+        status: 'upcoming',
+      },
+    ]
+  }
+
+  if (stage === 'waiting_confirmation') {
+    return [
+      {
+        title: t('Choose refund method'),
+        description: t('Choose your refund method and authorize the transfer.'),
+        status: 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
+        status: 'current',
+      },
+      {
+        title: t('Claim refund'),
+        description: t('Broadcast your claim transaction to claim the funds.'),
+        status: 'upcoming',
+      },
+      {
+        title: t('Refund sent'),
+        description: t('Your on-chain refund has been completed.'),
+        status: 'upcoming',
+      },
+    ]
+  }
+
+  return [
+    {
+      title: t('Choose refund method'),
+      description: t('Choose your refund method and authorize the transfer.'),
+      status: 'current',
+    },
+    {
+      title: t('Wait for confirmations'),
+      description: t('Bitcoin network confirmations are required before claiming.'),
+      status: 'upcoming',
+    },
+    {
+      title: t('Claim refund'),
+      description: t('Broadcast your claim transaction to claim the funds.'),
+      status: 'upcoming',
+    },
+    {
+      title: t('Refund sent'),
+      description: t('Your on-chain refund has been completed.'),
+      status: 'upcoming',
+    },
+  ]
+}
+
+const ContinueRefundContent = () => {
+  return (
+    <VStack spacing={4} alignItems="start" w="full">
+      <Body size={'md'} medium>
+        {t('Refund all of the contributions you have made to this project.')} <br />
+        {t('Are you sure you want to continue with the refund?')}
+      </Body>
+    </VStack>
+  )
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
@@ -79,12 +217,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
+  const [isWaitingClaimReady, setIsWaitingClaimReady] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
   const [lockTxId, setLockTxId] = useState('')
   const [refundTxId, setRefundTxId] = useState('')
   const [refundInvoiceId, setRefundInvoiceId] = useState('')
 
   const [continueRefund, setContinueRefund] = useState(false)
+  const hasDefaultedMethodRef = useRef(false)
+  const hasRequestedRefundRef = useRef(false)
 
   const [
     pledgeRefundRequest,
@@ -95,34 +236,65 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     usePledgeRefundPaymentCreateMutation()
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
-  const [swapData, setSwapData] = useState<any>(null)
+  const [swapData, setSwapData] = useState<PayoutFlowSwapData | null>(null)
+  const waitingNotice = isWaitingClaimReady ? (
+    t('Your funds are ready to be claimed')
+  ) : (
+    <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>mempool.space</1>.">
+      {
+        'We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on '
+      }
+      <ChakraLink href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
+        {'mempool.space'}
+      </ChakraLink>
+      {'.'}
+    </Trans>
+  )
 
   useEffect(() => {
-    if (isOpen) {
-      pledgeRefundRequest({
-        variables: {
-          input: {
-            contributionUuid: contributionUUID,
-            projectId,
-            rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
-          },
-        },
-      })
+    if (!isOpen) {
+      hasRequestedRefundRef.current = false
+      return
     }
+
+    if (hasRequestedRefundRef.current) {
+      return
+    }
+
+    hasRequestedRefundRef.current = true
+    pledgeRefundRequest({
+      variables: {
+        input: {
+          contributionUuid: contributionUUID,
+          projectId,
+          rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
+        },
+      },
+    }).catch(() => {
+      hasRequestedRefundRef.current = false
+    })
   }, [isOpen, pledgeRefundRequest, contributionUUID, projectId, userAccountKeys?.rskKeyPair.address, rskAddress])
 
   const isProcessing = pledgeRefundRequestData?.pledgeRefundRequest.refund.status === PledgeRefundStatus.Processing
   const latestPayment = isProcessing
-    ? pledgeRefundRequestData?.pledgeRefundRequest.refund.payments.sort(
+    ? [...(pledgeRefundRequestData?.pledgeRefundRequest.refund.payments ?? [])].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )[0]
     : null
+  const activeLightningPayment = latestPayment?.paymentType === PaymentType.RskToLightningSwap ? latestPayment : null
+  const activeOnChainPayment = latestPayment?.paymentType === PaymentType.RskToOnChainSwap ? latestPayment : null
+  const activeLightningInvoiceId = activeLightningPayment
+    ? (activeLightningPayment.paymentDetails as RskToLightningSwapPaymentDetailsFragment).lightningInvoiceId
+    : ''
 
   // isClaimable is the case when the funds are in the bitcoin address, ready for the user to claim
-  const isClaimable =
-    isProcessing &&
-    latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
-    latestPayment?.status === PaymentStatus.Claimable
+  const isClaimable = activeOnChainPayment?.status === PaymentStatus.Claimable
+  const latestOnChainPaymentDetails = activeOnChainPayment?.paymentDetails as RskToOnChainSwapPaymentDetails | undefined
+  const persistedOnChainAddress = latestOnChainPaymentDetails?.onChainAddress || ''
+  const shouldResumeOnChainRefund = Boolean(
+    activeOnChainPayment && [PaymentStatus.Pending, PaymentStatus.Claimable].includes(activeOnChainPayment.status),
+  )
+  const shouldRequestBitcoinAddressOnResume = shouldResumeOnChainRefund && !persistedOnChainAddress
 
   // isRefundable is the case when the funds are in the swap contract, user needs to wait for the funds to be refunded
   const isRefundable =
@@ -131,6 +303,55 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
   // isRetryable  is the case when the funds are in the user rsk address
   const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
+
+  const totalAmount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
+  const shouldShowProcessedScreen = isProcessed || Boolean(activeLightningPayment)
+  const progressMethod = shouldShowProcessedScreen
+    ? activeLightningPayment
+      ? PayoutMethod.Lightning
+      : selectedMethod
+    : selectedMethod
+  const progressStage: RefundProgressStage = shouldShowProcessedScreen
+    ? 'completed'
+    : isWaitingConfirmation
+    ? isWaitingClaimReady
+      ? 'claim_ready'
+      : 'waiting_confirmation'
+    : shouldResumeOnChainRefund
+    ? isClaimable
+      ? 'claim_ready'
+      : 'waiting_confirmation'
+    : 'setup'
+  const progressSteps = getRefundProgressSteps({ method: progressMethod, stage: progressStage })
+  const activeProgressStep =
+    progressSteps.find((step) => step.status === 'current') ??
+    [...progressSteps].reverse().find((step) => step.status === 'complete')
+  const activeProgressDescription = activeProgressStep?.description
+  const shouldShowMethodSelectionStep = !latestPayment && !shouldResumeOnChainRefund
+
+  useEffect(() => {
+    if (!isOpen) {
+      hasDefaultedMethodRef.current = false
+      return
+    }
+
+    if (!continueRefund || latestPayment || shouldResumeOnChainRefund || hasDefaultedMethodRef.current) {
+      return
+    }
+
+    if (isClaimable) {
+      setSelectedMethod(PayoutMethod.OnChain)
+      hasDefaultedMethodRef.current = true
+      return
+    }
+
+    if (!totalAmount) {
+      return
+    }
+
+    setSelectedMethod(totalAmount < DEFAULT_LIGHTNING_PAYOUT_MAX_SATS ? PayoutMethod.Lightning : PayoutMethod.OnChain)
+    hasDefaultedMethodRef.current = true
+  }, [continueRefund, latestPayment, shouldResumeOnChainRefund, isClaimable, isOpen, totalAmount])
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -241,22 +462,25 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   }
 
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
-    if (isProcessing && isClaimable) {
-      const paymentDetails = latestPayment?.paymentDetails as RskToOnChainSwapPaymentDetails
+    if (activeOnChainPayment && latestOnChainPaymentDetails) {
+      const paymentDetails = latestOnChainPaymentDetails
 
       const swapObj = JSON.parse(paymentDetails.swapMetadata)
 
+      swapObj.id = swapObj.id || paymentDetails.swapId
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = paymentDetails.swapPreimageHash
       swapObj.preimageHex = await decryptString({
         encryptedString: swapObj.preimageHexEncrypted || '',
         password: data.accountPassword || '',
       })
-      swapObj.paymentId = latestPayment.id
+      swapObj.paymentId = activeOnChainPayment.id
       setSwapData(swapObj)
 
+      setLockTxId(paymentDetails.onChainTxId || '')
       setIsWaitingConfirmation(true)
-      setRefundAddress(data.bitcoinAddress)
+      setIsWaitingClaimReady(isClaimable)
+      setRefundAddress(paymentDetails.onChainAddress || data.bitcoinAddress || null)
       toast.info({
         title: t('Refund initiated'),
         description: t('Your Bitcoin on-chain refund will be processed shortly'),
@@ -287,6 +511,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             pledgeRefundPaymentInput: {
               rskToOnChainSwap: {
+                onChainAddress: data.bitcoinAddress || undefined,
                 boltz: {
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
@@ -307,8 +532,10 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       }
 
       const { swap, payment } = pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate
+      const paymentDetails = payment?.paymentDetails as RskToOnChainSwapPaymentDetails
 
       const swapObj = JSON.parse(swap)
+      swapObj.id = swapObj.id || paymentDetails.swapId
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = preimageHash
       swapObj.preimageHex = preimageHex
@@ -368,7 +595,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         },
       })
       setIsWaitingConfirmation(true)
-      setRefundAddress(data.bitcoinAddress)
+      setIsWaitingClaimReady(false)
+      setRefundAddress(data.bitcoinAddress || null)
       toast.info({
         title: t('Refund initiated'),
         description: t('Your Bitcoin on-chain refund will be processed shortly'),
@@ -385,12 +613,54 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   }
 
   // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, refundFileAccountKeys)
-  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, refundFileAccountKeys)
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, refundFileAccountKeys, undefined, totalAmount)
+  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, refundFileAccountKeys, {
+    requireBitcoinAddress: !shouldResumeOnChainRefund || shouldRequestBitcoinAddressOnResume,
+  })
+
+  useEffect(() => {
+    if (isOpen && shouldResumeOnChainRefund) {
+      bitcoinForm.form.reset({
+        bitcoinAddress: persistedOnChainAddress,
+        accountPassword: '',
+      })
+    }
+  }, [isOpen, shouldResumeOnChainRefund, persistedOnChainAddress, bitcoinForm.form])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    if (activeLightningPayment) {
+      setSelectedMethod(PayoutMethod.Lightning)
+      setRefundInvoiceId(activeLightningInvoiceId)
+      return
+    }
+
+    if (latestOnChainPaymentDetails) {
+      setSelectedMethod(PayoutMethod.OnChain)
+      bitcoinForm.form.reset({
+        bitcoinAddress: persistedOnChainAddress,
+        accountPassword: '',
+      })
+    }
+  }, [
+    isOpen,
+    activeLightningPayment,
+    activeLightningPayment?.id,
+    activeLightningInvoiceId,
+    latestOnChainPaymentDetails,
+    activeOnChainPayment?.id,
+    persistedOnChainAddress,
+    bitcoinForm.form,
+  ])
 
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
+    setIsWaitingConfirmation(false)
+    setIsWaitingClaimReady(false)
     setContinueRefund(false)
     onClose()
   }
@@ -400,6 +670,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     handleClose()
   }
 
+  const shouldShowContinueRefundPrompt = !continueRefund && !latestPayment && !shouldResumeOnChainRefund
   const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
 
   const handleSubmit = () => {
@@ -446,114 +717,194 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   // Show processed screen after successful submission
   if (isProcessed) {
     return (
-      <Modal
-        isOpen={isOpen}
-        onClose={handleClose}
-        size="lg"
-        title={
-          selectedMethod === PayoutMethod.Lightning
-            ? t('Refund Processed (Off-Chain)')
-            : t('Refund Processed (On-Chain)')
-        }
-      >
-        {selectedMethod === PayoutMethod.Lightning ? (
-          <LightningPayoutProcessed isRefund={true} invoiceId={refundInvoiceId} onClose={handleCompleted} />
-        ) : (
-          <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleCompleted} />
-        )}
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
+        {renderModalContent({
+          title:
+            selectedMethod === PayoutMethod.Lightning
+              ? t('Refund Processed (Off-Chain)')
+              : t('Refund Processed (On-Chain)'),
+          description: selectedMethod === PayoutMethod.OnChain ? undefined : activeProgressDescription,
+          content:
+            selectedMethod === PayoutMethod.Lightning ? (
+              <LightningPayoutProcessed isRefund={true} invoiceId={refundInvoiceId} onClose={handleCompleted} />
+            ) : (
+              <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleCompleted} />
+            ),
+        })}
       </Modal>
     )
   }
 
   if (isWaitingConfirmation) {
     return (
-      <Modal isOpen={isOpen} size="lg" title={t('Confirm your refund')} onClose={() => {}} noClose={true}>
-        <BitcoinPayoutWaitingConfirmation
-          swapData={swapData}
-          refundAddress={refundAddress || ''}
-          lockTxId={lockTxId}
-          setIsProcessed={setIsProcessed}
-          setRefundTxId={setRefundTxId}
-        />
+      <Modal isOpen={isOpen} size="4xl" onClose={() => {}} noClose={true} contentProps={{ maxW: '980px' }}>
+        {renderModalContent({
+          notice: (
+            <Feedback variant={isWaitingClaimReady ? FeedBackVariant.SUCCESS : FeedBackVariant.INFO} w="full">
+              <Body>{waitingNotice}</Body>
+            </Feedback>
+          ),
+          title: isWaitingClaimReady ? t('Claim refund') : t('Please wait for swap confirmation'),
+          description: activeProgressDescription,
+          content: (
+            <BitcoinPayoutWaitingConfirmation
+              swapData={swapData}
+              refundAddress={refundAddress || ''}
+              setLockTxId={setLockTxId}
+              initialReadyToBeClaimed={isWaitingClaimReady}
+              onReadyToBeClaimed={() => setIsWaitingClaimReady(true)}
+              setIsProcessed={setIsProcessed}
+              setRefundTxId={setRefundTxId}
+            />
+          ),
+        })}
       </Modal>
     )
   }
 
-  const ContinueRefundContent = () => {
+  const modalTitle = getRefundModalTitle({
+    shouldShowContinueRefundPrompt,
+    shouldResumeOnChainRefund,
+    shouldRequestBitcoinAddressOnResume,
+  })
+  const modalSubtitle = `${t('Total refund amount')}: ${commaFormatted(totalAmount)} sats`
+  const submitLabel = getRefundSubmitLabel({
+    shouldResumeOnChainRefund,
+    shouldRequestBitcoinAddressOnResume,
+  })
+  const modalDescription = shouldResumeOnChainRefund
+    ? undefined
+    : continueRefund
+    ? activeProgressDescription
+    : undefined
+
+  function renderModalContent(params: {
+    notice?: ReactNode
+    title?: ReactNode
+    subtitle?: ReactNode
+    description?: ReactNode
+    content: ReactNode
+    footer?: ReactNode
+  }) {
+    const { notice, title, subtitle, description, content, footer } = params
+
     return (
-      <VStack spacing={4} alignItems="start" w="full">
-        <Body size={'md'} medium>
-          {t('Refund all of the contributions you have made to this project.')} <br />
-          {t('Are you sure you want to continue with the refund?')}
-        </Body>
-        <Body size={'md'} medium></Body>
-        <HStack spacing={4} w="full" justifyContent="space-between">
-          <Button size={'lg'} colorScheme={'neutral1'} variant={'outline'} onClick={handleClose}>
-            {t('No, cancel')}
-          </Button>
-          <Button size={'lg'} colorScheme={'primary1'} variant={'solid'} onClick={() => setContinueRefund(true)}>
-            {t('Yes, continue with the refund')}
-          </Button>
-        </HStack>
-      </VStack>
+      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
+        <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} label={t('Pending refund')} />
+        <VStack flex={1} spacing={4} align="stretch" minH="100%">
+          {(title || subtitle || description) && (
+            <VStack spacing={2} align="stretch">
+              {title && (
+                <Body as="h2" size="2xl" bold color="neutral1.12">
+                  {title}
+                </Body>
+              )}
+              {subtitle && (
+                <Body size="md" bold color="neutral1.12">
+                  {subtitle}
+                </Body>
+              )}
+              {description && (
+                <Body size="md" color="neutral1.10">
+                  {description}
+                </Body>
+              )}
+            </VStack>
+          )}
+          {notice}
+          <VStack flex={1} spacing={4} align="stretch">
+            {content}
+          </VStack>
+          {footer}
+        </VStack>
+      </Stack>
     )
   }
 
-  const totalAmount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
-
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      size="lg"
-      title={t('Refund you contribution')}
-      subtitle={`${t('Total refund amount')}: ${commaFormatted(totalAmount)} sats`}
-      subtitleProps={{ bold: true }}
-      bodyProps={{ gap: 4 }}
-    >
-      {pledgeRefundRequestLoading ? (
-        <RefundRskSkeleton />
-      ) : !continueRefund ? (
-        <ContinueRefundContent />
-      ) : (
-        <>
-          {/* Payout Method Selection */}
-          <PayoutMethodSelection
-            selectedMethod={selectedMethod}
-            setSelectedMethod={setSelectedMethod}
-            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
-          />
+    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+      {pledgeRefundRequestLoading
+        ? renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: modalDescription,
+            content: <RefundRskSkeleton />,
+          })
+        : shouldShowContinueRefundPrompt
+        ? renderModalContent({
+            title: t('Refund your contribution'),
+            subtitle: modalSubtitle,
+            content: <ContinueRefundContent />,
+            footer: (
+              <Stack direction={{ base: 'column', md: 'row' }} spacing={4} w="full">
+                <Button flex={1} w="full" size="lg" colorScheme="neutral1" variant="outline" onClick={handleClose}>
+                  {t('No, cancel')}
+                </Button>
+                <Button
+                  flex={1}
+                  w="full"
+                  size="lg"
+                  colorScheme="primary1"
+                  variant="solid"
+                  onClick={() => setContinueRefund(true)}
+                >
+                  {t('Yes, continue with the refund')}
+                </Button>
+              </Stack>
+            ),
+          })
+        : renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: modalDescription,
+            content: (
+              <>
+                {shouldShowMethodSelectionStep && (
+                  <PayoutMethodSelection
+                    selectedMethod={selectedMethod}
+                    setSelectedMethod={setSelectedMethod}
+                    disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
+                  />
+                )}
 
-          {/* Form Section */}
-          <CardLayout w="full" p={6}>
-            {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm
-                form={lightningForm.form}
-                satsAmount={totalAmount}
-                disablePassword={Boolean(privateKey)}
-              />
-            ) : (
-              <BitcoinPayoutForm
-                form={bitcoinForm.form}
-                satsAmount={totalAmount}
-                disablePassword={Boolean(privateKey)}
-              />
-            )}
-          </CardLayout>
-
-          <Button
-            w="full"
-            size="lg"
-            colorScheme="primary1"
-            variant="solid"
-            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundPaymentCreateLoading}
-            isDisabled={!enableSubmit}
-            onClick={handleSubmit}
-          >
-            {t('Claim Refund')}
-          </Button>
-        </>
-      )}
+                {shouldResumeOnChainRefund ? (
+                  <BitcoinPayoutForm
+                    form={bitcoinForm.form}
+                    satsAmount={totalAmount}
+                    disableBitcoinAddress={shouldResumeOnChainRefund && !shouldRequestBitcoinAddressOnResume}
+                    showBitcoinAddress={!shouldResumeOnChainRefund || shouldRequestBitcoinAddressOnResume}
+                  />
+                ) : selectedMethod === PayoutMethod.Lightning ? (
+                  <LightningPayoutForm
+                    form={lightningForm.form}
+                    disablePassword={Boolean(privateKey)}
+                    lightningAddress={lightningForm.lightningAddress}
+                  />
+                ) : (
+                  <BitcoinPayoutForm
+                    form={bitcoinForm.form}
+                    satsAmount={totalAmount}
+                    disablePassword={Boolean(privateKey)}
+                    disableBitcoinAddress={false}
+                    showBitcoinAddress={true}
+                  />
+                )}
+              </>
+            ),
+            footer: (
+              <Button
+                w="full"
+                size="lg"
+                colorScheme="primary1"
+                variant="solid"
+                isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundPaymentCreateLoading}
+                isDisabled={!enableSubmit}
+                onClick={handleSubmit}
+              >
+                {submitLabel}
+              </Button>
+            ),
+          })}
     </Modal>
   )
 }
@@ -562,9 +913,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 export const RefundRskSkeleton = () => {
   return (
     <VStack w="full" spacing={4} alignItems="start">
-      {/* Payout Method Selection Label Skeleton */}
-      <SkeletonLayout height="24px" width="160px" />
-
       {/* Payout Method Buttons Skeleton */}
       <HStack w="full" spacing={4}>
         <VStack
@@ -594,17 +942,54 @@ export const RefundRskSkeleton = () => {
       </HStack>
 
       {/* Form Section Skeleton */}
-      <CardLayout w="full" p={6}>
-        <VStack w="full" spacing={4} alignItems="start">
-          <SkeletonLayout height="20px" width="100px" />
-          <SkeletonLayout height="40px" width="100%" />
-          <SkeletonLayout height="20px" width="80px" />
-          <SkeletonLayout height="40px" width="100%" />
-        </VStack>
-      </CardLayout>
+      <VStack w="full" spacing={4} alignItems="start" pt={2}>
+        <SkeletonLayout height="20px" width="100px" />
+        <SkeletonLayout height="40px" width="100%" />
+        <SkeletonLayout height="20px" width="160px" />
+        <SkeletonLayout height="40px" width="100%" />
+      </VStack>
 
       {/* Submit Button Skeleton */}
       <SkeletonLayout height="48px" width="100%" />
     </VStack>
   )
+}
+
+function getRefundModalTitle(params: {
+  shouldShowContinueRefundPrompt: boolean
+  shouldResumeOnChainRefund: boolean
+  shouldRequestBitcoinAddressOnResume: boolean
+}): string {
+  const { shouldShowContinueRefundPrompt, shouldResumeOnChainRefund, shouldRequestBitcoinAddressOnResume } = params
+
+  if (shouldShowContinueRefundPrompt) {
+    return t('Refund your contribution')
+  }
+
+  if (!shouldResumeOnChainRefund) {
+    return t('Choose a refund method')
+  }
+
+  if (shouldRequestBitcoinAddressOnResume) {
+    return t('Resume your refund')
+  }
+
+  return t('Confirm your password to resume the refund')
+}
+
+function getRefundSubmitLabel(params: {
+  shouldResumeOnChainRefund: boolean
+  shouldRequestBitcoinAddressOnResume: boolean
+}): string {
+  const { shouldResumeOnChainRefund, shouldRequestBitcoinAddressOnResume } = params
+
+  if (!shouldResumeOnChainRefund) {
+    return t('Confirm refund method')
+  }
+
+  if (shouldRequestBitcoinAddressOnResume) {
+    return t('Resume my refund')
+  }
+
+  return t('Confirm my password')
 }

@@ -12,7 +12,7 @@ import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
-import { LAUNCH_FEE_USD_CENTS } from '../launch/views/LaunchFees.tsx'
+import { LAUNCH_FEE_USD_CENTS } from '../launch/constants/launchFees.ts'
 import { ProjectLaunchStrategy } from '../launch/views/LaunchStrategySelection.tsx'
 
 const options = {

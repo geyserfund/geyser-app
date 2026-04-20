@@ -1,34 +1,23 @@
 import { Button, Icon } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue, useSetAtom } from 'jotai'
 import React, { useState } from 'react'
 import { PiArrowSquareOut } from 'react-icons/pi'
 import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
-import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
-import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
-import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
-import { useFundingFiatSwapPaymentCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-import { FiatSwapStatus, fiatSwapStatusAtom } from '../atom/fiatSwapStatusAtom.ts'
 import { fiatSwapCurrencies } from '../data.ts'
+import { useCreateFiatSwapPayment } from '../hooks/useCreateFiatSwapPayment.ts'
 import { BitcoinPurchaseNotice } from './BitcoinPurchaseNotice.tsx'
 
 /** Component for handling fiat swap currency selection and payment */
 export const FiatSwapForm: React.FC = () => {
   const toast = useNotification()
 
-  const fundingContribution = useAtomValue(fundingContributionAtom)
-  const project = useAtomValue(fundingProjectAtom)
-  const updateFundingPaymentDetails = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
-  const setFiatSwapStatus = useSetAtom(fiatSwapStatusAtom)
-
-  const [createFiatSwapPayment, { loading: isLoading }] = useFundingFiatSwapPaymentCreateMutation()
+  const { createFiatSwapPayment, loading: isLoading } = useCreateFiatSwapPayment()
 
   const [selectedCurrency, setSelectedCurrency] = useState<SingleValue<{ label: string; value: string }>>()
 
@@ -40,30 +29,7 @@ export const FiatSwapForm: React.FC = () => {
       return
     }
 
-    const { data } = await createFiatSwapPayment({
-      variables: {
-        input: {
-          contributionId: fundingContribution.id,
-          paymentsInput: {
-            fiatToLightningSwap: {
-              create: true,
-              banxa: {
-                fiatCurrency: selectedCurrency?.value || '',
-                returnUrl: `${window.location.origin}${getPath('fundingCallback', project.name)}`,
-              },
-            },
-          },
-        },
-      },
-    })
-
-    if (data?.contributionPaymentsAdd.payments.fiatToLightningSwap?.checkoutUrl) {
-      window.open(data.contributionPaymentsAdd.payments.fiatToLightningSwap.checkoutUrl, '_blank')
-      updateFundingPaymentDetails({
-        fiatToLightningSwap: data?.contributionPaymentsAdd.payments.fiatToLightningSwap,
-      })
-      setFiatSwapStatus(FiatSwapStatus.pending)
-    }
+    await createFiatSwapPayment({ fiatCurrency: selectedCurrency.value })
   }
 
   return (

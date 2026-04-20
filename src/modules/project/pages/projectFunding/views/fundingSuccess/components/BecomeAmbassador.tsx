@@ -1,8 +1,9 @@
 import { Button, HStack, IconButton, Link, useClipboard, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { PiArrowClockwiseBold, PiCopy, PiShareFat } from 'react-icons/pi'
 
+import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
@@ -13,8 +14,17 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors, standardPadding } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
-import { useProjectAmbassadorStatsQuery, usePublishNostrEventMutation } from '@/types'
-import { useNotification } from '@/utils'
+import {
+  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
+  formatEffectiveAffiliatePayoutRate,
+  GEYSER_PROMOTION_FEE_RATE,
+} from '@/shared/utils/affiliatePayout.ts'
+import {
+  useProjectAmbassadorStatsQuery,
+  usePublishNostrEventMutation,
+  useUserAffiliatePartnerTermsQuery,
+} from '@/types'
+import { commaFormatted, useNotification } from '@/utils'
 
 import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
 
@@ -38,7 +48,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
   const { totalSats } = useFundingFormAtom()
 
   const handleNostrPost = async () => {
-    const event = await createPostEvent(project.title, project.keys.nostrKeys.publicKey.hex, totalSats)
+    const event = await createPostEvent(project.name, project.keys.nostrKeys.publicKey.hex, totalSats)
 
     if (event) {
       await publishNostrEvent({
@@ -76,7 +86,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           {heroLink.replace('https://', '')}
         </Body>
         <IconButton
-          aria-label={heroId ? 'Copy hero link' : 'Copy link'}
+          aria-label={heroId ? t('Copy hero link') : t('Copy link')}
           icon={<PiCopy />}
           variant="ghost"
           size="md"
@@ -88,12 +98,19 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
         {window.nostr && (
           <Button
             size="lg"
-            variant="soft"
-            colorScheme="nostr"
+            variant="solid"
+            bg="whiteAlpha.800"
+            color={lightModeColors.neutral1[11]}
+            border="1px solid"
+            borderColor={lightModeColors.neutral1[7]}
+            borderRadius={8}
             rightIcon={<PiArrowClockwiseBold />}
             w="full"
             isLoading={isPublishingNostrEvent || isPosting}
             onClick={handleNostrPost}
+            _hover={{
+              bg: 'whiteAlpha.900',
+            }}
           >
             {t('Post on Nostr')}
           </Button>
@@ -126,7 +143,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           onClick={handleCopy}
           w="full"
         >
-          {heroId ? t('Copy hero link') : t('Copy link')}
+          {t('Copy link')}
         </Button>
       </HStack>
     </>
@@ -154,6 +171,7 @@ const ShareProjectCard = ({ heroLink, heroId, twitterShareText, handleCopy }: Li
 type AmbassadorCardProps = LinkActionsSectionProps & {
   ambassadorsCount?: number
   totalSats?: number
+  effectiveContributionPayout: string
 }
 
 /** Ambassador section for logged in users */
@@ -164,6 +182,7 @@ const AmbassadorCard = ({
   handleCopy,
   ambassadorsCount,
   totalSats,
+  effectiveContributionPayout,
 }: AmbassadorCardProps) => {
   const { t } = useTranslation()
 
@@ -185,21 +204,14 @@ const AmbassadorCard = ({
         </H2>
       </HStack>
       <Body color="black">
-        <Trans
-          i18nKey="Spread the word using your own <1>Hero link</1>. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project."
-          values={{
-            ambassadorsCount: ambassadorsCount || 0,
-            totalSats: totalSats || 0,
-          }}
-        >
-          {'Spread the word using your own '}
-          <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline">
-            {'Hero link'}
-          </Body>
-          {
-            '. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.'
-          }
-        </Trans>
+        {t('Become an Ambassador for this project by spreading the word using your ambassador link.')}{' '}
+        {t('You will earn {{rate}} of each contribution you enable.', {
+          rate: effectiveContributionPayout,
+        })}{' '}
+        {t('So far, {{count}} ambassadors have enabled {{amount}} sats in contributions to this project.', {
+          count: ambassadorsCount || 0,
+          amount: commaFormatted(totalSats || 0),
+        })}
       </Body>
 
       <LinkActionsSection
@@ -208,6 +220,7 @@ const AmbassadorCard = ({
         twitterShareText={twitterShareText}
         handleCopy={handleCopy}
       />
+      <AmbassadorReferralTermsNotice />
     </VStack>
   )
 }
@@ -219,6 +232,10 @@ export const BecomeAnAmbassador = () => {
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
 
   const user = loggedInUser || fundingInputAfterRequest?.user
+  const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
+    skip: !user?.id,
+    variables: { where: { id: user?.id } },
+  })
   const heroId = user?.heroId
   const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `?hero=${heroId}` : ''}`
 
@@ -229,6 +246,11 @@ export const BecomeAnAmbassador = () => {
   const { onCopy } = useClipboard(heroLink)
   const toast = useNotification()
   const { getShareProjectUrl } = useProjectShare()
+  const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
+    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
+      DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
+    GEYSER_PROMOTION_FEE_RATE,
+  )
 
   const projectShareUrl = heroId ? heroLink : getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
@@ -237,7 +259,7 @@ export const BecomeAnAmbassador = () => {
     onCopy()
     toast.success({
       title: t('Copied!'),
-      description: heroId ? t('Hero link copied to clipboard') : t('Link copied to clipboard'),
+      description: t('Link copied to clipboard'),
     })
   }
 
@@ -253,7 +275,12 @@ export const BecomeAnAmbassador = () => {
   }
 
   return isLoggedIn ? (
-    <AmbassadorCard {...sharedProps} ambassadorsCount={ambassadorsCount} totalSats={totalSats} />
+    <AmbassadorCard
+      {...sharedProps}
+      ambassadorsCount={ambassadorsCount}
+      totalSats={totalSats}
+      effectiveContributionPayout={effectiveContributionPayout}
+    />
   ) : (
     <ShareProjectCard {...sharedProps} />
   )

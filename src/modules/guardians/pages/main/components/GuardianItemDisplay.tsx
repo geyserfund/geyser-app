@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Link, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, Link, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { RewardDetails, RewardMap } from '@/modules/guardians/utils/constants.ts'
@@ -19,39 +19,13 @@ export const GuardianItemDisplay = ({
 }) => {
   return (
     <VStack w="full" spacing={8}>
-      <VStack w="full" spacing={1} id={`guardians-${details.rewardType}`}>
-        <GuardianSubHeader textTransform="uppercase" lineHeight={1} textAlign={'center'}>
-          {details.title}
-        </GuardianSubHeader>
-        <HStack w="full" flexWrap={'wrap'} justifyContent={'center'}>
-          <Body fontSize={{ base: '20px', lg: '36px' }} textAlign={'center'}>
-            {t('In partnership with')}
-          </Body>
-          {details.partners.map((partner, index) => {
-            return (
-              <HStack key={partner.link}>
-                <Box as={Link} href={partner.link} isExternal>
-                  <Image
-                    src={partner.image}
-                    alt={`${partner.name} partner image`}
-                    maxHeight={{ base: '30px', lg: '50px' }}
-                    maxWidth="250px"
-                  />
-                </Box>
-                {index < details.partners.length - 1 && <Body fontSize={{ base: '20px', lg: '36px' }}>{t('&')}</Body>}
-              </HStack>
-            )
-          })}
-        </HStack>
-      </VStack>
+      <StackHeader details={details} />
       <HStack
         w="full"
         justifyContent={'center'}
         paddingX={{ base: 4, lg: 12 }}
         spacing={{ base: 12, lg: '4%', '3xl': '8%' }}
-        // paddingX={{ base: 4, md: '20px', lg: '60px', xl: '80px', '2xl': '100px', '3xl': '160px' }}
         flexDirection={{ base: 'column', lg: 'row' }}
-        // spacing={{ base: 12, md: 0 }}
       >
         {rewards.map((reward) => {
           return (
@@ -64,5 +38,51 @@ export const GuardianItemDisplay = ({
         })}
       </HStack>
     </VStack>
+  )
+}
+
+const StackHeader = ({ details }: { details: RewardDetails }) => {
+  return (
+    <Stack
+      w="full"
+      id={`guardians-${details.rewardType}`}
+      direction={{ base: 'column', md: 'row' }}
+      spacing={{ base: 3, md: 6 }}
+      justify="space-between"
+      align={{ base: 'flex-start', md: 'center' }}
+    >
+      <GuardianSubHeader
+        textTransform="none"
+        lineHeight={1}
+        textAlign="left"
+        fontSize={{ base: '18px', md: '22px', lg: '26px', xl: '32px' }}
+      >
+        {details.title}
+      </GuardianSubHeader>
+      <HStack w={{ base: 'full', md: 'auto' }} flexWrap="wrap" justify="flex-end" align="flex-end">
+        <Body fontSize={{ base: '14px', lg: '16px' }} textAlign="right" color="neutral1.9">
+          {t('in partnership with')}
+        </Body>
+        {details.partners.map((partner, index) => {
+          return (
+            <HStack key={partner.link} align="flex-end">
+              <Box as={Link} href={partner.link} isExternal>
+                <Image
+                  src={partner.image}
+                  alt={`${partner.name} partner image`}
+                  maxHeight={{ base: '30px', lg: '40px' }}
+                  maxWidth="220px"
+                />
+              </Box>
+              {index < details.partners.length - 1 && (
+                <Body fontSize={{ base: '14px', lg: '16px' }} color="neutral1.9">
+                  {t('&')}
+                </Body>
+              )}
+            </HStack>
+          )
+        })}
+      </HStack>
+    </Stack>
   )
 }

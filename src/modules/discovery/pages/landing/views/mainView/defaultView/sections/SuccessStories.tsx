@@ -2,6 +2,7 @@ import { Link, SimpleGrid } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
+import BringSuccessStoryImage from '@/assets/bring-success-story.webp'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { CreationStoryCard } from '@/modules/project/pages/projectCreation/views/start/components/CreationStoryCard.tsx'
 
@@ -56,10 +57,30 @@ const stories = [
     image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_stories_12.png',
     link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/nostr-booth',
   },
+  {
+    image: BringSuccessStoryImage,
+    link: 'https://guide.geyser.fund/geyser-docs/guides/take-brindon-to-btc-prague',
+  },
+  {
+    image:
+      'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_love_is_the_cure.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/love-is-the-cure',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_Node_runners.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/noderunners-bitcoin-blitz',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_wall_axe.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/wallaxe',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_we_satoshi.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/wesatoshis',
+  },
 ]
 
 export const SuccessStories = () => {
-  // Select 4 random stories for display
   const displayedStories = useMemo(() => {
     const shuffledStories = [...stories].sort(() => 0.5 - Math.random())
     return shuffledStories.slice(0, 4)

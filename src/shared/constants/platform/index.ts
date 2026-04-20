@@ -1,3 +1,4 @@
+export * from './aiSeo'
 export * from './copy'
 export * from './currency'
 export * from './defaultViewTags'

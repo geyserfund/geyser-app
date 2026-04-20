@@ -56,7 +56,7 @@ export const useProjectToolkit = (
     const balance = getProjectBalance()
 
     if (balance.sats && project.aonGoal?.goalAmount) {
-      return Math.round((balance.sats / project.aonGoal.goalAmount) * 100)
+      return Math.floor((balance.sats / project.aonGoal.goalAmount) * 100)
     }
 
     return 0

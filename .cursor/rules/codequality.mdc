@@ -45,3 +45,7 @@ Always provide links to the real files, not x.md.
 
 ## No Current Implementation
 Don't show or discuss the current implementation unless specifically requested.
+
+## Learnings
+- When introducing shared helpers, add explicit type imports to avoid dependency issues, and avoid adding redundant derived atoms if an existing atom already covers the needed state.
+- Keep translatable UI metadata in one `t()` call with interpolation, avoid `useMemo([])` around translated content, and validate theme token names against `src/shared/styles/colors.ts` (for example prefer `primaryAlpha.*` over undefined `primary1Alpha.*`).

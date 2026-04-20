@@ -6,14 +6,14 @@ import { RightSideStickyLayout } from '@/modules/project/components/RightSideSti
 import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
-import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
 import { RewardNotice } from '../../components/RewardNotice.tsx'
 import {
   ContributionSummary,
-  CreatorTools,
+  ControlPanel,
+  Creator,
   Details,
   Goals,
   Header,
@@ -26,9 +26,13 @@ import { AonGoToRefundPage } from './sections/AonGoToRefundPage.tsx'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
-import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
-import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
+import {
+  type ProjectImpactFundRecipient,
+  ImpactFundRecipientBanner,
+} from './sections/header/components/ImpactFundRecipientBadge.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
+import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
+import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -36,7 +40,9 @@ export const ProjectBody = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const isAon = isAllOrNothing(project)
+  const { impactFundRecipient } = project as typeof project & {
+    impactFundRecipient?: ProjectImpactFundRecipient | null
+  }
 
   useEffect(() => {
     if (loading) return
@@ -63,16 +69,17 @@ export const ProjectBody = () => {
       >
         <ProjectPreLaunchNav />
 
-        <ProjectPromotionNotice />
-
         <CreatorVerificationNotice />
 
         <AonNotification />
+        <TiaContributionRefundNotification />
+        <PausedRecurringContributionNotice />
 
-        <CreatorTools />
+        <ControlPanel />
 
         <Header />
-
+        <Creator />
+        <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
 
         <Story />
@@ -81,7 +88,6 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
-        {!isAon && <FundNowWithLightning />}
         <AonGoToRefundPage />
 
         <SuggestedProjects

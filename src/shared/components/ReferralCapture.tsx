@@ -1,32 +1,40 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useSearchParams } from 'react-router'
+import { useLocation, useSearchParams } from 'react-router'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 
 /** Component to handle capturing the referring hero ID from URL */
 export const ReferralCapture = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { pathname } = useLocation()
+  const [searchParams] = useSearchParams()
   const [referrerHeroId, setReferrerHeroId] = useAtom(referrerHeroIdAtom)
+  const { user } = useAuthContext()
 
   useEffect(() => {
-    const heroIdFromUrl = searchParams.get('hero')
-
-    // Capture First logic: Only set if a heroId is in URL and we haven't captured one yet.
-    if (heroIdFromUrl && referrerHeroId === null) {
-      setReferrerHeroId(heroIdFromUrl)
-      // Optional: Remove the param from URL - consider if needed globally
-      setSearchParams(
-        (prev) => {
-          prev.delete('hero')
-          return prev
-        },
-        { replace: true },
-      )
+    if (user.heroId && referrerHeroId === user.heroId) {
+      setReferrerHeroId(null)
     }
-    // Add referrerHeroId to dependency array to re-run if it changes (e.g., manually cleared)
-    // Add setReferrerHeroId to satisfy exhaustive-deps rule.
-  }, [searchParams, referrerHeroId, setReferrerHeroId, setSearchParams])
+
+    if (pathname.startsWith('/launch')) {
+      return
+    }
+
+    const heroIdFromUrl = searchParams.get('hero')
+    if (!heroIdFromUrl) {
+      return
+    }
+
+    if (heroIdFromUrl === user.heroId) {
+      return
+    }
+
+    // Capture First logic: only set if a heroId is in URL and we haven't captured one yet.
+    if (referrerHeroId === null || referrerHeroId === user.heroId) {
+      setReferrerHeroId(heroIdFromUrl)
+    }
+  }, [pathname, referrerHeroId, searchParams, setReferrerHeroId, user.heroId])
 
   // This component doesn't render anything itself
   return null

@@ -7,10 +7,13 @@ import { GuardianBody } from '../GuardiansMainPage.tsx'
 
 const PartnerPromotionUrl = 'https://geyser.fund/project/geyserpromotions/rewards/view/6267?hero=geyser'
 
+/** Renders the commercial partners participating in the Guardians drop. */
 export const Partners = () => {
   return (
     <>
-      <GuardianBody>{t('Bitcoin brands empowering creators to drive adoption worldwide.')}</GuardianBody>
+      <GuardianBody>
+        {t('Bitcoin brands collaborating with Guardians to fund Geyser Impact Funds and grassroots adoption worldwide.')}
+      </GuardianBody>
       <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
         {PartnerUrls.slice(0, 4).map((partner, index) => (
           <Link href={partner.link} isExternal key={partner.image}>

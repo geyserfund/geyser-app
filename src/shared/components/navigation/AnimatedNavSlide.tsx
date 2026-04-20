@@ -15,7 +15,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { lightModeColors } from '@/shared/styles'
-import { NewBadgeGradient, SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
+import { NewBadgeGradient } from '@/shared/styles/custom.ts'
 
 import { toInt } from '../../../utils'
 import { TooltipPopover } from '../feedback/TooltipPopover.tsx'
@@ -88,8 +88,8 @@ export const AnimatedNavSlide = ({
     if (node !== null) {
       setButtonPropsArray((current) => {
         current[index] = {
-          left: node.offsetLeft - 4,
-          width: node.offsetWidth + 12,
+          left: node.offsetLeft,
+          width: node.offsetWidth,
         }
         return current
       })
@@ -116,11 +116,11 @@ export const AnimatedNavSlide = ({
         <motion.div
           style={{
             position: 'absolute',
-            bottom: '-20px',
-            height: '4px',
-            background: SuccessImageBackgroundGradient,
+            bottom: '-10px',
+            height: '3px',
+            backgroundColor: '#4A4A4A',
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
-            borderRadius: '10px',
+            borderRadius: '3px',
             opacity: currentActiveItem?.isDisabled ? 0 : 1,
             left: initialButtonProps.left,
             width: initialButtonProps.width,
@@ -168,7 +168,6 @@ export const AnimatedNavSlide = ({
             disableColorMode={disableColorMode}
             position="relative"
           >
-            {item.new && <NavigationNewBadge position="absolute" top={-3} />}
             <TooltipPopover key={item.name} text={item.tooltipLabel}>
               <HStack
                 w="full"
@@ -180,11 +179,12 @@ export const AnimatedNavSlide = ({
                 alignItems="center"
               >
                 {item.icon}
-                {
-                  <Body as="span" size="md" fontWeight={isActive ? 700 : 500} paddingTop={4}>
+                <Box position="relative" display="inline-flex" alignItems="center">
+                  <Body as="span" size="md" fontWeight={isActive ? 700 : 500} paddingTop={2}>
                     {t(item.name)}
                   </Body>
-                }
+                  {item.new && <NavigationNewBadge position="absolute" top={-1} right={-8} />}
+                </Box>
               </HStack>
             </TooltipPopover>
           </ProjectNavigationButton>
@@ -220,13 +220,14 @@ export const NavigationNewBadge = (props: BoxProps) => {
   return (
     <Box
       background={NewBadgeGradient}
-      borderRadius="10px"
+      borderRadius="8px"
       borderBottomLeftRadius="2px"
-      padding="0px 6px 1px 6px"
+      padding="0px 4px"
+      lineHeight="1.1"
       {...props}
     >
-      <Body as="span" size="xs" fontWeight={700} color="black !important">
-        {t('live')}
+      <Body as="span" fontSize="9px" fontWeight={700} color="black !important">
+        {t('New')}
       </Body>
     </Box>
   )

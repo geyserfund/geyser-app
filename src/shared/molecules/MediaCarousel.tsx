@@ -28,7 +28,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
       },
     },
     '& .swiper-button-disabled': {
-      opacity: 0,
+      opacity: 1,
     },
 
     '& .swiper-pagination-bullets-dynamic': {
@@ -37,7 +37,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
       backgroundColor: 'rgba(0, 0, 0, 0.60)',
     },
     '& .swiper-button-next': {
-      opacity: 0,
+      opacity: 1,
       transition: 'opacity 0.2s',
       '&::after': {
         padding: '8px 8px 8px 9px',
@@ -53,7 +53,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
       },
     },
     '& .swiper-button-prev': {
-      opacity: 0,
+      opacity: 1,
       transition: 'opacity 0.2s',
       '&::after': {
         padding: '8px 9px 8px 8px',

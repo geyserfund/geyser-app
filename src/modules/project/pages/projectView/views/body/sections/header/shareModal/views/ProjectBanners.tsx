@@ -1,31 +1,46 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 
 import { ProjectBannerView } from './ProjectBannerView.tsx'
 import { ProjectShareContribute } from './ProjectShareContribute.tsx'
 
 type BannerType = 'project' | 'lightning'
 
-const options = [
-  {
-    label: t('Go to Project'),
-    value: 'project',
-  },
-  {
-    label: t('Lightning QR code'),
-    value: 'lightning',
-  },
-]
-
 export const ProjectBanners = () => {
+  const { isAon, isPrismEnabled } = useProjectAtom()
   const [selectedType, setSelectedType] = useState<BannerType>('project')
+  const hideLightningBanner = isAon || isPrismEnabled
 
-  const handleSelectChange = (value: SingleValue<{ label: string; value: string }>) => {
-    setSelectedType(value?.value as BannerType)
+  const options = useMemo(
+    () =>
+      [
+        {
+          label: t('Go to Project'),
+          value: 'project',
+        },
+        !hideLightningBanner && {
+          label: t('Lightning QR code'),
+          value: 'lightning',
+        },
+      ].filter(Boolean) as Array<{ label: string; value: BannerType }>,
+    [hideLightningBanner],
+  )
+
+  useEffect(() => {
+    if (hideLightningBanner && selectedType === 'lightning') {
+      setSelectedType('project')
+    }
+  }, [hideLightningBanner, selectedType])
+
+  const handleSelectChange = (value: SingleValue<{ label: string; value: BannerType }>) => {
+    if (value?.value) {
+      setSelectedType(value.value)
+    }
   }
 
   const renderBanner = () => {

@@ -4,10 +4,8 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context/auth.tsx'
-import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { VerificationModal } from '@/modules/project/pages/projectDashboard/components/VerificationModal.tsx'
 import { UserVerificationModal } from '@/modules/project/pages/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
 import { useUserVerificationModal } from '@/modules/project/pages/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
 import { isProjectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
@@ -17,14 +15,10 @@ import {
 } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { useModal } from '@/shared/hooks/useModal.tsx'
-import { lightModeColors } from '@/shared/styles/colors.ts'
-import { BrandCreamGradient } from '@/shared/styles/custom.ts'
 import { UserVerificationLevel, UserVerificationLevelInput, UserVerificationStatus } from '@/types/index.ts'
 import { isActive } from '@/utils/index.ts'
 
 import {
-  becomeVerifiedNoticeAtom,
   firstFundingLimitAlmostReachedNoticeClosedAtom,
   secondFundingLimitAlmostReachedNoticeClosedAtom,
 } from './noticeAtom.ts'
@@ -37,14 +31,8 @@ const isVerificationOnHold = (currentVerificationLevel: any) => {
   )
 }
 
-/** Helper to check if user should be prompted to become verified */
-const shouldShowBecomeVerified = (user: any, becomeVerifiedNotice: boolean) => {
-  return !user?.complianceDetails.verifiedDetails.identity?.verified && !becomeVerifiedNotice
-}
-
 export const CreatorVerificationNotice = () => {
   const { user } = useAuthContext()
-  const becomeVerifiedNotice = useAtomValue(becomeVerifiedNoticeAtom)
 
   const { project } = useProjectAtom()
 
@@ -83,10 +71,6 @@ export const CreatorVerificationNotice = () => {
 
   if (isVerificationOnHold(currentVerificationLevel)) {
     return <VerificationOnHoldNotice />
-  }
-
-  if (shouldShowBecomeVerified(user, becomeVerifiedNotice)) {
-    return <BecomeVerifiedNotice />
   }
 
   return null
@@ -251,56 +235,6 @@ const AlmostReachedLimitNotice = () => {
         accessToken={userVerificationToken?.token || ''}
         verificationLevel={userVerificationToken?.verificationLevel}
       />
-    </>
-  )
-}
-
-const BecomeVerifiedNotice = () => {
-  const setBecomeVerifiedNotice = useSetAtom(becomeVerifiedNoticeAtom)
-
-  const verifyIntroModal = useModal()
-
-  return (
-    <>
-      <CardLayout
-        as={HStack}
-        width="100%"
-        flexDirection="row"
-        background={BrandCreamGradient}
-        position="relative"
-        backgroundColor="utils.pbg"
-      >
-        <IconButton
-          position="absolute"
-          variant="ghost"
-          right="5px"
-          top="5px"
-          size="xs"
-          icon={<Icon as={PiX} />}
-          aria-label="Close"
-          onClick={() => {
-            setBecomeVerifiedNotice(true)
-          }}
-        />
-        <VStack flex={1} spacing={0} alignItems="start">
-          <HStack>
-            <Body bold color={lightModeColors.neutral1[12]}>
-              {t('Become a Verified Creator')} {t('(optional)')}
-            </Body>
-            <VerifiedBadge fontSize="20px" />
-          </HStack>
-
-          <Body size="sm" color={lightModeColors.neutral1[10]}>
-            {t('Earn a verified creator badge and enable fiat contributions by verifying your identity.')}
-          </Body>
-        </VStack>
-        <VStack justifyContent="flex-end" h="full">
-          <Button variant="solid" colorScheme="primary1" onClick={verifyIntroModal.onOpen}>
-            {t('Verify now')}
-          </Button>
-        </VStack>
-      </CardLayout>
-      <VerificationModal {...verifyIntroModal} />
     </>
   )
 }

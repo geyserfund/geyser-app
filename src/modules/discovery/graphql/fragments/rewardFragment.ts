@@ -22,6 +22,7 @@ export const FRAGMENT_REWARD_FOR_PRODUCTS_PAGE = gql`
   fragment RewardForProductsPage on ProjectReward {
     id
     uuid
+    category
     images
     cost
     name
@@ -32,6 +33,7 @@ export const FRAGMENT_REWARD_FOR_PRODUCTS_PAGE = gql`
       name
       title
       thumbnailImage
+      fundingStrategy
       category
       subCategory
     }

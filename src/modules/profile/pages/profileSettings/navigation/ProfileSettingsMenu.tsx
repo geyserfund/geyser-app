@@ -1,4 +1,4 @@
-import { Button, ButtonProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router'
@@ -21,7 +21,7 @@ export const ProfileSettingsMenuMobile = () => {
 
 export const ProfileSettingsMenuDesktop = () => {
   return (
-    <VStack height={'100%'} p={6} spacing={3} borderRight="1px solid" borderColor="neutral1.6">
+    <VStack height={'100%'} p={6} spacing={3} borderRight="1px solid" borderColor="neutral1.6" boxShadow="none">
       <ProfileSettingsMenuContent />
     </VStack>
   )
@@ -37,14 +37,16 @@ const ProfileSettingsMenuContent = (props: ButtonProps) => {
   return (
     <>
       {profileSettingsItems.map((item) => (
-        <ProfileSettingsMenuButton
-          key={item.label}
-          item={item}
-          currentProfileSettingsItem={currentProfileSettingsItem}
-          isMobile={isMobile}
-          userId={user.id}
-          {...props}
-        />
+        <VStack key={item.label} spacing={3} w="full">
+          <ProfileSettingsMenuButton
+            item={item}
+            currentProfileSettingsItem={currentProfileSettingsItem}
+            isMobile={isMobile}
+            userId={user.id}
+            {...props}
+          />
+          {item.showDividerAfter ? <Divider borderColor="neutral1.6" /> : null}
+        </VStack>
       ))}
     </>
   )
@@ -71,6 +73,7 @@ const ProfileSettingsMenuButton = ({
       variant="menu"
       colorScheme="primary1"
       size="lg"
+      boxShadow="none"
       width={`${dimensions.project.dashboard.menu.width}px`}
       key={item.label}
       leftIcon={<item.icon fontSize="18px" />}

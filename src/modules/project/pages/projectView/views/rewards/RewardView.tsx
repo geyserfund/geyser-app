@@ -16,7 +16,7 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
@@ -27,6 +27,7 @@ import { ProjectRewardShippingEstimate } from '../../../../forms/shippingConfigF
 import { PostsUpdates } from '../../components/PostsUpdates.tsx'
 import { useRewardBuy } from '../../hooks/index.ts'
 import { FollowButton } from '../body/components/FollowButton.tsx'
+import { AonNotice } from './components/AonNotice.tsx'
 import { RewardEditMenu } from './components/RewardEditMenu.tsx'
 import { RewardShare } from './components/RewardShare.tsx'
 
@@ -121,6 +122,8 @@ export const RewardView = () => {
           </Button>
           {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
+
+        <AonNotice />
 
         <CardLayout
           w="full"
@@ -241,7 +244,7 @@ export const RewardView = () => {
                 }}
                 flex={1}
               >
-                <MarkdownField preview content={reward.description || ''} />
+                <MdxMarkdownEditor mode="preview" value={reward.description || ''} />
               </HStack>
             )}
             {reward.posts.length > 0 && (

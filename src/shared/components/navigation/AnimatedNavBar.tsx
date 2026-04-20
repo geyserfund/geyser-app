@@ -106,6 +106,7 @@ export const AnimatedNavBar = ({
       padding={'2px'}
       background={disableColorMode ? lightModeColors.neutralAlpha[3] : 'neutralAlpha.3'}
       borderRadius={'12px'}
+      boxShadow="none"
       position="relative"
       zIndex={2}
       {...props}
@@ -119,11 +120,10 @@ export const AnimatedNavBar = ({
             backgroundColor: disableColorMode ? lightModeColors.utils.pbg : colors.utils.pbg,
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
             borderRadius: '10px',
-            border: '1px solid',
-            borderColor: disableColorMode ? lightModeColors.utils.text : colors.utils.text,
             opacity: currentActiveItem?.isDisabled ? 0 : 1,
             left: initialButtonProps.left,
             width: initialButtonProps.width,
+            boxShadow: 'none',
           }}
           initial={false}
           animate={buttonPropsArray[currentActiveIndex]}
@@ -175,7 +175,7 @@ export const AnimatedNavBar = ({
                 spacing={2}
                 justifyContent="center"
                 alignItems="center"
-                fontWeight={700}
+                fontWeight={isActive ? 700 : 500}
               >
                 {(showIcon || item.showIconAlways) &&
                   (isActive && ActiveIcon ? <ActiveIcon fontSize="18px" /> : Icon ? <Icon fontSize="18px" /> : null)}
@@ -200,6 +200,7 @@ const ProjectNavigationButton: ComponentWithAs<
       size={'lg'}
       variant="ghost"
       backgroundColor={'transparent'}
+      boxShadow="none"
       color={disableColorMode ? lightModeColors.neutral1[12] : 'neutral1.12'}
       _disabled={{ color: disableColorMode ? lightModeColors.neutral1[9] : 'neutral1.9' }}
       padding={0}

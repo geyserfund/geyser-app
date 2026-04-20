@@ -1,8 +1,8 @@
-import { Button, HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, HStack, IconButton, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect } from 'react'
-import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
+import { useCallback, useEffect, useState } from 'react'
+import { PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router'
 
 import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
@@ -10,41 +10,66 @@ import { NotificationPromptModal } from '@/modules/auth/components/NotificationP
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { ID } from '@/shared/constants/components/id.ts'
+import { getPath } from '@/shared/constants/index.ts'
+import { standardPadding } from '@/shared/styles/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
-import { PathName } from '../../../shared/constants'
-import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
+import { BrandLogoFull } from './components/BrandLogo'
 import { CreateProjectButton } from './components/CreateProjectButton.tsx'
+import { LandingDesktopNav } from './components/LandingDesktopNav.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
-  shouldShowGeyserLogoAtom,
-  shouldShowProjectLogoAtom,
+  isPlatformNavShadowRouteAtom,
+  isProjectDashboardRoutesAtom,
+  isProjectFundingRoutesAtom,
+  isProjectRoutesAtom,
+  useIsAmbassadorProgramPage,
+  useIsGuardiansPage,
   useIsManifestoPage,
+  useIsProfilePage,
 } from './platformNavBarAtom'
-import { PlatformNav } from './profileNav/components/PlatformNav.tsx'
 import { ProfileNav } from './profileNav/ProfileNav'
 
+/** Renders the fixed top platform navigation shared across platform pages. */
 export const PlatformNavBar = () => {
-  const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
+  const creatorNavScrollThreshold = 20
+  const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
+  const defaultNavShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
+  const landingButtonSurface = useColorModeValue('white', 'neutral1.3')
+  const landingButtonForeground = useColorModeValue('black', 'white')
+  const landingButtonBorder = useColorModeValue('black', 'neutral1.6')
+  const landingButtonHover = useColorModeValue('gray.50', 'neutral1.2')
+  const landingButtonActive = useColorModeValue('gray.100', 'neutral1.2')
+  const transparentButtonSurface = 'whiteAlpha.220'
+  const transparentButtonForeground = 'white'
+  const transparentButtonBorder = 'whiteAlpha.500'
+  const transparentButtonHover = 'whiteAlpha.320'
+  const transparentButtonActive = 'whiteAlpha.420'
+  const landingNavMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   const isMobileMode = useMobileMode()
 
+  const isGuardiansPage = useIsGuardiansPage()
   const isManifestoPage = useIsManifestoPage()
+  const isProfilePage = useIsProfilePage()
+  const isAmbassadorProgramPage = useIsAmbassadorProgramPage()
 
-  const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
-  const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
+  const isPlatformNavShadowRoute = useAtomValue(isPlatformNavShadowRouteAtom)
+  const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
+  const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
+  const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
 
-  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
+  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose, emailPromptVariant } = useEmailPromptModal()
 
   const { notificationPromptIsOpen, dontAskNotificationAgain, notificationPromptOnClose } = useNotificationPromptModal()
 
@@ -56,15 +81,50 @@ export const PlatformNavBar = () => {
       refresh?: boolean
     }
   } = useLocation()
-  const isGuardiansPage = location.pathname.includes('/guardians')
-
   const { state } = location
+  const [creatorNavScrolled, setCreatorNavScrolled] = useState(false)
 
   const {
     isOpen: isLoginAlertModalOpen,
     onOpen: onLoginAlertModalOpen,
     onClose: onLoginAlertModalClose,
   } = useDisclosure()
+
+  const creatorRoute = getPath('discoveryCreator')
+  const launchStartRoute = getPath('launchStart')
+  const isCreatorPage = location.pathname === creatorRoute || location.pathname.startsWith(`${creatorRoute}/`)
+  const isLaunchStartPage = location.pathname === launchStartRoute
+
+  useEffect(() => {
+    if (!isCreatorPage) {
+      setCreatorNavScrolled(false)
+      return
+    }
+
+    const rootElement = document.getElementById(ID.root)
+
+    const getScrollTop = () => {
+      if (!isMobileMode && rootElement) {
+        return rootElement.scrollTop
+      }
+
+      return window.scrollY || window.pageYOffset || document.scrollingElement?.scrollTop || 0
+    }
+
+    const handleScroll = () => {
+      setCreatorNavScrolled(getScrollTop() > creatorNavScrollThreshold)
+    }
+
+    handleScroll()
+
+    rootElement?.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      rootElement?.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [creatorNavScrollThreshold, isCreatorPage])
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -82,42 +142,118 @@ export const PlatformNavBar = () => {
   }, [state])
 
   const renderLeftSide = useCallback(() => {
-    if (isPlatformRoutes) {
-      return <BrandLogoFull />
-    }
-
-    if (shouldShowProjectLogo) {
+    if (isProjectFundingRoutes) {
       return <ProjectLogo />
     }
 
-    if (shouldShowGeyserLogo) {
-      return <BrandLogo showOutline={isGuardiansPage} />
-    }
+    return <BrandLogoFull forceLightLogo={isCreatorPage && !creatorNavScrolled} />
+  }, [creatorNavScrolled, isCreatorPage, isProjectFundingRoutes])
 
-    return <BrandLogo showOutline={isGuardiansPage} />
-  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isGuardiansPage])
+  const shouldShowPlatformNav =
+    (isPlatformRoutes ||
+      isProjectRoutes ||
+      isGuardiansPage ||
+      isProfilePage ||
+      isAmbassadorProgramPage ||
+      isLaunchStartPage) &&
+    !isProjectFundingRoutes &&
+    !isProjectDashboardRoutes &&
+    !isMobileMode
+  const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
+  const navShadow = isCreatorTransparentNav ? 'none' : isPlatformNavShadowRoute ? defaultNavShadow : 'none'
+  const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
       return <CloseGoBackButton />
     }
 
+    const shouldShowLandingCreateButton = shouldShowPlatformNav && (!isLoggedIn || !isUserAProjectCreator)
+    const shouldShowProjectSelectMenu = isLoggedIn && (!shouldShowPlatformNav || isUserAProjectCreator)
+
+    const actionButtonSurface = isCreatorTransparentNav ? transparentButtonSurface : landingButtonSurface
+    const actionButtonForeground = isCreatorTransparentNav ? transparentButtonForeground : landingButtonForeground
+    const actionButtonBorder = isCreatorTransparentNav ? transparentButtonBorder : landingButtonBorder
+    const actionButtonHover = isCreatorTransparentNav ? transparentButtonHover : landingButtonHover
+    const actionButtonActive = isCreatorTransparentNav ? transparentButtonActive : landingButtonActive
+
+    const landingCreateButton = shouldShowLandingCreateButton ? (
+      <>
+        <CreateProjectButton
+          display={{ base: 'none', lg: 'flex', xl: 'none' }}
+          iconOnly
+          aria-label={t('Start your project')}
+          size="md"
+          width="40px"
+          minWidth="40px"
+          paddingX={0}
+          variant="outline"
+          bg={actionButtonSurface}
+          color={actionButtonForeground}
+          borderColor={actionButtonBorder}
+          borderWidth="1px"
+          _hover={{ bg: actionButtonHover }}
+          _active={{ bg: actionButtonActive }}
+          borderRadius="8px"
+        />
+        <CreateProjectButton
+          display={{ base: 'none', xl: 'flex' }}
+          label={t('Start your project')}
+          noIcon
+          size={{ base: 'md', lg: 'lg' }}
+          minWidth="190px"
+          variant="outline"
+          bg={actionButtonSurface}
+          color={actionButtonForeground}
+          borderColor={actionButtonBorder}
+          borderWidth="1px"
+          _hover={{ bg: actionButtonHover }}
+          _active={{ bg: actionButtonActive }}
+          borderRadius={{ base: '8px', lg: '10px' }}
+        />
+      </>
+    ) : null
+
     return (
       <HStack position="relative">
         {!isLoggedIn ? (
           <>
-            <LoginButton />
-            <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
+            {landingCreateButton}
+            <LoginButton
+              color={isCreatorTransparentNav ? 'white' : undefined}
+              _hover={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.220' } : undefined}
+              _active={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.320' } : undefined}
+            />
+            {!shouldShowPlatformNav && (
+              <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
+            )}
           </>
-        ) : isGuardiansPage ? (
-          <ShareGuardiansButton />
         ) : (
-          <ProjectSelectMenu />
+          <>
+            {landingCreateButton}
+            {shouldShowProjectSelectMenu ? <ProjectSelectMenu transparentMode={isCreatorTransparentNav} /> : null}
+          </>
         )}
         <ProfileNav />
       </HStack>
     )
-  }, [isGuardiansPage, isLoggedIn, isManifestoPage])
+  }, [
+    isLoggedIn,
+    isCreatorTransparentNav,
+    isManifestoPage,
+    isUserAProjectCreator,
+    landingButtonActive,
+    landingButtonBorder,
+    landingButtonForeground,
+    landingButtonHover,
+    landingButtonSurface,
+    shouldShowPlatformNav,
+    transparentButtonActive,
+    transparentButtonBorder,
+    transparentButtonForeground,
+    transparentButtonHover,
+    transparentButtonSurface,
+  ])
 
   return (
     <HStack
@@ -126,32 +262,61 @@ export const PlatformNavBar = () => {
       top={0}
       justifyContent={'center'}
       zIndex={99}
-      bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
+      bgColor={navBackgroundColor}
+      boxShadow={navShadow}
+      transition="background-color 0.25s ease, box-shadow 0.25s ease"
     >
       <VStack
-        paddingY={{ base: 5, lg: 8 }}
+        paddingTop={{ base: 3, lg: 5 }}
+        paddingBottom={{ base: 3, lg: 5 }}
         paddingX={{ base: 3, lg: 6, xl: 12 }}
         maxWidth={dimensions.guardians.maxWidth}
         width="100%"
-        backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
+        backgroundColor={navBackgroundColor}
         justifySelf={'center'}
         spacing={4}
+        transition="background-color 0.25s ease"
       >
-        <HStack
-          w="100%"
-          height={{ base: '40px', lg: '48px' }}
-          justifyContent={'space-between'}
-          spacing={{ base: 2, lg: 4 }}
-        >
-          <HStack height="full">
-            {isGuardiansPage && <BackButton />}
-            {renderLeftSide()}
+        <VStack w="100%" spacing={0} position="relative">
+          <HStack
+            w="100%"
+            height={{ base: '40px', lg: '48px' }}
+            justifyContent={'space-between'}
+            spacing={{ base: 2, lg: 4 }}
+            position="relative"
+            zIndex={3}
+            pointerEvents="none"
+          >
+            <HStack height="full" flexShrink={0} pointerEvents="auto">
+              {renderLeftSide()}
+            </HStack>
+            <Box pointerEvents="auto">{renderRightSide()}</Box>
           </HStack>
 
-          {isPlatformRoutes && !isMobileMode && <PlatformNav />}
-
-          {renderRightSide()}
-        </HStack>
+          {shouldShowPlatformNav ? (
+            <HStack
+              position="absolute"
+              inset={0}
+              justifyContent="center"
+              alignItems="center"
+              pointerEvents="none"
+              zIndex={2}
+            >
+              <HStack
+                w="100%"
+                maxWidth={landingNavMaxWidth}
+                paddingX={standardPadding}
+                height={{ base: '40px', lg: '48px' }}
+                pointerEvents="none"
+                justifyContent="center"
+              >
+                <Box pointerEvents="auto">
+                  <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
+                </Box>
+              </HStack>
+            </HStack>
+          ) : null}
+        </VStack>
       </VStack>
 
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />
@@ -161,11 +326,11 @@ export const PlatformNavBar = () => {
         onClose={() => {
           loginOnClose()
           onLoginAlertModalClose()
-          emailPromptOnOpen()
+          emailPromptOnOpen('mandatory_after_login')
         }}
         {...loginModalAdditionalProps}
       />
-      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
+      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} variant={emailPromptVariant} />
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
@@ -185,50 +350,8 @@ const CloseGoBackButton = () => {
       minWidth={{ base: '40px', lg: '48px' }}
       height={{ base: '40px', lg: '48px' }}
       borderRadius="50% !important"
-      aria-label="go-back"
+      aria-label={t('Go back')}
       icon={<PiX fontSize={'24px'} />}
-      onClick={() => navigate(-1)}
-    />
-  )
-}
-
-const ShareGuardiansButton = () => {
-  const { user } = useAuthContext()
-
-  const { onCopy, hasCopied } = useCopyToClipboard(
-    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
-  )
-  return (
-    <Button
-      variant={hasCopied ? 'solid' : 'outline'}
-      colorScheme={hasCopied ? 'primary1' : 'neutral1'}
-      size={{ base: 'md', lg: 'lg' }}
-      rightIcon={hasCopied ? <PiCopy /> : <PiShareFat />}
-      onClick={() => onCopy()}
-      backgroundColor={hasCopied ? undefined : 'utils.pbg'}
-    >
-      {hasCopied ? t('Copied') : t('Share')}
-    </Button>
-  )
-}
-
-const BackButton = () => {
-  const navigate = useNavigate()
-
-  return (
-    <IconButton
-      variant="outline"
-      colorScheme="neutral1"
-      size={{ base: 'md', lg: 'lg' }}
-      width={{ base: '32px', lg: '40px' }}
-      minWidth={{ base: '32px', lg: '40px' }}
-      height={{ base: '32px', lg: '40px' }}
-      paddingInlineStart={'4px !important'}
-      paddingInlineEnd={'4px !important'}
-      borderRadius="50% !important"
-      backgroundColor="utils.pbg"
-      aria-label="go-back"
-      icon={<PiArrowLeft fontSize={'16px'} />}
       onClick={() => navigate(-1)}
     />
   )

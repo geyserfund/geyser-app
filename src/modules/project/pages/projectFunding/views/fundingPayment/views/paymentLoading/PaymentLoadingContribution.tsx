@@ -1,66 +1,105 @@
 import { useBreakpointValue, VStack } from '@chakra-ui/react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
+import {
+  ProjectSubscriptionStartMutation,
+  RecurringContributionRenewalCreateMutation,
+  RecurringDonationCreateMutation,
+} from '@/modules/project/recurring/graphql'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
+import { ContributionCreateMutation } from '@/types'
 
-import { hasFiatPaymentMethodAtom, intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom'
 import { QRCodeSizeMap } from '../../components/QRCodeComponent'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  hasFiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../state/paymentMethodAtom.ts'
 
-export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: string) => void }) => {
+export const PaymentLoadingContribution = ({
+  onComplete,
+}: {
+  onComplete?: (_: string, forceCardRoute?: boolean) => void
+}) => {
   const { requestFundingFromContext, requestFundingOptions } = useFundingAPI()
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
 
   const qrSize = useBreakpointValue(QRCodeSizeMap)
 
+  const location = useLocation()
   const navigate = useNavigate()
 
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
-  const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
-  const projectOwner = useAtomValue(projectOwnerAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
 
-  const isProjectOwnerVerified = projectOwner?.user.complianceDetails.verifiedDetails.identity?.verified
-  const isFiatAvailable = hasFiatPaymentMethod && isProjectOwnerVerified
-
   const data = useRef(false)
+
+  const getCheckoutPayload = (
+    response:
+      | ContributionCreateMutation
+      | RecurringDonationCreateMutation
+      | ProjectSubscriptionStartMutation
+      | RecurringContributionRenewalCreateMutation,
+  ) => {
+    if ('contributionCreate' in response) {
+      return response.contributionCreate
+    }
+
+    if ('recurringDonationCreate' in response) {
+      return response.recurringDonationCreate
+    }
+
+    if ('recurringContributionRenewalCreate' in response) {
+      return response.recurringContributionRenewalCreate
+    }
+
+    return response.projectSubscriptionStart
+  }
 
   useEffect(() => {
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !data.current) {
       data.current = true
       requestFundingFromContext((data) => {
-        const contributionId = data.contributionCreate.contribution.uuid
+        const {
+          contribution: { uuid: contributionId },
+          payments,
+        } = getCheckoutPayload(data)
 
-        if (contributionId && data.contributionCreate.contribution.isSubscription) {
-          navigate(
-            {
-              pathname: getPath('fundingSubscription', project.name),
-              search: `?transactionId=${contributionId}`,
-            },
-            { replace: true },
-          )
-        } else if (contributionId) {
+        if (contributionId) {
           if (onComplete) {
-            onComplete(contributionId)
+            onComplete(contributionId, Boolean(payments.fiat?.stripeClientSecret))
           } else {
             let paymentPath = getPath('fundingPaymentLightning', project.name)
 
-            if (intendedPaymentMethod === PaymentMethods.fiatSwap && isFiatAvailable) {
-              paymentPath = getPath('fundingPaymentFiatSwap', project.name)
+            if (payments.fiat?.stripeClientSecret) {
+              paymentPath = getPath('fundingPaymentFiatStripe', project.name)
+            } else if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
+              if (hasFiatPaymentMethod) {
+                paymentPath =
+                  fiatPaymentMethod === fiatCheckoutMethods.applePay
+                    ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
+                    : getPath('fundingPaymentFiatBanxa', project.name)
+              } else {
+                paymentPath = getPath('fundingStart', project.name)
+              }
             }
 
-            setIntendedPaymentMethod(undefined)
+            const searchParams = new URLSearchParams(location.search)
+            searchParams.set('transactionId', contributionId)
 
             navigate(
               {
                 pathname: paymentPath,
-                search: `?transactionId=${contributionId}`,
+                search: `?${searchParams.toString()}`,
               },
               { replace: true },
             )
@@ -69,6 +108,7 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
       })
     }
     // NOTE: adding `requestFundingFromContext` to dependencies causes rerender loops, do not add until resolved
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name])
 
   useEffect(() => {

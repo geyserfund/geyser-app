@@ -4,31 +4,22 @@ import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { Exact, ProjectCreationStep, UpdateProjectInput, UpdateProjectMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-const projectCreationStepIndex = {
-  [ProjectCreationStep.ProjectDetails]: 0,
-  [ProjectCreationStep.FundingType]: 1,
-  [ProjectCreationStep.FundingGoal]: 2,
-  [ProjectCreationStep.PerksAndProducts]: 3,
-  [ProjectCreationStep.Story]: 4,
-  [ProjectCreationStep.AboutYou]: 5,
-  [ProjectCreationStep.Wallet]: 6,
-  [ProjectCreationStep.TaxId]: 7,
-  [ProjectCreationStep.IdentityVerification]: 8,
-  [ProjectCreationStep.Launch]: 9,
-}
+import { getNextProjectCreationStep, projectCreationStepIndex } from '../utils/projectCreationSteps.ts'
 
 export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, nextPath: string) => {
   const { project } = useProjectAtom()
   const { updateProject } = useProjectAPI()
   const navigate = useNavigate()
   const toast = useNotification()
+  const { guardProjectEditAttempt } = useProjectCreationEditGuard()
 
   const projectStepIsAhead = projectCreationStepIndex[project.lastCreationStep] > projectCreationStepIndex[step]
 
-  const nextStep = Object.keys(projectCreationStepIndex)[projectCreationStepIndex[step] + 1]
+  const nextStep = getNextProjectCreationStep(step)
 
   const updateProjectWithLastCreationStep = (
     projectUpdateIput?: Omit<UpdateProjectInput, 'projectId'>,
@@ -40,9 +31,14 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
       DefaultContext,
       ApolloCache<any>
     >,
+    overrideLastCreationStep?: ProjectCreationStep,
   ) => {
     if (!projectUpdateIput && projectStepIsAhead) {
       navigate(nextPath)
+      return
+    }
+
+    if (guardProjectEditAttempt()) {
       return
     }
 
@@ -50,7 +46,9 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
       variables: {
         input: {
           projectId: project?.id,
-          lastCreationStep: projectStepIsAhead ? undefined : (nextStep as ProjectCreationStep),
+          lastCreationStep: projectStepIsAhead
+            ? undefined
+            : overrideLastCreationStep || (nextStep as ProjectCreationStep),
           ...projectUpdateIput,
         },
       },

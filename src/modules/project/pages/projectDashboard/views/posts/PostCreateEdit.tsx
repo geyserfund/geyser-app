@@ -1,6 +1,6 @@
-import { Box, Button, HStack, Input, Spinner, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Spinner, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { PiArrowLeft, PiCaretDown, PiImages } from 'react-icons/pi'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 
@@ -16,7 +16,7 @@ import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, ProjectPostValidations } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks'
-import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { FileUpload } from '@/shared/molecules'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
@@ -43,18 +43,6 @@ export const PostCreateEdit = () => {
   const [searchParams] = useSearchParams()
   const linkedGoalId = searchParams.get('goalId')
   const linkedRewardUuid = searchParams.get('rewardUuid')
-
-  const [focusFlag, setFocusFlag] = useState(false)
-
-  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
-  const [isStoryLoading, setIsStoryLoading] = useState(false)
-  const handleToggleEditorMode = () => {
-    toggleEditorMode()
-    setIsStoryLoading(true)
-    setTimeout(() => {
-      setIsStoryLoading(false)
-    }, 1)
-  }
 
   const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm({
     projectId: project.id,
@@ -119,6 +107,12 @@ export const PostCreateEdit = () => {
 
   const onImageUpload = (url: string) => setValue('image', url, { shouldDirty: true })
 
+  const focusMarkdownEditor = useCallback(() => {
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('.geyser-mdx-content[contenteditable="true"]')?.focus()
+    })
+  }, [])
+
   const handleKeyDown = useCallback((event: any) => {
     if (event) {
       if (event.target.name === 'title') {
@@ -130,16 +124,13 @@ export const PostCreateEdit = () => {
         if (event.key === 'ArrowUp') {
           event.preventDefault()
           document.getElementById('post-title-input')?.focus()
-        } else if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'Enter') {
+        } else if (event.key === 'ArrowDown' || event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
           event.preventDefault()
-          setFocusFlag(true)
-          setTimeout(() => {
-            setFocusFlag(false)
-          }, 100)
+          focusMarkdownEditor()
         }
       }
     }
-  }, [])
+  }, [focusMarkdownEditor])
 
   const getSaveButtonText = () => {
     if (saving) {
@@ -231,15 +222,9 @@ export const PostCreateEdit = () => {
                       borderRadius="8px"
                       overflow="hidden"
                       position="relative"
+                      role="group"
                     >
-                      <ImageUploadUi
-                        position="absolute"
-                        left={0}
-                        top={0}
-                        opacity={0}
-                        _hover={{ opacity: 0.9 }}
-                        height="100%"
-                      />
+                      <ImageUploadOverlay />
                       <ImageWithReload width="100%" objectFit="cover" src={postForm.image} alt={postForm.title} />
                     </HStack>
                   ) : (
@@ -333,22 +318,12 @@ export const PostCreateEdit = () => {
             </VStack>
 
             <Box flex={1} width="100%" paddingX={6}>
-              {isStoryLoading ? null : (
-                <MarkdownField
-                  initialContentReady={!loading}
-                  initialContent={() => postForm.markdown || ''}
-                  content={postForm.markdown || ''}
-                  name="markdown"
-                  flex
-                  control={control}
-                  isFloatingToolbar
-                  toolbarMaxWidth={dimensions.project.posts.view.maxWidth}
-                  enableRawMode
-                  autoFocus={Boolean(focusFlag)}
-                  isEditorMode={isEditorMode}
-                  toggleEditorMode={handleToggleEditorMode}
-                />
-              )}
+              <MdxMarkdownEditor
+                mode="edit"
+                name="markdown"
+                control={control}
+                minHeight="240px"
+              />
             </Box>
           </VStack>
         </CardLayout>
@@ -396,5 +371,25 @@ const ImageUploadUi = ({ isLoading, ...props }: ImageUploadUiProps) => {
       </Body>
       {isLoading ? <Spinner color="primary1.9" /> : <PiImages fontSize={'20px'} color={colors.neutral1[11]} />}
     </HStack>
+  )
+}
+
+const ImageUploadOverlay = () => {
+  return (
+    <VStack
+      position="absolute"
+      inset={0}
+      zIndex={1}
+      backgroundColor="utils.overlay"
+      justifyContent="center"
+      opacity={0}
+      transition="opacity 0.3s ease"
+      _groupHover={{ opacity: 1 }}
+      pointerEvents="none"
+    >
+      <Body size="lg" medium color="utils.whiteContrast">
+        {t('Upload Image')}
+      </Body>
+    </VStack>
   )
 }

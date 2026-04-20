@@ -14,6 +14,7 @@ import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCa
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPathWithGeyserHero } from '@/shared/constants/index.ts'
 import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
+import { ProjectPaymentMethodsHint } from '@/shared/molecules/project/ProjectPaymentMethodsHint.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectForLaunchpadPageFragment } from '@/types/index.ts'
 
@@ -109,6 +110,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           >
             {t('Contribute')}
           </Button>
+          <ProjectPaymentMethodsHint textSize="xs" />
         </VStack>
       }
       {...rest}

@@ -6,9 +6,10 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { LegalEntitySelection } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/components/LegalEntitySelection.tsx'
 import { useTaxProfileForm } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/useTaxProfileForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { shouldShowCreationFiatStep } from '@/modules/project/utils/stripeConnect.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep } from '@/types/index.ts'
+import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
@@ -18,36 +19,52 @@ export const LaunchPaymentTaxId = () => {
   const { user } = useAuthContext()
   const { project } = useProjectAtom()
   const navigate = useNavigate()
-
   const isAon = isAllOrNothing(project)
-  const nextPath = isAon ? getPath('launchPaymentAccountPassword', project.id) : getPath('launchFinalize', project.id)
+
+  const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
+  const shouldShowAccountPasswordStep = isAon || shouldConfigureProjectWallet
+  const shouldShowFiatContributionsStep = shouldShowCreationFiatStep(project)
+  let nextPath = getPath('launchFinalize', project.id)
+  let lastCreationStepOverride: ProjectCreationStep | undefined = ProjectCreationStep.Launch
+
+  if (shouldShowAccountPasswordStep) {
+    nextPath = getPath('launchPaymentAccountPassword', project.id)
+    lastCreationStepOverride = undefined
+  } else if (shouldShowFiatContributionsStep) {
+    nextPath = getPath('launchPaymentFiatContributions', project.id)
+    lastCreationStepOverride = ProjectCreationStep.Launch
+  }
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
     nextPath,
   )
 
-  const { form, handleSubmit } = useTaxProfileForm({ userId: user.id, onUpdate: updateProjectWithLastCreationStep })
+  const handleTaxIdComplete = () => {
+    updateProjectWithLastCreationStep(undefined, undefined, lastCreationStepOverride)
+  }
+
+  const { form, handleSubmit } = useTaxProfileForm({ userId: user.id, onUpdate: handleTaxIdComplete })
 
   const continueProps: ButtonProps = {
     onClick() {
       if (form.formState.isDirty) {
         handleSubmit()
       } else {
-        updateProjectWithLastCreationStep()
+        handleTaxIdComplete()
       }
     },
   }
 
   const backProps: ButtonProps = {
     onClick() {
-      navigate(getPath('launchPaymentWallet', project.id))
+      navigate(getPath('launchPayment', project.id))
     },
   }
 
   return (
     <ProjectCreationPageWrapper
-      title={t('Payment Tax ID (optional)')}
+      title={t('Wallet Tax ID (optional)')}
       continueButtonProps={continueProps}
       backButtonProps={backProps}
     >

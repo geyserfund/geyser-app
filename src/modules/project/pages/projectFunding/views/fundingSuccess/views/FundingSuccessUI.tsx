@@ -1,11 +1,14 @@
-import { Button, Divider, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import Confetti from 'react-confetti'
 import { Link } from 'react-router'
 
+import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -19,9 +22,27 @@ import { SuccessImageComponent } from '../components/index.ts'
 import { SafeToDeleteRefund } from '../components/SafeToDeleteRefund.tsx'
 
 export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
+  const { user } = useAuthContext()
   const { project, formState } = useFundingFormAtom()
+  const matchingPreview = useProjectMatchingPreview()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
+
+  const matchedAmountOverride =
+    !isPending && fundingContribution.matching
+      ? {
+          sats: fundingContribution.matchedAmountSats,
+          usdCents: fundingContribution.matchedAmountUsdCent,
+        }
+      : isPending &&
+        project.activeMatching &&
+        matchingPreview.hasActiveMatching &&
+        (matchingPreview.matchedAmountSats > 0 || matchingPreview.matchedAmountUsdCents > 0)
+      ? {
+          sats: matchingPreview.matchedAmountSats,
+          usdCents: matchingPreview.matchedAmountUsdCents,
+        }
+      : null
 
   return (
     <FundingLayout
@@ -55,22 +76,43 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           <VStack w="full" alignItems="start">
             <SuccessImageComponent isPending={isPending} />
           </VStack>
-          {formState.subscription.cost > 0 && (
+          {formState.fundingMode !== recurringFundingModes.oneTime && (
             <VStack w="full" alignItems="start" spacing={6}>
-              <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-                {t('Manage Subscription')}
-              </H2>
+              <HStack w="full" justifyContent="space-between" alignItems="center" gap={4}>
+                <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+                  {t('Manage Recurring Payment')}
+                </H2>
+                {user?.id && (
+                  <Button
+                    as={Link}
+                    to={getPath('userProfileSettingsSubscriptions', user.id)}
+                    size="lg"
+                    variant="outline"
+                    colorScheme="neutral1"
+                  >
+                    {t('Manage recurring payments')}
+                  </Button>
+                )}
+              </HStack>
               <Body size="sm" light>
-                {fundingContribution.isAnonymous
-                  ? t('To manage your subscription in the future, please login to stripe with your provided email.')
-                  : t('Please check your profile to manage your subscription.')}
+                {user?.id
+                  ? t('You can manage this recurring payment from your recurring payments settings.')
+                  : fundingContribution.isAnonymous
+                  ? t('Use the email associated with this payment to manage it in the future.')
+                  : t('Please check your recurring payments settings to manage this payment.')}
               </Body>
             </VStack>
           )}
           <SafeToDeleteRefund />
           <Divider />
-          <ProjectFundingSummary disableCollapse referenceCode={fundingContribution.uuid} />
-          <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
+          <ProjectFundingSummary
+            disableCollapse
+            referenceCode={fundingContribution.uuid}
+            matchedAmountOverride={matchedAmountOverride}
+          />
+          <HStack w="full" justifyContent="flex-end">
+            <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
+          </HStack>
           <SuggestedProjects
             id={'suggested-projects-funding-success'}
             subCategory={project.subCategory}

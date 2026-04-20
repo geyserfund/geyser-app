@@ -12,7 +12,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { cannotCompleteShippingForThisOrderAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { getPath, GeyserTermsUrl } from '@/shared/constants'
+import { getPath } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { darkModeColors } from '@/shared/styles/colors.ts'
 import { LegalEntityType } from '@/types/index.ts'
@@ -117,7 +117,7 @@ export const TAndCs = ({
     <Body size="sm" light {...props}>
       <Trans i18nKey="By continuing to checkout you are accepting our <1>T&Cs</1>.">
         {'By continuing to checkout you are accepting our '}
-        <Link isExternal href={GeyserTermsUrl} textDecoration={'underline'}>
+        <Link isExternal href={getPath('legalTerms')} textDecoration={'underline'}>
           {'T&Cs'}
         </Link>
         {'.'}

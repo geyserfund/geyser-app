@@ -21,6 +21,8 @@ export const projectCreationRoutesThatNeedStory = [
   getPath('launchPaymentWallet', PathName.projectId),
   getPath('launchPaymentTaxId', PathName.projectId),
   getPath('launchPaymentAccountPassword', PathName.projectId),
+  getPath('launchPaymentSeedWords', PathName.projectId),
+  getPath('launchPaymentFiatContributions', PathName.projectId),
   getPath('launchAboutYou', PathName.projectId),
   getPath('launchFinalize', PathName.projectId),
 ]
@@ -48,10 +50,12 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardInfo', PathName.projectName),
   getPath('dashboardDetails', PathName.projectName),
   getPath('dashboardWallet', PathName.projectName),
+  getPath('dashboardLimitsVerification', PathName.projectName),
   getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
   getPath('dashboardNotifications', PathName.projectName),
   getPath('dashboardPromote', PathName.projectName),
+  getPath('dashboardMatching', PathName.projectName),
   getPath('dashboardRewards', PathName.projectName),
   getPath('dashboardFundingGoal', PathName.projectName),
 ]
@@ -90,7 +94,13 @@ export const projectPostCreatorRoutes = [
 export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.projectName)]
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
-export const projectFundingPaymentCardRoutes = [getPath('fundingPaymentCard', PathName.projectName)]
+export const projectFundingPaymentCreditCardRoutes = [getPath('fundingPaymentCreditCard', PathName.projectName)]
+export const projectFundingPaymentApplePayRoutes = [getPath('fundingPaymentApplePay', PathName.projectName)]
+export const projectFundingPaymentFiatStripeRoutes = [getPath('fundingPaymentFiatStripe', PathName.projectName)]
+export const projectFundingPaymentFiatBanxaRoutes = [getPath('fundingPaymentFiatBanxa', PathName.projectName)]
+export const projectFundingPaymentFiatBanxaApplePayRoutes = [
+  getPath('fundingPaymentFiatBanxaApplePay', PathName.projectName),
+]
 
 /** Routes after onchain payment went into refund processing */
 export const projectFundingOnchainRefundRoutes = [
@@ -121,8 +131,12 @@ export const projectFundingPaymentFiatSwapRoutes = [getPath('fundingPaymentFiatS
 export const projectFundingPaymentCreatedRoutes = [
   getPath('fundingPayment', PathName.projectName),
   ...projectFundingPaymentLightingRoutes,
-  ...projectFundingPaymentCardRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
+  ...projectFundingPaymentCreditCardRoutes,
+  ...projectFundingPaymentApplePayRoutes,
+  ...projectFundingPaymentFiatStripeRoutes,
+  ...projectFundingPaymentFiatBanxaRoutes,
+  ...projectFundingPaymentFiatBanxaApplePayRoutes,
   ...projectFundingPaymentOnchainInitialRoutes,
 ]
 
@@ -138,6 +152,11 @@ export const projectFundingRoutes = [
   ...projectFundingPaymentCreatedRoutes,
   ...projectFundingPaymentOnchainRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
+  ...projectFundingPaymentCreditCardRoutes,
+  ...projectFundingPaymentApplePayRoutes,
+  ...projectFundingPaymentFiatStripeRoutes,
+  ...projectFundingPaymentFiatBanxaRoutes,
+  ...projectFundingPaymentFiatBanxaApplePayRoutes,
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
@@ -155,43 +174,92 @@ export const projectCreatorRoutes = [
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]
+export const impactFundRoutes = [getPath('impactFunds'), getPath('impactFunds', PathName.impactFundName)]
 
 export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath('landingFeed')]
 
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
+  getPath('discoveryProjects'),
+  getPath('discoveryProjectsInYourRegion'),
+  getPath('discoveryProjectsCategory', PathName.categoryName),
+  getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
   getPath('discoveryProjectCategory', PathName.categoryName),
   getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
   getPath('discoveryCampaigns'),
   getPath('discoveryAllOrNothing'),
   getPath('discoveryCampaignsAlmostFunded'),
   getPath('discoveryCampaignsAlmostOver'),
   getPath('discoveryCampaignsLatest'),
   getPath('discoveryCampaignsInYourRegion'),
+  getPath('discoveryCampaignsCategory', PathName.categoryName),
+  getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
   getPath('discoveryFundraisers'),
   getPath('discoveryFundraisersLatest'),
   getPath('discoveryFundraisersInYourRegion'),
+  getPath('discoveryFundraisersCategory', PathName.categoryName),
+  getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
   getPath('discoveryActivity'),
   getPath('discoveryActivityFollowed'),
   getPath('discoveryActivityGlobal'),
   getPath('discoveryLeaderboard'),
   getPath('discoveryLaunchpad'),
-  getPath('discoveryGrants'),
-  getPath('discoveryGrant', PathName.grantId),
+  getPath('discoveryImpactFunds'),
+  getPath('discoveryMicroLending'),
+  getPath('discoveryImpactFund', PathName.impactFundName),
+  getPath('discoveryCreator'),
   // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),
   getPath('heroesCreator'),
   getPath('heroesAmbassador'),
   getPath('heroesContributor'),
+  getPath('giveawayAcelerandoVip'),
+  getPath('legalGiveawayAcelerandoVipTerms'),
+  getPath('legalTerms'),
+  getPath('discoveryNews'),
+]
+
+export const platformNavBarShadowRoutes = [
+  getPath('discoveryLanding'),
+  getPath('discoveryProjects'),
+  getPath('discoveryProjectsInYourRegion'),
+  getPath('discoveryProjectsCategory', PathName.categoryName),
+  getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
+  getPath('discoveryProjectCategory', PathName.categoryName),
+  getPath('discoveryProjectSubCategory', PathName.subCategoryName),
+  getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
+  getPath('discoveryCampaigns'),
+  getPath('discoveryAllOrNothing'),
+  getPath('discoveryCampaignsAlmostFunded'),
+  getPath('discoveryCampaignsAlmostOver'),
+  getPath('discoveryCampaignsLatest'),
+  getPath('discoveryCampaignsInYourRegion'),
+  getPath('discoveryCampaignsCategory', PathName.categoryName),
+  getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
+  getPath('discoveryFundraisers'),
+  getPath('discoveryFundraisersLatest'),
+  getPath('discoveryFundraisersInYourRegion'),
+  getPath('discoveryFundraisersCategory', PathName.categoryName),
+  getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
+  getPath('discoveryImpactFunds'),
+  getPath('discoveryMicroLending'),
+  getPath('discoveryNews'),
+  getPath('ambassadorProgram'),
 ]
 
 export const profileSettingsRoutes = [
   getPath('userProfileSettings', PathName.userId),
   getPath('userProfileSettingsGeneral', PathName.userId),
   getPath('userProfileSettingsNotifications', PathName.userId),
+  getPath('userProfileSettingsSubscriptions', PathName.userId),
+  getPath('userProfileSettingsVerifications', PathName.userId),
+  getPath('userProfileSettingsWallet', PathName.userId),
+  getPath('userProfileSettingsAffiliate', PathName.userId),
 ]
 
 export const heroProfileSettingsRoutes = [
@@ -202,6 +270,7 @@ export const heroProfileSettingsRoutes = [
 
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
 export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
+export const ambassadorProgramRoutes = [getPath('ambassadorProgram')]
 
 export const guardiansRoutes = [
   getPath('guardians'),

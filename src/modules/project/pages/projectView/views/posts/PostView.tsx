@@ -11,7 +11,7 @@ import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { generatePostJsonLd } from '@/modules/project/tools/generateProjectJsonLD.ts'
+import { generatePostJsonLd, getProjectPostViewUrl } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -25,7 +25,7 @@ import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { FundingResourceType, useProjectPostLazyQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
-import { MarkdownField } from '../../../../../../shared/markdown/MarkdownField.tsx'
+import { MdxMarkdownEditor } from '../../../../../../shared/markdown/MdxMarkdownEditor.tsx'
 import { sourceResourceAtom } from '../../state/sourceActivityAtom.ts'
 import { LinkedRewardsAndGoals } from './components/LinkedRewardsAndGoals.tsx'
 import { PostEditMenu } from './components/PostEditMenu.tsx'
@@ -68,7 +68,7 @@ export const PostView = () => {
 
       handlePostQuery()
     }
-  }, [postId])
+  }, [postId, queryPost])
 
   const post = data?.post
 
@@ -96,7 +96,7 @@ export const PostView = () => {
         title={post?.title || ''}
         description={post?.description || ''}
         image={post?.image || project.thumbnailImage || ''}
-        url={`https://geyser.fund/project/${project?.name}/post/${post?.id}`}
+        url={getProjectPostViewUrl(project?.name || '', post?.id || '')}
         type="article"
       >
         {!loading && !projectLoading && <script type="application/ld+json">{generatePostJsonLd(post, project)}</script>}
@@ -203,7 +203,7 @@ export const PostView = () => {
                 }}
                 flex={1}
               >
-                <MarkdownField preview content={post.markdown || ''} />
+                <MdxMarkdownEditor mode="preview" value={post.markdown || ''} />
               </Box>
             )}
             {showLinkedRewardsAndGoals && <LinkedRewardsAndGoals post={post} />}

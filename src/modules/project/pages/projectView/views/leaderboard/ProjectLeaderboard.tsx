@@ -36,7 +36,10 @@ export const ProjectLeaderboard = () => {
           w="full"
           justifyContent={'space-between'}
           position={{ base: 'fixed', lg: 'relative' }}
-          top={{ base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height), lg: 'unset' }}
+          top={{
+            base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height),
+            lg: 'unset',
+          }}
           left={{ base: 0, lg: 'unset' }}
           paddingX={{ base: 3, lg: 0 }}
           paddingY={{ base: 1, lg: 0 }}

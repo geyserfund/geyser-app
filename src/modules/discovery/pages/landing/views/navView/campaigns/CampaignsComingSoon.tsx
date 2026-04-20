@@ -5,32 +5,25 @@ import {
   AccordionItem,
   AccordionPanel,
   Button,
+  HStack,
   Image,
   Link,
-  Stack,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Trans } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { PiCheckCircle, PiGlobeHemisphereWest, PiShieldCheck } from 'react-icons/pi'
+import { Link as RouterLink, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import {
-  AllOrNothingCampaignsStartingImageUrl,
-  CampaignsComingSoonImageUrl,
-  getPath,
-} from '@/shared/constants/index.ts'
-import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
+import { AllOrNothingCampaignsStartingImageUrl, getPath } from '@/shared/constants/index.ts'
 
-import {
-  CampaignsAlignIncentivesImageUrl,
-  CampaignsFailFastImageUrl,
-  CampaignsGoGlobalImageUrl,
-} from '../../../constants.ts'
+import { type CampaignCardProps } from '../components/CampaignCard.tsx'
+import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 import { NewCampaigns } from './views/NewCampaigns.tsx'
 
 export const CampaignsComingSoon = () => {
@@ -53,69 +46,29 @@ export const CampaignsComingSoon = () => {
   }
 
   return (
-    <VStack w="full" gap={{ base: 10, lg: 16 }} paddingBottom={8} px={standardPadding}>
-      <Stack w="full" gap={8} direction={{ base: 'column', lg: 'row' }} alignItems="center">
-        <Image
-          height="auto"
-          width="full"
-          maxWidth="400px"
-          src={CampaignsComingSoonImageUrl}
-          alt="Campaigns Coming Soon"
-        />
-        <VStack w="full" width="full" gap={1} alignItems="start">
-          <H2 size={{ base: 'xl', lg: '2xl' }} bold textAlign="center">
-            {t('Fund big ideas, only if they succeed')}
-          </H2>
-
-          <Body size="lg">
-            {t('All-or-Nothing on Bitcoin means creators get the funds only if they reach the goal.')}
-            <br />
-            {t('If they do not, contributors can claim their funds back.')}
+    <VStack w="full" gap={{ base: 10, lg: 12 }} paddingBottom={8}>
+      <CampaignTitleBlock
+        title={t('All or Nothing Campaigns')}
+        description={t('Launch and back new Bitcoin project ideas that only fund when targets are met.')}
+        campaignCards={campaignCards}
+      />
+      <VStack w="full" gap={2} alignItems="start" maxW="900px">
+        <Body size="md">
+          {t(
+            'Campaigns on Geyser help communities discover upcoming Bitcoin ideas early, while keeping contributor trust high through milestone-driven funding.',
+          )}
+        </Body>
+        <HStack spacing={4} flexWrap="wrap">
+          <Body as={RouterLink} to={getPath('discoveryFundraisers')} underline bold>
+            {t('Explore humanitarian fundraisers')}
           </Body>
-        </VStack>
-      </Stack>
+          <Body as={RouterLink} to={getPath('discoveryImpactFunds')} underline bold>
+            {t('See impact funds')}
+          </Body>
+        </HStack>
+      </VStack>
 
-      <Stack w="full" gap={{ base: 4, lg: 8 }} direction={{ base: 'column', md: 'row' }} alignItems="stretch">
-        <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center" borderRadius="20px">
-          <Image src={CampaignsAlignIncentivesImageUrl} alt="Aligned incentives" boxSize={32} />
-          <VStack w="full" gap={3} alignItems="start">
-            <Body size="lg" bold>
-              {t('Align the incentives')}
-            </Body>
-            <Body size="sm">
-              {t(
-                'Creators only get paid if they fully fund the project. Contributors back ideas knowing their bitcoin is not released unless the goal is met.',
-              )}
-            </Body>
-          </VStack>
-        </CardLayout>
-
-        <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center" borderRadius="20px">
-          <Image src={CampaignsFailFastImageUrl} alt="Fail fast, without burning trust" boxSize={32} />
-          <VStack w="full" gap={3} alignItems="start">
-            <Body size="lg" bold>
-              {t('Fail fast, without burning trust')}
-            </Body>
-            <Body size="sm">
-              {t('If a campaign fails, it fails cleanly. Funds go back to contributors and reputations stay intact.')}
-            </Body>
-          </VStack>
-        </CardLayout>
-
-        <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center">
-          <Image src={CampaignsGoGlobalImageUrl} alt="Global by default, no borders" boxSize={32} />
-          <VStack w="full" gap={3} alignItems="start">
-            <Body size="lg" bold>
-              {t('Go Global with your campaign')}
-            </Body>
-            <Body size="sm">
-              {t('All-or-Nothing campaigns can be launched and funded from anywhere using Bitcoin.')}
-            </Body>
-          </VStack>
-        </CardLayout>
-      </Stack>
-
-      <VStack w="full" gap={0}>
+      <VStack w="full" gap={0} alignItems="start">
         <H2 size={{ base: 'xl', lg: '3xl' }} bold>
           {t('Early Campaign Launches')}
         </H2>
@@ -127,7 +80,7 @@ export const CampaignsComingSoon = () => {
         </VStack>
       </VStack>
 
-      <VStack w="full" gap={2} maxW="800px">
+      <VStack w="full" gap={2} maxW="800px" paddingTop={8}>
         <H2 size="2xl" bold>
           {t('Over 20 projects have already registered to launch with All-or-Nothing.')}
         </H2>
@@ -137,7 +90,7 @@ export const CampaignsComingSoon = () => {
           )}
         </Body>
         <Button size="xl" colorScheme="primary1" onClick={handleLaunchCampaignButtonClick}>
-          {t('Join the early launch')}
+          {t('Launch an All-or-Nothing campaign')}
         </Button>
 
         <Image
@@ -214,6 +167,24 @@ export const CampaignsComingSoon = () => {
     </VStack>
   )
 }
+
+const campaignCards: CampaignCardProps[] = [
+  {
+    icon: PiShieldCheck,
+    titleKey: 'campaigns.cards.alignIncentives.title',
+    descriptionKey: 'campaigns.cards.alignIncentives.description',
+  },
+  {
+    icon: PiCheckCircle,
+    titleKey: 'campaigns.cards.failWithoutBurningTrust.title',
+    descriptionKey: 'campaigns.cards.failWithoutBurningTrust.description',
+  },
+  {
+    icon: PiGlobeHemisphereWest,
+    titleKey: 'campaigns.cards.goGlobal.title',
+    descriptionKey: 'campaigns.cards.goGlobal.description',
+  },
+]
 
 const FaqList = [
   {

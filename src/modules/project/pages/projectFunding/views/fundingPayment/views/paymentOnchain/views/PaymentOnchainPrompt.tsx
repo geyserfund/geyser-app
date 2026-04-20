@@ -8,6 +8,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import { isAllOrNothing } from '@/utils'
 
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
@@ -25,7 +26,10 @@ export const PaymentOnchainPrompt = () => {
     navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
   }
 
-  if (isAllOrNothing(project)) {
+  const isPrismTia = isPrismEnabled(project)
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
+
+  if (isRskSwapFlow) {
     setOnchainRefundDownloadAtom(true)
     return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} replace />
   }

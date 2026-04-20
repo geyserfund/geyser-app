@@ -23,6 +23,7 @@ export const AUTH_SERVICE_ENDPOINT = __production__
   ? import.meta.env.VITE_APP_AUTH_SERVICE_ENDPOINT
   : `${API_SERVICE_ENDPOINT}/auth`
 export const BOLTZ_DOMAIN = import.meta.env.VITE_APP_BOLTZ_SWAP_DOMAIN as string
+export const ORIGIN = typeof window === 'undefined' ? '' : window.location.origin
 /*
  Other environment vars
 */
@@ -55,8 +56,20 @@ if (!import.meta.env.VITE_APP_STRIPE_API_KEY) {
   console.warn('Missing VITE_APP_STRIPE_API_KEY from environment variables')
 }
 
+if (!import.meta.env.VITE_APP_GEYSER_LAUNCH_PROJECT_ID) {
+  console.warn('Missing VITE_APP_GEYSER_LAUNCH_PROJECT_ID from environment variables, using environment defaults')
+}
+
 if (!import.meta.env.VITE_APP_ROOTSTOCK_RPC_URL) {
   console.warn('Missing VITE_APP_ROOTSTOCK_RPC_URL from environment variables')
+}
+
+if (!import.meta.env.VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS) {
+  console.warn('Missing VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS from environment variables')
+}
+
+if (!import.meta.env.VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
+  console.warn('Missing VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS from environment variables')
 }
 
 export const {
@@ -69,4 +82,15 @@ export const {
   VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS,
   VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS,
   VITE_APP_ROOTSTOCK_RPC_URL,
+  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
+  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
 } = import.meta.env
+
+const parsedGeyserLaunchProjectId = Number(import.meta.env.VITE_APP_GEYSER_LAUNCH_PROJECT_ID)
+const defaultGeyserLaunchProjectId = __production__ ? 3075 : __staging__ ? 839 : 10
+
+/** Target project id used for launch-fee contributions in creation flow. */
+export const GEYSER_LAUNCH_PROJECT_ID =
+  Number.isFinite(parsedGeyserLaunchProjectId) && parsedGeyserLaunchProjectId > 0
+    ? parsedGeyserLaunchProjectId
+    : defaultGeyserLaunchProjectId

@@ -15,6 +15,7 @@ import {
   LandingPageFeaturedContributionsGetQueryVariables,
   OrderByOptions,
   useLandingPageFeaturedContributionsGetQuery,
+  useProjectThumbnailImageQuery,
 } from '@/types/index.ts'
 import { commaFormatted } from '@/utils/index.ts'
 
@@ -30,7 +31,7 @@ const getContributionColorScheme = (amount: number): string => {
   return 'blue'
 }
 
-export const FeaturedContributions = () => {
+export const FeaturedContributions = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
   const [contributions, setContributions] = useState<ContributionForLandingPageFragment[]>([])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -107,7 +108,7 @@ export const FeaturedContributions = () => {
       spacing={6}
     >
       {contributions.map((contribution) => (
-        <ContributionCard key={contribution.id} contribution={contribution} />
+        <ContributionCard key={contribution.id} contribution={contribution} size={size} />
       ))}
     </HStack>
   )
@@ -127,10 +128,19 @@ export const ContributionCard = ({
 
   const navigate = useNavigate()
 
-  const project = contribution.sourceResource?.__typename === 'Project' ? contribution.sourceResource : null
+  const { data, loading } = useProjectThumbnailImageQuery({
+    fetchPolicy: 'cache-first',
+    skip: !contribution.projectId,
+    variables: {
+      where: {
+        id: contribution.projectId,
+      },
+    },
+  })
+  const project = data?.projectGet
   const colorScheme = getContributionColorScheme(contribution.amount)
 
-  if (!project) {
+  if (loading || !project) {
     return null
   }
 
@@ -144,9 +154,9 @@ export const ContributionCard = ({
       _hover={{
         cursor: 'pointer',
       }}
-      height="28px"
+      height={size === 'lg' ? '38px' : '28px'}
       alignItems="center"
-      paddingLeft={2}
+      paddingX={size === 'lg' ? 3 : 2}
       {...rest}
     >
       {colorScheme === 'orange' && (

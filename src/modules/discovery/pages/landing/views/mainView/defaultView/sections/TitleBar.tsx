@@ -7,7 +7,6 @@ import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
 import { FilterComponent } from '../../../../components/FilterComponent.tsx'
-import { FeaturedContributions } from '../components/FeaturedContributions.tsx'
 
 export const TitleBar = () => {
   const location = useLocation()
@@ -47,14 +46,15 @@ export const TitleBar = () => {
               {t('Back')}
             </Button>
           ) : (
-            <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">
-              {t('Discover and fund Bitcoin projects worldwide')}
-            </H1>
+            <VStack w="full" spacing={2} alignItems="flex-start">
+              <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">
+                {t('Support fundraisers, back projects early, and shop goods')}
+              </H1>
+            </VStack>
           )}
 
           <FilterComponent />
         </HStack>
-        <FeaturedContributions />
       </VStack>
     </VStack>
   )

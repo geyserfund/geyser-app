@@ -1,10 +1,13 @@
 import { atom, useAtomValue } from 'jotai'
 
 import {
+  ambassadorProgramRoutes,
   discoveryRoutes,
   guardianCharacterRoutes,
   guardiansRoutes,
+  heroProfileRoutes,
   manifestoRoutes,
+  platformNavBarShadowRoutes,
   profileRoutes,
   projectDashboardRoutes,
   projectFundingRoutes,
@@ -29,6 +32,8 @@ export const isProjectRoutesAtom = atom(
     ...projectFundingRoutes,
   ]),
 )
+
+export const isProjectDashboardRoutesAtom = atom(routeMatchForAtom(projectDashboardRoutes))
 
 export const isProjectFundingRoutesAtom = atom(routeMatchForAtom(projectFundingRoutes))
 
@@ -64,7 +69,11 @@ export const shouldShowProjectLogoAtom = atom((get) => {
 })
 
 /** True if current route is one of the profile routes */
-const isProfileRoutesAtom = atom(routeMatchForAtom(profileRoutes))
+const isProfileRoutesAtom = atom(routeMatchForAtom([...profileRoutes, ...heroProfileRoutes]))
+export const useIsProfilePage = () => useAtomValue(isProfileRoutesAtom)
+
+const isAmbassadorProgramRoutesAtom = atom(routeMatchForAtom(ambassadorProgramRoutes))
+export const useIsAmbassadorProgramPage = () => useAtomValue(isAmbassadorProgramRoutesAtom)
 
 /** True if shoudl show geyser logo on left of topNavBar */
 export const shouldShowGeyserLogoAtom = atom((get) => {
@@ -79,6 +88,9 @@ export const isDiscoveryRoutesAtom = atom(routeMatchForAtom(discoveryRoutes))
 
 /** True if current route is the landing page */
 export const isLandingPageRouteAtom = atom(routeMatchForAtom([getPath('discoveryLanding')]))
+
+/** True if current route should display the platform nav shadow. */
+export const isPlatformNavShadowRouteAtom = atom(routeMatchForAtom(platformNavBarShadowRoutes))
 
 const platformNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)

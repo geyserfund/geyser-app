@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_REWARD_FOR_LANDING_PAGE, FRAGMENT_REWARD_FOR_PRODUCTS_PAGE } from '../fragments/rewardFragment'
+import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/projectFragment.ts'
+import { FRAGMENT_REWARD_FOR_LANDING_PAGE, FRAGMENT_REWARD_FOR_PRODUCTS_PAGE } from '../fragments/rewardFragment.ts'
 
 export const QUERY_TRENDING_REWARDS_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_REWARD_FOR_LANDING_PAGE}
@@ -14,6 +15,19 @@ export const QUERY_TRENDING_REWARDS_FOR_LANDING_PAGE = gql`
   }
 `
 
+export const QUERY_TRENDING_REWARD_PROJECTS_MONTHLY_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectRewardsTrendingMonthlyGet {
+    projectRewardsTrendingMonthlyGet {
+      projectReward {
+        project {
+          ...ProjectForLandingPage
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_TRENDING_REWARDS_FOR_PRODUCTS_PAGE = gql`
   ${FRAGMENT_REWARD_FOR_PRODUCTS_PAGE}
   query ProjectRewardsTrendingQuarterlyGet {
@@ -21,6 +35,40 @@ export const QUERY_TRENDING_REWARDS_FOR_PRODUCTS_PAGE = gql`
       count
       projectReward {
         ...RewardForProductsPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECT_REWARDS_MOST_SOLD = gql`
+  ${FRAGMENT_REWARD_FOR_PRODUCTS_PAGE}
+  query ProjectRewardsMostSoldGet($input: GetProjectRewardsMostSoldInput!) {
+    projectRewardsMostSoldGet(input: $input) {
+      count
+      projectReward {
+        ...RewardForProductsPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECT_REWARDS_CATALOG = gql`
+  ${FRAGMENT_REWARD_FOR_PRODUCTS_PAGE}
+  query ProjectRewardsCatalogGet($input: GetProjectRewardsCatalogInput!) {
+    projectRewardsCatalogGet(input: $input) {
+      rewards {
+        id
+        count
+        projectReward {
+          ...RewardForProductsPage
+        }
+      }
+      pagination {
+        take
+        count
+        cursor {
+          id
+        }
       }
     }
   }

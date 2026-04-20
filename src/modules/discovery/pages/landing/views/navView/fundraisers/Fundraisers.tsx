@@ -1,39 +1,238 @@
-import { Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { Outlet, useNavigate } from 'react-router'
+import { HStack, IconButton, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { PiCaretLeft, PiCaretRight, PiGlobeHemisphereWest, PiMoneyWavy, PiStorefront } from 'react-icons/pi'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router'
 
-import { getPath } from '@/shared/constants/index.ts'
+import { Head } from '@/config/Head.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { FundraisersSeoImageUrl, getAiSeoPageContent, getPath } from '@/shared/constants/index.ts'
+import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
+import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
-const tabs = [
+import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
+
+const campaignCards = [
   {
-    label: `🔥 ${t('Trending')}`,
-    path: getPath('discoveryFundraisers'),
+    icon: PiMoneyWavy,
+    titleKey: 'fundraisers.cards.receiveInstantly.title',
+    descriptionKey: 'fundraisers.cards.receiveInstantly.description',
   },
   {
-    label: `${t('Latest')}`,
-    path: getPath('discoveryFundraisersLatest'),
+    icon: PiStorefront,
+    titleKey: 'fundraisers.cards.sellProducts.title',
+    descriptionKey: 'fundraisers.cards.sellProducts.description',
   },
   {
-    label: `${t('In your region')}`,
-    path: getPath('discoveryFundraisersInYourRegion'),
+    icon: PiGlobeHemisphereWest,
+    titleKey: 'fundraisers.cards.goGlobal.title',
+    descriptionKey: 'fundraisers.cards.goGlobal.description',
   },
 ]
-
 export const Fundraisers = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fundraisersSeoContent = getAiSeoPageContent('fundraisers')
+  const tabListRef = useRef<HTMLDivElement | null>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const tabs = [
+    {
+      label: `💸 ${t('Fundraisers')}`,
+      path: getPath('discoveryFundraisers'),
+    },
+    {
+      label: `📍 ${t('In your region')}`,
+      path: getPath('discoveryFundraisersInYourRegion'),
+    },
+    {
+      label: `🌊 ${t('Circular Economies')}`,
+      path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.CircularEconomy),
+    },
+    {
+      label: `🎓 ${t('Education')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Education),
+    },
+    {
+      label: `🛠 ${t('Open Source')}`,
+      path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.OsSoftware),
+    },
+    {
+      label: `🌍 ${t('Humanitarian')}`,
+      path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
+    },
+    {
+      label: `🤲 ${t('Causes')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
+    },
+    {
+      label: `⚖️ ${t('Legal & Advocacy')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Advocacy),
+    },
+    {
+      label: `🤝 ${t('Community')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Community),
+    },
+  ]
+
+  const currentTabIndex = Math.max(
+    tabs.findIndex((tab) => tab.path === location.pathname),
+    0,
+  )
+
+  useEffect(() => {
+    const element = tabListRef.current
+    if (!element) return
+
+    const updateScrollState = () => {
+      setCanScrollLeft(element.scrollLeft > 0)
+      setCanScrollRight(element.scrollLeft + element.clientWidth < element.scrollWidth - 1)
+    }
+
+    updateScrollState()
+    element.addEventListener('scroll', updateScrollState)
+    window.addEventListener('resize', updateScrollState)
+
+    return () => {
+      element.removeEventListener('scroll', updateScrollState)
+      window.removeEventListener('resize', updateScrollState)
+    }
+  }, [])
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    const element = tabListRef.current
+    if (!element) return
+
+    element.scrollBy({
+      left: direction === 'left' ? -280 : 280,
+      behavior: 'smooth',
+    })
+  }
 
   return (
     <>
-      <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>
-        <TabList gap={4}>
-          {tabs.map((tab) => (
-            <Tab key={tab.label} fontSize={{ base: 'xs', sm: 'md' }}>
-              {tab.label}
-            </Tab>
-          ))}
-        </TabList>
+      <Head
+        title={fundraisersSeoContent.title}
+        description={fundraisersSeoContent.description}
+        image={FundraisersSeoImageUrl}
+        keywords={fundraisersSeoContent.keywords}
+        url={`https://geyser.fund${getPath('discoveryFundraisers')}`}
+      >
+        <script type="application/ld+json">
+          {buildCollectionPageJsonLd({
+            name: 'Geyser Fundraisers',
+            description: fundraisersSeoContent.description,
+            path: getPath('discoveryFundraisers'),
+            about: fundraisersSeoContent.about,
+            keywords: fundraisersSeoContent.keywords,
+            items: [
+              {
+                name: 'Humanitarian Fundraisers',
+                path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
+                description: 'Support Bitcoin-powered humanitarian causes around the world.',
+              },
+              {
+                name: 'Cause Fundraisers',
+                path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
+                description: 'Discover mission-driven fundraisers backed by the Bitcoin community.',
+              },
+              {
+                name: 'Upcoming Campaign Ideas',
+                path: getPath('discoveryCampaigns'),
+                description: 'Explore all-or-nothing campaigns for new Bitcoin project ideas.',
+              },
+            ],
+          })}
+        </script>
+      </Head>
+      <CampaignTitleBlock
+        title={t('Open Fundraisers')}
+        description={t('Back builders and humanitarian causes with open Bitcoin funding.')}
+        campaignCards={campaignCards}
+      />
+      <VStack w="full" spacing={2} alignItems="start">
+        <Body size="md">
+          {t(
+            'Fundraisers on Geyser connect bitcoiners with both upcoming builders and urgent causes, creating transparent support flows across regions.',
+          )}
+        </Body>
+        <HStack spacing={4} flexWrap="wrap">
+          <Body as={Link} to={getPath('discoveryCampaigns')} underline bold>
+            {t('Explore upcoming campaign ideas')}
+          </Body>
+          <Body as={Link} to={getPath('discoveryImpactFunds')} underline bold>
+            {t('See impact fund opportunities')}
+          </Body>
+        </HStack>
+      </VStack>
+      <Tabs
+        w="full"
+        variant="secondary"
+        index={currentTabIndex}
+        onChange={(index) =>
+          navigate(
+            {
+              pathname: tabs[index]?.path ?? getPath('discoveryFundraisers'),
+              search: location.search,
+            },
+            {
+              preventScrollReset: true,
+            },
+          )
+        }
+      >
+        <HStack w="full" spacing={2} alignItems="center">
+          {canScrollLeft ? (
+            <IconButton
+              aria-label={t('Scroll categories left')}
+              icon={<PiCaretLeft />}
+              variant="ghost"
+              colorScheme="neutral1"
+              onClick={() => scrollTabs('left')}
+            />
+          ) : null}
+          <TabList
+            ref={tabListRef}
+            gap={4}
+            overflowX="auto"
+            sx={{
+              '&::-webkit-scrollbar': { display: 'none' },
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+          >
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.label}
+                fontSize={{ base: 'xs', sm: 'md' }}
+                color="neutral1.11"
+                _selected={{
+                  color: 'neutral1.11',
+                  borderColor: 'neutral1.8',
+                }}
+                whiteSpace="nowrap"
+                overflow="visible"
+                maxW="none"
+                title={tab.label}
+              >
+                {tab.label}
+              </Tab>
+            ))}
+          </TabList>
+          {canScrollRight ? (
+            <IconButton
+              aria-label={t('Scroll categories right')}
+              icon={<PiCaretRight />}
+              variant="ghost"
+              colorScheme="neutral1"
+              onClick={() => scrollTabs('right')}
+            />
+          ) : null}
+        </HStack>
 
-        <VStack w="full" minHeight="100vh" paddingTop={8}>
+        <VStack w="full" minHeight="100vh" paddingTop={7} alignItems="start">
           <Outlet />
         </VStack>
       </Tabs>
