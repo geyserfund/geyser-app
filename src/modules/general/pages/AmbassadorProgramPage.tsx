@@ -130,7 +130,7 @@ export const AmbassadorProgramPage = () => {
               </Body>
             </Badge>
             <Body size="sm" bold color="neutral1.12">
-              {t('Until April 30, 2026, each contribution you enable earns 10% instead of 5%.')}
+              {t('Until April 22, 2026, each contribution you enable earns 10% instead of 5%.')}
             </Body>
           </HStack>
         </CardLayout>

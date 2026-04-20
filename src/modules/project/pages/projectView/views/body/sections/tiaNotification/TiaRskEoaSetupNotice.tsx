@@ -26,7 +26,7 @@ import { useNotification } from '@/utils/index.ts'
 
 import { ControlPanelNotification } from '../controlPanel/components/ControlPanelNotification.tsx'
 
-const KEY_CONFIG_DEADLINE = '30th of April 2026'
+const KEY_CONFIG_DEADLINE = '22nd of April 2026'
 
 type ProjectRskEoaSetMutation = {
   projectRskEoaSet: {

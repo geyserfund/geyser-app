@@ -22,7 +22,7 @@ import type { UserAccountKeysFragment } from '@/types/index.ts'
 import { useProjectRskEoaSetMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-const KEY_CONFIG_DEADLINE = '30th of April 2026'
+const KEY_CONFIG_DEADLINE = '22nd of April 2026'
 
 type WalletConfigurationPromptProps = {
   projectId: string | number
