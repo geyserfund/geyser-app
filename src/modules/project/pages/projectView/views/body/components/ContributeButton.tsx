@@ -57,7 +57,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         href: getFullDomainUrl(getPath('projectFunding', project.name)),
         isExternal: true,
         onClick: (event: MouseEvent<HTMLButtonElement>) => {
-          handleBlockedContribution(event)
+          if (handleBlockedContribution(event)) return
         },
       }
     : {

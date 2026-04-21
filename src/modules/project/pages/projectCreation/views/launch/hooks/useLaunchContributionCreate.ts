@@ -54,7 +54,7 @@ type LaunchRequestContext = {
 type LaunchAccountKeyResolution =
   | { status: 'ok'; accountKeys: LaunchPrismAccountKeys }
   | { status: 'prompt' }
-  | { status: 'error'; error: string }
+  | { status: 'error'; error: string; retryable?: boolean }
 
 export type ContributionResult =
   | { ok: true; contribution: FundingContributionFragment; payments: FundingContributionPaymentDetailsFragment }
@@ -126,7 +126,8 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
 
       if (!userAccountKeys?.encryptedSeed) {
         return {
-          status: 'prompt',
+          status: 'error',
+          error: t('Account setup is incomplete. Please reload the page and try again.'),
         }
       }
 
@@ -159,6 +160,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
         return {
           status: 'error',
           error: error instanceof Error ? error.message : t('Invalid password'),
+          retryable: true,
         }
       }
     },
@@ -298,7 +300,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
           return {
             ok: false,
             error: accountKeyResolution.error,
-            reason: 'password_required',
+            ...(accountKeyResolution.retryable ? { reason: 'password_required' as const } : {}),
           }
         }
 

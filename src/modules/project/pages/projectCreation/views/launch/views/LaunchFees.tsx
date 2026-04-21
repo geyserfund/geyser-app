@@ -17,7 +17,7 @@ import { __development__, FundingErrorUrl } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { FundingContributionFragment, FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
+import type { FundingContributionFragment, FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
 import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 

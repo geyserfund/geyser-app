@@ -151,14 +151,14 @@ const parseRskSwap = atom(null, (get, set, args: RskSwapParseArgs) => {
   const refundFile = JSON.parse(swap.swapJson)
 
   refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
-  refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
+  refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair?.address || rskKeyPair?.address
   refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
   refundFile.contributionInfo = contributionInfo
   refundFile.type = refundType
 
   set(currentSwapIdAtom, refundFile.id)
   set(currentIdAtom, refundFile.id)
-  set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+  set(swapAtom, { ...swapData, [refundFile.id]: refundFile })
 })
 
 export const parseOnChainToRskSwapAtom = atom(

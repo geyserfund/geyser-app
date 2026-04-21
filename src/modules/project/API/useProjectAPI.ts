@@ -28,8 +28,6 @@ export type UseInitProjectProps = {
   projectId?: number
   /** Don't use together with projectId prop */
   projectName?: string
-  /** @deprecated Project wallet connections are deprecated. */
-  initializeWallet?: boolean
 }
 
 /**

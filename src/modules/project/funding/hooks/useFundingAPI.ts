@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import { ApolloError, useMutation } from '@apollo/client'
+import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
@@ -258,8 +259,8 @@ export const useFundingAPI = () => {
           }).catch((error) => {
             setFundingRequestErrored(true)
             toast.error({
-              title: 'Unable to prepare on-chain-to-RSK claim transaction',
-              description: error instanceof Error ? error.message : 'Please refresh and try again',
+              title: t('Unable to prepare on-chain-to-RSK claim transaction'),
+              description: error instanceof Error ? error.message : t('Please refresh and try again'),
             })
           })
         }
@@ -285,8 +286,8 @@ export const useFundingAPI = () => {
           }).catch((error) => {
             setFundingRequestErrored(true)
             toast.error({
-              title: 'Unable to prepare Lightning-to-RSK claim transaction',
-              description: error instanceof Error ? error.message : 'Please refresh and try again',
+              title: t('Unable to prepare Lightning-to-RSK claim transaction'),
+              description: error instanceof Error ? error.message : t('Please refresh and try again'),
             })
           })
         }

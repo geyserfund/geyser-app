@@ -387,6 +387,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+  const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
 
   const supportsPrismSwaps =
     fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||
@@ -394,7 +395,8 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   if (
     fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-    intendedPaymentMethod === PaymentMethods.fiatSwap
+    intendedPaymentMethod === PaymentMethods.fiatSwap &&
+    stripeEnabled
   ) {
     paymentsInput.fiat = {
       create: true,

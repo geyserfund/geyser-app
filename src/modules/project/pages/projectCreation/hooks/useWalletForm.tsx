@@ -97,15 +97,11 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
   }, [queryProjectWalletConnectionDetailsExecute])
 
   useEffect(() => {
-    const connectionDetailsType = walletConnectionDetails?.connectionDetails.__typename
-    if (
-      connectionDetailsType === WalletConnectDetails.LightningAddressConnectionDetails ||
-      connectionDetailsType === WalletConnectDetails.NWCConnectionDetailsPrivate
-    ) {
-      const option = connectionDetailsTypenameToConnectionOptionMap[connectionDetailsType]
-      if (option) {
-        setConnectionOption(option)
-      }
+    const connectionDetailsType = walletConnectionDetails?.connectionDetails?.__typename
+    if (!connectionDetailsType) return
+    const option = connectionDetailsTypenameToConnectionOptionMap[connectionDetailsType as WalletConnectDetails]
+    if (option) {
+      setConnectionOption(option)
     }
   }, [walletConnectionDetails])
 

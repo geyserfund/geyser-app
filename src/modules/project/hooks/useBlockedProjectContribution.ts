@@ -1,17 +1,15 @@
+import { t } from 'i18next'
 import type { MouseEvent } from 'react'
 import { useCallback } from 'react'
 
-import { ProjectFundingStrategy, useProjectWalletConfigurationContributionAttemptNotifyMutation } from '@/types/index.ts'
+import {
+  Project,
+  ProjectFundingStrategy,
+  useProjectWalletConfigurationContributionAttemptNotifyMutation,
+} from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-const WALLET_NOT_CONFIGURED_MESSAGE =
-  'The wallet of this project is not configured and it cannot receive contributions. The creator has been notified.'
-
-type ProjectContributionGate = {
-  id: string | number
-  rskEoa?: string | null
-  fundingStrategy?: ProjectFundingStrategy | null
-}
+type ProjectContributionGate = Pick<Project, 'id' | 'rskEoa' | 'fundingStrategy'>
 
 /** Blocks contributions for Take-It-All projects missing an RSK EOA and notifies the project creator when a contribution is attempted. */
 export const useBlockedProjectContribution = (project?: ProjectContributionGate | null) => {
@@ -29,7 +27,11 @@ export const useBlockedProjectContribution = (project?: ProjectContributionGate 
       event?.preventDefault()
       event?.stopPropagation()
 
-      toast.error({ title: WALLET_NOT_CONFIGURED_MESSAGE })
+      toast.error({
+        title: t(
+          'The wallet of this project is not configured and it cannot receive contributions. The creator has been notified.',
+        ),
+      })
 
       notifyCreator({
         variables: {
@@ -37,7 +39,9 @@ export const useBlockedProjectContribution = (project?: ProjectContributionGate 
             projectId: project.id,
           },
         },
-      }).catch(() => undefined)
+      }).catch((error) => {
+        console.error('Failed to notify creator about blocked contribution attempt', { projectId: project.id, error })
+      })
 
       return true
     },

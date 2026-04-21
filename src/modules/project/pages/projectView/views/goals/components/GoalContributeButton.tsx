@@ -39,6 +39,7 @@ export const GoalContributeButton = ({
 
   const handleContributeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    e.stopPropagation()
 
     if (handleBlockedContribution(e)) return
 

@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import {
@@ -22,7 +23,7 @@ import { useMobileMode } from '@/utils'
 
 import { BackToProjectRow } from './components/BackToProjectRow.tsx'
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
-import { useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom'
+import { useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom.ts'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {
@@ -55,8 +56,8 @@ export const ProjectNavigation = () => {
     if (hasRewards) {
       const buyProductLabel =
         !initialRewardsLoading && activeRewards.length > 0
-          ? `Buy product (${activeRewards.length})`
-          : 'Buy product'
+          ? t('Buy product ({{count}})', { count: activeRewards.length })
+          : t('Buy product')
       buttonList.push({
         name: buyProductLabel,
         path: PathName.projectRewards,

@@ -35,7 +35,7 @@ export const ContributionSummaryWidget = () => {
 
   return (
     <ScopeProvider atoms={listOfAtoms}>
-      <ProjectProvider projectName={projectName || ''} initializeWallet>
+      <ProjectProvider projectName={projectName || ''}>
         <ContributionSummaryWrapper />
       </ProjectProvider>
     </ScopeProvider>

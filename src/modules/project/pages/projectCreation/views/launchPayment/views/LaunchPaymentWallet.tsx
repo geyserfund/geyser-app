@@ -44,7 +44,7 @@ export const LaunchPaymentWallet = () => {
 
   return (
     <ProjectCreationPageWrapper
-      title={t('Payment Wallet')}
+      title={t('Payment settings')}
       continueButtonProps={continueProps}
       backButtonProps={backProps}
     >
