@@ -302,12 +302,8 @@ export const networkFeeAtom = atom((get) => {
 
   let feesSats = 0
 
-  if (paymentMethod === PaymentMethods.onChain) {
-    if (fundingPaymentDetails.onChainSwap?.fees?.length) {
-      feesSats = fundingPaymentDetails.onChainSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
-    } else if (fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
-      feesSats = fundingPaymentDetails.onChainToRskSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
-    }
+  if (paymentMethod === PaymentMethods.onChain && fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
+    feesSats = fundingPaymentDetails.onChainToRskSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
   } else if (paymentMethod === PaymentMethods.lightning && fundingPaymentDetails.lightningToRskSwap?.fees?.length) {
     feesSats = fundingPaymentDetails.lightningToRskSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
   }
@@ -652,7 +648,7 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
     }
   }
 
-  if (!fundingPaymentDetails.onChainSwap?.address && !fundingPaymentDetails.onChainToRskSwap?.address) {
+  if (!fundingPaymentDetails.onChainToRskSwap?.address) {
     return `Something went wrong with the onChain payment, please try using Lightning or try again`
   }
 

@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import { ApolloError, useMutation } from '@apollo/client'
+import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
@@ -22,7 +23,7 @@ import {
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
 } from '@/shared/constants/config/env.ts'
-import { __development__, getPath } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import {
   ContributionCreateInput,
   ContributionCreateMutation,
@@ -62,22 +63,13 @@ import {
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
-import {
-  keyPairAtom,
-  parseLightningToRskSwapAtom,
-  parseOnChainToRskSwapAtom,
-  parseSwapAtom,
-} from '../state/swapAtom.ts'
+import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
-import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
-import { webln } from '../utils/requestWebLNPayment'
+import { validateFundingInput } from '../utils/helpers'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
 import { useStripeEmbeddedTheme } from './useStripeEmbeddedTheme.ts'
-import { useWebLNFlow } from './useWebLNFlow'
 
-const hasBolt11 = true
-const hasWebLN = true
 const PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS = 3
 const PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS = 400
 
@@ -97,12 +89,7 @@ const isRetryableClaimTxSetError = (error: unknown) => {
 
 const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
   Boolean(
-    payments.lightning ||
-      payments.onChainSwap ||
-      payments.fiat ||
-      payments.fiatToLightningSwap ||
-      payments.lightningToRskSwap ||
-      payments.onChainToRskSwap,
+    payments.fiat || payments.fiatToLightningSwap || payments.lightningToRskSwap || payments.onChainToRskSwap,
   )
 
 const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): ContributionPaymentsInput => ({
@@ -122,21 +109,6 @@ const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): Contribu
       ...(paymentsInput.fiatToLightningSwap.banxa && {
         banxa: {
           ...paymentsInput.fiatToLightningSwap.banxa,
-        },
-      }),
-    },
-  }),
-  ...(paymentsInput?.lightning && {
-    lightning: {
-      ...paymentsInput.lightning,
-    },
-  }),
-  ...(paymentsInput?.onChainSwap && {
-    onChainSwap: {
-      ...paymentsInput.onChainSwap,
-      ...(paymentsInput.onChainSwap.boltz && {
-        boltz: {
-          ...paymentsInput.onChainSwap.boltz,
         },
       }),
     },
@@ -209,13 +181,9 @@ export const useFundingAPI = () => {
   const fundingContributionPartialUpdate = useSetAtom(fundingContributionPartialUpdateAtom)
   const fundingPaymentDetailsPartialUpdate = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
 
-  const parseResponseToSwap = useSetAtom(parseSwapAtom)
   const parseResponseToOnChainToRskSwap = useSetAtom(parseOnChainToRskSwapAtom)
   const parseResponseToLightningToRskSwap = useSetAtom(parseLightningToRskSwapAtom)
 
-  const startWebLNFlow = useWebLNFlow()
-
-  const setKeyPair = useSetAtom(keyPairAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
@@ -271,21 +239,6 @@ export const useFundingAPI = () => {
         fundingContributionPartialUpdate(payload.contribution)
         fundingPaymentDetailsPartialUpdate(payload.payments)
 
-        if (payload.payments.onChainSwap?.swapJson) {
-          parseResponseToSwap(
-            payload.payments.onChainSwap,
-            {
-              projectTitle: project?.title,
-              projectId: project?.id,
-              reference: payload.contribution.uuid,
-              contributionId: payload.contribution.id,
-              bitcoinQuote: payload.contribution.bitcoinQuote,
-              datetime: payload.contribution.createdAt,
-            },
-            accountKeys,
-          )
-        }
-
         if (payload.payments.onChainToRskSwap?.swapJson) {
           parseResponseToOnChainToRskSwap(
             payload.payments.onChainToRskSwap,
@@ -306,8 +259,8 @@ export const useFundingAPI = () => {
           }).catch((error) => {
             setFundingRequestErrored(true)
             toast.error({
-              title: 'Unable to prepare on-chain-to-RSK claim transaction',
-              description: error instanceof Error ? error.message : 'Please refresh and try again',
+              title: t('Unable to prepare on-chain-to-RSK claim transaction'),
+              description: error instanceof Error ? error.message : t('Please refresh and try again'),
             })
           })
         }
@@ -333,17 +286,8 @@ export const useFundingAPI = () => {
           }).catch((error) => {
             setFundingRequestErrored(true)
             toast.error({
-              title: 'Unable to prepare Lightning-to-RSK claim transaction',
-              description: error instanceof Error ? error.message : 'Please refresh and try again',
-            })
-          })
-        }
-
-        if (hasBolt11 && hasWebLN && webln && payload.payments.lightning && !__development__) {
-          startWebLNFlow(payload.payments.lightning).catch(() => {
-            toast.error({
-              title: 'Something went wrong1',
-              description: 'Please refresh the page and try again',
+              title: t('Unable to prepare Lightning-to-RSK claim transaction'),
+              description: error instanceof Error ? error.message : t('Please refresh and try again'),
             })
           })
         }
@@ -362,11 +306,9 @@ export const useFundingAPI = () => {
       generateTransactionForOnChainToRskSwap,
       parseResponseToLightningToRskSwap,
       parseResponseToOnChainToRskSwap,
-      parseResponseToSwap,
       project?.id,
       project?.title,
       setFundingRequestErrored,
-      startWebLNFlow,
       toast,
     ],
   )
@@ -567,70 +509,51 @@ export const useFundingAPI = () => {
         paymentsInputToPrepare.fiat.stripe.theme = stripeEmbeddedTheme
       }
 
-      if (paymentsInputToPrepare?.onChainSwap?.boltz && !paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey) {
-        const keyPair = generatePrivatePublicKeyPair()
-        setKeyPair(keyPair)
-        requestContext.accountKeys.publicKey = keyPair.publicKey.toString('hex')
-        requestContext.accountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
-        paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
-      }
-
       const lightningToRskSwapInput = paymentsInputToPrepare?.lightningToRskSwap?.boltz
       const onChainToRskSwapInput = paymentsInputToPrepare?.onChainToRskSwap?.boltz
 
       if (lightningToRskSwapInput || onChainToRskSwapInput) {
-        const ensureAccountKeys = () => {
-          if (
-            requestContext.accountKeys.publicKey &&
-            requestContext.accountKeys.address &&
-            isValidRskPrivateKey(requestContext.accountKeys.privateKey)
-          ) {
-            return requestContext.accountKeys
-          }
+        const hasValidContextKeys =
+          requestContext.accountKeys.publicKey &&
+          requestContext.accountKeys.address &&
+          isValidRskPrivateKey(requestContext.accountKeys.privateKey)
 
+        if (!hasValidContextKeys) {
           const generatedKeys = generateAccountKeys()
           setRskAccountKeys(generatedKeys)
-          requestContext.accountKeys.publicKey = generatedKeys.publicKey
-          requestContext.accountKeys.address = generatedKeys.address
-          requestContext.accountKeys.privateKey = generatedKeys.privateKey
-
-          return requestContext.accountKeys
+          requestContext.accountKeys = { ...generatedKeys }
         }
 
-        const contributionPreImages: {
-          lightning?: { preimageHex: string; preimageHash: string }
-          onChain?: { preimageHex: string; preimageHash: string }
-        } = {}
+        const { publicKey: claimPublicKey, address: claimAddress } = requestContext.accountKeys
+        const newPreImages: ClaimPreImages = getInitialClaimPreImages()
+        let hasNewPreImages = false
 
-        if (lightningToRskSwapInput && !lightningToRskSwapInput.preimageHash) {
-          const lightningPreImage = generatePreImageHash()
-          contributionPreImages.lightning = lightningPreImage
-          requestContext.preImages.lightning = lightningPreImage
-          lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
-        }
-
-        if (onChainToRskSwapInput && !onChainToRskSwapInput.preimageHash) {
-          const onChainPreImage = generatePreImageHash()
-          contributionPreImages.onChain = onChainPreImage
-          requestContext.preImages.onChain = onChainPreImage
-          onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
-        }
-
-        if (contributionPreImages.lightning || contributionPreImages.onChain) {
-          setContributionCreatePreImages(contributionPreImages)
-        }
-
-        if (lightningToRskSwapInput || onChainToRskSwapInput) {
-          const accountKeys = ensureAccountKeys()
-          if (lightningToRskSwapInput) {
-            lightningToRskSwapInput.claimPublicKey = accountKeys.publicKey
-            lightningToRskSwapInput.claimAddress = accountKeys.address
+        if (lightningToRskSwapInput) {
+          if (!lightningToRskSwapInput.preimageHash) {
+            const lightningPreImage = generatePreImageHash()
+            newPreImages.lightning = lightningPreImage
+            requestContext.preImages.lightning = lightningPreImage
+            lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
+            hasNewPreImages = true
           }
+          lightningToRskSwapInput.claimPublicKey = claimPublicKey
+          lightningToRskSwapInput.claimAddress = claimAddress
+        }
 
-          if (onChainToRskSwapInput) {
-            onChainToRskSwapInput.claimPublicKey = accountKeys.publicKey
-            onChainToRskSwapInput.claimAddress = accountKeys.address
+        if (onChainToRskSwapInput) {
+          if (!onChainToRskSwapInput.preimageHash) {
+            const onChainPreImage = generatePreImageHash()
+            newPreImages.onChain = onChainPreImage
+            requestContext.preImages.onChain = onChainPreImage
+            onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
+            hasNewPreImages = true
           }
+          onChainToRskSwapInput.claimPublicKey = claimPublicKey
+          onChainToRskSwapInput.claimAddress = claimAddress
+        }
+
+        if (hasNewPreImages) {
+          setContributionCreatePreImages(newPreImages)
         }
       }
 
@@ -745,7 +668,6 @@ export const useFundingAPI = () => {
       recurringContributionRenewalCreate,
       recurringDonationCreate,
       toast,
-      setKeyPair,
       setFundingInputAfterRequest,
       setFundingRequestErrored,
       project?.name,

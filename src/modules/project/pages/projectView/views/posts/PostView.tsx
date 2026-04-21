@@ -3,6 +3,7 @@ import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VSt
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
+import type { MouseEvent } from 'react'
 import { useEffect, useState } from 'react'
 import { PiArrowLeft, PiCopy, PiEnvelope, PiShareFat } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
@@ -10,6 +11,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
+import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generatePostJsonLd, getProjectPostViewUrl } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
@@ -34,6 +36,7 @@ import { postTypeOptions } from './utils/postTypeLabel.ts'
 
 export const PostView = () => {
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
+  const { handleBlockedContribution } = useBlockedProjectContribution(project)
   const { postId } = useParams<{ postId: string }>()
   const [sourceResource, setSourceResource] = useAtom(sourceResourceAtom)
   const navigate = useNavigate()
@@ -80,7 +83,9 @@ export const PostView = () => {
     return null
   }
 
-  const onContributeClick = () => {
+  const onContributeClick = (event?: MouseEvent<HTMLButtonElement>) => {
+    if (handleBlockedContribution(event)) return
+
     if (!sourceResource.resourceId) {
       setSourceResource({ resourceId: post.id, resourceType: FundingResourceType.Entry })
     }

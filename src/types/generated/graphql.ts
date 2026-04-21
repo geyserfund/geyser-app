@@ -289,7 +289,7 @@ export type CompetitionVoteGrantVoteSummary = {
   voterCount: Scalars['Int']['output'];
 };
 
-export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic | NwcConnectionDetailsPrivate;
+export type ConnectionDetails = LightningAddressConnectionDetails | NwcConnectionDetailsPrivate;
 
 export type Contribution = {
   __typename?: 'Contribution';
@@ -648,7 +648,6 @@ export type CreateProjectSubscriptionPlanInput = {
 export type CreateWalletInput = {
   feePercentage: Scalars['Float']['input'];
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsCreateInput>;
-  lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>;
   name?: InputMaybe<Scalars['String']['input']>;
   nwcConnectionDetailsInput?: InputMaybe<NwcConnectionDetailsCreateInput>;
   resourceInput: WalletResourceInput;
@@ -1541,76 +1540,6 @@ export type LightningToRskSwapPaymentDetails = {
   swapUserLockTxId?: Maybe<Scalars['String']['output']>;
 };
 
-export type LndConnectionDetails = {
-  /** Port where the gRPC calls should be made. */
-  grpcPort: Scalars['Int']['output'];
-  /** Hostname where the gRPC calls should be made. */
-  hostname: Scalars['String']['output'];
-  lndNodeType: LndNodeType;
-  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
-  macaroon: Scalars['String']['output'];
-  /** TLS certificate for the LND node (optional for Voltage nodes). */
-  tlsCertificate?: Maybe<Scalars['String']['output']>;
-};
-
-export type LndConnectionDetailsCreateInput = {
-  /** Port where the gRPC calls should be made. */
-  grpcPort: Scalars['Int']['input'];
-  /** Hostname where the gRPC calls should be made. */
-  hostname: Scalars['String']['input'];
-  lndNodeType: LndNodeType;
-  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
-  macaroon: Scalars['String']['input'];
-  /** Public key of the LND node. */
-  pubkey?: InputMaybe<Scalars['String']['input']>;
-  /** TLS certificate for the LND node (optional for Voltage nodes). */
-  tlsCertificate?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** Private node details that can only be queried by the wallet owner. */
-export type LndConnectionDetailsPrivate = {
-  __typename?: 'LndConnectionDetailsPrivate';
-  /** Port where the gRPC calls should be made. */
-  grpcPort: Scalars['Int']['output'];
-  /** Hostname where the gRPC calls should be made. */
-  hostname: Scalars['String']['output'];
-  /** Type of the LND node used. */
-  lndNodeType: LndNodeType;
-  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
-  macaroon: Scalars['String']['output'];
-  /** Public key of the LND node. */
-  pubkey?: Maybe<Scalars['String']['output']>;
-  /** TLS certificate for the LND node (optional for Voltage nodes). */
-  tlsCertificate?: Maybe<Scalars['String']['output']>;
-};
-
-/** Public node details visible by anyone. */
-export type LndConnectionDetailsPublic = {
-  __typename?: 'LndConnectionDetailsPublic';
-  pubkey?: Maybe<Scalars['String']['output']>;
-};
-
-export type LndConnectionDetailsUpdateInput = {
-  /** Port where the gRPC calls should be made. */
-  grpcPort?: InputMaybe<Scalars['Int']['input']>;
-  /** Hostname where the gRPC calls should be made. */
-  hostname?: InputMaybe<Scalars['String']['input']>;
-  /** Type of the LND node. */
-  lndNodeType?: InputMaybe<LndNodeType>;
-  /** Invoice macaroon for authenticating gRPC calls to the LND node. */
-  macaroon?: InputMaybe<Scalars['String']['input']>;
-  /** Public key of the LND node. */
-  pubkey?: InputMaybe<Scalars['String']['input']>;
-  /** TLS certificate for the LND node (optional for Voltage nodes). */
-  tlsCertificate?: InputMaybe<Scalars['String']['input']>;
-};
-
-export enum LndNodeType {
-  Custom = 'custom',
-  Geyser = 'geyser',
-  Voltage = 'voltage'
-}
-
 export type Location = {
   __typename?: 'Location';
   country?: Maybe<Country>;
@@ -1743,6 +1672,7 @@ export type Mutation = {
   projectSubscriptionStart: RecurringContributionCheckoutResponse;
   projectUnfollow: Scalars['Boolean']['output'];
   projectUpdate: Project;
+  projectWalletConfigurationContributionAttemptNotify: ProjectWalletConfigurationContributionAttemptNotifyResponse;
   publishNostrEvent?: Maybe<Scalars['Boolean']['output']>;
   recurringContributionCancel: RecurringContribution;
   recurringContributionPortalSessionCreate: RecurringContributionPortalSession;
@@ -2175,6 +2105,11 @@ export type MutationProjectUnfollowArgs = {
 
 export type MutationProjectUpdateArgs = {
   input: UpdateProjectInput;
+};
+
+
+export type MutationProjectWalletConfigurationContributionAttemptNotifyArgs = {
+  input: ProjectWalletConfigurationContributionAttemptNotifyInput;
 };
 
 
@@ -4244,6 +4179,16 @@ export type ProjectViewStats = {
   visitorGraph: Array<Maybe<PageViewCountGraph>>;
 };
 
+export type ProjectWalletConfigurationContributionAttemptNotifyInput = {
+  projectId: Scalars['BigInt']['input'];
+};
+
+export type ProjectWalletConfigurationContributionAttemptNotifyResponse = MutationResponse & {
+  __typename?: 'ProjectWalletConfigurationContributionAttemptNotifyResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
 export type ProjectsAonAlmostFundedInput = {
   pagination?: InputMaybe<PaginationInput>;
 };
@@ -4384,10 +4329,7 @@ export type Query = {
   currencyQuoteGet: CurrencyQuoteGetResponse;
   fundersGet: Array<Funder>;
   getDashboardFunders: Array<Funder>;
-  /**
-   * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated No longer supported
-   */
+  /** @deprecated No longer supported */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
   getSignedUploadUrl: SignedUploadUrl;
@@ -5327,7 +5269,6 @@ export type UpdateWalletInput = {
   feePercentage?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['BigInt']['input'];
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsUpdateInput>;
-  lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>;
   name?: InputMaybe<Scalars['String']['input']>;
   nwcConnectionDetailsInput?: InputMaybe<NwcConnectionDetailsUpdateInput>;
   twoFAInput?: InputMaybe<TwoFaInput>;
@@ -5771,7 +5712,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping of union types */
 export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
   ActivityResource: ( Omit<Contribution, 'bitcoinQuote' | 'matching' | 'payments' | 'sourceResource'> & { bitcoinQuote?: Maybe<_RefType['BitcoinQuote']>, matching?: Maybe<_RefType['ProjectMatching']>, payments: Array<_RefType['Payment']>, sourceResource?: Maybe<_RefType['SourceResource']> } ) | ( Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'activeMatching' | 'ambassadors' | 'contributions' | 'followers' | 'grantApplications' | 'matchings' | 'owners' | 'sponsors' | 'wallets'> & { activeMatching?: Maybe<_RefType['ProjectMatching']>, ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, followers: Array<_RefType['User']>, grantApplications: Array<_RefType['GrantApplicant']>, matchings: Array<_RefType['ProjectMatching']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } ) | ( ProjectGoal ) | ( Omit<ProjectReward, 'project'> & { project: _RefType['Project'] } );
-  ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic ) | ( NwcConnectionDetailsPrivate );
+  ConnectionDetails: ( LightningAddressConnectionDetails ) | ( NwcConnectionDetailsPrivate );
   Grant: ( Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, boardMembers: Array<_RefType['GrantBoardMember']>, sponsors: Array<_RefType['Sponsor']> } ) | ( Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, sponsors: Array<_RefType['Sponsor']> } );
   PaymentDetails: ( FiatToLightningSwapPaymentDetails ) | ( LightningPaymentDetails ) | ( LightningToRskSwapPaymentDetails ) | ( OnChainToLightningSwapPaymentDetails ) | ( OnChainToRskSwapPaymentDetails ) | ( RskToLightningSwapPaymentDetails ) | ( RskToOnChainSwapPaymentDetails );
   SourceResource: ( Omit<Activity, 'project' | 'resource'> & { project: _RefType['Project'], resource: _RefType['ActivityResource'] } ) | ( Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'activeMatching' | 'ambassadors' | 'contributions' | 'followers' | 'grantApplications' | 'matchings' | 'owners' | 'sponsors' | 'wallets'> & { activeMatching?: Maybe<_RefType['ProjectMatching']>, ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, followers: Array<_RefType['User']>, grantApplications: Array<_RefType['GrantApplicant']>, matchings: Array<_RefType['ProjectMatching']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } );
@@ -5782,8 +5723,7 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
   GraphData: ( ProjectContributionsStatsGraphDataAmount );
   GraphSumData: ( FunderRewardGraphSum );
   HeroStats: ( AmbassadorStats ) | ( ContributorStats ) | ( CreatorStats );
-  LndConnectionDetails: never;
-  MutationResponse: ( DeleteUserResponse ) | ( ProjectAonGoalStatusUpdateResponse ) | ( ProjectDeleteResponse ) | ( ProjectGoalDeleteResponse ) | ( ProjectMatchingDeleteResponse );
+  MutationResponse: ( DeleteUserResponse ) | ( ProjectAonGoalStatusUpdateResponse ) | ( ProjectDeleteResponse ) | ( ProjectGoalDeleteResponse ) | ( ProjectMatchingDeleteResponse ) | ( ProjectWalletConfigurationContributionAttemptNotifyResponse );
   StatsInterface: ( ProjectContributionsGroupedByMethodStats ) | ( ProjectContributionsStats );
 };
 
@@ -6000,12 +5940,6 @@ export type ResolversTypes = {
   LightningPaymentDetails: ResolverTypeWrapper<LightningPaymentDetails>;
   LightningPaymentMethods: ResolverTypeWrapper<LightningPaymentMethods>;
   LightningToRskSwapPaymentDetails: ResolverTypeWrapper<LightningToRskSwapPaymentDetails>;
-  LndConnectionDetails: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LndConnectionDetails']>;
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
-  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
-  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>;
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
-  LndNodeType: LndNodeType;
   Location: ResolverTypeWrapper<Location>;
   MFAAction: MfaAction;
   Milestone: ResolverTypeWrapper<Milestone>;
@@ -6262,6 +6196,8 @@ export type ResolversTypes = {
   ProjectType: ProjectType;
   ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>;
   ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>;
+  ProjectWalletConfigurationContributionAttemptNotifyInput: ProjectWalletConfigurationContributionAttemptNotifyInput;
+  ProjectWalletConfigurationContributionAttemptNotifyResponse: ResolverTypeWrapper<ProjectWalletConfigurationContributionAttemptNotifyResponse>;
   ProjectsAonAlmostFundedInput: ProjectsAonAlmostFundedInput;
   ProjectsAonAlmostFundedResponse: ResolverTypeWrapper<Omit<ProjectsAonAlmostFundedResponse, 'projects'> & { projects: Array<ResolversTypes['Project']> }>;
   ProjectsAonAlmostOverInput: ProjectsAonAlmostOverInput;
@@ -6574,11 +6510,6 @@ export type ResolversParentTypes = {
   LightningPaymentDetails: LightningPaymentDetails;
   LightningPaymentMethods: LightningPaymentMethods;
   LightningToRskSwapPaymentDetails: LightningToRskSwapPaymentDetails;
-  LndConnectionDetails: ResolversInterfaceTypes<ResolversParentTypes>['LndConnectionDetails'];
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
-  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
-  LndConnectionDetailsPublic: LndConnectionDetailsPublic;
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
   Location: Location;
   Milestone: Milestone;
   Mutation: {};
@@ -6790,6 +6721,8 @@ export type ResolversParentTypes = {
   ProjectSubscriptionStartInput: ProjectSubscriptionStartInput;
   ProjectViewBaseStats: ProjectViewBaseStats;
   ProjectViewStats: ProjectViewStats;
+  ProjectWalletConfigurationContributionAttemptNotifyInput: ProjectWalletConfigurationContributionAttemptNotifyInput;
+  ProjectWalletConfigurationContributionAttemptNotifyResponse: ProjectWalletConfigurationContributionAttemptNotifyResponse;
   ProjectsAonAlmostFundedInput: ProjectsAonAlmostFundedInput;
   ProjectsAonAlmostFundedResponse: Omit<ProjectsAonAlmostFundedResponse, 'projects'> & { projects: Array<ResolversParentTypes['Project']> };
   ProjectsAonAlmostOverInput: ProjectsAonAlmostOverInput;
@@ -7068,7 +7001,7 @@ export type CompetitionVoteGrantVoteSummaryResolvers<ContextType = any, ParentTy
 };
 
 export type ConnectionDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails']> = {
-  __resolveType: TypeResolveFn<'LightningAddressConnectionDetails' | 'LndConnectionDetailsPrivate' | 'LndConnectionDetailsPublic' | 'NWCConnectionDetailsPrivate', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'LightningAddressConnectionDetails' | 'NWCConnectionDetailsPrivate', ParentType, ContextType>;
 };
 
 export type ContributionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Contribution'] = ResolversParentTypes['Contribution']> = {
@@ -7639,30 +7572,6 @@ export type LightningToRskSwapPaymentDetailsResolvers<ContextType = any, ParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LndConnectionDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['LndConnectionDetails'] = ResolversParentTypes['LndConnectionDetails']> = {
-  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
-  grpcPort?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  hostname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lndNodeType?: Resolver<ResolversTypes['LndNodeType'], ParentType, ContextType>;
-  macaroon?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tlsCertificate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-};
-
-export type LndConnectionDetailsPrivateResolvers<ContextType = any, ParentType extends ResolversParentTypes['LndConnectionDetailsPrivate'] = ResolversParentTypes['LndConnectionDetailsPrivate']> = {
-  grpcPort?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  hostname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lndNodeType?: Resolver<ResolversTypes['LndNodeType'], ParentType, ContextType>;
-  macaroon?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  pubkey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  tlsCertificate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type LndConnectionDetailsPublicResolvers<ContextType = any, ParentType extends ResolversParentTypes['LndConnectionDetailsPublic'] = ResolversParentTypes['LndConnectionDetailsPublic']> = {
-  pubkey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type LocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = {
   country?: Resolver<Maybe<ResolversTypes['Country']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -7760,6 +7669,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectSubscriptionStart?: Resolver<ResolversTypes['RecurringContributionCheckoutResponse'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionStartArgs, 'input'>>;
   projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
   projectUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectUpdateArgs, 'input'>>;
+  projectWalletConfigurationContributionAttemptNotify?: Resolver<ResolversTypes['ProjectWalletConfigurationContributionAttemptNotifyResponse'], ParentType, ContextType, RequireFields<MutationProjectWalletConfigurationContributionAttemptNotifyArgs, 'input'>>;
   publishNostrEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationPublishNostrEventArgs, 'event'>>;
   recurringContributionCancel?: Resolver<ResolversTypes['RecurringContribution'], ParentType, ContextType, RequireFields<MutationRecurringContributionCancelArgs, 'input'>>;
   recurringContributionPortalSessionCreate?: Resolver<ResolversTypes['RecurringContributionPortalSession'], ParentType, ContextType, RequireFields<MutationRecurringContributionPortalSessionCreateArgs, 'input'>>;
@@ -7787,7 +7697,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {
-  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectAonGoalStatusUpdateResponse' | 'ProjectDeleteResponse' | 'ProjectGoalDeleteResponse' | 'ProjectMatchingDeleteResponse', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectAonGoalStatusUpdateResponse' | 'ProjectDeleteResponse' | 'ProjectGoalDeleteResponse' | 'ProjectMatchingDeleteResponse' | 'ProjectWalletConfigurationContributionAttemptNotifyResponse', ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
@@ -8781,6 +8691,12 @@ export type ProjectViewStatsResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectWalletConfigurationContributionAttemptNotifyResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectWalletConfigurationContributionAttemptNotifyResponse'] = ResolversParentTypes['ProjectWalletConfigurationContributionAttemptNotifyResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectsAonAlmostFundedResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectsAonAlmostFundedResponse'] = ResolversParentTypes['ProjectsAonAlmostFundedResponse']> = {
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -9368,9 +9284,6 @@ export type Resolvers<ContextType = any> = {
   LightningPaymentDetails?: LightningPaymentDetailsResolvers<ContextType>;
   LightningPaymentMethods?: LightningPaymentMethodsResolvers<ContextType>;
   LightningToRskSwapPaymentDetails?: LightningToRskSwapPaymentDetailsResolvers<ContextType>;
-  LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
-  LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
-  LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
   Milestone?: MilestoneResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
@@ -9494,6 +9407,7 @@ export type Resolvers<ContextType = any> = {
   ProjectSubscriptionPlan?: ProjectSubscriptionPlanResolvers<ContextType>;
   ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>;
   ProjectViewStats?: ProjectViewStatsResolvers<ContextType>;
+  ProjectWalletConfigurationContributionAttemptNotifyResponse?: ProjectWalletConfigurationContributionAttemptNotifyResponseResolvers<ContextType>;
   ProjectsAonAlmostFundedResponse?: ProjectsAonAlmostFundedResponseResolvers<ContextType>;
   ProjectsAonAlmostOverResponse?: ProjectsAonAlmostOverResponseResolvers<ContextType>;
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
@@ -9565,7 +9479,7 @@ export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take
 
 export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
 
-export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate' } };
+export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } };
 
 export type WalletLimitsFragment = { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null } | null };
 
@@ -9629,7 +9543,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'User', id: any, bio?: string | null, email?: string | null, username: string, imageUrl?: string | null, wallet?: { __typename?: 'Wallet', connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate' } | { __typename?: 'LndConnectionDetailsPublic' } | { __typename?: 'NWCConnectionDetailsPrivate' } } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'User', id: any, bio?: string | null, email?: string | null, username: string, imageUrl?: string | null, wallet?: { __typename?: 'Wallet', connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } } | null } };
 
 export type UserDeleteMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -9753,7 +9667,7 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, activeMatching?: (
@@ -10154,7 +10068,7 @@ export type ImpactFundApplyMutation = { __typename?: 'Mutation', impactFundApply
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, status: ImpactFundStatus, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number }, donateProject?: { __typename?: 'Project', name: string } | null }> };
+export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
 
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
@@ -10239,7 +10153,7 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
 
 export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, userId: any, legalEntityType: LegalEntityType, fullName?: string | null, country?: string | null, state?: string | null, taxId?: string | null, verified?: boolean | null };
 
-export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
+export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
 export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -10506,16 +10420,6 @@ export type RskToOnChainSwapPaymentDetailsFragment = { __typename?: 'RskToOnChai
 
 export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null, description?: string | null };
 
-export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string, amountDue: number, fees: Array<(
-    { __typename?: 'PaymentFee' }
-    & ContributionFeesFragment
-  )> };
-
-export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string, amountDue: number, fees: Array<(
-    { __typename?: 'PaymentFee' }
-    & ContributionFeesFragment
-  )> };
-
 export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string, stripeAccountId: string };
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string };
@@ -10530,13 +10434,7 @@ export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 
     & ContributionFeesFragment
   )> };
 
-export type FundingContributionPaymentDetailsFragment = { __typename?: 'ContributionPaymentsDetails', lightning?: (
-    { __typename?: 'ContributionLightningPaymentDetails' }
-    & ContributionLightningPaymentDetailsFragment
-  ) | null, onChainSwap?: (
-    { __typename?: 'ContributionOnChainSwapPaymentDetails' }
-    & ContributionOnChainSwapPaymentDetailsFragment
-  ) | null, fiat?: (
+export type FundingContributionPaymentDetailsFragment = { __typename?: 'ContributionPaymentsDetails', fiat?: (
     { __typename?: 'ContributionFiatPaymentDetails' }
     & ContributionFiatPaymentDetailsFragment
   ) | null, fiatToLightningSwap?: (
@@ -10732,7 +10630,7 @@ export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?:
       & WalletContributionLimitsFragment
     ) | null } | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } };
 
-export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
+export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
 export type ProjectPageWalletCreationDetailsFragment = (
   { __typename?: 'Wallet' }
@@ -11034,6 +10932,13 @@ export type ProjectRskEoaSetMutationVariables = Exact<{
 
 
 export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: any, rskEoa?: string | null } };
+
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationVariables = Exact<{
+  input: ProjectWalletConfigurationContributionAttemptNotifyInput;
+}>;
+
+
+export type ProjectWalletConfigurationContributionAttemptNotifyMutation = { __typename?: 'Mutation', projectWalletConfigurationContributionAttemptNotify: { __typename?: 'ProjectWalletConfigurationContributionAttemptNotifyResponse', success: boolean, message?: string | null } };
 
 export type ProjectReviewRequestMutationVariables = Exact<{
   input: ProjectReviewRequestInput;
@@ -12105,17 +12010,6 @@ export const ProjectWalletFragmentDoc = gql`
     ... on LightningAddressConnectionDetails {
       lightningAddress
     }
-    ... on LndConnectionDetailsPrivate {
-      macaroon
-      tlsCertificate
-      hostname
-      grpcPort
-      lndNodeType
-      pubkey
-    }
-    ... on LndConnectionDetailsPublic {
-      pubkey
-    }
   }
 }
     `;
@@ -12326,6 +12220,7 @@ export const ProjectForLandingPageFragmentDoc = gql`
   title
   status
   fundingStrategy
+  rskEoa
   category
   subCategory
   location {
@@ -12956,17 +12851,6 @@ export const UserWalletConnectionDetailsFragmentDoc = gql`
     ... on LightningAddressConnectionDetails {
       lightningAddress
     }
-    ... on LndConnectionDetailsPublic {
-      pubkey
-    }
-    ... on LndConnectionDetailsPrivate {
-      tlsCertificate
-      pubkey
-      macaroon
-      lndNodeType
-      hostname
-      grpcPort
-    }
     ... on NWCConnectionDetailsPrivate {
       nwcUrl
     }
@@ -13396,34 +13280,6 @@ export const OnChainToRskSwapPaymentDetailsFragmentDoc = gql`
   onChainAddress
 }
     `;
-export const ContributionFeesFragmentDoc = gql`
-    fragment ContributionFees on PaymentFee {
-  feeType
-  feeAmount
-  feePayer
-  description
-}
-    `;
-export const ContributionLightningPaymentDetailsFragmentDoc = gql`
-    fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
-  lightningInvoiceId
-  paymentRequest
-  amountDue
-  fees {
-    ...ContributionFees
-  }
-}
-    ${ContributionFeesFragmentDoc}`;
-export const ContributionOnChainSwapPaymentDetailsFragmentDoc = gql`
-    fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
-  address
-  swapJson
-  amountDue
-  fees {
-    ...ContributionFees
-  }
-}
-    ${ContributionFeesFragmentDoc}`;
 export const ContributionFiatPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
   stripeClientSecret
@@ -13433,6 +13289,14 @@ export const ContributionFiatPaymentDetailsFragmentDoc = gql`
 export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatSwapPaymentDetails on ContributionFiatToLightningSwapPaymentDetails {
   checkoutUrl
+}
+    `;
+export const ContributionFeesFragmentDoc = gql`
+    fragment ContributionFees on PaymentFee {
+  feeType
+  feeAmount
+  feePayer
+  description
 }
     `;
 export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
@@ -13461,12 +13325,6 @@ export const ContributionOnChainToRskSwapPaymentDetailsFragmentDoc = gql`
     ${ContributionFeesFragmentDoc}`;
 export const FundingContributionPaymentDetailsFragmentDoc = gql`
     fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
-  lightning {
-    ...ContributionLightningPaymentDetails
-  }
-  onChainSwap {
-    ...ContributionOnChainSwapPaymentDetails
-  }
   fiat {
     ...ContributionFiatPaymentDetails
   }
@@ -13480,9 +13338,7 @@ export const FundingContributionPaymentDetailsFragmentDoc = gql`
     ...ContributionOnChainToRskSwapPaymentDetails
   }
 }
-    ${ContributionLightningPaymentDetailsFragmentDoc}
-${ContributionOnChainSwapPaymentDetailsFragmentDoc}
-${ContributionFiatPaymentDetailsFragmentDoc}
+    ${ContributionFiatPaymentDetailsFragmentDoc}
 ${ContributionFiatSwapPaymentDetailsFragmentDoc}
 ${ContributionLightningToRskSwapPaymentDetailsFragmentDoc}
 ${ContributionOnChainToRskSwapPaymentDetailsFragmentDoc}`;
@@ -14244,17 +14100,6 @@ export const ProjectWalletConnectionDetailsFragmentDoc = gql`
   connectionDetails {
     ... on LightningAddressConnectionDetails {
       lightningAddress
-    }
-    ... on LndConnectionDetailsPublic {
-      pubkey
-    }
-    ... on LndConnectionDetailsPrivate {
-      tlsCertificate
-      pubkey
-      macaroon
-      lndNodeType
-      hostname
-      grpcPort
     }
     ... on NWCConnectionDetailsPrivate {
       nwcUrl
@@ -18983,6 +18828,40 @@ export function useProjectRskEoaSetMutation(baseOptions?: Apollo.MutationHookOpt
 export type ProjectRskEoaSetMutationHookResult = ReturnType<typeof useProjectRskEoaSetMutation>;
 export type ProjectRskEoaSetMutationResult = Apollo.MutationResult<ProjectRskEoaSetMutation>;
 export type ProjectRskEoaSetMutationOptions = Apollo.BaseMutationOptions<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>;
+export const ProjectWalletConfigurationContributionAttemptNotifyDocument = gql`
+    mutation ProjectWalletConfigurationContributionAttemptNotify($input: ProjectWalletConfigurationContributionAttemptNotifyInput!) {
+  projectWalletConfigurationContributionAttemptNotify(input: $input) {
+    success
+    message
+  }
+}
+    `;
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationFn = Apollo.MutationFunction<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>;
+
+/**
+ * __useProjectWalletConfigurationContributionAttemptNotifyMutation__
+ *
+ * To run a mutation, you first call `useProjectWalletConfigurationContributionAttemptNotifyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectWalletConfigurationContributionAttemptNotifyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectWalletConfigurationContributionAttemptNotifyMutation, { data, loading, error }] = useProjectWalletConfigurationContributionAttemptNotifyMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectWalletConfigurationContributionAttemptNotifyMutation(baseOptions?: Apollo.MutationHookOptions<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>(ProjectWalletConfigurationContributionAttemptNotifyDocument, options);
+      }
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationHookResult = ReturnType<typeof useProjectWalletConfigurationContributionAttemptNotifyMutation>;
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationResult = Apollo.MutationResult<ProjectWalletConfigurationContributionAttemptNotifyMutation>;
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationOptions = Apollo.BaseMutationOptions<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>;
 export const ProjectReviewRequestDocument = gql`
     mutation ProjectReviewRequest($input: ProjectReviewRequestInput!) {
   projectReviewRequest(input: $input) {

@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import Confetti from 'react-confetti'
-import { PiCopy, PiDownloadSimple, PiLink } from 'react-icons/pi'
+import { PiCopy, PiLink } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import {
@@ -17,19 +17,13 @@ import { __development__, FundingErrorUrl } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import {
-  FundingContributionFragment,
-  FundingContributionPaymentDetailsFragment,
-  PaymentFeePayer,
-  PaymentFeeType,
-} from '@/types/index.ts'
+import type { FundingContributionFragment, FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
 import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment/components/QRCodeComponent'
 import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayment/components/WaitingForPayment'
 import { TransactionProcessing } from '../../../../projectFunding/views/fundingPayment/views/paymentOnchain/components/TransactionProcessing.tsx'
-import { useDownloadRefund } from '../../../../projectFunding/views/fundingPayment/views/paymentOnchain/hooks/useDownloadRefund'
 import {
   useTransactionStatusUpdate,
   type SwapStatusUpdate,
@@ -39,30 +33,6 @@ import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
 import { LaunchPaymentMethod } from './LaunchPaymentMethodSelection.tsx'
 import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
-
-const getTotalBitcoinAmount = (
-  paymentMethod: LaunchPaymentMethod,
-  paymentsData: FundingContributionPaymentDetailsFragment,
-): number => {
-  if (paymentMethod === LaunchPaymentMethod.Onchain) {
-    const contributorOnChainFees =
-      paymentsData.onChainSwap?.fees.reduce((acc, fee) => {
-        if (fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip) {
-          return acc + fee.feeAmount
-        }
-
-        return acc
-      }, 0) || 0
-
-    if (paymentsData.onChainSwap) {
-      return paymentsData.onChainSwap.amountDue + contributorOnChainFees
-    }
-
-    return paymentsData.onChainToRskSwap?.amountDue || 0
-  }
-
-  return paymentsData.lightningToRskSwap?.amountDue || 0
-}
 
 /** Bitcoin payment screen for the launch fee across Lightning and on-chain payment paths. */
 export const LaunchFees = ({
@@ -82,37 +52,33 @@ export const LaunchFees = ({
 }) => {
   const isMobile = useMobileMode()
   const toast = useNotification()
-  const { buttonProps: refundButtonProps } = useDownloadRefund()
 
   const { project, partialUpdateProject } = useProjectAtom()
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const currentOnChainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
 
   const [isPaid, setIsPaid] = useState(false)
-  const [hasUnlockedOnchainFlow, setHasUnlockedOnchainFlow] = useState(!paymentsData.onChainSwap?.swapJson)
   const [isAwaitingConfirmation, setIsAwaitingConfirmation] = useState(false)
   const [processingTransactionId, setProcessingTransactionId] = useState('')
 
+  const isOnchain = paymentMethod === LaunchPaymentMethod.Onchain
+
   const launchFeeUsd = LAUNCH_FEE_USD_CENTS[strategy] / 100
-  const totalSats = getTotalBitcoinAmount(paymentMethod, paymentsData)
+  const totalSats = isOnchain
+    ? paymentsData.onChainToRskSwap?.amountDue || 0
+    : paymentsData.lightningToRskSwap?.amountDue || 0
 
   const lightningPaymentRequest = paymentsData.lightningToRskSwap?.paymentRequest || ''
-  const onChainAddress = paymentsData.onChainSwap?.address || paymentsData.onChainToRskSwap?.address || ''
+  const onChainAddress = paymentsData.onChainToRskSwap?.address || ''
   const onChainBip21Invoice =
     onChainAddress && totalSats
       ? __development__
         ? `address=${onChainAddress} amount=${totalSats}`
         : getBip21Invoice(totalSats, onChainAddress)
       : ''
-  const requiresRefundDownload = Boolean(paymentsData.onChainSwap?.swapJson)
-  const launchSwapId =
-    paymentMethod === LaunchPaymentMethod.Onchain
-      ? currentOnChainToRskSwapId || undefined
-      : currentLightningToRskSwapId || undefined
-
-  useEffect(() => {
-    setHasUnlockedOnchainFlow(!requiresRefundDownload)
-  }, [requiresRefundDownload])
+  const launchSwapId = isOnchain
+    ? currentOnChainToRskSwapId || undefined
+    : currentLightningToRskSwapId || undefined
 
   useEffect(() => {
     if (isPaid) {
@@ -125,16 +91,14 @@ export const LaunchFees = ({
 
   const launchCopy = useMemo(
     () => ({
-      intro:
-        paymentMethod === LaunchPaymentMethod.Onchain
-          ? t('Please pay the launch fee with Bitcoin on-chain to continue.')
-          : t('Please pay the launch fee with Bitcoin Lightning to continue.'),
-      waitingTitle:
-        paymentMethod === LaunchPaymentMethod.Onchain
-          ? t('Send the exact amount from your Bitcoin wallet.')
-          : t('Scan and pay invoice with Bitcoin Lightning.'),
+      intro: isOnchain
+        ? t('Please pay the launch fee with Bitcoin on-chain to continue.')
+        : t('Please pay the launch fee with Bitcoin Lightning to continue.'),
+      waitingTitle: isOnchain
+        ? t('Send the exact amount from your Bitcoin wallet.')
+        : t('Scan and pay invoice with Bitcoin Lightning.'),
     }),
-    [paymentMethod],
+    [isOnchain],
   )
 
   const launchIntro = isAwaitingConfirmation
@@ -278,14 +242,45 @@ export const LaunchFees = ({
     )
   }
 
-  const renderLightningPayment = () => {
-    if (!lightningPaymentRequest) {
+  const renderPaymentContent = () => {
+    const qrValue = isOnchain ? onChainBip21Invoice : lightningPaymentRequest
+    const qrClick = isOnchain ? handleOnchainCopy : handleLightningPayment
+    const qrColored = isOnchain ? hasCopiedOnchain : hasCopiedLightning
+
+    const hasPayload = isOnchain ? Boolean(onChainAddress && onChainBip21Invoice) : Boolean(lightningPaymentRequest)
+    if (!hasPayload) {
       return renderMissingPaymentContent()
     }
 
+    const copyButton = isOnchain ? (
+      <Button
+        id="copy-onchain-address-button"
+        width="310px"
+        size="lg"
+        variant="solid"
+        colorScheme="primary1"
+        onClick={handleOnchainCopy}
+        rightIcon={hasCopiedOnchain ? <PiLink /> : <PiCopy />}
+      >
+        {hasCopiedOnchain ? t('Copied!') : t('Copy on-chain address')}
+      </Button>
+    ) : (
+      <Button
+        id="copy-lightning-invoice-button"
+        width="310px"
+        size="lg"
+        variant="solid"
+        colorScheme="primary1"
+        onClick={handleLightningCopy}
+        rightIcon={<PiCopy />}
+      >
+        {t('Copy Lightning invoice')}
+      </Button>
+    )
+
     return (
       <VStack w="full" spacing={6}>
-        <QRCodeComponent value={lightningPaymentRequest} onClick={handleLightningPayment} isColored={hasCopiedLightning} />
+        <QRCodeComponent value={qrValue} onClick={qrClick} isColored={qrColored} />
         <HStack w="full" justifyContent="center">
           <Body light>{t('Total to pay')}:</Body>
           <Body>
@@ -298,100 +293,7 @@ export const LaunchFees = ({
         </HStack>
         <VStack w="full" spacing={6} pt={4}>
           <WaitingForPayment title={launchCopy.waitingTitle} />
-          <Button
-            id="copy-lightning-invoice-button"
-            width="310px"
-            size="lg"
-            variant="solid"
-            colorScheme="primary1"
-            onClick={handleLightningCopy}
-            rightIcon={<PiCopy />}
-          >
-            {t('Copy Lightning invoice')}
-          </Button>
-        </VStack>
-      </VStack>
-    )
-  }
-
-  const renderOnchainDownloadPrompt = () => {
-    return (
-      <VStack w="full" spacing={6}>
-        <CardLayout w="full" spacing={3}>
-          <Body bold>{t('Download refund file before continuing')}</Body>
-          <Body size="sm" light>
-            {t(
-              'On-chain launch-fee payments require a refund file as backup in the rare case the payment swap fails.',
-            )}
-          </Body>
-          <Body size="sm" light>
-            {t('Download and store the refund file, then continue to the payment QR.')}
-          </Body>
-        </CardLayout>
-        <Button
-          {...refundButtonProps}
-          size="lg"
-          variant="solid"
-          minWidth="310px"
-          colorScheme="primary1"
-          rightIcon={<PiDownloadSimple />}
-          isDisabled={!refundButtonProps.href}
-          onClick={() => setHasUnlockedOnchainFlow(true)}
-        >
-          {t('Download refund file & continue')}
-        </Button>
-      </VStack>
-    )
-  }
-
-  const renderOnchainPayment = () => {
-    if (!onChainAddress || !onChainBip21Invoice) {
-      return renderMissingPaymentContent()
-    }
-
-    if (requiresRefundDownload && !hasUnlockedOnchainFlow) {
-      return renderOnchainDownloadPrompt()
-    }
-
-    return (
-      <VStack w="full" spacing={6}>
-        <QRCodeComponent value={onChainBip21Invoice} onClick={handleOnchainCopy} isColored={hasCopiedOnchain} />
-        <HStack w="full" justifyContent="center">
-          <Body light>{t('Total to pay')}:</Body>
-          <Body>
-            {`${commaFormatted(totalSats)} `}
-            <Body as="span" light>
-              sats
-            </Body>
-          </Body>
-          <Body light>{`($${commaFormatted(launchFeeUsd)})`}</Body>
-        </HStack>
-        <VStack w="full" spacing={6} pt={4}>
-          <WaitingForPayment title={launchCopy.waitingTitle} />
-          <Button
-            id="copy-onchain-address-button"
-            width="310px"
-            size="lg"
-            variant="solid"
-            colorScheme="primary1"
-            onClick={handleOnchainCopy}
-            rightIcon={hasCopiedOnchain ? <PiLink /> : <PiCopy />}
-          >
-            {hasCopiedOnchain ? t('Copied!') : t('Copy on-chain address')}
-          </Button>
-          {requiresRefundDownload ? (
-            <Button
-              {...refundButtonProps}
-              size="lg"
-              variant="surface"
-              colorScheme="primary1"
-              minWidth="310px"
-              rightIcon={<PiDownloadSimple />}
-              isDisabled={!refundButtonProps.href}
-            >
-              {t('Download refund file')}
-            </Button>
-          ) : null}
+          {copyButton}
         </VStack>
       </VStack>
     )
@@ -416,9 +318,7 @@ export const LaunchFees = ({
         ? renderSuccessContent()
         : isAwaitingConfirmation
         ? renderAwaitingConfirmationContent()
-        : paymentMethod === LaunchPaymentMethod.Onchain
-        ? renderOnchainPayment()
-        : renderLightningPayment()}
+        : renderPaymentContent()}
     </ProjectCreationPageWrapper>
   )
 }

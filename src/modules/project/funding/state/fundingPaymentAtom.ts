@@ -11,18 +11,6 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
   fiatToLightningSwap: {
     checkoutUrl: '',
   },
-  lightning: {
-    lightningInvoiceId: '',
-    paymentRequest: '',
-    amountDue: 0,
-    fees: [],
-  },
-  onChainSwap: {
-    swapJson: '',
-    address: '',
-    amountDue: 0,
-    fees: [],
-  },
   lightningToRskSwap: {
     lightningInvoiceId: '',
     paymentRequest: '',

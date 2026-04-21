@@ -13,18 +13,10 @@ export const PaymentOnchain = () => {
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
 
   useEffect(() => {
-    if (
-      (!fundingPaymentDetails.onChainSwap?.address && !fundingPaymentDetails.onChainToRskSwap?.address) ||
-      !project.name
-    ) {
+    if (!fundingPaymentDetails.onChainToRskSwap?.address || !project.name) {
       navigate(getPath('projectFunding', project.name))
     }
-  }, [
-    fundingPaymentDetails.onChainSwap?.address,
-    fundingPaymentDetails.onChainToRskSwap?.address,
-    project.name,
-    navigate,
-  ])
+  }, [fundingPaymentDetails.onChainToRskSwap?.address, project.name, navigate])
 
   return <Outlet />
 }

@@ -36,7 +36,7 @@ export const Project = () => {
   }, [user, searchParams, setSearchParams, location.state, setSourceResource])
 
   return (
-    <ProjectProvider projectName={projectName || ''} initializeWallet>
+    <ProjectProvider projectName={projectName || ''}>
       <FundingProviderWithProjectContext>
         <ProjectLayout />
       </FundingProviderWithProjectContext>

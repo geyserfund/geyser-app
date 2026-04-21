@@ -87,3 +87,14 @@ export const MUTATION_PROJECT_RSK_EOA_SET = gql`
     }
   }
 `
+
+export const MUTATION_PROJECT_WALLET_CONFIGURATION_CONTRIBUTION_ATTEMPT_NOTIFY = gql`
+  mutation ProjectWalletConfigurationContributionAttemptNotify(
+    $input: ProjectWalletConfigurationContributionAttemptNotifyInput!
+  ) {
+    projectWalletConfigurationContributionAttemptNotify(input: $input) {
+      success
+      message
+    }
+  }
+`
