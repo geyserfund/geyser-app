@@ -302,31 +302,25 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
           }
         }
 
-        requestContext.accountKeys = accountKeyResolution.accountKeys
         const { publicKey: claimPublicKey, address: claimAddress } = accountKeyResolution.accountKeys
+        const preImage = generatePreImageHash()
+        const boltzInput = {
+          create: true,
+          boltz: {
+            claimPublicKey,
+            claimAddress,
+            preimageHash: preImage.preimageHash,
+          },
+        }
+
+        requestContext.accountKeys = accountKeyResolution.accountKeys
 
         if (method === LaunchPaymentMethod.Lightning) {
-          const lightningPreImage = generatePreImageHash()
-          requestContext.lightningPreImage = lightningPreImage
-          paymentsInput.lightningToRskSwap = {
-            create: true,
-            boltz: {
-              claimPublicKey,
-              claimAddress,
-              preimageHash: lightningPreImage.preimageHash,
-            },
-          }
+          requestContext.lightningPreImage = preImage
+          paymentsInput.lightningToRskSwap = boltzInput
         } else {
-          const onChainPreImage = generatePreImageHash()
-          requestContext.onChainPreImage = onChainPreImage
-          paymentsInput.onChainToRskSwap = {
-            create: true,
-            boltz: {
-              claimPublicKey,
-              claimAddress,
-              preimageHash: onChainPreImage.preimageHash,
-            },
-          }
+          requestContext.onChainPreImage = preImage
+          paymentsInput.onChainToRskSwap = boltzInput
         }
       }
 

@@ -10933,6 +10933,13 @@ export type ProjectRskEoaSetMutationVariables = Exact<{
 
 export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: any, rskEoa?: string | null } };
 
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationVariables = Exact<{
+  input: ProjectWalletConfigurationContributionAttemptNotifyInput;
+}>;
+
+
+export type ProjectWalletConfigurationContributionAttemptNotifyMutation = { __typename?: 'Mutation', projectWalletConfigurationContributionAttemptNotify: { __typename?: 'ProjectWalletConfigurationContributionAttemptNotifyResponse', success: boolean, message?: string | null } };
+
 export type ProjectReviewRequestMutationVariables = Exact<{
   input: ProjectReviewRequestInput;
 }>;
@@ -18821,6 +18828,40 @@ export function useProjectRskEoaSetMutation(baseOptions?: Apollo.MutationHookOpt
 export type ProjectRskEoaSetMutationHookResult = ReturnType<typeof useProjectRskEoaSetMutation>;
 export type ProjectRskEoaSetMutationResult = Apollo.MutationResult<ProjectRskEoaSetMutation>;
 export type ProjectRskEoaSetMutationOptions = Apollo.BaseMutationOptions<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>;
+export const ProjectWalletConfigurationContributionAttemptNotifyDocument = gql`
+    mutation ProjectWalletConfigurationContributionAttemptNotify($input: ProjectWalletConfigurationContributionAttemptNotifyInput!) {
+  projectWalletConfigurationContributionAttemptNotify(input: $input) {
+    success
+    message
+  }
+}
+    `;
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationFn = Apollo.MutationFunction<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>;
+
+/**
+ * __useProjectWalletConfigurationContributionAttemptNotifyMutation__
+ *
+ * To run a mutation, you first call `useProjectWalletConfigurationContributionAttemptNotifyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectWalletConfigurationContributionAttemptNotifyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectWalletConfigurationContributionAttemptNotifyMutation, { data, loading, error }] = useProjectWalletConfigurationContributionAttemptNotifyMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectWalletConfigurationContributionAttemptNotifyMutation(baseOptions?: Apollo.MutationHookOptions<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>(ProjectWalletConfigurationContributionAttemptNotifyDocument, options);
+      }
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationHookResult = ReturnType<typeof useProjectWalletConfigurationContributionAttemptNotifyMutation>;
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationResult = Apollo.MutationResult<ProjectWalletConfigurationContributionAttemptNotifyMutation>;
+export type ProjectWalletConfigurationContributionAttemptNotifyMutationOptions = Apollo.BaseMutationOptions<ProjectWalletConfigurationContributionAttemptNotifyMutation, ProjectWalletConfigurationContributionAttemptNotifyMutationVariables>;
 export const ProjectReviewRequestDocument = gql`
     mutation ProjectReviewRequest($input: ProjectReviewRequestInput!) {
   projectReviewRequest(input: $input) {

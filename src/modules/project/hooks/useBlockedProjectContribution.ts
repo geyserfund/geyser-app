@@ -1,21 +1,11 @@
-import { gql, useMutation } from '@apollo/client'
 import type { MouseEvent } from 'react'
 import { useCallback } from 'react'
 
-import { ProjectFundingStrategy } from '@/types/index.ts'
+import { ProjectFundingStrategy, useProjectWalletConfigurationContributionAttemptNotifyMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const WALLET_NOT_CONFIGURED_MESSAGE =
   'The wallet of this project is not configured and it cannot receive contributions. The creator has been notified.'
-
-const MUTATION_PROJECT_WALLET_CONFIGURATION_CONTRIBUTION_ATTEMPT_NOTIFY = gql`
-  mutation ProjectWalletConfigurationContributionAttemptNotify($input: ProjectWalletConfigurationContributionAttemptNotifyInput!) {
-    projectWalletConfigurationContributionAttemptNotify(input: $input) {
-      success
-      message
-    }
-  }
-`
 
 type ProjectContributionGate = {
   id: string | number
@@ -23,9 +13,10 @@ type ProjectContributionGate = {
   fundingStrategy?: ProjectFundingStrategy | null
 }
 
+/** Blocks contributions for Take-It-All projects missing an RSK EOA and notifies the project creator when a contribution is attempted. */
 export const useBlockedProjectContribution = (project?: ProjectContributionGate | null) => {
   const toast = useNotification()
-  const [notifyCreator] = useMutation(MUTATION_PROJECT_WALLET_CONFIGURATION_CONTRIBUTION_ATTEMPT_NOTIFY)
+  const [notifyCreator] = useProjectWalletConfigurationContributionAttemptNotifyMutation()
 
   const isContributionBlocked = Boolean(
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project?.rskEoa,

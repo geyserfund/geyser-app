@@ -512,58 +512,47 @@ export const useFundingAPI = () => {
       const onChainToRskSwapInput = paymentsInputToPrepare?.onChainToRskSwap?.boltz
 
       if (lightningToRskSwapInput || onChainToRskSwapInput) {
-        const ensureAccountKeys = () => {
-          if (
-            requestContext.accountKeys.publicKey &&
-            requestContext.accountKeys.address &&
-            isValidRskPrivateKey(requestContext.accountKeys.privateKey)
-          ) {
-            return requestContext.accountKeys
-          }
+        const hasValidContextKeys =
+          requestContext.accountKeys.publicKey &&
+          requestContext.accountKeys.address &&
+          isValidRskPrivateKey(requestContext.accountKeys.privateKey)
 
+        if (!hasValidContextKeys) {
           const generatedKeys = generateAccountKeys()
           setRskAccountKeys(generatedKeys)
-          requestContext.accountKeys.publicKey = generatedKeys.publicKey
-          requestContext.accountKeys.address = generatedKeys.address
-          requestContext.accountKeys.privateKey = generatedKeys.privateKey
-
-          return requestContext.accountKeys
+          requestContext.accountKeys = { ...generatedKeys }
         }
 
-        const contributionPreImages: {
-          lightning?: { preimageHex: string; preimageHash: string }
-          onChain?: { preimageHex: string; preimageHash: string }
-        } = {}
+        const { publicKey: claimPublicKey, address: claimAddress } = requestContext.accountKeys
+        const newPreImages: ClaimPreImages = getInitialClaimPreImages()
+        let hasNewPreImages = false
 
-        if (lightningToRskSwapInput && !lightningToRskSwapInput.preimageHash) {
-          const lightningPreImage = generatePreImageHash()
-          contributionPreImages.lightning = lightningPreImage
-          requestContext.preImages.lightning = lightningPreImage
-          lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
-        }
-
-        if (onChainToRskSwapInput && !onChainToRskSwapInput.preimageHash) {
-          const onChainPreImage = generatePreImageHash()
-          contributionPreImages.onChain = onChainPreImage
-          requestContext.preImages.onChain = onChainPreImage
-          onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
-        }
-
-        if (contributionPreImages.lightning || contributionPreImages.onChain) {
-          setContributionCreatePreImages(contributionPreImages)
-        }
-
-        if (lightningToRskSwapInput || onChainToRskSwapInput) {
-          const accountKeys = ensureAccountKeys()
-          if (lightningToRskSwapInput) {
-            lightningToRskSwapInput.claimPublicKey = accountKeys.publicKey
-            lightningToRskSwapInput.claimAddress = accountKeys.address
+        if (lightningToRskSwapInput) {
+          if (!lightningToRskSwapInput.preimageHash) {
+            const lightningPreImage = generatePreImageHash()
+            newPreImages.lightning = lightningPreImage
+            requestContext.preImages.lightning = lightningPreImage
+            lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
+            hasNewPreImages = true
           }
+          lightningToRskSwapInput.claimPublicKey = claimPublicKey
+          lightningToRskSwapInput.claimAddress = claimAddress
+        }
 
-          if (onChainToRskSwapInput) {
-            onChainToRskSwapInput.claimPublicKey = accountKeys.publicKey
-            onChainToRskSwapInput.claimAddress = accountKeys.address
+        if (onChainToRskSwapInput) {
+          if (!onChainToRskSwapInput.preimageHash) {
+            const onChainPreImage = generatePreImageHash()
+            newPreImages.onChain = onChainPreImage
+            requestContext.preImages.onChain = onChainPreImage
+            onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
+            hasNewPreImages = true
           }
+          onChainToRskSwapInput.claimPublicKey = claimPublicKey
+          onChainToRskSwapInput.claimAddress = claimAddress
+        }
+
+        if (hasNewPreImages) {
+          setContributionCreatePreImages(newPreImages)
         }
       }
 

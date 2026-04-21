@@ -340,6 +340,15 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   }
 })
 
+const buildBoltzSwapInput = (claimPublicKey: string, claimAddress: string) => ({
+  create: true,
+  boltz: {
+    claimPublicKey,
+    claimAddress,
+    preimageHash: '',
+  },
+})
+
 const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
   const intendedPaymentMethod = get(intendedPaymentMethodAtom)
@@ -362,14 +371,7 @@ const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
           returnUrl: `${ORIGIN}${getPath('fundingCallback', fundingProject.name)}`,
         },
       },
-      lightningToRskSwap: {
-        create: true,
-        boltz: {
-          claimPublicKey,
-          claimAddress,
-          preimageHash: '',
-        },
-      },
+      lightningToRskSwap: buildBoltzSwapInput(claimPublicKey, claimAddress),
     }
   }
 
@@ -385,9 +387,15 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
-  const shouldIncludeFiat = intendedPaymentMethod === PaymentMethods.fiatSwap
 
-  if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && shouldIncludeFiat) {
+  const supportsPrismSwaps =
+    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||
+    fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+
+  if (
+    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+    intendedPaymentMethod === PaymentMethods.fiatSwap
+  ) {
     paymentsInput.fiat = {
       create: true,
       stripe: {
@@ -396,27 +404,9 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     }
   }
 
-  if (
-    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||
-    fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-  ) {
-    paymentsInput.lightningToRskSwap = {
-      create: true,
-      boltz: {
-        claimPublicKey,
-        claimAddress,
-        preimageHash: '',
-      },
-    }
-
-    paymentsInput.onChainToRskSwap = {
-      create: true,
-      boltz: {
-        claimPublicKey,
-        claimAddress,
-        preimageHash: '',
-      },
-    }
+  if (supportsPrismSwaps) {
+    paymentsInput.lightningToRskSwap = buildBoltzSwapInput(claimPublicKey, claimAddress)
+    paymentsInput.onChainToRskSwap = buildBoltzSwapInput(claimPublicKey, claimAddress)
   }
 
   return paymentsInput

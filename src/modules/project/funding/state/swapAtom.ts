@@ -130,61 +130,72 @@ export const enum RefundFileType {
   LIGHTNING_TO_RSK = 'LIGHTNING_TO_RSK',
 }
 
+type RskSwapAccountKeys = { publicKey: string; address: string; privateKey: string }
+
+type RskSwapParseArgs = {
+  swap: { swapJson: string }
+  contributionInfo?: SwapContributionInfo
+  accountKeys?: RskSwapAccountKeys
+  refundType: RefundFileType.ON_CHAIN_TO_RSK | RefundFileType.LIGHTNING_TO_RSK
+  currentIdAtom: typeof currentLightningToRskSwapIdAtom | typeof currentOnChainToRskSwapIdAtom
+}
+
+const parseRskSwap = atom(null, (get, set, args: RskSwapParseArgs) => {
+  const { swap, contributionInfo, accountKeys, refundType, currentIdAtom } = args
+
+  const userAccountKeyPair = get(userAccountKeyPairAtom)
+  const userAccountKeys = get(userAccountKeysAtom)
+  const rskKeyPair = get(rskAccountKeysAtom)
+
+  const swapData = get(swapAtom)
+  const refundFile = JSON.parse(swap.swapJson)
+
+  refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
+  refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
+  refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
+  refundFile.contributionInfo = contributionInfo
+  refundFile.type = refundType
+
+  set(currentSwapIdAtom, refundFile.id)
+  set(currentIdAtom, refundFile.id)
+  set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+})
+
 export const parseOnChainToRskSwapAtom = atom(
   null,
   (
-    get,
+    _get,
     set,
     swap: ContributionOnChainToRskSwapPaymentDetailsFragment,
     contributionInfo?: SwapContributionInfo,
-    accountKeys?: { publicKey: string; address: string; privateKey: string },
+    accountKeys?: RskSwapAccountKeys,
   ) => {
-    const userAccountKeyPair = get(userAccountKeyPairAtom)
-    const userAccountKeys = get(userAccountKeysAtom)
-    const rskKeyPair = get(rskAccountKeysAtom)
-
-    const swapData = get(swapAtom)
-    const refundFile = JSON.parse(swap.swapJson)
-
-    refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
-    refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
-    refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
-
-    refundFile.contributionInfo = contributionInfo
-    refundFile.type = RefundFileType.ON_CHAIN_TO_RSK
-
-    set(currentSwapIdAtom, refundFile.id)
-    set(currentOnChainToRskSwapIdAtom, refundFile.id)
-    set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+    set(parseRskSwap, {
+      swap,
+      contributionInfo,
+      accountKeys,
+      refundType: RefundFileType.ON_CHAIN_TO_RSK,
+      currentIdAtom: currentOnChainToRskSwapIdAtom,
+    })
   },
 )
 
 export const parseLightningToRskSwapAtom = atom(
   null,
   (
-    get,
+    _get,
     set,
     swap: ContributionLightningToRskSwapPaymentDetailsFragment,
     contributionInfo?: SwapContributionInfo,
-    accountKeys?: { publicKey: string; address: string; privateKey: string },
+    accountKeys?: RskSwapAccountKeys,
   ) => {
-    const userAccountKeyPair = get(userAccountKeyPairAtom)
-    const userAccountKeys = get(userAccountKeysAtom)
-    const rskKeyPair = get(rskAccountKeysAtom)
-
-    const swapData = get(swapAtom)
-    const refundFile = JSON.parse(swap.swapJson)
-
-    refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
-    refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
-    refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
-
-    refundFile.contributionInfo = contributionInfo
-    refundFile.type = RefundFileType.LIGHTNING_TO_RSK
-
-    set(currentSwapIdAtom, refundFile.id)
-    set(currentLightningToRskSwapIdAtom, refundFile.id)
-    set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+    set(parseRskSwap, {
+      swap,
+      contributionInfo,
+      accountKeys,
+      refundType: RefundFileType.LIGHTNING_TO_RSK,
+      currentIdAtom: currentLightningToRskSwapIdAtom,
+    })
   },
 )
 
