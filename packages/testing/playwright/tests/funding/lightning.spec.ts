@@ -11,9 +11,16 @@ import {
 import { LIGHTNING_AMOUNT, PROJECT_NAME, TEST_COMMENT, TEST_EMAIL } from '../../domains/funding/constants'
 import { completeLightningDonation, completeLightningReward } from '../../domains/funding/flows'
 import { payLightningInvoice } from '../../domains/shared/bitcoin/lncli'
+import { checkLiveBackendAvailability } from '../../domains/shared/backend'
 
 test.describe('Lightning Funding Flows - TIA Projects', () => {
+  test.describe.configure({ mode: 'serial' })
+  test.setTimeout(120000)
+
   test.beforeEach(async ({ page }) => {
+    const backend = await checkLiveBackendAvailability(page.request)
+    test.skip(!backend.ok, `Skipping funding tests: ${backend.reason}`)
+
     // Navigate to project page
     await page.goto(`/project/${PROJECT_NAME}`)
   })

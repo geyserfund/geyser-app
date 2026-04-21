@@ -52,11 +52,10 @@ export const expectIntermediateSuccessScreen = async (page: Page) => {
   await expect(page.locator('#successful-contribution-banner')).toBeVisible({ timeout: 15000 })
 
   // Check for intermediate-specific text
-  await expect(page.getByText('successfully submitted contribution to')).toBeVisible()
+  await expect(page.getByText(/successfully submitted contribution to/i)).toBeVisible()
 
-  // Check for processing message (visible for all users during pending)
-  // This is the primary indicator of intermediate/pending state
-  await expect(page.getByText('Your transaction is being processed. You can safely leave this page.')).toBeVisible()
+  // This is the primary indicator of intermediate/pending state.
+  await expect(page.getByText("Your transaction is on it's way. Feel free to close this page.")).toBeVisible()
 }
 
 /** Verify final success screen (isPending=false) */
@@ -67,11 +66,14 @@ export const expectFinalSuccessScreen = async (page: Page) => {
   // Check for final-specific text (without "submitted")
   await expect(page.getByText(/successfully contributed to/)).toBeVisible()
 
-  // Processing message should NOT be visible
-  await expect(page.getByText('Your transaction is being processed')).not.toBeVisible()
+  // Pending-state message should NOT be visible anymore.
+  await expect(page.getByText("Your transaction is on it's way. Feel free to close this page.")).not.toBeVisible()
 
-  // Button shows "Go to project" (not "View contribution status")
-  await expect(page.getByRole('link', { name: 'Go to project' })).toBeVisible()
+  // Final success has Back to project navigation in top-right.
+  const backToProject = page
+    .getByRole('link', { name: 'Back to project' })
+    .or(page.getByRole('button', { name: 'Back to project' }))
+  await expect(backToProject).toBeVisible()
 }
 
 /** Verify transaction failed screen */

@@ -1,8 +1,9 @@
 /** Project creation fixtures for Playwright tests */
 
-import { test as base, Page } from '@playwright/test'
+import { test as base } from '@playwright/test'
 
 import { loginWithRealNostr, setupRealAuth } from '../auth/realAuth'
+import { checkLiveBackendAvailability } from '../shared/backend'
 import { navigateToLandingPage } from './actions'
 import { DEFAULT_AON_GOAL, DEFAULT_PROJECT_DETAILS, TEST_IMAGE_PATHS } from './constants'
 import { createAONProject } from './flows'
@@ -14,7 +15,10 @@ export const test = base.extend<{
   aonProject: CreatedProject
 }>({
   /** Fixture that creates an AON project before test */
-  aonProject: async ({ page }, use) => {
+  aonProject: async ({ page }, use, testInfo) => {
+    const backend = await checkLiveBackendAvailability(page.request, { requireAuth: true })
+    testInfo.skip(!backend.ok, `Skipping project-creation fixtures: ${backend.reason}`)
+
     // Setup real authentication BEFORE page.goto()
     await setupRealAuth(page)
     

@@ -12,6 +12,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn workspace @geyser-app/testing test:e2e",
+    "test:cypress:e2e": "yarn workspace @geyser-app/testing test:cypress:e2e",
     "test:watch": "yarn workspace @geyser-app/testing test:watch",
     "test:state": "yarn workspace @geyser-app/testing test:state",
     "test:playwright": "yarn workspace @geyser-app/testing test:playwright",

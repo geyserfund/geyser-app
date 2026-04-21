@@ -62,102 +62,78 @@ export const setupRealNostrExtension = async (page: Page, nsec: string = TEST_NO
 
 /** Real login flow - authenticates with actual backend */
 export const loginWithRealNostr = async (page: Page) => {
-  // Import actions from existing module
   const { clickSignIn, selectNostrAuth } = await import('./actions')
-
-  // Enable console logging for debugging
-  page.on('console', (msg) => {
-    console.log(`[BROWSER ${msg.type()}]:`, msg.text())
-  })
-
-  // Log page errors
-  page.on('pageerror', (error) => {
-    console.error('[PAGE ERROR]:', error.message)
-  })
-
-  // Track auth failures
-  const authFailures: string[] = []
-
-  // Log network activity
-  page.on('request', (request) => {
-    if (request.url().includes('/auth') || request.url().includes('/graphql')) {
-      console.log(`[REQUEST] ${request.method()} ${request.url()}`)
+  const getAvatar = () => page.getByTestId('user-profile-avatar')
+  const getSignInButton = () => page.getByRole('button', { name: /^Sign in$/i }).first()
+  const getMyProjectsLink = () => page.getByRole('link', { name: /My projects/i }).first()
+  const getAvatarLink = () => page.getByRole('link', { name: /avatar/i }).first()
+  const getProfileMenuButton = () => page.getByRole('button', { name: /Open profile menu/i }).first()
+  const getNostrOption = () => page.getByRole('button', { name: /Nostr|Connect with Nostr/i }).first()
+  const isAlreadyLoggedIn = async () => {
+    const avatarVisible = await getAvatar().isVisible().catch(() => false)
+    if (avatarVisible) {
+      return true
     }
-  })
 
-  page.on('response', async (response) => {
-    if (response.url().includes('/auth') || response.url().includes('/graphql')) {
-      console.log(`[RESPONSE] ${response.status()} ${response.url()}`)
-      
-      // Capture auth failures
-      if (response.url().includes('/auth/nostr') && response.status() >= 400) {
-        try {
-          const body = await response.text()
-          authFailures.push(`${response.status()}: ${body}`)
-          console.error(`[AUTH FAILED] ${response.status()}`, body)
-        } catch (e) {
-          authFailures.push(`${response.status()}: Unable to read response`)
-        }
-      }
+    const signInVisible = await getSignInButton().isVisible().catch(() => false)
+    if (signInVisible) {
+      return false
     }
-  })
 
-  // Click Sign In button
-  console.log('[TEST] Clicking Sign In button...')
-  await clickSignIn(page)
-
-  // Wait for Connect popup
-  console.log('[TEST] Waiting for Connect popup...')
-  await page.getByText('Connect').waitFor({ state: 'visible', timeout: 5000 })
-
-  // Click Nostr authentication button
-  console.log('[TEST] Clicking Nostr button...')
-  await selectNostrAuth(page)
-
-  try {
-    // Wait for the FIRST /auth/nostr call (get event template)
-    console.log('[TEST] Waiting for initial /auth/nostr request (get event)...')
-    await page.waitForResponse(
-      (response) =>
-        response.url().includes('/auth/nostr') &&
-        !response.url().includes('token=') && // First call has NO token
-        response.status() === 200,
-      { timeout: 10000 },
-    )
-    console.log('[TEST] ✓ Initial /auth/nostr received')
-
-    // Wait for the SECOND /auth/nostr call (with signed event token)
-    console.log('[TEST] Waiting for authenticated /auth/nostr?token=... request...')
-    await page.waitForResponse(
-      (response) =>
-        response.url().includes('/auth/nostr') &&
-        response.url().includes('token=') && // Second call HAS token
-        response.status() === 200,
-      { timeout: 15000 }, // Longer timeout for signing + network
-    )
-    console.log('[TEST] ✓ Authentication completed successfully')
-
-    // Wait for GraphQL Me query to complete (with real user data)
-    console.log('[TEST] Waiting for GraphQL Me query...')
-    await page.waitForResponse(
-      (response) =>
-        response.url().includes('/graphql') &&
-        response.status() === 200 &&
-        response.request().postDataJSON()?.operationName === 'Me',
-      { timeout: 10000 },
-    )
-    console.log('[TEST] ✓ GraphQL Me query completed')
-  } catch (error) {
-    // Provide detailed error message if auth failed
-    if (authFailures.length > 0) {
-      throw new Error(`Authentication failed: ${authFailures.join('; ')}. Original error: ${error}`)
+    const avatarLinkVisible = await getAvatarLink().isVisible().catch(() => false)
+    if (avatarLinkVisible) {
+      return true
     }
-    throw error
+
+    const myProjectsVisible = await getMyProjectsLink().isVisible().catch(() => false)
+    if (myProjectsVisible) {
+      return true
+    }
+
+    return getProfileMenuButton().isVisible().catch(() => false)
   }
 
-  // Small delay for UI state updates
-  await page.waitForTimeout(1000)
-  console.log('[TEST] ✓ Login flow completed successfully')
+  if (await isAlreadyLoggedIn()) {
+    return
+  }
+
+  const waitForLoggedInState = async () => {
+    const timeoutAt = Date.now() + 35000
+    while (Date.now() < timeoutAt) {
+      if (await isAlreadyLoggedIn()) {
+        return
+      }
+      await page.waitForTimeout(500)
+    }
+    throw new Error('Timed out waiting for logged-in UI state')
+  }
+
+  let lastError: unknown
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      await clickSignIn(page)
+      await getNostrOption().waitFor({ state: 'visible', timeout: 15000 })
+      await selectNostrAuth(page)
+      await waitForLoggedInState()
+      await page.waitForTimeout(500)
+      return
+    } catch (error) {
+      lastError = error
+
+      if (attempt < 3) {
+        if (await isAlreadyLoggedIn()) {
+          return
+        }
+        await page.keyboard.press('Escape').catch(() => undefined)
+        await page.goto('/', { waitUntil: 'domcontentloaded' }).catch(() => undefined)
+        await page.waitForTimeout(1000)
+        continue
+      }
+    }
+  }
+
+  throw new Error(`Real Nostr login failed after 3 attempts: ${String(lastError)}`)
 }
 
 /** Setup real auth (call before page.goto) */

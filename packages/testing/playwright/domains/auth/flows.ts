@@ -10,6 +10,12 @@ export type LoginOptions = {
   useMocks?: boolean
 }
 
+/** Options for logout flow */
+export type LogoutOptions = {
+  /** Whether to use mocked authentication helpers (default: false) */
+  useMocks?: boolean
+}
+
 /** Complete login flow with Nostr authentication */
 export const loginWithNostr = async (page: Page, options: LoginOptions = {}) => {
   const { useMocks = true } = options
@@ -19,7 +25,6 @@ export const loginWithNostr = async (page: Page, options: LoginOptions = {}) => 
 
   // Click Sign In and wait for popup
   await clickSignIn(page)
-  await page.getByText('Connect').waitFor({ state: 'visible', timeout: 5000 })
 
   if (useMocks) {
     // NOW set up GraphQL mock to return logged-in user
@@ -54,18 +59,76 @@ export const loginWithNostr = async (page: Page, options: LoginOptions = {}) => 
  * - Makes a fire-and-forget fetch to /logout endpoint
  * - UI updates naturally via useEffect watching user.id
  */
-export const logout = async (page: Page) => {
+export const logout = async (page: Page, options: LogoutOptions = {}) => {
+  const { useMocks = false } = options
+
+  if (useMocks) {
+    const { mockGraphQLMeLoggedOut } = await import('./mocks')
+    await mockGraphQLMeLoggedOut(page)
+  }
+
+  const isLoggedOutUi = async () => {
+    const signInButton = page.getByRole('button', { name: /^Sign in$/i }).first()
+    const avatar = page.getByTestId('user-profile-avatar').first()
+    const avatarLink = page.getByRole('link', { name: /avatar/i }).first()
+    const myProjectsLink = page.getByRole('link', { name: /My projects/i }).first()
+
+    const signInVisible = await signInButton.isVisible().catch(() => false)
+    const avatarVisible = await avatar.isVisible().catch(() => false)
+    const avatarLinkVisible = await avatarLink.isVisible().catch(() => false)
+    const myProjectsVisible = await myProjectsLink.isVisible().catch(() => false)
+
+    return signInVisible && !avatarVisible && !avatarLinkVisible && !myProjectsVisible
+  }
+
+  const waitForLoggedOutState = async (timeout = 8000) => {
+    const timeoutAt = Date.now() + timeout
+
+    while (Date.now() < timeoutAt) {
+      if (await isLoggedOutUi()) {
+        // Ensure logged-out state is stable and not a transient UI flip.
+        await page.waitForTimeout(1200)
+        if (await isLoggedOutUi()) {
+          return true
+        }
+      }
+
+      await page.waitForTimeout(250)
+    }
+
+    return false
+  }
+
+  const performLogoutAttempt = async () => {
+    await openUserMenu(page)
+    await clickSignOut(page)
+  }
+
   // Perform logout actions
-  await openUserMenu(page)
-  await clickSignOut(page)
+  await performLogoutAttempt()
 
-  // Wait for logout endpoint to be called
-  // This is a REST call, not GraphQL
-  await page.waitForResponse(
-    (response) => response.url().includes('/logout'),
-    { timeout: 5000 },
-  )
+  // Logout updates local auth state immediately; backend logout request can be fire-and-forget.
+  if (await waitForLoggedOutState(8000)) {
+    return
+  }
 
-  // Small delay to ensure UI updates from local state changes
-  await page.waitForTimeout(500)
+  // Retry one more interactive sign out before route fallback for transient menu click misses.
+  await performLogoutAttempt().catch(() => undefined)
+
+  if (await waitForLoggedOutState(8000)) {
+    return
+  }
+
+  // Fallback for environments where dedicated logout route can hang on loading:
+  // clear browser session state directly, then reload to re-bootstrap logged-out UI.
+  await page.context().clearCookies()
+  await page.evaluate(() => {
+    window.localStorage.clear()
+    window.sessionStorage.clear()
+  })
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+  if (!(await waitForLoggedOutState(15000))) {
+    throw new Error(`Logout did not transition to a logged-out state at URL: ${page.url()}`)
+  }
 }

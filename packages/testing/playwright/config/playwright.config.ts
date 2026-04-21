@@ -11,17 +11,17 @@ export default defineConfig({
   /** Maximum time one test can run for */
   timeout: 60 * 1000,
   
-  /** Run tests in files in parallel */
-  fullyParallel: true,
+  /** Keep suites deterministic for live-backend E2E scenarios */
+  fullyParallel: false,
   
   /** Fail the build on CI if you accidentally left test.only in the source code */
   forbidOnly: !!process.env.CI,
   
-  /** Retry on CI only */
+  /** Retry once locally and twice on CI for transient backend/network instability */
   retries: process.env.CI ? 2 : 1,
   
-  /** Opt out of parallel tests on CI */
-  workers: process.env.CI ? 1 : undefined,
+  /** Default to single worker for auth/payment stateful flows; override with PLAYWRIGHT_WORKERS */
+  workers: Number(process.env.PLAYWRIGHT_WORKERS ?? '1'),
   
   /** Reporter to use */
   reporter: [

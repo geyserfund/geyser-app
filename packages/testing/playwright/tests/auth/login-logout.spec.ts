@@ -41,7 +41,7 @@ test.describe('Authentication', () => {
     await expectUserLoggedIn(page)
 
     // Act - Logout
-    await logout(page)
+    await logout(page, { useMocks: true })
 
     // Assert - User is logged out
     await expectUserLoggedOut(page)

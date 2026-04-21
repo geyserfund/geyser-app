@@ -14,9 +14,16 @@ import { expect, test } from '@playwright/test'
 import { expectUserLoggedIn, expectUserLoggedOut } from '../../domains/auth/assertions'
 import { logout } from '../../domains/auth/flows'
 import { loginWithRealNostr, setupRealAuth } from '../../domains/auth/realAuth'
+import { checkLiveBackendAvailability } from '../../domains/shared/backend'
 
 test.describe('Real Authentication (No Mocks)', () => {
+  test.describe.configure({ mode: 'serial' })
+  test.setTimeout(120000)
+
   test.beforeEach(async ({ page }) => {
+    const backend = await checkLiveBackendAvailability(page.request, { requireAuth: true })
+    test.skip(!backend.ok, `Skipping real-auth tests: ${backend.reason}`)
+
     // Setup real Nostr extension BEFORE navigation
     await setupRealAuth(page)
 

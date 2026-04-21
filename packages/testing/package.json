@@ -2,7 +2,8 @@
   "name": "@geyser-app/testing",
   "version": "1.0.0",
   "scripts": {
-    "test:e2e": "yarn cypress run --e2e",
+    "test:e2e": "yarn test:playwright:chromium",
+    "test:cypress:e2e": "yarn cypress run --e2e",
     "test:watch": "yarn cypress open",
     "test:state": "vitest run -c ../../vite.config.ts",
     "build:nostr-bundle": "node playwright/bundles/build-nostr-bundle.js",
@@ -12,7 +13,7 @@
     "test:playwright:auth": "playwright test -c playwright/config/playwright.config.ts tests/auth",
     "test:playwright:real-auth": "yarn build:nostr-bundle && playwright test -c playwright/config/playwright.config.ts tests/auth/real-auth.spec.ts",
     "test:playwright:headed": "playwright test -c playwright/config/playwright.config.ts --headed",
-    "test:playwright:chromium": "playwright test -c playwright/config/playwright.config.ts --project=chromium"
+    "test:playwright:chromium": "yarn build:nostr-bundle && playwright test -c playwright/config/playwright.config.ts --project=chromium"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

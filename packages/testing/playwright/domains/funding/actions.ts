@@ -1,6 +1,54 @@
 /** Atomic funding actions for Playwright tests */
 
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
+
+const FUNDING_ERROR_HEADING = 'An Error Occured'
+
+const getFundingErrorDiagnostics = async (page: Page, step: string): Promise<string> => {
+  const errorMessage = await page
+    .getByText("We've encountered an issue with the payment flow.")
+    .first()
+    .textContent()
+    .catch(() => null)
+
+  const onchainTab = page.getByRole('button', { name: /Onchain/i }).first()
+  const onchainTitle = await onchainTab.getAttribute('title').catch(() => null)
+  const onchainAriaLabel = await onchainTab.getAttribute('aria-label').catch(() => null)
+
+  return [
+    `[Funding:${step}] Payment failed screen is visible.`,
+    `URL: ${page.url()}`,
+    onchainTitle ? `Onchain title: ${onchainTitle}` : null,
+    onchainAriaLabel ? `Onchain aria-label: ${onchainAriaLabel}` : null,
+    errorMessage ? `Error message: ${errorMessage}` : null,
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
+
+const waitForFundingTargetOrFail = async (
+  page: Page,
+  target: Locator,
+  step: string,
+  timeoutMs = 15000,
+): Promise<void> => {
+  const startedAt = Date.now()
+  const fundingErrorHeading = page.getByRole('heading', { name: FUNDING_ERROR_HEADING })
+
+  while (Date.now() - startedAt < timeoutMs) {
+    if (await target.isVisible().catch(() => false)) {
+      return
+    }
+
+    if (await fundingErrorHeading.isVisible().catch(() => false)) {
+      throw new Error(await getFundingErrorDiagnostics(page, step))
+    }
+
+    await page.waitForTimeout(200)
+  }
+
+  throw new Error(`[Funding:${step}] Timed out waiting for expected UI. URL: ${page.url()}`)
+}
 
 /** Click the Contribute button on project page */
 export const clickContribute = async (page: Page) => {
@@ -81,17 +129,26 @@ export const clickOnchainTab = async (page: Page) => {
  * Must use getByRole('link'), not getByRole('button').
  */
 export const clickDownloadAndContinue = async (page: Page) => {
-  // Note: This is rendered as a Link (role="link"), not Button, due to spread props
-  const downloadButton = page.getByRole('link', { name: 'Download & Continue' })
-  await downloadButton.waitFor({ state: 'visible' })
-  await downloadButton.scrollIntoViewIfNeeded()
-  await downloadButton.click()
+  const downloadButton = page.getByRole('button', { name: 'Download & Continue' }).first()
+  const downloadLink = page.getByRole('link', { name: 'Download & Continue' }).first()
+  const actionableDownloadControl = downloadButton.or(downloadLink)
+
+  await waitForFundingTargetOrFail(page, actionableDownloadControl, 'onchain-download-prompt')
+
+  if (await downloadButton.isVisible().catch(() => false)) {
+    await downloadButton.scrollIntoViewIfNeeded()
+    await downloadButton.click()
+    return
+  }
+
+  await downloadLink.scrollIntoViewIfNeeded()
+  await downloadLink.click()
 }
 
 /** Click Copy Lightning Invoice button and return the invoice */
 export const clickCopyLightningInvoice = async (page: Page): Promise<string> => {
   const copyButton = page.locator('#copy-lightning-invoice-button')
-  await copyButton.waitFor({ state: 'visible' })
+  await waitForFundingTargetOrFail(page, copyButton, 'copy-lightning-invoice')
   await copyButton.scrollIntoViewIfNeeded()
 
   // Grant clipboard permissions
@@ -113,7 +170,7 @@ export const clickCopyLightningInvoice = async (page: Page): Promise<string> => 
 /** Click Copy Onchain Address button and return the BIP21 URI */
 export const clickCopyOnchainAddress = async (page: Page): Promise<string> => {
   const copyButton = page.locator('#copy-onchain-address-button')
-  await copyButton.waitFor({ state: 'visible' })
+  await waitForFundingTargetOrFail(page, copyButton, 'copy-onchain-address')
   await copyButton.scrollIntoViewIfNeeded()
 
   // Grant clipboard permissions

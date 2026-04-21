@@ -6,14 +6,14 @@ import {
   clickContinueFromFundingGoal,
   clickContinueFromFundingStrategy,
   clickContinueFromProjectDetails,
-  clickCreateProjectFromProfileMenu,
   clickLaunchProjectButton,
   fillAONGoalAmount,
   fillAONGoalDuration,
+  fillDescription,
   fillProjectName,
   fillProjectTitle,
   fillShortDescription,
-  openProfileMenu,
+  navigateToLaunchStart,
   selectAONFundingStrategy,
   selectCategory,
   selectLocation,
@@ -22,19 +22,15 @@ import {
   uploadHeaderImage,
   uploadThumbnailImage,
 } from './actions'
-import { expectFundingGoalPage, expectFundingStrategyPage, expectProjectDetailsPage } from './assertions'
+import { expectFundingGoalPage, expectFundingStrategyPage, expectLaunchStartPage, expectProjectDetailsPage } from './assertions'
 import { AONGoalOptions, ProjectDetailsOptions } from './types'
 
 /** Navigate from landing page to project details page */
 export const navigateToProjectCreation = async (page: Page) => {
-  // Open profile menu and click "Create project"
-  await openProfileMenu(page)
-  await clickCreateProjectFromProfileMenu(page)
-
-  // Click "Launch your project" button on the launch start page
+  await navigateToLaunchStart(page)
+  await expectLaunchStartPage(page)
   await clickLaunchProjectButton(page)
 
-  // Wait for project details page
   await expectProjectDetailsPage(page)
 }
 
@@ -44,6 +40,7 @@ export const completeProjectDetails = async (page: Page, options: ProjectDetails
   await fillProjectTitle(page, options.title)
   await fillProjectName(page, options.name)
   await fillShortDescription(page, options.shortDescription)
+  await fillDescription(page, options.description)
 
   // Select category and subcategory using their labels
   await selectCategory(page, options.category)
