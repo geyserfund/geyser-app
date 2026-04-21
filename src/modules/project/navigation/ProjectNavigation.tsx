@@ -22,7 +22,7 @@ import { useMobileMode } from '@/utils'
 
 import { BackToProjectRow } from './components/BackToProjectRow.tsx'
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
-import { useProjectAtom } from '../hooks/useProjectAtom'
+import { useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {
@@ -36,6 +36,7 @@ export const ProjectNavigation = () => {
 
   const { loading: userLoading } = useAuthContext()
   const { isProjectOwner, loading, project } = useProjectAtom()
+  const { activeRewards, hasRewards, initialRewardsLoading } = useRewardsAtom()
 
   const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
 
@@ -51,9 +52,13 @@ export const ProjectNavigation = () => {
       },
     ] as AnimatedNavBarItem[]
 
-    if (project.rewardsCount) {
+    if (hasRewards) {
+      const buyProductLabel =
+        !initialRewardsLoading && activeRewards.length > 0
+          ? `Buy product (${activeRewards.length})`
+          : 'Buy product'
       buttonList.push({
-        name: `Buy product (${project.rewardsCount})`,
+        name: buyProductLabel,
         path: PathName.projectRewards,
         icon: PiBag,
         activeIcon: PiBagBold,
@@ -98,7 +103,16 @@ export const ProjectNavigation = () => {
     }
 
     return buttonList
-  }, [project, isProjectOwner, isDraftUrl, navigate])
+  }, [
+    activeRewards.length,
+    hasRewards,
+    initialRewardsLoading,
+    isProjectOwner,
+    isDraftUrl,
+    navigate,
+    project.entriesCount,
+    project.goalsCount,
+  ])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0

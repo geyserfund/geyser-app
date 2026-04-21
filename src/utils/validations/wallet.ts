@@ -12,12 +12,5 @@ export const getUserLightningAddress = (user?: User) => {
 export const getPossibleWalletPubkey = (
   wallet: Pick<Wallet, 'connectionDetails'> | undefined,
 ): Maybe<string> | undefined => {
-  if (wallet && wallet.connectionDetails) {
-    if (
-      wallet.connectionDetails.__typename === 'LndConnectionDetailsPublic' ||
-      wallet.connectionDetails.__typename === 'LndConnectionDetailsPrivate'
-    ) {
-      return wallet.connectionDetails.pubkey
-    }
-  }
+  return undefined
 }

@@ -1,9 +1,11 @@
 import { Button, ButtonProps, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
+import type { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
+import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
@@ -30,6 +32,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
 
   const { project } = useProjectAtom()
   const { isFundingDisabled } = useProjectToolkit(project)
+  const { handleBlockedContribution } = useBlockedProjectContribution(project)
 
   // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
 
@@ -53,12 +56,17 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         as: Link,
         href: getFullDomainUrl(getPath('projectFunding', project.name)),
         isExternal: true,
+        onClick: (event: MouseEvent<HTMLButtonElement>) => {
+          handleBlockedContribution(event)
+        },
       }
     : {
-        onClick: () =>
+        onClick: (event: MouseEvent<HTMLButtonElement>) => {
+          if (handleBlockedContribution(event)) return
           communityVotingGrant && isStepVoting
             ? votingInfoModal.onOpen()
-            : navigate(getPath('projectFunding', project.name)),
+            : navigate(getPath('projectFunding', project.name))
+        },
       }
 
   return (

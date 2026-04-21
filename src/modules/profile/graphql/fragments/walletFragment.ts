@@ -7,17 +7,6 @@ export const FRAGMENT_USER_WALLET_CONNECTION_DETAILS = gql`
       ... on LightningAddressConnectionDetails {
         lightningAddress
       }
-      ... on LndConnectionDetailsPublic {
-        pubkey
-      }
-      ... on LndConnectionDetailsPrivate {
-        tlsCertificate
-        pubkey
-        macaroon
-        lndNodeType
-        hostname
-        grpcPort
-      }
       ... on NWCConnectionDetailsPrivate {
         nwcUrl
       }

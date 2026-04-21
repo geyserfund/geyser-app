@@ -22,7 +22,7 @@ import {
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
 } from '@/shared/constants/config/env.ts'
-import { __development__, getPath } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import {
   ContributionCreateInput,
   ContributionCreateMutation,
@@ -62,22 +62,13 @@ import {
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
-import {
-  keyPairAtom,
-  parseLightningToRskSwapAtom,
-  parseOnChainToRskSwapAtom,
-  parseSwapAtom,
-} from '../state/swapAtom.ts'
+import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
-import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
-import { webln } from '../utils/requestWebLNPayment'
+import { validateFundingInput } from '../utils/helpers'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
 import { useStripeEmbeddedTheme } from './useStripeEmbeddedTheme.ts'
-import { useWebLNFlow } from './useWebLNFlow'
 
-const hasBolt11 = true
-const hasWebLN = true
 const PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS = 3
 const PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS = 400
 
@@ -97,12 +88,7 @@ const isRetryableClaimTxSetError = (error: unknown) => {
 
 const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
   Boolean(
-    payments.lightning ||
-      payments.onChainSwap ||
-      payments.fiat ||
-      payments.fiatToLightningSwap ||
-      payments.lightningToRskSwap ||
-      payments.onChainToRskSwap,
+    payments.fiat || payments.fiatToLightningSwap || payments.lightningToRskSwap || payments.onChainToRskSwap,
   )
 
 const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): ContributionPaymentsInput => ({
@@ -122,21 +108,6 @@ const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): Contribu
       ...(paymentsInput.fiatToLightningSwap.banxa && {
         banxa: {
           ...paymentsInput.fiatToLightningSwap.banxa,
-        },
-      }),
-    },
-  }),
-  ...(paymentsInput?.lightning && {
-    lightning: {
-      ...paymentsInput.lightning,
-    },
-  }),
-  ...(paymentsInput?.onChainSwap && {
-    onChainSwap: {
-      ...paymentsInput.onChainSwap,
-      ...(paymentsInput.onChainSwap.boltz && {
-        boltz: {
-          ...paymentsInput.onChainSwap.boltz,
         },
       }),
     },
@@ -209,13 +180,9 @@ export const useFundingAPI = () => {
   const fundingContributionPartialUpdate = useSetAtom(fundingContributionPartialUpdateAtom)
   const fundingPaymentDetailsPartialUpdate = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
 
-  const parseResponseToSwap = useSetAtom(parseSwapAtom)
   const parseResponseToOnChainToRskSwap = useSetAtom(parseOnChainToRskSwapAtom)
   const parseResponseToLightningToRskSwap = useSetAtom(parseLightningToRskSwapAtom)
 
-  const startWebLNFlow = useWebLNFlow()
-
-  const setKeyPair = useSetAtom(keyPairAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
@@ -271,21 +238,6 @@ export const useFundingAPI = () => {
         fundingContributionPartialUpdate(payload.contribution)
         fundingPaymentDetailsPartialUpdate(payload.payments)
 
-        if (payload.payments.onChainSwap?.swapJson) {
-          parseResponseToSwap(
-            payload.payments.onChainSwap,
-            {
-              projectTitle: project?.title,
-              projectId: project?.id,
-              reference: payload.contribution.uuid,
-              contributionId: payload.contribution.id,
-              bitcoinQuote: payload.contribution.bitcoinQuote,
-              datetime: payload.contribution.createdAt,
-            },
-            accountKeys,
-          )
-        }
-
         if (payload.payments.onChainToRskSwap?.swapJson) {
           parseResponseToOnChainToRskSwap(
             payload.payments.onChainToRskSwap,
@@ -338,15 +290,6 @@ export const useFundingAPI = () => {
             })
           })
         }
-
-        if (hasBolt11 && hasWebLN && webln && payload.payments.lightning && !__development__) {
-          startWebLNFlow(payload.payments.lightning).catch(() => {
-            toast.error({
-              title: 'Something went wrong1',
-              description: 'Please refresh the page and try again',
-            })
-          })
-        }
       } catch (e) {
         setFundingRequestErrored(true)
         toast.error({
@@ -362,11 +305,9 @@ export const useFundingAPI = () => {
       generateTransactionForOnChainToRskSwap,
       parseResponseToLightningToRskSwap,
       parseResponseToOnChainToRskSwap,
-      parseResponseToSwap,
       project?.id,
       project?.title,
       setFundingRequestErrored,
-      startWebLNFlow,
       toast,
     ],
   )
@@ -567,14 +508,6 @@ export const useFundingAPI = () => {
         paymentsInputToPrepare.fiat.stripe.theme = stripeEmbeddedTheme
       }
 
-      if (paymentsInputToPrepare?.onChainSwap?.boltz && !paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey) {
-        const keyPair = generatePrivatePublicKeyPair()
-        setKeyPair(keyPair)
-        requestContext.accountKeys.publicKey = keyPair.publicKey.toString('hex')
-        requestContext.accountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
-        paymentsInputToPrepare.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
-      }
-
       const lightningToRskSwapInput = paymentsInputToPrepare?.lightningToRskSwap?.boltz
       const onChainToRskSwapInput = paymentsInputToPrepare?.onChainToRskSwap?.boltz
 
@@ -745,7 +678,6 @@ export const useFundingAPI = () => {
       recurringContributionRenewalCreate,
       recurringDonationCreate,
       toast,
-      setKeyPair,
       setFundingInputAfterRequest,
       setFundingRequestErrored,
       project?.name,

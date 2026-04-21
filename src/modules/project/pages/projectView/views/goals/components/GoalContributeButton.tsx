@@ -3,6 +3,7 @@ import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
+import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { getPath } from '@/shared/constants'
 
@@ -28,6 +29,7 @@ export const GoalContributeButton = ({
 
   const { project } = useProjectAtom()
   const setSelectedGoalId = useSetAtom(selectedGoalIdAtom)
+  const { handleBlockedContribution } = useBlockedProjectContribution(project)
 
   if (!project) {
     return null
@@ -37,6 +39,8 @@ export const GoalContributeButton = ({
 
   const handleContributeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+
+    if (handleBlockedContribution(e)) return
 
     if (isPriorityGoal) {
       setSelectedGoalId(null)

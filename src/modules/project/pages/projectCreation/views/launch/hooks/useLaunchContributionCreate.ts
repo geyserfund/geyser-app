@@ -7,8 +7,7 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { useGenerateTransactionDataForClaimingRBTCToContract } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { useStripeEmbeddedTheme } from '@/modules/project/funding/hooks/useStripeEmbeddedTheme.ts'
-import { keyPairAtom, parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom, parseSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
-import { generatePrivatePublicKeyPair } from '@/modules/project/funding/utils/helpers.ts'
+import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import {
   decryptSeed,
   generateKeysFromSeedHex,
@@ -19,7 +18,6 @@ import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/sta
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { GEYSER_LAUNCH_PROJECT_ID, ORIGIN } from '@/shared/constants/config/env.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
-import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionPaymentsInput,
   FundingContributionFragment,
@@ -72,8 +70,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
-  const setKeyPair = useSetAtom(keyPairAtom)
-  const parseResponseToSwap = useSetAtom(parseSwapAtom)
   const parseResponseToOnChainToRskSwap = useSetAtom(parseOnChainToRskSwapAtom)
   const parseResponseToLightningToRskSwap = useSetAtom(parseLightningToRskSwapAtom)
 
@@ -185,10 +181,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
         datetime: contribution.createdAt,
       }
 
-      if (payments.onChainSwap?.swapJson) {
-        parseResponseToSwap(payments.onChainSwap, contributionInfo)
-      }
-
       if (payments.onChainToRskSwap?.swapJson) {
         parseResponseToOnChainToRskSwap(payments.onChainToRskSwap, contributionInfo, requestContext.accountKeys)
 
@@ -235,7 +227,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       generateTransactionForOnChainToRskSwap,
       parseResponseToLightningToRskSwap,
       parseResponseToOnChainToRskSwap,
-      parseResponseToSwap,
       project?.id,
       project?.title,
       toast,
@@ -281,7 +272,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
 
       const paymentsInput: ContributionPaymentsInput = {}
       const requestContext: LaunchRequestContext = {}
-      const prismEnabled = isPrismEnabled(launchPaymentProject)
 
       if (method === LaunchPaymentMethod.CreditCard) {
         paymentsInput.fiat = {
@@ -293,14 +283,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
         }
       }
 
-      if (method === LaunchPaymentMethod.Lightning) {
-        if (!prismEnabled) {
-          return {
-            ok: false,
-            error: t('Lightning launch payments require Prism configuration.'),
-          }
-        }
-
+      if (method === LaunchPaymentMethod.Lightning || method === LaunchPaymentMethod.Onchain) {
         const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
 
         if (accountKeyResolution.status === 'prompt') {
@@ -319,57 +302,29 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
           }
         }
 
-        const lightningPreImage = generatePreImageHash()
         requestContext.accountKeys = accountKeyResolution.accountKeys
-        requestContext.lightningPreImage = lightningPreImage
-        paymentsInput.lightningToRskSwap = {
-          create: true,
-          boltz: {
-            claimPublicKey: accountKeyResolution.accountKeys.publicKey,
-            claimAddress: accountKeyResolution.accountKeys.address,
-            preimageHash: lightningPreImage.preimageHash,
-          },
-        }
-      }
+        const { publicKey: claimPublicKey, address: claimAddress } = accountKeyResolution.accountKeys
 
-      if (method === LaunchPaymentMethod.Onchain) {
-        if (prismEnabled) {
-          const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
-
-          if (accountKeyResolution.status === 'prompt') {
-            return {
-              ok: false,
-              error: t('Please confirm your account password to continue.'),
-              reason: 'password_required',
-            }
+        if (method === LaunchPaymentMethod.Lightning) {
+          const lightningPreImage = generatePreImageHash()
+          requestContext.lightningPreImage = lightningPreImage
+          paymentsInput.lightningToRskSwap = {
+            create: true,
+            boltz: {
+              claimPublicKey,
+              claimAddress,
+              preimageHash: lightningPreImage.preimageHash,
+            },
           }
-
-          if (accountKeyResolution.status === 'error') {
-            return {
-              ok: false,
-              error: accountKeyResolution.error,
-              reason: 'password_required',
-            }
-          }
-
+        } else {
           const onChainPreImage = generatePreImageHash()
-          requestContext.accountKeys = accountKeyResolution.accountKeys
           requestContext.onChainPreImage = onChainPreImage
           paymentsInput.onChainToRskSwap = {
             create: true,
             boltz: {
-              claimPublicKey: accountKeyResolution.accountKeys.publicKey,
-              claimAddress: accountKeyResolution.accountKeys.address,
+              claimPublicKey,
+              claimAddress,
               preimageHash: onChainPreImage.preimageHash,
-            },
-          }
-        } else {
-          const keyPair = generatePrivatePublicKeyPair()
-          setKeyPair(keyPair)
-          paymentsInput.onChainSwap = {
-            create: true,
-            boltz: {
-              swapPublicKey: keyPair.publicKey.toString('hex'),
             },
           }
         }
@@ -416,7 +371,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       project?.id,
       resolvePrismAccountKeys,
       returnUrl,
-      setKeyPair,
       strategy,
       stripeEmbeddedTheme,
       usdRate,

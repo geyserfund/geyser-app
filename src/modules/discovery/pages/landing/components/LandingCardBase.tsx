@@ -4,6 +4,7 @@ import { PiClockCountdown, PiMapPin } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
+import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -330,6 +331,7 @@ export const LandingCardBase = ({
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
   const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
+  const { handleBlockedContribution } = useBlockedProjectContribution(project)
   const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
   const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
@@ -352,6 +354,7 @@ export const LandingCardBase = ({
   const handleContribute = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
+    if (handleBlockedContribution(e)) return
     navigate(getPath('projectFunding', project.name))
   }
 

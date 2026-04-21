@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
-import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing, useNotification } from '@/utils/index.ts'
@@ -12,7 +12,6 @@ import { isAllOrNothing, useNotification } from '@/utils/index.ts'
 import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
-import { ConnectWallet } from '../components/ConnectWallet.tsx'
 
 export const LaunchPaymentWallet = () => {
   const { user } = useAuthContext()
@@ -20,24 +19,16 @@ export const LaunchPaymentWallet = () => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
 
-  const { wallet } = useWalletAtom()
-
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
     getPath('launchPaymentTaxId', project.id),
   )
-
   const isAon = isAllOrNothing(project)
 
   const continueProps: ButtonProps = {
     onClick() {
       if (!user.isEmailVerified) {
         toast.error({ title: t('Creator email must be verified to continue') })
-        return
-      }
-
-      if (!isAon && !wallet?.id) {
-        toast.error({ title: t('Please connect a wallet to continue') })
         return
       }
 
@@ -58,15 +49,12 @@ export const LaunchPaymentWallet = () => {
       backButtonProps={backProps}
     >
       <UpdateVerifyEmail inputWrapperProps={{ marginTop: 2 }} />
-      {!isAon && <ConnectWallet />}
 
       {!isAon && (
-        <>
-          <EnableFiatContributions
-            isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
-            projectId={project.id}
-          />
-        </>
+        <EnableFiatContributions
+          isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
+          projectId={project.id}
+        />
       )}
     </ProjectCreationPageWrapper>
   )

@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import Confetti from 'react-confetti'
-import { PiCopy, PiDownloadSimple, PiLink } from 'react-icons/pi'
+import { PiCopy, PiLink } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import {
@@ -17,19 +17,13 @@ import { __development__, FundingErrorUrl } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import {
-  FundingContributionFragment,
-  FundingContributionPaymentDetailsFragment,
-  PaymentFeePayer,
-  PaymentFeeType,
-} from '@/types/index.ts'
+import { FundingContributionFragment, FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
 import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment/components/QRCodeComponent'
 import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayment/components/WaitingForPayment'
 import { TransactionProcessing } from '../../../../projectFunding/views/fundingPayment/views/paymentOnchain/components/TransactionProcessing.tsx'
-import { useDownloadRefund } from '../../../../projectFunding/views/fundingPayment/views/paymentOnchain/hooks/useDownloadRefund'
 import {
   useTransactionStatusUpdate,
   type SwapStatusUpdate,
@@ -45,19 +39,6 @@ const getTotalBitcoinAmount = (
   paymentsData: FundingContributionPaymentDetailsFragment,
 ): number => {
   if (paymentMethod === LaunchPaymentMethod.Onchain) {
-    const contributorOnChainFees =
-      paymentsData.onChainSwap?.fees.reduce((acc, fee) => {
-        if (fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip) {
-          return acc + fee.feeAmount
-        }
-
-        return acc
-      }, 0) || 0
-
-    if (paymentsData.onChainSwap) {
-      return paymentsData.onChainSwap.amountDue + contributorOnChainFees
-    }
-
     return paymentsData.onChainToRskSwap?.amountDue || 0
   }
 
@@ -82,14 +63,12 @@ export const LaunchFees = ({
 }) => {
   const isMobile = useMobileMode()
   const toast = useNotification()
-  const { buttonProps: refundButtonProps } = useDownloadRefund()
 
   const { project, partialUpdateProject } = useProjectAtom()
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const currentOnChainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
 
   const [isPaid, setIsPaid] = useState(false)
-  const [hasUnlockedOnchainFlow, setHasUnlockedOnchainFlow] = useState(!paymentsData.onChainSwap?.swapJson)
   const [isAwaitingConfirmation, setIsAwaitingConfirmation] = useState(false)
   const [processingTransactionId, setProcessingTransactionId] = useState('')
 
@@ -97,22 +76,17 @@ export const LaunchFees = ({
   const totalSats = getTotalBitcoinAmount(paymentMethod, paymentsData)
 
   const lightningPaymentRequest = paymentsData.lightningToRskSwap?.paymentRequest || ''
-  const onChainAddress = paymentsData.onChainSwap?.address || paymentsData.onChainToRskSwap?.address || ''
+  const onChainAddress = paymentsData.onChainToRskSwap?.address || ''
   const onChainBip21Invoice =
     onChainAddress && totalSats
       ? __development__
         ? `address=${onChainAddress} amount=${totalSats}`
         : getBip21Invoice(totalSats, onChainAddress)
       : ''
-  const requiresRefundDownload = Boolean(paymentsData.onChainSwap?.swapJson)
   const launchSwapId =
     paymentMethod === LaunchPaymentMethod.Onchain
       ? currentOnChainToRskSwapId || undefined
       : currentLightningToRskSwapId || undefined
-
-  useEffect(() => {
-    setHasUnlockedOnchainFlow(!requiresRefundDownload)
-  }, [requiresRefundDownload])
 
   useEffect(() => {
     if (isPaid) {
@@ -314,43 +288,9 @@ export const LaunchFees = ({
     )
   }
 
-  const renderOnchainDownloadPrompt = () => {
-    return (
-      <VStack w="full" spacing={6}>
-        <CardLayout w="full" spacing={3}>
-          <Body bold>{t('Download refund file before continuing')}</Body>
-          <Body size="sm" light>
-            {t(
-              'On-chain launch-fee payments require a refund file as backup in the rare case the payment swap fails.',
-            )}
-          </Body>
-          <Body size="sm" light>
-            {t('Download and store the refund file, then continue to the payment QR.')}
-          </Body>
-        </CardLayout>
-        <Button
-          {...refundButtonProps}
-          size="lg"
-          variant="solid"
-          minWidth="310px"
-          colorScheme="primary1"
-          rightIcon={<PiDownloadSimple />}
-          isDisabled={!refundButtonProps.href}
-          onClick={() => setHasUnlockedOnchainFlow(true)}
-        >
-          {t('Download refund file & continue')}
-        </Button>
-      </VStack>
-    )
-  }
-
   const renderOnchainPayment = () => {
     if (!onChainAddress || !onChainBip21Invoice) {
       return renderMissingPaymentContent()
-    }
-
-    if (requiresRefundDownload && !hasUnlockedOnchainFlow) {
-      return renderOnchainDownloadPrompt()
     }
 
     return (
@@ -379,19 +319,6 @@ export const LaunchFees = ({
           >
             {hasCopiedOnchain ? t('Copied!') : t('Copy on-chain address')}
           </Button>
-          {requiresRefundDownload ? (
-            <Button
-              {...refundButtonProps}
-              size="lg"
-              variant="surface"
-              colorScheme="primary1"
-              minWidth="310px"
-              rightIcon={<PiDownloadSimple />}
-              isDisabled={!refundButtonProps.href}
-            >
-              {t('Download refund file')}
-            </Button>
-          ) : null}
         </VStack>
       </VStack>
     )

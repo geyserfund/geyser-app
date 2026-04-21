@@ -13,7 +13,6 @@ import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
-import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionCreateInput,
   ContributionPaymentsInput,
@@ -354,7 +353,6 @@ const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     const userAccountKeys = get(userAccountKeysAtom)
     const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
     const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
-    const usePrism = isPrismEnabled(fundingProject)
 
     return {
       fiatToLightningSwap: {
@@ -364,16 +362,14 @@ const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
           returnUrl: `${ORIGIN}${getPath('fundingCallback', fundingProject.name)}`,
         },
       },
-      ...(usePrism && {
-        lightningToRskSwap: {
-          create: true,
-          boltz: {
-            claimPublicKey,
-            claimAddress,
-            preimageHash: '',
-          },
+      lightningToRskSwap: {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
         },
-      }),
+      },
     }
   }
 
@@ -389,52 +385,21 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
-  const usePrism = isPrismEnabled(fundingProject)
   const shouldIncludeFiat = intendedPaymentMethod === PaymentMethods.fiatSwap
 
-  if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
-    if (shouldIncludeFiat) {
-      paymentsInput.fiat = {
-        create: true,
-        stripe: {
-          returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
-        },
-      }
-    }
-
-    if (usePrism) {
-      paymentsInput.lightningToRskSwap = {
-        create: true,
-        boltz: {
-          claimPublicKey,
-          claimAddress,
-          preimageHash: '',
-        },
-      }
-
-      paymentsInput.onChainToRskSwap = {
-        create: true,
-        boltz: {
-          claimPublicKey,
-          claimAddress,
-          preimageHash: '',
-        },
-      }
-    } else {
-      paymentsInput.lightning = {
-        create: true,
-        zapRequest: null,
-      }
-      paymentsInput.onChainSwap = {
-        create: true,
-        boltz: {
-          swapPublicKey: claimPublicKey,
-        },
-      }
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && shouldIncludeFiat) {
+    paymentsInput.fiat = {
+      create: true,
+      stripe: {
+        returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
+      },
     }
   }
 
-  if (fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+  if (
+    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||
+    fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+  ) {
     paymentsInput.lightningToRskSwap = {
       create: true,
       boltz: {
