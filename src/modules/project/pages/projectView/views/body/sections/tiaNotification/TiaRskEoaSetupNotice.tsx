@@ -3,7 +3,6 @@ import { Button, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -25,8 +24,6 @@ import { ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.t
 import { useNotification } from '@/utils/index.ts'
 
 import { ControlPanelNotification } from '../controlPanel/components/ControlPanelNotification.tsx'
-
-const KEY_CONFIG_DEADLINE = '30th of April 2026'
 
 type ProjectRskEoaSetMutation = {
   projectRskEoaSet: {
@@ -69,11 +66,6 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
   const shouldShow = Boolean(user?.id && isProjectOwner && isTiaProject && needsProjectKey)
-
-  const message = t(
-    'Geyser is migrating to a new payment infrastructure. Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date. You can read more about it',
-    { keyConfigDeadline: KEY_CONFIG_DEADLINE },
-  )
 
   const buttonLabel = t('Configure project wallet')
 
@@ -249,30 +241,14 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
               flexShrink={0}
             />
           }
-          title={t('Configure your project wallet')}
-          description={
-            <Trans
-              i18nKey="Set up before {{keyConfigDeadline}} to continue receiving contributions. You can read more about this migration <link>here</link>"
-              values={{ keyConfigDeadline: KEY_CONFIG_DEADLINE }}
-              components={{
-                link: (
-                  <ChakraLink
-                    href={GeyserConfigureWalletGuideUrl}
-                    isExternal
-                    color="warning.10"
-                    textDecoration="underline"
-                    _hover={{ color: 'warning.11' }}
-                  />
-                ),
-              }}
-            />
-          }
+          title={t('Wallet not configured')}
+          description={t('Your project cannot receive any contributions until you configure your project wallet.')}
           actionButton={
-            <Button colorScheme="warning" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>
+            <Button colorScheme="error" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>
               {t('Configure')}
             </Button>
           }
-          variant="warning"
+          variant="error"
         />
         {modals}
       </>
@@ -281,25 +257,15 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
 
   return (
     <>
-      <Feedback variant={FeedBackVariant.WARNING}>
+      <Feedback variant={FeedBackVariant.ERROR}>
         <VStack spacing={4} align="stretch">
           <Body size="xl" bold>
-            {t('Configure your project wallet')}
+            {t('Wallet not configured')}
           </Body>
           <Body dark>
-            {message}{' '}
-            <ChakraLink
-              href={GeyserConfigureWalletGuideUrl}
-              isExternal
-              color="amber1.900"
-              textDecoration="underline"
-              _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
-            >
-              {t('here')}
-            </ChakraLink>
-            {'.'}
+            {t('Your project cannot receive any contributions until you configure your project wallet.')}
           </Body>
-          <Button colorScheme="warning" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
+          <Button colorScheme="error" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
             {buttonLabel}
           </Button>
         </VStack>

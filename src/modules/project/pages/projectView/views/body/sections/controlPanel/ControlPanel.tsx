@@ -306,7 +306,7 @@ export const ControlPanel = () => {
           <Button
             size="md"
             as={Link}
-            to={getPath('projectDashboard', project.name)}
+            to={getPath('dashboardAnalytics', project.name)}
             variant="soft"
             colorScheme="neutral1"
             paddingX={3}
@@ -325,7 +325,7 @@ export const ControlPanel = () => {
         <Button
           size="md"
           as={Link}
-          to={getPath('projectDashboard', project.name)}
+          to={getPath('dashboardAnalytics', project.name)}
           variant="soft"
           colorScheme="neutral1"
           paddingX={3}
