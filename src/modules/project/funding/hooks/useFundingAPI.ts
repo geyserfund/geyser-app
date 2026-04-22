@@ -526,24 +526,37 @@ export const useFundingAPI = () => {
         }
 
         const { publicKey: claimPublicKey, address: claimAddress } = requestContext.accountKeys
-        const newPreImages: ClaimPreImages = getInitialClaimPreImages()
+
+        const initialPreImages = getInitialClaimPreImages()
+        const mergedPreImages: ClaimPreImages = {
+          lightning: existingContributionCreatePreImages.lightning ?? initialPreImages.lightning,
+          onChain: existingContributionCreatePreImages.onChain ?? initialPreImages.onChain,
+        }
+
+        if (
+          mergedPreImages.lightning.preimageHex &&
+          mergedPreImages.lightning.preimageHash
+        ) {
+          requestContext.preImages.lightning = { ...mergedPreImages.lightning }
+        }
+        if (
+          mergedPreImages.onChain.preimageHex &&
+          mergedPreImages.onChain.preimageHash
+        ) {
+          requestContext.preImages.onChain = { ...mergedPreImages.onChain }
+        }
+
         let hasNewPreImages = false
 
         if (lightningToRskSwapInput) {
           if (!lightningToRskSwapInput.preimageHash) {
             const lightningPreImage = generatePreImageHash()
-            newPreImages.lightning = lightningPreImage
+            mergedPreImages.lightning = lightningPreImage
             requestContext.preImages.lightning = lightningPreImage
             lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
             hasNewPreImages = true
-          } else if (
-            existingContributionCreatePreImages.lightning?.preimageHash === lightningToRskSwapInput.preimageHash &&
-            existingContributionCreatePreImages.lightning.preimageHex
-          ) {
-            requestContext.preImages.lightning = {
-              preimageHex: existingContributionCreatePreImages.lightning.preimageHex,
-              preimageHash: existingContributionCreatePreImages.lightning.preimageHash,
-            }
+          } else if (mergedPreImages.lightning.preimageHash !== lightningToRskSwapInput.preimageHash) {
+            requestContext.preImages.lightning = getInitialClaimPreImages().lightning
           }
           lightningToRskSwapInput.claimPublicKey = claimPublicKey
           lightningToRskSwapInput.claimAddress = claimAddress
@@ -552,25 +565,19 @@ export const useFundingAPI = () => {
         if (onChainToRskSwapInput) {
           if (!onChainToRskSwapInput.preimageHash) {
             const onChainPreImage = generatePreImageHash()
-            newPreImages.onChain = onChainPreImage
+            mergedPreImages.onChain = onChainPreImage
             requestContext.preImages.onChain = onChainPreImage
             onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
             hasNewPreImages = true
-          } else if (
-            existingContributionCreatePreImages.onChain?.preimageHash === onChainToRskSwapInput.preimageHash &&
-            existingContributionCreatePreImages.onChain.preimageHex
-          ) {
-            requestContext.preImages.onChain = {
-              preimageHex: existingContributionCreatePreImages.onChain.preimageHex,
-              preimageHash: existingContributionCreatePreImages.onChain.preimageHash,
-            }
+          } else if (mergedPreImages.onChain.preimageHash !== onChainToRskSwapInput.preimageHash) {
+            requestContext.preImages.onChain = getInitialClaimPreImages().onChain
           }
           onChainToRskSwapInput.claimPublicKey = claimPublicKey
           onChainToRskSwapInput.claimAddress = claimAddress
         }
 
         if (hasNewPreImages) {
-          setContributionCreatePreImages(newPreImages)
+          setContributionCreatePreImages(mergedPreImages)
         }
       }
 
