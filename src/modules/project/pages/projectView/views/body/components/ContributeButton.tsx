@@ -49,37 +49,42 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
 
   const isStepVoting = communityVotingGrant ? communityVotingGrant.votingSystem === VotingSystem.StepLog_10 : false
 
-  const buttonProps = isWidget
-    ? {
-        as: Link,
-        href: getFullDomainUrl(getPath('projectFunding', project.name)),
-        isExternal: true,
-        onClick: (event: MouseEvent<HTMLButtonElement>) => {
-          if (handleBlockedContribution(event)) {
-            return
-          }
+  const handleWidgetClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (handleBlockedContribution(event)) {
+      return
+    }
 
-          onClick?.(event)
-        },
-      }
-    : {
-        onClick: (event: MouseEvent<HTMLButtonElement>) => {
-          if (handleBlockedContribution(event)) {
-            return
-          }
+    onClick?.(event)
+  }
 
-          onClick?.(event)
-          if (event.defaultPrevented) {
-            return
-          }
+  const handleInlineClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (handleBlockedContribution(event)) {
+      return
+    }
 
-          if (communityVotingGrant && isStepVoting) {
-            votingInfoModal.onOpen()
-          } else {
-            navigate(getPath('projectFunding', project.name))
-          }
-        },
-      }
+    onClick?.(event)
+    if (event.defaultPrevented) {
+      return
+    }
+
+    if (communityVotingGrant && isStepVoting) {
+      votingInfoModal.onOpen()
+    } else {
+      navigate(getPath('projectFunding', project.name))
+    }
+  }
+
+  const sharedButtonProps: ButtonProps = {
+    size: 'lg',
+    variant: 'solid',
+    colorScheme: 'primary1',
+    isDisabled: isFundingDisabled(),
+    position: 'relative',
+    sx: {
+      transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+      '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+    },
+  }
 
   return (
     <>
@@ -93,21 +98,22 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
         />
       )}
 
-      <Button
-        size="lg"
-        variant="solid"
-        colorScheme="primary1"
-        isDisabled={isFundingDisabled()}
-        position="relative"
-        sx={{
-          transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
-          '&:active:not(:disabled)': { transform: 'scale(0.96)' },
-        }}
-        {...rest}
-        {...buttonProps}
-      >
-        {t('Contribute')}
-      </Button>
+      {isWidget ? (
+        <Button
+          {...sharedButtonProps}
+          {...rest}
+          as={Link}
+          href={getFullDomainUrl(getPath('projectFunding', project.name))}
+          isExternal
+          onClick={handleWidgetClick}
+        >
+          {t('Contribute')}
+        </Button>
+      ) : (
+        <Button {...sharedButtonProps} {...rest} onClick={handleInlineClick}>
+          {t('Contribute')}
+        </Button>
+      )}
     </>
   )
 }

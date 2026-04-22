@@ -152,10 +152,10 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
         ) : (
           <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
             <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {t('Contributors: {{count}}', { count: project.fundersCount })}
+              {t('Contributors: {{count}}', { count: project.fundersCount ?? 0 })}
             </Body>
             <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {t('Followers: {{count}}', { count: project.followersCount })}
+              {t('Followers: {{count}}', { count: project.followersCount ?? 0 })}
             </Body>
 
             {subscribers && (
