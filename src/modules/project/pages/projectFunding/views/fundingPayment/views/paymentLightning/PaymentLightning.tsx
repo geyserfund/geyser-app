@@ -17,7 +17,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { PaymentStatus, PaymentType } from '@/types/index.ts'
-import { isAllOrNothing, useMobileMode, useNotification } from '@/utils/index.ts'
+import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../components/QRCodeComponent'
 import { TotalAmountToPay } from '../../components/TotalAmountToPay'
@@ -27,26 +27,15 @@ import { useTransactionStatusUpdate } from '../paymentOnchain/hooks/useTransacti
 export const PaymentLightning = () => {
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
 
-  if (!fundingPaymentDetails.lightning?.paymentRequest && !fundingPaymentDetails.lightningToRskSwap?.paymentRequest) {
+  if (!fundingPaymentDetails.lightningToRskSwap?.paymentRequest) {
     return null
   }
 
-  return (
-    <PaymentLightningContent
-      paymentRequest={
-        fundingPaymentDetails.lightning?.paymentRequest ||
-        fundingPaymentDetails.lightningToRskSwap?.paymentRequest ||
-        ''
-      }
-    />
-  )
+  return <PaymentLightningContent paymentRequest={fundingPaymentDetails.lightningToRskSwap.paymentRequest} />
 }
 
 export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: string }) => {
   useListenFundingContributionSuccess()
-
-  const { project, isPrismEnabled } = useProjectAtom()
-  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
 
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
@@ -84,10 +73,10 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
   }
 
   useEffect(() => {
-    if (isRskSwapFlow && currentLightningToRskSwapId) {
+    if (currentLightningToRskSwapId) {
       setCurrentSwapId(currentLightningToRskSwapId)
     }
-  }, [isRskSwapFlow, currentLightningToRskSwapId, setCurrentSwapId])
+  }, [currentLightningToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack w="full">
@@ -101,23 +90,26 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
           size="lg"
           variant="solid"
           colorScheme="primary1"
-          onClick={onCopy}
+          onClick={handleCopy}
           rightIcon={<PiCopy />}
+          sx={{
+            transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+            '&:active:not(:disabled)': { transform: 'scale(0.98)' },
+          }}
         >
           {t('Copy invoice')}
         </Button>
       </VStack>
-      {isRskSwapFlow && <PaymentLightningAonComponent />}
+      <PaymentLightningRskSwapStatusListener />
     </VStack>
   )
 }
 
-export const PaymentLightningAonComponent = () => {
+const PaymentLightningRskSwapStatusListener = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { project, isPrismEnabled } = useProjectAtom()
-  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
+  const { project } = useProjectAtom()
 
   const [fundingContribution, setFundingContribution] = useAtom(fundingContributionAtom)
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
@@ -152,7 +144,7 @@ export const PaymentLightningAonComponent = () => {
   useTransactionStatusUpdate({
     handleProcessing,
     handleFailed,
-    swapId: isRskSwapFlow ? currentSwap?.id : undefined,
+    swapId: currentSwap?.id,
   })
 
   return null

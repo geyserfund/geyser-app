@@ -12,7 +12,7 @@ export const BodySectionLayout = forwardRef(
     return (
       <VStack ref={ref} w="full" spacing={2} alignItems="start" {...props}>
         <HStack width="100%" justifyContent="space-between">
-          <Body size="2xl" bold>
+          <Body size="2xl" bold sx={{ textWrap: 'balance' }}>
             {title}
           </Body>
           {rightComponent}

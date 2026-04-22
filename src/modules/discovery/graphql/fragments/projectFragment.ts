@@ -19,6 +19,7 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     title
     status
     fundingStrategy
+    rskEoa
     category
     subCategory
     location {

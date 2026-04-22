@@ -10,9 +10,5 @@ export const isWalletLightning = (projectWallet: Wallet) => {
 }
 
 export const isWalletNode = (projectWallet: Wallet) => {
-  if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
-    return true
-  }
-
   return false
 }

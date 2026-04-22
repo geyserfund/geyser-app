@@ -32,7 +32,7 @@ export const FundingDetailsPrivateCommentPrompt = () => {
   )
   return (
     <CardLayout width="100%" mobileDense>
-      <H1 size="2xl" bold>
+      <H1 size="2xl" bold sx={{ textWrap: 'balance' }}>
         {t('Private comments')}
       </H1>
       <Body size="md" light>

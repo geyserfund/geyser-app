@@ -6,11 +6,8 @@ import { PiCopy, PiLink } from 'react-icons/pi'
 
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { currentOnChainToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { PaymentFeePayer, PaymentFeeType } from '@/types/index.ts'
-import { isAllOrNothing } from '@/utils/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
@@ -21,42 +18,27 @@ import { useListenOnchainTransactionUpdate } from '../hooks/useListenOnchainTran
 
 export const PaymentOnchainQR = () => {
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
-  if (!fundingPaymentDetails.onChainSwap?.address && !fundingPaymentDetails.onChainToRskSwap?.address) {
+  const address = fundingPaymentDetails.onChainToRskSwap?.address
+  const amountDue = fundingPaymentDetails.onChainToRskSwap?.amountDue
+
+  if (!address || !amountDue || amountDue <= 0) {
     return null
   }
 
-  return (
-    <PaymentOnchainQRContent
-      address={fundingPaymentDetails.onChainSwap?.address || fundingPaymentDetails.onChainToRskSwap?.address || ''}
-    />
-  )
+  return <PaymentOnchainQRContent address={address} totalAmountSats={amountDue} />
 }
 
-export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
+export const PaymentOnchainQRContent = ({
+  address,
+  totalAmountSats,
+}: {
+  address: string
+  totalAmountSats: number
+}) => {
   useListenOnchainTransactionUpdate()
 
-  const { project, isPrismEnabled } = useProjectAtom()
-  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
   const currentOnchainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
-
-  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
-
-  const onChainSwapContributorFees =
-    fundingPaymentDetails.onChainSwap?.fees.reduce(
-      (acc, fee) =>
-        fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip ? acc + fee.feeAmount : acc,
-      0,
-    ) || 0
-
-  const totalAmountSats =
-    (fundingPaymentDetails.onChainSwap?.amountDue || 0) + onChainSwapContributorFees ||
-    fundingPaymentDetails.onChainToRskSwap?.amountDue ||
-    0
-
-  console.log('onChainSwapContributorFees', onChainSwapContributorFees)
-  console.log('fundingPaymentDetails.onChainSwap?.amountDue', fundingPaymentDetails.onChainSwap?.amountDue)
-  console.log('fundingPaymentDetails.onChainToRskSwap?.amountDue', fundingPaymentDetails.onChainToRskSwap?.amountDue)
 
   const onChainBip21Invoice = __development__
     ? `address=${address} amount=${totalAmountSats}`
@@ -65,10 +47,10 @@ export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   const { onCopy: onCopyBip21Invoice, hasCopied: hasCopiedBip21Invoice } = useCopyToClipboard(onChainBip21Invoice)
 
   useEffect(() => {
-    if (isRskSwapFlow && currentOnchainToRskSwapId) {
+    if (currentOnchainToRskSwapId) {
       setCurrentSwapId(currentOnchainToRskSwapId)
     }
-  }, [isRskSwapFlow, currentOnchainToRskSwapId, setCurrentSwapId])
+  }, [currentOnchainToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack flexWrap="wrap" width="100%" spacing={6}>

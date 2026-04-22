@@ -1079,7 +1079,7 @@ const ProjectsFilterEmptyState = ({ message, suggestion }: ProjectsFilterEmptySt
   const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
 
   return (
-    <VStack w="full" borderWidth="1px" borderColor={borderColor} borderRadius="12px" padding={{ base: 4, md: 5 }}>
+    <VStack w="full" borderWidth="0.5px" borderColor={borderColor} borderRadius="card" padding={{ base: 4, md: 5 }}>
       <HStack
         w="full"
         justifyContent="center"

@@ -7,6 +7,7 @@ import {
   SkeletonCircle,
   SkeletonText,
   StackProps,
+  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
@@ -33,6 +34,8 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
   const { t } = useTranslation()
 
   const isWidget = useAtomValue(isWidgetAtom)
+
+  const mediaPlaceholderBg = useColorModeValue('neutral1.3', 'neutral1.4')
 
   return (
     <HStack
@@ -71,7 +74,7 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
         </HStack>
 
         <HStack spacing={2}>
-          <Body size="sm">
+          <Body size="sm" sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {commaFormatted(contribution.amount)}{' '}
             <Body as="span" size="sm" muted>
               sats{' '}
@@ -103,14 +106,14 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
           </Body>
         )}
         {contribution.media && (
-          <Box h={'178px'} bg={'gray.100'} pos={'relative'} borderRadius="8px">
+          <Box h={'178px'} bg={mediaPlaceholderBg} pos={'relative'} borderRadius="8px" overflow="hidden">
             <Image
               src={contribution.media}
               alt="Contribution media attachment"
               objectFit={'cover'}
               width="full"
               height="full"
-              borderRadius="4px"
+              borderRadius="8px"
             />
           </Box>
         )}

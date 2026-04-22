@@ -15,7 +15,7 @@ export const TotalAmountToPay = () => {
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
 
   return (
-    <HStack w="full" justifyContent="center">
+    <HStack w="full" justifyContent="center" sx={{ fontVariantNumeric: 'tabular-nums' }}>
       <Body light>{t(' Total to pay')}: </Body>
 
       <Body>

@@ -10,7 +10,7 @@ import { useRewardBuy } from '@/modules/project/pages/projectView/hooks'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
 
@@ -26,7 +26,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
   const { project, formState } = useFundingFormAtom()
 
-  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter(true)
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter(true)
 
   const location = useLocation()
 
@@ -54,19 +54,19 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
         </Box>
         <VStack padding={4} justifyContent="space-between" overflowX={'hidden'}>
           <VStack width="full" alignItems={'start'}>
-            <Body width="full" size="md" medium>
+            <Body width="full" size="md" medium sx={{ textWrap: 'balance' }}>
               {reward.name}
             </Body>
             <HStack w="full" spacing={3} flexWrap={'wrap'}>
               <HStack justifyContent="start" spacing={3}>
-                <Body size="xs" medium muted>
+                <Body size="xs" medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
                     {reward.sold}
                   </Box>
                 </Body>
                 {reward.maxClaimable && (
-                  <Body size="xs" medium muted>
+                  <Body size="xs" medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {t('Available')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
                       {reward.maxClaimable - reward.sold - count}
@@ -101,21 +101,23 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
             >
               {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
                 <>
-                  <Body bold dark>{`$${reward.cost / 100}`}</Body>
-                  <Body medium muted>
+                  <Body bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
+                    {formatAmount(reward.cost, FormatCurrencyType.Usdcent)}
+                  </Body>
+                  <Body medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`(${formatSatsAmount(reward.cost)})`}
                   </Body>
                 </>
               ) : (
                 <>
-                  <Body bold dark>
+                  <Body bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`${reward.cost.toLocaleString()}`}
                     <Box as="span" color={'neutral1.9'}>
                       {' '}
                       sats
                     </Box>
                   </Body>
-                  <Body medium muted>
+                  <Body medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`(${formatUsdAmount(reward.cost)})`}
                   </Body>
                 </>
@@ -129,6 +131,10 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 colorScheme="primary1"
                 onClick={addRewardToBasket}
                 isDisabled={!isAvailable}
+                sx={{
+                  transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+                  '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+                }}
               >
                 {t('Buy')}
               </Button>
@@ -137,29 +143,37 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 backgroundColor={'utils.pbg'}
                 border="1px solid"
                 borderColor={'neutral1.6'}
-                borderRadius="6px"
+                borderRadius="4px"
                 alignItems="center"
                 spacing={1}
               >
                 <IconButton
-                  aria-label="remove-reward"
+                  aria-label={t('Remove reward')}
                   size="md"
                   width="30px"
                   variant="ghost"
                   icon={<PiMinus />}
                   onClick={removeRewardFromBasket}
+                  sx={{
+                    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
+                    '&:active:not(:disabled)': { transform: 'scale(0.9)' },
+                  }}
                 />
-                <Body size="md" px={1} pt="2px" medium>
+                <Body size="md" px={1} pt="2px" medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
                   {count}
                 </Body>
                 <IconButton
-                  aria-label="select-reward"
+                  aria-label={t('Add reward')}
                   size="md"
                   width="30px"
                   variant="ghost"
                   icon={<PiPlus />}
                   onClick={addRewardToBasket}
                   isDisabled={!isAvailable}
+                  sx={{
+                    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
+                    '&:active:not(:disabled)': { transform: 'scale(0.9)' },
+                  }}
                 />
               </HStack>
             )}

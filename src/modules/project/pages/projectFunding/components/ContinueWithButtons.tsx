@@ -26,6 +26,11 @@ type ContinueWithButtonsProps = {
   useFormSubmit?: boolean
 }
 
+const PAY_BUTTON_PRESS_STYLES = {
+  transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s, opacity 0.2s',
+  '&:active:not(:disabled)': { transform: 'scale(0.98)' },
+} as const
+
 const getIsApplePayVisible = () => {
   if (typeof window === 'undefined') {
     return false
@@ -169,6 +174,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           data-fiat-checkout-method={fiatCheckoutMethods.applePay}
           rightIcon={isMobile ? undefined : applePayIcon}
           aria-label={t('Continue with Apple Pay')}
+          sx={PAY_BUTTON_PRESS_STYLES}
         >
           {isMobile ? applePayIcon : t('Continue with Apple Pay')}
         </Button>
@@ -190,6 +196,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           data-fiat-checkout-method={fiatCheckoutMethods.stripe}
           rightIcon={isMobile ? undefined : stripeIcon}
           aria-label={t('Continue with Stripe')}
+          sx={PAY_BUTTON_PRESS_STYLES}
         >
           {isMobile ? stripeIcon : t('Continue with Stripe')}
         </Button>
@@ -207,6 +214,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           data-fiat-checkout-method={fiatCheckoutMethods.creditCard}
           rightIcon={isMobile ? undefined : creditCardIcon}
           aria-label={t('Continue with Card or Bank Transfer')}
+          sx={PAY_BUTTON_PRESS_STYLES}
         >
           {isMobile ? creditCardIcon : t('Continue with Card or Bank Transfer')}
         </Button>
@@ -228,6 +236,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           data-payment-method={PaymentMethods.lightning}
           rightIcon={isMobile ? undefined : bitcoinIcon}
           aria-label={t('Continue with Bitcoin')}
+          sx={PAY_BUTTON_PRESS_STYLES}
         >
           {isMobile ? bitcoinIcon : t('Continue with Bitcoin')}
         </Button>

@@ -83,7 +83,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
           height="100%"
           aspectRatio={{ base: 1, lg: ImageCropAspectRatio.Reward }}
           objectFit="cover"
-          borderRadius="8px"
+          borderRadius="innerCard"
           src={toMediumImageUrl(reward.images[0] || '')}
           alt={`${reward.name}-header-image`}
         />
@@ -167,7 +167,7 @@ export const TrendingRewardCardSkeleton = () => {
         height={{ base: '96px', lg: 'auto' }}
         aspectRatio={ImageCropAspectRatio.Reward}
       >
-        <SkeletonLayout borderRadius={'8px'} width="100%" height="100%" />
+        <SkeletonLayout borderRadius="innerCard" width="100%" height="100%" />
       </Box>
       <VStack
         flex={1}

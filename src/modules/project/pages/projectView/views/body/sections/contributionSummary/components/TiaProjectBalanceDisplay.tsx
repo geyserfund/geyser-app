@@ -145,18 +145,18 @@ export const TiaProjectBalanceDisplay = () => {
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
           {priorityGoal.currency === ProjectGoalCurrency.Usdcent ? (
-            <Body size="2xl" bold dark>
+            <Body size="2xl" bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {priorityGoal.amountContributed ? formatAmount(priorityGoal.amountContributed, 'USDCENT') : 0}
             </Body>
           ) : (
-            <Body size="2xl" bold dark>
+            <Body size="2xl" bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {priorityGoal.amountContributed ? commaFormatted(priorityGoal.amountContributed) : 0}
               <Body as="span" muted medium>
                 {' sats'}
               </Body>
             </Body>
           )}
-          <Body size="md" dark display="inline">
+          <Body size="md" dark display="inline" sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {priorityGoal.currency === ProjectGoalCurrency.Btcsat
               ? `${formattedUsdAmount()}`
               : `${formattedSatsAmount()}`}
@@ -191,7 +191,7 @@ export const TiaProjectBalanceDisplay = () => {
         animate={{ opacity: isTotalView ? 1 : 0 }}
       >
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-          <Body size="2xl" bold dark>
+          <Body size="2xl" bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {commaFormatted(balance ?? 0)}
             <Body as="span" muted medium>
               {' Sats'}
@@ -199,7 +199,7 @@ export const TiaProjectBalanceDisplay = () => {
           </Body>
 
           <Body size="md" light display="inline">
-            <Body as="span" dark medium>
+            <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {formattedTotalUsdAmount()}
             </Body>
             {` ${t('contributed in total')} `}
@@ -234,14 +234,14 @@ export const TiaProjectBalanceDisplay = () => {
           trackColor="neutral1.3"
         />
         <VStack flex="1" spacing={0} width="100%" px={2} alignItems={'start'}>
-          <Body size="2xl" bold dark>
+          <Body size="2xl" bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {formatAmount(usdCentsAmount, 'USDCENT') ?? 0}{' '}
             <Body as="span" size="md" light>
               {t(`raised`)}
             </Body>
           </Body>
 
-          <Body size="2xl" dark bold display="inline">
+          <Body size="2xl" dark bold display="inline" sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {formatAmount(amountUsdCentsToGoLive, 'USDCENT')}{' '}
             <Body as="span" size="md" light>
               {t(`more to go live.`)}

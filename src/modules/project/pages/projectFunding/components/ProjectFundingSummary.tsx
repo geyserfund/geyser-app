@@ -181,13 +181,14 @@ export const ProjectFundingSummary = ({
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
+        fontVariantNumeric: 'tabular-nums',
 
         gap: isMobileMode ? '4px' : '12px',
       }}
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
     >
       <HStack as={motion.div} layout w="full" justifyContent={'space-between'}>
-        <H2 size={{ base: 'xl', lg: '2xl' }} display={{ base: 'none', lg: 'block' }} bold>
+        <H2 size={{ base: 'xl', lg: '2xl' }} display={{ base: 'none', lg: 'block' }} bold sx={{ textWrap: 'balance' }}>
           {t('Summary')}
         </H2>
       </HStack>
@@ -201,12 +202,16 @@ export const ProjectFundingSummary = ({
         position="absolute"
         top={1}
         right={0}
+        sx={{
+          transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+          '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+        }}
       >
         {isMobileDetailsOpen ? t('Collapse') : t('Details')}
       </Button>
       <VStack w="full" alignItems="start" spacing={{ base: 2, lg: 3 }} display={mobileDisplayStyle}>
         <VStack w="full" alignItems="start" display={{ base: 'flex', lg: 'none' }} spacing={3} marginBottom={3}>
-          <H2 size="xl" bold>
+          <H2 size="xl" bold sx={{ textWrap: 'balance' }}>
             {t('Summary')}
           </H2>
 
@@ -308,7 +313,7 @@ export const ProjectFundingSummary = ({
                     height="20px"
                     width="20px"
                     minWidth="20px"
-                    borderRadius="8px"
+                    borderRadius="innerCard"
                     src={item?.image}
                     alt={item?.label}
                   />

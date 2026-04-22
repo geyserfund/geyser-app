@@ -82,7 +82,18 @@ export const FundingInitSummary = () => {
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
-          <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit" isDisabled={isDisabled}>
+          <Button
+            size="lg"
+            w="full"
+            variant="solid"
+            colorScheme="primary1"
+            type="submit"
+            isDisabled={isDisabled}
+            sx={{
+              transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+              '&:active:not(:disabled)': { transform: 'scale(0.98)' },
+            }}
+          >
             {t('Continue')}
           </Button>
         </VStack>

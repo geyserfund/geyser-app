@@ -20,9 +20,9 @@ export const Payment = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   useEffect(() => {
-    if (isSpeedWalletApp && fundingPaymentDetails.lightning?.paymentRequest && fundingContribution.amount) {
+    if (isSpeedWalletApp && fundingPaymentDetails.lightningToRskSwap?.paymentRequest && fundingContribution.amount) {
       sendSpeedWalletData({
-        invoice: fundingPaymentDetails.lightning?.paymentRequest,
+        invoice: fundingPaymentDetails.lightningToRskSwap.paymentRequest,
         amount: fundingContribution.amount,
       })
     }

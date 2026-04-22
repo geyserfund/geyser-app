@@ -105,7 +105,14 @@ const CreatorTrustStat = ({ label, value }: { label: string; value: string }) =>
       <Body size="md" medium color={statLabelColor} lineHeight={1} whiteSpace="nowrap">
         {label}
       </Body>
-      <Body size="md" medium color={statValueColor} lineHeight={1} whiteSpace="nowrap">
+      <Body
+        size="md"
+        medium
+        color={statValueColor}
+        lineHeight={1}
+        whiteSpace="nowrap"
+        sx={{ fontVariantNumeric: 'tabular-nums' }}
+      >
         {value}
       </Body>
     </Badge>

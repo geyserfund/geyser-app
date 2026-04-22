@@ -13,30 +13,6 @@ export const FRAGMENT_CONTRIBUTION_FEES = gql`
   }
 `
 
-export const FRAGMENT_CONTRIBUTION_LIGHTNING_PAYMENT_DETAILS = gql`
-  ${FRAGMENT_CONTRIBUTION_FEES}
-  fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
-    lightningInvoiceId
-    paymentRequest
-    amountDue
-    fees {
-      ...ContributionFees
-    }
-  }
-`
-
-export const FRAGMENT_CONTRIBUTION_ON_CHAIN_SWAP_PAYMENT_DETAILS = gql`
-  ${FRAGMENT_CONTRIBUTION_FEES}
-  fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
-    address
-    swapJson
-    amountDue
-    fees {
-      ...ContributionFees
-    }
-  }
-`
-
 export const FRAGMENT_CONTRIBUTION_FIAT_PAYMENT_DETAILS = gql`
   fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
     stripeClientSecret
@@ -79,19 +55,11 @@ export const FRAGMENT_CONTRIBUTION_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
 `
 
 export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
-  ${FRAGMENT_CONTRIBUTION_LIGHTNING_PAYMENT_DETAILS}
-  ${FRAGMENT_CONTRIBUTION_ON_CHAIN_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_FIAT_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_FIAT_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS}
   fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
-    lightning {
-      ...ContributionLightningPaymentDetails
-    }
-    onChainSwap {
-      ...ContributionOnChainSwapPaymentDetails
-    }
     fiat {
       ...ContributionFiatPaymentDetails
     }

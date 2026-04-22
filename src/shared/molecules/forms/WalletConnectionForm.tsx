@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Button,
   HStack,
   InputGroup,
   InputRightElement,
@@ -15,16 +14,11 @@ import {
 import { forwardRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
-import { PiGear } from 'react-icons/pi'
 
 import { BoltIcon } from '@/components/icons'
-import { NodeIcon } from '@/components/icons'
 import { NWCIcon } from '@/components/icons/svg/NWCIcon'
 import { TextInputBox } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
-import { NodeConnectionDetails } from '@/modules/project/components/NodeConnectionDetails'
-import { ProjectFeeSelection } from '@/modules/project/components/ProjectFeeSelection'
-import { NodeAdditionModal } from '@/modules/project/forms/components/NodeAdditionModal'
 import { RenderSponsorFromTable } from '@/modules/project/forms/components/RenderSponsorFromTable.tsx'
 import { RenderSponsorImage } from '@/modules/project/forms/components/RenderSponsorImage.tsx'
 import {
@@ -36,34 +30,26 @@ import {
   LightingWalletForm,
   Limits,
   LNAddressEvaluationState,
-  NodeWalletForm,
   NWCWalletForm,
-  WalletForm,
 } from '@/modules/project/pages/projectCreation/hooks/useWalletForm'
 import { WalletLimitComponent } from '@/modules/project/pages/projectDashboard/components/WalletLimitComponent'
 import { Body } from '@/shared/components/typography'
 import { GeyserLightningWalletGuideLink, LIGHTNING_FEE_PERCENTAGE } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
-import { LndNodeType, WalletResourceType } from '@/types'
 import { useCustomTheme } from '@/utils'
 
 type AvailableOptions = {
   lightningAddress: boolean
-  node: boolean
   nwc: boolean
 }
 
 type Props = {
   readOnly?: boolean
-  isEdit?: boolean
   connectionOption: ConnectionOption
   lightningAddress: LightingWalletForm
-  node?: NodeWalletForm
   nwc: NWCWalletForm
   setConnectionOption: (connectionOption: ConnectionOption) => void
-  fee?: WalletForm['fee']
   limits: Limits
-  resourceType: WalletResourceType
   availableOptions?: AvailableOptions
   showPromoText?: boolean
   removeSponsors?: boolean
@@ -216,73 +202,6 @@ const LightningAddressAccordionItem = forwardRef<
   )
 })
 
-const LightningNodeAccordionItem = forwardRef<
-  HTMLDivElement,
-  {
-    readOnly?: boolean
-    node: NodeWalletForm
-    fee: WalletForm['fee']
-    connectionOption: ConnectionOption
-    hasLightningAddress: boolean
-  }
->(({ readOnly, node, fee, connectionOption, hasLightningAddress }, ref) => {
-  const { t } = useTranslation()
-  const { colors } = useCustomTheme()
-  const nodeInput = node.value
-
-  return (
-    <AccordionItem mb="30px" border="none" tabIndex={hasLightningAddress ? 1 : 0} ref={ref}>
-      <h2>
-        <AccordionButton {...accordionButtonStyles}>
-          <Box as="span" flex="1" textAlign="left">
-            {t('Lightning Node')}
-          </Box>
-          <NodeIcon
-            color={connectionOption === ConnectionOption.PERSONAL_NODE ? colors.primary1[9] : colors.utils.text}
-          />
-        </AccordionButton>
-      </h2>
-      <AccordionPanel p={0}>
-        <WalletConnectionOptionInfoBox
-          pt={0}
-          primaryNode={
-            <>
-              <Button
-                leftIcon={<PiGear fontSize="20px" />}
-                w="full"
-                variant="outline"
-                colorScheme="neutral1"
-                onClick={node.onOpen}
-                isDisabled={readOnly}
-              >
-                {t('Connect Your Node')}
-              </Button>
-              {nodeInput && (
-                <NodeConnectionDetails
-                  projectWallet={{
-                    connectionDetails: {
-                      grpcPort: nodeInput.isVoltage ? 10009 : Number(nodeInput.grpc),
-                      hostname: nodeInput.hostname,
-                      lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Geyser,
-                      macaroon: nodeInput.invoiceMacaroon,
-                      pubkey: nodeInput.publicKey,
-                      tlsCertificate: nodeInput.tlsCert,
-                    },
-                    name: nodeInput.name,
-                  }}
-                />
-              )}
-            </>
-          }
-          secondaryText={'Connect your lightning node to receive incoming transactions directly.'}
-        >
-          <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
-        </WalletConnectionOptionInfoBox>
-      </AccordionPanel>
-    </AccordionItem>
-  )
-})
-
 const NostrWalletConnectAccordionItem = forwardRef<
   HTMLDivElement,
   {
@@ -290,16 +209,15 @@ const NostrWalletConnectAccordionItem = forwardRef<
     nwc: NWCWalletForm
     connectionOption: ConnectionOption
     hasLightningAddress: boolean
-    hasNode: boolean
     showPromoText?: boolean
     removeSponsors?: boolean
   }
->(({ readOnly, nwc, connectionOption, hasLightningAddress, hasNode, showPromoText = true, removeSponsors }, ref) => {
+>(({ readOnly, nwc, connectionOption, hasLightningAddress, showPromoText = true, removeSponsors }, ref) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
   return (
-    <AccordionItem border="none" tabIndex={(hasLightningAddress ? 1 : 0) + (hasNode ? 1 : 0)} ref={ref}>
+    <AccordionItem border="none" tabIndex={hasLightningAddress ? 1 : 0} ref={ref}>
       <h2>
         <AccordionButton {...accordionButtonStyles}>
           <Box as="span" flex="1" textAlign="left">
@@ -381,16 +299,12 @@ const NostrWalletConnectAccordionItem = forwardRef<
 
 export const WalletConnectionForm = ({
   readOnly,
-  isEdit,
   connectionOption,
   lightningAddress,
-  node,
   nwc,
   setConnectionOption,
-  fee,
   limits,
-  resourceType,
-  availableOptions = { lightningAddress: true, node: true, nwc: true },
+  availableOptions = { lightningAddress: true, nwc: true },
   showPromoText = true,
   removeSponsors,
 }: Props) => {
@@ -403,13 +317,6 @@ export const WalletConnectionForm = ({
     }
 
     optionIndex += availableOptions.lightningAddress ? 1 : 0
-
-    if (availableOptions.node && expandedIndex === optionIndex) {
-      setConnectionOption(ConnectionOption.PERSONAL_NODE)
-      return
-    }
-
-    optionIndex += availableOptions.node ? 1 : 0
 
     if (availableOptions.nwc && expandedIndex === optionIndex) {
       setConnectionOption(ConnectionOption.NWC)
@@ -425,14 +332,9 @@ export const WalletConnectionForm = ({
       return 0
     }
 
-    if (connectionOption === ConnectionOption.PERSONAL_NODE && availableOptions.node) {
-      return availableOptions.lightningAddress ? 1 : 0
-    }
-
     if (connectionOption === ConnectionOption.NWC && availableOptions.nwc) {
       let index = 0
       if (availableOptions.lightningAddress) index++
-      if (availableOptions.node) index++
       return index
     }
 
@@ -453,37 +355,17 @@ export const WalletConnectionForm = ({
           />
         )}
 
-        {availableOptions.node && node && fee && (
-          <LightningNodeAccordionItem
-            readOnly={readOnly}
-            node={node}
-            fee={fee}
-            connectionOption={connectionOption}
-            hasLightningAddress={availableOptions.lightningAddress}
-          />
-        )}
-
         {availableOptions.nwc && (
           <NostrWalletConnectAccordionItem
             readOnly={readOnly}
             nwc={nwc}
             connectionOption={connectionOption}
             hasLightningAddress={availableOptions.lightningAddress}
-            hasNode={availableOptions.node}
             showPromoText={showPromoText}
             removeSponsors={removeSponsors}
           />
         )}
       </Accordion>
-
-      {node && (
-        <NodeAdditionModal
-          isOpen={node.isOpen}
-          onClose={node.onClose}
-          nodeInput={node.value}
-          onSubmit={node.setValue}
-        />
-      )}
     </VStack>
   )
 }

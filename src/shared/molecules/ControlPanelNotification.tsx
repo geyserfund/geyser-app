@@ -23,6 +23,7 @@ const variantStyles: Record<NotificationVariant, { bg: string; color: string }> 
   error: { bg: 'error.1', color: 'error.11' },
 }
 
+/** Inline notification banner used across the control panel and other project management surfaces. */
 export const ControlPanelNotification = ({
   icon,
   title,
