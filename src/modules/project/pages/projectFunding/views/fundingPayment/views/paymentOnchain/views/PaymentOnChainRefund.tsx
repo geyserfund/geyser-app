@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
-import { PiHandCoins, PiWarning } from 'react-icons/pi'
+import { PiHandCoins } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -12,10 +12,8 @@ import { getPath } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { commaFormatted } from '@/utils'
 
-import { RefundPolicyNote } from '../../../components/RefundPolicyNote'
 import { TransactionFailed } from '../components'
 import { ClaimRefundForm } from '../components/ClaimRefundForm'
-import { DownloadRefundButton } from '../components/DownloadRefundButton'
 import { onChainErrorAtom } from '../states/onChainErrror.ts'
 import { extractValuesFromError } from '../utils/parseError'
 
@@ -77,25 +75,6 @@ export const PaymentOnChainRefund = () => {
           <ClaimRefundForm refundFile={refundFile} showUpload={!refundFile} onSuccess={handleRefundSuccess} />
         </VStack>
       </Feedback>
-
-      <Feedback variant={FeedBackVariant.WARNING} icon={<PiWarning fontSize="24px" />}>
-        <VStack alignItems="start">
-          <Body size="lg" medium>
-            {t('Do not close this window')}
-          </Body>
-          <Body size="sm">
-            <strong>{t('Download and securely store your Refund File.')}</strong>{' '}
-            {t(
-              'If you did so, and you have determined that you do not wish to proceed with a refund at this moment, it is completely safe for you to close this window',
-            )}
-          </Body>
-        </VStack>
-      </Feedback>
-
-      <VStack spacing={0}>
-        <DownloadRefundButton width="310px" size="lg" variant="surface" colorScheme="primary1" />
-        <RefundPolicyNote />
-      </VStack>
     </VStack>
   )
 }

@@ -340,20 +340,15 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   }
 })
 
-const buildBoltzSwapInput = (claimPublicKey?: string | null, claimAddress?: string | null) => {
-  if (!claimPublicKey || !claimAddress) {
-    return undefined
-  }
-
-  return {
-    create: true,
-    boltz: {
-      claimPublicKey,
-      claimAddress,
-      preimageHash: '',
-    },
-  }
-}
+const buildBoltzSwapInput = (claimPublicKey?: string | null, claimAddress?: string | null) => ({
+  create: true,
+  boltz: {
+    // For logged-out users, keys are generated right before the mutation is sent.
+    claimPublicKey: claimPublicKey ?? '',
+    claimAddress: claimAddress ?? '',
+    preimageHash: '',
+  },
+})
 
 const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
@@ -370,10 +365,6 @@ const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       userAccountKeys?.rskKeyPair?.publicKey,
       userAccountKeys?.rskKeyPair?.address,
     )
-
-    if (!lightningToRskSwap) {
-      return {}
-    }
 
     return {
       fiatToLightningSwap: {
@@ -397,10 +388,10 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const paymentsInput: ContributionPaymentsInput = {}
 
-  const boltzSwapInput = buildBoltzSwapInput(
-    userAccountKeys?.rskKeyPair?.publicKey,
-    userAccountKeys?.rskKeyPair?.address,
-  )
+  const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey
+  const claimAddress = userAccountKeys?.rskKeyPair?.address
+  const lightningBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
+  const onChainBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
   const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
 
   const supportsPrismSwaps =
@@ -420,9 +411,9 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     }
   }
 
-  if (supportsPrismSwaps && boltzSwapInput) {
-    paymentsInput.lightningToRskSwap = boltzSwapInput
-    paymentsInput.onChainToRskSwap = boltzSwapInput
+  if (supportsPrismSwaps) {
+    paymentsInput.lightningToRskSwap = lightningBoltzSwapInput
+    paymentsInput.onChainToRskSwap = onChainBoltzSwapInput
   }
 
   return paymentsInput
