@@ -340,14 +340,20 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   }
 })
 
-const buildBoltzSwapInput = (claimPublicKey: string, claimAddress: string) => ({
-  create: true,
-  boltz: {
-    claimPublicKey,
-    claimAddress,
-    preimageHash: '',
-  },
-})
+const buildBoltzSwapInput = (claimPublicKey?: string | null, claimAddress?: string | null) => {
+  if (!claimPublicKey || !claimAddress) {
+    return undefined
+  }
+
+  return {
+    create: true,
+    boltz: {
+      claimPublicKey,
+      claimAddress,
+      preimageHash: '',
+    },
+  }
+}
 
 const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
@@ -360,8 +366,14 @@ const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     }
 
     const userAccountKeys = get(userAccountKeysAtom)
-    const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
-    const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+    const lightningToRskSwap = buildBoltzSwapInput(
+      userAccountKeys?.rskKeyPair?.publicKey,
+      userAccountKeys?.rskKeyPair?.address,
+    )
+
+    if (!lightningToRskSwap) {
+      return {}
+    }
 
     return {
       fiatToLightningSwap: {
@@ -371,7 +383,7 @@ const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
           returnUrl: `${ORIGIN}${getPath('fundingCallback', fundingProject.name)}`,
         },
       },
-      lightningToRskSwap: buildBoltzSwapInput(claimPublicKey, claimAddress),
+      lightningToRskSwap,
     }
   }
 
@@ -385,8 +397,10 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const paymentsInput: ContributionPaymentsInput = {}
 
-  const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
-  const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+  const boltzSwapInput = buildBoltzSwapInput(
+    userAccountKeys?.rskKeyPair?.publicKey,
+    userAccountKeys?.rskKeyPair?.address,
+  )
   const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
 
   const supportsPrismSwaps =
@@ -406,9 +420,9 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     }
   }
 
-  if (supportsPrismSwaps) {
-    paymentsInput.lightningToRskSwap = buildBoltzSwapInput(claimPublicKey, claimAddress)
-    paymentsInput.onChainToRskSwap = buildBoltzSwapInput(claimPublicKey, claimAddress)
+  if (supportsPrismSwaps && boltzSwapInput) {
+    paymentsInput.lightningToRskSwap = boltzSwapInput
+    paymentsInput.onChainToRskSwap = boltzSwapInput
   }
 
   return paymentsInput

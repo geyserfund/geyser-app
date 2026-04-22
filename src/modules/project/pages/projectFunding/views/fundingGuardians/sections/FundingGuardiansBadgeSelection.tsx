@@ -111,7 +111,7 @@ const UserProfileSection = ({ user, selectedBadges }: { user: any; selectedBadge
     <HStack w="full" justifyContent="center">
       <CardLayout
         padding="12px 8px"
-        borderRadius="12px"
+        borderRadius="innerCard"
         flexDirection="row"
         spacing={6}
         alignItems="center"

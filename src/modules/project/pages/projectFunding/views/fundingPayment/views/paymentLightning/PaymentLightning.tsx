@@ -90,7 +90,7 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
           size="lg"
           variant="solid"
           colorScheme="primary1"
-          onClick={onCopy}
+          onClick={handleCopy}
           rightIcon={<PiCopy />}
           sx={{
             transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',

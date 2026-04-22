@@ -42,10 +42,19 @@ export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
       alignItems="stretch"
       transition="transform 0.2s ease, box-shadow 0.2s ease"
       cursor="pointer"
+      role="link"
+      tabIndex={0}
+      aria-label={project.title}
       _hover={{
         transform: 'translateY(-2px)',
       }}
       onClick={handleViewProject}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          handleViewProject()
+        }
+      }}
     >
       <Box width="100%" aspectRatio={1} position="relative" overflow="hidden">
         <ImageWithReload

@@ -103,7 +103,7 @@ const ImpactFundPills = () => {
 
 /** Section explaining the two ways to support Bitcoin adoption on Geyser. */
 export const HowGeyserWorks = () => {
-  const cardBg = useColorModeValue('utils.pbg', 'neutral1.3')
+  const cardBg = useColorModeValue(undefined, 'neutral1.3')
   const subtitleColor = 'neutralAlpha.11'
 
   return (

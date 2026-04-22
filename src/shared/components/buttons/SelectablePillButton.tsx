@@ -31,6 +31,7 @@ export const SelectablePillButton = ({ isSelected, children, sx, ...rest }: Sele
       height="44px"
       borderRadius="innerCard"
       borderWidth="1px"
+      aria-pressed={isSelected}
       borderColor={isSelected ? selectedBorder : unselectedBorder}
       bg={isSelected ? selectedBg : 'transparent'}
       color={isSelected ? selectedText : unselectedText}

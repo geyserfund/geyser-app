@@ -18,22 +18,27 @@ import { useListenOnchainTransactionUpdate } from '../hooks/useListenOnchainTran
 
 export const PaymentOnchainQR = () => {
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
-  if (!fundingPaymentDetails.onChainToRskSwap?.address) {
+  const address = fundingPaymentDetails.onChainToRskSwap?.address
+  const amountDue = fundingPaymentDetails.onChainToRskSwap?.amountDue
+
+  if (!address || !amountDue || amountDue <= 0) {
     return null
   }
 
-  return <PaymentOnchainQRContent address={fundingPaymentDetails.onChainToRskSwap.address} />
+  return <PaymentOnchainQRContent address={address} totalAmountSats={amountDue} />
 }
 
-export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
+export const PaymentOnchainQRContent = ({
+  address,
+  totalAmountSats,
+}: {
+  address: string
+  totalAmountSats: number
+}) => {
   useListenOnchainTransactionUpdate()
 
   const currentOnchainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
-
-  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
-
-  const totalAmountSats = fundingPaymentDetails.onChainToRskSwap?.amountDue || 0
 
   const onChainBip21Invoice = __development__
     ? `address=${address} amount=${totalAmountSats}`

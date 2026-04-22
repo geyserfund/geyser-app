@@ -71,7 +71,7 @@ const AnnouncementCard = ({
       dense
       backgroundColor={cardBackground}
       cursor="pointer"
-      role="group"
+      role="link"
       tabIndex={0}
       onClick={handleNavigate}
       onKeyDown={(event) => {

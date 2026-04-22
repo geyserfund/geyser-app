@@ -10,7 +10,7 @@ import { useRewardBuy } from '@/modules/project/pages/projectView/hooks'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
 
@@ -26,7 +26,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
   const { project, formState } = useFundingFormAtom()
 
-  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter(true)
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter(true)
 
   const location = useLocation()
 
@@ -101,7 +101,9 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
             >
               {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
                 <>
-                  <Body bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>{`$${reward.cost / 100}`}</Body>
+                  <Body bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
+                    {formatAmount(reward.cost, FormatCurrencyType.Usdcent)}
+                  </Body>
                   <Body medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`(${formatSatsAmount(reward.cost)})`}
                   </Body>
@@ -146,7 +148,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 spacing={1}
               >
                 <IconButton
-                  aria-label="remove-reward"
+                  aria-label={t('Remove reward')}
                   size="md"
                   width="30px"
                   variant="ghost"
@@ -161,7 +163,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                   {count}
                 </Body>
                 <IconButton
-                  aria-label="select-reward"
+                  aria-label={t('Add reward')}
                   size="md"
                   width="30px"
                   variant="ghost"

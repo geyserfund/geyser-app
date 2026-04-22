@@ -152,7 +152,11 @@ const parseRskSwap = atom(null, (get, set, args: RskSwapParseArgs) => {
 
   refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
   refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair?.address || rskKeyPair?.address
-  refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
+  refundFile.publicKey =
+    accountKeys?.publicKey ||
+    userAccountKeys?.rskKeyPair?.publicKey ||
+    userAccountKeyPair?.publicKey ||
+    rskKeyPair?.publicKey
   refundFile.contributionInfo = contributionInfo
   refundFile.type = refundType
 

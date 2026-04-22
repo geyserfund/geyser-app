@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import { Button, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -13,31 +12,17 @@ import {
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
-import { MUTATION_PROJECT_RSK_EOA_SET } from '@/modules/project/graphql/mutation/projectMutation.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { GeyserConfigureWalletGuideUrl } from '@/shared/constants/platform/url.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.ts'
+import { ProjectFundingStrategy, useProjectRskEoaSetMutation } from '@/types/index.ts'
+import type { UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-import { ControlPanelNotification } from '../controlPanel/components/ControlPanelNotification.tsx'
-
-type ProjectRskEoaSetMutation = {
-  projectRskEoaSet: {
-    id: string
-    rskEoa?: string | null
-  }
-}
-
-type ProjectRskEoaSetMutationVariables = {
-  input: {
-    projectId: string | number
-    rskEoa: string
-  }
-}
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 
 type TiaRskEoaSetupNoticeProps = {
   compact?: boolean
@@ -58,9 +43,7 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
   const [isSettingProjectKey, setIsSettingProjectKey] = useState(false)
   const successModal = useModal()
 
-  const [projectRskEoaSet] = useMutation<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>(
-    MUTATION_PROJECT_RSK_EOA_SET,
-  )
+  const [projectRskEoaSet] = useProjectRskEoaSetMutation()
 
   const needsProjectKey = !project?.rskEoa
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll

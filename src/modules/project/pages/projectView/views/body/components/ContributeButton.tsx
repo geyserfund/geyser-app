@@ -21,7 +21,7 @@ type ContributeButtonProps = ButtonProps & {
   paymentMethods?: string[]
 }
 
-export const ContributeButton = ({ isWidget, paymentMethods, ...props }: ContributeButtonProps) => {
+export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }: ContributeButtonProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -33,8 +33,6 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
   const { project } = useProjectAtom()
   const { isFundingDisabled } = useProjectToolkit(project)
   const { handleBlockedContribution } = useBlockedProjectContribution(project)
-
-  // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
 
   if (!project) {
     return null
@@ -57,15 +55,29 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         href: getFullDomainUrl(getPath('projectFunding', project.name)),
         isExternal: true,
         onClick: (event: MouseEvent<HTMLButtonElement>) => {
-          if (handleBlockedContribution(event)) return
+          if (handleBlockedContribution(event)) {
+            return
+          }
+
+          onClick?.(event)
         },
       }
     : {
         onClick: (event: MouseEvent<HTMLButtonElement>) => {
-          if (handleBlockedContribution(event)) return
-          communityVotingGrant && isStepVoting
-            ? votingInfoModal.onOpen()
-            : navigate(getPath('projectFunding', project.name))
+          if (handleBlockedContribution(event)) {
+            return
+          }
+
+          onClick?.(event)
+          if (event.defaultPrevented) {
+            return
+          }
+
+          if (communityVotingGrant && isStepVoting) {
+            votingInfoModal.onOpen()
+          } else {
+            navigate(getPath('projectFunding', project.name))
+          }
         },
       }
 
@@ -91,8 +103,8 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
           transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
           '&:active:not(:disabled)': { transform: 'scale(0.96)' },
         }}
+        {...rest}
         {...buttonProps}
-        {...props}
       >
         {t('Contribute')}
       </Button>

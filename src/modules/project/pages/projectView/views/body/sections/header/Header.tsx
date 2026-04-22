@@ -63,7 +63,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
   const { project, projectOwner } = useProjectAtom()
   const projectImages = project.images || []
 
-  const thumbnailOutlineColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.1)')
+  const thumbnailOutlineColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
   const iconButtonPressStyles = {
     transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
     '&:active': { transform: 'scale(0.96)' },
@@ -130,7 +130,9 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
           alignSelf={'start'}
           onClick={onOpen}
           cursor={'pointer'}
-          boxShadow={`inset 0 0 0 1px ${thumbnailOutlineColor}`}
+          outline="1px solid"
+          outlineColor={thumbnailOutlineColor}
+          outlineOffset="-1px"
         />
       </Box>
       <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
@@ -150,15 +152,15 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
         ) : (
           <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
             <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {`${t('Contributors')}: ${project.fundersCount}`}
+              {t('Contributors: {{count}}', { count: project.fundersCount })}
             </Body>
             <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {`${t('Followers')}: ${project.followersCount}`}
+              {t('Followers: {{count}}', { count: project.followersCount })}
             </Body>
 
             {subscribers && (
               <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-                {`${subscribers || 0} ${t('subscribers')}`}
+                {t('{{count}} subscribers', { count: subscribers || 0 })}
               </Body>
             )}
           </HStack>
@@ -167,7 +169,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
         <HStack w="full" paddingTop={1} justifyContent="space-between" flexWrap={'wrap'}>
           <HStack>
             <IconButton
-              aria-label="Go to project details"
+              aria-label={t('Go to project details')}
               icon={<PiCaretDoubleDown />}
               variant="soft"
               colorScheme="neutral1"
@@ -175,7 +177,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
               sx={iconButtonPressStyles}
             />
             <IconButton
-              aria-label="Go to project Lighting QR"
+              aria-label={t('Go to project Lightning QR')}
               icon={<PiQrCode fontSize="20px" />}
               variant="soft"
               colorScheme="neutral1"
@@ -244,7 +246,7 @@ export const Header = () => {
   const { wallet } = useWalletAtom()
   const projectImages = project.images || []
 
-  const headerMediaOutlineColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.1)')
+  const headerMediaOutlineColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -308,7 +310,8 @@ export const Header = () => {
               position: 'absolute',
               inset: 0,
               pointerEvents: 'none',
-              boxShadow: `inset 0 0 0 1px ${headerMediaOutlineColor}`,
+              border: '1px solid',
+              borderColor: headerMediaOutlineColor,
             }}
           >
             {renderImageOrVideo()}

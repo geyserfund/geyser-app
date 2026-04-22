@@ -13,7 +13,7 @@ import {
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
-import { ControlPanelNotification } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/components/ControlPanelNotification.tsx'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'

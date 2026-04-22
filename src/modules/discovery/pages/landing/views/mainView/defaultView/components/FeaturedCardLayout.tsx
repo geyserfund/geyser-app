@@ -102,7 +102,7 @@ export const FeaturedCardSkeleton = () => {
       overflow="hidden"
       noborder
     >
-      <Box width="100%" height="auto" maxHeight="340x" aspectRatio={3 / 2} overflow="hidden" borderRadius="innerCard">
+      <Box width="100%" height="auto" maxHeight="340px" aspectRatio={3 / 2} overflow="hidden" borderRadius="innerCard">
         <Skeleton height="full" width="full" />
       </Box>
       <VStack

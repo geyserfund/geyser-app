@@ -172,6 +172,7 @@ export const useFundingAPI = () => {
 
   const setFundingInputAfterRequest = useSetAtom(setFundingInputAfterRequestAtom)
   const setContributionCreatePreImages = useSetAtom(contributionCreatePreImagesAtom)
+  const existingContributionCreatePreImages = useAtomValue(contributionCreatePreImagesAtom)
 
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
@@ -294,7 +295,7 @@ export const useFundingAPI = () => {
       } catch (e) {
         setFundingRequestErrored(true)
         toast.error({
-          title: 'Something went wrong2',
+          title: t('Something went wrong'),
           description: e instanceof Error ? e.message : JSON.stringify(e),
         })
       }
@@ -322,8 +323,8 @@ export const useFundingAPI = () => {
       setFundingRequestErrored(true)
 
       toast.error({
-        title: 'Something went wrong3',
-        description: 'Please refresh the page and try again',
+        title: t('Something went wrong'),
+        description: t('Please refresh the page and try again'),
       })
     },
   })
@@ -341,7 +342,7 @@ export const useFundingAPI = () => {
       setFundingRequestErrored(true)
       toast.error({
         title: fallbackTitle,
-        description: error instanceof Error ? error.message : 'Please refresh the page and try again',
+        description: error instanceof Error ? error.message : t('Please refresh the page and try again'),
       })
     },
     [setFundingRequestErrored, toast],
@@ -358,8 +359,8 @@ export const useFundingAPI = () => {
 
       setFundingRequestErrored(true)
       toast.error({
-        title: 'Something went wrong3',
-        description: 'Please refresh the page and try again',
+        title: t('Something went wrong'),
+        description: t('Please refresh the page and try again'),
       })
     },
   })
@@ -375,8 +376,8 @@ export const useFundingAPI = () => {
 
       setFundingRequestErrored(true)
       toast.error({
-        title: 'Something went wrong3',
-        description: 'Please refresh the page and try again',
+        title: t('Something went wrong'),
+        description: t('Please refresh the page and try again'),
       })
     },
   })
@@ -392,8 +393,8 @@ export const useFundingAPI = () => {
 
       setFundingRequestErrored(true)
       toast.error({
-        title: 'Something went wrong3',
-        description: 'Please refresh the page and try again',
+        title: t('Something went wrong'),
+        description: t('Please refresh the page and try again'),
       })
     },
   })
@@ -414,7 +415,7 @@ export const useFundingAPI = () => {
 
       if (formState.fundingMode === recurringFundingModes.oneTime && !isValid) {
         toast.error({
-          title: 'failed to generate invoice',
+          title: t('Failed to generate invoice'),
           description: error,
         })
         return
@@ -427,8 +428,8 @@ export const useFundingAPI = () => {
           formattedRecurringDonationInput.input.amount <= 0)
       ) {
         toast.error({
-          title: 'Unable to create recurring payment',
-          description: 'Please refresh the page and try again',
+          title: t('Unable to create recurring payment'),
+          description: t('Please refresh the page and try again'),
         })
         return
       }
@@ -439,8 +440,8 @@ export const useFundingAPI = () => {
           !formattedProjectSubscriptionStartInput.input.paymentMethod)
       ) {
         toast.error({
-          title: 'Unable to create recurring payment',
-          description: 'Please refresh the page and try again',
+          title: t('Unable to create recurring payment'),
+          description: t('Please refresh the page and try again'),
         })
         return
       }
@@ -451,8 +452,8 @@ export const useFundingAPI = () => {
         !formattedRecurringContributionRenewalInput.input.id
       ) {
         toast.error({
-          title: 'Unable to create recurring payment',
-          description: 'Please refresh the page and try again',
+          title: t('Unable to create recurring payment'),
+          description: t('Please refresh the page and try again'),
         })
         return
       }
@@ -535,6 +536,14 @@ export const useFundingAPI = () => {
             requestContext.preImages.lightning = lightningPreImage
             lightningToRskSwapInput.preimageHash = lightningPreImage.preimageHash
             hasNewPreImages = true
+          } else if (
+            existingContributionCreatePreImages.lightning?.preimageHash === lightningToRskSwapInput.preimageHash &&
+            existingContributionCreatePreImages.lightning.preimageHex
+          ) {
+            requestContext.preImages.lightning = {
+              preimageHex: existingContributionCreatePreImages.lightning.preimageHex,
+              preimageHash: existingContributionCreatePreImages.lightning.preimageHash,
+            }
           }
           lightningToRskSwapInput.claimPublicKey = claimPublicKey
           lightningToRskSwapInput.claimAddress = claimAddress
@@ -547,6 +556,14 @@ export const useFundingAPI = () => {
             requestContext.preImages.onChain = onChainPreImage
             onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
             hasNewPreImages = true
+          } else if (
+            existingContributionCreatePreImages.onChain?.preimageHash === onChainToRskSwapInput.preimageHash &&
+            existingContributionCreatePreImages.onChain.preimageHex
+          ) {
+            requestContext.preImages.onChain = {
+              preimageHex: existingContributionCreatePreImages.onChain.preimageHex,
+              preimageHash: existingContributionCreatePreImages.onChain.preimageHash,
+            }
           }
           onChainToRskSwapInput.claimPublicKey = claimPublicKey
           onChainToRskSwapInput.claimAddress = claimAddress
@@ -578,7 +595,7 @@ export const useFundingAPI = () => {
             }
           }
         } catch (error) {
-          handleRequestError(error, 'Unable to create recurring payment')
+          handleRequestError(error, t('Unable to create recurring payment'))
         }
 
         return
@@ -605,7 +622,7 @@ export const useFundingAPI = () => {
             }
           }
         } catch (error) {
-          handleRequestError(error, 'Unable to create recurring payment')
+          handleRequestError(error, t('Unable to create recurring payment'))
         }
 
         return
@@ -632,7 +649,7 @@ export const useFundingAPI = () => {
             }
           }
         } catch (error) {
-          handleRequestError(error, 'Unable to create recurring payment')
+          handleRequestError(error, t('Unable to create recurring payment'))
         }
 
         return
@@ -674,6 +691,7 @@ export const useFundingAPI = () => {
       resetContribution,
       setRskAccountKeys,
       setContributionCreatePreImages,
+      existingContributionCreatePreImages,
       stripeEmbeddedTheme,
     ],
   )

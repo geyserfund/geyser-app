@@ -29,7 +29,7 @@ import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
 import { promotionsNoticeClosedByProjectAtom, stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
-import { ControlPanelNotification } from './components/ControlPanelNotification.tsx'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { ProjectReviewFeedbackModal } from './components/ProjectReviewFeedbackModal.tsx'
 import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
 import { useImpactFundEligibility } from './hooks/useImpactFundEligibility.ts'
@@ -306,7 +306,7 @@ export const ControlPanel = () => {
           <Button
             size="md"
             as={Link}
-            to={getPath('dashboardAnalytics', project.name)}
+            to={getPath('projectDashboard', project.name)}
             variant="soft"
             colorScheme="neutral1"
             paddingX={3}
@@ -325,7 +325,7 @@ export const ControlPanel = () => {
         <Button
           size="md"
           as={Link}
-          to={getPath('dashboardAnalytics', project.name)}
+          to={getPath('projectDashboard', project.name)}
           variant="soft"
           colorScheme="neutral1"
           paddingX={3}

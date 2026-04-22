@@ -1,6 +1,6 @@
 import { t } from 'i18next'
 import type { MouseEvent } from 'react'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 
 import {
   Project,
@@ -15,6 +15,7 @@ type ProjectContributionGate = Pick<Project, 'id' | 'rskEoa' | 'fundingStrategy'
 export const useBlockedProjectContribution = (project?: ProjectContributionGate | null) => {
   const toast = useNotification()
   const [notifyCreator] = useProjectWalletConfigurationContributionAttemptNotifyMutation()
+  const notifiedProjectIdsRef = useRef<Set<string>>(new Set())
 
   const isContributionBlocked = Boolean(
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project?.rskEoa,
@@ -33,14 +34,21 @@ export const useBlockedProjectContribution = (project?: ProjectContributionGate 
         ),
       })
 
+      const projectId = project.id
+      if (notifiedProjectIdsRef.current.has(projectId)) {
+        return true
+      }
+      notifiedProjectIdsRef.current.add(projectId)
+
       notifyCreator({
         variables: {
           input: {
-            projectId: project.id,
+            projectId,
           },
         },
       }).catch((error) => {
-        console.error('Failed to notify creator about blocked contribution attempt', { projectId: project.id, error })
+        notifiedProjectIdsRef.current.delete(projectId)
+        console.error('Failed to notify creator about blocked contribution attempt', { projectId, error })
       })
 
       return true
