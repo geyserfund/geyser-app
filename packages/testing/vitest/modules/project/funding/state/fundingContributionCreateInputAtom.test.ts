@@ -5,7 +5,7 @@ import { authUserAtom, defaultUser } from '@/modules/auth/state/authAtom.ts'
 import { fundingFormStateAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
-import { ProjectFundingStrategy, RewardCurrency, ShippingDestination, UserSubscriptionInterval } from '@/types'
+import { ProjectFundingStrategy, RewardCurrency, ShippingDestination } from '@/types'
 
 import {
   fiatOnlyPaymentsInputAtom,
@@ -121,7 +121,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
         cost: 0,
         subscriptionId: undefined,
         currency: undefined,
-        interval: UserSubscriptionInterval.Monthly,
+        interval: 'MONTHLY',
         name: '',
       },
       geyserTipPercent: 5,
@@ -138,5 +138,51 @@ describe('fiatOnlyPaymentsInputAtom', () => {
     const contributionInput = store.get(formattedFundingInputAtom)
 
     expect(contributionInput.referrerHeroId).toBeUndefined()
+  })
+
+  it('includes swap payment inputs when logged out with no account keys', () => {
+    const store = createStore()
+    store.set(
+      projectAtom,
+      createProjectState({
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+        stripeEnabled: false,
+        projectName: 'logged-out-swap',
+      }),
+    )
+    store.set(usdRateAtom, 100_000)
+    store.set(authUserAtom, null as any)
+    store.set(fundingFormStateAtom, {
+      donationAmount: 1_000,
+      donationAmountUsdCent: 100,
+      shippingCost: 0,
+      email: '',
+      media: '',
+      comment: '',
+      privateComment: '',
+      rewardsByIDAndCount: undefined,
+      rewardCurrency: RewardCurrency.Usdcent,
+      needsShipping: false,
+      shippingDestination: ShippingDestination.National,
+      followProject: false,
+      subscribeToGeyserEmails: false,
+      subscription: {
+        cost: 0,
+        subscriptionId: undefined,
+        currency: undefined,
+        interval: 'MONTHLY',
+        name: '',
+      },
+      geyserTipPercent: 5,
+      guardianBadges: [],
+    } as any)
+
+    const contributionInput = store.get(formattedFundingInputAtom)
+
+    expect(contributionInput.paymentsInput?.lightningToRskSwap?.create).toBe(true)
+    expect(contributionInput.paymentsInput?.onChainToRskSwap?.create).toBe(true)
+    expect(contributionInput.paymentsInput?.lightningToRskSwap).not.toBe(
+      contributionInput.paymentsInput?.onChainToRskSwap,
+    )
   })
 })

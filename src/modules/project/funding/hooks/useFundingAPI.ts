@@ -576,6 +576,19 @@ export const useFundingAPI = () => {
           onChainToRskSwapInput.claimAddress = claimAddress
         }
 
+        if (
+          lightningToRskSwapInput &&
+          onChainToRskSwapInput &&
+          lightningToRskSwapInput.preimageHash &&
+          lightningToRskSwapInput.preimageHash === onChainToRskSwapInput.preimageHash
+        ) {
+          const onChainPreImage = generatePreImageHash()
+          mergedPreImages.onChain = onChainPreImage
+          requestContext.preImages.onChain = onChainPreImage
+          onChainToRskSwapInput.preimageHash = onChainPreImage.preimageHash
+          hasNewPreImages = true
+        }
+
         if (hasNewPreImages) {
           setContributionCreatePreImages(mergedPreImages)
         }

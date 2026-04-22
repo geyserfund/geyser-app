@@ -13,7 +13,6 @@ import { getBip21Invoice } from '@/utils/lightning/bip21'
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
 import { TotalAmountToPay } from '../../../components/TotalAmountToPay'
 import { WaitingForPayment } from '../../../components/WaitingForPayment'
-import { PaymentAndRefundInstructions } from '../components'
 import { useListenOnchainTransactionUpdate } from '../hooks/useListenOnchainTransactionUpdate'
 
 export const PaymentOnchainQR = () => {
@@ -72,8 +71,6 @@ export const PaymentOnchainQRContent = ({
       >
         {hasCopiedBip21Invoice ? t('Copied!') : t('Copy onchain address')}
       </Button>
-
-      <PaymentAndRefundInstructions />
     </VStack>
   )
 }

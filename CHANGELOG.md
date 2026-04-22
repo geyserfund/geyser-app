@@ -1,3 +1,15 @@
+## [0.41.1](https://github.com/geyserfund/geyser-app/compare/v0.41.0...v0.41.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* address pr comments and other smaller fixes ([688c488](https://github.com/geyserfund/geyser-app/commit/688c488076fd66e650002e180bd49512abf23780))
+* funding flow issues ([35aaef3](https://github.com/geyserfund/geyser-app/commit/35aaef3b61e9674bbb05bc88a48ed22af58451b6))
+* payout issue ([314c960](https://github.com/geyserfund/geyser-app/commit/314c9601d21b7f42f7fc32ae37bcffc209856861))
+* pre-image override ([bad32a9](https://github.com/geyserfund/geyser-app/commit/bad32a900a5bdc0f3120fda38cb7fe9e8af87a78))
+* prism deadline ([5964017](https://github.com/geyserfund/geyser-app/commit/59640173cb48a8fc75e5028ad883d71391815821))
+* tsc fixes ([338645b](https://github.com/geyserfund/geyser-app/commit/338645b045281a83ce4421fa810d9fec2211ffa6))
+
 ## [0.41.0](https://github.com/geyserfund/geyser-app/compare/v0.39.2...v0.41.0) (2026-04-22)
 
 

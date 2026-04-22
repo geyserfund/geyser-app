@@ -7,10 +7,35 @@ import {
   currentLightningToRskSwapIdAtom,
   currentOnChainToRskSwapIdAtom,
   currentSwapIdAtom,
+  SwapData,
   swapAtom,
 } from '@/modules/project/funding/state/swapAtom.ts'
 
 const REFUND_QR_FILE_NAME = 'refundFile'
+
+export const hasRefundFileEssentials = (refundFile?: SwapData) =>
+  Boolean(
+    refundFile?.id &&
+      refundFile?.privateKey,
+  )
+
+export const isRefundDownloadReady = (params: {
+  isAllOrNothing?: boolean
+  onChainSwapRefundFile?: SwapData
+  lightningToRskSwapRefundFile?: SwapData
+  onChainToRskSwapRefundFile?: SwapData
+}) => {
+  const { isAllOrNothing, onChainSwapRefundFile, lightningToRskSwapRefundFile, onChainToRskSwapRefundFile } = params
+
+  if (isAllOrNothing) {
+    return (
+      hasRefundFileEssentials(lightningToRskSwapRefundFile) &&
+      hasRefundFileEssentials(onChainToRskSwapRefundFile)
+    )
+  }
+
+  return hasRefundFileEssentials(onChainSwapRefundFile)
+}
 
 export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   const [fileToDownload, setFileToDownload] = useState<{ download: string; content: string } | null>(null)
@@ -25,16 +50,26 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   const onChainSwapRefundFile = allRefundFiles[currentSwapId]
   const lightningToRskSwapRefundFile = allRefundFiles[currentLightningToRskSwapId]
   const onChainToRskSwapRefundFile = allRefundFiles[currentOnChainToRskSwapId]
+  const isReady = isRefundDownloadReady({
+    isAllOrNothing: props?.isAllOrNothing,
+    onChainSwapRefundFile,
+    lightningToRskSwapRefundFile,
+    onChainToRskSwapRefundFile,
+  })
 
   const refundFiles = useMemo(
     () =>
-      props?.isAllOrNothing
+      !isReady
+        ? null
+        : props?.isAllOrNothing
         ? { isAonRefund: true, onChainToRsk: onChainToRskSwapRefundFile, lightningToRsk: lightningToRskSwapRefundFile }
         : onChainSwapRefundFile,
-    [props?.isAllOrNothing, onChainToRskSwapRefundFile, lightningToRskSwapRefundFile, onChainSwapRefundFile],
+    [isReady, props?.isAllOrNothing, onChainToRskSwapRefundFile, lightningToRskSwapRefundFile, onChainSwapRefundFile],
   )
 
   const refundFileName = useMemo(() => {
+    if (!isReady) return ''
+
     let projectTitle = ''
     const dateTime = DateTime.now().toFormat('yyyy-MM-dd_HH-mm')
 
@@ -45,15 +80,17 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
     }
 
     return `${REFUND_QR_FILE_NAME}_for_${projectTitle}_on_${dateTime}.json`
-  }, [props?.isAllOrNothing, lightningToRskSwapRefundFile, onChainSwapRefundFile])
+  }, [isReady, props?.isAllOrNothing, lightningToRskSwapRefundFile, onChainSwapRefundFile])
 
   const getJsonFile = useCallback(() => {
+    if (!refundFiles || !refundFileName) return null
+
     const blob = new Blob([JSON.stringify(refundFiles, null, 2)], { type: 'application/json' })
     const content = URL.createObjectURL(blob)
     return { download: refundFileName, content }
   }, [refundFiles, refundFileName])
 
-  const downloadFile = useCallback(async () => {
+  const downloadFile = useCallback(() => {
     const jsonFile = getJsonFile()
     setFileToDownload(jsonFile)
   }, [getJsonFile])
@@ -73,11 +110,13 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
 
   return {
     fileToDownload,
+    isReady,
     buttonProps: {
       as: Link,
       href: fileToDownload?.content,
       download: fileToDownload?.download,
       isExternal: true,
+      isDisabled: !isReady || !fileToDownload?.content,
     },
   }
 }

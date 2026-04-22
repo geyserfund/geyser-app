@@ -1,4 +1,4 @@
-import { Button, Divider, HStack, Link, VStack } from '@chakra-ui/react'
+import { Button, Divider, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
@@ -18,7 +18,7 @@ type PaymentDownloadRefundFileProps = {
 export const PaymentDownloadRefundFile = ({ isPrismContribution, onComplete }: PaymentDownloadRefundFileProps) => {
   const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
-  const { buttonProps } = useDownloadRefund({
+  const { buttonProps, isReady } = useDownloadRefund({
     isAllOrNothing: true,
   })
 
@@ -31,6 +31,8 @@ export const PaymentDownloadRefundFile = ({ isPrismContribution, onComplete }: P
       )
 
   const handleClick = () => {
+    if (!isReady) return
+
     setRefundFileDownloaded(true)
     onComplete()
   }
@@ -55,11 +57,9 @@ export const PaymentDownloadRefundFile = ({ isPrismContribution, onComplete }: P
           </Body>
         </VStack>
       </Feedback>
-      <HStack onClick={handleClick}>
-        <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1">
-          {t('Download & Continue')}
-        </Button>
-      </HStack>
+      <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
+        {t('Download & Continue')}
+      </Button>
     </VStack>
   )
 }

@@ -40,9 +40,11 @@ export const PaymentOnchainPrompt = () => {
 export const PaymentOnchainDownloadPrompt = ({ onComplete }: { onComplete: () => void }) => {
   const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
-  const { buttonProps } = useDownloadRefund()
+  const { buttonProps, isReady } = useDownloadRefund()
 
   const handleClick = () => {
+    if (!isReady) return
+
     setRefundFileDownloaded(true)
     onComplete()
   }
