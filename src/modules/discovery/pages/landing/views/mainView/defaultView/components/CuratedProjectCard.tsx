@@ -1,8 +1,9 @@
-import { Badge, Box, Button, HStack, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectForLandingPageFragment, ProjectFundingStrategy } from '@/types/index.ts'
@@ -11,12 +12,9 @@ type CuratedProjectCardProps = {
   project: ProjectForLandingPageFragment
 }
 
+/** Curated landing-page project card with thumbnail, title, description, and CTA. */
 export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
   const navigate = useNavigate()
-
-  const borderColor = useColorModeValue('gray.200', 'gray.700')
-  const bgColor = useColorModeValue('white', 'gray.800')
-  const hoverBgColor = useColorModeValue('gray.50', 'gray.700')
 
   const handleViewProject = () => {
     navigate(getPath('project', project.name))
@@ -37,26 +35,19 @@ export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
   const fundingLabel = getFundingLabel()
 
   return (
-    <VStack
+    <CardLayout
       width="100%"
-      borderWidth="1px"
-      borderColor={borderColor}
-      borderRadius="8px"
-      bg={bgColor}
-      overflow="hidden"
+      dense
       spacing={0}
       alignItems="stretch"
-      boxShadow="sm"
-      transition="all 0.2s"
+      transition="transform 0.2s ease, box-shadow 0.2s ease"
+      cursor="pointer"
       _hover={{
-        bg: hoverBgColor,
-        boxShadow: 'md',
         transform: 'translateY(-2px)',
       }}
-      cursor="pointer"
       onClick={handleViewProject}
     >
-      <Box width="100%" aspectRatio={1} position="relative">
+      <Box width="100%" aspectRatio={1} position="relative" overflow="hidden">
         <ImageWithReload
           width="100%"
           height="100%"
@@ -95,6 +86,6 @@ export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
           {t('View Project')}
         </Button>
       </VStack>
-    </VStack>
+    </CardLayout>
   )
 }

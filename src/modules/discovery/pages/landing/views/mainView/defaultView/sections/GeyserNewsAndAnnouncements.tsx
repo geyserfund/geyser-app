@@ -7,6 +7,7 @@ import { PiArrowLeft, PiArrowRight } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { useAcelerandoVipLeaderboardQuery } from '@/types/index.ts'
@@ -45,7 +46,6 @@ const AnnouncementCard = ({
   to,
 }: AnnouncementCardProps) => {
   const navigate = useNavigate()
-  const borderColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
   const descriptionColor = 'neutralAlpha.11'
   const eyebrowBackground = useColorModeValue('utils.pbg', 'neutral1.2')
@@ -63,18 +63,14 @@ const AnnouncementCard = ({
   }
 
   return (
-    <VStack
+    <CardLayout
       width="100%"
       height="100%"
       alignItems="start"
       spacing={0}
+      dense
       backgroundColor={cardBackground}
-      borderWidth="1px"
-      borderColor={borderColor}
-      borderRadius="12px"
-      boxShadow="sm"
       cursor="pointer"
-      overflow="hidden"
       role="group"
       tabIndex={0}
       onClick={handleNavigate}
@@ -84,8 +80,8 @@ const AnnouncementCard = ({
           handleNavigate()
         }
       }}
-      _hover={{ boxShadow: 'md', transform: 'translateY(-2px)' }}
-      transition="all 0.2s ease"
+      _hover={{ transform: 'translateY(-2px)' }}
+      transition="transform 0.2s ease, box-shadow 0.2s ease"
     >
       <Box width="100%" padding={2}>
         <Box width="100%" position="relative">
@@ -94,7 +90,7 @@ const AnnouncementCard = ({
             alt={title}
             width="100%"
             aspectRatio={1.45}
-            borderRadius="8px"
+            borderRadius="innerCard"
             objectFit="cover"
             objectPosition={imagePosition}
           />
@@ -106,9 +102,7 @@ const AnnouncementCard = ({
             borderRadius="md"
             paddingX={2}
             paddingY={1}
-            boxShadow="sm"
-            borderWidth="1px"
-            borderColor={borderColor}
+            boxShadow="card"
             maxWidth="calc(100% - 32px)"
           >
             <Body size="xs" medium color={eyebrowColor} isTruncated>
@@ -137,7 +131,7 @@ const AnnouncementCard = ({
           {footer}
         </Box>
       </VStack>
-    </VStack>
+    </CardLayout>
   )
 }
 

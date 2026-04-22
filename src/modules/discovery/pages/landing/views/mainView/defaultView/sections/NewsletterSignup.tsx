@@ -2,6 +2,7 @@ import { HStack, Icon, StackProps, useColorModeValue, VStack } from '@chakra-ui/
 import { t } from 'i18next'
 import { PiEnvelopeSimple } from 'react-icons/pi'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography/index.ts'
 import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 
@@ -14,14 +15,12 @@ export const NewsletterSignup = (props: StackProps) => {
   const bodyColor = 'neutralAlpha.11'
 
   return (
-    <VStack
+    <CardLayout
       w="full"
       alignSelf="center"
       spacing={6}
       padding={8}
-      borderWidth="1px"
       borderColor={borderColor}
-      borderRadius="12px"
       bg={bgColor}
       {...props}
     >
@@ -52,6 +51,6 @@ export const NewsletterSignup = (props: StackProps) => {
           minWidth: '100px',
         }}
       />
-    </VStack>
+    </CardLayout>
   )
 }

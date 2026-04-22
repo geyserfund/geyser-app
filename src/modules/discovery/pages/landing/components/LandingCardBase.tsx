@@ -3,8 +3,8 @@ import { t } from 'i18next'
 import { PiClockCountdown, PiMapPin } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
+import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -277,7 +277,7 @@ const CardImage = ({
       height="100%"
       aspectRatio={compact ? 1 : 1.45}
       objectFit="cover"
-      borderRadius="8px"
+      borderRadius="innerCard"
       src={project.thumbnailImage || ''}
       alt={`${project.title}-header-image`}
     />
@@ -379,9 +379,7 @@ export const LandingCardBase = ({
       spacing={0}
       flex={1}
       position="relative"
-      background="transparent"
-      boxShadow={useCompactLayout ? 'none' : '0px 2px 12px rgba(0, 0, 0, 0.08)'}
-      borderRadius="12px"
+      borderRadius="card"
       overflow="hidden"
       alignItems={useCompactLayout ? 'stretch' : undefined}
       {...rest}
@@ -563,7 +561,7 @@ export const LandingCardBaseSkeleton = () => {
   return (
     <InteractiveCardLayout padding="0px" width="full" height="100%" direction="column" spacing={0} flex={1}>
       <Box width="full" padding={2}>
-        <SkeletonLayout width="100%" aspectRatio={1.45} borderRadius="8px" />
+        <SkeletonLayout width="100%" aspectRatio={1.45} borderRadius="innerCard" />
       </Box>
 
       <VStack

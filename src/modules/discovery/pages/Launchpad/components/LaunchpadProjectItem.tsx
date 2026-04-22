@@ -121,7 +121,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           height="100%"
           aspectRatio={1}
           objectFit="cover"
-          borderRadius="8px"
+          borderRadius="innerCard"
           src={project.thumbnailImage}
           alt={`${project.title}-header-image`}
         />
@@ -183,7 +183,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
 export const LaunchpadProjectItemSkeleton = () => {
   return (
     <InteractiveCardLayout padding="0px" width={'auto'} direction={'column'} spacing={4} flex={1} position="relative">
-      <Skeleton h="160px" borderRadius="8px" w="full" />
+      <Skeleton h="160px" borderRadius="innerCard" w="full" />
 
       <VStack spacing="4" align="stretch" flex={1}>
         <SkeletonLayout height="24px" width="80%" />

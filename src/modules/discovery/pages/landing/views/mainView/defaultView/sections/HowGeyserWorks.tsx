@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { PiArrowDown, PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -102,8 +103,7 @@ const ImpactFundPills = () => {
 
 /** Section explaining the two ways to support Bitcoin adoption on Geyser. */
 export const HowGeyserWorks = () => {
-  const cardBg = useColorModeValue('white', 'neutral1.3')
-  const cardBorderColor = useColorModeValue('neutral1.6', 'neutral1.4')
+  const cardBg = useColorModeValue('utils.pbg', 'neutral1.3')
   const subtitleColor = 'neutralAlpha.11'
 
   return (
@@ -117,16 +117,13 @@ export const HowGeyserWorks = () => {
 
       <VStack w="full" spacing={5}>
         {/* Fund individual projects card */}
-        <VStack
+        <CardLayout
           w="full"
           align={{ base: 'start', md: 'center' }}
           spacing={{ base: 5, md: 8 }}
           px={{ base: 5, md: 8, lg: 10 }}
           py={{ base: 4, md: 6, lg: 7 }}
           bg={cardBg}
-          borderWidth="1px"
-          borderColor={cardBorderColor}
-          borderRadius="12px"
         >
           <VStack w="full" align="start" spacing={1}>
             <H3 size={{ base: 'md', lg: 'xl' }} bold>
@@ -147,23 +144,19 @@ export const HowGeyserWorks = () => {
             variant="solid"
             colorScheme="primary1"
             fontWeight={700}
-            borderRadius="8px"
           >
             {t('Explore projects')}
           </Button>
-        </VStack>
+        </CardLayout>
 
         {/* Contribute to an Impact Fund card */}
-        <VStack
+        <CardLayout
           w="full"
           align={{ base: 'start', md: 'center' }}
           spacing={{ base: 5, md: 8 }}
           px={{ base: 5, md: 8, lg: 10 }}
           py={{ base: 4, md: 6, lg: 7 }}
           bg={cardBg}
-          borderWidth="1px"
-          borderColor={cardBorderColor}
-          borderRadius="12px"
         >
           <VStack w="full" align="start" spacing={1}>
             <H3 size={{ base: 'md', lg: 'xl' }} bold>
@@ -184,12 +177,11 @@ export const HowGeyserWorks = () => {
             variant="solid"
             colorScheme="primary1"
             fontWeight={700}
-            borderRadius="8px"
             rightIcon={<Icon as={PiArrowRight} />}
           >
             {t('Fund an impact fund')}
           </Button>
-        </VStack>
+        </CardLayout>
       </VStack>
     </VStack>
   )
