@@ -408,7 +408,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       creatorAddress: accountKeys.address,
       amount: satsToWei(amount),
       nonce: payoutMetadata?.nonce || 0,
-      deadline: payoutPrepareData?.payoutPrepare.payout.expiresAt || 0,
+      deadline: payout?.expiresAt || 0,
       processingFee: 0n,
       lockCallData,
       rskPrivateKey: accountKeys.privateKey,
@@ -418,12 +418,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const amount = payoutPrepareData?.payoutPrepare.payout.amount || 0
+      const amount = payout?.amount || 0
+      const payoutId = payout?.id
 
       const { data: payoutPaymentPrepareResponse } = await payoutPaymentPrepare({
         variables: {
           input: {
-            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
+            payoutId,
             payoutPaymentInput: {
               rskToLightningSwap: {
                 lightningAddress: data.lightningAddress,
@@ -485,7 +486,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       await payoutPaymentInitiate({
         variables: {
           input: {
-            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
+            payoutId,
             paymentId: payment.id,
             signature,
             callDataHex,
@@ -557,12 +558,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         password: data.accountPassword || '',
       })
 
-      const amount = payoutPrepareData?.payoutPrepare.payout.amount || 0
+      const amount = payout?.amount || 0
+      const payoutId = payout?.id
 
       const { data: payoutPaymentPrepareResponse } = await payoutPaymentPrepare({
         variables: {
           input: {
-            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
+            payoutId,
             payoutPaymentInput: {
               rskToOnChainSwap: {
                 onChainAddress: data.bitcoinAddress || undefined,
@@ -626,7 +628,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       await payoutPaymentInitiate({
         variables: {
           input: {
-            payoutId: payoutPrepareData?.payoutPrepare.payout.id,
+            payoutId,
             paymentId: payment.id,
             signature,
             callDataHex,
