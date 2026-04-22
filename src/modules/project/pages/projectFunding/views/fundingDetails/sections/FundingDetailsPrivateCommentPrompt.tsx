@@ -31,7 +31,7 @@ export const FundingDetailsPrivateCommentPrompt = () => {
     new Set(selectedRewards.flatMap((reward) => reward.privateCommentPrompts || [])),
   )
   return (
-    <CardLayout width="100%" mobileDense borderRadius="16px">
+    <CardLayout width="100%" mobileDense>
       <H1 size="2xl" bold sx={{ textWrap: 'balance' }}>
         {t('Private comments')}
       </H1>

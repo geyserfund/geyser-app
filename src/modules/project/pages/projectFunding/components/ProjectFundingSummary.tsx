@@ -313,7 +313,7 @@ export const ProjectFundingSummary = ({
                     height="20px"
                     width="20px"
                     minWidth="20px"
-                    borderRadius="8px"
+                    borderRadius="innerCard"
                     src={item?.image}
                     alt={item?.label}
                   />

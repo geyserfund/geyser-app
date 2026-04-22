@@ -155,7 +155,7 @@ const ShareProjectCard = ({ heroLink, heroId, twitterShareText, handleCopy }: Li
   const { t } = useTranslation()
 
   return (
-    <CardLayout w={'full'} borderRadius="16px">
+    <CardLayout w={'full'}>
       <H2 bold>{t('Share Project')}</H2>
       <Body>{t('Spread the word to help this project become a success.')}</Body>
       <LinkActionsSection

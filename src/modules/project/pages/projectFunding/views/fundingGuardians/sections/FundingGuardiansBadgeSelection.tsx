@@ -71,7 +71,7 @@ export const FundingGuardiansBadgeSelection = () => {
   }
 
   return (
-    <CardLayout mobileDense width="100%" position="relative" borderRadius="16px">
+    <CardLayout mobileDense width="100%" position="relative">
       <VStack w="full" alignItems="flex-start" spacing={6}>
         {/* Header Section */}
         <VStack w="full" alignItems="flex-start" spacing={0}>
@@ -111,7 +111,7 @@ const UserProfileSection = ({ user, selectedBadges }: { user: any; selectedBadge
     <HStack w="full" justifyContent="center">
       <CardLayout
         padding="12px 8px"
-        borderRadius="18px"
+        borderRadius="12px"
         flexDirection="row"
         spacing={6}
         alignItems="center"

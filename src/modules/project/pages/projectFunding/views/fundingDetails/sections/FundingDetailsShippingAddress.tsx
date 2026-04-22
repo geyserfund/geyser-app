@@ -157,7 +157,7 @@ export const FundingDetailsShippingAddress = ({ form }: { form: UseFormReturn<Sh
   if (!fundingFormState.needsShipping || (shippingAvailability && shippingAvailability.length === 0)) return null
 
   return (
-    <CardLayout mobileDense width="100%" position="relative" borderRadius="16px">
+    <CardLayout mobileDense width="100%" position="relative">
       <VStack w="full" alignItems="flex-start" spacing={4}>
         <VStack w="full" alignItems="flex-start" spacing={0}>
           <H1 size="2xl" bold sx={{ textWrap: 'balance' }}>

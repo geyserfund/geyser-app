@@ -44,7 +44,7 @@ export const FundingMatchingBanner = ({ isSatoshi, size = 'lg' }: FundingMatchin
       spacing={{ base: 2, sm: 4 }}
       px={5}
       py={4}
-      borderRadius="12px"
+      borderRadius="innerCard"
       border="1px solid"
       borderColor={borderColor}
       bg={backgroundColor}

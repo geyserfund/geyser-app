@@ -42,15 +42,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
-      <CardLayout
-        dense
-        w="full"
-        direction="column"
-        spacing={0}
-        overflowX={'hidden'}
-        justifyContent="space-between"
-        borderRadius="16px"
-      >
+      <CardLayout dense w="full" direction="column" spacing={0} overflowX={'hidden'} justifyContent="space-between">
         <Box width="full" maxWidth={'100%'} overflow={'hidden'}>
           <ImageWithReload
             src={reward.images[0] || ''}
@@ -149,7 +141,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 backgroundColor={'utils.pbg'}
                 border="1px solid"
                 borderColor={'neutral1.6'}
-                borderRadius="6px"
+                borderRadius="4px"
                 alignItems="center"
                 spacing={1}
               >

@@ -47,7 +47,7 @@ export const FundingDetailsUserComment = () => {
 
   return (
     <>
-      <CardLayout mobileDense width="100%" position="relative" borderRadius="16px">
+      <CardLayout mobileDense width="100%" position="relative">
         <H1 size="2xl" bold sx={{ textWrap: 'balance' }}>
           {t('Public comment')}
         </H1>

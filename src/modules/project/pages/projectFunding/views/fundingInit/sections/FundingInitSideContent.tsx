@@ -29,7 +29,7 @@ export const FundingInitBottomContent = () => {
 
 export const FundingInitSideContent = () => {
   return (
-    <CardLayout w="full" h="full" padding={0} borderRadius="16px">
+    <CardLayout w="full" h="full" padding={0}>
       <FundingInitSummary />
     </CardLayout>
   )

@@ -133,7 +133,7 @@ export const DonationInput = () => {
   }
 
   return (
-    <CardLayout w="full" spacing={4} alignItems="stretch" borderRadius="16px">
+    <CardLayout w="full" spacing={4} alignItems="stretch">
       <H1 size="xl" bold alignSelf="start" sx={{ textWrap: 'balance' }}>
         {donationTitle}
       </H1>
@@ -141,13 +141,18 @@ export const DonationInput = () => {
       {canUseRecurringFunding && (
         <VStack alignItems="stretch" spacing={2}>
           <HStack spacing={3} alignItems="stretch">
-            <Box flex={1} p="1px" borderRadius="xl" bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}>
+            <Box
+              flex={1}
+              p="1px"
+              borderRadius="innerCard"
+              bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}
+            >
               <Button
                 w="full"
                 h="calc(3.5rem - 2px)"
                 fontSize="lg"
                 fontWeight="700"
-                borderRadius="calc(var(--chakra-radii-xl) - 1px)"
+                borderRadius="5px"
                 variant="ghost"
                 bgGradient={!isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
                 color={!isRecurringMode ? selectedTextColor : unselectedTextColor}
@@ -169,13 +174,18 @@ export const DonationInput = () => {
               </Button>
             </Box>
 
-            <Box flex={1} p="1px" borderRadius="xl" bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}>
+            <Box
+              flex={1}
+              p="1px"
+              borderRadius="innerCard"
+              bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}
+            >
               <Button
                 w="full"
                 h="calc(3.5rem - 2px)"
                 fontSize="lg"
                 fontWeight="700"
-                borderRadius="calc(var(--chakra-radii-xl) - 1px)"
+                borderRadius="5px"
                 variant="ghost"
                 leftIcon={<Icon as={PiHeartFill} color="primary1.9" boxSize={4} />}
                 bgGradient={isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
@@ -248,7 +258,7 @@ export const DonationInput = () => {
                 fontWeight="bold"
                 px={2}
                 py={0.2}
-                borderRadius="md"
+                borderRadius="base"
                 position="absolute"
                 bottom="-8px"
                 left="50%"

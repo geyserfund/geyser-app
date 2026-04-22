@@ -10,7 +10,7 @@ export const FundingPaymentBottomContent = () => {
 
 export const FundingPaymentSideContent = () => {
   return (
-    <CardLayout w="full" h="full" padding={0} borderRadius="16px">
+    <CardLayout w="full" h="full" padding={0}>
       <FundingPaymentsSummary />
     </CardLayout>
   )

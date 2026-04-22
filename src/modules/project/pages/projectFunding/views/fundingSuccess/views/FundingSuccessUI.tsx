@@ -63,7 +63,7 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
         </Button>
       }
     >
-      <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center" borderRadius="16px">
+      <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
         {!isPending && (
           <Confetti
             gravity={0.07}

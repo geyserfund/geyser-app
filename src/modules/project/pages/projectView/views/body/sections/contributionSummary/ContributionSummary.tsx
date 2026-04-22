@@ -37,9 +37,10 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
       minHeight="fit-content"
       flexShrink={0}
       backgroundColor="utils.pbg"
-      border="1px solid"
+      border="0.5px solid"
       borderColor="neutral1.6"
-      borderRadius="8px"
+      borderRadius="card"
+      boxShadow="card"
       overflow="hidden"
       {...props}
     >
