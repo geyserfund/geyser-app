@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, HStack, IconButton } from '@chakra-ui/react'
+import { ButtonGroup, HStack, IconButton } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom, useAtomValue } from 'jotai'
 import { PiQuestion } from 'react-icons/pi'
@@ -7,6 +7,7 @@ import { Tooltip } from '@/components/ui/Tooltip.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { recurringFundingModes } from '@/modules/project/recurring/graphql.ts'
+import { SelectablePillButton } from '@/shared/components/buttons/SelectablePillButton.tsx'
 import { H3 } from '@/shared/components/typography'
 import { useGetUserIpCountryQuery } from '@/types/index.ts'
 
@@ -64,17 +65,16 @@ export const GeyserTipInput = () => {
           />
         </Tooltip>
       </HStack>
-      <ButtonGroup size="md" variant="outline" spacing={3}>
+      <ButtonGroup spacing={3}>
         {tipOptions.map((percent) => (
-          <Button
+          <SelectablePillButton
             key={percent}
             onClick={() => setGeyserTipPercent(percent)}
-            variant={'soft'}
-            colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral1'}
+            isSelected={geyserTipPercent === percent}
             w={{ base: '50px', sm: '60px' }}
           >
             {percent}%
-          </Button>
+          </SelectablePillButton>
         ))}
       </ButtonGroup>
     </HStack>

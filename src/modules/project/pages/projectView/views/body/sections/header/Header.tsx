@@ -9,6 +9,7 @@ import {
   SkeletonText,
   Stack,
   StackProps,
+  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -61,6 +62,12 @@ interface HeaderDetailsProps extends StackProps {
 const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner } = useProjectAtom()
   const projectImages = project.images || []
+
+  const thumbnailOutlineColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.1)')
+  const iconButtonPressStyles = {
+    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
+    '&:active': { transform: 'scale(0.96)' },
+  }
 
   const [subscribers, setSubscribers] = useState(0)
   const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
@@ -123,11 +130,12 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
           alignSelf={'start'}
           onClick={onOpen}
           cursor={'pointer'}
+          boxShadow={`inset 0 0 0 1px ${thumbnailOutlineColor}`}
         />
       </Box>
       <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
         <HStack w="full" alignItems="center" gap={2}>
-          <H1 size={'2xl'} medium>
+          <H1 size={'2xl'} medium sx={{ textWrap: 'balance' }}>
             {project.title}
           </H1>
           <NonProjectProjectIcon taxProfile={projectOwner?.user?.taxProfile} />
@@ -141,14 +149,18 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
           </Body>
         ) : (
           <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-            <Body size="md" medium light>
+            <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {`${t('Contributors')}: ${project.fundersCount}`}
             </Body>
-            <Body size="md" medium light>
+            <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {`${t('Followers')}: ${project.followersCount}`}
             </Body>
 
-            {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
+            {subscribers && (
+              <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
+                {`${subscribers || 0} ${t('subscribers')}`}
+              </Body>
+            )}
           </HStack>
         )}
 
@@ -160,6 +172,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
               variant="soft"
               colorScheme="neutral1"
               onClick={handleClickDetails}
+              sx={iconButtonPressStyles}
             />
             <IconButton
               aria-label="Go to project Lighting QR"
@@ -167,6 +180,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
               variant="soft"
               colorScheme="neutral1"
               onClick={handleClickLightingQR}
+              sx={iconButtonPressStyles}
             />
             <FollowButton project={project} withLabel />
             <ShareProjectButton />
@@ -193,12 +207,12 @@ const MobileBalanceInfo = () => {
     return (
       <>
         {project.balance > 0 && (
-          <Body size="lg" bold>
+          <Body size="lg" bold sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {commaFormatted(project.balance)}
             <Body as="span">{' sats'}</Body>
           </Body>
         )}
-        <Body size="sm">
+        <Body size="sm" sx={{ fontVariantNumeric: 'tabular-nums' }}>
           {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
           <Body as="span" light>
             {t('raised')}
@@ -229,6 +243,8 @@ export const Header = () => {
   const { project, isProjectOwner, loading, partialUpdateProject } = useProjectAtom()
   const { wallet } = useWalletAtom()
   const projectImages = project.images || []
+
+  const headerMediaOutlineColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.1)')
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -284,7 +300,20 @@ export const Header = () => {
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
         <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
 
-        {projectImages.length === 1 && <Box>{renderImageOrVideo()}</Box>}
+        {projectImages.length === 1 && (
+          <Box
+            position="relative"
+            _after={{
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              pointerEvents: 'none',
+              boxShadow: `inset 0 0 0 1px ${headerMediaOutlineColor}`,
+            }}
+          >
+            {renderImageOrVideo()}
+          </Box>
+        )}
 
         {projectImages.length > 1 && <MediaCarousel altText={'Project header image'} links={projectImages} />}
         <HeaderDetails onOpen={onOpen} summaryLoading={summaryLoading} summaryError={Boolean(summaryError)} />

@@ -26,7 +26,7 @@ export const Story = () => {
   return (
     <BodySectionLayout title={t('Story')}>
       <CardLayout w="full" direction="column" spacing={5} paddingX={{ base: 3, lg: 6 }} paddingY={{ base: 6, lg: 8 }}>
-        <Body bold size="2xl">
+        <Body bold size="2xl" sx={{ textWrap: 'balance' }}>
           {project.shortDescription}
         </Body>
         {project?.description && (

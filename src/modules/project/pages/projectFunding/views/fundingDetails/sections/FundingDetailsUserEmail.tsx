@@ -169,9 +169,9 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   return (
     <VStack w="full" spacing={4}>
       {showEmailComponent && (
-        <CardLayout mobileDense width="100%" position="relative">
+        <CardLayout mobileDense width="100%" position="relative" borderRadius="16px">
           <VStack w="full" alignItems="flex-start" spacing={0}>
-            <H1 size="2xl" bold>
+            <H1 size="2xl" bold sx={{ textWrap: 'balance' }}>
               {t('Add Email')}
             </H1>
             <Body size="sm" light>
@@ -273,10 +273,10 @@ export const ConnectProfileCard = ({
   onChange: (checked: boolean) => void
 }) => {
   return (
-    <CardLayout mobileDense width="100%" position="relative">
+    <CardLayout mobileDense width="100%" position="relative" borderRadius="16px">
       <VStack w="full" alignItems="flex-start" spacing={0}>
         <HStack w="full" justifyContent="space-between">
-          <H1 size="2xl" bold>
+          <H1 size="2xl" bold sx={{ textWrap: 'balance' }}>
             ✨ {t('Follow this project for exclusive updates')}
           </H1>
           <Switch

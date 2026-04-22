@@ -71,7 +71,7 @@ export const FundingGuardiansBadgeSelection = () => {
   }
 
   return (
-    <CardLayout mobileDense width="100%" position="relative">
+    <CardLayout mobileDense width="100%" position="relative" borderRadius="16px">
       <VStack w="full" alignItems="flex-start" spacing={6}>
         {/* Header Section */}
         <VStack w="full" alignItems="flex-start" spacing={0}>

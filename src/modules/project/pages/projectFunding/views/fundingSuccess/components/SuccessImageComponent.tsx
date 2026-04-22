@@ -59,7 +59,7 @@ const SuccessfulContributionBanner = ({ isPending }: { isPending: boolean }) => 
       </HStack>
 
       <VStack w="full" spacing={1} zIndex={1}>
-        <H3 light fontSize="2xl" regular w="full" textAlign={'center'}>
+        <H3 light fontSize="2xl" regular w="full" textAlign={'center'} sx={{ textWrap: 'balance' }}>
           {isPending
             ? user.username
               ? t('successfully submitted contribution to')
@@ -68,7 +68,7 @@ const SuccessfulContributionBanner = ({ isPending }: { isPending: boolean }) => 
             ? t('successfully contributed to')
             : t('You successfully contributed to')}
         </H3>
-        <H3 dark bold fontSize="4xl" textAlign="center">
+        <H3 dark bold fontSize="4xl" textAlign="center" sx={{ textWrap: 'balance' }}>
           {project.title}
         </H3>
       </VStack>

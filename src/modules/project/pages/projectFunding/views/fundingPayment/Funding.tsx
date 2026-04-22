@@ -31,7 +31,7 @@ export const Funding = () => {
         minHeight: derivedDimensions.heightAfterTopNavBar,
       }}
     >
-      <CardLayout mobileDense flex={6} w="full" h="full" justifyContent="space-between">
+      <CardLayout mobileDense flex={6} w="full" h="full" justifyContent="space-between" borderRadius="16px">
         <Outlet />
       </CardLayout>
     </FundingLayout>

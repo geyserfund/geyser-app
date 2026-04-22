@@ -42,7 +42,15 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
-      <CardLayout dense w="full" direction="column" spacing={0} overflowX={'hidden'} justifyContent="space-between">
+      <CardLayout
+        dense
+        w="full"
+        direction="column"
+        spacing={0}
+        overflowX={'hidden'}
+        justifyContent="space-between"
+        borderRadius="16px"
+      >
         <Box width="full" maxWidth={'100%'} overflow={'hidden'}>
           <ImageWithReload
             src={reward.images[0] || ''}
@@ -54,19 +62,19 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
         </Box>
         <VStack padding={4} justifyContent="space-between" overflowX={'hidden'}>
           <VStack width="full" alignItems={'start'}>
-            <Body width="full" size="md" medium>
+            <Body width="full" size="md" medium sx={{ textWrap: 'balance' }}>
               {reward.name}
             </Body>
             <HStack w="full" spacing={3} flexWrap={'wrap'}>
               <HStack justifyContent="start" spacing={3}>
-                <Body size="xs" medium muted>
+                <Body size="xs" medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
                     {reward.sold}
                   </Box>
                 </Body>
                 {reward.maxClaimable && (
-                  <Body size="xs" medium muted>
+                  <Body size="xs" medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {t('Available')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
                       {reward.maxClaimable - reward.sold - count}
@@ -101,21 +109,21 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
             >
               {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
                 <>
-                  <Body bold dark>{`$${reward.cost / 100}`}</Body>
-                  <Body medium muted>
+                  <Body bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>{`$${reward.cost / 100}`}</Body>
+                  <Body medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`(${formatSatsAmount(reward.cost)})`}
                   </Body>
                 </>
               ) : (
                 <>
-                  <Body bold dark>
+                  <Body bold dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`${reward.cost.toLocaleString()}`}
                     <Box as="span" color={'neutral1.9'}>
                       {' '}
                       sats
                     </Box>
                   </Body>
-                  <Body medium muted>
+                  <Body medium muted sx={{ fontVariantNumeric: 'tabular-nums' }}>
                     {`(${formatUsdAmount(reward.cost)})`}
                   </Body>
                 </>
@@ -129,6 +137,10 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 colorScheme="primary1"
                 onClick={addRewardToBasket}
                 isDisabled={!isAvailable}
+                sx={{
+                  transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+                  '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+                }}
               >
                 {t('Buy')}
               </Button>
@@ -148,8 +160,12 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                   variant="ghost"
                   icon={<PiMinus />}
                   onClick={removeRewardFromBasket}
+                  sx={{
+                    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
+                    '&:active:not(:disabled)': { transform: 'scale(0.9)' },
+                  }}
                 />
-                <Body size="md" px={1} pt="2px" medium>
+                <Body size="md" px={1} pt="2px" medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
                   {count}
                 </Body>
                 <IconButton
@@ -160,6 +176,10 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                   icon={<PiPlus />}
                   onClick={addRewardToBasket}
                   isDisabled={!isAvailable}
+                  sx={{
+                    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
+                    '&:active:not(:disabled)': { transform: 'scale(0.9)' },
+                  }}
                 />
               </HStack>
             )}

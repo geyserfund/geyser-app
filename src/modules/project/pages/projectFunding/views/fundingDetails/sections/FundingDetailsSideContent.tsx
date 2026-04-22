@@ -48,7 +48,7 @@ export const FundingDetailsBottomContent = ({ handleSubmit, addressForm }: Fundi
 
 export const FundingDetailsSideContent = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
   return (
-    <CardLayout w="full" h="full" padding={0}>
+    <CardLayout w="full" h="full" padding={0} borderRadius="16px">
       <FundingDetailsSummary handleSubmit={handleSubmit} addressForm={addressForm} />
     </CardLayout>
   )

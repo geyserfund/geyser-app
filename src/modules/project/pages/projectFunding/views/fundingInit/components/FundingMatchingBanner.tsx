@@ -49,7 +49,14 @@ export const FundingMatchingBanner = ({ isSatoshi, size = 'lg' }: FundingMatchin
       borderColor={borderColor}
       bg={backgroundColor}
     >
-      <Body size={isCompactSize ? 'lg' : '4xl'} bold color={headlineColor} flexShrink={0} lineHeight="1">
+      <Body
+        size={isCompactSize ? 'lg' : '4xl'}
+        bold
+        color={headlineColor}
+        flexShrink={0}
+        lineHeight="1"
+        sx={{ fontVariantNumeric: 'tabular-nums' }}
+      >
         {headline}
       </Body>
       <VStack alignItems="start" spacing={0}>

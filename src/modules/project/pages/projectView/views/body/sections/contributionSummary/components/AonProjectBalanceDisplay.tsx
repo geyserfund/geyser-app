@@ -57,18 +57,18 @@ export const AonProjectBalanceDisplay = () => {
 
       <HStack w="full" justifyContent="space-between">
         <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
-          <Body size="2xl" bold dark lineHeight={1}>
+          <Body size="2xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {formatAmount(balance ?? 0, 'BTCSAT')}
           </Body>
 
           <Body size="md" light display="inline">
-            <Body as="span" dark medium>
+            <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {formatAmount(balanceUsdCent ?? 0, 'USDCENT')}
             </Body>
             {` ${t('raised')} `}
           </Body>
           <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
-            <Body size="xl" bold dark lineHeight={1}>
+            <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {project.fundersCount ?? 0}
             </Body>
             <Body size="md" light display="inline">
@@ -77,12 +77,12 @@ export const AonProjectBalanceDisplay = () => {
           </VStack>
         </VStack>
         <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
-          <Body size="lg" bold dark lineHeight={1}>
+          <Body size="lg" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
             {formatAmount(goalAmount ?? 0, 'BTCSAT')}
           </Body>
 
           <Body size="md" light display="inline">
-            <Body as="span" dark medium>
+            <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {formatUsdAmount(goalAmount ?? 0)}
             </Body>
             {` ${t('goal')} `}
@@ -90,7 +90,7 @@ export const AonProjectBalanceDisplay = () => {
 
           {timeLeft && (
             <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
-              <Body size="xl" bold dark lineHeight={1}>
+              <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
                 {timeLeft.value}
               </Body>
               <Body size="md" light display="inline">

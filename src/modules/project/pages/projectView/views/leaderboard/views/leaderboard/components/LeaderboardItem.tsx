@@ -50,7 +50,7 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
             {funder.user?.username || t('Anonymous')}
           </ProfileText>
           <HStack spacing={2}>
-            <Body size="sm">
+            <Body size="sm" sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {`${formatAmount(funder.contributionsTotalUsd, FormatCurrencyType.Usd)}`}{' '}
               <Body as="span" size="sm" muted>
                 {`(${commaFormatted(funder.contributionsTotal)} sats)`}
@@ -64,7 +64,7 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
                     {t('with')}
                   </Body>
                 )}
-                <Body size="sm" dark>
+                <Body size="sm" dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
                   {funder.contributionsCount}
                 </Body>
                 <Icon
@@ -82,7 +82,7 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
 
             {funder.commentsCount && funder.commentsCount > 0 && (
               <HStack spacing={0}>
-                <Body size="sm" dark>
+                <Body size="sm" dark sx={{ fontVariantNumeric: 'tabular-nums' }}>
                   {funder.commentsCount}
                 </Body>
                 <PiChatCircle fontSize={'12px'} />

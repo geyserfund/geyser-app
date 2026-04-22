@@ -89,7 +89,7 @@ export const FundingLaunchPayment = () => {
         minHeight: derivedDimensions.heightAfterTopNavBar,
       }}
     >
-      <CardLayout mobileDense flex={6} w="full" h="full">
+      <CardLayout mobileDense flex={6} w="full" h="full" borderRadius="16px">
         <VStack w="full" spacing={4}>
           <VStack w="full" alignItems="start">
             <SkeletonLayout height="26px" width="120px" />

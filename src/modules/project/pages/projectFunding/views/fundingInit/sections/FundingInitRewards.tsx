@@ -36,7 +36,7 @@ export const FundingInitRewards = ({ readOnly }: Props) => {
   return (
     <VStack width="100%" spacing={6}>
       <VStack w="full" spacing={2} alignItems="start">
-        <H2 size="xl" bold>
+        <H2 size="xl" bold sx={{ textWrap: 'balance' }}>
           {t('Support the project with a product ')}
         </H2>
 
