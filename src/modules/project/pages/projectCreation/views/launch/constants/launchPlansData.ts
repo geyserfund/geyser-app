@@ -30,15 +30,15 @@ export const getLaunchPlansData = (translate: TFunction): LaunchPlanData[] => [
   },
   {
     id: 'visibility-boost',
-    title: translate('Visibility Boost'),
+    title: translate('Launch Boost'),
     subtitle: translate(
-      'Get eyes on your project. Best for projects that already have an audience and are confident about your project.',
+      'Give your project a strong launch with coordinated exposure and expert feedback to optimize campaign setup.',
     ),
     price: translate('$60'),
     points: [
       { title: translate('1 week front-page feature') },
-      { title: translate('Newsletter placement') },
-      { title: translate('1 social post by Geyser socials') },
+      { title: translate('Newsletter placement + launch announcement on Geyser socials') },
+      { title: translate('Personalized launch feedback via email') },
     ],
     strategyValue: 'GROWTH_LAUNCH',
   },
