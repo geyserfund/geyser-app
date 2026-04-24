@@ -52,9 +52,17 @@ const waitForFundingTargetOrFail = async (
 
 /** Click the Contribute button on project page */
 export const clickContribute = async (page: Page) => {
-  const contributeButton = page.getByRole('button', { name: 'Contribute' })
-  await contributeButton.waitFor({ state: 'visible', timeout: 10000 })
-  await contributeButton.click()
+  const primaryContributeButton = page.getByTestId('contribute-button').first()
+  const fallbackContributeButton = page.getByRole('button', { name: /^Contribute$/i }).last()
+
+  await primaryContributeButton.waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined)
+
+  if (await primaryContributeButton.isVisible().catch(() => false)) {
+    await primaryContributeButton.click()
+  } else {
+    await fallbackContributeButton.waitFor({ state: 'visible', timeout: 10000 })
+    await fallbackContributeButton.click()
+  }
 
   // Wait for funding page to load - use input instead of conditional heading
   await page.getByTestId('donation-input').waitFor({ state: 'visible', timeout: 10000 })
@@ -117,8 +125,30 @@ export const clickCheckout = async (page: Page) => {
 
 /** Click the Onchain tab to switch payment method */
 export const clickOnchainTab = async (page: Page) => {
-  const onchainButton = page.getByRole('button', { name: 'Onchain' })
-  await onchainButton.waitFor({ state: 'visible' })
+  const onchainButton = page.getByRole('button', { name: /^Onchain$/i }).first()
+  const downloadButton = page.getByRole('button', { name: 'Download & Continue' }).first()
+  const downloadLink = page.getByRole('link', { name: 'Download & Continue' }).first()
+  const onchainPromptControl = downloadButton.or(downloadLink).first()
+
+  const nextStep = await Promise.race([
+    onchainPromptControl
+      .waitFor({ state: 'visible', timeout: 15000 })
+      .then(() => 'prompt')
+      .catch(() => null),
+    onchainButton
+      .waitFor({ state: 'visible', timeout: 15000 })
+      .then(() => 'tab')
+      .catch(() => null),
+  ])
+
+  if (nextStep === 'prompt') {
+    return
+  }
+
+  if (nextStep !== 'tab') {
+    throw new Error(`[Funding:onchain-tab] Could not find Onchain tab or onchain prompt. URL: ${page.url()}`)
+  }
+
   await onchainButton.click()
 }
 
@@ -147,7 +177,10 @@ export const clickDownloadAndContinue = async (page: Page) => {
 
 /** Click Copy Lightning Invoice button and return the invoice */
 export const clickCopyLightningInvoice = async (page: Page): Promise<string> => {
-  const copyButton = page.locator('#copy-lightning-invoice-button')
+  const copyButton = page
+    .locator('#copy-lightning-invoice-button')
+    .or(page.getByRole('button', { name: /Copy invoice/i }))
+    .first()
   await waitForFundingTargetOrFail(page, copyButton, 'copy-lightning-invoice')
   await copyButton.scrollIntoViewIfNeeded()
 
@@ -169,7 +202,10 @@ export const clickCopyLightningInvoice = async (page: Page): Promise<string> => 
 
 /** Click Copy Onchain Address button and return the BIP21 URI */
 export const clickCopyOnchainAddress = async (page: Page): Promise<string> => {
-  const copyButton = page.locator('#copy-onchain-address-button')
+  const copyButton = page
+    .locator('#copy-onchain-address-button')
+    .or(page.getByRole('button', { name: /Copy onchain address|Copy address/i }))
+    .first()
   await waitForFundingTargetOrFail(page, copyButton, 'copy-onchain-address')
   await copyButton.scrollIntoViewIfNeeded()
 

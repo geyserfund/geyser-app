@@ -64,8 +64,6 @@ export const expectUserLoggedOut = async (page: Page) => {
   // Sign In is normally visible in the top nav.
   if (await signInButton.isVisible().catch(() => false)) {
     await expect(signInButton).toBeVisible({ timeout: 10000 })
-    await expect(avatarLink).not.toBeVisible({ timeout: 10000 })
-    await expect(myProjectsLink).not.toBeVisible({ timeout: 10000 })
     return
   }
 

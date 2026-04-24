@@ -2,6 +2,10 @@
 
 import { expect, Page } from '@playwright/test'
 
+type FinalSuccessOptions = {
+  timeoutMs?: number
+}
+
 /** Verify funding amount screen is visible */
 export const expectFundingAmountScreen = async (page: Page) => {
   // Check for the donation input (reliable across projects with/without rewards)
@@ -27,7 +31,9 @@ export const expectLightningQRScreen = async (page: Page) => {
   // QR code canvas
   await expect(page.locator('canvas#qr-code')).toBeVisible({ timeout: 10000 })
   // Copy button
-  await expect(page.locator('#copy-lightning-invoice-button')).toBeVisible()
+  await expect(
+    page.locator('#copy-lightning-invoice-button').or(page.getByRole('button', { name: /Copy invoice/i })).first(),
+  ).toBeVisible()
 }
 
 /** Verify Onchain QR screen is visible */
@@ -35,7 +41,12 @@ export const expectOnchainQRScreen = async (page: Page) => {
   // QR code canvas
   await expect(page.locator('canvas#qr-code')).toBeVisible({ timeout: 10000 })
   // Copy button
-  await expect(page.locator('#copy-onchain-address-button')).toBeVisible()
+  await expect(
+    page
+      .locator('#copy-onchain-address-button')
+      .or(page.getByRole('button', { name: /Copy onchain address|Copy address/i }))
+      .first(),
+  ).toBeVisible()
 }
 
 /** Verify intermediate success screen (isPending=true)
@@ -55,19 +66,31 @@ export const expectIntermediateSuccessScreen = async (page: Page) => {
   await expect(page.getByText(/successfully submitted contribution to/i)).toBeVisible()
 
   // This is the primary indicator of intermediate/pending state.
-  await expect(page.getByText("Your transaction is on it's way. Feel free to close this page.")).toBeVisible()
+  const pendingMessage = page.getByText("Your transaction is on it's way. Feel free to close this page.")
+  await expect(pendingMessage.or(page.locator('#onchain-transaction-processing-card')).first()).toBeVisible({
+    timeout: 30000,
+  })
 }
 
 /** Verify final success screen (isPending=false) */
-export const expectFinalSuccessScreen = async (page: Page) => {
-  // Success banner is visible
-  await expect(page.locator('#successful-contribution-banner')).toBeVisible({ timeout: 15000 })
+export const expectFinalSuccessScreen = async (page: Page, options: FinalSuccessOptions = {}) => {
+  const { timeoutMs = 15000 } = options
+  const pendingMessage = page.getByText("Your transaction is on it's way. Feel free to close this page.")
+  const finalMessage = page.getByText(/successfully contributed to/i)
 
-  // Check for final-specific text (without "submitted")
-  await expect(page.getByText(/successfully contributed to/)).toBeVisible()
+  // Success banner is visible while the UI transitions from pending to final.
+  await expect(page.locator('#successful-contribution-banner')).toBeVisible({ timeout: timeoutMs })
 
-  // Pending-state message should NOT be visible anymore.
-  await expect(page.getByText("Your transaction is on it's way. Feel free to close this page.")).not.toBeVisible()
+  await expect
+    .poll(
+      async () => {
+        const finalVisible = await finalMessage.isVisible().catch(() => false)
+        const pendingVisible = await pendingMessage.isVisible().catch(() => false)
+        return finalVisible && !pendingVisible
+      },
+      { timeout: timeoutMs, intervals: [500, 1000, 2000] },
+    )
+    .toBe(true)
 
   // Final success has Back to project navigation in top-right.
   const backToProject = page

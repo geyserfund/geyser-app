@@ -60,9 +60,6 @@ export const getOnchainAddress = async (page: Page): Promise<{ address: string; 
   // Download refund file (navigates to QR page)
   await clickDownloadAndContinue(page)
 
-  // Wait for QR page to load - button visibility ensures page is ready
-  await page.waitForSelector('#copy-onchain-address-button', { state: 'visible', timeout: 10000 })
-
   // Copy BIP21 URI
   const bip21Uri = await clickCopyOnchainAddress(page)
 
