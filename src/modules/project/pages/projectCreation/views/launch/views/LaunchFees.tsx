@@ -61,7 +61,7 @@ const getTotalBitcoinAmount = (
     return paymentsData.onChainToRskSwap?.amountDue || 0
   }
 
-  return paymentsData.lightningToRskSwap?.amountDue || 0
+  return paymentsData.lightningToRskSwap?.amountDue || paymentsData.lightning?.amountDue || 0
 }
 
 /** Bitcoin payment screen for the launch fee across Lightning and on-chain payment paths. */
@@ -96,7 +96,7 @@ export const LaunchFees = ({
   const launchFeeUsd = LAUNCH_FEE_USD_CENTS[strategy] / 100
   const totalSats = getTotalBitcoinAmount(paymentMethod, paymentsData)
 
-  const lightningPaymentRequest = paymentsData.lightningToRskSwap?.paymentRequest || ''
+  const lightningPaymentRequest = paymentsData.lightningToRskSwap?.paymentRequest || paymentsData.lightning?.paymentRequest || ''
   const onChainAddress = paymentsData.onChainSwap?.address || paymentsData.onChainToRskSwap?.address || ''
   const onChainBip21Invoice =
     onChainAddress && totalSats

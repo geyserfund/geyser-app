@@ -9,10 +9,25 @@ const getEnv = (key: string, fallback?: string): string => {
   return value || fallback || ''
 }
 
+/** Get optional environment variable with fallback */
+const getOptionalEnv = (key: string, fallback = ''): string => {
+  const value = process.env[key]
+  return value || fallback
+}
+
+const getApiOriginFromAppUrl = (appUrl: string): string => {
+  const parsed = new URL(appUrl)
+  const host = parsed.hostname.startsWith('api.') ? parsed.hostname : `api.${parsed.hostname}`
+  return `${parsed.protocol}//${host}`
+}
+
 /** Test environment configuration */
 export const config = {
   /** Application URL */
   appUrl: getEnv('APP_URL', 'https://dev.geyser.fund'),
+
+  /** API URL used for direct GraphQL calls from tests */
+  apiUrl: getOptionalEnv('API_URL', getApiOriginFromAppUrl(getEnv('APP_URL', 'https://dev.geyser.fund'))),
   
   /** Lightning Network Daemon (LND) configuration */
   lnd: {
@@ -31,6 +46,12 @@ export const config = {
   projects: {
     lndTestProject: 'lndtestproject',
     lightningTestProject: 'lightningtestproject',
+  },
+
+  /** Project-creation test configuration */
+  projectCreation: {
+    reviewSubmitJwt: getOptionalEnv('PROJECT_REVIEW_SUBMIT_JWT'),
+    accountPassword: getOptionalEnv('PROJECT_CREATION_ACCOUNT_PASSWORD'),
   },
 } as const
 

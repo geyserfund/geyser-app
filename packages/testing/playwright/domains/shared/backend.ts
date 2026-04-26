@@ -18,7 +18,7 @@ const GRAPHQL_HEALTH_QUERY = {
   query: '{ __typename }',
 }
 
-const getApiOriginFromAppUrl = (appUrl: string): string => {
+export const getApiOriginFromAppUrl = (appUrl: string): string => {
   const parsed = new URL(appUrl)
   const host = parsed.hostname.startsWith('api.') ? parsed.hostname : `api.${parsed.hostname}`
   return `${parsed.protocol}//${host}`
@@ -79,7 +79,7 @@ export const checkLiveBackendAvailability = async (
   options: BackendCheckOptions = {},
 ): Promise<BackendCheckResult> => {
   const { requireAuth = false, timeoutMs = 8000 } = options
-  const apiOrigin = getApiOriginFromAppUrl(ENV.APP_URL)
+  const apiOrigin = ENV.API_URL || getApiOriginFromAppUrl(ENV.APP_URL)
 
   const graphql = await checkGraphql(request, apiOrigin, timeoutMs)
   if (!graphql.ok) {

@@ -21,11 +21,14 @@ export const TEST_PROJECTS = {
 /** Environment configuration shortcuts */
 export const ENV = {
   APP_URL: config.appUrl,
+  API_URL: config.apiUrl,
   LND_ENDPOINT: config.lnd.endpoint,
   LND_MACAROON_HEX: config.lnd.macaroonHex,
   BITCOIND_ENDPOINT: config.bitcoin.endpoint,
   BITCOIND_AUTH: config.bitcoin.auth,
   MINE_BLOCK_ADDRESS: config.bitcoin.mineBlockAddress,
+  PROJECT_REVIEW_SUBMIT_JWT: config.projectCreation.reviewSubmitJwt,
+  PROJECT_CREATION_ACCOUNT_PASSWORD: config.projectCreation.accountPassword,
 } as const
 
 /** Test user credentials for Nostr authentication */

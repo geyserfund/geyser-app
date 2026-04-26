@@ -294,41 +294,40 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       }
 
       if (method === LaunchPaymentMethod.Lightning) {
-        if (!prismEnabled) {
-          return {
-            ok: false,
-            error: t('Lightning launch payments require Prism configuration.'),
+        if (prismEnabled) {
+          const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
+
+          if (accountKeyResolution.status === 'prompt') {
+            return {
+              ok: false,
+              error: t('Please confirm your account password to continue.'),
+              reason: 'password_required',
+            }
           }
-        }
 
-        const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
-
-        if (accountKeyResolution.status === 'prompt') {
-          return {
-            ok: false,
-            error: t('Please confirm your account password to continue.'),
-            reason: 'password_required',
+          if (accountKeyResolution.status === 'error') {
+            return {
+              ok: false,
+              error: accountKeyResolution.error,
+              reason: 'password_required',
+            }
           }
-        }
 
-        if (accountKeyResolution.status === 'error') {
-          return {
-            ok: false,
-            error: accountKeyResolution.error,
-            reason: 'password_required',
+          const lightningPreImage = generatePreImageHash()
+          requestContext.accountKeys = accountKeyResolution.accountKeys
+          requestContext.lightningPreImage = lightningPreImage
+          paymentsInput.lightningToRskSwap = {
+            create: true,
+            boltz: {
+              claimPublicKey: accountKeyResolution.accountKeys.publicKey,
+              claimAddress: accountKeyResolution.accountKeys.address,
+              preimageHash: lightningPreImage.preimageHash,
+            },
           }
-        }
-
-        const lightningPreImage = generatePreImageHash()
-        requestContext.accountKeys = accountKeyResolution.accountKeys
-        requestContext.lightningPreImage = lightningPreImage
-        paymentsInput.lightningToRskSwap = {
-          create: true,
-          boltz: {
-            claimPublicKey: accountKeyResolution.accountKeys.publicKey,
-            claimAddress: accountKeyResolution.accountKeys.address,
-            preimageHash: lightningPreImage.preimageHash,
-          },
+        } else {
+          paymentsInput.lightning = {
+            create: true,
+          }
         }
       }
 

@@ -12,16 +12,26 @@ import {
 import { DEFAULT_AON_GOAL, DEFAULT_PROJECT_DETAILS, TEST_IMAGE_PATHS } from '../../domains/projectCreation/constants'
 import { expect, test } from '../../domains/projectCreation/fixtures'
 import { checkLiveBackendAvailability } from '../../domains/shared/backend'
+import { ENV } from '../../domains/shared/constants'
+import { acceptProjectReviewViaJwt } from '../../domains/projectCreation/backend'
 import {
   completeProjectDetails,
+  createAONProject,
   navigateToProjectCreation,
   selectAONStrategy,
   setAONGoal,
 } from '../../domains/projectCreation/flows'
+import {
+  continueFromAcceptedReview,
+  continueFromRewardsToLaunchReview,
+  payLaunchFeeAndReachPublishStep,
+  publishProjectAndAssertLive,
+  submitProjectForReviewInUi,
+} from '../../domains/projectCreation/launchFlow'
 import { AONGoalOptions, ProjectDetailsOptions } from '../../domains/projectCreation/types'
 
 test.describe.configure({ mode: 'serial' })
-test.setTimeout(240000)
+test.setTimeout(420000)
 
 test.describe('AON Project Creation - Fixture', () => {
   test('should create AON project with minimal required fields using fixture', async ({ page, aonProject }) => {
@@ -72,6 +82,44 @@ test.describe('AON Project Creation - Flow', () => {
     // Verify project was created and rewards page is visible
     await expectProjectCreated(page, projectDetails.name)
     await expect(page.getByRole('button', { name: 'Create product' })).toBeVisible()
+  })
+
+  test('should complete full launch after review acceptance and launch-fee payment', async ({ page }) => {
+    test.skip(
+      !ENV.PROJECT_REVIEW_SUBMIT_JWT,
+      'Skipping full launch flow: PROJECT_REVIEW_SUBMIT_JWT is required for backend review acceptance.',
+    )
+
+    const uniqueSuffix = `${Date.now()}-${Math.floor(Math.random() * 1000)}`
+    const projectDetails: ProjectDetailsOptions = {
+      ...DEFAULT_PROJECT_DETAILS,
+      name: `test-aon-full-launch-${uniqueSuffix}`,
+      thumbnailImage: TEST_IMAGE_PATHS.thumbnail,
+      headerImages: [TEST_IMAGE_PATHS.header],
+    }
+
+    const createdProject = await createAONProject(page, projectDetails, DEFAULT_AON_GOAL)
+
+    await continueFromRewardsToLaunchReview(page, {
+      accountPassword: ENV.PROJECT_CREATION_ACCOUNT_PASSWORD,
+    })
+
+    await submitProjectForReviewInUi(page)
+
+    await acceptProjectReviewViaJwt(page.request, {
+      projectId: createdProject.projectId,
+      reviewSubmitJwt: ENV.PROJECT_REVIEW_SUBMIT_JWT,
+    })
+
+    await continueFromAcceptedReview(page)
+
+    const paymentMethod = await payLaunchFeeAndReachPublishStep(page, {
+      accountPassword: ENV.PROJECT_CREATION_ACCOUNT_PASSWORD,
+    })
+
+    expect(['lightning', 'onchain']).toContain(paymentMethod)
+
+    await publishProjectAndAssertLive(page, createdProject.projectName)
   })
 
   test('should validate required fields on project details form', async ({ page }) => {
