@@ -1,4 +1,5 @@
 /** Atomic project creation actions for Playwright tests */
+/* eslint-disable no-await-in-loop */
 
 import { Page } from '@playwright/test'
 
@@ -308,15 +309,22 @@ export const fillAONGoalAmount = async (page: Page, amountSats: number) => {
   await addGoalButton.waitFor({ state: 'visible', timeout: 10000 })
   await addGoalButton.click()
 
-  const goalModal = page.getByRole('dialog').filter({ hasText: /Create goal|Edit goal/i }).first()
+  const goalModal = page
+    .getByRole('dialog')
+    .filter({ hasText: /Create goal|Edit goal/i })
+    .first()
   await goalModal.waitFor({ state: 'visible', timeout: 10000 })
 
   const titleInput = goalModal.getByPlaceholder(/Episode 21 with Hal Finney/i).first()
   const amountInput = goalModal.locator('input[placeholder="0"]').first()
+  const denominationSelect = goalModal.locator('select').first()
 
   await titleInput.waitFor({ state: 'visible', timeout: 10000 })
   await titleInput.clear()
   await titleInput.fill(`Test goal ${Date.now()}`)
+
+  await denominationSelect.waitFor({ state: 'visible', timeout: 10000 })
+  await denominationSelect.selectOption('BTCSAT')
 
   await amountInput.waitFor({ state: 'visible', timeout: 10000 })
   await amountInput.clear()
@@ -355,7 +363,10 @@ export const setAONLaunchDate = async (page: Page, date: Date) => {
 
 /** Click Continue/Submit button on funding goal page */
 export const clickContinueFromFundingGoal = async (page: Page) => {
-  const goalModal = page.getByRole('dialog').filter({ hasText: /Create goal|Edit goal/i }).first()
+  const goalModal = page
+    .getByRole('dialog')
+    .filter({ hasText: /Create goal|Edit goal/i })
+    .first()
   const isGoalModalVisible = await goalModal.isVisible().catch(() => false)
 
   if (isGoalModalVisible) {
@@ -366,10 +377,12 @@ export const clickContinueFromFundingGoal = async (page: Page) => {
       await amountInput.press('Tab').catch(() => undefined)
       await page.waitForTimeout(300)
     }
+
     const isConfirmEnabled = await confirmButton.isEnabled().catch(() => false)
     if (!isConfirmEnabled) {
       throw new Error('Goal modal confirm button remained disabled after filling required fields')
     }
+
     await confirmButton.click()
     await goalModal.waitFor({ state: 'hidden', timeout: 20000 })
   }

@@ -3,6 +3,11 @@ on:
   pull_request:
     branches:
       - 'main'
+      - 'production'
+  push:
+    branches:
+      - 'main'
+      - 'production'
 jobs:
   playwright-chromium:
     runs-on: ubuntu-22.04
@@ -15,6 +20,8 @@ jobs:
       MINE_BLOCK_ADDRESS: ${{ secrets.MINE_BLOCK_ADDRESS }}
       BITCOIND_ENDPOINT: ${{ secrets.BITCOIND_ENDPOINT }}
       BITCOIND_AUTH: ${{ secrets.BITCOIND_AUTH }}
+      PROJECT_REVIEW_SUBMIT_JWT: ${{ secrets.PROJECT_REVIEW_SUBMIT_JWT }}
+      PROJECT_CREATION_ACCOUNT_PASSWORD: ${{ secrets.PROJECT_CREATION_ACCOUNT_PASSWORD }}
       CI: true
     steps:
       - name: Checkout code

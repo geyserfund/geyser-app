@@ -1,10 +1,12 @@
 /** Real Nostr authentication (without mocks) for E2E testing */
+/* eslint-disable no-await-in-loop */
 
 import { Page } from '@playwright/test'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
 import { TEST_NOSTR_USER } from '../shared/constants'
+import { clickSignIn, selectNostrAuth } from './actions'
 
 /** Inject bundled nostr-tools into browser context */
 export const injectNostrBundle = async (page: Page) => {
@@ -30,13 +32,13 @@ export const setupRealNostrExtension = async (page: Page, nsec: string = TEST_NO
 
       // Create real window.nostr implementation
       ;(window as any).nostr = {
-        getPublicKey: async () => {
+        async getPublicKey() {
           console.log('[window.nostr] getPublicKey called, returning:', pubkey)
           return pubkey
         },
-        signEvent: async (event: any) => {
+        async signEvent(event: any) {
           console.log('[window.nostr] signEvent called with event:', JSON.stringify(event, null, 2))
-          
+
           // Set pubkey if not already set
           if (!event.pubkey) {
             event.pubkey = pubkey
@@ -62,7 +64,6 @@ export const setupRealNostrExtension = async (page: Page, nsec: string = TEST_NO
 
 /** Real login flow - authenticates with actual backend */
 export const loginWithRealNostr = async (page: Page) => {
-  const { clickSignIn, selectNostrAuth } = await import('./actions')
   const getAvatar = () => page.getByTestId('user-profile-avatar')
   const getSignInButton = () => page.getByRole('button', { name: /^Sign in$/i }).first()
   const getMyProjectsLink = () => page.getByRole('link', { name: /My projects/i }).first()
@@ -70,27 +71,37 @@ export const loginWithRealNostr = async (page: Page) => {
   const getProfileMenuButton = () => page.getByRole('button', { name: /Open profile menu/i }).first()
   const getNostrOption = () => page.getByRole('button', { name: /Nostr|Connect with Nostr/i }).first()
   const isAlreadyLoggedIn = async () => {
-    const avatarVisible = await getAvatar().isVisible().catch(() => false)
+    const avatarVisible = await getAvatar()
+      .isVisible()
+      .catch(() => false)
     if (avatarVisible) {
       return true
     }
 
-    const signInVisible = await getSignInButton().isVisible().catch(() => false)
+    const signInVisible = await getSignInButton()
+      .isVisible()
+      .catch(() => false)
     if (signInVisible) {
       return false
     }
 
-    const avatarLinkVisible = await getAvatarLink().isVisible().catch(() => false)
+    const avatarLinkVisible = await getAvatarLink()
+      .isVisible()
+      .catch(() => false)
     if (avatarLinkVisible) {
       return true
     }
 
-    const myProjectsVisible = await getMyProjectsLink().isVisible().catch(() => false)
+    const myProjectsVisible = await getMyProjectsLink()
+      .isVisible()
+      .catch(() => false)
     if (myProjectsVisible) {
       return true
     }
 
-    return getProfileMenuButton().isVisible().catch(() => false)
+    return getProfileMenuButton()
+      .isVisible()
+      .catch(() => false)
   }
 
   if (await isAlreadyLoggedIn()) {
@@ -103,8 +114,10 @@ export const loginWithRealNostr = async (page: Page) => {
       if (await isAlreadyLoggedIn()) {
         return
       }
+
       await page.waitForTimeout(500)
     }
+
     throw new Error('Timed out waiting for logged-in UI state')
   }
 
@@ -125,6 +138,7 @@ export const loginWithRealNostr = async (page: Page) => {
         if (await isAlreadyLoggedIn()) {
           return
         }
+
         await page.keyboard.press('Escape').catch(() => undefined)
         await page.goto('/', { waitUntil: 'domcontentloaded' }).catch(() => undefined)
         await page.waitForTimeout(1000)

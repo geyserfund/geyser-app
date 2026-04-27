@@ -1,18 +1,18 @@
 # Playwright E2E Stabilization Plan (Funding-First, Then Existing Failures)
 
 ## Summary
-- Goal: make current Playwright E2E suite pass reliably (funding first, then other currently failing Playwright specs), then expand Playwright coverage using Cypress as reference only.
+- Goal: make current Playwright E2E suite pass reliably (funding first, then other currently failing Playwright specs), then expand Playwright coverage directly in Playwright.
 - Funding failures are a mix of live backend instability and stale selectors/assertions in Playwright funding helpers/specs.
 - Funding failed-route navigation had a production path bug (trailing whitespace) and is included as a minimal app fix.
 - Project creation failures are primarily driven by fragile real-auth sequencing plus stale launch-flow assumptions.
-- Root script and CI currently default to Cypress and must gate on Playwright Chromium instead.
+- Root script and CI gate on Playwright Chromium.
 
 ## Implementation Changes
 
 ### Phase 1: Playwright Baseline
 - Make Playwright Chromium the default `test:e2e` gate.
-- Keep Cypress tests and commands as reference via explicit non-default scripts.
-- Move CI from Cypress action to Playwright Chromium execution.
+- Remove the legacy E2E suite and commands.
+- Keep CI on Playwright Chromium execution.
 - Ensure CI passes required env vars expected by Playwright config.
 - Persist Playwright artifacts (trace/video/screenshots/report) in CI.
 
@@ -33,19 +33,17 @@
 - Add live-backend availability checks for real-auth/funding/project-creation suites, and skip those suites when backend/auth services are returning transport or 5xx/404 outage signals.
 
 ### Phase 4: Add Playwright Funding Error Coverage
-- Port Cypress funding error matrix to Playwright via deterministic GraphQL interception of `ContributionCreate`:
+- Cover the funding error matrix in Playwright via deterministic GraphQL interception of `ContributionCreate`:
   - invalid funding amount (max)
   - invalid funding amount (min)
   - wallet unreachable
   - inactive project
   - reward out of stock
   - internal server error
-- Keep Cypress tests unchanged as reference.
 
 ## Public Interface / Contract Changes
 - Root `test:e2e` now gates Playwright Chromium.
-- New explicit Cypress script remains available for reference runs.
-- CI workflow semantics switch from Cypress to Playwright Chromium.
+- CI workflow semantics use Playwright Chromium for pull requests and production pushes.
 
 ## Test Plan
 - Required pass scope:
@@ -61,4 +59,3 @@
 - Funding/project-creation core flows remain live-backend (no full-flow mocking).
 - Minimal app fixes needed for test correctness are in scope.
 - Chromium is the gating browser for now; multi-browser gating is deferred.
-- Cypress remains in-repo as reference and is not removed.

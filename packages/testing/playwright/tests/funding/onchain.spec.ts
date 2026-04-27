@@ -1,12 +1,10 @@
 /** Onchain funding flow tests for Prism-backed TIA projects */
 
-import { Page, test } from '@playwright/test'
+import { test } from '@playwright/test'
 
 import { clickContribute, clickInitiateRefund, enterRefundAddress } from '../../domains/funding/actions'
 import {
-  expectFinalSuccessScreen,
   expectFundingAmountScreen,
-  expectIntermediateSuccessScreen,
   expectRefundInitiatedScreen,
   expectTransactionFailedScreen,
 } from '../../domains/funding/assertions'
@@ -15,60 +13,12 @@ import {
   completeFundingDetails,
   completeFundingInitWithDonation,
   completeFundingInitWithReward,
-  getLightningInvoice,
   getOnchainAddress,
 } from '../../domains/funding/flows'
+import { settleOnchainPaymentAndConfirm } from '../../domains/funding/settlement'
 import { checkLiveBackendAvailability } from '../../domains/shared/backend'
-import { mineBlock, payLightningInvoice, payOnchain } from '../../domains/shared/bitcoin/lncli'
+import { payOnchain } from '../../domains/shared/bitcoin/lncli'
 import { ENV } from '../../domains/shared/constants'
-
-type PrismPayment =
-  | { method: 'onchain'; address: string; amountSats: number }
-  | { method: 'lightning'; invoice: string }
-
-const mineBlockOrSkipWhenUnauthorized = async () => {
-  try {
-    await mineBlock()
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('Failed to mine block: 401')) {
-      test.skip(true, 'Skipping final-confirmation check: BITCOIND_AUTH is unauthorized in this environment.')
-      return
-    }
-
-    throw error
-  }
-}
-
-const getPrismPaymentDetails = async (page: Page): Promise<PrismPayment> => {
-  try {
-    const { address, amountSats } = await getOnchainAddress(page)
-    return { method: 'onchain', address, amountSats }
-  } catch (onchainError) {
-    const lightningInvoiceButton = page
-      .locator('#copy-lightning-invoice-button')
-      .or(page.getByRole('button', { name: /Copy invoice/i }))
-      .first()
-
-    if (await lightningInvoiceButton.isVisible().catch(() => false)) {
-      const invoice = await getLightningInvoice(page)
-      return { method: 'lightning', invoice }
-    }
-
-    throw onchainError
-  }
-}
-
-const settlePrismPaymentAndConfirm = async (page: Page, payment: PrismPayment) => {
-  if (payment.method === 'onchain') {
-    await payOnchain(payment.address, payment.amountSats)
-  } else {
-    await payLightningInvoice(payment.invoice)
-  }
-
-  await expectIntermediateSuccessScreen(page)
-  await mineBlockOrSkipWhenUnauthorized()
-  await expectFinalSuccessScreen(page, { timeoutMs: 90000 })
-}
 
 test.describe('Onchain Funding Flows - Prism TIA Projects', () => {
   test.describe.configure({ mode: 'serial' })
@@ -90,10 +40,9 @@ test.describe('Onchain Funding Flows - Prism TIA Projects', () => {
     // Act - Complete funding flow and settle payment.
     await completeFundingInitWithDonation(page, ONCHAIN_AMOUNT)
     await completeFundingDetails(page, { comment: TEST_COMMENT })
-    const payment = await getPrismPaymentDetails(page)
 
     // Assert - Verify pending state and final confirmation after mined block.
-    await settlePrismPaymentAndConfirm(page, payment)
+    await settleOnchainPaymentAndConfirm(page)
   })
 
   test('should complete onchain reward with intermediate and final success states', async ({ page }) => {
@@ -109,10 +58,9 @@ test.describe('Onchain Funding Flows - Prism TIA Projects', () => {
     // Act - Complete funding flow with reward and settle payment.
     await completeFundingInitWithReward(page, 0)
     await completeFundingDetails(page, { comment: TEST_COMMENT, email: TEST_EMAIL })
-    const payment = await getPrismPaymentDetails(page)
 
     // Assert - Verify pending state and final confirmation after mined block.
-    await settlePrismPaymentAndConfirm(page, payment)
+    await settleOnchainPaymentAndConfirm(page)
   })
 
   test('should handle onchain refund flow when underpaid', async ({ page }) => {
@@ -124,14 +72,7 @@ test.describe('Onchain Funding Flows - Prism TIA Projects', () => {
     await completeFundingInitWithDonation(page, ONCHAIN_AMOUNT)
     await completeFundingDetails(page, { comment: TEST_COMMENT })
 
-    const payment = await getPrismPaymentDetails(page)
-    if (payment.method !== 'onchain') {
-      test.skip(
-        true,
-        `Skipping onchain refund flow: ${PRISM_PROJECT_NAME} returned lightning invoice in this environment.`,
-      )
-      return
-    }
+    const payment = await getOnchainAddress(page)
 
     // Pay LESS than required (underpayment) - subtract 1000 sats from exact amount
     const underpaymentAmount = payment.amountSats - 1000
