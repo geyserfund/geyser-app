@@ -53,7 +53,7 @@ export const AmountInput = (props: {
         <Input
           ref={props.inputRef}
           data-testid="donation-input"
-          borderRadius="12px"
+          borderRadius="innerCard"
           fontSize={isSmallSize ? 'xl' : '5xl'}
           height={isSmallSize ? '40px' : '70px'}
           fontWeight={isSmallSize ? 500 : 700}

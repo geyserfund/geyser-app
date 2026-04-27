@@ -1,9 +1,11 @@
 import { Button, ButtonProps, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
+import type { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
+import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
@@ -19,7 +21,7 @@ type ContributeButtonProps = ButtonProps & {
   paymentMethods?: string[]
 }
 
-export const ContributeButton = ({ isWidget, paymentMethods, ...props }: ContributeButtonProps) => {
+export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }: ContributeButtonProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -30,8 +32,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
 
   const { project } = useProjectAtom()
   const { isFundingDisabled } = useProjectToolkit(project)
-
-  // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
+  const { handleBlockedContribution } = useBlockedProjectContribution(project)
 
   if (!project) {
     return null
@@ -48,18 +49,42 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
 
   const isStepVoting = communityVotingGrant ? communityVotingGrant.votingSystem === VotingSystem.StepLog_10 : false
 
-  const buttonProps = isWidget
-    ? {
-        as: Link,
-        href: getFullDomainUrl(getPath('projectFunding', project.name)),
-        isExternal: true,
-      }
-    : {
-        onClick: () =>
-          communityVotingGrant && isStepVoting
-            ? votingInfoModal.onOpen()
-            : navigate(getPath('projectFunding', project.name)),
-      }
+  const handleWidgetClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (handleBlockedContribution(event)) {
+      return
+    }
+
+    onClick?.(event)
+  }
+
+  const handleInlineClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (handleBlockedContribution(event)) {
+      return
+    }
+
+    onClick?.(event)
+    if (event.defaultPrevented) {
+      return
+    }
+
+    if (communityVotingGrant && isStepVoting) {
+      votingInfoModal.onOpen()
+    } else {
+      navigate(getPath('projectFunding', project.name))
+    }
+  }
+
+  const sharedButtonProps: ButtonProps = {
+    size: 'lg',
+    variant: 'solid',
+    colorScheme: 'primary1',
+    isDisabled: isFundingDisabled(),
+    position: 'relative',
+    sx: {
+      transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+      '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+    },
+  }
 
   return (
     <>
@@ -73,18 +98,23 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         />
       )}
 
-      <Button
-        size="lg"
-        variant="solid"
-        colorScheme="primary1"
-        isDisabled={isFundingDisabled()}
-        position="relative"
-        data-testid="contribute-button"
-        {...buttonProps}
-        {...props}
-      >
-        {t('Contribute')}
-      </Button>
+      {isWidget ? (
+        <Button
+          {...sharedButtonProps}
+          {...rest}
+          data-testid="contribute-button"
+          as={Link}
+          href={getFullDomainUrl(getPath('projectFunding', project.name))}
+          isExternal
+          onClick={handleWidgetClick}
+        >
+          {t('Contribute')}
+        </Button>
+      ) : (
+        <Button {...sharedButtonProps} {...rest} data-testid="contribute-button" onClick={handleInlineClick}>
+          {t('Contribute')}
+        </Button>
+      )}
     </>
   )
 }

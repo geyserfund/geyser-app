@@ -1,8 +1,8 @@
-import { Box, Button, Circle, HStack, Icon, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Box, Button, Circle, HStack, Icon, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useState } from 'react'
-import { PiCheckCircle, PiInfo, PiWarning } from 'react-icons/pi'
+import { PiCheckCircle, PiWarning } from 'react-icons/pi'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -13,16 +13,14 @@ import {
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { GeyserConfigureWalletGuideUrl } from '@/shared/constants/platform/url.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import type { UserAccountKeysFragment } from '@/types/index.ts'
 import { useProjectRskEoaSetMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
-
-const KEY_CONFIG_DEADLINE = '30th of April 2026'
 
 type WalletConfigurationPromptProps = {
   projectId: string | number
@@ -234,40 +232,25 @@ export const WalletConfigurationPrompt = ({
   if (compact) {
     return (
       <>
-        <HStack
-          w="full"
-          spacing={2}
-          px={3}
-          py={2}
-          bg="warning.1"
-          borderRadius="6px"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <HStack spacing={2} flex={1} alignItems="center">
-            <Icon as={PiInfo} color="warning.11" boxSize="16px" flexShrink={0} />
-            <Body size="sm" color="neutral1.11">
-              <Body as="span" bold size="sm">
-                {t('Wallet setup required.')}
-              </Body>{' '}
-              {t('Configure before {{keyConfigDeadline}} to continue receiving contributions.', {
-                keyConfigDeadline: KEY_CONFIG_DEADLINE,
-              })}{' '}
-              <ChakraLink
-                href={GeyserConfigureWalletGuideUrl}
-                isExternal
-                color="warning.11"
-                textDecoration="underline"
-                _hover={{ color: 'warning.12' }}
-              >
-                {t('Learn more')}
-              </ChakraLink>
-            </Body>
-          </HStack>
-          <Button colorScheme="warning" variant="soft" size="sm" flexShrink={0} onClick={modal.onOpen}>
-            {t('Configure')}
-          </Button>
-        </HStack>
+        <ControlPanelNotification
+          icon={
+            <Image
+              src="/icons/creator_tools_wallet.png"
+              alt={t('Wallet')}
+              boxSize="52px"
+              objectFit="contain"
+              flexShrink={0}
+            />
+          }
+          title={t('Wallet not configured')}
+          description={t('Your project cannot receive any contributions until you configure your project wallet.')}
+          actionButton={
+            <Button colorScheme="error" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>
+              {t('Configure')}
+            </Button>
+          }
+          variant="error"
+        />
         {modals}
       </>
     )
@@ -275,28 +258,15 @@ export const WalletConfigurationPrompt = ({
 
   return (
     <>
-      <Feedback variant={FeedBackVariant.WARNING}>
+      <Feedback variant={FeedBackVariant.ERROR}>
         <VStack spacing={4} align="stretch">
           <Body size="xl" bold>
-            {t('Configure your project wallet')}
+            {t('Wallet not configured')}
           </Body>
           <Body dark>
-            {t(
-              'Geyser is migrating to a new payment infrastructure. Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date. You can read more about it',
-              { keyConfigDeadline: KEY_CONFIG_DEADLINE },
-            )}{' '}
-            <ChakraLink
-              href={GeyserConfigureWalletGuideUrl}
-              isExternal
-              color="amber1.900"
-              textDecoration="underline"
-              _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
-            >
-              {t('here')}
-            </ChakraLink>
-            {'.'}
+            {t('Your project cannot receive any contributions until you configure your project wallet.')}
           </Body>
-          <Button colorScheme="warning" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
+          <Button colorScheme="error" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
             {t('Configure project wallet')}
           </Button>
         </VStack>

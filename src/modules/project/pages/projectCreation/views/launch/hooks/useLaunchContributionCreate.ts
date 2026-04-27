@@ -7,8 +7,7 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { useGenerateTransactionDataForClaimingRBTCToContract } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { useStripeEmbeddedTheme } from '@/modules/project/funding/hooks/useStripeEmbeddedTheme.ts'
-import { keyPairAtom, parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom, parseSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
-import { generatePrivatePublicKeyPair } from '@/modules/project/funding/utils/helpers.ts'
+import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import {
   decryptSeed,
   generateKeysFromSeedHex,
@@ -19,7 +18,6 @@ import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/sta
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { GEYSER_LAUNCH_PROJECT_ID, ORIGIN } from '@/shared/constants/config/env.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
-import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionPaymentsInput,
   FundingContributionFragment,
@@ -56,7 +54,7 @@ type LaunchRequestContext = {
 type LaunchAccountKeyResolution =
   | { status: 'ok'; accountKeys: LaunchPrismAccountKeys }
   | { status: 'prompt' }
-  | { status: 'error'; error: string }
+  | { status: 'error'; error: string; retryable?: boolean }
 
 export type ContributionResult =
   | { ok: true; contribution: FundingContributionFragment; payments: FundingContributionPaymentDetailsFragment }
@@ -72,8 +70,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
-  const setKeyPair = useSetAtom(keyPairAtom)
-  const parseResponseToSwap = useSetAtom(parseSwapAtom)
   const parseResponseToOnChainToRskSwap = useSetAtom(parseOnChainToRskSwapAtom)
   const parseResponseToLightningToRskSwap = useSetAtom(parseLightningToRskSwapAtom)
 
@@ -130,7 +126,8 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
 
       if (!userAccountKeys?.encryptedSeed) {
         return {
-          status: 'prompt',
+          status: 'error',
+          error: t('Account setup is incomplete. Please reload the page and try again.'),
         }
       }
 
@@ -163,6 +160,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
         return {
           status: 'error',
           error: error instanceof Error ? error.message : t('Invalid password'),
+          retryable: true,
         }
       }
     },
@@ -183,10 +181,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
         contributionId: contribution.id,
         bitcoinQuote: contribution.bitcoinQuote,
         datetime: contribution.createdAt,
-      }
-
-      if (payments.onChainSwap?.swapJson) {
-        parseResponseToSwap(payments.onChainSwap, contributionInfo)
       }
 
       if (payments.onChainToRskSwap?.swapJson) {
@@ -235,7 +229,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       generateTransactionForOnChainToRskSwap,
       parseResponseToLightningToRskSwap,
       parseResponseToOnChainToRskSwap,
-      parseResponseToSwap,
       project?.id,
       project?.title,
       toast,
@@ -281,7 +274,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
 
       const paymentsInput: ContributionPaymentsInput = {}
       const requestContext: LaunchRequestContext = {}
-      const prismEnabled = isPrismEnabled(launchPaymentProject)
 
       if (method === LaunchPaymentMethod.CreditCard) {
         paymentsInput.fiat = {
@@ -293,84 +285,44 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
         }
       }
 
-      if (method === LaunchPaymentMethod.Lightning) {
-        if (prismEnabled) {
-          const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
+      if (method === LaunchPaymentMethod.Lightning || method === LaunchPaymentMethod.Onchain) {
+        const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
 
-          if (accountKeyResolution.status === 'prompt') {
-            return {
-              ok: false,
-              error: t('Please confirm your account password to continue.'),
-              reason: 'password_required',
-            }
-          }
-
-          if (accountKeyResolution.status === 'error') {
-            return {
-              ok: false,
-              error: accountKeyResolution.error,
-              reason: 'password_required',
-            }
-          }
-
-          const lightningPreImage = generatePreImageHash()
-          requestContext.accountKeys = accountKeyResolution.accountKeys
-          requestContext.lightningPreImage = lightningPreImage
-          paymentsInput.lightningToRskSwap = {
-            create: true,
-            boltz: {
-              claimPublicKey: accountKeyResolution.accountKeys.publicKey,
-              claimAddress: accountKeyResolution.accountKeys.address,
-              preimageHash: lightningPreImage.preimageHash,
-            },
-          }
-        } else {
-          paymentsInput.lightning = {
-            create: true,
+        if (accountKeyResolution.status === 'prompt') {
+          return {
+            ok: false,
+            error: t('Please confirm your account password to continue.'),
+            reason: 'password_required',
           }
         }
-      }
 
-      if (method === LaunchPaymentMethod.Onchain) {
-        if (prismEnabled) {
-          const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
-
-          if (accountKeyResolution.status === 'prompt') {
-            return {
-              ok: false,
-              error: t('Please confirm your account password to continue.'),
-              reason: 'password_required',
-            }
+        if (accountKeyResolution.status === 'error') {
+          return {
+            ok: false,
+            error: accountKeyResolution.error,
+            ...(accountKeyResolution.retryable ? { reason: 'password_required' as const } : {}),
           }
+        }
 
-          if (accountKeyResolution.status === 'error') {
-            return {
-              ok: false,
-              error: accountKeyResolution.error,
-              reason: 'password_required',
-            }
-          }
+        const { publicKey: claimPublicKey, address: claimAddress } = accountKeyResolution.accountKeys
+        const preImage = generatePreImageHash()
+        const boltzInput = {
+          create: true,
+          boltz: {
+            claimPublicKey,
+            claimAddress,
+            preimageHash: preImage.preimageHash,
+          },
+        }
 
-          const onChainPreImage = generatePreImageHash()
-          requestContext.accountKeys = accountKeyResolution.accountKeys
-          requestContext.onChainPreImage = onChainPreImage
-          paymentsInput.onChainToRskSwap = {
-            create: true,
-            boltz: {
-              claimPublicKey: accountKeyResolution.accountKeys.publicKey,
-              claimAddress: accountKeyResolution.accountKeys.address,
-              preimageHash: onChainPreImage.preimageHash,
-            },
-          }
+        requestContext.accountKeys = accountKeyResolution.accountKeys
+
+        if (method === LaunchPaymentMethod.Lightning) {
+          requestContext.lightningPreImage = preImage
+          paymentsInput.lightningToRskSwap = boltzInput
         } else {
-          const keyPair = generatePrivatePublicKeyPair()
-          setKeyPair(keyPair)
-          paymentsInput.onChainSwap = {
-            create: true,
-            boltz: {
-              swapPublicKey: keyPair.publicKey.toString('hex'),
-            },
-          }
+          requestContext.onChainPreImage = preImage
+          paymentsInput.onChainToRskSwap = boltzInput
         }
       }
 
@@ -415,7 +367,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       project?.id,
       resolvePrismAccountKeys,
       returnUrl,
-      setKeyPair,
       strategy,
       stripeEmbeddedTheme,
       usdRate,

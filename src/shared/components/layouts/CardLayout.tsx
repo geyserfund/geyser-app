@@ -35,9 +35,9 @@ export const CardLayout = ({
     overflow: 'hidden',
     as: rest.to ? Link : undefined,
     backgroundColor: 'utils.pbg',
-    border: noborder ? 'none' : '1px solid',
+    border: noborder ? 'none' : '0.5px solid',
     transition: 'border-color 0.5s',
-    boxShadow: 'none',
+    boxShadow: noborder ? 'none' : 'card',
     _hover: hover
       ? {
           cursor: 'pointer',
@@ -61,7 +61,7 @@ export const CardLayout = ({
   }
 
   return (
-    <Stack padding={dense ? 0 : { base: 3, lg: 6 }} borderRadius="8px" {...props} {...rest}>
+    <Stack padding={dense ? 0 : { base: 3, lg: 6 }} borderRadius="card" {...props} {...rest}>
       {children}
     </Stack>
   )

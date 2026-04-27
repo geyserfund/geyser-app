@@ -20,7 +20,6 @@ import {
   ProjectState,
 } from '../state/projectAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
-import { useProjectWalletAPI } from './useProjectWalletAPI'
 
 export type UseInitProjectProps = {
   /** Load project at hook invocation */
@@ -29,8 +28,6 @@ export type UseInitProjectProps = {
   projectId?: number
   /** Don't use together with projectId prop */
   projectName?: string
-  /** Pass true, if we want wallet to be initialized */
-  initializeWallet?: boolean
 }
 
 /**
@@ -51,7 +48,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
   const setProjectLoading = useSetAtom(projectLoadingAtom)
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
 
-  const { load, projectId, projectName, initializeWallet } = props || {}
+  const { load, projectId, projectName } = props || {}
 
   const [queryProject, queryProjectOptions] = useProjectPageBodyLazyQuery()
   const [queryProjectActiveMatching] = useProjectActiveMatchingGetLazyQuery()
@@ -173,8 +170,6 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
       queryProjectMethod()
     }
   }, [load, projectId, projectName, queryProjectMethod])
-
-  useProjectWalletAPI(initializeWallet)
 
   return {
     queryProject: {

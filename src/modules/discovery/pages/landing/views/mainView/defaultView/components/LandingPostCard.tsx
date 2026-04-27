@@ -67,7 +67,7 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
         src={post.image || post.project?.thumbnailImage || ''}
         alt={post.title}
         width="100%"
-        borderRadius="8px"
+        borderRadius="innerCard"
         aspectRatio={compact ? 1 : 1.45}
         objectFit="cover"
       />
@@ -111,7 +111,7 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
         left={{ base: '-8px', lg: '-16px' }}
         right={{ base: '-8px', lg: '-16px' }}
         bottom={{ base: '-8px', lg: '-16px' }}
-        borderRadius="8px"
+        borderRadius="card"
         display="none"
         _groupHover={{
           display: 'block',

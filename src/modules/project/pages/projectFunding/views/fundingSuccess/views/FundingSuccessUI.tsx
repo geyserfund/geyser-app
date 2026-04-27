@@ -48,7 +48,17 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
     <FundingLayout
       showBack={false}
       topNavBarRightContent={
-        <Button size="lg" as={Link} to={getPath('project', project.name)} variant="soft" colorScheme={'neutral1'}>
+        <Button
+          size="lg"
+          as={Link}
+          to={getPath('project', project.name)}
+          variant="soft"
+          colorScheme={'neutral1'}
+          sx={{
+            transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+            '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+          }}
+        >
           {t('Back to project')}
         </Button>
       }
@@ -79,7 +89,7 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           {formState.fundingMode !== recurringFundingModes.oneTime && (
             <VStack w="full" alignItems="start" spacing={6}>
               <HStack w="full" justifyContent="space-between" alignItems="center" gap={4}>
-                <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+                <H2 size={{ base: 'xl', lg: '2xl' }} bold sx={{ textWrap: 'balance' }}>
                   {t('Manage Recurring Payment')}
                 </H2>
                 {user?.id && (
@@ -89,6 +99,10 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
                     size="lg"
                     variant="outline"
                     colorScheme="neutral1"
+                    sx={{
+                      transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+                      '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+                    }}
                   >
                     {t('Manage recurring payments')}
                   </Button>

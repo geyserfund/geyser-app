@@ -13,17 +13,6 @@ export const FRAGMENT_PROJECT_WALLET = gql`
       ... on LightningAddressConnectionDetails {
         lightningAddress
       }
-      ... on LndConnectionDetailsPrivate {
-        macaroon
-        tlsCertificate
-        hostname
-        grpcPort
-        lndNodeType
-        pubkey
-      }
-      ... on LndConnectionDetailsPublic {
-        pubkey
-      }
     }
   }
 `

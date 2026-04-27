@@ -234,7 +234,6 @@ export const useUserWalletForm = (): UserWalletForm => {
           id: existingWallet.id,
           lightningAddressConnectionDetailsInput: input.lightningAddressConnectionDetailsInput,
           nwcConnectionDetailsInput: input.nwcConnectionDetailsInput,
-          lndConnectionDetailsInput: input.lndConnectionDetailsInput,
           feePercentage: input.feePercentage,
           name: input.name,
         }

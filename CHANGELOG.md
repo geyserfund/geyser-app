@@ -1,9 +1,44 @@
+## [0.41.1](https://github.com/geyserfund/geyser-app/compare/v0.41.0...v0.41.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* address pr comments and other smaller fixes ([688c488](https://github.com/geyserfund/geyser-app/commit/688c488076fd66e650002e180bd49512abf23780))
+* funding flow issues ([35aaef3](https://github.com/geyserfund/geyser-app/commit/35aaef3b61e9674bbb05bc88a48ed22af58451b6))
+* payout issue ([314c960](https://github.com/geyserfund/geyser-app/commit/314c9601d21b7f42f7fc32ae37bcffc209856861))
+* pre-image override ([bad32a9](https://github.com/geyserfund/geyser-app/commit/bad32a900a5bdc0f3120fda38cb7fe9e8af87a78))
+* prism deadline ([5964017](https://github.com/geyserfund/geyser-app/commit/59640173cb48a8fc75e5028ad883d71391815821))
+* tsc fixes ([338645b](https://github.com/geyserfund/geyser-app/commit/338645b045281a83ce4421fa810d9fec2211ffa6))
+
+## [0.41.0](https://github.com/geyserfund/geyser-app/compare/v0.39.2...v0.41.0) (2026-04-22)
+
+
+### Features
+
+* address PR comments ([d3a3cb1](https://github.com/geyserfund/geyser-app/commit/d3a3cb17cf954cbeceafb4be90546afbd00572d8))
+* apply design improvements in project page and funding flow ([9d27470](https://github.com/geyserfund/geyser-app/commit/9d27470fef30894a2e39857a0f47694cee2ff1b5))
+* component design adjustments ([cb6e49e](https://github.com/geyserfund/geyser-app/commit/cb6e49ed3f4fcb955349f23d8045edd63cde12e9))
+* deprecate hold invoice flows ([60b9dec](https://github.com/geyserfund/geyser-app/commit/60b9dec2854b497844944975a248c159874421bd))
+* enhance MdxMarkdownEditorInternal styles with Chakra UI color variables ([95d1a20](https://github.com/geyserfund/geyser-app/commit/95d1a20679c2664f65b581458e141bcecf2542d7))
+* error banner and project dashboard default view ([ec3c684](https://github.com/geyserfund/geyser-app/commit/ec3c6840bb50613ba272e4498b5c4b87db4d7250))
+* micro-loans one pager and project review flow update ([751ef0f](https://github.com/geyserfund/geyser-app/commit/751ef0f4f1d8fe308bf33d75bfb7a11d96d8c5a1))
+
+
+### Bug Fixes
+
+* issues with profile page ([c4820a1](https://github.com/geyserfund/geyser-app/commit/c4820a1d36b77867ba26eb0f684aafdb846b243b))
+* refactor code structure for improved readability and maintainability ([c055701](https://github.com/geyserfund/geyser-app/commit/c0557012b5083d121238c6bfdd55e010c25acb02))
+* try out in staging ([f0ba2fe](https://github.com/geyserfund/geyser-app/commit/f0ba2fed705a7143f14edcb787f3967afde5bdc9))
+* update guide url ([92e6387](https://github.com/geyserfund/geyser-app/commit/92e6387c981ad3199b394ef181a6c8ebf16cd334))
+* updated package version ([c80e53a](https://github.com/geyserfund/geyser-app/commit/c80e53a32e27972d6159fa176e21f1233e4f9024))
+* use project name for automatic contribution posts ([c3dc379](https://github.com/geyserfund/geyser-app/commit/c3dc3790dd4ce87b7fb0eb96ac9e4b9b4b53161f))
+
 ## [0.40.0](https://github.com/geyserfund/geyser-app/compare/v0.39.2...v0.40.0) (2026-04-16)
 
 
 ### Features
 
-* micro-loans one pager and project review flow upadte ([751ef0f](https://github.com/geyserfund/geyser-app/commit/751ef0f4f1d8fe308bf33d75bfb7a11d96d8c5a1))
+* micro-loans one pager and project review flow update ([751ef0f](https://github.com/geyserfund/geyser-app/commit/751ef0f4f1d8fe308bf33d75bfb7a11d96d8c5a1))
 
 ## [0.38.0](https://github.com/geyserfund/geyser-app/compare/v0.36.0...v0.38.0) (2026-04-15)
 

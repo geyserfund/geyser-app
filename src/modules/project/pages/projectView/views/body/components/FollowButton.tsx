@@ -53,6 +53,11 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
     }
   }
 
+  const pressStyles = {
+    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
+    '&:active:not(:disabled)': { transform: 'scale(0.96)' },
+  }
+
   if (withLabel) {
     return (
       <Button
@@ -62,6 +67,7 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
         onClick={handleClick}
         isLoading={followLoading || unfollowLoading}
         rightIcon={<PiBell />}
+        sx={pressStyles}
         {...rest}
       >
         {isFollowed ? t('Followed') : t('Follow')}
@@ -78,6 +84,7 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
         onClick={handleClick}
         isLoading={followLoading || unfollowLoading}
         icon={<PiBell />}
+        sx={pressStyles}
         {...rest}
       />
     </Tooltip>

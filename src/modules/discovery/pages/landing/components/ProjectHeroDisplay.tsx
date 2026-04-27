@@ -24,11 +24,11 @@ export const ProjectHeroDisplay = ({ project, index }: { project: GlobalProjectL
         flex={1}
         overflow={'hidden'}
         _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
-        borderRadius="16px"
+        borderRadius="card"
         paddingRight={2}
       >
         <ImageWithReload
-          borderRadius={'16px'}
+          borderRadius="card"
           height="64px"
           width="64px"
           src={project.projectThumbnailUrl}
@@ -58,10 +58,10 @@ export const ProjectHeroDisplaySkeleton = () => {
         flex={1}
         overflow={'hidden'}
         _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
-        borderRadius="16px"
+        borderRadius="card"
         paddingRight={2}
       >
-        <SkeletonLayout borderRadius={'16px'} height="64px" width="64px" />
+        <SkeletonLayout borderRadius="card" height="64px" width="64px" />
         <VStack w="full" overflow="hidden" flex={1} spacing={1} alignItems="start">
           <SkeletonLayout height="24px" width="150px" />
           <SkeletonLayout height="18px" width="50px" />

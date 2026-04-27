@@ -163,6 +163,13 @@ export const theme = {
     Textarea: textareaTheme,
     Stepper: stepperTheme,
   },
+  shadows: {
+    card: '0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 2px 6px -2px rgba(0, 0, 0, 0.04)',
+  },
+  radii: {
+    card: '10px',
+    innerCard: '6px',
+  },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({
       body: {

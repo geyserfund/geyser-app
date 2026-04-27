@@ -49,7 +49,7 @@ export const FeaturedCardLayout = ({
         maxHeight="350px"
         aspectRatio={3 / 2}
         overflow="hidden"
-        borderRadius="8px"
+        borderRadius="innerCard"
         position="relative"
         justifyContent="center"
       >
@@ -100,10 +100,9 @@ export const FeaturedCardSkeleton = () => {
       alignItems="start"
       padding="0px"
       overflow="hidden"
-      borderRadius="8px"
       noborder
     >
-      <Box width="100%" height="auto" maxHeight="340x" aspectRatio={3 / 2} overflow="hidden" borderRadius="8px">
+      <Box width="100%" height="auto" maxHeight="340px" aspectRatio={3 / 2} overflow="hidden" borderRadius="innerCard">
         <Skeleton height="full" width="full" />
       </Box>
       <VStack
