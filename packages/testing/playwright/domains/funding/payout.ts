@@ -10,6 +10,40 @@ type CompleteAonOnchainPayoutOptions = {
   bitcoinAddress: string
 }
 
+const getAonClaimSection = (page: Page) =>
+  page.getByText(/^Claim funds$/i).locator('xpath=ancestor::*[.//button[normalize-space()="Claim"]][1]')
+
+const getAonClaimButton = (page: Page) => getAonClaimSection(page).getByRole('button', { name: /^Claim$/i }).first()
+
+const getAonClaimDiagnostics = async (page: Page, projectName: string): Promise<string> => {
+  const claimSection = getAonClaimSection(page)
+  const claimButton = getAonClaimButton(page)
+  const genericClaimButtons = await page.getByRole('button', { name: /^Claim$/i }).count().catch(() => 0)
+  const claimSectionText = await claimSection
+    .innerText({ timeout: 1000 })
+    .then((text) => text.replace(/\s+/g, ' ').trim())
+    .catch(() => '')
+  const isClaimButtonVisible = await claimButton.isVisible().catch(() => false)
+  const isClaimButtonEnabled = isClaimButtonVisible && (await claimButton.isEnabled().catch(() => false))
+  const claimButtonState = !isClaimButtonVisible ? 'not visible' : isClaimButtonEnabled ? 'enabled' : 'disabled'
+  const statusText = await page
+    .getByText(/successful|claimed|campaign|goal|claim funds/i)
+    .allInnerTexts()
+    .then((items) => items.map((item) => item.replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 8))
+    .catch(() => [])
+
+  return [
+    `[AONClaim] Project: ${projectName}`,
+    `URL: ${page.url()}`,
+    `Scoped claim button: ${claimButtonState}`,
+    `Generic Claim buttons: ${genericClaimButtons}`,
+    claimSectionText ? `Claim section: ${claimSectionText}` : null,
+    statusText.length ? `Status text: ${statusText.join(' | ')}` : null,
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
+
 const getVisiblePayoutDiagnostics = async (page: Page): Promise<string> => {
   const dialog = page.getByRole('dialog').first()
   const modalText = await dialog
@@ -107,30 +141,37 @@ const selectOnchainPayoutMethod = async (page: Page) => {
 
 export const waitForAonClaimReady = async (page: Page, projectName: string, timeoutMs = 300000) => {
   const startedAt = Date.now()
-  const claimButton = page.getByRole('button', { name: /^Claim$/i }).first()
+  const claimButton = getAonClaimButton(page)
 
   while (Date.now() - startedAt < timeoutMs) {
     await page.goto(`/project/${projectName}`, { waitUntil: 'domcontentloaded' })
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => undefined)
 
-    if ((await claimButton.isVisible().catch(() => false)) && (await claimButton.isEnabled().catch(() => false))) {
+    const isClaimReady = await claimButton
+      .waitFor({ state: 'visible', timeout: 10000 })
+      .then(async () => await claimButton.isEnabled())
+      .catch(() => false)
+
+    if (isClaimReady) {
       return
     }
 
-    await page.waitForTimeout(5000)
+    await page.waitForTimeout(2000)
   }
 
   if ((await claimButton.isVisible().catch(() => false)) && (await claimButton.isEnabled().catch(() => false))) {
     return
   }
 
-  throw new Error(`Timed out waiting for AON claim controls on project ${projectName}. Current URL: ${page.url()}`)
+  throw new Error(`Timed out waiting for AON claim controls. ${await getAonClaimDiagnostics(page, projectName)}`)
 }
 
 export const openAonClaimModal = async (page: Page) => {
   await withPayoutDiagnostics(page, 'open-claim-modal', async () => {
     await expect(page.getByText(/Claim funds/i).first()).toBeVisible({ timeout: 30000 })
-    const claimButton = page.getByRole('button', { name: /^Claim$/i }).first()
+    const claimButton = getAonClaimButton(page)
     await claimButton.waitFor({ state: 'visible', timeout: 15000 })
+    await expect(claimButton).toBeEnabled({ timeout: 15000 })
     await claimButton.click()
     await expect(
       page

@@ -4,6 +4,41 @@ import { Locator, Page } from '@playwright/test'
 
 const FUNDING_ERROR_HEADING = 'An Error Occured'
 
+type OnchainPaymentUiState = 'address' | 'prompt'
+
+const getPaymentControlDiagnostics = async (page: Page, step: string): Promise<string> => {
+  const onchainTab = page.getByRole('button', { name: /^Onchain$/i }).first()
+  const lightningInvoiceButton = page
+    .locator('#copy-lightning-invoice-button')
+    .or(page.getByRole('button', { name: /Copy invoice/i }))
+    .first()
+  const onchainAddressButton = page
+    .locator('#copy-onchain-address-button')
+    .or(page.getByRole('button', { name: /Copy onchain address|Copy address/i }))
+    .first()
+  const downloadControl = page
+    .getByRole('button', { name: 'Download & Continue' })
+    .or(page.getByRole('link', { name: 'Download & Continue' }))
+    .first()
+  const onchainTitle = await onchainTab.getAttribute('title').catch(() => null)
+  const onchainAriaLabel = await onchainTab.getAttribute('aria-label').catch(() => null)
+  const isOnchainVisible = await onchainTab.isVisible().catch(() => false)
+  const isOnchainEnabled = isOnchainVisible && (await onchainTab.isEnabled().catch(() => false))
+  const onchainState = !isOnchainVisible ? 'not visible' : isOnchainEnabled ? 'visible/enabled' : 'visible/disabled'
+
+  return [
+    `[Funding:${step}] URL: ${page.url()}`,
+    `Onchain tab: ${onchainState}`,
+    `Lightning invoice visible: ${await lightningInvoiceButton.isVisible().catch(() => false)}`,
+    `Onchain address visible: ${await onchainAddressButton.isVisible().catch(() => false)}`,
+    `Download prompt visible: ${await downloadControl.isVisible().catch(() => false)}`,
+    onchainTitle ? `Onchain title: ${onchainTitle}` : null,
+    onchainAriaLabel ? `Onchain aria-label: ${onchainAriaLabel}` : null,
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
+
 const getFundingErrorDiagnostics = async (page: Page, step: string): Promise<string> => {
   const errorMessage = await page
     .getByText("We've encountered an issue with the payment flow.")
@@ -24,6 +59,68 @@ const getFundingErrorDiagnostics = async (page: Page, step: string): Promise<str
   ]
     .filter(Boolean)
     .join(' ')
+}
+
+export const waitForOnchainPaymentUi = async (
+  page: Page,
+  step = 'onchain-payment-ui',
+  timeoutMs = 20000,
+): Promise<OnchainPaymentUiState> => {
+  const startedAt = Date.now()
+  const fundingErrorHeading = page.getByRole('heading', { name: FUNDING_ERROR_HEADING })
+  const onchainAddressButton = page
+    .locator('#copy-onchain-address-button')
+    .or(page.getByRole('button', { name: /Copy onchain address|Copy address/i }))
+    .first()
+  const downloadControl = page
+    .getByRole('button', { name: 'Download & Continue' })
+    .or(page.getByRole('link', { name: 'Download & Continue' }))
+    .first()
+
+  while (Date.now() - startedAt < timeoutMs) {
+    if (await onchainAddressButton.isVisible().catch(() => false)) {
+      return 'address'
+    }
+
+    if (await downloadControl.isVisible().catch(() => false)) {
+      return 'prompt'
+    }
+
+    if (await fundingErrorHeading.isVisible().catch(() => false)) {
+      throw new Error(await getFundingErrorDiagnostics(page, step))
+    }
+
+    await page.waitForTimeout(250)
+  }
+
+  throw new Error(await getPaymentControlDiagnostics(page, step))
+}
+
+export const waitForOnchainAddressUi = async (
+  page: Page,
+  step = 'onchain-address-ui',
+  timeoutMs = 20000,
+): Promise<void> => {
+  const startedAt = Date.now()
+  const fundingErrorHeading = page.getByRole('heading', { name: FUNDING_ERROR_HEADING })
+  const onchainAddressButton = page
+    .locator('#copy-onchain-address-button')
+    .or(page.getByRole('button', { name: /Copy onchain address|Copy address/i }))
+    .first()
+
+  while (Date.now() - startedAt < timeoutMs) {
+    if (await onchainAddressButton.isVisible().catch(() => false)) {
+      return
+    }
+
+    if (await fundingErrorHeading.isVisible().catch(() => false)) {
+      throw new Error(await getFundingErrorDiagnostics(page, step))
+    }
+
+    await page.waitForTimeout(250)
+  }
+
+  throw new Error(await getPaymentControlDiagnostics(page, step))
 }
 
 const waitForFundingTargetOrFail = async (
@@ -126,30 +223,21 @@ export const clickCheckout = async (page: Page) => {
 /** Click the Onchain tab to switch payment method */
 export const clickOnchainTab = async (page: Page) => {
   const onchainButton = page.getByRole('button', { name: /^Onchain$/i }).first()
-  const downloadButton = page.getByRole('button', { name: 'Download & Continue' }).first()
-  const downloadLink = page.getByRole('link', { name: 'Download & Continue' }).first()
-  const onchainPromptControl = downloadButton.or(downloadLink).first()
 
-  const nextStep = await Promise.race([
-    onchainPromptControl
-      .waitFor({ state: 'visible', timeout: 15000 })
-      .then(() => 'prompt')
-      .catch(() => null),
-    onchainButton
-      .waitFor({ state: 'visible', timeout: 15000 })
-      .then(() => 'tab')
-      .catch(() => null),
-  ])
-
-  if (nextStep === 'prompt') {
+  if (await waitForOnchainPaymentUi(page, 'onchain-existing-state', 1000).catch(() => null)) {
     return
   }
 
-  if (nextStep !== 'tab') {
-    throw new Error(`[Funding:onchain-tab] Could not find Onchain tab or onchain prompt. URL: ${page.url()}`)
+  await onchainButton.waitFor({ state: 'visible', timeout: 15000 }).catch(async () => {
+    throw new Error(await getPaymentControlDiagnostics(page, 'onchain-tab-visible'))
+  })
+
+  if (!(await onchainButton.isEnabled().catch(() => false))) {
+    throw new Error(await getPaymentControlDiagnostics(page, 'onchain-tab-enabled'))
   }
 
   await onchainButton.click()
+  await waitForOnchainPaymentUi(page, 'onchain-tab-after-click')
 }
 
 /** Click Download & Continue button for onchain refund file

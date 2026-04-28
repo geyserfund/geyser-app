@@ -14,8 +14,26 @@ import {
   enterComment,
   enterDonationAmount,
   enterEmail,
+  waitForOnchainAddressUi,
+  waitForOnchainPaymentUi,
 } from './actions'
 import { FundingDetailsOptions } from './types'
+
+const parseBip21Payment = (bip21Uri: string): { address: string; amountSats: number } => {
+  const [bitcoinPart, queryPart] = bip21Uri.split('?')
+  const address = bitcoinPart.split(':')[1] || ''
+  const amountMatch = queryPart?.match(/amount=([0-9.]+)/)
+  const amountBtcString = amountMatch ? amountMatch[1] : '0'
+  const [wholePart, decimalPart = ''] = amountBtcString.split('.')
+  const paddedDecimal = decimalPart.padEnd(8, '0').substring(0, 8)
+  const amountSats = parseInt(`${wholePart}${paddedDecimal}`, 10)
+
+  if (!address || !Number.isFinite(amountSats) || amountSats <= 0) {
+    throw new Error(`Unable to parse BIP21 URI: ${bip21Uri}`)
+  }
+
+  return { address, amountSats }
+}
 
 /** Complete funding init with donation amount */
 export const completeFundingInitWithDonation = async (page: Page, amount: number) => {
@@ -57,33 +75,17 @@ export const getOnchainAddress = async (page: Page): Promise<{ address: string; 
   // Switch to onchain tab (goes to prompt page)
   await clickOnchainTab(page)
 
-  // Download refund file (navigates to QR page)
-  await clickDownloadAndContinue(page)
+  const initialOnchainState = await waitForOnchainPaymentUi(page, 'onchain-address-initial')
+
+  if (initialOnchainState === 'prompt') {
+    // Download refund file (navigates to QR page)
+    await clickDownloadAndContinue(page)
+    await waitForOnchainAddressUi(page, 'onchain-address-after-download')
+  }
 
   // Copy BIP21 URI
   const bip21Uri = await clickCopyOnchainAddress(page)
-
-  // Parse BIP21 URI to get address and amount
-  // Format: bitcoin:ADDRESS?amount=0.00063365
-  const [bitcoinPart, queryPart] = bip21Uri.split('?')
-  const address = bitcoinPart.split(':')[1] || ''
-
-  // Parse amount parameter (in BTC string format)
-  const amountMatch = queryPart?.match(/amount=([0-9.]+)/)
-  const amountBtcString = amountMatch ? amountMatch[1] : '0'
-
-  // Convert BTC string to satoshis using string manipulation to avoid floating point errors
-  // Remove decimal point and pad/trim to get satoshis
-  // Example: "0.00063365" -> "63365" sats
-  const [wholePart, decimalPart = ''] = amountBtcString.split('.')
-  // BTC has 8 decimal places, so pad or trim decimal part to 8 digits
-  const paddedDecimal = decimalPart.padEnd(8, '0').substring(0, 8)
-  // Combine whole part and decimal part as satoshis
-  const amountSats = parseInt(wholePart + paddedDecimal, 10)
-
-  console.log(`[DEBUG] BIP21 URI: ${bip21Uri}`)
-  console.log(`[DEBUG] Parsed BTC: ${amountBtcString}`)
-  console.log(`[DEBUG] Converted to sats: ${amountSats}`)
+  const { address, amountSats } = parseBip21Payment(bip21Uri)
 
   return { address, amountSats }
 }
