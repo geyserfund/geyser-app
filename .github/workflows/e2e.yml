@@ -3,11 +3,6 @@ on:
   pull_request:
     branches:
       - 'main'
-      - 'production'
-  push:
-    branches:
-      - 'main'
-      - 'production'
 jobs:
   playwright-chromium:
     runs-on: ubuntu-22.04
@@ -22,6 +17,11 @@ jobs:
       BITCOIND_AUTH: ${{ secrets.BITCOIND_AUTH }}
       PROJECT_REVIEW_SUBMIT_JWT: ${{ secrets.PROJECT_REVIEW_SUBMIT_JWT }}
       PROJECT_CREATION_ACCOUNT_PASSWORD: ${{ secrets.PROJECT_CREATION_ACCOUNT_PASSWORD }}
+      VITE_APP_ENV: ${{ vars.VITE_APP_ENV }}
+      VITE_APP_API_ENDPOINT: ${{ vars.VITE_APP_API_ENDPOINT }}
+      VITE_APP_SENTRY_DSN: ${{ vars.VITE_APP_SENTRY_DSN }}
+      SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
       CI: true
     steps:
       - name: Checkout code
