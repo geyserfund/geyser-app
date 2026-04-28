@@ -12,12 +12,6 @@ export enum ApolloErrors {
   REWARD_OUT_OF_STOCK = 'REWARD_OUT_OF_STOCK',
 }
 
-/** Test project names */
-export const TEST_PROJECTS = {
-  LND_TEST_PROJECT: config.projects.lndTestProject,
-  LIGHTNING_TEST_PROJECT: config.projects.lightningTestProject,
-} as const
-
 /** Environment configuration shortcuts */
 export const ENV = {
   APP_URL: config.appUrl,

@@ -42,12 +42,6 @@ export const config = {
     mineBlockAddress: getEnv('MINE_BLOCK_ADDRESS', 'bcrt1qkfxpvljhfmj93vjjdfzl24ww8yx8hrq4hllnfn'),
   },
   
-  /** Test project names */
-  projects: {
-    lndTestProject: 'lndtestproject',
-    lightningTestProject: 'lightningtestproject',
-  },
-
   /** Project-creation test configuration */
   projectCreation: {
     reviewSubmitJwt: getOptionalEnv('PROJECT_REVIEW_SUBMIT_JWT'),

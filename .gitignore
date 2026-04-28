@@ -25,6 +25,7 @@ packages/testing/playwright/.cache/
 packages/testing/playwright/.auth/
 packages/testing/playwright/trace.zip
 packages/testing/playwright/**/*.png
+!packages/testing/playwright/assets/*.png
 packages/testing/playwright/**/*.webm
 packages/testing/playwright/**/*.mp4
 packages/testing/playwright/bundles/*.bundle.js

@@ -129,6 +129,9 @@ export const loginWithRealNostr = async (page: Page) => {
       await getNostrOption().waitFor({ state: 'visible', timeout: 15000 })
       await selectNostrAuth(page)
       await waitForLoggedInState()
+      // Dismiss any lingering login/auth modal before returning so it cannot
+      // block subsequent interactions (e.g. clicking the user-menu dropdown).
+      await page.keyboard.press('Escape').catch(() => undefined)
       await page.waitForTimeout(500)
       return
     } catch (error) {

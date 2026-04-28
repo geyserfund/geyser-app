@@ -13,7 +13,7 @@ import {
   enterEmail,
 } from '../../domains/funding/actions'
 import { expectCommentScreen, expectFundingAmountScreen } from '../../domains/funding/assertions'
-import { ONCHAIN_AMOUNT, PROJECT_NAME, TEST_COMMENT, TEST_EMAIL } from '../../domains/funding/constants'
+import { ONCHAIN_AMOUNT, PRISM_PROJECT_NAME, TEST_COMMENT, TEST_EMAIL } from '../../domains/funding/constants'
 import { checkLiveBackendAvailability } from '../../domains/shared/backend'
 import { ApolloErrors } from '../../domains/shared/constants'
 
@@ -76,7 +76,7 @@ test.describe('Funding Error Handling', () => {
     const backend = await checkLiveBackendAvailability(page.request)
     test.skip(!backend.ok, `Skipping funding tests: ${backend.reason}`)
 
-    await page.goto(`/project/${PROJECT_NAME}`)
+    await page.goto(`/project/${PRISM_PROJECT_NAME}`)
   })
 
   test('shows wallet max limit error page', async ({ page }) => {
