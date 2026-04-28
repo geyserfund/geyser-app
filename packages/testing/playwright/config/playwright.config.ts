@@ -56,7 +56,9 @@ export default defineConfig({
 
     /** Accept downloads */
     acceptDownloads: true,
-* Configure projects for major browsers */
+  },
+
+  /** Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
