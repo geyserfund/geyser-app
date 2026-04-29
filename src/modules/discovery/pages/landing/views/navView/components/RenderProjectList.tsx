@@ -24,8 +24,8 @@ export const RenderProjectList = ({
   noMoreItems,
   fetchNext,
   projectRows,
+  projectFilter,
   trendingAmountLabel,
-  hideTrendingBelowUsd,
   emptyState,
 }: {
   projects: (ProjectForLandingPageFragment & {
@@ -36,12 +36,15 @@ export const RenderProjectList = ({
   noMoreItems?: MutableRefObject<boolean>
   fetchNext?: (count?: number) => Promise<void>
   projectRows?: GlobalProjectLeaderboardRow[]
+  projectFilter?: (project: ProjectForLandingPageFragment) => boolean
   trendingAmountLabel?: string
-  hideTrendingBelowUsd?: number
   emptyState?: ReactNode
 }) => {
   const isMobile = useMobileMode()
-  const hasNoResults = !loading && !isLoadingMore?.current && !projects.length && !projectRows?.length
+  const visibleProjects = projectFilter ? projects.filter(projectFilter) : projects
+  const hasLoadedAllItems = noMoreItems?.current ?? true
+  const hasNoResults =
+    !loading && !isLoadingMore?.current && hasLoadedAllItems && !visibleProjects.length && !projectRows?.length
 
   if (hasNoResults && emptyState) {
     return <>{emptyState}</>
@@ -54,19 +57,18 @@ export const RenderProjectList = ({
 
     if (projectRows) {
       return projectRows.map((projectRow) => (
-        <GridItem key={projectRow.projectName}>
-          <MonthlyLeaderboardProjectCard
-            projectRow={projectRow}
-            trendingAmountLabel={trendingAmountLabel}
-            hideTrendingBelowUsd={hideTrendingBelowUsd}
-          />
-        </GridItem>
+        <MonthlyLeaderboardProjectCard
+          key={projectRow.projectName}
+          projectRow={projectRow}
+          projectFilter={projectFilter}
+          trendingAmountLabel={trendingAmountLabel}
+        />
       ))
     }
 
     return (
       <>
-        {projects.map((project) => (
+        {visibleProjects.map((project) => (
           <GridItem key={project.id}>
             <LandingProjectCard key={project.id} project={project} />
           </GridItem>
@@ -95,12 +97,12 @@ export const RenderProjectList = ({
 
 const MonthlyLeaderboardProjectCard = ({
   projectRow,
+  projectFilter,
   trendingAmountLabel,
-  hideTrendingBelowUsd,
 }: {
   projectRow: GlobalProjectLeaderboardRow
+  projectFilter?: (project: ProjectForLandingPageFragment) => boolean
   trendingAmountLabel?: string
-  hideTrendingBelowUsd?: number
 }) => {
   const { t } = useTranslation()
   const { data, loading } = useFeaturedProjectForLandingPageQuery({
@@ -115,22 +117,29 @@ const MonthlyLeaderboardProjectCard = ({
   const project = data?.projectGet
 
   if (loading || !project) {
-    return <LandingCardBaseSkeleton />
+    return (
+      <GridItem>
+        <LandingCardBaseSkeleton />
+      </GridItem>
+    )
+  }
+
+  if (projectFilter && !projectFilter(project)) {
+    return null
   }
 
   return (
-    <LandingProjectCard
-      project={{
-        ...project,
-        contributionSummary: {
-          contributionsTotal: projectRow.contributionsTotal,
-          contributionsTotalUsd: projectRow.contributionsTotalUsd,
-        },
-      }}
-      hideContributionContent={Boolean(
-        hideTrendingBelowUsd && projectRow.contributionsTotalUsd <= hideTrendingBelowUsd,
-      )}
-      trendingAmountLabel={trendingAmountLabel ?? t('raised this month')}
-    />
+    <GridItem>
+      <LandingProjectCard
+        project={{
+          ...project,
+          contributionSummary: {
+            contributionsTotal: projectRow.contributionsTotal,
+            contributionsTotalUsd: projectRow.contributionsTotalUsd,
+          },
+        }}
+        trendingAmountLabel={trendingAmountLabel ?? t('raised this month')}
+      />
+    </GridItem>
   )
 }

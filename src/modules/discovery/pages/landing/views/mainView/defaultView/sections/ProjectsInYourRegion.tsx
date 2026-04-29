@@ -9,6 +9,7 @@ import {
   OrderByDirection,
   ProjectFundingStrategy,
   ProjectsGetWhereInput,
+  ProjectsGetWhereInputStatus,
   ProjectsOrderByField,
   ProjectsOrderByInput,
   useGetUserIpCountryQuery,
@@ -34,6 +35,7 @@ export const ProjectsInYourRegion = () => {
   const where = {
     fundingStrategy: ProjectFundingStrategy.TakeItAll,
     countryCode: userIpCountryData?.userIpCountry || undefined,
+    status: ProjectsGetWhereInputStatus.Active,
   } as ProjectsGetWhereInput
 
   const orderBy = [

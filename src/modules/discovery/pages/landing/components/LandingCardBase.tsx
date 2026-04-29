@@ -37,12 +37,13 @@ export interface LandingCardBaseProps extends CardLayoutProps {
   project: ProjectForLandingPageFragment & {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   }
-  hideContributionContent?: boolean
   noMobile?: boolean
   hasSubscribe?: boolean
   statusPillLabel?: string
   trendingAmountLabel?: string
 }
+
+const MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD = 100
 
 /** Shared pill style used for location and category overlays on the image. */
 const ImagePill = ({ children }: { children: React.ReactNode }) => (
@@ -176,6 +177,7 @@ const CardFooter = ({
   percentage,
   timeLeft,
   formattedAmount,
+  shouldShowContributionAmount,
   hasFire,
   contributionLabel,
   onContribute,
@@ -188,6 +190,7 @@ const CardFooter = ({
   percentage: number
   timeLeft: ReturnType<typeof aonProjectTimeLeft>
   formattedAmount: string
+  shouldShowContributionAmount: boolean
   hasFire: boolean
   contributionLabel: string
   onContribute: (e: React.MouseEvent<HTMLButtonElement>) => void
@@ -245,7 +248,11 @@ const CardFooter = ({
 
   return (
     <HStack width="100%" justifyContent="space-between" alignItems="center" marginTop="auto">
-      <ContributionAmount amount={formattedAmount} hasFire={hasFire} label={contributionLabel} />
+      {shouldShowContributionAmount ? (
+        <ContributionAmount amount={formattedAmount} hasFire={hasFire} label={contributionLabel} />
+      ) : (
+        <Box flex={1} />
+      )}
       {contributeButton}
     </HStack>
   )
@@ -321,7 +328,6 @@ export const LandingCardBase = ({
   project,
   hasSubscribe,
   noMobile,
-  hideContributionContent,
   statusPillLabel,
   trendingAmountLabel,
   ...rest
@@ -340,6 +346,7 @@ export const LandingCardBase = ({
   const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
 
   const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
+  const shouldShowContributionAmount = contributionAmount >= MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD
   const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
   const isAonEndedFunded = isAonProject && !isAonFailed && !timeLeft && percentage >= 100
@@ -493,40 +500,40 @@ export const LandingCardBase = ({
           </Body>
         )}
 
-        {!hideContributionContent &&
-          (useCompactLayout ? (
-            isAonProject ? (
-              <AonStatusDisplay
-                percentage={percentage}
-                timeLeft={timeLeft}
-                isFailed={isAonFailed}
-                isEndedFunded={isAonEndedFunded}
-                size="xs"
-                wrap={false}
-              />
-            ) : (
-              <ContributionAmount
-                amount={formatAmount(contributionAmount || 0, 'USD')}
-                hasFire={hasFire}
-                label={contributionLabel}
-                size="xs"
-              />
-            )
-          ) : (
-            <CardFooter
-              project={project}
-              isAonProject={isAonProject}
-              isAonFailed={isAonFailed}
-              isAonEndedFunded={isAonEndedFunded}
+        {useCompactLayout ? (
+          isAonProject ? (
+            <AonStatusDisplay
               percentage={percentage}
               timeLeft={timeLeft}
-              formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
-              hasFire={hasFire}
-              contributionLabel={contributionLabel}
-              onContribute={handleContribute}
-              isDisabled={isFundingDisabled()}
+              isFailed={isAonFailed}
+              isEndedFunded={isAonEndedFunded}
+              size="xs"
+              wrap={false}
             />
-          ))}
+          ) : shouldShowContributionAmount ? (
+            <ContributionAmount
+              amount={formatAmount(contributionAmount || 0, 'USD')}
+              hasFire={hasFire}
+              label={contributionLabel}
+              size="xs"
+            />
+          ) : null
+        ) : (
+          <CardFooter
+            project={project}
+            isAonProject={isAonProject}
+            isAonFailed={isAonFailed}
+            isAonEndedFunded={isAonEndedFunded}
+            percentage={percentage}
+            timeLeft={timeLeft}
+            formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
+            shouldShowContributionAmount={shouldShowContributionAmount}
+            hasFire={hasFire}
+            contributionLabel={contributionLabel}
+            onContribute={handleContribute}
+            isDisabled={isFundingDisabled()}
+          />
+        )}
       </VStack>
     </InteractiveCardLayout>
   )

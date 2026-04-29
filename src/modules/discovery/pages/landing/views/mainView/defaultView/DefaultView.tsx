@@ -94,11 +94,11 @@ export const DefaultView = () => {
       <VStack w="full" spacing={20} paddingBottom={40}>
         <CuratedProjects />
 
+        <ProjectsInYourRegion />
+
         <SuccessStories />
 
         <HowGeyserWorks />
-
-        <ProjectsInYourRegion />
 
         {showBelowTheFold && (
           <>

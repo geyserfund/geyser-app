@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -19,6 +20,10 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
+  QUERY_USER_WALLET_WITHDRAW_ACTIVE,
+  QUERY_USER_WALLET_WITHDRAW_LATEST,
+} from '@/modules/profile/graphql/userWalletWithdraw.ts'
+import {
   ConfigureUserWalletModal,
   hasConfiguredUserWallet,
 } from '@/modules/profile/pages/profileSettings/components/ConfigureUserWalletModal.tsx'
@@ -34,11 +39,14 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 import { useNotification } from '@/utils'
 
+import { UserWalletWithdrawRsk } from './UserWalletWithdrawRsk.tsx'
+
 export const ProfileWalletSettings = () => {
   const toast = useNotification()
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setAccountPassword = useSetAtom(accountPasswordAtom)
   const configureWalletModal = useDisclosure()
+  const userWalletWithdrawModal = useDisclosure()
   const seedWordsModal = useModal()
 
   useUserAccountKeys()
@@ -54,10 +62,54 @@ export const ProfileWalletSettings = () => {
   const hasWalletConfigured = hasConfiguredUserWallet(userAccountKeys)
   const rskAddress = userAccountKeys?.rskKeyPair?.address || ''
   const { getUSDCentsAmount } = useBTCConverter()
-  const { withdrawable, isLoading: isWithdrawableLoading } = usePrismWithdrawable({ rskAddress })
+  const {
+    withdrawable,
+    isLoading: isWithdrawableLoading,
+    refetch: refetchWithdrawable,
+  } = usePrismWithdrawable({ rskAddress })
+  const {
+    data: activeUserWalletWithdrawData,
+    loading: isActiveUserWalletWithdrawLoading,
+    refetch: refetchActiveUserWalletWithdraw,
+  } = useQuery(QUERY_USER_WALLET_WITHDRAW_ACTIVE, {
+    fetchPolicy: 'cache-and-network',
+    skip: !hasWalletConfigured,
+  })
+  const {
+    data: latestUserWalletWithdrawData,
+    loading: isLatestUserWalletWithdrawLoading,
+    refetch: refetchLatestUserWalletWithdraw,
+  } = useQuery(QUERY_USER_WALLET_WITHDRAW_LATEST, {
+    fetchPolicy: 'cache-and-network',
+    skip: !hasWalletConfigured,
+  })
   const withdrawableSats = withdrawable ? withdrawable / 10000000000n : 0n
   const withdrawableUsd = getUSDCentsAmount(withdrawableSats) / 100
   const isBelowMinimumWithdrawal = withdrawableUsd > 0 && withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
+  const activeUserWalletWithdraw = activeUserWalletWithdrawData?.userWalletWithdrawActive?.userWalletWithdraw
+  const latestUserWalletWithdraw = latestUserWalletWithdrawData?.userWalletWithdrawLatest?.userWalletWithdraw
+  const latestUserWalletWithdrawPayment = [...(latestUserWalletWithdraw?.payments ?? [])].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )[0]
+  const hasRetryableUserWalletWithdraw =
+    latestUserWalletWithdraw?.status === 'FAILED' && latestUserWalletWithdrawPayment?.status === 'REFUNDED'
+  const hasActiveUserWalletWithdraw = Boolean(
+    activeUserWalletWithdraw && ['PENDING', 'PROCESSING'].includes(activeUserWalletWithdraw.status),
+  )
+  const canWithdraw =
+    withdrawableUsd >= MIN_BITCOIN_PAYOUT_USD || hasActiveUserWalletWithdraw || hasRetryableUserWalletWithdraw
+  const isUserWalletWithdrawStateLoading = isActiveUserWalletWithdrawLoading || isLatestUserWalletWithdrawLoading
+  const withdrawButtonLabel = hasActiveUserWalletWithdraw
+    ? t('Continue')
+    : hasRetryableUserWalletWithdraw
+    ? t('Retry')
+    : t('Withdraw')
+
+  const handleUserWalletWithdrawCompleted = () => {
+    refetchWithdrawable()
+    refetchActiveUserWalletWithdraw()
+    refetchLatestUserWalletWithdraw()
+  }
 
   const handleCloseSeedWordsModal = () => {
     seedWordsModal.onClose()
@@ -231,8 +283,14 @@ export const ProfileWalletSettings = () => {
                         {t('≈ {{amount}} USD', { amount: `$${withdrawableUsd.toFixed(2)}` })}
                       </Body>
                     </VStack>
-                    <Button size="sm" colorScheme="primary1" isDisabled>
-                      {t('Withdraw')}
+                    <Button
+                      size="sm"
+                      colorScheme="primary1"
+                      isDisabled={!canWithdraw || isWithdrawableLoading || isUserWalletWithdrawStateLoading}
+                      isLoading={isUserWalletWithdrawStateLoading}
+                      onClick={userWalletWithdrawModal.onOpen}
+                    >
+                      {withdrawButtonLabel}
                     </Button>
                   </HStack>
                 </Skeleton>
@@ -282,6 +340,13 @@ export const ProfileWalletSettings = () => {
       )}
 
       <ConfigureUserWalletModal isOpen={configureWalletModal.isOpen} onClose={configureWalletModal.onClose} />
+
+      <UserWalletWithdrawRsk
+        isOpen={userWalletWithdrawModal.isOpen}
+        onClose={userWalletWithdrawModal.onClose}
+        rskAddress={rskAddress}
+        onCompleted={handleUserWalletWithdrawCompleted}
+      />
 
       <Modal isOpen={seedWordsModal.isOpen} onClose={handleCloseSeedWordsModal} title={t('View seed words')} size="md">
         {isSeedWordsView ? renderSeedWordsListView() : renderSeedWordsPasswordView()}

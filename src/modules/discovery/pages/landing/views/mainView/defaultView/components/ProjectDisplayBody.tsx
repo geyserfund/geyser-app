@@ -14,7 +14,6 @@ import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout.tsx'
 
 export type ProjectDisplayItem = ProjectForLandingPageFragment & {
   contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
-  hideContributionContent?: boolean
   statusPillLabel?: string
 }
 
@@ -64,7 +63,6 @@ export const ProjectDisplayBody = ({
               <LandingProjectCard
                 key={project.id}
                 project={project}
-                hideContributionContent={project.hideContributionContent}
                 statusPillLabel={project.statusPillLabel}
               />
             </GridItem>

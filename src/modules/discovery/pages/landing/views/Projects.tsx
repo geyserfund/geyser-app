@@ -24,13 +24,6 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 import { Head } from '@/config/Head.tsx'
 import { useFilterContext } from '@/context/filter.tsx'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '@/modules/discovery/graphql/queries/projectsQuery.ts'
-import {
-  ProjectCategoryLabel,
-  ProjectCategoryList,
-  ProjectSubCategoryMap,
-  ProjectSubCategoryLabel,
-  ProjectSubCategoryList,
-} from '@/shared/constants/platform/projectCategory.ts'
 import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import {
@@ -40,7 +33,15 @@ import {
   GeyserMainSeoImageUrl,
   PathName,
 } from '@/shared/constants/index.ts'
+import {
+  ProjectCategoryLabel,
+  ProjectCategoryList,
+  ProjectSubCategoryLabel,
+  ProjectSubCategoryList,
+  ProjectSubCategoryMap,
+} from '@/shared/constants/platform/projectCategory.ts'
 import { useQueryWithPagination } from '@/shared/hooks/useQueryWithPagination.tsx'
+import { getIsAonActive } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import {
   type GlobalProjectLeaderboardRow,
   type ProjectForLandingPageFragment,
@@ -55,6 +56,7 @@ import {
   useGetUserIpCountryQuery,
   useLeaderboardGlobalProjectsQuery,
 } from '@/types/index.ts'
+import { isActive } from '@/utils/validations/project.ts'
 
 import { RenderProjectList } from './navView/components/RenderProjectList.tsx'
 import { ProjectsRegionCountryFilter } from './ProjectsRegionCountryFilter.tsx'
@@ -174,7 +176,22 @@ const getHeadContent = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) =>
   }
 }
 
-const getSortOption = (sortParam: string | null, supportsMostFundedThisMonth: boolean): SortOption => {
+const getDefaultSortOption = (
+  projectTypeFilter: ProjectTypeFilter,
+  supportsMostFundedThisMonth: boolean,
+): SortOption => {
+  if (projectTypeFilter === 'campaigns') {
+    return 'most_recent'
+  }
+
+  return supportsMostFundedThisMonth ? 'most_funded_this_month' : 'most_funded'
+}
+
+const getSortOption = (
+  sortParam: string | null,
+  supportsMostFundedThisMonth: boolean,
+  projectTypeFilter: ProjectTypeFilter,
+): SortOption => {
   if (sortParam === 'most_funded') {
     return 'most_funded'
   }
@@ -187,7 +204,11 @@ const getSortOption = (sortParam: string | null, supportsMostFundedThisMonth: bo
     return supportsMostFundedThisMonth ? 'most_funded_this_month' : 'most_funded'
   }
 
-  return supportsMostFundedThisMonth ? 'most_funded_this_month' : 'most_funded'
+  return getDefaultSortOption(projectTypeFilter, supportsMostFundedThisMonth)
+}
+
+const isCampaignProjectStillRaising = (project: ProjectForLandingPageFragment) => {
+  return isActive(project.status) && getIsAonActive(project)
 }
 
 const ProjectCategoryEmoji: Record<ProjectCategory, string> = {
@@ -418,7 +439,7 @@ export const Projects = () => {
   const hasSearchFilter = Boolean(search?.trim())
   const tagFiltersCount = tagIds?.length ?? 0
   const supportsMostFundedThisMonth = !hasSearchFilter && tagFiltersCount === 0
-  const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM), supportsMostFundedThisMonth)
+  const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM), supportsMostFundedThisMonth, projectTypeFilter)
   const sortOptions = useMemo<FilterDropdownOption<SortOption>[]>(
     () =>
       supportsMostFundedThisMonth
@@ -474,11 +495,16 @@ export const Projects = () => {
       },
     ]
   }, [sort])
+  const resultMap =
+    projectTypeFilter === 'campaigns'
+      ? (projects: ProjectForLandingPageFragment[]) => projects.filter(isCampaignProjectStillRaising)
+      : undefined
 
   const { data, error, fetchNext, isLoading, isLoadingMore, noMoreItems, refetch } =
     useQueryWithPagination<ProjectForLandingPageFragment>({
       itemLimit: PAGE_SIZE,
       orderBy,
+      resultMap,
       options: {
         skip: shouldUseMostFundedThisMonth || (shouldFilterByUserRegion && (!countryCode || loadingCountryCode)),
       },
@@ -514,6 +540,7 @@ export const Projects = () => {
   const projectRows = shouldUseMostFundedThisMonth ? mostFundedThisMonthProjects : undefined
   const projectsError = shouldUseMostFundedThisMonth ? mostFundedThisMonthError : error
   const projectsLoading = shouldUseMostFundedThisMonth ? isMostFundedThisMonthLoading : isLoading
+  const projectFilter = projectTypeFilter === 'campaigns' ? isCampaignProjectStillRaising : undefined
   const toolbarDividerColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
 
   useEffect(() => {
@@ -548,10 +575,7 @@ export const Projects = () => {
 
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
-
-    const shouldClearSortParam =
-      (supportsMostFundedThisMonth && nextSort === 'most_funded_this_month') ||
-      (!supportsMostFundedThisMonth && nextSort === 'most_funded')
+    const shouldClearSortParam = nextSort === getDefaultSortOption(projectTypeFilter, supportsMostFundedThisMonth)
 
     if (shouldClearSortParam) {
       nextSearchParams.delete(SORT_SEARCH_PARAM)
@@ -1056,9 +1080,9 @@ export const Projects = () => {
             projects={projects}
             loading={projectsLoading}
             projectRows={projectRows}
+            projectFilter={projectFilter}
             emptyState={<ProjectsFilterEmptyState message={emptyStateMessage} suggestion={emptyStateSuggestion} />}
             trendingAmountLabel={t('raised this month')}
-            hideTrendingBelowUsd={100}
             isLoadingMore={shouldUseMostFundedThisMonth ? undefined : isLoadingMore}
             noMoreItems={shouldUseMostFundedThisMonth ? undefined : noMoreItems}
             fetchNext={shouldUseMostFundedThisMonth ? undefined : fetchNext}

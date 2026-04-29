@@ -218,7 +218,11 @@ export const ProfileSettingsAffiliate = () => {
           <CardLayout spacing={3} borderColor="neutral1.6">
             <H2 size="lg">{t('Payout instructions')}</H2>
             <Body color="neutral1.11">
-              {t('Affiliate payouts are processed monthly. Only payouts above $10 will be processed.')}
+              {t('Affiliate payouts are processed monthly and can be withdrawn from the')}{' '}
+              <ChakraLink as={Link} to={getPath('userProfileSettingsWallet', userId || '')} color="primary1.9">
+                {t('Wallet')}
+              </ChakraLink>{' '}
+              {t('page.')}
             </Body>
             {!hasUserWalletConfigured ? (
               <Feedback variant={FeedBackVariant.WARNING} noIcon>

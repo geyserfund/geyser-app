@@ -40,8 +40,6 @@ interface ProjectDisplayProps {
 const NO_OF_ITEMS_TO_SHOW = 3
 const NO_OF_ITEMS_TO_FETCH = 5
 const NO_OF_POSTS_TO_FETCH = 10
-const MINIMUM_VISIBLE_AMOUNT_USD = 100
-
 const shuffleProjects = <T,>(projects: T[]) => {
   const shuffledProjects = [...projects]
 
@@ -65,9 +63,6 @@ const isRecentlyLaunched = (launchedAt?: ProjectDisplayItem['launchedAt'] | null
 
   return launchDate.isValid && launchDate.hasSame(DateTime.local(), 'month')
 }
-
-const getDisplayedAmountUsd = (project: ProjectDisplayItem) =>
-  project.contributionSummary?.contributionsTotalUsd ?? project.balanceUsdCent / 100
 
 export const ProjectsDisplayMostFundedThisWeek = ({
   title,
@@ -191,7 +186,6 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return shuffleProjects(
       Array.from(projectMap.values()).map((project) => ({
         ...project,
-        hideContributionContent: getDisplayedAmountUsd(project) < MINIMUM_VISIBLE_AMOUNT_USD,
         statusPillLabel: isRecentlyLaunched(project.launchedAt) ? t('Recently launched') : t('Weekly trending'),
       })),
     ).slice(0, NO_OF_ITEMS_TO_SHOW)

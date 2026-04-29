@@ -22,6 +22,10 @@
   - `hasFiatPaymentMethodAtom` current behavior remains unchanged.
   - Apple Pay capability check with `ApplePaySession.canMakePayments()` remains unchanged.
 
+## Local Development
+
+- When verifying the app in a browser, use `https://dev.geyser.fund` instead of `http://localhost:3000` so frontend data loads correctly from the dev backend.
+
 ## Internationalization
 
 - For translatable strings with dynamic values, never use template literals in `t(...)`; use interpolation (`t('... {{var}} ...', { var: value })`) or `Trans`.
