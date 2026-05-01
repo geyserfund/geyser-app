@@ -25,6 +25,9 @@ const createBitcoinContext = () => {
   })
 }
 
+/** Default timeout for all LND / bitcoind HTTP requests (30 seconds) */
+const LND_REQUEST_TIMEOUT_MS = 30000
+
 /** Pay an onchain Bitcoin transaction via LND */
 export const payOnchain = async (address: string, amount: number) => {
   const context = await createLndContext()
@@ -34,6 +37,7 @@ export const payOnchain = async (address: string, amount: number) => {
       addr: address,
       amount: amount.toString(),
     },
+    timeout: LND_REQUEST_TIMEOUT_MS,
   })
 
   if (!response.ok()) {
@@ -54,6 +58,7 @@ export const payLightningInvoice = async (paymentRequest: string) => {
     data: {
       payment_request: paymentRequest,
     },
+    timeout: LND_REQUEST_TIMEOUT_MS,
   })
 
   if (!response.ok()) {
@@ -77,6 +82,7 @@ export const mineBlock = async () => {
       method: 'generatetoaddress',
       params: [1, ENV.MINE_BLOCK_ADDRESS],
     },
+    timeout: LND_REQUEST_TIMEOUT_MS,
   })
 
   if (!response.ok()) {

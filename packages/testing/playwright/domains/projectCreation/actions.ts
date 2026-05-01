@@ -66,8 +66,8 @@ export const clickLaunchProjectButton = async (page: Page) => {
   await launchButton.waitFor({ state: 'visible', timeout: 10000 })
   await launchButton.click()
 
-  // Wait for navigation to project details page
-  await page.waitForURL(/\/launch\/(new|\d+)\/details/, { timeout: 10000 })
+  // Wait for navigation to project details page (20s: CI can be slow to commit the new project)
+  await page.waitForURL(/\/launch\/(new|\d+)\/details/, { timeout: 20000 })
 }
 
 /** Fill project title input */
