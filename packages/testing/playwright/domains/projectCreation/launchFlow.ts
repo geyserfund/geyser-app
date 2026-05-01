@@ -402,39 +402,55 @@ export const continueFromRewardsToLaunchReview = async (page: Page, options: Con
   await clickContinue(page)
   await page.waitForURL(URL_PATTERNS.payment, { timeout: 20000 })
 
+  const POST_PAYMENT_EMAIL_PATTERNS = [
+    URL_PATTERNS.paymentTaxId,
+    URL_PATTERNS.paymentAccountPassword,
+    URL_PATTERNS.paymentSeedWords,
+    URL_PATTERNS.paymentFiatContributions,
+    URL_PATTERNS.launchFinalize,
+  ] as const
+
   await clickContinue(page)
-  await page.waitForURL(URL_PATTERNS.paymentTaxId, { timeout: 20000 })
+  // The tax-id sub-step is skipped for accounts that already have tax info on file;
+  // accept any downstream step as a valid landing point.
+  const afterPaymentEmail = await waitForAnyUrl(page, [...POST_PAYMENT_EMAIL_PATTERNS], 20000)
 
   let nextPattern: RegExp | null = null
-  for (let attempt = 1; attempt <= 5; attempt += 1) {
-    await clickContinue(page)
 
-    nextPattern = await waitForAnyUrlOrNull(
-      page,
-      [URL_PATTERNS.paymentAccountPassword, URL_PATTERNS.paymentSeedWords, URL_PATTERNS.paymentFiatContributions, URL_PATTERNS.launchFinalize],
-      20000,
-    )
+  if (afterPaymentEmail === URL_PATTERNS.paymentTaxId) {
+    for (let attempt = 1; attempt <= 5; attempt += 1) {
+      await clickContinue(page)
 
-    if (nextPattern) {
-      break
-    }
-
-    const isStillOnTaxId = URL_PATTERNS.paymentTaxId.test(page.url())
-    if (!isStillOnTaxId) {
-      nextPattern = await waitForAnyUrl(
+      nextPattern = await waitForAnyUrlOrNull(
         page,
         [URL_PATTERNS.paymentAccountPassword, URL_PATTERNS.paymentSeedWords, URL_PATTERNS.paymentFiatContributions, URL_PATTERNS.launchFinalize],
-        12000,
+        20000,
       )
-      break
+
+      if (nextPattern) {
+        break
+      }
+
+      const isStillOnTaxId = URL_PATTERNS.paymentTaxId.test(page.url())
+      if (!isStillOnTaxId) {
+        nextPattern = await waitForAnyUrl(
+          page,
+          [URL_PATTERNS.paymentAccountPassword, URL_PATTERNS.paymentSeedWords, URL_PATTERNS.paymentFiatContributions, URL_PATTERNS.launchFinalize],
+          12000,
+        )
+        break
+      }
+
+      await maybeSelectTaxEntity(page)
+      await page.waitForTimeout(500)
     }
 
-    await maybeSelectTaxEntity(page)
-    await page.waitForTimeout(500)
-  }
-
-  if (!nextPattern) {
-    throw new Error('Unable to continue past wallet tax-id step.')
+    if (!nextPattern) {
+      throw new Error('Unable to continue past wallet tax-id step.')
+    }
+  } else {
+    // Tax-id was skipped; already on the next step
+    nextPattern = afterPaymentEmail
   }
 
   if (nextPattern === URL_PATTERNS.paymentAccountPassword) {

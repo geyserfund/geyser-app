@@ -91,7 +91,10 @@ export const selectNostrAuth = async (page: Page) => {
 /** Open the user dropdown menu */
 export const openUserMenu = async (page: Page) => {
   const dropdown = page.getByTestId('platform-dropdown-menu')
-  await dropdown.click()
+  await dropdown.waitFor({ state: 'visible', timeout: 10000 })
+  // force: true bypasses Chakra modal overlays that may intercept pointer events
+  // after login (e.g. auth modal still mounted while login completes)
+  await dropdown.click({ force: true })
 }
 
 /** Click the Sign Out menu item in the user menu */

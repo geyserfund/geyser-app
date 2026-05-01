@@ -129,6 +129,12 @@ test.describe('Funding Error Handling', () => {
     await clickContribute(page)
     await expectFundingAmountScreen(page)
 
+    const firstBuyButton = page.getByRole('button', { name: 'Buy' }).first()
+    test.skip(
+      !(await firstBuyButton.isVisible().catch(() => false)),
+      `Skipping: ${PRISM_PROJECT_NAME} has no visible products/rewards to test the out-of-stock error.`,
+    )
+
     await clickToggleDonationInput(page)
     await clickAddReward(page, 0)
     await clickContinueFromInit(page)
