@@ -423,17 +423,13 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
   if (name === 'fundingMode') {
     const nextMode = value as RecurringFundingMode
 
-    newState = {
-      ...newState,
-      rewardsByIDAndCount: {},
-      needsShipping: false,
-      guardianBadges: [],
-      shippingCost: 0,
-    }
-
     if (nextMode === recurringFundingModes.membership) {
       newState = {
         ...newState,
+        rewardsByIDAndCount: {},
+        needsShipping: false,
+        guardianBadges: [],
+        shippingCost: 0,
         donationAmount: 0,
         donationAmountUsdCent: 0,
       }
@@ -579,6 +575,7 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       })
     }
 
+    console.log('newRewardsCountInfo', newRewardsCountInfo)
     return {
       ...current,
       rewardsByIDAndCount: newRewardsCountInfo,
