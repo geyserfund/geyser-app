@@ -362,7 +362,7 @@ const pathsMap = {
   fundingPayment: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}`,
   fundingPaymentFailed: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFailed} `,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFailed}`,
   fundingPaymentLightning: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
   fundingPaymentCard: (projectName: string) =>

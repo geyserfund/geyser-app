@@ -89,6 +89,7 @@ export default [
       'testing-library/render-result-naming-convention': 0,
       'max-nested-callbacks': 0,
       'no-warning-comments': 0,
+      'testing-library/prefer-screen-queries': 0,
       'no-restricted-syntax': [
         'off',
         {

@@ -87,7 +87,7 @@ export const {
 } = import.meta.env
 
 const parsedGeyserLaunchProjectId = Number(import.meta.env.VITE_APP_GEYSER_LAUNCH_PROJECT_ID)
-const defaultGeyserLaunchProjectId = __production__ ? 3075 : __staging__ ? 839 : 10
+const defaultGeyserLaunchProjectId = __production__ ? 3075 : __staging__ ? 839 : __development__ ? 939 : 10
 
 /** Target project id used for launch-fee contributions in creation flow. */
 export const GEYSER_LAUNCH_PROJECT_ID =

@@ -131,6 +131,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 colorScheme="primary1"
                 onClick={addRewardToBasket}
                 isDisabled={!isAvailable}
+                data-testid="add-reward-button"
                 sx={{
                   transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
                   '&:active:not(:disabled)': { transform: 'scale(0.96)' },

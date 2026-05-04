@@ -317,6 +317,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             control={form.control}
             name="category"
             placeholder={t('Select category')}
+            containerProps={{ 'data-testid': 'project-category-select' }}
             options={ProjectCategoryList.map((subCategory) => ({
               label: ProjectCategoryLabel[subCategory],
               value: subCategory,
@@ -328,6 +329,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             control={form.control}
             name="subCategory"
             placeholder={t('Select sub-category')}
+            containerProps={{ 'data-testid': 'project-subcategory-select' }}
             options={ProjectSubCategoryList.map((subCategory) => ({
               label: ProjectSubCategoryLabel[subCategory],
               value: subCategory,
@@ -347,6 +349,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           placeholder={t('Select country')}
           required
           control={form.control}
+          containerProps={{ 'data-testid': 'project-country-select' }}
           options={countriesData}
           getOptionLabel={(option: Country) => option.name}
           getOptionValue={(option: Country) => option.code}

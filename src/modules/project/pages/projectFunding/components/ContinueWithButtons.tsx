@@ -69,9 +69,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const creditCardIcon = <Icon as={FaCreditCard} color="currentColor" />
   const bitcoinIcon = <Icon as={FaBitcoin} color="currentColor" />
   const applePayIcon = <Icon as={AiFillApple} />
-  const stripeIcon = (
-    <Image src="/icons/stripe-s-logo.webp" alt={t('Stripe')} h="15px" objectFit="contain" />
-  )
+  const stripeIcon = <Image src="/icons/stripe-s-logo.webp" alt={t('Stripe')} h="15px" objectFit="contain" />
 
   const handleCreditCardClick = () => {
     setIntendedPaymentMethod(PaymentMethods.fiatSwap)

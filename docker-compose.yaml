@@ -33,16 +33,3 @@ services:
       - ./caddy/config:/config
     networks:
       - caddy
-
-  e2e:
-    image: cypress/included:13.13.2
-    build: /cypress
-    container_name: cypress
-    environment:
-      - ENV=development
-      - CYPRESS_baseUrl=https://dev.geyser.fund
-    working_dir: /cypress
-    volumes:
-      - ./:/cypress 
-    network_mode: host
-
