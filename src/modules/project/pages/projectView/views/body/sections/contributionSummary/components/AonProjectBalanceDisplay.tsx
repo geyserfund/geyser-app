@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, VStack } from '@chakra-ui/react'
+import { Button, HStack, Skeleton, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
@@ -7,7 +7,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
-import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { aonProjectTimeLeft, getFormattedAonGoalUserFacingDeadline } from '@/shared/utils/project/getAonData.ts'
 import { ProjectAonGoalStatus } from '@/types/index.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
@@ -24,6 +24,7 @@ export const AonProjectBalanceDisplay = () => {
 
   /** Calculate time left for AON project showing only the largest time unit */
   const timeLeft = useMemo(() => aonProjectTimeLeft(project.aonGoal), [project.aonGoal])
+  const deadlineLabel = useMemo(() => getFormattedAonGoalUserFacingDeadline(project.aonGoal), [project.aonGoal])
 
   const { sats: balance, usdCents: balanceUsdCent } = getProjectBalance()
   const goalAmount = project.aonGoal?.goalAmount
@@ -132,14 +133,16 @@ export const AonProjectBalanceDisplay = () => {
           </Body>
 
           {timeLeft && (
-            <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
-              <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
-                {timeLeft.value}
-              </Body>
-              <Body size="md" light display="inline">
-                {timeLeft.label}
-              </Body>
-            </VStack>
+            <Tooltip label={deadlineLabel ? t('Deadline: {{deadline}}', { deadline: deadlineLabel }) : undefined}>
+              <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
+                <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {timeLeft.value}
+                </Body>
+                <Body size="md" light display="inline">
+                  {timeLeft.label}
+                </Body>
+              </VStack>
+            </Tooltip>
           )}
         </VStack>
       </HStack>
