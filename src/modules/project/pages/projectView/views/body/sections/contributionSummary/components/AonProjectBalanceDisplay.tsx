@@ -1,7 +1,8 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Skeleton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
+import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
@@ -14,7 +15,8 @@ import { LiveProgressAqua } from '../../../../../../../../../shared/components/f
 const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus.Cancelled]
 
 export const AonProjectBalanceDisplay = () => {
-  const { project } = useProjectAtom()
+  const { project, projectAonGoalLoading, projectAonGoalError } = useProjectAtom()
+  const { queryProject } = useProjectAPI()
 
   const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
 
@@ -35,6 +37,47 @@ export const AonProjectBalanceDisplay = () => {
     ? 'linear-gradient(90deg, #b9e8fa 0%, #c4d2e2 25%, #d4e6ef 55%, #a1b8ca 100%)'
     : 'linear-gradient(90deg,#00E4FF 0%,#00F5D4 45%,#4ADE80 100%)'
   const glowColor = failedStatus ? '#a1b8ca' : '#00E4FF'
+
+  if (!project.aonGoal && (projectAonGoalLoading || projectAonGoalError)) {
+    return (
+      <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>
+        <HStack w="full" justifyContent="space-between">
+          <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
+            <Body size="2xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
+              {formatAmount(project.balance ?? 0, 'BTCSAT')}
+            </Body>
+            <Body size="md" light display="inline">
+              <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
+                {formatAmount(project.balanceUsdCent ?? 0, 'USDCENT')}
+              </Body>
+              {` ${t('raised')} `}
+            </Body>
+          </VStack>
+          <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
+            <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
+              {project.fundersCount ?? 0}
+            </Body>
+            <Body size="md" light display="inline">
+              {t('backers')}
+            </Body>
+          </VStack>
+        </HStack>
+
+        {projectAonGoalLoading ? (
+          <Skeleton height="20px" width="100%" borderRadius="full" />
+        ) : (
+          <VStack w="full" alignItems="start" spacing={2}>
+            <Body size="sm" light>
+              {t('Could not fetch All-or-Nothing goal data. Try again later.')}
+            </Body>
+            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={queryProject.execute}>
+              {t('Retry')}
+            </Button>
+          </VStack>
+        )}
+      </VStack>
+    )
+  }
 
   return (
     <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>

@@ -12,7 +12,7 @@ export const AonGoToRefundPage = () => {
   const { project } = useProjectAtom()
   const { isLoggedIn } = useAuthContext()
   const isAon = isAllOrNothing(project)
-  if (!isAon || isLoggedIn) {
+  if (!isAon || !project.aonGoal || isLoggedIn) {
     return null
   }
 
