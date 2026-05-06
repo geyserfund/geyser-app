@@ -5,16 +5,21 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 
 import { getPath } from '../../../shared/constants'
 import {
+  type UniqueProjectQueryInput,
   useCreateProjectMutation,
   useProjectActiveMatchingGetLazyQuery,
+  useProjectAonGoalLazyQuery,
   useProjectPageBodyLazyQuery,
   useProjectPublishMutation,
   useProjectStatusUpdateMutation,
   useUpdateProjectMutation,
 } from '../../../types'
+import { isAllOrNothing } from '../../../utils'
 import {
   normalizeProjectState,
   partialUpdateProjectAtom,
+  projectAonGoalErrorAtom,
+  projectAonGoalLoadingAtom,
   projectAtom,
   projectLoadingAtom,
   ProjectState,
@@ -46,13 +51,66 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
 
   const setProject = useSetAtom(projectAtom)
   const setProjectLoading = useSetAtom(projectLoadingAtom)
+  const setProjectAonGoalLoading = useSetAtom(projectAonGoalLoadingAtom)
+  const setProjectAonGoalError = useSetAtom(projectAonGoalErrorAtom)
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
 
   const { load, projectId, projectName } = props || {}
 
   const [queryProject, queryProjectOptions] = useProjectPageBodyLazyQuery()
+  const [queryProjectAonGoal] = useProjectAonGoalLazyQuery()
   const [queryProjectActiveMatching] = useProjectActiveMatchingGetLazyQuery()
+  const aonGoalRequestIdRef = useRef(0)
   const activeMatchingRequestIdRef = useRef(0)
+
+  const queryProjectAonGoalMethod = useCallback(
+    (where: UniqueProjectQueryInput) => {
+      const aonGoalRequestId = ++aonGoalRequestIdRef.current
+      setProjectAonGoalLoading(true)
+      setProjectAonGoalError(null)
+
+      queryProjectAonGoal({
+        variables: {
+          where,
+        },
+        fetchPolicy: 'cache-and-network',
+        errorPolicy: 'all',
+      })
+        .then(({ data: aonGoalData, error }) => {
+          if (aonGoalRequestIdRef.current !== aonGoalRequestId) {
+            return
+          }
+
+          setProjectAonGoalLoading(false)
+          if (error) {
+            setProjectAonGoalError(error)
+            captureException(error, {
+              tags: {
+                'project-aon-goal': 'projectGet.aonGoal',
+                'error.on': 'query error',
+              },
+            })
+          }
+
+          partialUpdateProject({ aonGoal: aonGoalData?.projectGet?.aonGoal ?? null })
+        })
+        .catch((error) => {
+          if (aonGoalRequestIdRef.current !== aonGoalRequestId) {
+            return
+          }
+
+          setProjectAonGoalLoading(false)
+          setProjectAonGoalError(error)
+          captureException(error, {
+            tags: {
+              'project-aon-goal': 'projectGet.aonGoal',
+              'error.on': 'query error',
+            },
+          })
+        })
+    },
+    [partialUpdateProject, queryProjectAonGoal, setProjectAonGoalError, setProjectAonGoalLoading],
+  )
 
   const queryProjectMethod = useCallback(() => {
     queryProject({
@@ -87,6 +145,13 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
 
         const { projectGet: project } = data
         setProject(normalizeProjectState(project as ProjectState))
+
+        if (isAllOrNothing(project)) {
+          queryProjectAonGoalMethod({ name: projectName || projectNameParam, id: projectId })
+        } else {
+          setProjectAonGoalLoading(false)
+          setProjectAonGoalError(null)
+        }
 
         const activeMatchingRequestId = ++activeMatchingRequestIdRef.current
         queryProjectActiveMatching({
@@ -123,8 +188,11 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     partialUpdateProject,
     queryProject,
     queryProjectActiveMatching,
+    queryProjectAonGoalMethod,
     projectName,
     projectId,
+    setProjectAonGoalError,
+    setProjectAonGoalLoading,
     setProjectLoading,
     navigate,
     launchModalShouldOpen,
@@ -145,6 +213,9 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     onCompleted(data) {
       if (data.updateProject) {
         partialUpdateProject(data.updateProject)
+        if (isAllOrNothing(data.updateProject)) {
+          queryProjectAonGoalMethod({ id: data.updateProject.id, name: data.updateProject.name })
+        }
       }
     },
   })

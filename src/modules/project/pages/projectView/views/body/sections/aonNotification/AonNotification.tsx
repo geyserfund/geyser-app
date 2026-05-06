@@ -29,7 +29,7 @@ export const AonNotification = () => {
   const isAon = isAllOrNothing(project)
 
   const { data, loading } = useProjectContributorQuery({
-    skip: !project.id || !user.id || !isAon,
+    skip: !project.id || !user.id || !isAon || !project.aonGoal,
     fetchPolicy: 'network-only',
     variables: {
       input: {
@@ -50,7 +50,7 @@ export const AonNotification = () => {
   )
 
   const renderFunderNotification = () => {
-    if (!isAon || loading) {
+    if (!isAon || !project.aonGoal || loading) {
       return null
     }
 
@@ -64,7 +64,7 @@ export const AonNotification = () => {
   }
 
   const renderNotification = () => {
-    if (!isAon || loading) {
+    if (!isAon || !project.aonGoal || loading) {
       return null
     }
 

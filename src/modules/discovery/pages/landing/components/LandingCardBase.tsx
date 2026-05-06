@@ -97,7 +97,7 @@ const AonStatusDisplay = ({
 }) => {
   const getStatusColor = () => {
     if (percentage > 100) return 'primary1.11'
-    if (timeLeft?.label !== 'days left') return 'warning.11'
+    if (timeLeft?.unit !== 'day') return 'warning.11'
     return 'neutral1.12'
   }
 
