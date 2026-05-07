@@ -8,6 +8,8 @@ import {
   isPrismEnabledAtom,
   isProjectOwnerAtom,
   partialUpdateProjectAtom,
+  projectAonGoalErrorAtom,
+  projectAonGoalLoadingAtom,
   projectAtom,
   projectLoadingAtom,
   projectOwnerAtom,
@@ -25,13 +27,25 @@ import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../s
 export const useProjectAtom = () => {
   const loading = useAtomValue(projectLoadingAtom)
   const project = useAtomValue(projectAtom)
+  const projectAonGoalLoading = useAtomValue(projectAonGoalLoadingAtom)
+  const projectAonGoalError = useAtomValue(projectAonGoalErrorAtom)
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
   const projectOwner = useAtomValue(projectOwnerAtom)
   const isAon = isAllOrNothing(project)
   const isPrismEnabled = useAtomValue(isPrismEnabledAtom)
 
-  return { loading, project, isProjectOwner, projectOwner, partialUpdateProject, isAon, isPrismEnabled }
+  return {
+    loading,
+    project,
+    projectAonGoalLoading,
+    projectAonGoalError,
+    isProjectOwner,
+    projectOwner,
+    partialUpdateProject,
+    isAon,
+    isPrismEnabled,
+  }
 }
 
 export const useWalletAtom = () => {

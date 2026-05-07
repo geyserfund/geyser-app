@@ -1,3 +1,14 @@
+## [0.42.0](https://github.com/geyserfund/geyser-app/compare/v0.41.1...v0.42.0) (2026-05-07)
+
+
+### Features
+
+* address PR comments and updating landing page news ([c9e73fe](https://github.com/geyserfund/geyser-app/commit/c9e73febe2008a84a1239a939bf3c37af23c9abe))
+* enhance deadline handling in project components ([09f0320](https://github.com/geyserfund/geyser-app/commit/09f03208ea8d6bf932e81e35a3dfa7afc73fd8ff))
+* impact fund moderator dashboard updates ([5f21b04](https://github.com/geyserfund/geyser-app/commit/5f21b04523988e3fa086d7a60669e79f5277c660))
+* implement separate AON goal fetching and error handling in project API ([0c601a2](https://github.com/geyserfund/geyser-app/commit/0c601a27b17d89b630a9851f7d9aa0bd35493085))
+* wallet withdraw and landing updates ([12bb80d](https://github.com/geyserfund/geyser-app/commit/12bb80daf085f55f31c9ef21ccd81f18d1535099))
+
 ## [0.41.1](https://github.com/geyserfund/geyser-app/compare/v0.41.0...v0.41.1) (2026-04-22)
 
 

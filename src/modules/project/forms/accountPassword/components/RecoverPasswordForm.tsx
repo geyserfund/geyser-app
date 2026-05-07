@@ -12,6 +12,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
+import { useUserAccountPasswordFundsSummary } from '../hooks/useUserAccountPasswordFundsSummary.ts'
 import { accountPasswordAtom } from '../state/passwordStorageAtom.ts'
 import { PasswordVisibilityToggle } from './PasswordVisibilityToggle.tsx'
 
@@ -40,13 +41,64 @@ const recoverPasswordSchema = yup.object({
   acknowledgeRefund: yup
     .boolean()
     .required()
-    .oneOf([true], t('You must acknowledge that unclaimed funds will be refunded')),
+    .oneOf([true], t('You must acknowledge that some funds may be lost or refunded')),
 })
+
+const getFundsSummaryText = (fundsSummary: {
+  tiaUnclaimedFundsSats: string | number | bigint
+  aonUnclaimedFundsSats: string | number | bigint
+  pledgedSats: string | number | bigint
+}) => {
+  const tiaUnclaimedFundsSats = toSatsBigInt(fundsSummary.tiaUnclaimedFundsSats)
+  const aonUnclaimedFundsSats = toSatsBigInt(fundsSummary.aonUnclaimedFundsSats)
+  const pledgedSats = toSatsBigInt(fundsSummary.pledgedSats)
+  const messages = []
+
+  if (tiaUnclaimedFundsSats > 0n) {
+    messages.push(
+      t('You currently have {{tiaUnclaimedFunds}} sats unclaimed that will be lost.', {
+        tiaUnclaimedFunds: formatSatsBigInt(tiaUnclaimedFundsSats),
+      }),
+    )
+  }
+
+  if (aonUnclaimedFundsSats > 0n) {
+    messages.push(
+      t('You currently have {{aonUnclaimedFunds}} sats in AON unclaimed funds that will be refunded to contributors.', {
+        aonUnclaimedFunds: formatSatsBigInt(aonUnclaimedFundsSats),
+      }),
+    )
+  }
+
+  if (pledgedSats > 0n) {
+    messages.push(
+      t('You currently have {{pledged}} sats pledged and will lose the ability to claim refunds on those pledges.', {
+        pledged: formatSatsBigInt(pledgedSats),
+      }),
+    )
+  }
+
+  return messages.length
+    ? messages.join(' ')
+    : t('You currently have no TIA project funds, AON unclaimed funds, or pledged sats tied to this account password.')
+}
+
+function toSatsBigInt(value: string | number | bigint): bigint {
+  if (typeof value === 'bigint') return value
+  if (typeof value === 'number') return Number.isFinite(value) ? BigInt(Math.trunc(value)) : 0n
+  return /^-?\d+$/.test(value) ? BigInt(value) : 0n
+}
+
+function formatSatsBigInt(value: bigint): string {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
 
 /** Password recovery form component with new password fields and acknowledgment checkboxes */
 export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswordFormProps) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState(false)
+  const { data, loading, error } = useUserAccountPasswordFundsSummary()
+  const fundsSummary = data?.userAccountPasswordFundsSummary
 
   return (
     <VStack w="full" gap={6}>
@@ -54,16 +106,22 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
         <Feedback variant={FeedBackVariant.WARNING}>
           <Body>
             {t(
-              'If you have forgotten your password, you can set a new account password. Note that you will lose access to all unclaimed funds in previously created projects. You will also lose the ability to claim refunds on pledges made to other projects.',
+              'If you have forgotten your password, you can set a new account password. Note that you will lose access to TIA project funds tied to your current account password. AON funds you can no longer claim will be refunded to contributors. You will also lose the ability to claim refunds on pledges made to other projects.',
             )}
           </Body>
         </Feedback>
 
-        <Body>
-          {t(
-            'You currently have 102,334 sats in unclaimed funds that will be refunded to contributors and 11,342 sats pledged.',
-          )}
-        </Body>
+        {loading && <Body>{t('Checking current unclaimed and pledged amounts...')}</Body>}
+
+        {!loading && error && (
+          <Body>
+            {t(
+              'We could not calculate your current TIA project funds, AON unclaimed funds, and pledged amounts. Recovering your password may still make funds and refunds tied to your current account password inaccessible.',
+            )}
+          </Body>
+        )}
+
+        {!loading && !error && fundsSummary && <Body>{getFundsSummaryText(fundsSummary)}</Body>}
       </VStack>
 
       <VStack w="full" gap={4}>
@@ -103,7 +161,7 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
           <Checkbox {...control.register('acknowledgeRefund')} colorScheme="primary1">
             <Body size="sm">
               {t(
-                'I would like to reset my password and acknowledge that unclaimed funds from past projects will be refunded to the contributors.',
+                'I would like to reset my password and acknowledge that TIA project funds may be lost, AON unclaimed funds may be refunded to contributors, and I may lose access to pledge refunds.',
               )}
             </Body>
           </Checkbox>

@@ -6,6 +6,7 @@ import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import { toInt } from '@/utils'
 
 import {
+  ProjectAonGoalForProjectPageFragment,
   ProjectGrantApplicantFragment,
   ProjectHeaderSummaryFragment,
   ProjectMatchingFragment,
@@ -25,6 +26,7 @@ import { resetIsWidgetAtom } from './widgetAtom.ts'
 export type ProjectState = ProjectPageBodyFragment &
   ProjectHeaderSummaryFragment & {
     activeMatching?: ProjectMatchingFragment | null
+    aonGoal?: ProjectAonGoalForProjectPageFragment | null
     promotionsEnabled?: boolean | null
     grantApplications?: ProjectGrantApplicantFragment[]
   }
@@ -79,6 +81,12 @@ export const updateProjectItemCountsAtom = atom(
 /** Defaults to true when intialized, Set to false after project is loaded. */
 export const projectLoadingAtom = atom(true)
 
+/** Tracks the independent AON goal fetch for the project page. */
+export const projectAonGoalLoadingAtom = atom(false)
+
+/** Stores independent AON goal fetch errors without blocking the project page. */
+export const projectAonGoalErrorAtom = atom<Error | null>(null)
+
 /** True for creator visiting their own project */
 export const isProjectOwnerAtom = atom((get) => {
   const project = get(projectAtom)
@@ -125,6 +133,8 @@ export const initialProjectGrantApplicationsLoadAtom = atom(false)
 export const projectAtomReset = atom(null, (get, set) => {
   set(projectAtom, {} as ProjectState)
   set(projectLoadingAtom, true)
+  set(projectAonGoalLoadingAtom, false)
+  set(projectAonGoalErrorAtom, null)
   set(initialProjectDetailsLoadAtom, false)
   set(initialProjectGrantApplicationsLoadAtom, false)
 })

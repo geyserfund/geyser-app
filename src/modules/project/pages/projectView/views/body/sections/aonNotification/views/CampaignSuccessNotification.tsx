@@ -1,33 +1,25 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { getAonCreatorClaimDeadline } from '@/shared/utils/project/getAonData.ts'
 
 export const CampaignSuccessNotification = ({ onOpen }: { onOpen?: () => void }) => {
   const { project, isProjectOwner } = useProjectAtom()
 
   /** Calculate days left for claiming funds */
   const daysLeft = useMemo(() => {
-    if (!project.aonGoal?.deployedAt || !project.aonGoal?.goalDurationInDays) {
-      return '00:00:00'
-    }
-
-    const launchDate = DateTime.fromMillis(project.aonGoal?.deployedAt)
-    const claimDeadline = launchDate.plus({ days: (project.aonGoal?.goalDurationInDays || 0) + 30 })
-
-    const timeLeft = getTimeLeft(claimDeadline)
+    const timeLeft = getAonCreatorClaimDeadline(project.aonGoal)
     if (!timeLeft) {
       return '00:00:00'
     }
 
     return `${timeLeft.value} ${timeLeft.label}`
-  }, [project.aonGoal?.deployedAt, project.aonGoal?.goalDurationInDays])
+  }, [project.aonGoal])
 
   if (!isProjectOwner) {
     return (

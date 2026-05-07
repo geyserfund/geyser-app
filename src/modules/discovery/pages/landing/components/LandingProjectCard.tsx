@@ -10,7 +10,6 @@ interface LandingProjectCardProps extends CardLayoutProps {
   }
   isMobile?: boolean
   noMobile?: boolean
-  hideContributionContent?: boolean
   statusPillLabel?: string
   trendingAmountLabel?: string
 }

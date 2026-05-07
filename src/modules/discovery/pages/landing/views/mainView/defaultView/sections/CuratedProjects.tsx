@@ -381,7 +381,6 @@ const MonthlyTrendingProjectItem = ({ projectRow }: { projectRow: GlobalProjectL
           contributionsTotalUsd: projectRow.contributionsTotalUsd,
         },
       }}
-      hideContributionContent={projectRow.contributionsTotalUsd <= 100}
       trendingAmountLabel={t('raised this month')}
     />
   )

@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_PAYMENT_METHODS } from './paymentMethodsFragment'
-import { FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE } from './projectAognGoalFragment.ts'
 import { FRAGMENT_PROJECT_REVIEW, FRAGMENT_PROJECT_REVIEW_PUBLIC } from './projectReviewFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_CREATOR } from './userFragment'
 
@@ -80,7 +79,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_LOCATION}
   ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
-  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   ${FRAGMENT_PROJECT_REVIEW_PUBLIC}
   fragment ProjectPageBody on Project {
     id
@@ -114,9 +112,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     category
     subCategory
     links
-    aonGoal {
-      ...ProjectAonGoalForProjectPage
-    }
     location {
       ...ProjectLocation
     }
@@ -147,7 +142,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
   ${FRAGMENT_PROJECT_LOCATION}
   ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
-  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   ${FRAGMENT_PROJECT_REVIEW}
   fragment ProjectPageBodyCreator on Project {
     id
@@ -181,9 +175,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     category
     subCategory
     links
-    aonGoal {
-      ...ProjectAonGoalForProjectPage
-    }
     location {
       ...ProjectLocation
     }
@@ -210,7 +201,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
 `
 
 export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
-  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectHeaderSummary on Project {
     followersCount
     fundersCount
@@ -223,14 +213,10 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
       amountAwardedInSats
       awardedAt
     }
-    aonGoal {
-      ...ProjectAonGoalForProjectPage
-    }
   }
 `
 
 export const FRAGMENT_PROJECT_UPDATE = gql`
-  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectUpdate on Project {
     id
     title
@@ -254,9 +240,6 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     rewardCurrency
     fundingStrategy
     lastCreationStep
-    aonGoal {
-      ...ProjectAonGoalForProjectPage
-    }
     launchScheduledAt
   }
 `
