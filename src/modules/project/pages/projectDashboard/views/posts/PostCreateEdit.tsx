@@ -26,7 +26,18 @@ import { useCustomTheme, useMobileMode, useNotification } from '@/utils'
 import { postTypeOptions } from '../../../projectView/views/posts/utils/postTypeLabel'
 import { LinkGoalsAndRewardsModal } from './components/LinkGoalsAndRewardsModal'
 import { PublishModal } from './components/PublishModal'
-import { usePostForm } from './hooks/usePostForm.tsx'
+import { type PostFormType, usePostForm } from './hooks/usePostForm.tsx'
+
+const getPostAutosaveValueSignature = (postForm: PostFormType) =>
+  JSON.stringify({
+    description: postForm.description || '',
+    image: postForm.image || '',
+    markdown: postForm.markdown || '',
+    postType: postForm.postType || null,
+    projectGoalIds: postForm.projectGoalIds || [],
+    projectRewardUUIDs: postForm.projectRewardUUIDs || [],
+    title: postForm.title || '',
+  })
 
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
@@ -63,21 +74,19 @@ export const PostCreateEdit = () => {
   })
 
   const postForm = watch()
+  const autosaveValueSignature = getPostAutosaveValueSignature(postForm)
 
   useEffect(() => {
-    let number: any
-    if (isDirty && postForm.status !== PostStatus.Published) {
-      number = setInterval(() => {
-        savePost()
-      }, 1000)
+    if (!isDirty || saving || postForm.status === PostStatus.Published) {
+      return
     }
 
-    if (postForm.status === PostStatus.Published) {
-      clearInterval(number)
-    }
+    const autosaveTimeout = setTimeout(() => {
+      savePost()
+    }, 1000)
 
-    return () => clearInterval(number)
-  }, [postForm, isDirty, savePost])
+    return () => clearTimeout(autosaveTimeout)
+  }, [autosaveValueSignature, isDirty, postForm.status, savePost, saving])
 
   const handleSaveButtonClick = () => {
     savePost({
@@ -113,24 +122,27 @@ export const PostCreateEdit = () => {
     })
   }, [])
 
-  const handleKeyDown = useCallback((event: any) => {
-    if (event) {
-      if (event.target.name === 'title') {
-        if (event.key === 'ArrowDown' || event.key === 'Enter') {
-          event.preventDefault()
-          document.getElementById('post-description-input')?.focus()
-        }
-      } else if (event.target.name === 'description') {
-        if (event.key === 'ArrowUp') {
-          event.preventDefault()
-          document.getElementById('post-title-input')?.focus()
-        } else if (event.key === 'ArrowDown' || event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
-          event.preventDefault()
-          focusMarkdownEditor()
+  const handleKeyDown = useCallback(
+    (event: any) => {
+      if (event) {
+        if (event.target.name === 'title') {
+          if (event.key === 'ArrowDown' || event.key === 'Enter') {
+            event.preventDefault()
+            document.getElementById('post-description-input')?.focus()
+          }
+        } else if (event.target.name === 'description') {
+          if (event.key === 'ArrowUp') {
+            event.preventDefault()
+            document.getElementById('post-title-input')?.focus()
+          } else if (event.key === 'ArrowDown' || event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
+            event.preventDefault()
+            focusMarkdownEditor()
+          }
         }
       }
-    }
-  }, [focusMarkdownEditor])
+    },
+    [focusMarkdownEditor],
+  )
 
   const getSaveButtonText = () => {
     if (saving) {
@@ -318,12 +330,7 @@ export const PostCreateEdit = () => {
             </VStack>
 
             <Box flex={1} width="100%" paddingX={6}>
-              <MdxMarkdownEditor
-                mode="edit"
-                name="markdown"
-                control={control}
-                minHeight="240px"
-              />
+              <MdxMarkdownEditor mode="edit" name="markdown" control={control} minHeight="240px" />
             </Box>
           </VStack>
         </CardLayout>

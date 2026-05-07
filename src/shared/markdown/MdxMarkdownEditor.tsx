@@ -152,6 +152,7 @@ const MdxMarkdownEditorInternal = ({
 }: MdxMarkdownEditorInternalProps) => {
   const editorRef = useRef<MDXEditorMethods>(null)
   const lastEmittedValueRef = useRef<string>('')
+  const latestEditorValueRef = useRef<string>(value)
   const resolvedPlaceholder = placeholder || DEFAULT_MARKDOWN_PLACEHOLDER
 
   const { uploadFile } = useSignedUpload()
@@ -187,6 +188,7 @@ const MdxMarkdownEditorInternal = ({
   const handleChange = useCallback(
     (markdown: string, initialMarkdownNormalize: boolean) => {
       const decodedMarkdown = decodeMarkdownWhitespaceFromEditor(markdown)
+      latestEditorValueRef.current = decodedMarkdown
 
       if (initialMarkdownNormalize && decodedMarkdown === value) {
         return
@@ -210,9 +212,18 @@ const MdxMarkdownEditorInternal = ({
     }
 
     const nextMarkdown = encodeMarkdownWhitespaceForEditor(value)
+    const editorMarkdown = editor.getMarkdown()
+    const decodedEditorMarkdown = decodeMarkdownWhitespaceFromEditor(editorMarkdown)
 
-    if (editor.getMarkdown() !== nextMarkdown) {
+    if (decodedEditorMarkdown === value || latestEditorValueRef.current === value) {
+      latestEditorValueRef.current = value
+      return
+    }
+
+    if (editorMarkdown !== nextMarkdown) {
       editor.setMarkdown(nextMarkdown)
+      latestEditorValueRef.current = value
+      lastEmittedValueRef.current = value
     }
   }, [value])
 
