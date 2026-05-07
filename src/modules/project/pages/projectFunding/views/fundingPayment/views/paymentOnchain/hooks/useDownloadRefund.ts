@@ -7,17 +7,13 @@ import {
   currentLightningToRskSwapIdAtom,
   currentOnChainToRskSwapIdAtom,
   currentSwapIdAtom,
-  SwapData,
   swapAtom,
+  SwapData,
 } from '@/modules/project/funding/state/swapAtom.ts'
 
 const REFUND_QR_FILE_NAME = 'refundFile'
 
-export const hasRefundFileEssentials = (refundFile?: SwapData) =>
-  Boolean(
-    refundFile?.id &&
-      refundFile?.privateKey,
-  )
+export const hasRefundFileEssentials = (refundFile?: SwapData) => Boolean(refundFile?.id && refundFile?.privateKey)
 
 export const isRefundDownloadReady = (params: {
   isAllOrNothing?: boolean
@@ -28,10 +24,7 @@ export const isRefundDownloadReady = (params: {
   const { isAllOrNothing, onChainSwapRefundFile, lightningToRskSwapRefundFile, onChainToRskSwapRefundFile } = params
 
   if (isAllOrNothing) {
-    return (
-      hasRefundFileEssentials(lightningToRskSwapRefundFile) &&
-      hasRefundFileEssentials(onChainToRskSwapRefundFile)
-    )
+    return hasRefundFileEssentials(lightningToRskSwapRefundFile) || hasRefundFileEssentials(onChainToRskSwapRefundFile)
   }
 
   return hasRefundFileEssentials(onChainSwapRefundFile)
