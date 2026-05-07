@@ -3,7 +3,7 @@ export const GuideFundraisingURL =
   'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/step-by-step-how-to-create-a-project#choose-your-funding-method'
 export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/resources/project-checklist'
 export const FeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pagtedCU3NPqEjBjR/form'
-export const ImpactFundsFieldPartnerApplicationUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pag7Rcn0UeGQWAnR8/form'
+export const ImpactFundsFieldPartnerApplicationUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrNXMwb68dmNeMX4'
 export const FAQUrl = 'https://guide.geyser.fund/geyser-docs/resources/faq'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
