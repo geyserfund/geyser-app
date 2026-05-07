@@ -9,11 +9,10 @@ import * as yup from 'yup'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { commaFormatted } from '@/shared/utils/formatData/index.ts'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
-import { useUserAccountPasswordFundsSummary } from '../hooks/useUserAccountPasswordFundsSummary.ts'
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
+import { useUserAccountPasswordFundsSummary } from '../hooks/useUserAccountPasswordFundsSummary.ts'
 import { accountPasswordAtom } from '../state/passwordStorageAtom.ts'
 import { PasswordVisibilityToggle } from './PasswordVisibilityToggle.tsx'
 
@@ -46,33 +45,35 @@ const recoverPasswordSchema = yup.object({
 })
 
 const getFundsSummaryText = (fundsSummary: {
-  tiaUnclaimedFundsSats: number
-  aonUnclaimedFundsSats: number
-  pledgedSats: number
+  tiaUnclaimedFundsSats: string | number | bigint
+  aonUnclaimedFundsSats: string | number | bigint
+  pledgedSats: string | number | bigint
 }) => {
-  const { tiaUnclaimedFundsSats, aonUnclaimedFundsSats, pledgedSats } = fundsSummary
+  const tiaUnclaimedFundsSats = toSatsBigInt(fundsSummary.tiaUnclaimedFundsSats)
+  const aonUnclaimedFundsSats = toSatsBigInt(fundsSummary.aonUnclaimedFundsSats)
+  const pledgedSats = toSatsBigInt(fundsSummary.pledgedSats)
   const messages = []
 
-  if (tiaUnclaimedFundsSats > 0) {
+  if (tiaUnclaimedFundsSats > 0n) {
     messages.push(
       t('You currently have {{tiaUnclaimedFunds}} sats unclaimed that will be lost.', {
-        tiaUnclaimedFunds: commaFormatted(tiaUnclaimedFundsSats),
+        tiaUnclaimedFunds: formatSatsBigInt(tiaUnclaimedFundsSats),
       }),
     )
   }
 
-  if (aonUnclaimedFundsSats > 0) {
+  if (aonUnclaimedFundsSats > 0n) {
     messages.push(
       t('You currently have {{aonUnclaimedFunds}} sats in AON unclaimed funds that will be refunded to contributors.', {
-        aonUnclaimedFunds: commaFormatted(aonUnclaimedFundsSats),
+        aonUnclaimedFunds: formatSatsBigInt(aonUnclaimedFundsSats),
       }),
     )
   }
 
-  if (pledgedSats > 0) {
+  if (pledgedSats > 0n) {
     messages.push(
       t('You currently have {{pledged}} sats pledged and will lose the ability to claim refunds on those pledges.', {
-        pledged: commaFormatted(pledgedSats),
+        pledged: formatSatsBigInt(pledgedSats),
       }),
     )
   }
@@ -80,6 +81,16 @@ const getFundsSummaryText = (fundsSummary: {
   return messages.length
     ? messages.join(' ')
     : t('You currently have no TIA project funds, AON unclaimed funds, or pledged sats tied to this account password.')
+}
+
+function toSatsBigInt(value: string | number | bigint): bigint {
+  if (typeof value === 'bigint') return value
+  if (typeof value === 'number') return Number.isFinite(value) ? BigInt(Math.trunc(value)) : 0n
+  return /^-?\d+$/.test(value) ? BigInt(value) : 0n
+}
+
+function formatSatsBigInt(value: bigint): string {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
 /** Password recovery form component with new password fields and acknowledgment checkboxes */
@@ -110,9 +121,7 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
           </Body>
         )}
 
-        {!loading && !error && fundsSummary && (
-          <Body>{getFundsSummaryText(fundsSummary)}</Body>
-        )}
+        {!loading && !error && fundsSummary && <Body>{getFundsSummaryText(fundsSummary)}</Body>}
       </VStack>
 
       <VStack w="full" gap={4}>

@@ -2,8 +2,9 @@ import { HStack, Icon } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiSealCheckFill, PiSealQuestionFill } from 'react-icons/pi'
 
-import { Tooltip } from '@/components/ui/Tooltip'
 import { Body } from '@/shared/components/typography/Body.tsx'
+
+import { DashboardTooltip as Tooltip } from './DashboardTooltip'
 
 type IdentityVerifiedBadgeProps = {
   isVerified: boolean

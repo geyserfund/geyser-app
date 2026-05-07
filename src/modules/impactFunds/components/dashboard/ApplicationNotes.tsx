@@ -2,7 +2,6 @@ import { Badge, Box, Button, ButtonGroup, HStack, Textarea, VStack } from '@chak
 import { t } from 'i18next'
 import { useState } from 'react'
 
-import { Tooltip } from '@/components/ui/Tooltip'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { UserAvatar } from '@/shared/molecules/UserAvatar'
 import {
@@ -14,6 +13,7 @@ import { useNotification } from '@/utils'
 
 import { NoNotesYet } from './DashboardEmptyState'
 import { formatDate, formatRelativeTime } from './dashboardFormatters'
+import { DashboardTooltip as Tooltip } from './DashboardTooltip'
 
 type DashboardApplication =
   ImpactFundDashboardApplicationsQuery['impactFundDashboardApplications']['applications'][number]
@@ -156,16 +156,21 @@ function NoteItem({
   onSubmitEdit,
 }: NoteItemProps) {
   const wasEdited = note.updatedAt && note.createdAt && String(note.updatedAt) !== String(note.createdAt)
+  const { author } = note
 
   return (
     <Box p={3} borderWidth="1px" borderColor="neutral1.6" borderRadius="md" bg="utils.pbg">
       <HStack align="start" spacing={3}>
-        <UserAvatar id={note.author.id as unknown as string} user={note.author as never} height="32px" width="32px" />
+        {author ? (
+          <UserAvatar id={String(author.id)} height="32px" width="32px" />
+        ) : (
+          <Box h="32px" w="32px" borderRadius="full" bg="neutral1.3" flexShrink={0} />
+        )}
         <VStack align="stretch" spacing={2} flex={1} minW={0}>
           <HStack justify="space-between" align="center" flexWrap="wrap" rowGap={1}>
             <HStack spacing={2}>
               <Body size="sm" bold>
-                {note.author.username}
+                {author?.username ?? t('Unknown')}
               </Body>
               <Tooltip content={formatDate(note.updatedAt)}>
                 <Body size="xs" color="neutral1.9" as="span">

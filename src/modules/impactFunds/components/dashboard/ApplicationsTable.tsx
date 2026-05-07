@@ -17,7 +17,6 @@ import { t } from 'i18next'
 import { type ComponentProps } from 'react'
 import { PiArrowsDownUpBold, PiCaretDownBold, PiCaretUpBold } from 'react-icons/pi'
 
-import { Tooltip } from '@/components/ui/Tooltip'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter'
 import {
@@ -29,7 +28,8 @@ import {
 import { type DashboardAction, ApplicationActionsMenu } from './ApplicationActionsMenu'
 import { ApplicationStatusTag } from './ApplicationStatusTag'
 import { NOT_PROVIDED_PLACEHOLDER, projectFundingStrategyLabels } from './dashboardConstants'
-import { formatDate, formatEnumLabel, formatSatsCompact } from './dashboardFormatters'
+import { formatDate, formatEnumLabel, formatSatsCompact, toFiniteNumber } from './dashboardFormatters'
+import { DashboardTooltip as Tooltip } from './DashboardTooltip'
 import { FundingModelTag } from './FundingModelTag'
 import { IdentityVerifiedBadge } from './IdentityVerifiedBadge'
 
@@ -154,6 +154,7 @@ type ApplicationRowProps = {
 function ApplicationRow({ application, onOpenApplication, onAction, isSelected }: ApplicationRowProps) {
   const { formatUsdAmount } = useCurrencyFormatter()
   const handleOpen = () => onOpenApplication(String(application.applicationId))
+  const amountAwardedNumber = toFiniteNumber(application.amountAwardedInSats)
 
   const aonTarget =
     application.project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
@@ -176,6 +177,10 @@ function ApplicationRow({ application, onOpenApplication, onAction, isSelected }
       }}
       onClick={handleOpen}
       onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) {
+          return
+        }
+
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
           handleOpen()
@@ -253,13 +258,13 @@ function ApplicationRow({ application, onOpenApplication, onAction, isSelected }
         <ApplicationStatusTag status={application.status} />
       </Td>
       <Td isNumeric>
-        {application.amountAwardedInSats ? (
+        {application.amountAwardedInSats !== null && application.amountAwardedInSats !== undefined ? (
           <VStack align="end" spacing={0}>
             <Body size="sm" bold>
               {formatSatsCompact(application.amountAwardedInSats)}
             </Body>
             <Body size="xs" color="neutral1.9">
-              {formatUsdAmount(application.amountAwardedInSats)}
+              {amountAwardedNumber !== null ? formatUsdAmount(amountAwardedNumber) : NOT_PROVIDED_PLACEHOLDER}
             </Body>
           </VStack>
         ) : (
@@ -271,7 +276,13 @@ function ApplicationRow({ application, onOpenApplication, onAction, isSelected }
       <Td>
         <FundingModelTag fundingModel={application.fundingModel} />
       </Td>
-      <Td {...stickyRight} textAlign="right" onClick={(event) => event.stopPropagation()}>
+      <Td
+        {...stickyRight}
+        textAlign="right"
+        data-actions-cell
+        onClick={(event) => event.stopPropagation()}
+        onKeyDown={(event) => event.stopPropagation()}
+      >
         <ApplicationActionsMenu
           onAction={(action) => onAction(action, application)}
           projectPath={application.projectPath}

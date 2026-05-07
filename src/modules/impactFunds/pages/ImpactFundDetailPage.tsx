@@ -37,7 +37,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { PiArrowUpRightBold, PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link, useParams } from 'react-router'
@@ -117,66 +117,7 @@ type FundingModelPillStyle = { bg: string; textColor: string }
 type FundingModelPillStyles = Record<ImpactFundApplicationFundingModel, FundingModelPillStyle>
 
 function ImpactFundDescriptionPreview({ value }: { value: string }) {
-  const blocks: ReactNode[] = []
-  let listItems: string[] = []
-
-  const flushList = () => {
-    if (listItems.length === 0) return
-
-    blocks.push(
-      <UnorderedList key={`list-${blocks.length}`} pl={5} spacing={1}>
-        {listItems.map((item, index) => (
-          <ListItem key={`${item}-${index}`}>
-            <Body>{item}</Body>
-          </ListItem>
-        ))}
-      </UnorderedList>,
-    )
-    listItems = []
-  }
-
-  value.split('\n').forEach((line, index) => {
-    const trimmedLine = line.trim()
-    if (!trimmedLine) {
-      flushList()
-      return
-    }
-
-    if (trimmedLine.startsWith('- ')) {
-      listItems.push(trimmedLine.slice(2))
-      return
-    }
-
-    flushList()
-
-    if (trimmedLine.startsWith('## ')) {
-      blocks.push(
-        <Body key={`heading-${index}`} fontSize="lg" fontWeight="bold" pt={blocks.length === 0 ? 0 : 2}>
-          {trimmedLine.slice(3)}
-        </Body>,
-      )
-      return
-    }
-
-    if (trimmedLine.startsWith('# ')) {
-      blocks.push(
-        <Body key={`heading-${index}`} fontSize="xl" fontWeight="bold" pt={blocks.length === 0 ? 0 : 2}>
-          {trimmedLine.slice(2)}
-        </Body>,
-      )
-      return
-    }
-
-    blocks.push(<Body key={`paragraph-${index}`}>{trimmedLine}</Body>)
-  })
-
-  flushList()
-
-  return (
-    <VStack align="stretch" spacing={3}>
-      {blocks}
-    </VStack>
-  )
+  return <MdxMarkdownEditor mode="preview" value={value} />
 }
 
 function getQuarterFromDate(dateString: string): string {
@@ -331,7 +272,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
 
     if (previousAuthQueryKeyRef.current !== currentAuthQueryKey) {
       previousAuthQueryKeyRef.current = currentAuthQueryKey
-      void refetch()
+      refetch().catch(() => undefined)
     }
   }, [impactFundName, isLoggedIn, refetch, user?.id])
 
@@ -365,10 +306,13 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       if (selectedProjectId !== '') {
         setSelectedProjectId('')
       }
+
       return
     }
 
-    const hasSelectedAvailableProject = availableOwnedProjects.some((project) => String(project.id) === selectedProjectId)
+    const hasSelectedAvailableProject = availableOwnedProjects.some(
+      (project) => String(project.id) === selectedProjectId,
+    )
     if (!hasSelectedAvailableProject) {
       setSelectedProjectId(String(availableOwnedProjects[0]?.id || ''))
     }

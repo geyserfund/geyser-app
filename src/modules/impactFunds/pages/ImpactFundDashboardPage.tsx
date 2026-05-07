@@ -118,8 +118,8 @@ export function ImpactFundDashboardPage() {
 
   const detailsApplication = useMemo<DashboardApplication | null>(() => {
     if (!filters.applicationId) return null
-    return applications.find((a) => String(a.applicationId) === filters.applicationId) ?? null
-  }, [applications, filters.applicationId])
+    return filteredApplications.find((a) => String(a.applicationId) === filters.applicationId) ?? null
+  }, [filteredApplications, filters.applicationId])
 
   const handleAction = useCallback((action: DashboardAction, application: DashboardApplication) => {
     setActiveAction({
@@ -135,13 +135,13 @@ export function ImpactFundDashboardPage() {
     await Promise.all([refetchApplications(), refetchImpactFund()])
   }, [refetchApplications, refetchImpactFund])
 
-  // Auto-close drawer when the selected application falls out of the loaded set.
+  // Auto-close drawer when the selected application falls out of the visible set.
   useEffect(() => {
     if (!filters.applicationId) return
-    if (applications.length === 0) return
-    const stillExists = applications.some((a) => String(a.applicationId) === filters.applicationId)
+    if (isInitialLoading) return
+    const stillExists = filteredApplications.some((a) => String(a.applicationId) === filters.applicationId)
     if (!stillExists) openApplication(null)
-  }, [applications, filters.applicationId, openApplication])
+  }, [filteredApplications, filters.applicationId, isInitialLoading, openApplication])
 
   if (loading) {
     return (

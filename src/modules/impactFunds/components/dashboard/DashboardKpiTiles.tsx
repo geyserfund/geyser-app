@@ -1,6 +1,7 @@
 import { Box, HStack, Icon, Progress, SimpleGrid, Skeleton, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
+import type { TFunction } from 'i18next'
 import { type ComponentType, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiHandHeartBold, PiHourglassBold, PiStackBold, PiSwapBold } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -14,7 +15,7 @@ import {
 } from '@/types'
 
 import { fundingModelLabels, reviewableStatuses } from './dashboardConstants'
-import { formatEnumLabel, formatSatsCompact } from './dashboardFormatters'
+import { formatEnumLabel, formatSatsCompact, toFiniteNumber, toSatsBigInt } from './dashboardFormatters'
 
 type ImpactFundForKpis = NonNullable<ImpactFundQuery['impactFund']>
 type DashboardApplicationsResult = ImpactFundDashboardApplicationsQuery['impactFundDashboardApplications']
@@ -41,12 +42,13 @@ type StatTile = {
 type BreakdownEntry = {
   key: string
   label: string
-  awardedSats: number
+  awardedSats: bigint
   applicationsCount: number
 }
 
 export function DashboardKpiTiles({ impactFund, dashboardApplications, isLoading }: DashboardKpiTilesProps) {
   const { formatUsdAmount } = useCurrencyFormatter()
+  const { t } = useTranslation()
 
   const fundingSummary = useMemo<FundingSummaryRow[]>(
     () => dashboardApplications?.fundingSummary ?? [],
@@ -55,6 +57,7 @@ export function DashboardKpiTiles({ impactFund, dashboardApplications, isLoading
 
   const stats = useMemo<StatTile[]>(() => {
     const awardedTotalSats = impactFund.metrics?.awardedTotalSats ?? 0
+    const awardedTotalSatsNumber = toFiniteNumber(awardedTotalSats) ?? 0
     const projectsFundedCount = impactFund.metrics?.projectsFundedCount ?? 0
     const applications = dashboardApplications?.applications ?? []
     const inReviewCount = applications.filter((a) =>
@@ -66,7 +69,7 @@ export function DashboardKpiTiles({ impactFund, dashboardApplications, isLoading
         key: 'awarded',
         label: t('Awarded'),
         value: formatSatsCompact(awardedTotalSats),
-        fiat: awardedTotalSats > 0 ? formatUsdAmount(awardedTotalSats) : undefined,
+        fiat: awardedTotalSatsNumber > 0 ? formatUsdAmount(awardedTotalSatsNumber) : undefined,
         hint: t('{{count}} projects funded', { count: projectsFundedCount }),
         icon: PiHandHeartBold,
         accent: 'success',
@@ -85,10 +88,17 @@ export function DashboardKpiTiles({ impactFund, dashboardApplications, isLoading
     formatUsdAmount,
     impactFund.metrics?.awardedTotalSats,
     impactFund.metrics?.projectsFundedCount,
+    t,
   ])
 
-  const byCategory = useMemo<BreakdownEntry[]>(() => groupBy(fundingSummary, byCategoryKey), [fundingSummary])
-  const byFundingModel = useMemo<BreakdownEntry[]>(() => groupBy(fundingSummary, byFundingModelKey), [fundingSummary])
+  const byCategory = useMemo<BreakdownEntry[]>(
+    () => groupBy(fundingSummary, (row) => byCategoryKey(row, t)),
+    [fundingSummary, t],
+  )
+  const byFundingModel = useMemo<BreakdownEntry[]>(
+    () => groupBy(fundingSummary, (row) => byFundingModelKey(row, t)),
+    [fundingSummary, t],
+  )
 
   return (
     <VStack align="stretch" spacing={3}>
@@ -158,12 +168,16 @@ type BreakdownCardProps = {
 
 function BreakdownCard({ title, icon, accent, entries, isLoading }: BreakdownCardProps) {
   const { formatUsdAmount } = useCurrencyFormatter()
+  const { t } = useTranslation()
 
   const sortedEntries = useMemo(
-    () => [...entries].filter((entry) => entry.awardedSats > 0).sort((a, b) => b.awardedSats - a.awardedSats),
+    () =>
+      [...entries]
+        .filter((entry) => entry.awardedSats > 0n)
+        .sort((a, b) => (a.awardedSats === b.awardedSats ? 0 : a.awardedSats > b.awardedSats ? -1 : 1)),
     [entries],
   )
-  const total = useMemo(() => sortedEntries.reduce((sum, entry) => sum + entry.awardedSats, 0), [sortedEntries])
+  const total = useMemo(() => sortedEntries.reduce((sum, entry) => sum + entry.awardedSats, 0n), [sortedEntries])
 
   return (
     <Box p={4} borderWidth="1px" borderColor="neutral1.6" borderRadius="md" bg="utils.pbg" minH="116px">
@@ -189,7 +203,8 @@ function BreakdownCard({ title, icon, accent, entries, isLoading }: BreakdownCar
         ) : (
           <VStack align="stretch" spacing={2.5}>
             {sortedEntries.map((entry) => {
-              const percent = total > 0 ? (entry.awardedSats / total) * 100 : 0
+              const percent = total > 0n ? Number((entry.awardedSats * 10000n) / total) / 100 : 0
+              const entryAwardedNumber = toFiniteNumber(entry.awardedSats)
               return (
                 <Box key={entry.key}>
                   <HStack justify="space-between" align="baseline">
@@ -214,7 +229,10 @@ function BreakdownCard({ title, icon, accent, entries, isLoading }: BreakdownCar
                     aria-label={t('{{label}}: {{count}} applications, {{usd}}', {
                       label: entry.label,
                       count: entry.applicationsCount,
-                      usd: formatUsdAmount(entry.awardedSats),
+                      usd:
+                        entryAwardedNumber !== null
+                          ? formatUsdAmount(entryAwardedNumber)
+                          : formatSatsCompact(entry.awardedSats),
                     })}
                   />
                 </Box>
@@ -227,7 +245,7 @@ function BreakdownCard({ title, icon, accent, entries, isLoading }: BreakdownCar
   )
 }
 
-function byCategoryKey(row: FundingSummaryRow) {
+function byCategoryKey(row: FundingSummaryRow, t: TFunction) {
   const category = row.category ?? null
   return {
     key: category ?? 'uncategorized',
@@ -235,7 +253,7 @@ function byCategoryKey(row: FundingSummaryRow) {
   }
 }
 
-function byFundingModelKey(row: FundingSummaryRow) {
+function byFundingModelKey(row: FundingSummaryRow, t: TFunction) {
   return {
     key: row.fundingModel,
     label: t(fundingModelLabels[row.fundingModel as ImpactFundApplicationFundingModel]),
@@ -249,15 +267,16 @@ function groupBy(
   const acc = new Map<string, BreakdownEntry>()
   for (const row of rows) {
     const { key, label } = keyFn(row)
+    const awardedTotalSats = toSatsBigInt(row.awardedTotalSats) ?? 0n
     const existing = acc.get(key)
     if (existing) {
-      existing.awardedSats += row.awardedTotalSats
+      existing.awardedSats += awardedTotalSats
       existing.applicationsCount += row.applicationsCount
     } else {
       acc.set(key, {
         key,
         label,
-        awardedSats: row.awardedTotalSats,
+        awardedSats: awardedTotalSats,
         applicationsCount: row.applicationsCount,
       })
     }

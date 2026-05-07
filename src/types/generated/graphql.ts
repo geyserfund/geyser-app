@@ -1465,7 +1465,7 @@ export type ImpactFundDashboardProject = {
 export type ImpactFundFundingSummaryRow = {
   __typename?: 'ImpactFundFundingSummaryRow';
   applicationsCount: Scalars['Int']['output'];
-  awardedTotalSats: Scalars['Int']['output'];
+  awardedTotalSats: Scalars['BigInt']['output'];
   category?: Maybe<ProjectCategory>;
   fundingModel: ImpactFundApplicationFundingModel;
 };
@@ -1480,7 +1480,7 @@ export type ImpactFundGetWhereInput = {
 
 export type ImpactFundMetrics = {
   __typename?: 'ImpactFundMetrics';
-  awardedTotalSats: Scalars['Int']['output'];
+  awardedTotalSats: Scalars['BigInt']['output'];
   projectsFundedCount: Scalars['Int']['output'];
 };
 
@@ -10349,14 +10349,14 @@ export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation',
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
+export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: any, projectsFundedCount: number } }> };
 
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
 }>;
 
 
-export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, canAccessDashboard: boolean, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number }, viewerApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, name: string, title: string } }> } };
+export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, canAccessDashboard: boolean, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: any, projectsFundedCount: number }, viewerApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, name: string, title: string } }> } };
 
 export type ImpactFundApplicationsQueryVariables = Exact<{
   input: ImpactFundApplicationsInput;
@@ -10370,7 +10370,7 @@ export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: any }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
@@ -12018,6 +12018,11 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
       { __typename?: 'UserAccountKeys' }
       & UserAccountKeysFragment
     ) | null } };
+
+export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: any, tiaUnclaimedFundsSats: any, aonUnclaimedFundsSats: any, pledgedSats: any } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
@@ -22833,6 +22838,40 @@ export type AccountKeysQueryHookResult = ReturnType<typeof useAccountKeysQuery>;
 export type AccountKeysLazyQueryHookResult = ReturnType<typeof useAccountKeysLazyQuery>;
 export type AccountKeysSuspenseQueryHookResult = ReturnType<typeof useAccountKeysSuspenseQuery>;
 export type AccountKeysQueryResult = Apollo.QueryResult<AccountKeysQuery, AccountKeysQueryVariables>;
+export const UserAccountPasswordFundsSummaryDocument = gql`
+    query UserAccountPasswordFundsSummary {
+  userAccountPasswordFundsSummary {
+    unclaimedFundsSats
+    tiaUnclaimedFundsSats
+    aonUnclaimedFundsSats
+    pledgedSats
+  }
+}
+    `;
+
+/**
+ * __useUserAccountPasswordFundsSummaryQuery__
+ *
+ * To run a query within a React component, call `useUserAccountPasswordFundsSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAccountPasswordFundsSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ */
+export function useUserAccountPasswordFundsSummaryQuery(baseOptions?: Apollo.QueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>(UserAccountPasswordFundsSummaryDocument, options);
+      }
+export function useUserAccountPasswordFundsSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>(UserAccountPasswordFundsSummaryDocument, options);
+        }
+export function useUserAccountPasswordFundsSummarySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>(UserAccountPasswordFundsSummaryDocument, options);
+        }
+export type UserAccountPasswordFundsSummaryQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummaryQuery>;
+export type UserAccountPasswordFundsSummaryLazyQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummaryLazyQuery>;
+export type UserAccountPasswordFundsSummarySuspenseQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummarySuspenseQuery>;
+export type UserAccountPasswordFundsSummaryQueryResult = Apollo.QueryResult<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>;
 export const PayoutGetDocument = gql`
     query PayoutGet($input: PayoutGetInput!) {
   payoutGet(input: $input) {

@@ -89,6 +89,7 @@ export function DashboardToolbar({
 }: DashboardToolbarProps) {
   const [searchInput, setSearchInput] = useState(search)
   const debouncedSearch = useDebounce(searchInput, 250)
+  const activeViewLabel = QUICK_VIEWS.find((v) => v.id === view)?.label ?? ''
 
   useEffect(() => {
     if (debouncedSearch !== search) {
@@ -199,7 +200,7 @@ export function DashboardToolbar({
           {view !== 'all' ? (
             <WrapItem>
               <FilterChip color="primary1" onRemove={() => onViewChange('all')}>
-                {t('View')}: {t(QUICK_VIEWS.find((v) => v.id === view)?.label ?? '')}
+                {t('View: {{label}}', { label: t(activeViewLabel) })}
               </FilterChip>
             </WrapItem>
           ) : null}
@@ -223,7 +224,7 @@ export function DashboardToolbar({
           {search ? (
             <WrapItem>
               <FilterChip color="neutral1" onRemove={() => onSearchChange('')}>
-                {t('Search')}: “{search}”
+                {t('Search: “{{search}}”', { search })}
               </FilterChip>
             </WrapItem>
           ) : null}

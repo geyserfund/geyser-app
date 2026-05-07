@@ -164,7 +164,7 @@ function DisbursementModal({ activeAction, onClose, onSuccess }: ApplicationActi
               <Input
                 value={contributionUuid}
                 onChange={(event) => setContributionUuid(event.target.value)}
-                placeholder="00000000-0000-0000-0000-000000000000"
+                placeholder={t('00000000-0000-0000-0000-000000000000')}
                 autoFocus
               />
             </FormControl>

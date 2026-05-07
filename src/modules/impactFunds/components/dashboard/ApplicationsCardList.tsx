@@ -13,7 +13,7 @@ import {
 import { type DashboardAction, ApplicationActionsMenu } from './ApplicationActionsMenu'
 import { ApplicationStatusTag } from './ApplicationStatusTag'
 import { NOT_PROVIDED_PLACEHOLDER, sortLabels } from './dashboardConstants'
-import { formatDate, formatEnumLabel, formatSatsCompact } from './dashboardFormatters'
+import { formatDate, formatEnumLabel, formatSatsCompact, toFiniteNumber } from './dashboardFormatters'
 import { FundingModelTag } from './FundingModelTag'
 import { IdentityVerifiedBadge } from './IdentityVerifiedBadge'
 
@@ -84,6 +84,7 @@ function ApplicationCard({ application, onOpenApplication, onAction, isSelected 
     application.project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
       ? formatSatsCompact(application.project.aonGoalAmount)
       : null
+  const amountAwardedNumber = toFiniteNumber(application.amountAwardedInSats)
 
   return (
     <Box
@@ -122,7 +123,14 @@ function ApplicationCard({ application, onOpenApplication, onAction, isSelected 
                 {aonTarget ? ` · ${aonTarget}` : ''}
               </Body>
             </VStack>
-            <Box onClick={(event) => event.stopPropagation()}>
+            <Box
+              onClick={(event) => event.stopPropagation()}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.stopPropagation()
+                }
+              }}
+            >
               <ApplicationActionsMenu
                 onAction={(action) => onAction(action, application)}
                 projectPath={application.projectPath}
@@ -145,13 +153,13 @@ function ApplicationCard({ application, onOpenApplication, onAction, isSelected 
                 · {formatDate(application.createdAt)}
               </Body>
             </HStack>
-            {application.amountAwardedInSats ? (
+            {application.amountAwardedInSats !== null && application.amountAwardedInSats !== undefined ? (
               <VStack align="end" spacing={0}>
                 <Body size="xs" bold>
                   {formatSatsCompact(application.amountAwardedInSats)}
                 </Body>
                 <Body size="xs" color="neutral1.9">
-                  {formatUsdAmount(application.amountAwardedInSats)}
+                  {amountAwardedNumber !== null ? formatUsdAmount(amountAwardedNumber) : NOT_PROVIDED_PLACEHOLDER}
                 </Body>
               </VStack>
             ) : null}

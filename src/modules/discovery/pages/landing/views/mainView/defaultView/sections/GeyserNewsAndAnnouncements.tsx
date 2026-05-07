@@ -10,10 +10,18 @@ import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { useAcelerandoVipLeaderboardQuery } from '@/types/index.ts'
+import {
+  OrderByOptions,
+  PostType,
+  useAcelerandoVipLeaderboardQuery,
+  useFeaturedProjectForLandingPageQuery,
+  usePostsForLandingPageQuery,
+} from '@/types/index.ts'
 
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
+const GEYSER_PROJECT_NAME = 'geyser'
+const GEYSER_PROJECT_ANNOUNCEMENT_LIMIT = 6
 const ACELERANDO_ANNOUNCEMENT_IMAGE_URL = '/images/acelerando-bitcoin-banner.webp'
 const GUARDIANS_ANNOUNCEMENT_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/ad-and-announcement-banners/Legend%20guardian.png'
@@ -23,6 +31,11 @@ const YOUTUBE_VIDEO_ONE_URL = 'https://www.youtube.com/watch?v=e5PTRMz27vA'
 const YOUTUBE_VIDEO_TWO_URL = 'https://www.youtube.com/watch?v=i6FIvDddrdw'
 const YOUTUBE_VIDEO_ONE_THUMBNAIL_URL = 'https://img.youtube.com/vi/e5PTRMz27vA/hqdefault.jpg'
 const YOUTUBE_VIDEO_TWO_THUMBNAIL_URL = 'https://img.youtube.com/vi/i6FIvDddrdw/hqdefault.jpg'
+const ACELERANDO_ANNOUNCEMENT_SORT_DATE = '2026-05-01'
+const GUARDIANS_ANNOUNCEMENT_SORT_DATE = '2026-04-01'
+const TWITTER_ANNOUNCEMENT_SORT_DATE = '2025-11-10'
+const YOUTUBE_VIDEO_ONE_SORT_DATE = '2025-10-01'
+const YOUTUBE_VIDEO_TWO_SORT_DATE = '2025-09-01'
 
 type AnnouncementCardProps = {
   description: string
@@ -33,6 +46,29 @@ type AnnouncementCardProps = {
   imageUrl: string
   title: string
   to?: string
+}
+
+type AnnouncementCardData = AnnouncementCardProps & {
+  id: string
+  sortTimestamp: number
+}
+
+const getSortTimestampFromDate = (date: string) => DateTime.fromISO(date).toMillis()
+
+const getSortTimestampFromPublishedAt = (publishedAt?: string | null) => {
+  if (!publishedAt) {
+    return 0
+  }
+
+  const timestamp = Number(publishedAt)
+
+  if (Number.isFinite(timestamp) && timestamp > 0) {
+    return timestamp
+  }
+
+  const parsedDate = DateTime.fromISO(publishedAt)
+
+  return parsedDate.isValid ? parsedDate.toMillis() : 0
 }
 
 const AnnouncementCard = ({
@@ -138,6 +174,20 @@ const AnnouncementCard = ({
 /** Landing section surfacing Geyser-managed announcements in the standard card layout. */
 export const GeyserNewsAndAnnouncements = () => {
   const { data, error, loading, refetch } = useAcelerandoVipLeaderboardQuery()
+  const { data: projectData } = useFeaturedProjectForLandingPageQuery({
+    variables: { where: { name: GEYSER_PROJECT_NAME } },
+  })
+  const geyserProjectId = projectData?.projectGet?.id
+  const { data: projectAnnouncementsData } = usePostsForLandingPageQuery({
+    variables: {
+      input: {
+        orderBy: { publishedAt: OrderByOptions.Desc },
+        pagination: { take: GEYSER_PROJECT_ANNOUNCEMENT_LIMIT },
+        where: { postType: [PostType.Announcement], projectId: geyserProjectId },
+      },
+    },
+    skip: !geyserProjectId,
+  })
   const accentColor = useColorModeValue('primary1.11', 'primary1.9')
   const mutedTextColor = 'neutralAlpha.11'
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -179,7 +229,7 @@ export const GeyserNewsAndAnnouncements = () => {
     }
   }, [])
 
-  const announcementCards = useMemo(() => {
+  const announcementCards = useMemo<AnnouncementCardData[]>(() => {
     const giveawayFooter = (() => {
       if (loading && !giveawayEndDate) {
         return <Skeleton height="20px" width="140px" borderRadius="md" />
@@ -214,13 +264,15 @@ export const GeyserNewsAndAnnouncements = () => {
       )
     })()
 
-    return [
+    const staticAnnouncementCards: AnnouncementCardData[] = [
       {
         description: t('Enter for a chance to win a VIP ticket to the Acelerando Bitcoin 2026 conference.'),
         eyebrow: t('Announcement'),
         footer: giveawayFooter,
+        id: 'acelerando-bitcoin-2026-vip-ticket-giveaway',
         imagePosition: { base: '62% center', lg: 'center' },
         imageUrl: ACELERANDO_ANNOUNCEMENT_IMAGE_URL,
+        sortTimestamp: getSortTimestampFromDate(ACELERANDO_ANNOUNCEMENT_SORT_DATE),
         title: t('VIP Ticket Giveaway: Acelerando Bitcoin 2026'),
         to: getPath('giveawayAcelerandoVip'),
       },
@@ -232,8 +284,10 @@ export const GeyserNewsAndAnnouncements = () => {
             {t('Browse the collection')}
           </Body>
         ),
+        id: 'geyser-guardians-merch',
         imagePosition: { base: '80% 66%', lg: '78% 72%' },
         imageUrl: GUARDIANS_ANNOUNCEMENT_IMAGE_URL,
+        sortTimestamp: getSortTimestampFromDate(GUARDIANS_ANNOUNCEMENT_SORT_DATE),
         title: t('Geyser Guardians Merch'),
         to: getPath('guardians'),
       },
@@ -246,7 +300,9 @@ export const GeyserNewsAndAnnouncements = () => {
           </Body>
         ),
         href: TWITTER_ANNOUNCEMENT_LINK_URL,
+        id: 'latest-geyser-x-announcement',
         imageUrl: TWITTER_ANNOUNCEMENT_IMAGE_URL,
+        sortTimestamp: getSortTimestampFromDate(TWITTER_ANNOUNCEMENT_SORT_DATE),
         title: t('Latest Announcement from Geyser'),
       },
       {
@@ -258,7 +314,9 @@ export const GeyserNewsAndAnnouncements = () => {
           </Body>
         ),
         href: YOUTUBE_VIDEO_ONE_URL,
+        id: 'featured-geyser-video',
         imageUrl: YOUTUBE_VIDEO_ONE_THUMBNAIL_URL,
+        sortTimestamp: getSortTimestampFromDate(YOUTUBE_VIDEO_ONE_SORT_DATE),
         title: t('Featured Geyser Video'),
       },
       {
@@ -270,11 +328,33 @@ export const GeyserNewsAndAnnouncements = () => {
           </Body>
         ),
         href: YOUTUBE_VIDEO_TWO_URL,
+        id: 'more-from-geyser-on-youtube',
         imageUrl: YOUTUBE_VIDEO_TWO_THUMBNAIL_URL,
+        sortTimestamp: getSortTimestampFromDate(YOUTUBE_VIDEO_TWO_SORT_DATE),
         title: t('More from Geyser on YouTube'),
       },
     ]
-  }, [accentColor, error, giveawayEndDate, loading, refetch])
+
+    const projectAnnouncementCards =
+      projectAnnouncementsData?.posts
+        .filter((post) => post.project?.name)
+        .map<AnnouncementCardData>((post) => ({
+          description: post.description,
+          eyebrow: t('Project announcement'),
+          footer: (
+            <Body size="sm" color={accentColor} medium>
+              {t('Read announcement')}
+            </Body>
+          ),
+          id: `project-announcement-${post.id}`,
+          imageUrl: post.image || post.project?.thumbnailImage || '',
+          sortTimestamp: getSortTimestampFromPublishedAt(post.publishedAt),
+          title: post.title,
+          to: getPath('projectPostView', post.project?.name || '', post.id),
+        })) ?? []
+
+    return [...projectAnnouncementCards, ...staticAnnouncementCards].sort((a, b) => b.sortTimestamp - a.sortTimestamp)
+  }, [accentColor, error, giveawayEndDate, loading, projectAnnouncementsData?.posts, refetch])
 
   const scrollCards = (direction: 'left' | 'right') => {
     const element = scrollContainerRef.current
@@ -353,7 +433,7 @@ export const GeyserNewsAndAnnouncements = () => {
           paddingBottom={1}
         >
           {announcementCards.map((card) => (
-            <Box key={card.title} width="100%" minWidth={0}>
+            <Box key={card.id} width="100%" minWidth={0}>
               <AnnouncementCard {...card} />
             </Box>
           ))}

@@ -976,10 +976,10 @@ type DeleteUserResponse implements MutationResponse {
 }
 
 type UserAccountPasswordFundsSummary {
-  unclaimedFundsSats: Int!
-  tiaUnclaimedFundsSats: Int!
-  aonUnclaimedFundsSats: Int!
-  pledgedSats: Int!
+  unclaimedFundsSats: BigInt!
+  tiaUnclaimedFundsSats: BigInt!
+  aonUnclaimedFundsSats: BigInt!
+  pledgedSats: BigInt!
 }
 
 type AffiliatePartnerTerms {
@@ -3577,11 +3577,11 @@ type ImpactFundFundingSummaryRow {
   category: ProjectCategory
   fundingModel: ImpactFundApplicationFundingModel!
   applicationsCount: Int!
-  awardedTotalSats: Int!
+  awardedTotalSats: BigInt!
 }
 
 type ImpactFundMetrics {
-  awardedTotalSats: Int!
+  awardedTotalSats: BigInt!
   projectsFundedCount: Int!
 }
 

@@ -21,7 +21,6 @@ import { useEffect, useMemo } from 'react'
 import { PiArrowLeftBold, PiArrowRightBold, PiArrowSquareOutBold, PiCopyBold } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
-import { Tooltip } from '@/components/ui/Tooltip'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { UserAvatar } from '@/shared/molecules/UserAvatar'
@@ -34,7 +33,8 @@ import { type DashboardAction, ApplicationActionsMenu } from './ApplicationActio
 import { ApplicationNotes } from './ApplicationNotes'
 import { ApplicationStatusTag } from './ApplicationStatusTag'
 import { NOT_PROVIDED_PLACEHOLDER, projectFundingStrategyLabels } from './dashboardConstants'
-import { formatDate, formatEnumLabel, formatSats, truncateUuid } from './dashboardFormatters'
+import { formatDate, formatEnumLabel, formatSats, toFiniteNumber, truncateUuid } from './dashboardFormatters'
+import { DashboardTooltip as Tooltip } from './DashboardTooltip'
 import { FundingModelTag } from './FundingModelTag'
 import { IdentityVerifiedBadge } from './IdentityVerifiedBadge'
 
@@ -204,6 +204,7 @@ type DrawerContentsProps = {
 function DrawerContents({ application, onRefetch }: DrawerContentsProps) {
   const { formatUsdAmount } = useCurrencyFormatter()
   const { success } = useNotification()
+  const amountAwardedNumber = toFiniteNumber(application.amountAwardedInSats)
 
   return (
     <VStack align="stretch" spacing={6}>
@@ -246,9 +247,9 @@ function DrawerContents({ application, onRefetch }: DrawerContentsProps) {
               ) : (
                 <VStack align="start" spacing={0}>
                   <Body size="sm">{formatSats(application.amountAwardedInSats)}</Body>
-                  {application.amountAwardedInSats > 0 ? (
+                  {amountAwardedNumber && amountAwardedNumber > 0 ? (
                     <Body size="xs" color="neutral1.9">
-                      {formatUsdAmount(application.amountAwardedInSats)}
+                      {formatUsdAmount(amountAwardedNumber)}
                     </Body>
                   ) : null}
                 </VStack>
