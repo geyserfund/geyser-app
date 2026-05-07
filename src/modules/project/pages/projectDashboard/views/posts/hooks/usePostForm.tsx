@@ -79,23 +79,26 @@ export const usePostForm = ({
   })
   const { isDirty } = formState
 
-  const resetForm = (post: ProjectPostViewFragment) => {
-    reset({
-      id: post.id,
-      status: post.status,
-      markdown: post.markdown,
-      description: post.description,
-      image: post.image,
-      title: post.title,
-      postType: post.postType || null,
-      sentByEmailAt: post.sentByEmailAt || null,
-      projectGoalIds: [
-        ...(post.projectGoals?.inProgress?.map((goal) => goal.id) || []),
-        ...(post.projectGoals?.completed?.map((goal) => goal.id) || []),
-      ],
-      projectRewardUUIDs: post.projectRewards.map((reward) => reward.uuid) || [],
-    })
-  }
+  const resetForm = useCallback(
+    (post: ProjectPostViewFragment) => {
+      reset({
+        id: post.id,
+        status: post.status,
+        markdown: post.markdown || '',
+        description: post.description || '',
+        image: post.image || '',
+        title: post.title || '',
+        postType: post.postType || null,
+        sentByEmailAt: post.sentByEmailAt || null,
+        projectGoalIds: [
+          ...(post.projectGoals?.inProgress?.map((goal) => goal.id) || []),
+          ...(post.projectGoals?.completed?.map((goal) => goal.id) || []),
+        ],
+        projectRewardUUIDs: post.projectRewards.map((reward) => reward.uuid) || [],
+      })
+    },
+    [reset],
+  )
 
   useProjectPostQuery({
     variables: {

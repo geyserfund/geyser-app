@@ -33,11 +33,40 @@ export const getMdxMarkdownContentStyles = ({
   [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} p:first-of-type`]: {
     marginTop: 0,
   },
-  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} p, & .${MDX_EDITOR_CONTENT_CLASS_NAME} iframe, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h1, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h2, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h3, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h4, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h5`]:
+  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} p, & .${MDX_EDITOR_CONTENT_CLASS_NAME} iframe`]: {
+    marginTop: 6,
+    color: 'utils.text',
+  },
+  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} h1, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h2, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h3, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h4, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h5`]:
     {
-      marginTop: 6,
       color: 'utils.text',
+      fontWeight: 700,
+      letterSpacing: 0,
     },
+  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} h1`]: {
+    marginTop: 8,
+    marginBottom: 3,
+    fontSize: { base: '28px', md: '32px' },
+    lineHeight: 1.18,
+  },
+  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} h2`]: {
+    marginTop: 7,
+    marginBottom: 2,
+    fontSize: { base: '24px', md: '28px' },
+    lineHeight: 1.22,
+  },
+  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} h3`]: {
+    marginTop: 6,
+    marginBottom: 2,
+    fontSize: { base: '20px', md: '22px' },
+    lineHeight: 1.28,
+  },
+  [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} h4, & .${MDX_EDITOR_CONTENT_CLASS_NAME} h5`]: {
+    marginTop: 5,
+    marginBottom: 2,
+    fontSize: '18px',
+    lineHeight: 1.32,
+  },
   [`& .${MDX_EDITOR_CONTENT_CLASS_NAME} a`]: {
     textDecoration: 'underline',
     fontWeight: 600,
