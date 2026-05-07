@@ -22,6 +22,7 @@ type Query {
   projectsAonAlmostOver(input: ProjectsAonAlmostOverInput): ProjectsAonAlmostOverResponse!
   me: User
   user(where: UserGetInput!): User!
+  userAccountPasswordFundsSummary: UserAccountPasswordFundsSummary!
   userEmailIsAvailable(email: String!): Boolean!
   userEmailIsValid(email: String!): UserEmailIsValidResponse!
   userIpCountry: String
@@ -197,6 +198,10 @@ type Mutation {
   tagCreate(input: TagCreateInput!): Tag!
   grantApply(input: GrantApplyInput): GrantApplicant!
   impactFundApply(input: ImpactFundApplyInput!): ImpactFundApplication!
+  impactFundApplicationUpdate(input: ImpactFundApplicationUpdateInput!): ImpactFundApplication!
+  impactFundApplicationFundingSet(input: ImpactFundApplicationFundingSetInput!): ImpactFundApplication!
+  impactFundApplicationNoteCreate(input: ImpactFundApplicationNoteCreateInput!): ImpactFundApplicationNote!
+  impactFundApplicationNoteUpdate(input: ImpactFundApplicationNoteUpdateInput!): ImpactFundApplicationNote!
   userBadgeAward(userBadgeId: BigInt!): UserBadge!
   claimBadge(input: BadgeClaimInput!): UserBadge!
 
@@ -968,6 +973,13 @@ input OTPLoginInput {
 type DeleteUserResponse implements MutationResponse {
   success: Boolean!
   message: String
+}
+
+type UserAccountPasswordFundsSummary {
+  unclaimedFundsSats: Int!
+  tiaUnclaimedFundsSats: Int!
+  aonUnclaimedFundsSats: Int!
+  pledgedSats: Int!
 }
 
 type AffiliatePartnerTerms {
@@ -3426,7 +3438,31 @@ input ImpactFundApplicationsInput {
 
 input ImpactFundDashboardApplicationsInput {
   impactFundId: BigInt!
+  statusIn: [ImpactFundApplicationStatus!]
+  fundingModelIn: [ImpactFundApplicationFundingModel!]
+  sort: ImpactFundDashboardApplicationsSort
   pagination: PaginationInput
+}
+
+input ImpactFundApplicationUpdateInput {
+  applicationId: BigInt!
+  status: ImpactFundApplicationStatus
+  fundingModel: ImpactFundApplicationFundingModel
+}
+
+input ImpactFundApplicationFundingSetInput {
+  applicationId: BigInt!
+  contributionUuid: String!
+}
+
+input ImpactFundApplicationNoteCreateInput {
+  applicationId: BigInt!
+  body: String!
+}
+
+input ImpactFundApplicationNoteUpdateInput {
+  noteId: BigInt!
+  body: String!
 }
 
 type ImpactFundApplicationsGetResponse {
@@ -3437,6 +3473,7 @@ type ImpactFundApplicationsGetResponse {
 
 type ImpactFundDashboardApplicationsResponse {
   applications: [ImpactFundDashboardApplicationRow!]!
+  fundingSummary: [ImpactFundFundingSummaryRow!]!
   pagination: CursorPaginationResponse
   totalCount: Int!
 }
@@ -3487,8 +3524,13 @@ type ImpactFundApplication {
 
 type ImpactFundDashboardApplicationRow {
   applicationId: BigInt!
+  createdAt: Date!
   status: ImpactFundApplicationStatus!
   fundingModel: ImpactFundApplicationFundingModel!
+  amountAwardedInSats: Int
+  contributionUuid: String
+  awardedAt: Date
+  notes: [ImpactFundApplicationNote!]!
   project: ImpactFundDashboardProject!
   creator: ImpactFundDashboardCreator
   projectPath: String!
@@ -3500,8 +3542,11 @@ type ImpactFundDashboardProject {
   title: String!
   thumbnailImage: String
   shortDescription: String
+  description: String
   country: String
+  category: ProjectCategory
   fundingStrategy: ProjectFundingStrategy!
+  aonGoalAmount: Int
 }
 
 type ImpactFundDashboardCreator {
@@ -3509,6 +3554,30 @@ type ImpactFundDashboardCreator {
   username: String!
   email: String
   isIdentityVerified: Boolean!
+}
+
+type ImpactFundApplicationNote {
+  id: BigInt!
+  applicationId: BigInt!
+  authorUserId: BigInt!
+  body: String!
+  createdAt: Date!
+  updatedAt: Date!
+  author: ImpactFundApplicationNoteAuthor!
+  canEdit: Boolean!
+}
+
+type ImpactFundApplicationNoteAuthor {
+  id: BigInt!
+  username: String!
+  imageUrl: String
+}
+
+type ImpactFundFundingSummaryRow {
+  category: ProjectCategory
+  fundingModel: ImpactFundApplicationFundingModel!
+  applicationsCount: Int!
+  awardedTotalSats: Int!
 }
 
 type ImpactFundMetrics {
@@ -3544,12 +3613,24 @@ enum ImpactFundApplicationStatus {
   FUNDED
   ONGOING
   IN_REVIEW
+  INFO_REQUESTED
+  UNDER_EVALUATION
+  DISBURSEMENT
 }
 
 enum ImpactFundApplicationFundingModel {
   DIRECT_GRANT
   MATCHING
   AON_COFUNDING
+}
+
+enum ImpactFundDashboardApplicationsSort {
+  LATEST
+  OLDEST
+  AMOUNT_AWARDED_DESC
+  AMOUNT_AWARDED_ASC
+  STATUS_ASC
+  STATUS_DESC
 }
 
 type Sponsor {

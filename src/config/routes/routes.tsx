@@ -8,7 +8,12 @@ import { loadLandingPages } from '@/modules/discovery/pages/landing/loader.ts'
 import { loadLandingMainViewPages } from '@/modules/discovery/pages/landing/views/mainView/loader.ts'
 import { MaintainancePage } from '@/modules/general/fallback/MaintainancePage.tsx'
 import { loadGuardiansModule } from '@/modules/guardians/loader.ts'
-import { loadImpactFundsModule } from '@/modules/impactFunds/loader.ts'
+import {
+  loadImpactFundDashboardPage,
+  loadImpactFundDetailPage,
+  loadImpactFundsMainPage,
+  loadLegacyGrantRedirectPage,
+} from '@/modules/impactFunds/loader.ts'
 import { loadProfileModule } from '@/modules/profile/loader.ts'
 import { loadProfileSettingsModule } from '@/modules/profile/pages/profileSettings/loader.ts'
 import { loadProjectModule } from '@/modules/project/loader.ts'
@@ -1216,8 +1221,8 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('discoveryImpactFunds'),
         async lazy() {
-          const impactFundsModule = await loadImpactFundsModule()
-          return { Component: impactFundsModule.ImpactFundsMainPage }
+          const { ImpactFundsMainPage } = await loadImpactFundsMainPage()
+          return { Component: ImpactFundsMainPage }
         },
       },
       {
@@ -1230,22 +1235,22 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
-          const impactFundsModule = await loadImpactFundsModule()
-          return { Component: impactFundsModule.LegacyGrantRedirectPage }
+          const { LegacyGrantRedirectPage } = await loadLegacyGrantRedirectPage()
+          return { Component: LegacyGrantRedirectPage }
         },
       },
       {
         path: getPath('discoveryImpactFund', PathName.impactFundName),
         async lazy() {
-          const impactFundsModule = await loadImpactFundsModule()
-          return { Component: impactFundsModule.ImpactFundDetailPage }
+          const { ImpactFundDetailPage } = await loadImpactFundDetailPage()
+          return { Component: ImpactFundDetailPage }
         },
       },
       {
         path: getPath('impactFundDashboard', PathName.impactFundName),
         async lazy() {
-          const impactFundsModule = await loadImpactFundsModule()
-          return { element: renderPrivateRoute(impactFundsModule.ImpactFundDashboardPage) }
+          const { ImpactFundDashboardPage } = await loadImpactFundDashboardPage()
+          return { element: renderPrivateRoute(ImpactFundDashboardPage) }
         },
       },
 

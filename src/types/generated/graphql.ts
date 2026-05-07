@@ -1332,10 +1332,13 @@ export enum ImpactFundApplicationStatus {
   Accepted = 'ACCEPTED',
   Canceled = 'CANCELED',
   Funded = 'FUNDED',
+  InfoRequested = 'INFO_REQUESTED',
   InReview = 'IN_REVIEW',
   Ongoing = 'ONGOING',
   Pending = 'PENDING',
-  Rejected = 'REJECTED'
+  Rejected = 'REJECTED',
+  UnderEvaluation = 'UNDER_EVALUATION',
+  Disbursement = 'DISBURSEMENT'
 }
 
 export type ImpactFundApplicationsGetResponse = {
@@ -1357,27 +1360,85 @@ export type ImpactFundApplyInput = {
   projectId: Scalars['BigInt']['input'];
 };
 
+export type ImpactFundApplicationFundingSetInput = {
+  applicationId: Scalars['BigInt']['input'];
+  contributionUuid: Scalars['String']['input'];
+};
+
+export type ImpactFundApplicationNote = {
+  __typename?: 'ImpactFundApplicationNote';
+  applicationId: Scalars['BigInt']['output'];
+  author: ImpactFundApplicationNoteAuthor;
+  authorUserId: Scalars['BigInt']['output'];
+  body: Scalars['String']['output'];
+  canEdit: Scalars['Boolean']['output'];
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['BigInt']['output'];
+  updatedAt: Scalars['Date']['output'];
+};
+
+export type ImpactFundApplicationNoteAuthor = {
+  __typename?: 'ImpactFundApplicationNoteAuthor';
+  id: Scalars['BigInt']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  username: Scalars['String']['output'];
+};
+
+export type ImpactFundApplicationNoteCreateInput = {
+  applicationId: Scalars['BigInt']['input'];
+  body: Scalars['String']['input'];
+};
+
+export type ImpactFundApplicationNoteUpdateInput = {
+  body: Scalars['String']['input'];
+  noteId: Scalars['BigInt']['input'];
+};
+
+export type ImpactFundApplicationUpdateInput = {
+  applicationId: Scalars['BigInt']['input'];
+  fundingModel?: InputMaybe<ImpactFundApplicationFundingModel>;
+  status?: InputMaybe<ImpactFundApplicationStatus>;
+};
+
 export type ImpactFundDashboardApplicationRow = {
   __typename?: 'ImpactFundDashboardApplicationRow';
+  amountAwardedInSats?: Maybe<Scalars['Int']['output']>;
   applicationId: Scalars['BigInt']['output'];
+  awardedAt?: Maybe<Scalars['Date']['output']>;
+  contributionUuid?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
   creator?: Maybe<ImpactFundDashboardCreator>;
   fundingModel: ImpactFundApplicationFundingModel;
+  notes: Array<ImpactFundApplicationNote>;
   project: ImpactFundDashboardProject;
   projectPath: Scalars['String']['output'];
   status: ImpactFundApplicationStatus;
 };
 
 export type ImpactFundDashboardApplicationsInput = {
+  fundingModelIn?: InputMaybe<Array<ImpactFundApplicationFundingModel>>;
   impactFundId: Scalars['BigInt']['input'];
   pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<ImpactFundDashboardApplicationsSort>;
+  statusIn?: InputMaybe<Array<ImpactFundApplicationStatus>>;
 };
 
 export type ImpactFundDashboardApplicationsResponse = {
   __typename?: 'ImpactFundDashboardApplicationsResponse';
   applications: Array<ImpactFundDashboardApplicationRow>;
+  fundingSummary: Array<ImpactFundFundingSummaryRow>;
   pagination?: Maybe<CursorPaginationResponse>;
   totalCount: Scalars['Int']['output'];
 };
+
+export enum ImpactFundDashboardApplicationsSort {
+  AmountAwardedAsc = 'AMOUNT_AWARDED_ASC',
+  AmountAwardedDesc = 'AMOUNT_AWARDED_DESC',
+  Latest = 'LATEST',
+  Oldest = 'OLDEST',
+  StatusAsc = 'STATUS_ASC',
+  StatusDesc = 'STATUS_DESC'
+}
 
 export type ImpactFundDashboardCreator = {
   __typename?: 'ImpactFundDashboardCreator';
@@ -1389,13 +1450,24 @@ export type ImpactFundDashboardCreator = {
 
 export type ImpactFundDashboardProject = {
   __typename?: 'ImpactFundDashboardProject';
+  aonGoalAmount?: Maybe<Scalars['Int']['output']>;
+  category?: Maybe<ProjectCategory>;
   country?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   fundingStrategy: ProjectFundingStrategy;
   id: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
   shortDescription?: Maybe<Scalars['String']['output']>;
   thumbnailImage?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+};
+
+export type ImpactFundFundingSummaryRow = {
+  __typename?: 'ImpactFundFundingSummaryRow';
+  applicationsCount: Scalars['Int']['output'];
+  awardedTotalSats: Scalars['Int']['output'];
+  category?: Maybe<ProjectCategory>;
+  fundingModel: ImpactFundApplicationFundingModel;
 };
 
 export type ImpactFundGetInput = {
@@ -1576,6 +1648,10 @@ export type Mutation = {
   createStripeConnectAccount: StripeConnectOnboardingPayload;
   creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   grantApply: GrantApplicant;
+  impactFundApplicationFundingSet: ImpactFundApplication;
+  impactFundApplicationNoteCreate: ImpactFundApplicationNote;
+  impactFundApplicationNoteUpdate: ImpactFundApplicationNote;
+  impactFundApplicationUpdate: ImpactFundApplication;
   impactFundApply: ImpactFundApplication;
   orderStatusUpdate?: Maybe<Order>;
   paymentCancel: PaymentCancelResponse;
@@ -1763,6 +1839,22 @@ export type MutationGrantApplyArgs = {
 
 export type MutationImpactFundApplyArgs = {
   input: ImpactFundApplyInput;
+};
+
+export type MutationImpactFundApplicationFundingSetArgs = {
+  input: ImpactFundApplicationFundingSetInput;
+};
+
+export type MutationImpactFundApplicationNoteCreateArgs = {
+  input: ImpactFundApplicationNoteCreateInput;
+};
+
+export type MutationImpactFundApplicationNoteUpdateArgs = {
+  input: ImpactFundApplicationNoteUpdateInput;
+};
+
+export type MutationImpactFundApplicationUpdateArgs = {
+  input: ImpactFundApplicationUpdateInput;
 };
 
 
@@ -9638,7 +9730,7 @@ export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGr
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
+export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, description?: string | null, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
 
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } };
 
@@ -10226,6 +10318,34 @@ export type ImpactFundApplyMutationVariables = Exact<{
 
 export type ImpactFundApplyMutation = { __typename?: 'Mutation', impactFundApply: { __typename?: 'ImpactFundApplication', id: any, impactFundId: any, status: ImpactFundApplicationStatus } };
 
+export type ImpactFundApplicationUpdateMutationVariables = Exact<{
+  input: ImpactFundApplicationUpdateInput;
+}>;
+
+
+export type ImpactFundApplicationUpdateMutation = { __typename?: 'Mutation', impactFundApplicationUpdate: { __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel } };
+
+export type ImpactFundApplicationFundingSetMutationVariables = Exact<{
+  input: ImpactFundApplicationFundingSetInput;
+}>;
+
+
+export type ImpactFundApplicationFundingSetMutation = { __typename?: 'Mutation', impactFundApplicationFundingSet: { __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null } };
+
+export type ImpactFundApplicationNoteCreateMutationVariables = Exact<{
+  input: ImpactFundApplicationNoteCreateInput;
+}>;
+
+
+export type ImpactFundApplicationNoteCreateMutation = { __typename?: 'Mutation', impactFundApplicationNoteCreate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
+
+export type ImpactFundApplicationNoteUpdateMutationVariables = Exact<{
+  input: ImpactFundApplicationNoteUpdateInput;
+}>;
+
+
+export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation', impactFundApplicationNoteUpdate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
+
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -10250,7 +10370,7 @@ export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, projectPath: string, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, country?: string | null, fundingStrategy: ProjectFundingStrategy }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
@@ -12304,6 +12424,7 @@ export const ProjectForOwnerFragmentDoc = gql`
   images
   thumbnailImage
   title
+  description
   status
   createdAt
   lastCreationStep
@@ -16839,6 +16960,93 @@ export function useImpactFundApplyMutation(baseOptions?: Apollo.MutationHookOpti
 export type ImpactFundApplyMutationHookResult = ReturnType<typeof useImpactFundApplyMutation>;
 export type ImpactFundApplyMutationResult = Apollo.MutationResult<ImpactFundApplyMutation>;
 export type ImpactFundApplyMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplyMutation, ImpactFundApplyMutationVariables>;
+export const ImpactFundApplicationUpdateDocument = gql`
+    mutation ImpactFundApplicationUpdate($input: ImpactFundApplicationUpdateInput!) {
+  impactFundApplicationUpdate(input: $input) {
+    id
+    status
+    fundingModel
+  }
+}
+    `;
+export type ImpactFundApplicationUpdateMutationFn = Apollo.MutationFunction<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>;
+export function useImpactFundApplicationUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>(ImpactFundApplicationUpdateDocument, options);
+      }
+export type ImpactFundApplicationUpdateMutationHookResult = ReturnType<typeof useImpactFundApplicationUpdateMutation>;
+export type ImpactFundApplicationUpdateMutationResult = Apollo.MutationResult<ImpactFundApplicationUpdateMutation>;
+export type ImpactFundApplicationUpdateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>;
+export const ImpactFundApplicationFundingSetDocument = gql`
+    mutation ImpactFundApplicationFundingSet($input: ImpactFundApplicationFundingSetInput!) {
+  impactFundApplicationFundingSet(input: $input) {
+    id
+    amountAwardedInSats
+    contributionUuid
+    awardedAt
+  }
+}
+    `;
+export type ImpactFundApplicationFundingSetMutationFn = Apollo.MutationFunction<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>;
+export function useImpactFundApplicationFundingSetMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>(ImpactFundApplicationFundingSetDocument, options);
+      }
+export type ImpactFundApplicationFundingSetMutationHookResult = ReturnType<typeof useImpactFundApplicationFundingSetMutation>;
+export type ImpactFundApplicationFundingSetMutationResult = Apollo.MutationResult<ImpactFundApplicationFundingSetMutation>;
+export type ImpactFundApplicationFundingSetMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>;
+export const ImpactFundApplicationNoteCreateDocument = gql`
+    mutation ImpactFundApplicationNoteCreate($input: ImpactFundApplicationNoteCreateInput!) {
+  impactFundApplicationNoteCreate(input: $input) {
+    id
+    applicationId
+    authorUserId
+    body
+    createdAt
+    updatedAt
+    canEdit
+    author {
+      id
+      username
+      imageUrl
+    }
+  }
+}
+    `;
+export type ImpactFundApplicationNoteCreateMutationFn = Apollo.MutationFunction<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>;
+export function useImpactFundApplicationNoteCreateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>(ImpactFundApplicationNoteCreateDocument, options);
+      }
+export type ImpactFundApplicationNoteCreateMutationHookResult = ReturnType<typeof useImpactFundApplicationNoteCreateMutation>;
+export type ImpactFundApplicationNoteCreateMutationResult = Apollo.MutationResult<ImpactFundApplicationNoteCreateMutation>;
+export type ImpactFundApplicationNoteCreateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>;
+export const ImpactFundApplicationNoteUpdateDocument = gql`
+    mutation ImpactFundApplicationNoteUpdate($input: ImpactFundApplicationNoteUpdateInput!) {
+  impactFundApplicationNoteUpdate(input: $input) {
+    id
+    applicationId
+    authorUserId
+    body
+    createdAt
+    updatedAt
+    canEdit
+    author {
+      id
+      username
+      imageUrl
+    }
+  }
+}
+    `;
+export type ImpactFundApplicationNoteUpdateMutationFn = Apollo.MutationFunction<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>;
+export function useImpactFundApplicationNoteUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>(ImpactFundApplicationNoteUpdateDocument, options);
+      }
+export type ImpactFundApplicationNoteUpdateMutationHookResult = ReturnType<typeof useImpactFundApplicationNoteUpdateMutation>;
+export type ImpactFundApplicationNoteUpdateMutationResult = Apollo.MutationResult<ImpactFundApplicationNoteUpdateMutation>;
+export type ImpactFundApplicationNoteUpdateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>;
 export const ImpactFundsDocument = gql`
     query ImpactFunds {
   impactFunds(status: LIVE) {
@@ -17050,18 +17258,45 @@ export const ImpactFundDashboardApplicationsDocument = gql`
     query ImpactFundDashboardApplications($input: ImpactFundDashboardApplicationsInput!) {
   impactFundDashboardApplications(input: $input) {
     totalCount
+    fundingSummary {
+      category
+      fundingModel
+      applicationsCount
+      awardedTotalSats
+    }
     applications {
       applicationId
+      createdAt
       status
       fundingModel
+      amountAwardedInSats
+      contributionUuid
+      awardedAt
+      notes {
+        id
+        applicationId
+        authorUserId
+        body
+        createdAt
+        updatedAt
+        canEdit
+        author {
+          id
+          username
+          imageUrl
+        }
+      }
       project {
         id
         name
         title
-        thumbnailImage
-        shortDescription
-        country
+          thumbnailImage
+          shortDescription
+          description
+          country
+        category
         fundingStrategy
+        aonGoalAmount
       }
       creator {
         id
