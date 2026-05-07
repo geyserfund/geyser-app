@@ -33,6 +33,18 @@ export const QUERY_USER_ACCOUNT_KEYS_UPDATE = gql`
     }
   }
 `
+
+export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
+  query UserAccountPasswordFundsSummary {
+    userAccountPasswordFundsSummary {
+      unclaimedFundsSats
+      tiaUnclaimedFundsSats
+      aonUnclaimedFundsSats
+      pledgedSats
+    }
+  }
+`
+
 export const QUERY_USER_IP_COUNTRY = gql`
   query GetUserIpCountry {
     userIpCountry

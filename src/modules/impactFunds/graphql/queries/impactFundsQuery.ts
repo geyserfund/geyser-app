@@ -116,18 +116,45 @@ export const QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS = gql`
   query ImpactFundDashboardApplications($input: ImpactFundDashboardApplicationsInput!) {
     impactFundDashboardApplications(input: $input) {
       totalCount
+      fundingSummary {
+        category
+        fundingModel
+        applicationsCount
+        awardedTotalSats
+      }
       applications {
         applicationId
+        createdAt
         status
         fundingModel
+        amountAwardedInSats
+        contributionUuid
+        awardedAt
+        notes {
+          id
+          applicationId
+          authorUserId
+          body
+          createdAt
+          updatedAt
+          canEdit
+          author {
+            id
+            username
+            imageUrl
+          }
+        }
         project {
           id
           name
           title
           thumbnailImage
           shortDescription
+          description
           country
+          category
           fundingStrategy
+          aonGoalAmount
         }
         creator {
           id

@@ -8,7 +8,11 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   HStack,
   Icon,
   Image,
@@ -59,6 +63,7 @@ import {
   useImpactFundApplyMutation,
   useImpactFundQuery,
   useProjectPageFundersQuery,
+  useUpdateProjectMutation,
 } from '@/types'
 import { useNotification } from '@/utils'
 
@@ -82,7 +87,7 @@ const CIRCULAR_ECONOMY_REPORT_PDF_URL =
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
-type OwnedProject = { id: unknown; title: string }
+type OwnedProject = { id: unknown; title: string; description?: string | null }
 type SponsorItem = Pick<ImpactFundDetails['liveSponsors'][number], 'id' | 'name' | 'image' | 'url'>
 type ViewerApplication = {
   id: string
@@ -110,6 +115,10 @@ const fundingModelLabels: Record<ImpactFundApplicationFundingModel, string> = {
 }
 type FundingModelPillStyle = { bg: string; textColor: string }
 type FundingModelPillStyles = Record<ImpactFundApplicationFundingModel, FundingModelPillStyle>
+
+function ImpactFundDescriptionPreview({ value }: { value: string }) {
+  return <MdxMarkdownEditor mode="preview" value={value} />
+}
 
 function getQuarterFromDate(dateString: string): string {
   const date = new Date(dateString)
@@ -173,6 +182,10 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const { success, error: notifyError } = useNotification()
   const projectModal = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
+  const [projectDescription, setProjectDescription] = useState('')
+  const [hasConfirmedProjectVision, setHasConfirmedProjectVision] = useState(false)
+  const [hasConfirmedImpactMetric, setHasConfirmedImpactMetric] = useState(false)
+  const [hasSubmittedApplicationForm, setHasSubmittedApplicationForm] = useState(false)
   const previousAuthQueryKeyRef = useRef<string | null>(null)
 
   const { data, loading, error, refetch } = useImpactFundQuery({
@@ -181,6 +194,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   })
 
   const [apply, { loading: applying }] = useImpactFundApplyMutation()
+  const [updateProject, { loading: updatingProject }] = useUpdateProjectMutation()
   const [isLoadingMoreApplications, setIsLoadingMoreApplications] = useState(false)
 
   const impactFund = data?.impactFund
@@ -258,7 +272,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
 
     if (previousAuthQueryKeyRef.current !== currentAuthQueryKey) {
       previousAuthQueryKeyRef.current = currentAuthQueryKey
-      void refetch()
+      refetch().catch(() => undefined)
     }
   }, [impactFundName, isLoggedIn, refetch, user?.id])
 
@@ -280,6 +294,10 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     () => ownedProjects.filter((project) => !viewerApplicationProjectIdSet.has(String(project.id))),
     [ownedProjects, viewerApplicationProjectIdSet],
   )
+  const selectedProject = useMemo(
+    () => availableOwnedProjects.find((project) => String(project.id) === selectedProjectId) ?? null,
+    [availableOwnedProjects, selectedProjectId],
+  )
   const hasAvailableProjects = availableOwnedProjects.length > 0
   const shouldDisableApply = isLoggedIn && !hasAvailableProjects
 
@@ -288,14 +306,24 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       if (selectedProjectId !== '') {
         setSelectedProjectId('')
       }
+
       return
     }
 
-    const hasSelectedAvailableProject = availableOwnedProjects.some((project) => String(project.id) === selectedProjectId)
+    const hasSelectedAvailableProject = availableOwnedProjects.some(
+      (project) => String(project.id) === selectedProjectId,
+    )
     if (!hasSelectedAvailableProject) {
       setSelectedProjectId(String(availableOwnedProjects[0]?.id || ''))
     }
   }, [availableOwnedProjects, selectedProjectId])
+
+  useEffect(() => {
+    setProjectDescription(selectedProject?.description || '')
+    setHasConfirmedProjectVision(false)
+    setHasConfirmedImpactMetric(false)
+    setHasSubmittedApplicationForm(false)
+  }, [selectedProject?.id, selectedProject?.description])
 
   const handleApplyClick = () => {
     if (!isLoggedIn) {
@@ -315,7 +343,18 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const submitApplication = async () => {
     if (!impactFund || !selectedProjectId) return
 
+    setHasSubmittedApplicationForm(true)
+    if (!projectDescription.trim() || !hasConfirmedProjectVision || !hasConfirmedImpactMetric) {
+      return
+    }
+
     try {
+      await updateProject({
+        variables: {
+          input: { projectId: selectedProjectId, description: projectDescription },
+        },
+      })
+
       await apply({
         variables: {
           input: { impactFundId: impactFund.id, projectId: selectedProjectId },
@@ -324,6 +363,10 @@ export function ImpactFundDetailPage(): JSX.Element | null {
 
       await refetch()
       success({ title: t('Application submitted') })
+      setProjectDescription('')
+      setHasConfirmedProjectVision(false)
+      setHasConfirmedImpactMetric(false)
+      setHasSubmittedApplicationForm(false)
       projectModal.onClose()
     } catch (error) {
       notifyError({ title: t('Failed to apply to impact fund') })
@@ -412,9 +455,19 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       hasOwnedProjects={ownedProjects.length > 0}
       selectedProjectId={selectedProjectId}
       onSelectedProjectIdChange={setSelectedProjectId}
+      projectDescription={projectDescription}
+      onProjectDescriptionChange={setProjectDescription}
+      hasConfirmedProjectVision={hasConfirmedProjectVision}
+      onHasConfirmedProjectVisionChange={setHasConfirmedProjectVision}
+      hasConfirmedImpactMetric={hasConfirmedImpactMetric}
+      onHasConfirmedImpactMetricChange={setHasConfirmedImpactMetric}
+      hasSubmittedApplicationForm={hasSubmittedApplicationForm}
       isProjectModalOpen={projectModal.isOpen}
-      onProjectModalClose={projectModal.onClose}
-      applying={applying}
+      onProjectModalClose={() => {
+        setHasSubmittedApplicationForm(false)
+        projectModal.onClose()
+      }}
+      applying={applying || updatingProject}
       onSubmitApplication={submitApplication}
     />
   )
@@ -438,6 +491,13 @@ type ImpactFundDetailContentProps = {
   hasOwnedProjects: boolean
   selectedProjectId: string
   onSelectedProjectIdChange: (projectId: string) => void
+  projectDescription: string
+  onProjectDescriptionChange: (value: string) => void
+  hasConfirmedProjectVision: boolean
+  onHasConfirmedProjectVisionChange: (value: boolean) => void
+  hasConfirmedImpactMetric: boolean
+  onHasConfirmedImpactMetricChange: (value: boolean) => void
+  hasSubmittedApplicationForm: boolean
   isProjectModalOpen: boolean
   onProjectModalClose: () => void
   applying: boolean
@@ -956,7 +1016,7 @@ function ImpactFundOverviewSection({
                 maxH={isDescriptionCollapsed ? DESCRIPTION_COLLAPSED_MAX_HEIGHT : undefined}
                 overflow={isDescriptionCollapsed ? 'hidden' : undefined}
               >
-                <MdxMarkdownEditor mode="preview" value={descriptionText} />
+                <ImpactFundDescriptionPreview value={descriptionText} />
               </Box>
               {isDescriptionCollapsed && (
                 <Box
@@ -1488,7 +1548,7 @@ function SponsorInquiryModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent maxH={{ base: '100dvh', md: '90vh' }}>
         <ModalHeader>{t('Become a Sponsor')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
@@ -1550,6 +1610,13 @@ type ApplicationSubmissionModalProps = {
   hasOwnedProjects: boolean
   selectedProjectId: string
   onSelectedProjectIdChange: (projectId: string) => void
+  projectDescription: string
+  onProjectDescriptionChange: (value: string) => void
+  hasConfirmedProjectVision: boolean
+  onHasConfirmedProjectVisionChange: (value: boolean) => void
+  hasConfirmedImpactMetric: boolean
+  onHasConfirmedImpactMetricChange: (value: boolean) => void
+  hasSubmittedApplicationForm: boolean
   applying: boolean
   onSubmitApplication: () => Promise<void>
   primaryTextColor: string
@@ -1565,6 +1632,13 @@ function ApplicationSubmissionModal({
   hasOwnedProjects,
   selectedProjectId,
   onSelectedProjectIdChange,
+  projectDescription,
+  onProjectDescriptionChange,
+  hasConfirmedProjectVision,
+  onHasConfirmedProjectVisionChange,
+  hasConfirmedImpactMetric,
+  onHasConfirmedImpactMetricChange,
+  hasSubmittedApplicationForm,
   applying,
   onSubmitApplication,
   primaryTextColor,
@@ -1573,7 +1647,7 @@ function ApplicationSubmissionModal({
   highlightedSurfaceBorderColor,
 }: ApplicationSubmissionModalProps): JSX.Element {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} size={{ base: 'full', md: '4xl' }}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{t('Submit your application')}</ModalHeader>
@@ -1604,20 +1678,70 @@ function ApplicationSubmissionModal({
 
             {ownedProjects.length > 0 ? (
               <VStack align="stretch" spacing={3}>
-                <Body fontWeight="semibold" color={primaryTextColor}>
-                  {t('Select your project')}:
-                </Body>
-                <Select
-                  value={selectedProjectId}
-                  onChange={(event) => onSelectedProjectIdChange(event.target.value)}
-                  size="lg"
-                >
-                  {ownedProjects.map((project) => (
-                    <option key={String(project.id)} value={String(project.id)}>
-                      {project.title}
-                    </option>
-                  ))}
-                </Select>
+                <FormControl>
+                  <FormLabel color={primaryTextColor}>{t('Select your project')}</FormLabel>
+                  <Select
+                    value={selectedProjectId}
+                    onChange={(event) => onSelectedProjectIdChange(event.target.value)}
+                    size="lg"
+                  >
+                    {ownedProjects.map((project) => (
+                      <option key={String(project.id)} value={String(project.id)}>
+                        {project.title}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl isRequired isInvalid={hasSubmittedApplicationForm && !projectDescription.trim()}>
+                  <FormLabel color={primaryTextColor}>{t('Project story')}</FormLabel>
+                  <Box
+                    h={{ base: '340px', md: '440px' }}
+                    overflowY="auto"
+                    bg="utils.pbg"
+                    borderWidth="1px"
+                    borderColor={hasSubmittedApplicationForm && !projectDescription.trim() ? 'error.9' : 'neutral1.6'}
+                    borderRadius="md"
+                  >
+                    <MdxMarkdownEditor
+                      mode="edit"
+                      value={projectDescription}
+                      onChange={onProjectDescriptionChange}
+                      minHeight="100%"
+                      placeholder={t(
+                        'Tell the story of your project: its origin, mission, goals, and the impact you want to make',
+                      )}
+                    />
+                  </Box>
+                  <FormErrorMessage>{t('Project story is required.')}</FormErrorMessage>
+                </FormControl>
+                <VStack align="stretch" spacing={3}>
+                  <Checkbox
+                    isChecked={hasConfirmedProjectVision}
+                    onChange={(event) => onHasConfirmedProjectVisionChange(event.target.checked)}
+                    colorScheme="primary1"
+                  >
+                    <Body size="sm" color={secondaryTextColor}>
+                      {t('I have included a detailed description of the project vision and specific goals')}
+                    </Body>
+                  </Checkbox>
+                  <Checkbox
+                    isChecked={hasConfirmedImpactMetric}
+                    onChange={(event) => onHasConfirmedImpactMetricChange(event.target.checked)}
+                    colorScheme="primary1"
+                  >
+                    <Body size="sm" color={secondaryTextColor}>
+                      {t('I have included a clear impact measurement metric')}
+                    </Body>
+                  </Checkbox>
+                  {hasSubmittedApplicationForm && (!hasConfirmedProjectVision || !hasConfirmedImpactMetric) && (
+                    <Body size="sm" color="error.9">
+                      {t('Confirm both requirements before submitting.')}
+                    </Body>
+                  )}
+                  <Body size="sm" color={secondaryTextColor}>
+                    {t('Not including this information may delay your application or cause it to be rejected.')}
+                  </Body>
+                </VStack>
               </VStack>
             ) : (
               <Box
@@ -1674,6 +1798,13 @@ function ImpactFundDetailContent({
   hasOwnedProjects,
   selectedProjectId,
   onSelectedProjectIdChange,
+  projectDescription,
+  onProjectDescriptionChange,
+  hasConfirmedProjectVision,
+  onHasConfirmedProjectVisionChange,
+  hasConfirmedImpactMetric,
+  onHasConfirmedImpactMetricChange,
+  hasSubmittedApplicationForm,
   isProjectModalOpen,
   onProjectModalClose,
   applying,
@@ -1814,6 +1945,13 @@ function ImpactFundDetailContent({
         hasOwnedProjects={hasOwnedProjects}
         selectedProjectId={selectedProjectId}
         onSelectedProjectIdChange={onSelectedProjectIdChange}
+        projectDescription={projectDescription}
+        onProjectDescriptionChange={onProjectDescriptionChange}
+        hasConfirmedProjectVision={hasConfirmedProjectVision}
+        onHasConfirmedProjectVisionChange={onHasConfirmedProjectVisionChange}
+        hasConfirmedImpactMetric={hasConfirmedImpactMetric}
+        onHasConfirmedImpactMetricChange={onHasConfirmedImpactMetricChange}
+        hasSubmittedApplicationForm={hasSubmittedApplicationForm}
         applying={applying}
         onSubmitApplication={onSubmitApplication}
         primaryTextColor={colors.primaryTextColor}

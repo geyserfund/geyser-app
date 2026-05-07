@@ -1,6 +1,6 @@
 import { Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, StackProps } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { useLocation, useNavigate } from 'react-router'
@@ -36,6 +36,8 @@ type AnimatedNavBarProps = {
   disableColorMode?: boolean
 } & StackProps
 
+type ButtonMeasurements = { left: number; width: number }
+
 export const AnimatedNavBar = ({
   items,
   showLabel,
@@ -52,20 +54,13 @@ export const AnimatedNavBar = ({
 
   const { colors } = useCustomTheme()
 
-  const [buttonPropsArray, setButtonPropsArray] = useState<{ left: number; width: number }[]>([])
-
-  const [initialButtonProps, setInitialButtonProps] = useState<{ left: number; width: number }>()
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [buttonPropsArray, setButtonPropsArray] = useState<(ButtonMeasurements | undefined)[]>([])
 
   const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex)
   useEffect(() => {
     setCurrentActiveIndex(activeIndex)
   }, [activeIndex])
-
-  useEffect(() => {
-    if (!initialButtonProps && buttonPropsArray.length > 0 && buttonPropsArray[currentActiveIndex]) {
-      setInitialButtonProps(buttonPropsArray[currentActiveIndex])
-    }
-  }, [buttonPropsArray, items, currentActiveIndex, initialButtonProps])
 
   const handleClick = (item: AnimatedNavBarItem, index: number) => {
     if (item.disableClick) {
@@ -82,19 +77,58 @@ export const AnimatedNavBar = ({
     navigate({ pathname: item.path || '', search: location.search }, { replace: item.replacePath })
   }
 
-  const measuredRef = useCallback((node: HTMLButtonElement | null, index: number) => {
-    if (node !== null) {
-      setButtonPropsArray((current) => {
-        current[index] = {
-          left: node.offsetLeft,
-          width: node.offsetWidth,
-        }
-        return current
+  const updateButtonProps = useCallback(() => {
+    setButtonPropsArray((current) => {
+      const next = items.map((_, index) => {
+        const node = buttonRefs.current[index]
+
+        return node
+          ? {
+              left: node.offsetLeft,
+              width: node.offsetWidth,
+            }
+          : current[index]
       })
-    }
+
+      const hasChanged = next.some((buttonProps, index) => {
+        const currentButtonProps = current[index]
+
+        return (
+          !currentButtonProps ||
+          currentButtonProps.left !== buttonProps?.left ||
+          currentButtonProps.width !== buttonProps?.width
+        )
+      })
+
+      return hasChanged || next.length !== current.length ? next : current
+    })
+  }, [items])
+
+  const measuredRef = useCallback((node: HTMLButtonElement | null, index: number) => {
+    buttonRefs.current[index] = node
   }, [])
 
   const currentActiveItem = items[currentActiveIndex]
+  const currentButtonProps = buttonPropsArray[currentActiveIndex]
+
+  useLayoutEffect(() => {
+    updateButtonProps()
+
+    if (typeof ResizeObserver === 'undefined') {
+      return
+    }
+
+    const resizeObserver = new ResizeObserver(updateButtonProps)
+    buttonRefs.current.forEach((buttonRef) => {
+      if (buttonRef) {
+        resizeObserver.observe(buttonRef)
+      }
+    })
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [items, updateButtonProps])
 
   if (loading) {
     return <Skeleton borderRadius={'10px'} height={'44px'} width="100%" />
@@ -111,7 +145,7 @@ export const AnimatedNavBar = ({
       zIndex={2}
       {...props}
     >
-      {initialButtonProps && (
+      {currentButtonProps && (
         <motion.div
           style={{
             position: 'absolute',
@@ -121,8 +155,8 @@ export const AnimatedNavBar = ({
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
             borderRadius: '10px',
             opacity: currentActiveItem?.isDisabled ? 0 : 1,
-            left: initialButtonProps.left,
-            width: initialButtonProps.width,
+            left: currentButtonProps.left,
+            width: currentButtonProps.width,
             boxShadow: 'none',
           }}
           initial={false}

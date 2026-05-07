@@ -7,6 +7,7 @@ export const FRAGMENT_PROJECT_FOR_OWNER = gql`
     images
     thumbnailImage
     title
+    description
     status
     createdAt
     lastCreationStep

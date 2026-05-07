@@ -9,6 +9,7 @@ import { TransactionClaimedImageUrl } from '../constant.ts'
 import { PayoutStepLayout } from './PayoutStepLayout.tsx'
 
 type BitcoinPayoutProcessedProps = {
+  hideAction?: boolean
   isRefund?: boolean
   onClose: () => void
   refundTxId?: string
@@ -16,6 +17,7 @@ type BitcoinPayoutProcessedProps = {
 
 /** BitcoinPayoutProcessed: Success screen for Bitcoin on-chain payout completion */
 export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
+  hideAction = false,
   isRefund = false,
   onClose,
   refundTxId,
@@ -43,9 +45,11 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
         </VStack>
       }
       action={
-        <Button w="full" size="lg" colorScheme="neutral1" variant="outline" onClick={onClose}>
-          {isRefund ? t('Close') : t('Go back to my project')}
-        </Button>
+        hideAction ? undefined : (
+          <Button w="full" size="lg" colorScheme="neutral1" variant="outline" onClick={onClose}>
+            {isRefund ? t('Close') : t('Go back to my project')}
+          </Button>
+        )
       }
     />
   )
