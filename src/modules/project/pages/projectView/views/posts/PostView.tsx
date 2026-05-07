@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, Text, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
@@ -30,9 +30,41 @@ import { toInt, useNotification } from '@/utils'
 import { MdxMarkdownEditor } from '../../../../../../shared/markdown/MdxMarkdownEditor.tsx'
 import { sourceResourceAtom } from '../../state/sourceActivityAtom.ts'
 import { LinkedRewardsAndGoals } from './components/LinkedRewardsAndGoals.tsx'
+import { OgLinkPreviewCard } from './components/OgLinkPreviewCard.tsx'
 import { PostEditMenu } from './components/PostEditMenu.tsx'
 import { PostShare } from './components/PostShare.tsx'
 import { postTypeOptions } from './utils/postTypeLabel.ts'
+
+/** Returns true when the entire trimmed string is a valid URL */
+const isValidUrl = (str: string): boolean => {
+  try {
+    new URL(str)
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** Renders plain text with any URLs as clickable external links */
+const LinkifiedText = ({ text }: { text: string }) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g
+  const parts = text.split(urlRegex)
+  return (
+    <>
+      {parts.map((part, i) =>
+        urlRegex.test(part) ? (
+          <ChakraLink key={i} href={part} isExternal color="primary1.11" wordBreak="break-all">
+            {part}
+          </ChakraLink>
+        ) : (
+          <Text key={i} as="span">
+            {part}
+          </Text>
+        ),
+      )}
+    </>
+  )
+}
 
 export const PostView = () => {
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
@@ -94,6 +126,9 @@ export const PostView = () => {
   }
 
   const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
+
+  const descriptionTrimmed = post.description?.trim() ?? ''
+  const isLinkOnly = descriptionTrimmed.length > 0 && isValidUrl(descriptionTrimmed)
 
   return (
     <>
@@ -192,9 +227,15 @@ export const PostView = () => {
               </HStack>
             </VStack>
 
-            <Body size="md" bold dark>
-              {post.description}
-            </Body>
+            {descriptionTrimmed && (
+              isLinkOnly ? (
+                <OgLinkPreviewCard url={descriptionTrimmed} />
+              ) : (
+                <Body size="md" dark>
+                  <LinkifiedText text={descriptionTrimmed} />
+                </Body>
+              )
+            )}
 
             {post.markdown && (
               <Box
