@@ -4,10 +4,12 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { PiCopy, PiLink } from 'react-icons/pi'
 
+import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { currentOnChainToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { BitcoinQuote } from '@/types/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
@@ -16,6 +18,7 @@ import { WaitingForPayment } from '../../../components/WaitingForPayment'
 import { useListenOnchainTransactionUpdate } from '../hooks/useListenOnchainTransactionUpdate'
 
 export const PaymentOnchainQR = () => {
+  const fundingContribution = useAtomValue(fundingContributionAtom)
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
   const address = fundingPaymentDetails.onChainToRskSwap?.address
   const amountDue = fundingPaymentDetails.onChainToRskSwap?.amountDue
@@ -24,15 +27,23 @@ export const PaymentOnchainQR = () => {
     return null
   }
 
-  return <PaymentOnchainQRContent address={address} totalAmountSats={amountDue} />
+  return (
+    <PaymentOnchainQRContent
+      address={address}
+      totalAmountSats={amountDue}
+      bitcoinQuote={fundingContribution.bitcoinQuote}
+    />
+  )
 }
 
 export const PaymentOnchainQRContent = ({
   address,
   totalAmountSats,
+  bitcoinQuote,
 }: {
   address: string
   totalAmountSats: number
+  bitcoinQuote?: BitcoinQuote | null
 }) => {
   useListenOnchainTransactionUpdate()
 
@@ -55,7 +66,7 @@ export const PaymentOnchainQRContent = ({
     <VStack flexWrap="wrap" width="100%" spacing={6}>
       <VStack w="full">
         <QRCodeComponent value={onChainBip21Invoice} onClick={onCopyBip21Invoice} isColored={hasCopiedBip21Invoice} />
-        <TotalAmountToPay />
+        <TotalAmountToPay amountDueSats={totalAmountSats} bitcoinQuote={bitcoinQuote} />
       </VStack>
       <WaitingForPayment />
 
