@@ -1,0 +1,169 @@
+import { Button, HStack, Input, InputGroup, InputRightElement, SimpleGrid, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useState } from 'react'
+
+import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { decryptMnemonic, getSeedWords } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
+import { Modal } from '@/shared/components/layouts/Modal.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H2 } from '@/shared/components/typography/Heading.tsx'
+import { useModal } from '@/shared/hooks/useModal.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { useNotification } from '@/utils'
+
+const SeedWordsFeedback = () => (
+  <>
+    <Feedback variant={FeedBackVariant.WARNING}>
+      <Body size="sm">
+        {t(
+          'Store them somewhere secure and offline, like a paper backup. Never share them. Anyone with these words can access your Bitcoin.',
+        )}
+      </Body>
+    </Feedback>
+    <Feedback variant={FeedBackVariant.INFO}>
+      <Body size="sm">{t('These recovery words store your Bitcoin on the Rootstock sidechain or on base-chain.')}</Body>
+    </Feedback>
+  </>
+)
+
+export const SeedWordsSection = () => {
+  const toast = useNotification()
+  const userAccountKeys = useAtomValue(userAccountKeysAtom)
+  const setAccountPassword = useSetAtom(accountPasswordAtom)
+  const seedWordsModal = useModal()
+
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [isDecryptingSeed, setIsDecryptingSeed] = useState(false)
+  const [seedWords, setSeedWords] = useState<string[]>([])
+  const [showSeedWords, setShowSeedWords] = useState(false)
+  const [isSeedWordsView, setIsSeedWordsView] = useState(false)
+
+  if (!userAccountKeys?.encryptedMnemonic) {
+    return null
+  }
+
+  const handleCloseSeedWordsModal = () => {
+    seedWordsModal.onClose()
+    setPassword('')
+    setShowPassword(false)
+    setPasswordError(null)
+    setSeedWords([])
+    setShowSeedWords(false)
+    setIsSeedWordsView(false)
+  }
+
+  const handleViewSeedWords = async () => {
+    if (!userAccountKeys?.encryptedMnemonic) {
+      toast.error({ title: t('Unable to find your account keys') })
+      return
+    }
+
+    if (!password) {
+      setPasswordError(t('Password is required'))
+      return
+    }
+
+    setIsDecryptingSeed(true)
+    setPasswordError(null)
+
+    try {
+      const mnemonic = await decryptMnemonic(userAccountKeys.encryptedMnemonic, password)
+      setSeedWords(getSeedWords('', mnemonic))
+      setShowSeedWords(false)
+      setAccountPassword(password)
+      setIsSeedWordsView(true)
+    } catch (_error) {
+      setPasswordError(t('Invalid password'))
+    } finally {
+      setIsDecryptingSeed(false)
+    }
+  }
+
+  const seedWordsListView = (
+    <VStack w="full" spacing={4} align="stretch">
+      <VStack align="stretch" spacing={3}>
+        <HStack justify="space-between">
+          <Body medium>{t('Recovery words')}</Body>
+          <Button size="sm" variant="soft" colorScheme="primary1" onClick={() => setShowSeedWords((prev) => !prev)}>
+            {showSeedWords ? t('Hide words') : t('Show words')}
+          </Button>
+        </HStack>
+        <SimpleGrid w="full" columns={{ base: 2, md: 3 }} spacing={2}>
+          {seedWords.map((word, index) => (
+            <HStack key={`${word}-${index}`} borderWidth="1px" borderColor="neutral1.4" borderRadius="md" p={2}>
+              <Body size="sm" muted>
+                {index + 1}.
+              </Body>
+              <Body size="sm">{showSeedWords ? word : '••••••••'}</Body>
+            </HStack>
+          ))}
+        </SimpleGrid>
+        <SeedWordsFeedback />
+      </VStack>
+    </VStack>
+  )
+
+  const seedWordsPasswordView = (
+    <VStack w="full" spacing={4} align="stretch">
+      <Body size="sm">
+        {t('Enter your account password to view your seed words. Keep them private and store them in a secure place.')}
+      </Body>
+
+      <VStack align="stretch" spacing={2}>
+        <InputGroup>
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            placeholder={t('Enter your password')}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" variant="ghost" onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? t('Hide') : t('Show')}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+        {passwordError ? (
+          <Body size="sm" color="red.400">
+            {passwordError}
+          </Body>
+        ) : null}
+      </VStack>
+
+      <Button
+        size="md"
+        colorScheme="primary1"
+        onClick={handleViewSeedWords}
+        isLoading={isDecryptingSeed}
+        isDisabled={isDecryptingSeed}
+      >
+        {t('Show seed words')}
+      </Button>
+    </VStack>
+  )
+
+  return (
+    <>
+      <VStack spacing={4} align="flex-start" w="full">
+        <H2 size="md">{t('Recovery seed words')}</H2>
+        <Body size="md" color="neutral1.10" maxW="4xl">
+          {t(
+            'These recovery words back up your Bitcoin wallet on Geyser. They are the only way to recover your funds if you lose access.',
+          )}
+        </Body>
+        <SeedWordsFeedback />
+        <Button size="md" colorScheme="primary1" variant="outline" onClick={seedWordsModal.onOpen}>
+          {t('View seed words')}
+        </Button>
+      </VStack>
+
+      <Modal isOpen={seedWordsModal.isOpen} onClose={handleCloseSeedWordsModal} title={t('View seed words')} size="md">
+        {isSeedWordsView ? seedWordsListView : seedWordsPasswordView}
+      </Modal>
+    </>
+  )
+}

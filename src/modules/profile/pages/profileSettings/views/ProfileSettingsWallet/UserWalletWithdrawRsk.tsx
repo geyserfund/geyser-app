@@ -13,6 +13,7 @@ import {
   QUERY_USER_WALLET_WITHDRAW_ACTIVE,
   QUERY_USER_WALLET_WITHDRAW_LATEST,
 } from '@/modules/profile/graphql/userWalletWithdraw.ts'
+import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { createCallDataForLockCall } from '@/modules/project/pages/projectFunding/utils/createCallDataForLockCall.ts'
@@ -41,11 +42,10 @@ import {
 } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/hooks/usePayoutWithLightningForm.ts'
 import { PayoutRskSkeleton } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { PayoutFlowSwapData, PayoutMethod } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/types.ts'
-import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
+import { getMempoolSpaceUrl, getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentForPayoutRefundFragment,
@@ -375,6 +375,7 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
           password: data.accountPassword || '',
         })
       }
+
       swapObj.paymentId = activeOnChainPayment.id
       setSwapData(swapObj)
       setLockTxId(activeOnChainDetails.onChainTxId || '')
@@ -597,12 +598,12 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
     const waitingNotice = isWaitingClaimReady ? (
       t('Your funds are ready to be claimed')
     ) : (
-      <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>mempool.space</1>.">
+      <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>rootstock.blockscout.com</1>.">
         {
           'We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on '
         }
-        <ChakraLink href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
-          {'mempool.space'}
+        <ChakraLink href={getRootstockBlockscoutUrl(lockTxId || '')} textDecoration="underline" isExternal>
+          {'rootstock.blockscout.com'}
         </ChakraLink>
         {'.'}
       </Trans>

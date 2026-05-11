@@ -16,7 +16,7 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
+import { getMempoolSpaceUrl, getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
 import {
   PaymentStatus,
   PaymentType,
@@ -240,12 +240,12 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const waitingNotice = isWaitingClaimReady ? (
     t('Your funds are ready to be claimed')
   ) : (
-    <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>mempool.space</1>.">
+    <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>rootstock.blockscout.com</1>.">
       {
         'We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on '
       }
-      <ChakraLink href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
-        {'mempool.space'}
+      <ChakraLink href={getRootstockBlockscoutUrl(lockTxId || '')} textDecoration="underline" isExternal>
+        {'rootstock.blockscout.com'}
       </ChakraLink>
       {'.'}
     </Trans>
