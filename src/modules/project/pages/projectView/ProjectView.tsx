@@ -5,6 +5,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import { GoalModal } from './components/GoalModal.tsx'
 import { useLiveContributions } from './hooks/useLiveContributions'
+import { WriteUpdateModal } from './views/posts/components/WriteUpdateModal.tsx'
 
 export const ProjectView = () => {
   useLiveContributions()
@@ -23,6 +24,7 @@ export const ProjectView = () => {
     <>
       <Outlet />
       <GoalModal onGoalCreated={onGoalCreated} />
+      <WriteUpdateModal />
     </>
   )
 }

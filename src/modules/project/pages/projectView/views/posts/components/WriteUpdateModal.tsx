@@ -1,0 +1,607 @@
+import {
+  Box,
+  Button,
+  Collapse,
+  HStack,
+  IconButton,
+  Input,
+  Modal as ChakraModal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
+  Select,
+  Spinner,
+  Textarea,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
+import { t } from 'i18next'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { PiArrowLeft, PiImages, PiLink, PiVideoCamera, PiX } from 'react-icons/pi'
+import { useNavigate } from 'react-router'
+
+import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
+import { Body } from '@/shared/components/typography'
+import { getPath, ProjectPostValidations } from '@/shared/constants/index.ts'
+import { FileUpload } from '@/shared/molecules'
+import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
+import { PostCreateInput, PostType, PostUpdateInput, useProjectPostQuery } from '@/types'
+import { toInt, useMobileMode, useNotification } from '@/utils'
+
+import { useWriteUpdateModal } from '../../../hooks/useWriteUpdateModal.ts'
+import { postTypeOptions } from '../utils/postTypeLabel.ts'
+import { isValidUrl } from '../utils/postUrlUtils.tsx'
+import { OgLinkPreviewCard } from './OgLinkPreviewCard.tsx'
+import { PublishSuccessState } from './PublishSuccessState.tsx'
+
+/** Returns a non-empty title derived from the description. For URL-only descriptions uses the hostname as fallback. */
+const generateTitle = (description: string): string => {
+  const trimmed = description.trim()
+  if (!trimmed) return t('Project update')
+  if (isValidUrl(trimmed)) {
+    try {
+      return new URL(trimmed).hostname.substring(0, ProjectPostValidations.title.maxLength)
+    } catch {
+      return t('Project update')
+    }
+  }
+
+  return trimmed.substring(0, ProjectPostValidations.title.maxLength)
+}
+
+/** Composer modal for quick project updates */
+export const WriteUpdateModal = () => {
+  const isMobile = useMobileMode()
+  const navigate = useNavigate()
+  const toast = useNotification()
+  const { project } = useProjectAtom()
+  const { isOpen, postId, closeWriteUpdateModal } = useWriteUpdateModal()
+
+  const { postCreate, postUpdate, postPublish } = useProjectPostsAPI()
+
+  // ── composer state ──
+  const [description, setDescription] = useState('')
+  const [image, setImage] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
+  const [linkInputValue, setLinkInputValue] = useState('')
+  const [showLinkInput, setShowLinkInput] = useState(false)
+  const [postType, setPostType] = useState<PostType>(PostType.Announcement)
+
+  // runtime state
+  const [currentPostId, setCurrentPostId] = useState<number | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [showSuccessState, setShowSuccessState] = useState(false)
+  const [publishedPostId, setPublishedPostId] = useState<number | null>(null)
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // ── load existing draft when editing ──
+  const { loading: loadingPost } = useProjectPostQuery({
+    variables: { postId: toInt(postId) },
+    skip: !postId,
+    fetchPolicy: 'network-only',
+    onCompleted(data) {
+      if (data.post) {
+        const p = data.post
+        const desc = p.description ?? ''
+        setDescription(desc)
+        setImage(p.image ?? '')
+        if (isValidUrl(desc.trim())) {
+          setLinkUrl(desc.trim())
+        }
+
+        setPostType(p.postType ?? PostType.Announcement)
+        setCurrentPostId(p.id)
+      }
+    },
+  })
+
+  // ── reset when modal closes ──
+  useEffect(() => {
+    if (!isOpen) {
+      const timer = setTimeout(() => {
+        setDescription('')
+        setImage('')
+        setLinkUrl('')
+        setLinkInputValue('')
+        setShowLinkInput(false)
+        setPostType(PostType.Announcement)
+        setCurrentPostId(null)
+        setShowSuccessState(false)
+        setPublishedPostId(null)
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
+
+  const hasMeaningfulContent = description.trim().length > 0 || Boolean(image) || Boolean(linkUrl)
+
+  // auto-resize textarea
+  const adjustTextarea = useCallback(() => {
+    const el = textareaRef.current
+    if (el) {
+      el.style.height = 'auto'
+      el.style.height = `${Math.min(el.scrollHeight, 240)}px`
+    }
+  }, [])
+
+  // Recalculate textarea height whenever description changes or the textarea becomes visible
+  useEffect(() => {
+    adjustTextarea()
+  }, [description, adjustTextarea])
+
+  // ── build API inputs ──
+  const buildDescription = (): string => {
+    if (linkUrl) {
+      return linkUrl
+    }
+
+    return description
+  }
+
+  const buildCreateInput = (): PostCreateInput => ({
+    projectId: toInt(project.id),
+    title: generateTitle(buildDescription()),
+    description: buildDescription(),
+    image: image || undefined,
+    postType,
+    projectGoalIds: [],
+    projectRewardUUIDs: [],
+  })
+
+  const buildUpdateInput = (id: number): PostUpdateInput => ({
+    postId: id,
+    title: generateTitle(buildDescription()),
+    description: buildDescription(),
+    image: image || undefined,
+    postType,
+    projectGoalIds: [],
+    projectRewardUUIDs: [],
+  })
+
+  // ── save/create draft ──
+  const saveOrUpdateDraft = useCallback((): Promise<number | null> => {
+    if (!hasMeaningfulContent) return Promise.resolve(null)
+
+    return new Promise((resolve) => {
+      if (currentPostId) {
+        postUpdate.execute({
+          variables: { input: buildUpdateInput(currentPostId) },
+          onCompleted(data) {
+            resolve(data.postUpdate.id)
+          },
+          onError() {
+            toast.error({ title: t('Failed to save draft') })
+            resolve(null)
+          },
+        })
+      } else {
+        postCreate.execute({
+          variables: { input: buildCreateInput() },
+          onCompleted(data) {
+            setCurrentPostId(data.postCreate.id)
+            resolve(data.postCreate.id)
+          },
+          onError() {
+            toast.error({ title: t('Failed to save draft') })
+            resolve(null)
+          },
+        })
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasMeaningfulContent, currentPostId, description, image, linkUrl, postType])
+
+  const handleSaveDraft = async () => {
+    if (!hasMeaningfulContent) return
+    setIsSaving(true)
+    const id = await saveOrUpdateDraft()
+    setIsSaving(false)
+    if (id) {
+      toast.success({ title: t('Draft saved') })
+      closeWriteUpdateModal()
+    }
+  }
+
+  const handlePublish = async () => {
+    if (!hasMeaningfulContent) return
+    setIsPublishing(true)
+    const id = await saveOrUpdateDraft()
+    if (!id) {
+      setIsPublishing(false)
+      return
+    }
+
+    postPublish.execute({
+      variables: { input: { postId: id } },
+      onCompleted(data) {
+        setIsPublishing(false)
+        setPublishedPostId(data.postPublish.id)
+        setShowSuccessState(true)
+      },
+      onError() {
+        setIsPublishing(false)
+        toast.error({ title: t('Failed to publish update') })
+      },
+    })
+  }
+
+  const handleOpenFullEditor = async () => {
+    if (!hasMeaningfulContent) {
+      closeWriteUpdateModal()
+      navigate(getPath('projectPostCreate', project.name))
+      return
+    }
+
+    setIsSaving(true)
+    const id = currentPostId ?? (await saveOrUpdateDraft())
+    setIsSaving(false)
+    if (id) {
+      closeWriteUpdateModal()
+      navigate(getPath('projectPostEdit', project.name, String(id)))
+    }
+  }
+
+  const handleAddLink = () => {
+    const raw = linkInputValue.trim()
+    if (!raw) return
+    const hasProtocol = /^https?:\/\//i.test(raw)
+    const withProtocol = hasProtocol ? raw.toLowerCase().replace(/^https?/i, (m) => m.toLowerCase()) : `https://${raw}`
+    if (!isValidUrl(withProtocol)) {
+      toast.error({ title: t('Please enter a valid URL') })
+      return
+    }
+
+    setLinkUrl(withProtocol)
+    setLinkInputValue('')
+    setShowLinkInput(false)
+  }
+
+  const isLoading = isSaving || isPublishing
+
+  // Caption textarea is hidden when link input is open or a link URL is set
+  const showCaptionTextarea = !showLinkInput && !linkUrl
+
+  return (
+    <ChakraModal
+      isOpen={isOpen}
+      onClose={closeWriteUpdateModal}
+      isCentered
+      size="xl"
+      motionPreset={isMobile ? 'slideInBottom' : 'scale'}
+      closeOnOverlayClick={!hasMeaningfulContent}
+    >
+      <ModalOverlay />
+      <ModalContent
+        maxWidth="580px"
+        maxHeight="90vh"
+        borderRadius="16px"
+        overflow="hidden"
+        bg="utils.pbg"
+        display="flex"
+        flexDirection="column"
+        mx={{ base: 2, lg: 'auto' }}
+      >
+        {/* ── Header ── */}
+        <HStack
+          px={5}
+          py={4}
+          borderBottom="1px solid"
+          borderColor="neutral1.6"
+          justifyContent="space-between"
+          flexShrink={0}
+        >
+          <HStack spacing={3}>
+            {project.thumbnailImage && (
+              <Box
+                w="32px"
+                h="32px"
+                borderRadius="full"
+                overflow="hidden"
+                border="1px solid"
+                borderColor="neutral1.6"
+                flexShrink={0}
+              >
+                <ImageWithReload src={project.thumbnailImage} alt={project.name} w="full" h="full" objectFit="cover" />
+              </Box>
+            )}
+            <VStack spacing={0} alignItems="start">
+              <Body size="xs" muted lineHeight="short">
+                {t('Posting to')}
+              </Body>
+              <Body size="sm" medium dark lineHeight="short">
+                {project.title || project.name}
+              </Body>
+            </VStack>
+          </HStack>
+
+          <IconButton
+            aria-label={t('Close')}
+            icon={<PiX />}
+            size="sm"
+            variant="outline"
+            colorScheme="neutral1"
+            onClick={closeWriteUpdateModal}
+          />
+        </HStack>
+
+        {/* ── Body ── */}
+        <ModalBody px={0} py={0} flex={1} overflowY="auto" display="flex" flexDirection="column">
+          {showSuccessState && publishedPostId ? (
+            <Box px={5} py={6}>
+              <PublishSuccessState
+                postId={publishedPostId}
+                description={description}
+                onWriteAnother={() => {
+                  setShowSuccessState(false)
+                  setPublishedPostId(null)
+                  setDescription('')
+                  setImage('')
+                  setLinkUrl('')
+                  setCurrentPostId(null)
+                  setPostType(PostType.Announcement)
+                }}
+                onClose={closeWriteUpdateModal}
+              />
+            </Box>
+          ) : (
+            <VStack spacing={0} alignItems="stretch">
+              {/* Image upload area */}
+              <Box px={5} pt={4}>
+                <FileUpload
+                  onUploadComplete={(url) => setImage(url)}
+                  childrenOnLoading={<SkeletonLayout height="200px" width="100%" />}
+                  imageCrop={ImageCropAspectRatio.Post}
+                >
+                  <>
+                    {image ? (
+                      <Box
+                        position="relative"
+                        borderRadius="8px"
+                        overflow="hidden"
+                        role="group"
+                        cursor="pointer"
+                        style={{ aspectRatio: '16/9' }}
+                      >
+                        <ImageWithReload src={image} alt={t('Post image')} w="full" h="full" objectFit="cover" />
+                        <VStack
+                          position="absolute"
+                          inset={0}
+                          bg="utils.overlay"
+                          opacity={0}
+                          _groupHover={{ opacity: 1 }}
+                          transition="opacity 0.2s ease"
+                          justifyContent="center"
+                          alignItems="center"
+                          spacing={2}
+                          pointerEvents="none"
+                        >
+                          <Body size="sm" medium color="utils.whiteContrast">
+                            {t('Change image')}
+                          </Body>
+                        </VStack>
+                        <IconButton
+                          aria-label={t('Remove image')}
+                          icon={<PiX />}
+                          size="xs"
+                          position="absolute"
+                          top={2}
+                          right={2}
+                          variant="solid"
+                          colorScheme="neutral1"
+                          zIndex={1}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setImage('')
+                          }}
+                        />
+                      </Box>
+                    ) : (
+                      <HStack
+                        w="full"
+                        h="160px"
+                        borderRadius="8px"
+                        border="2px dashed"
+                        borderColor="neutral1.6"
+                        justifyContent="center"
+                        spacing={2}
+                        cursor="pointer"
+                        transition="border-color 0.2s, background-color 0.2s"
+                        _hover={{ borderColor: 'primary1.8', bg: 'primary1.2' }}
+                      >
+                        <PiImages fontSize="20px" color="var(--chakra-colors-neutral1-9)" />
+                        <Body size="sm" muted>
+                          {t('Drag and drop or click to upload')}
+                        </Body>
+                      </HStack>
+                    )}
+                  </>
+                </FileUpload>
+              </Box>
+
+              {/* Action pills row */}
+              <HStack px={5} pt={3} pb={1} spacing={2}>
+                {/* Share a link */}
+                <Button
+                  size="sm"
+                  variant={linkUrl ? 'solid' : 'outline'}
+                  colorScheme={linkUrl ? 'primary1' : 'neutral1'}
+                  leftIcon={<PiLink />}
+                  onClick={() => {
+                    if (linkUrl) {
+                      setLinkUrl('')
+                    } else {
+                      setShowLinkInput(!showLinkInput)
+                    }
+                  }}
+                  borderRadius="full"
+                >
+                  {linkUrl ? t('Remove link') : t('Share a link')}
+                </Button>
+
+                {/* Record a video — placeholder, disabled */}
+                <Tooltip label={t('Coming soon')} hasArrow>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    colorScheme="neutral1"
+                    leftIcon={<PiVideoCamera />}
+                    isDisabled
+                    borderRadius="full"
+                    cursor="not-allowed"
+                  >
+                    {t('Record a video')}
+                  </Button>
+                </Tooltip>
+              </HStack>
+
+              {/* Link input panel */}
+              <Collapse in={showLinkInput} animateOpacity>
+                <HStack px={5} pb={3} pt={2} spacing={2}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    colorScheme="neutral1"
+                    leftIcon={<PiArrowLeft />}
+                    onClick={() => {
+                      setShowLinkInput(false)
+                      setLinkInputValue('')
+                    }}
+                    px={1}
+                    aria-label={t('Back')}
+                  />
+                  <Input
+                    size="sm"
+                    placeholder="https://..."
+                    value={linkInputValue}
+                    onChange={(e) => setLinkInputValue(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddLink()}
+                    autoFocus
+                    flex={1}
+                  />
+                  <Button
+                    size="sm"
+                    variant="solid"
+                    colorScheme="primary1"
+                    onClick={handleAddLink}
+                    isDisabled={!linkInputValue.trim()}
+                  >
+                    {t('Add')}
+                  </Button>
+                </HStack>
+              </Collapse>
+
+              {/* OG preview when link set */}
+              {linkUrl && (
+                <Box px={5} pb={3}>
+                  <OgLinkPreviewCard url={linkUrl} onRemove={() => setLinkUrl('')} />
+                </Box>
+              )}
+
+              {/* Caption textarea — hidden while link input is open or a link is set */}
+              {showCaptionTextarea && (
+                <Box px={5} pb={2}>
+                  <Textarea
+                    ref={textareaRef}
+                    value={description}
+                    onChange={(e) => {
+                      setDescription(e.target.value)
+                      adjustTextarea()
+                    }}
+                    placeholder={t('Share what changed, what you built, or what supporters helped make happen…')}
+                    border="none"
+                    bg="transparent"
+                    _focus={{ border: 'none', boxShadow: 'none' }}
+                    _focusVisible={{ boxShadow: 'none' }}
+                    resize="none"
+                    minHeight="100px"
+                    maxLength={ProjectPostValidations.description.maxLength}
+                    px={0}
+                    fontSize="sm"
+                    color="utils.text"
+                  />
+                </Box>
+              )}
+
+              {/* Post type selector */}
+              <Box px={5} pb={4}>
+                <Select
+                  size="sm"
+                  value={postType}
+                  onChange={(e) => setPostType(e.target.value as PostType)}
+                  borderRadius="8px"
+                  color="neutral1.11"
+                  borderColor="neutral1.6"
+                  _hover={{ borderColor: 'neutral1.8' }}
+                  fontSize="sm"
+                >
+                  {postTypeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {t(option.label)}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+
+              {/* Loading indicator while fetching existing post */}
+              {loadingPost && (
+                <HStack justifyContent="center" py={4}>
+                  <Spinner size="sm" color="primary1.9" />
+                </HStack>
+              )}
+            </VStack>
+          )}
+        </ModalBody>
+
+        {/* ── Footer (hidden in success state) ── */}
+        {!showSuccessState && (
+          <HStack
+            px={5}
+            py={4}
+            borderTop="1px solid"
+            borderColor="neutral1.6"
+            justifyContent="space-between"
+            flexShrink={0}
+          >
+            <Button
+              size="sm"
+              variant="ghost"
+              colorScheme="neutral1"
+              onClick={handleOpenFullEditor}
+              isLoading={isSaving && !isPublishing}
+            >
+              {t('Open full editor')}
+            </Button>
+
+            <HStack spacing={2}>
+              <Button
+                size="md"
+                variant="outline"
+                colorScheme="neutral1"
+                isDisabled={!hasMeaningfulContent || isLoading}
+                isLoading={isSaving && !isPublishing}
+                onClick={handleSaveDraft}
+              >
+                {t('Save draft')}
+              </Button>
+              <Button
+                size="md"
+                variant="solid"
+                colorScheme="primary1"
+                isDisabled={!hasMeaningfulContent || isLoading}
+                isLoading={isPublishing}
+                onClick={handlePublish}
+              >
+                {t('Publish')}
+              </Button>
+            </HStack>
+          </HStack>
+        )}
+      </ModalContent>
+    </ChakraModal>
+  )
+}

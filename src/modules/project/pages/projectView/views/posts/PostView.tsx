@@ -30,9 +30,11 @@ import { toInt, useNotification } from '@/utils'
 import { MdxMarkdownEditor } from '../../../../../../shared/markdown/MdxMarkdownEditor.tsx'
 import { sourceResourceAtom } from '../../state/sourceActivityAtom.ts'
 import { LinkedRewardsAndGoals } from './components/LinkedRewardsAndGoals.tsx'
+import { OgLinkPreviewCard } from './components/OgLinkPreviewCard.tsx'
 import { PostEditMenu } from './components/PostEditMenu.tsx'
 import { PostShare } from './components/PostShare.tsx'
 import { postTypeOptions } from './utils/postTypeLabel.ts'
+import { isValidUrl, LinkifiedText } from './utils/postUrlUtils.tsx'
 
 export const PostView = () => {
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
@@ -94,6 +96,9 @@ export const PostView = () => {
   }
 
   const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
+
+  const descriptionTrimmed = post.description?.trim() ?? ''
+  const isLinkOnly = descriptionTrimmed.length > 0 && isValidUrl(descriptionTrimmed)
 
   return (
     <>
@@ -192,9 +197,14 @@ export const PostView = () => {
               </HStack>
             </VStack>
 
-            <Body size="md" bold dark>
-              {post.description}
-            </Body>
+            {descriptionTrimmed &&
+              (isLinkOnly ? (
+                <OgLinkPreviewCard url={descriptionTrimmed} />
+              ) : (
+                <Body size="md" dark>
+                  <LinkifiedText text={descriptionTrimmed} />
+                </Body>
+              ))}
 
             {post.markdown && (
               <Box

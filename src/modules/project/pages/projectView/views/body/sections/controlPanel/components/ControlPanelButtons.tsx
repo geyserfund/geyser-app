@@ -40,13 +40,6 @@ export const ControlPanelButtons = () => {
         />
       )}
 
-      <ControlPanelButton
-        emoji={ControlPanelImages.update}
-        label={t('Write an update')}
-        mobileLabel={t('Update')}
-        to={getPath('projectPostCreate', project?.name)}
-      />
-
       <PromoteProjectMenu projectName={project?.name} />
     </>
   )
