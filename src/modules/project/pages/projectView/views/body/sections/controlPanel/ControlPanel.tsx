@@ -4,6 +4,7 @@ import { useAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
+import { DateTime } from 'luxon'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
@@ -25,10 +26,12 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
-import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
+import { usePostsAtom, useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
+import { useWriteUpdateModal } from '../../../../hooks/useWriteUpdateModal.ts'
 import { promotionsNoticeClosedByProjectAtom, stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
+import { ControlPanelImages } from './constant.ts'
 import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { ProjectReviewFeedbackModal } from './components/ProjectReviewFeedbackModal.tsx'
 import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
@@ -162,6 +165,81 @@ const ControlPanelFinancialActions = ({
         </Stack>
       )}
     </VStack>
+  )
+}
+
+/** Shown when the project owner has not posted in more than 7 days (or has never posted). */
+const WriteUpdateNudgeCard = () => {
+  const { posts } = usePostsAtom()
+  const { openWriteUpdateModal } = useWriteUpdateModal()
+
+  const latestPost = useMemo(
+    () =>
+      [...posts]
+        .filter((p) => p.publishedAt)
+        .sort((a, b) => Number(b.publishedAt) - Number(a.publishedAt))[0] ?? null,
+    [posts],
+  )
+
+  const daysSinceLastPost = latestPost
+    ? Math.floor(DateTime.now().diff(DateTime.fromMillis(Number(latestPost.publishedAt)), 'days').days)
+    : null
+
+  const isUrgent = daysSinceLastPost === null || daysSinceLastPost > 7
+
+  const title = isUrgent
+    ? t('Keep your community in the loop')
+    : t('Write an update for your community')
+
+  const subtitle = (() => {
+    if (daysSinceLastPost === null) return t("You haven't posted yet — share your first update!")
+    if (daysSinceLastPost > 7)
+      return t("Your contributors haven't heard from you in {{days}} days — share an update!", {
+        days: daysSinceLastPost,
+      })
+    return t("Keep your supporters informed — share what's happening with your project.")
+  })()
+
+  return (
+    <HStack
+      w="full"
+      justifyContent="space-between"
+      alignItems="center"
+      bg="utils.pbg"
+      border="1px solid"
+      borderColor="neutral1.6"
+      borderRadius="8px"
+      px={4}
+      py={4}
+      spacing={4}
+    >
+      <HStack spacing={3} flex={1} alignItems="center" minWidth={0}>
+        <Image
+          src={ControlPanelImages.update}
+          alt={t('Write update')}
+          boxSize="40px"
+          objectFit="contain"
+          flexShrink={0}
+        />
+        <VStack align="start" spacing={0} minWidth={0}>
+          <Body size="md" bold>
+            {title}
+          </Body>
+          <Body size="sm" color="neutral1.11" noOfLines={2}>
+            {subtitle}
+          </Body>
+        </VStack>
+      </HStack>
+      <Button
+        colorScheme="neutral1"
+        variant="soft"
+        size="md"
+        flexShrink={0}
+        onClick={() => openWriteUpdateModal()}
+      >
+        {t('Start a post')}
+      </Button>
+    </HStack>
   )
 }
 
@@ -406,6 +484,9 @@ export const ControlPanel = () => {
         hasFailedWithdraw={hasFailedWithdraw}
         showWithdraw={showWithdraw}
       />
+
+      {/* Write Update nudge — shown when no post in last 7 days */}
+      <WriteUpdateNudgeCard />
 
       {/* Notifications */}
       {isInactiveProject && (

@@ -5,7 +5,6 @@ import { isAllOrNothing, useMobileMode } from '@/utils'
 import { getPath } from '../../../../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../../../../types'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
-import { useWriteUpdateModal } from '../../../../../hooks/useWriteUpdateModal.ts'
 import { useGoalsModal } from '../../../../../hooks'
 import { ControlPanelImages } from '../constant.ts'
 import { ControlPanelButton } from './ControlPanelButton.tsx'
@@ -19,7 +18,6 @@ export const ControlPanelButtons = () => {
   const isAon = isAllOrNothing(project)
 
   const { onGoalModalOpen } = useGoalsModal()
-  const { openWriteUpdateModal } = useWriteUpdateModal()
 
   if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
     return null
@@ -41,13 +39,6 @@ export const ControlPanelButtons = () => {
           onClick={() => onGoalModalOpen()}
         />
       )}
-
-      <ControlPanelButton
-        emoji={ControlPanelImages.update}
-        label={t('Write an update')}
-        mobileLabel={t('Update')}
-        onClick={() => openWriteUpdateModal()}
-      />
 
       <PromoteProjectMenu projectName={project?.name} />
     </>

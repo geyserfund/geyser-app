@@ -110,7 +110,6 @@ const ProjectPostsSkeleton = () => {
             {[1, 2].map((key) => {
               return <ProjectPostCardSkeleton key={key} />
             })}
-            ProjectPostCardSkeleton
           </VStack>
         </VStack>
       </CardLayout>

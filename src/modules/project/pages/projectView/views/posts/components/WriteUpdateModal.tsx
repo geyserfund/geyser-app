@@ -1,15 +1,7 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Button,
-  Checkbox,
-  CheckboxGroup,
   Collapse,
-  Divider,
   HStack,
   IconButton,
   Input,
@@ -17,6 +9,7 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
+  Select,
   Spinner,
   Textarea,
   Tooltip,
@@ -27,10 +20,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { PiArrowLeft, PiImages, PiLink, PiVideoCamera, PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
-import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
-import { useGoalsAtom, useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
@@ -41,6 +32,7 @@ import { PostCreateInput, PostType, PostUpdateInput, useProjectPostQuery } from 
 import { toInt, useMobileMode, useNotification } from '@/utils'
 
 import { useWriteUpdateModal } from '../../../hooks/useWriteUpdateModal.ts'
+import { postTypeOptions } from '../utils/postTypeLabel.ts'
 import { OgLinkPreviewCard } from './OgLinkPreviewCard.tsx'
 import { PublishSuccessState } from './PublishSuccessState.tsx'
 
@@ -54,14 +46,14 @@ const isValidUrl = (str: string): boolean => {
   }
 }
 
-/** Trims description to title length or returns fallback */
+/** Trims description to title length, or returns empty string */
 const generateTitle = (description: string): string => {
   const trimmed = description.trim()
   if (trimmed && !isValidUrl(trimmed)) {
     return trimmed.substring(0, ProjectPostValidations.title.maxLength)
   }
 
-  return 'Project update'
+  return ''
 }
 
 /** Composer modal for quick project updates */
@@ -74,20 +66,13 @@ export const WriteUpdateModal = () => {
 
   const { postCreate, postUpdate, postPublish } = useProjectPostsAPI()
 
-  // load goals/rewards for linking section
-  const { queryInProgressGoals, queryCompletedGoals } = useProjectGoalsAPI(true)
-  const { queryProjectRewards } = useProjectRewardsAPI(true)
-  const { inProgressGoals, completedGoals } = useGoalsAtom()
-  const { rewards } = useRewardsAtom()
-
   // ── composer state ──
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [linkInputValue, setLinkInputValue] = useState('')
   const [showLinkInput, setShowLinkInput] = useState(false)
-  const [projectGoalIds, setProjectGoalIds] = useState<number[]>([])
-  const [projectRewardUUIDs, setProjectRewardUUIDs] = useState<string[]>([])
+  const [postType, setPostType] = useState<PostType>(PostType.Announcement)
 
   // runtime state
   const [currentPostId, setCurrentPostId] = useState<number | null>(null)
@@ -113,11 +98,7 @@ export const WriteUpdateModal = () => {
           setLinkUrl(desc.trim())
         }
 
-        setProjectGoalIds([
-          ...(p.projectGoals?.inProgress?.map((g) => g.id) ?? []),
-          ...(p.projectGoals?.completed?.map((g) => g.id) ?? []),
-        ])
-        setProjectRewardUUIDs(p.projectRewards.map((r) => r.uuid))
+        setPostType(p.postType ?? PostType.Announcement)
         setCurrentPostId(p.id)
       }
     },
@@ -132,8 +113,7 @@ export const WriteUpdateModal = () => {
         setLinkUrl('')
         setLinkInputValue('')
         setShowLinkInput(false)
-        setProjectGoalIds([])
-        setProjectRewardUUIDs([])
+        setPostType(PostType.Announcement)
         setCurrentPostId(null)
         setShowSuccessState(false)
         setPublishedPostId(null)
@@ -142,7 +122,7 @@ export const WriteUpdateModal = () => {
     }
   }, [isOpen])
 
-  const hasMeaningfulContent = description.trim().length > 0 || !!image || !!linkUrl
+  const hasMeaningfulContent = description.trim().length > 0 || Boolean(image) || Boolean(linkUrl)
 
   // auto-resize textarea
   const adjustTextarea = useCallback(() => {
@@ -156,10 +136,7 @@ export const WriteUpdateModal = () => {
   // ── build API inputs ──
   const buildDescription = (): string => {
     if (linkUrl) {
-      const captionText = description.trim()
-      if (!captionText || isValidUrl(captionText)) return linkUrl
-      if (!captionText.includes(linkUrl)) return `${captionText}\n${linkUrl}`
-      return captionText
+      return linkUrl
     }
 
     return description
@@ -170,9 +147,9 @@ export const WriteUpdateModal = () => {
     title: generateTitle(buildDescription()),
     description: buildDescription(),
     image: image || undefined,
-    postType: PostType.Announcement,
-    projectGoalIds,
-    projectRewardUUIDs,
+    postType,
+    projectGoalIds: [],
+    projectRewardUUIDs: [],
   })
 
   const buildUpdateInput = (id: number): PostUpdateInput => ({
@@ -180,9 +157,9 @@ export const WriteUpdateModal = () => {
     title: generateTitle(buildDescription()),
     description: buildDescription(),
     image: image || undefined,
-    postType: PostType.Announcement,
-    projectGoalIds,
-    projectRewardUUIDs,
+    postType,
+    projectGoalIds: [],
+    projectRewardUUIDs: [],
   })
 
   // ── save/create draft ──
@@ -216,7 +193,7 @@ export const WriteUpdateModal = () => {
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMeaningfulContent, currentPostId, description, image, linkUrl, projectGoalIds, projectRewardUUIDs])
+  }, [hasMeaningfulContent, currentPostId, description, image, linkUrl, postType])
 
   const handleSaveDraft = async () => {
     if (!hasMeaningfulContent) return
@@ -282,11 +259,10 @@ export const WriteUpdateModal = () => {
     setShowLinkInput(false)
   }
 
-  const hasGoals = inProgressGoals.length > 0 || completedGoals.length > 0
-  const hasRewards = rewards.length > 0
-  const totalLinked = projectGoalIds.length + projectRewardUUIDs.length
-
   const isLoading = isSaving || isPublishing
+
+  // Caption textarea is hidden when link input is open or a link URL is set
+  const showCaptionTextarea = !showLinkInput && !linkUrl
 
   return (
     <ChakraModal
@@ -352,14 +328,7 @@ export const WriteUpdateModal = () => {
         </HStack>
 
         {/* ── Body ── */}
-        <ModalBody
-          px={0}
-          py={0}
-          flex={1}
-          overflowY="auto"
-          display="flex"
-          flexDirection="column"
-        >
+        <ModalBody px={0} py={0} flex={1} overflowY="auto" display="flex" flexDirection="column">
           {showSuccessState && publishedPostId ? (
             <Box px={5} py={6}>
               <PublishSuccessState
@@ -372,8 +341,7 @@ export const WriteUpdateModal = () => {
                   setImage('')
                   setLinkUrl('')
                   setCurrentPostId(null)
-                  setProjectGoalIds([])
-                  setProjectRewardUUIDs([])
+                  setPostType(PostType.Announcement)
                 }}
                 onClose={closeWriteUpdateModal}
               />
@@ -461,10 +429,16 @@ export const WriteUpdateModal = () => {
                   variant={linkUrl ? 'solid' : 'outline'}
                   colorScheme={linkUrl ? 'primary1' : 'neutral1'}
                   leftIcon={<PiLink />}
-                  onClick={() => setShowLinkInput(!showLinkInput)}
+                  onClick={() => {
+                    if (linkUrl) {
+                      setLinkUrl('')
+                    } else {
+                      setShowLinkInput(!showLinkInput)
+                    }
+                  }}
                   borderRadius="full"
                 >
-                  {linkUrl ? t('Link added') : t('Share a link')}
+                  {linkUrl ? t('Remove link') : t('Share a link')}
                 </Button>
 
                 {/* Record a video — placeholder, disabled */}
@@ -526,119 +500,50 @@ export const WriteUpdateModal = () => {
                 </Box>
               )}
 
-              {/* Caption textarea */}
-              <Box px={5} pb={2}>
-                <Textarea
-                  ref={textareaRef}
-                  value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value)
-                    adjustTextarea()
-                  }}
-                  placeholder={t('Share what changed, what you built, or what supporters helped make happen…')}
-                  border="none"
-                  bg="transparent"
-                  _focus={{ border: 'none', boxShadow: 'none' }}
-                  _focusVisible={{ boxShadow: 'none' }}
-                  resize="none"
-                  minHeight="100px"
-                  maxLength={ProjectPostValidations.description.maxLength}
-                  px={0}
-                  fontSize="sm"
-                  color="utils.text"
-                />
-                {!hasMeaningfulContent && (
-                  <Body size="xs" muted mt={1}>
-                    {t("A title isn't required — a caption or image is enough.")}
-                  </Body>
-                )}
-              </Box>
-
-              <Divider borderColor="neutral1.5" mx={5} w="auto" />
-
-              {/* Link goals and products accordion */}
-              {(hasGoals || hasRewards) && (
-                <Accordion allowToggle>
-                  <AccordionItem border="none">
-                    <AccordionButton px={5} py={3} _hover={{ bg: 'neutral1.2' }}>
-                      <HStack flex={1} spacing={2} textAlign="left">
-                        <Body size="sm" muted>
-                          {t('Link goal or product')}
-                        </Body>
-                        {totalLinked > 0 && (
-                          <Body size="xs" color="primary1.11" fontWeight={600}>
-                            {`(${totalLinked})`}
-                          </Body>
-                        )}
-                      </HStack>
-                      <AccordionIcon color="neutral1.9" />
-                    </AccordionButton>
-                    <AccordionPanel px={5} pb={4}>
-                      <Body size="xs" muted mb={3}>
-                        {t('Linked goals and products appear on the full post view, not on update cards.')}
-                      </Body>
-
-                      {/* Goals */}
-                      {hasGoals && (
-                        <VStack alignItems="start" spacing={2} mb={4}>
-                          <Body size="sm" medium>
-                            {t('Goals')}
-                          </Body>
-                          {queryInProgressGoals.loading || queryCompletedGoals.loading ? (
-                            <VStack w="full" spacing={1}>
-                              {[1, 2].map((k) => (
-                                <SkeletonLayout key={k} height="24px" width="100%" />
-                              ))}
-                            </VStack>
-                          ) : (
-                            <CheckboxGroup
-                              value={projectGoalIds.map(String)}
-                              onChange={(vals) => setProjectGoalIds(vals.map((v) => toInt(v)))}
-                            >
-                              <VStack alignItems="start" spacing={2} w="full">
-                                {[...inProgressGoals, ...completedGoals].map((goal) => (
-                                  <Checkbox key={goal.id} value={String(goal.id)} size="md">
-                                    <Body size="sm">{goal.title}</Body>
-                                  </Checkbox>
-                                ))}
-                              </VStack>
-                            </CheckboxGroup>
-                          )}
-                        </VStack>
-                      )}
-
-                      {/* Rewards */}
-                      {hasRewards && (
-                        <VStack alignItems="start" spacing={2}>
-                          <Body size="sm" medium>
-                            {t('Products')}
-                          </Body>
-                          {queryProjectRewards.loading ? (
-                            <VStack w="full" spacing={1}>
-                              {[1, 2].map((k) => (
-                                <SkeletonLayout key={k} height="24px" width="100%" />
-                              ))}
-                            </VStack>
-                          ) : (
-                            <CheckboxGroup
-                              value={projectRewardUUIDs}
-                              onChange={(vals) => setProjectRewardUUIDs(vals as string[])}
-                            >
-                              <VStack alignItems="start" spacing={2} w="full">
-                                {rewards.map((reward) => (
-                                  <Checkbox key={reward.id} value={reward.uuid} size="md">
-                                    <Body size="sm">{reward.name}</Body>
-                                  </Checkbox>
-                                ))}
-                              </VStack>
-                            </CheckboxGroup>
-                          )}
-                        </VStack>
-                      )}
-                    </AccordionPanel>
-                  </AccordionItem>
-                </Accordion>
+              {/* Caption textarea — hidden while link input is open or a link is set */}
+              {showCaptionTextarea && (
+                <Box px={5} pb={2}>
+                  <Textarea
+                    ref={textareaRef}
+                    value={description}
+                    onChange={(e) => {
+                      setDescription(e.target.value)
+                      adjustTextarea()
+                    }}
+                    placeholder={t('Share what changed, what you built, or what supporters helped make happen…')}
+                    border="none"
+                    bg="transparent"
+                    _focus={{ border: 'none', boxShadow: 'none' }}
+                    _focusVisible={{ boxShadow: 'none' }}
+                    resize="none"
+                    minHeight="100px"
+                    maxLength={ProjectPostValidations.description.maxLength}
+                    px={0}
+                    fontSize="sm"
+                    color="utils.text"
+                  />
+                </Box>
               )}
+
+              {/* Post type selector */}
+              <Box px={5} pb={4}>
+                <Select
+                  size="sm"
+                  value={postType}
+                  onChange={(e) => setPostType(e.target.value as PostType)}
+                  borderRadius="8px"
+                  color="neutral1.11"
+                  borderColor="neutral1.6"
+                  _hover={{ borderColor: 'neutral1.8' }}
+                  fontSize="sm"
+                >
+                  {postTypeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {t(option.label)}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
 
               {/* Loading indicator while fetching existing post */}
               {loadingPost && (
