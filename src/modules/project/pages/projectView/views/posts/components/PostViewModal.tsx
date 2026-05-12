@@ -5,13 +5,11 @@ import {
   HStack,
   Icon,
   IconButton,
-  Link as ChakraLink,
   Modal as ChakraModal,
   ModalBody,
   ModalContent,
   ModalOverlay,
   SkeletonText,
-  Text,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
@@ -33,42 +31,12 @@ import { toInt, useMobileMode } from '@/utils'
 
 import { MdxMarkdownEditor } from '../../../../../../../shared/markdown/MdxMarkdownEditor.tsx'
 import { sourceResourceAtom } from '../../../state/sourceActivityAtom.ts'
+import { postTypeOptions } from '../utils/postTypeLabel.ts'
+import { isValidUrl, LinkifiedText } from '../utils/postUrlUtils.tsx'
 import { LinkedRewardsAndGoals } from './LinkedRewardsAndGoals.tsx'
 import { OgLinkPreviewCard } from './OgLinkPreviewCard.tsx'
 import { PostEditMenu } from './PostEditMenu.tsx'
 import { PostShare } from './PostShare.tsx'
-import { postTypeOptions } from '../utils/postTypeLabel.ts'
-
-/** Returns true when the entire trimmed string is a valid URL */
-const isValidUrl = (str: string): boolean => {
-  try {
-    new URL(str)
-    return true
-  } catch {
-    return false
-  }
-}
-
-/** Renders plain text with any URLs as clickable external links */
-const LinkifiedText = ({ text }: { text: string }) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g
-  const parts = text.split(urlRegex)
-  return (
-    <>
-      {parts.map((part, i) =>
-        urlRegex.test(part) ? (
-          <ChakraLink key={i} href={part} isExternal color="primary1.11" wordBreak="break-all">
-            {part}
-          </ChakraLink>
-        ) : (
-          <Text key={i} as="span">
-            {part}
-          </Text>
-        ),
-      )}
-    </>
-  )
-}
 
 type PostViewModalProps = {
   postId: string
@@ -147,18 +115,9 @@ export const PostViewModal = ({ postId, isOpen, onClose }: PostViewModalProps) =
               <>
                 <PostShare size="sm" post={post} project={project} />
                 {isProjectOwner ? (
-                  <PostEditMenu
-                    size="sm"
-                    post={post}
-                    onDeleteComplete={onClose}
-                  />
+                  <PostEditMenu size="sm" post={post} onDeleteComplete={onClose} />
                 ) : (
-                  <Button
-                    size="sm"
-                    variant="solid"
-                    colorScheme="primary1"
-                    onClick={onContributeClick}
-                  >
+                  <Button size="sm" variant="solid" colorScheme="primary1" onClick={onContributeClick}>
                     {t('Contribute')}
                   </Button>
                 )}
@@ -221,24 +180,18 @@ export const PostViewModal = ({ postId, isOpen, onClose }: PostViewModalProps) =
                 </HStack>
 
                 {/* Description */}
-                {descriptionTrimmed && (
-                  isLinkOnly ? (
+                {descriptionTrimmed &&
+                  (isLinkOnly ? (
                     <OgLinkPreviewCard url={descriptionTrimmed} />
                   ) : (
                     <Body size="md" dark>
                       <LinkifiedText text={descriptionTrimmed} />
                     </Body>
-                  )
-                )}
+                  ))}
 
                 {/* Markdown content */}
                 {post.markdown && (
-                  <Box
-                    fontSize="16px"
-                    color="utils.text"
-                    width="full"
-                    sx={{ p: { marginTop: '0px' } }}
-                  >
+                  <Box fontSize="16px" color="utils.text" width="full" sx={{ p: { marginTop: '0px' } }}>
                     <MdxMarkdownEditor mode="preview" value={post.markdown} />
                   </Box>
                 )}
@@ -249,7 +202,6 @@ export const PostViewModal = ({ postId, isOpen, onClose }: PostViewModalProps) =
             </VStack>
           )}
         </ModalBody>
-
       </ModalContent>
     </ChakraModal>
   )

@@ -5,44 +5,26 @@ import { DateTime } from 'luxon'
 import type { MouseEvent } from 'react'
 import { useMemo, useState } from 'react'
 import { PiLink } from 'react-icons/pi'
+import { useNavigate } from 'react-router'
 
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { FundingResourceType, PostStatus, ProjectPostFragment } from '@/types'
 import { toInt } from '@/utils'
-import { getPath } from '@/shared/constants'
-import { useNavigate } from 'react-router'
 
 import { useWriteUpdateModal } from '../../../hooks/useWriteUpdateModal.ts'
 import { sourceResourceAtom } from '../../../state/sourceActivityAtom.ts'
 import { useOgPreview } from '../hooks/useOgPreview.ts'
 import { postTypeOptions } from '../utils/postTypeLabel.ts'
+import { extractDomain, isValidUrl } from '../utils/postUrlUtils.tsx'
 import { PostEditMenu } from './PostEditMenu.tsx'
 import { PostShare } from './PostShare.tsx'
 import { PostViewModal } from './PostViewModal.tsx'
 import { ProjectPostCardThumbnailPlaceholder } from './ProjectPostCardThumbnailPlaceholder.tsx'
-
-/** Returns true when the entire trimmed string is a valid URL */
-const isValidUrl = (str: string): boolean => {
-  try {
-    new URL(str)
-    return true
-  } catch {
-    return false
-  }
-}
-
-/** Extracts the domain from a URL string, or returns the original string on failure */
-const extractDomain = (url: string): string => {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '')
-  } catch {
-    return url
-  }
-}
 
 /**
  * Inline OG preview rendered inside a post card.
@@ -133,7 +115,9 @@ export const ProjectPostCard = ({ post }: Props) => {
         dense
         spacing={0}
         w="100%"
-        role="group"
+        role="button"
+        aria-label={t('Open post: {{title}}', { title: post.title })}
+        data-group=""
         cursor="pointer"
         border="none"
         boxShadow="none"
@@ -165,14 +149,7 @@ export const ProjectPostCard = ({ post }: Props) => {
               _groupHover={{ transform: 'scale(1.03)' }}
             />
             {isDraft && (
-              <Badge
-                position="absolute"
-                top={2}
-                left={2}
-                variant="solid"
-                colorScheme="orange"
-                fontSize="xs"
-              >
+              <Badge position="absolute" top={2} left={2} variant="solid" colorScheme="orange" fontSize="xs">
                 {t('Draft')}
               </Badge>
             )}
@@ -221,22 +198,11 @@ export const ProjectPostCard = ({ post }: Props) => {
           )}
 
           {/* Action buttons — visible on hover */}
-          <HStack
-            w="full"
-            justifyContent="flex-end"
-            opacity={0}
-            _groupHover={{ opacity: 1 }}
-            transition="opacity 0.2s"
-          >
+          <HStack w="full" justifyContent="flex-end" opacity={0} _groupHover={{ opacity: 1 }} transition="opacity 0.2s">
             <PostEditMenu post={post} />
             {!isDraft && <PostShare size="md" post={post} project={project} />}
             {!isDraft && !isProjectOwner && (
-              <Button
-                size="md"
-                variant="solid"
-                colorScheme="primary1"
-                onClick={handleContributeClick}
-              >
+              <Button size="md" variant="solid" colorScheme="primary1" onClick={handleContributeClick}>
                 {t('Contribute')}
               </Button>
             )}
@@ -245,11 +211,7 @@ export const ProjectPostCard = ({ post }: Props) => {
       </CardLayout>
 
       {!isDraft && (
-        <PostViewModal
-          postId={String(post.id)}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
+        <PostViewModal postId={String(post.id)} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       )}
     </>
   )

@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import {
   writeUpdateModalOpenAtom,
   writeUpdateModalPostIdAtom,
-} from '../state/writeUpdateModalAtom'
+} from '../state/writeUpdateModalAtom.ts'
 
 /** Trigger the Write Update composer modal from anywhere within the Project context */
 export const useWriteUpdateModal = () => {

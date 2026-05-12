@@ -33,27 +33,23 @@ import { toInt, useMobileMode, useNotification } from '@/utils'
 
 import { useWriteUpdateModal } from '../../../hooks/useWriteUpdateModal.ts'
 import { postTypeOptions } from '../utils/postTypeLabel.ts'
+import { isValidUrl } from '../utils/postUrlUtils.tsx'
 import { OgLinkPreviewCard } from './OgLinkPreviewCard.tsx'
 import { PublishSuccessState } from './PublishSuccessState.tsx'
 
-/** Returns true when the entire string is a valid URL */
-const isValidUrl = (str: string): boolean => {
-  try {
-    new URL(str)
-    return true
-  } catch {
-    return false
-  }
-}
-
-/** Trims description to title length, or returns empty string */
+/** Returns a non-empty title derived from the description. For URL-only descriptions uses the hostname as fallback. */
 const generateTitle = (description: string): string => {
   const trimmed = description.trim()
-  if (trimmed && !isValidUrl(trimmed)) {
-    return trimmed.substring(0, ProjectPostValidations.title.maxLength)
+  if (!trimmed) return t('Project update')
+  if (isValidUrl(trimmed)) {
+    try {
+      return new URL(trimmed).hostname.substring(0, ProjectPostValidations.title.maxLength)
+    } catch {
+      return t('Project update')
+    }
   }
 
-  return ''
+  return trimmed.substring(0, ProjectPostValidations.title.maxLength)
 }
 
 /** Composer modal for quick project updates */
@@ -132,6 +128,11 @@ export const WriteUpdateModal = () => {
       el.style.height = `${Math.min(el.scrollHeight, 240)}px`
     }
   }, [])
+
+  // Recalculate textarea height whenever description changes or the textarea becomes visible
+  useEffect(() => {
+    adjustTextarea()
+  }, [description, adjustTextarea])
 
   // ── build API inputs ──
   const buildDescription = (): string => {
@@ -248,7 +249,8 @@ export const WriteUpdateModal = () => {
   const handleAddLink = () => {
     const raw = linkInputValue.trim()
     if (!raw) return
-    const withProtocol = raw.startsWith('http') ? raw : `https://${raw}`
+    const hasProtocol = /^https?:\/\//i.test(raw)
+    const withProtocol = hasProtocol ? raw.toLowerCase().replace(/^https?/i, (m) => m.toLowerCase()) : `https://${raw}`
     if (!isValidUrl(withProtocol)) {
       toast.error({ title: t('Please enter a valid URL') })
       return
