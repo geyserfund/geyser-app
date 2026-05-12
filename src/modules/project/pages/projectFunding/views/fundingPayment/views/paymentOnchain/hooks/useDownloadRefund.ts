@@ -24,7 +24,7 @@ export const isRefundDownloadReady = (params: {
   const { isAllOrNothing, onChainSwapRefundFile, lightningToRskSwapRefundFile, onChainToRskSwapRefundFile } = params
 
   if (isAllOrNothing) {
-    return hasRefundFileEssentials(lightningToRskSwapRefundFile) && hasRefundFileEssentials(onChainToRskSwapRefundFile)
+    return hasRefundFileEssentials(lightningToRskSwapRefundFile) || hasRefundFileEssentials(onChainToRskSwapRefundFile)
   }
 
   return hasRefundFileEssentials(onChainSwapRefundFile)
