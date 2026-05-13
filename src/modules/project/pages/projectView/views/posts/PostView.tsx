@@ -151,6 +151,7 @@ export const PostView = () => {
         </TopNavContainerBar>
 
         <CardLayout
+          noborder
           w="full"
           maxWidth={{ base: 'full', lg: dimensions.project.posts.view.maxWidth }}
           direction="row"
@@ -250,6 +251,7 @@ export const PostViewSkeleton = () => {
       </TopNavContainerBar>
 
       <CardLayout
+        noborder
         w="full"
         direction="row"
         justifyContent="center"

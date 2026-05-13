@@ -1,13 +1,13 @@
 import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowSquareOut, PiCopy, PiCheck, PiPencilSimple } from 'react-icons/pi'
+import { PiArrowSquareOut, PiCheck, PiCopy, PiPencilSimple } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { getPath } from '@/shared/constants/index.ts'
-import { Body, H2 } from '@/shared/components/typography'
-import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { getProjectPostViewUrl } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { getProjectPostViewUrl } from '@/modules/project/tools/generateProjectJsonLD.ts'
+import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants/index.ts'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 type PublishSuccessStateProps = {
   /** The published post id */
@@ -19,12 +19,7 @@ type PublishSuccessStateProps = {
 }
 
 /** Shown inside WriteUpdateModal after a successful publish. */
-export const PublishSuccessState = ({
-  postId,
-  description,
-  onWriteAnother,
-  onClose,
-}: PublishSuccessStateProps) => {
+export const PublishSuccessState = ({ postId, description, onWriteAnother, onClose }: PublishSuccessStateProps) => {
   const navigate = useNavigate()
   const { project } = useProjectAtom()
 
@@ -72,13 +67,7 @@ export const PublishSuccessState = ({
         <Body size="xs" medium muted textTransform="uppercase" letterSpacing="wider">
           {t('Public link')}
         </Body>
-        <HStack
-          w="full"
-          border="1px solid"
-          borderColor="neutral1.6"
-          borderRadius="8px"
-          overflow="hidden"
-        >
+        <HStack w="full" border="1px solid" borderColor="neutral1.6" borderRadius="8px" overflow="hidden">
           <Body size="sm" flex={1} px={3} py={2} isTruncated color="utils.text">
             {postUrl}
           </Body>
@@ -99,24 +88,6 @@ export const PublishSuccessState = ({
             {hasCopied ? t('Copied!') : t('Copy')}
           </Button>
         </HStack>
-      </VStack>
-
-      {/* Share copy */}
-      <VStack w="full" alignItems="start" spacing={2}>
-        <Body size="xs" medium muted textTransform="uppercase" letterSpacing="wider">
-          {t('Share copy')}
-        </Body>
-        <Box
-          w="full"
-          bg="neutral1.2"
-          borderRadius="8px"
-          px={3}
-          py={2}
-        >
-          <Body size="xs" muted lineHeight="tall">
-            {shareCopy}
-          </Body>
-        </Box>
       </VStack>
 
       {/* Action buttons */}
@@ -142,13 +113,7 @@ export const PublishSuccessState = ({
           >
             {t('Write another')}
           </Button>
-          <Button
-            flex={1}
-            size="md"
-            variant="ghost"
-            colorScheme="neutral1"
-            onClick={onClose}
-          >
+          <Button flex={1} size="md" variant="ghost" colorScheme="neutral1" onClick={onClose}>
             {t('Close')}
           </Button>
         </HStack>

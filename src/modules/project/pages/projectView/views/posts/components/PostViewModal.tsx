@@ -113,11 +113,11 @@ export const PostViewModal = ({ postId, isOpen, onClose }: PostViewModalProps) =
           <HStack spacing={2}>
             {post && !loading && (
               <>
-                <PostShare size="sm" post={post} project={project} />
+                <PostShare size="md" post={post} project={project} />
                 {isProjectOwner ? (
-                  <PostEditMenu size="sm" post={post} onDeleteComplete={onClose} />
+                  <PostEditMenu size="md" post={post} onDeleteComplete={onClose} />
                 ) : (
-                  <Button size="sm" variant="solid" colorScheme="primary1" onClick={onContributeClick}>
+                  <Button size="md" variant="solid" colorScheme="primary1" onClick={onContributeClick}>
                     {t('Contribute')}
                   </Button>
                 )}

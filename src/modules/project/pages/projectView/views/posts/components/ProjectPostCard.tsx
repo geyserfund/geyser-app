@@ -1,4 +1,4 @@
-import { Badge, Box, Button, HStack, Icon, Image, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Icon, Image, Link, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
@@ -26,48 +26,102 @@ import { PostShare } from './PostShare.tsx'
 import { PostViewModal } from './PostViewModal.tsx'
 import { ProjectPostCardThumbnailPlaceholder } from './ProjectPostCardThumbnailPlaceholder.tsx'
 
-/**
- * Inline OG preview rendered inside a post card.
- * Does NOT wrap in a link — the parent card handles opening the post modal.
- */
-const InlineOgPreview = ({ url }: { url: string }) => {
-  const { data, loading } = useOgPreview(url)
-  const domain = extractDomain(url)
+type InlineOgPreviewProps = {
+  url: string
+  isDraft: boolean
+  /** When true, the card already shows a hero image above — only domain + text below */
+  skipFeaturedImage?: boolean
+}
 
-  if (loading) {
+/**
+ * Inline OG preview for link-only posts: 16:9 featured media (unless skipped), domain row,
+ * then title/description at the same typography as regular post bodies. Published cards
+ * wrap the preview in an external link with stopPropagation so the card modal does not open.
+ */
+const InlineOgPreview = ({ url, isDraft, skipFeaturedImage }: InlineOgPreviewProps) => {
+  const { data, loading, error } = useOgPreview(url)
+  const domain = extractDomain(url)
+  const ogImage = data?.image && !data.image.includes('default') ? data.image : null
+
+  const renderFeatured = () => {
+    if (skipFeaturedImage) return null
+
     return (
-      <VStack w="full" alignItems="start" spacing={1}>
-        <SkeletonLayout height="12px" width="80px" />
-        <SkeletonLayout height="16px" width="full" />
-        <SkeletonLayout height="12px" width="60%" />
-      </VStack>
+      <Box
+        w="full"
+        borderRadius="8px"
+        overflow="hidden"
+        border="1px solid"
+        borderColor="neutral1.6"
+        position="relative"
+        style={{ aspectRatio: '16/9' }}
+      >
+        {loading ? (
+          <SkeletonLayout position="absolute" top={0} left={0} w="full" h="full" borderRadius={0} />
+        ) : ogImage ? (
+          <Image
+            src={ogImage}
+            alt={data?.title ?? ''}
+            objectFit="cover"
+            w="full"
+            h="full"
+            position="absolute"
+            top={0}
+            left={0}
+          />
+        ) : (
+          <Box position="absolute" top={0} left={0} w="full" h="full" bg="neutral1.3" />
+        )}
+      </Box>
     )
   }
 
-  return (
-    <VStack w="full" alignItems="start" spacing={1}>
-      {data?.image && !data.image.includes('default') && (
-        <Box w="full" maxHeight="180px" overflow="hidden" borderRadius="6px">
-          <Image src={data.image} alt={data.title ?? ''} w="full" objectFit="cover" maxHeight="180px" />
-        </Box>
-      )}
-      <HStack spacing={1} color="neutral1.9">
+  const showTextSkeleton = loading && (skipFeaturedImage || error)
+
+  const inner = (
+    <VStack w="full" alignItems="start" spacing={2}>
+      {renderFeatured()}
+      <HStack spacing={1} color="neutral1.9" w="full">
         <Icon as={PiLink} fontSize="11px" flexShrink={0} />
         <Body size="xs" muted isTruncated>
           {data?.domain ?? domain}
         </Body>
       </HStack>
-      {data?.title && (
-        <Body size="sm" medium dark noOfLines={2}>
+      {showTextSkeleton && (
+        <VStack w="full" alignItems="start" spacing={1}>
+          <SkeletonLayout height="16px" width="90%" />
+          <SkeletonLayout height="16px" width="55%" />
+        </VStack>
+      )}
+      {!loading && !error && data?.title && (
+        <Body medium dark wordBreak="break-word" noOfLines={2}>
           {data.title}
         </Body>
       )}
-      {data?.description && (
-        <Body size="xs" muted noOfLines={2}>
+      {!loading && !error && data?.description && (
+        <Body medium dark wordBreak="break-word" noOfLines={3}>
           {data.description}
         </Body>
       )}
     </VStack>
+  )
+
+  if (isDraft) {
+    return inner
+  }
+
+  return (
+    <Link
+      href={url}
+      isExternal
+      rel="noopener noreferrer"
+      display="block"
+      w="full"
+      _hover={{ textDecoration: 'none' }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {inner}
+    </Link>
   )
 }
 
@@ -119,13 +173,16 @@ export const ProjectPostCard = ({ post }: Props) => {
         aria-label={t('Open post: {{title}}', { title: post.title })}
         data-group=""
         cursor="pointer"
-        border="none"
+        border="1px solid"
+        borderColor="transparent"
+        borderRadius="card"
         boxShadow="none"
-        transition="box-shadow 0.2s ease, transform 0.2s ease"
+        transition="box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease"
         _hover={{
           cursor: 'pointer',
           transform: 'translateY(-3px)',
           boxShadow: 'md',
+          borderColor: 'neutral1.6',
         }}
         onClick={handleCardClick}
         onKeyDown={(e) => {
@@ -149,6 +206,12 @@ export const ProjectPostCard = ({ post }: Props) => {
                 <Badge variant="soft" colorScheme="neutral1" gap={2}>
                   <Icon as={postTypeOptions.find((o) => o.value === post.postType)?.icon} />
                   {postTypeOptions.find((o) => o.value === post.postType)?.label}
+                </Badge>
+              )}
+              {isLinkOnly && (
+                <Badge variant="outline" colorScheme="neutral1" gap={1}>
+                  <Icon as={PiLink} />
+                  {t('Link')}
                 </Badge>
               )}
             </HStack>
@@ -195,7 +258,7 @@ export const ProjectPostCard = ({ post }: Props) => {
 
           {/* Description or inline OG link preview */}
           {isLinkOnly ? (
-            <InlineOgPreview url={descriptionTrimmed} />
+            <InlineOgPreview url={descriptionTrimmed} isDraft={isDraft} skipFeaturedImage={Boolean(post.image)} />
           ) : (
             post.description && (
               <Body medium dark wordBreak="break-word" noOfLines={3}>
