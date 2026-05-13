@@ -26,11 +26,6 @@ export const PublishSuccessState = ({ postId, description, onWriteAnother, onClo
   const postUrl = getProjectPostViewUrl(project.name, postId)
   const { onCopy, hasCopied } = useCopyToClipboard(postUrl)
 
-  const previewText = description.trim().substring(0, 80)
-  const shareCopy = previewText
-    ? t('"{{text}}" — {{url}}', { text: `${previewText}${description.length > 80 ? '…' : ''}`, url: postUrl })
-    : postUrl
-
   const handleViewPost = () => {
     onClose()
     navigate(getPath('projectPostView', project.name, String(postId)))
