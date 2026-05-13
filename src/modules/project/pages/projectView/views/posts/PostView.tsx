@@ -174,9 +174,11 @@ export const PostView = () => {
               </Box>
             )}
             <VStack w="full" spacing={3} alignItems="start">
-              <H2 flex={1} size="2xl" bold>
-                {post.title}
-              </H2>
+              {post.title && post.title !== 'Project update' && !descriptionTrimmed.startsWith(post.title) && (
+                <H2 flex={1} size="2xl" bold>
+                  {post.title}
+                </H2>
+              )}
 
               <Body size="sm" medium light>
                 {post.createdAt && DateTime.fromMillis(toInt(post.createdAt)).toFormat(' dd LLLL, yyyy')}

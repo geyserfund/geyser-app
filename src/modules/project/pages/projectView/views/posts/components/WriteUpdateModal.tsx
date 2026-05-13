@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Collapse,
   HStack,
   IconButton,
   Input,
@@ -12,12 +11,11 @@ import {
   Select,
   Spinner,
   Textarea,
-  Tooltip,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { PiArrowLeft, PiImages, PiLink, PiVideoCamera, PiX } from 'react-icons/pi'
+import { PiArrowLeft, PiImages, PiLink, PiNotePencil, PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
@@ -37,20 +35,288 @@ import { isValidUrl } from '../utils/postUrlUtils.tsx'
 import { OgLinkPreviewCard } from './OgLinkPreviewCard.tsx'
 import { PublishSuccessState } from './PublishSuccessState.tsx'
 
-/** Returns a non-empty title derived from the description. For URL-only descriptions uses the hostname as fallback. */
-const generateTitle = (description: string): string => {
-  const trimmed = description.trim()
-  if (!trimmed) return t('Project update')
-  if (isValidUrl(trimmed)) {
-    try {
-      return new URL(trimmed).hostname.substring(0, ProjectPostValidations.title.maxLength)
-    } catch {
-      return t('Project update')
-    }
-  }
+type ModalView = 'select' | 'share-link' | 'write-post'
 
-  return trimmed.substring(0, ProjectPostValidations.title.maxLength)
+/** Derives a title from a URL — uses the hostname, falling back to 'Project update'. */
+const generateTitleFromUrl = (url: string): string => {
+  const trimmed = url.trim()
+  if (!trimmed) return t('Project update')
+  try {
+    return new URL(trimmed).hostname.substring(0, ProjectPostValidations.title.maxLength)
+  } catch {
+    return t('Project update')
+  }
 }
+
+// ── Screen sub-components ──
+
+type SelectionScreenProps = {
+  onShareLink: () => void
+  onWritePost: () => void
+}
+
+const SelectionScreen = ({ onShareLink, onWritePost }: SelectionScreenProps) => (
+  <VStack px={5} py={8} spacing={4} alignItems="stretch">
+    <Button
+      size="lg"
+      variant="outline"
+      colorScheme="neutral1"
+      leftIcon={<PiLink fontSize="20px" />}
+      justifyContent="flex-start"
+      height="72px"
+      borderRadius="12px"
+      borderWidth="1px"
+      _hover={{ borderColor: 'primary1.8', bg: 'primary1.2' }}
+      onClick={onShareLink}
+      fontSize="md"
+    >
+      {t('Share a link')}
+    </Button>
+    <Button
+      size="lg"
+      variant="outline"
+      colorScheme="neutral1"
+      leftIcon={<PiNotePencil fontSize="20px" />}
+      justifyContent="flex-start"
+      height="72px"
+      borderRadius="12px"
+      borderWidth="1px"
+      _hover={{ borderColor: 'primary1.8', bg: 'primary1.2' }}
+      onClick={onWritePost}
+      fontSize="md"
+    >
+      {t('Write a post')}
+    </Button>
+  </VStack>
+)
+
+type ShareLinkScreenProps = {
+  linkUrl: string
+  linkInputValue: string
+  postType: PostType
+  loadingPost: boolean
+  onLinkInputChange: (val: string) => void
+  onAddLink: () => void
+  onRemoveLink: () => void
+  onPostTypeChange: (val: PostType) => void
+}
+
+const ShareLinkScreen = ({
+  linkUrl,
+  linkInputValue,
+  postType,
+  loadingPost,
+  onLinkInputChange,
+  onAddLink,
+  onRemoveLink,
+  onPostTypeChange,
+}: ShareLinkScreenProps) => (
+  <VStack spacing={0} alignItems="stretch">
+    <HStack px={5} pt={5} pb={3} spacing={2}>
+      <Input
+        size="md"
+        placeholder="https://..."
+        value={linkInputValue}
+        onChange={(e) => onLinkInputChange(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && onAddLink()}
+        autoFocus={!linkUrl}
+        flex={1}
+        isDisabled={Boolean(linkUrl)}
+      />
+      {!linkUrl && (
+        <Button
+          size="md"
+          variant="solid"
+          colorScheme="primary1"
+          onClick={onAddLink}
+          isDisabled={!linkInputValue.trim()}
+        >
+          {t('Add')}
+        </Button>
+      )}
+    </HStack>
+
+    {linkUrl && (
+      <Box px={5} pb={3}>
+        <OgLinkPreviewCard url={linkUrl} onRemove={onRemoveLink} />
+      </Box>
+    )}
+
+    <Box px={5} pb={4}>
+      <Select
+        size="sm"
+        value={postType}
+        onChange={(e) => onPostTypeChange(e.target.value as PostType)}
+        borderRadius="8px"
+        color="neutral1.11"
+        borderColor="neutral1.6"
+        _hover={{ borderColor: 'neutral1.8' }}
+        fontSize="sm"
+      >
+        {postTypeOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {t(option.label)}
+          </option>
+        ))}
+      </Select>
+    </Box>
+
+    {loadingPost && (
+      <HStack justifyContent="center" py={4}>
+        <Spinner size="sm" color="primary1.9" />
+      </HStack>
+    )}
+  </VStack>
+)
+
+type WritePostScreenProps = {
+  image: string
+  description: string
+  postType: PostType
+  loadingPost: boolean
+  textareaRef: React.RefObject<HTMLTextAreaElement>
+  onImageUpload: (url: string) => void
+  onImageRemove: () => void
+  onDescriptionChange: (val: string) => void
+  onAdjustTextarea: () => void
+  onPostTypeChange: (val: PostType) => void
+}
+
+const WritePostScreen = ({
+  image,
+  description,
+  postType,
+  loadingPost,
+  textareaRef,
+  onImageUpload,
+  onImageRemove,
+  onDescriptionChange,
+  onAdjustTextarea,
+  onPostTypeChange,
+}: WritePostScreenProps) => (
+  <VStack spacing={0} alignItems="stretch">
+    <Box px={5} pt={4}>
+      <FileUpload
+        onUploadComplete={onImageUpload}
+        childrenOnLoading={<SkeletonLayout height="200px" width="100%" />}
+        imageCrop={ImageCropAspectRatio.Post}
+      >
+        <>
+          {image ? (
+            <Box
+              position="relative"
+              borderRadius="8px"
+              overflow="hidden"
+              role="group"
+              cursor="pointer"
+              style={{ aspectRatio: '16/9' }}
+            >
+              <ImageWithReload src={image} alt={t('Post image')} w="full" h="full" objectFit="cover" />
+              <VStack
+                position="absolute"
+                inset={0}
+                bg="utils.overlay"
+                opacity={0}
+                _groupHover={{ opacity: 1 }}
+                transition="opacity 0.2s ease"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+                pointerEvents="none"
+              >
+                <Body size="sm" medium color="utils.whiteContrast">
+                  {t('Change image')}
+                </Body>
+              </VStack>
+              <IconButton
+                aria-label={t('Remove image')}
+                icon={<PiX />}
+                size="xs"
+                position="absolute"
+                top={2}
+                right={2}
+                variant="solid"
+                colorScheme="neutral1"
+                zIndex={1}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onImageRemove()
+                }}
+              />
+            </Box>
+          ) : (
+            <HStack
+              w="full"
+              h="160px"
+              borderRadius="8px"
+              border="2px dashed"
+              borderColor="neutral1.6"
+              justifyContent="center"
+              spacing={2}
+              cursor="pointer"
+              transition="border-color 0.2s, background-color 0.2s"
+              _hover={{ borderColor: 'primary1.8', bg: 'primary1.2' }}
+            >
+              <PiImages fontSize="20px" color="var(--chakra-colors-neutral1-9)" />
+              <Body size="sm" muted>
+                {t('Drag and drop or click to upload')}
+              </Body>
+            </HStack>
+          )}
+        </>
+      </FileUpload>
+    </Box>
+
+    <Box px={5} pt={3} pb={2}>
+      <Textarea
+        ref={textareaRef}
+        value={description}
+        onChange={(e) => {
+          onDescriptionChange(e.target.value)
+          onAdjustTextarea()
+        }}
+        placeholder={t('Share what changed, what you built, or what supporters helped make happen…')}
+        border="none"
+        bg="transparent"
+        _focus={{ border: 'none', boxShadow: 'none' }}
+        _focusVisible={{ boxShadow: 'none' }}
+        resize="none"
+        minHeight="100px"
+        maxLength={ProjectPostValidations.description.maxLength}
+        px={0}
+        fontSize="sm"
+        color="utils.text"
+      />
+    </Box>
+
+    <Box px={5} pb={4}>
+      <Select
+        size="sm"
+        value={postType}
+        onChange={(e) => onPostTypeChange(e.target.value as PostType)}
+        borderRadius="8px"
+        color="neutral1.11"
+        borderColor="neutral1.6"
+        _hover={{ borderColor: 'neutral1.8' }}
+        fontSize="sm"
+      >
+        {postTypeOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {t(option.label)}
+          </option>
+        ))}
+      </Select>
+    </Box>
+
+    {loadingPost && (
+      <HStack justifyContent="center" py={4}>
+        <Spinner size="sm" color="primary1.9" />
+      </HStack>
+    )}
+  </VStack>
+)
+
+// ── Main modal ──
 
 /** Composer modal for quick project updates */
 export const WriteUpdateModal = () => {
@@ -62,12 +328,14 @@ export const WriteUpdateModal = () => {
 
   const { postCreate, postUpdate, postPublish } = useProjectPostsAPI()
 
+  // ── view routing ──
+  const [view, setView] = useState<ModalView>('select')
+
   // ── composer state ──
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [linkInputValue, setLinkInputValue] = useState('')
-  const [showLinkInput, setShowLinkInput] = useState(false)
   const [postType, setPostType] = useState<PostType>(PostType.Announcement)
 
   // runtime state
@@ -92,6 +360,9 @@ export const WriteUpdateModal = () => {
         setImage(p.image ?? '')
         if (isValidUrl(desc.trim())) {
           setLinkUrl(desc.trim())
+          setView('share-link')
+        } else if (desc.trim() || p.image) {
+          setView('write-post')
         }
 
         setPostType(p.postType ?? PostType.Announcement)
@@ -104,11 +375,11 @@ export const WriteUpdateModal = () => {
   useEffect(() => {
     if (!isOpen) {
       const timer = setTimeout(() => {
+        setView('select')
         setDescription('')
         setImage('')
         setLinkUrl('')
         setLinkInputValue('')
-        setShowLinkInput(false)
         setPostType(PostType.Announcement)
         setCurrentPostId(null)
         setShowSuccessState(false)
@@ -129,23 +400,19 @@ export const WriteUpdateModal = () => {
     }
   }, [])
 
-  // Recalculate textarea height whenever description changes or the textarea becomes visible
   useEffect(() => {
     adjustTextarea()
   }, [description, adjustTextarea])
 
   // ── build API inputs ──
-  const buildDescription = (): string => {
-    if (linkUrl) {
-      return linkUrl
-    }
+  const buildDescription = (): string => (linkUrl ? linkUrl : description)
 
-    return description
-  }
+  /** Share-link posts get a hostname-derived title; write-post (short posts) use an empty title. */
+  const buildTitle = (): string => (view === 'share-link' ? generateTitleFromUrl(linkUrl) : '')
 
   const buildCreateInput = (): PostCreateInput => ({
     projectId: toInt(project.id),
-    title: generateTitle(buildDescription()),
+    title: buildTitle(),
     description: buildDescription(),
     image: image || undefined,
     postType,
@@ -155,7 +422,7 @@ export const WriteUpdateModal = () => {
 
   const buildUpdateInput = (id: number): PostUpdateInput => ({
     postId: id,
-    title: generateTitle(buildDescription()),
+    title: buildTitle(),
     description: buildDescription(),
     image: image || undefined,
     postType,
@@ -258,13 +525,74 @@ export const WriteUpdateModal = () => {
 
     setLinkUrl(withProtocol)
     setLinkInputValue('')
-    setShowLinkInput(false)
+  }
+
+  const handleBack = () => {
+    setView('select')
+    setLinkUrl('')
+    setLinkInputValue('')
+    setDescription('')
+    setImage('')
   }
 
   const isLoading = isSaving || isPublishing
 
-  // Caption textarea is hidden when link input is open or a link URL is set
-  const showCaptionTextarea = !showLinkInput && !linkUrl
+  const renderBody = () => {
+    if (showSuccessState && publishedPostId) {
+      return (
+        <Box px={5} py={6}>
+          <PublishSuccessState
+            postId={publishedPostId}
+            description={description}
+            onWriteAnother={() => {
+              setShowSuccessState(false)
+              setPublishedPostId(null)
+              setDescription('')
+              setImage('')
+              setLinkUrl('')
+              setCurrentPostId(null)
+              setPostType(PostType.Announcement)
+            }}
+            onClose={closeWriteUpdateModal}
+          />
+        </Box>
+      )
+    }
+
+    if (view === 'select') {
+      return <SelectionScreen onShareLink={() => setView('share-link')} onWritePost={() => setView('write-post')} />
+    }
+
+    if (view === 'share-link') {
+      return (
+        <ShareLinkScreen
+          linkUrl={linkUrl}
+          linkInputValue={linkInputValue}
+          postType={postType}
+          loadingPost={loadingPost}
+          onLinkInputChange={setLinkInputValue}
+          onAddLink={handleAddLink}
+          onRemoveLink={() => setLinkUrl('')}
+          onPostTypeChange={setPostType}
+        />
+      )
+    }
+
+    return (
+      <WritePostScreen
+        image={image}
+        description={description}
+        postType={postType}
+        loadingPost={loadingPost}
+        textareaRef={textareaRef}
+        onImageUpload={setImage}
+        onImageRemove={() => setImage('')}
+        onDescriptionChange={setDescription}
+        onAdjustTextarea={adjustTextarea}
+        onPostTypeChange={setPostType}
+      />
+    )
+  }
 
   return (
     <ChakraModal
@@ -296,6 +624,16 @@ export const WriteUpdateModal = () => {
           flexShrink={0}
         >
           <HStack spacing={3}>
+            {view !== 'select' && !showSuccessState && (
+              <IconButton
+                aria-label={t('Back')}
+                icon={<PiArrowLeft />}
+                size="sm"
+                variant="ghost"
+                colorScheme="neutral1"
+                onClick={handleBack}
+              />
+            )}
             {project.thumbnailImage && (
               <Box
                 w="32px"
@@ -331,234 +669,11 @@ export const WriteUpdateModal = () => {
 
         {/* ── Body ── */}
         <ModalBody px={0} py={0} flex={1} overflowY="auto" display="flex" flexDirection="column">
-          {showSuccessState && publishedPostId ? (
-            <Box px={5} py={6}>
-              <PublishSuccessState
-                postId={publishedPostId}
-                description={description}
-                onWriteAnother={() => {
-                  setShowSuccessState(false)
-                  setPublishedPostId(null)
-                  setDescription('')
-                  setImage('')
-                  setLinkUrl('')
-                  setCurrentPostId(null)
-                  setPostType(PostType.Announcement)
-                }}
-                onClose={closeWriteUpdateModal}
-              />
-            </Box>
-          ) : (
-            <VStack spacing={0} alignItems="stretch">
-              {/* Image upload area */}
-              <Box px={5} pt={4}>
-                <FileUpload
-                  onUploadComplete={(url) => setImage(url)}
-                  childrenOnLoading={<SkeletonLayout height="200px" width="100%" />}
-                  imageCrop={ImageCropAspectRatio.Post}
-                >
-                  <>
-                    {image ? (
-                      <Box
-                        position="relative"
-                        borderRadius="8px"
-                        overflow="hidden"
-                        role="group"
-                        cursor="pointer"
-                        style={{ aspectRatio: '16/9' }}
-                      >
-                        <ImageWithReload src={image} alt={t('Post image')} w="full" h="full" objectFit="cover" />
-                        <VStack
-                          position="absolute"
-                          inset={0}
-                          bg="utils.overlay"
-                          opacity={0}
-                          _groupHover={{ opacity: 1 }}
-                          transition="opacity 0.2s ease"
-                          justifyContent="center"
-                          alignItems="center"
-                          spacing={2}
-                          pointerEvents="none"
-                        >
-                          <Body size="sm" medium color="utils.whiteContrast">
-                            {t('Change image')}
-                          </Body>
-                        </VStack>
-                        <IconButton
-                          aria-label={t('Remove image')}
-                          icon={<PiX />}
-                          size="xs"
-                          position="absolute"
-                          top={2}
-                          right={2}
-                          variant="solid"
-                          colorScheme="neutral1"
-                          zIndex={1}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setImage('')
-                          }}
-                        />
-                      </Box>
-                    ) : (
-                      <HStack
-                        w="full"
-                        h="160px"
-                        borderRadius="8px"
-                        border="2px dashed"
-                        borderColor="neutral1.6"
-                        justifyContent="center"
-                        spacing={2}
-                        cursor="pointer"
-                        transition="border-color 0.2s, background-color 0.2s"
-                        _hover={{ borderColor: 'primary1.8', bg: 'primary1.2' }}
-                      >
-                        <PiImages fontSize="20px" color="var(--chakra-colors-neutral1-9)" />
-                        <Body size="sm" muted>
-                          {t('Drag and drop or click to upload')}
-                        </Body>
-                      </HStack>
-                    )}
-                  </>
-                </FileUpload>
-              </Box>
-
-              {/* Action pills row */}
-              <HStack px={5} pt={3} pb={1} spacing={2}>
-                {/* Share a link */}
-                <Button
-                  size="sm"
-                  variant={linkUrl ? 'solid' : 'outline'}
-                  colorScheme={linkUrl ? 'primary1' : 'neutral1'}
-                  leftIcon={<PiLink />}
-                  onClick={() => {
-                    if (linkUrl) {
-                      setLinkUrl('')
-                    } else {
-                      setShowLinkInput(!showLinkInput)
-                    }
-                  }}
-                  borderRadius="full"
-                >
-                  {linkUrl ? t('Remove link') : t('Share a link')}
-                </Button>
-
-                {/* Record a video — placeholder, disabled */}
-                <Tooltip label={t('Coming soon')} hasArrow>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    colorScheme="neutral1"
-                    leftIcon={<PiVideoCamera />}
-                    isDisabled
-                    borderRadius="full"
-                    cursor="not-allowed"
-                  >
-                    {t('Record a video')}
-                  </Button>
-                </Tooltip>
-              </HStack>
-
-              {/* Link input panel */}
-              <Collapse in={showLinkInput} animateOpacity>
-                <HStack px={5} pb={3} pt={2} spacing={2}>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    colorScheme="neutral1"
-                    leftIcon={<PiArrowLeft />}
-                    onClick={() => {
-                      setShowLinkInput(false)
-                      setLinkInputValue('')
-                    }}
-                    px={1}
-                    aria-label={t('Back')}
-                  />
-                  <Input
-                    size="sm"
-                    placeholder="https://..."
-                    value={linkInputValue}
-                    onChange={(e) => setLinkInputValue(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAddLink()}
-                    autoFocus
-                    flex={1}
-                  />
-                  <Button
-                    size="sm"
-                    variant="solid"
-                    colorScheme="primary1"
-                    onClick={handleAddLink}
-                    isDisabled={!linkInputValue.trim()}
-                  >
-                    {t('Add')}
-                  </Button>
-                </HStack>
-              </Collapse>
-
-              {/* OG preview when link set */}
-              {linkUrl && (
-                <Box px={5} pb={3}>
-                  <OgLinkPreviewCard url={linkUrl} onRemove={() => setLinkUrl('')} />
-                </Box>
-              )}
-
-              {/* Caption textarea — hidden while link input is open or a link is set */}
-              {showCaptionTextarea && (
-                <Box px={5} pb={2}>
-                  <Textarea
-                    ref={textareaRef}
-                    value={description}
-                    onChange={(e) => {
-                      setDescription(e.target.value)
-                      adjustTextarea()
-                    }}
-                    placeholder={t('Share what changed, what you built, or what supporters helped make happen…')}
-                    border="none"
-                    bg="transparent"
-                    _focus={{ border: 'none', boxShadow: 'none' }}
-                    _focusVisible={{ boxShadow: 'none' }}
-                    resize="none"
-                    minHeight="100px"
-                    maxLength={ProjectPostValidations.description.maxLength}
-                    px={0}
-                    fontSize="sm"
-                    color="utils.text"
-                  />
-                </Box>
-              )}
-
-              {/* Post type selector */}
-              <Box px={5} pb={4}>
-                <Select
-                  size="sm"
-                  value={postType}
-                  onChange={(e) => setPostType(e.target.value as PostType)}
-                  borderRadius="8px"
-                  color="neutral1.11"
-                  borderColor="neutral1.6"
-                  _hover={{ borderColor: 'neutral1.8' }}
-                  fontSize="sm"
-                >
-                  {postTypeOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {t(option.label)}
-                    </option>
-                  ))}
-                </Select>
-              </Box>
-
-              {/* Loading indicator while fetching existing post */}
-              {loadingPost && (
-                <HStack justifyContent="center" py={4}>
-                  <Spinner size="sm" color="primary1.9" />
-                </HStack>
-              )}
-            </VStack>
-          )}
+          {renderBody()}
         </ModalBody>
 
-        {/* ── Footer (hidden in success state) ── */}
-        {!showSuccessState && (
+        {/* ── Footer (hidden on selection screen and success state) ── */}
+        {!showSuccessState && view !== 'select' && (
           <HStack
             px={5}
             py={4}

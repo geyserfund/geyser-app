@@ -136,32 +136,12 @@ export const ProjectPostCard = ({ post }: Props) => {
         }}
         tabIndex={0}
       >
-        {/* Media area */}
-        {post.image && (
-          <Box w="full" maxHeight="280px" overflow="hidden" position="relative">
-            <Image
-              objectFit="cover"
-              boxSize="100%"
-              src={post.image}
-              alt={post.title}
-              fallback={<ProjectPostCardThumbnailPlaceholder />}
-              transition="transform 0.3s ease"
-              _groupHover={{ transform: 'scale(1.03)' }}
-            />
-            {isDraft && (
-              <Badge position="absolute" top={2} left={2} variant="solid" colorScheme="orange" fontSize="xs">
-                {t('Draft')}
-              </Badge>
-            )}
-          </Box>
-        )}
-
         <VStack w="full" p={{ base: 3, lg: 4 }} spacing={2} alignItems="start">
-          {/* Type badge + date — first visible row */}
+          {/* Type badge + date — always at the top */}
           <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2}>
             <HStack spacing={2} flexWrap="wrap">
-              {!post.image && isDraft && (
-                <Badge variant="soft" colorScheme="neutral1">
+              {isDraft && (
+                <Badge variant="soft" colorScheme="orange">
                   {t('Draft')}
                 </Badge>
               )}
@@ -179,8 +159,35 @@ export const ProjectPostCard = ({ post }: Props) => {
             )}
           </HStack>
 
-          {/* Title (only shown for posts with a non-link-only description) */}
-          {!isLinkOnly && post.title && post.title !== 'Project update' && (
+          {/* Media area — 16:9, bordered, uniform padding from outer VStack */}
+          {post.image && (
+            <Box
+              w="full"
+              borderRadius="8px"
+              overflow="hidden"
+              border="1px solid"
+              borderColor="neutral1.6"
+              position="relative"
+              style={{ aspectRatio: '16/9' }}
+            >
+              <Image
+                objectFit="cover"
+                w="full"
+                h="full"
+                position="absolute"
+                top={0}
+                left={0}
+                src={post.image}
+                alt={post.title}
+                fallback={<ProjectPostCardThumbnailPlaceholder />}
+                transition="transform 0.3s ease"
+                _groupHover={{ transform: 'scale(1.03)' }}
+              />
+            </Box>
+          )}
+
+          {/* Title — hidden when empty, default placeholder, or auto-derived from description */}
+          {!isLinkOnly && post.title && post.title !== 'Project update' && !(post.description?.trim() ?? '').startsWith(post.title) && (
             <Body size="lg" medium dark>
               {post.title}
             </Body>
@@ -220,15 +227,21 @@ export const ProjectPostCard = ({ post }: Props) => {
 export const ProjectPostCardSkeleton = () => {
   return (
     <CardLayout dense spacing={0} w="100%" border="none" boxShadow="none">
-      <Box w="full" maxHeight="280px" overflow="hidden">
-        <SkeletonLayout w="full" height="200px" />
-      </Box>
-
       <VStack w="full" p={{ base: 3, lg: 4 }} spacing={2} alignItems="start">
         <HStack w="full" justifyContent="space-between">
           <SkeletonLayout width="120px" height="24px" />
           <SkeletonLayout width="80px" height="16px" />
         </HStack>
+        <Box
+          w="full"
+          borderRadius="8px"
+          overflow="hidden"
+          border="1px solid"
+          borderColor="neutral1.6"
+          style={{ aspectRatio: '16/9' }}
+        >
+          <SkeletonLayout w="full" h="full" />
+        </Box>
         <SkeletonLayout width="300px" height="24px" />
         <SkeletonText height="80px" width="full" />
         <HStack w="full" justifyContent="flex-end">
