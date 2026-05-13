@@ -282,7 +282,7 @@ const CardImage = ({
     <ImageWithReload
       width="100%"
       height="100%"
-      aspectRatio={compact ? 1 : 1.45}
+      aspectRatio={1}
       objectFit="cover"
       borderRadius="innerCard"
       src={project.thumbnailImage || ''}
@@ -568,7 +568,7 @@ export const LandingCardBaseSkeleton = () => {
   return (
     <InteractiveCardLayout padding="0px" width="full" height="100%" direction="column" spacing={0} flex={1}>
       <Box width="full" padding={2}>
-        <SkeletonLayout width="100%" aspectRatio={1.45} borderRadius="innerCard" />
+        <SkeletonLayout width="100%" aspectRatio={1} borderRadius="innerCard" />
       </Box>
 
       <VStack
