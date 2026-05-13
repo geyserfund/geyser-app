@@ -7,7 +7,6 @@ import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
-import { getProjectMatchingAmountBreakdown } from '@/modules/project/matching/utils/projectMatching.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
   guardianBadgesCostAtoms,
@@ -20,6 +19,7 @@ import {
 } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { getProjectMatchingAmountBreakdown } from '@/modules/project/matching/utils/projectMatching.ts'
 import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
@@ -27,6 +27,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom.ts'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import { ProjectMatchingCurrency } from '@/types'
+
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
@@ -155,7 +156,9 @@ export const ProjectFundingSummary = ({
       : null
   const hasMatchingSection = Boolean(matchingAvailableRow || matchingRow)
   const hasContributionSection = Boolean(
-    (formState.donationAmount && formState.donationAmount > 0 && formState.fundingMode !== recurringFundingModes.membership) ||
+    (formState.donationAmount &&
+      formState.donationAmount > 0 &&
+      formState.fundingMode !== recurringFundingModes.membership) ||
       (formState.subscription && formState.subscription.subscriptionId) ||
       numberOfRewardsSelected > 0 ||
       rewardsCosts.sats > 0 ||
@@ -226,7 +229,9 @@ export const ProjectFundingSummary = ({
           </SummaryRow>
         )}
 
-        {referrerHeroId && (hasMatchingSection || hasContributionSection) && <Divider borderColor={sectionDividerColor} />}
+        {referrerHeroId && (hasMatchingSection || hasContributionSection) && (
+          <Divider borderColor={sectionDividerColor} />
+        )}
 
         {matchingAvailableRow && (
           <SummaryRow label={matchingAvailableRow.label}>
@@ -263,7 +268,9 @@ export const ProjectFundingSummary = ({
           formState.fundingMode !== recurringFundingModes.membership && (
             <VStack w="full" alignItems="start" spacing={{ base: 2, lg: 3 }}>
               <SummaryRow
-                label={t(formState.fundingMode === recurringFundingModes.recurringDonation ? 'Recurring donation' : 'Donation')}
+                label={t(
+                  formState.fundingMode === recurringFundingModes.recurringDonation ? 'Recurring donation' : 'Donation',
+                )}
               >
                 <Body size={{ base: 'sm', lg: 'md' }}>
                   {`${commaFormatted(formState.donationAmount)} `}
@@ -296,33 +303,28 @@ export const ProjectFundingSummary = ({
           </SummaryRow>
         )}
         {numberOfRewardsSelected > 0 && (
-          <Grid
-            w="full"
-            templateColumns="minmax(0, 1fr) max-content"
-            columnGap={3}
-            alignItems="start"
-          >
+          <Grid w="full" templateColumns="minmax(0, 1fr) max-content" columnGap={3} alignItems="start">
             <Body size={{ base: 'sm', lg: 'md' }} light textAlign="left" whiteSpace="nowrap">
               {t('Products')}
             </Body>
             <VStack w="full" alignItems={'start'} spacing={1}>
-            {items.map((item) => {
-              return (
-                <HStack w="full" key={item?.label} alignItems="center">
-                  <ImageWithReload
-                    height="20px"
-                    width="20px"
-                    minWidth="20px"
-                    borderRadius="innerCard"
-                    src={item?.image}
-                    alt={item?.label}
-                  />
-                  <Body isTruncated size={{ base: 'sm', lg: 'md' }}>
-                    {item?.label}
-                  </Body>
-                </HStack>
-              )
-            })}
+              {items.map((item) => {
+                return (
+                  <HStack w="full" key={item?.label} alignItems="center">
+                    <ImageWithReload
+                      height="20px"
+                      width="20px"
+                      minWidth="20px"
+                      borderRadius="innerCard"
+                      src={item?.image}
+                      alt={item?.label}
+                    />
+                    <Body isTruncated size={{ base: 'sm', lg: 'md' }}>
+                      {item?.label}
+                    </Body>
+                  </HStack>
+                )
+              })}
             </VStack>
           </Grid>
         )}
@@ -429,9 +431,18 @@ export const ProjectFundingSummary = ({
         )}
       </VStack>
 
-      {(hasMatchingSection || hasContributionSection || referrerHeroId) && <Divider borderColor={sectionDividerColor} />}
+      {(hasMatchingSection || hasContributionSection || referrerHeroId) && (
+        <Divider borderColor={sectionDividerColor} />
+      )}
 
-      <Grid as={motion.div} layout w="full" templateColumns="minmax(0, 1fr) max-content" columnGap={3} alignItems="start">
+      <Grid
+        as={motion.div}
+        layout
+        w="full"
+        templateColumns="minmax(0, 1fr) max-content"
+        columnGap={3}
+        alignItems="start"
+      >
         <Body size={{ base: 'md', lg: 'xl' }} light textAlign="left" whiteSpace="nowrap">
           {`${t('Total')}: `}
         </Body>
