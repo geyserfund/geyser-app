@@ -18,7 +18,7 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { getMempoolSpaceUrl, getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
+import { getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentStatus,

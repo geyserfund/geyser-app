@@ -189,7 +189,7 @@ export const PromoteOptions = ({ projectName, onClose }: PromoteOptionsProps) =>
       />
       <PromoteOptionCard
         emoji="📢"
-        title={t('Ambassador Network Promotion')}
+        title={t('Geyser Ambassador Network')}
         description={t('Get visibility on the Geyser landing page, emails, and much more')}
         to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
         onClose={onClose}
