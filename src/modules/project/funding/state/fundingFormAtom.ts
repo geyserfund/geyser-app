@@ -684,6 +684,8 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
 })
 
 const MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT = 1000 // 10 USD in cents
+const MIN_PAYMENT_AMOUNT_SATS = 1000
+const MIN_PAYMENT_AMOUNT_SATS_FOR_TAKE_IT_ALL_PROJECT = 2500
 
 /** Check if the input amount is valid for the funidng flow */
 export const isFundingInputAmountValidAtom = atom((get) => {
@@ -726,9 +728,14 @@ export const isFundingInputAmountValidAtom = atom((get) => {
     }
   }
 
-  if (totalAmount < 1000) {
+  const minPaymentAmountSats =
+    fundingProjectState.fundingStrategy === ProjectFundingStrategy.TakeItAll
+      ? MIN_PAYMENT_AMOUNT_SATS_FOR_TAKE_IT_ALL_PROJECT
+      : MIN_PAYMENT_AMOUNT_SATS
+
+  if (totalAmount < minPaymentAmountSats) {
     return {
-      title: t('The payment minimum is 1000 satoshi.'),
+      title: t('The payment minimum is {{amount}} satoshi.', { amount: minPaymentAmountSats }),
       description: t('Please update the amount.'),
       valid: false,
     }
