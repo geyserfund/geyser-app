@@ -3037,10 +3037,26 @@ export type PayoutMetadata = {
   __typename?: 'PayoutMetadata';
   aonContractAddress?: Maybe<Scalars['String']['output']>;
   contractType: PayoutContractType;
+  feeSummary: PayoutFeeSummary;
   nonce: Scalars['Int']['output'];
   projectKey?: Maybe<Scalars['String']['output']>;
   requiresUserLockTx: Scalars['Boolean']['output'];
   swapContractAddress: Scalars['String']['output'];
+};
+
+export type PayoutFeeSummary = {
+  __typename?: 'PayoutFeeSummary';
+  currency: FeeCurrency;
+  items: Array<PayoutFeeSummaryItem>;
+  totalAmount: Scalars['Int']['output'];
+};
+
+export type PayoutFeeSummaryItem = {
+  __typename?: 'PayoutFeeSummaryItem';
+  amount: Scalars['Int']['output'];
+  currency: FeeCurrency;
+  description?: Maybe<Scalars['String']['output']>;
+  feeType: PaymentFeeType;
 };
 
 export type PayoutPaymentCreateInput = {
@@ -4476,6 +4492,7 @@ export type Query = {
   payoutActive?: Maybe<PayoutGetResponse>;
   payoutGet?: Maybe<PayoutGetResponse>;
   payoutLatest?: Maybe<PayoutGetResponse>;
+  payoutProcessing?: Maybe<PayoutGetResponse>;
   pledgeRefundGet?: Maybe<PledgeRefundGetResponse>;
   pledgeRefundsGet?: Maybe<PledgeRefundsGetResponse>;
   post?: Maybe<Post>;
@@ -4691,6 +4708,11 @@ export type QueryPayoutGetArgs = {
 
 
 export type QueryPayoutLatestArgs = {
+  projectId: Scalars['BigInt']['input'];
+};
+
+
+export type QueryPayoutProcessingArgs = {
   projectId: Scalars['BigInt']['input'];
 };
 
@@ -6249,6 +6271,8 @@ export type ResolversTypes = {
   PayoutInitiateInput: PayoutInitiateInput;
   PayoutInitiateResponse: ResolverTypeWrapper<Omit<PayoutInitiateResponse, 'payout'> & { payout: ResolversTypes['Payout'] }>;
   PayoutMetadata: ResolverTypeWrapper<PayoutMetadata>;
+  PayoutFeeSummary: ResolverTypeWrapper<PayoutFeeSummary>;
+  PayoutFeeSummaryItem: ResolverTypeWrapper<PayoutFeeSummaryItem>;
   PayoutPaymentCreateInput: PayoutPaymentCreateInput;
   PayoutPaymentCreateResponse: ResolverTypeWrapper<Omit<PayoutPaymentCreateResponse, 'payment' | 'payout'> & { payment: ResolversTypes['Payment'], payout: ResolversTypes['Payout'] }>;
   PayoutPaymentInput: PayoutPaymentInput;
@@ -6820,6 +6844,8 @@ export type ResolversParentTypes = {
   PayoutInitiateInput: PayoutInitiateInput;
   PayoutInitiateResponse: Omit<PayoutInitiateResponse, 'payout'> & { payout: ResolversParentTypes['Payout'] };
   PayoutMetadata: PayoutMetadata;
+  PayoutFeeSummary: PayoutFeeSummary;
+  PayoutFeeSummaryItem: PayoutFeeSummaryItem;
   PayoutPaymentCreateInput: PayoutPaymentCreateInput;
   PayoutPaymentCreateResponse: Omit<PayoutPaymentCreateResponse, 'payment' | 'payout'> & { payment: ResolversParentTypes['Payment'], payout: ResolversParentTypes['Payout'] };
   PayoutPaymentInput: PayoutPaymentInput;
@@ -8328,10 +8354,26 @@ export type PayoutInitiateResponseResolvers<ContextType = any, ParentType extend
 export type PayoutMetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutMetadata'] = ResolversParentTypes['PayoutMetadata']> = {
   aonContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contractType?: Resolver<ResolversTypes['PayoutContractType'], ParentType, ContextType>;
+  feeSummary?: Resolver<ResolversTypes['PayoutFeeSummary'], ParentType, ContextType>;
   nonce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   projectKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   requiresUserLockTx?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutFeeSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummary'] = ResolversParentTypes['PayoutFeeSummary']> = {
+  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['PayoutFeeSummaryItem']>, ParentType, ContextType>;
+  totalAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutFeeSummaryItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummaryItem'] = ResolversParentTypes['PayoutFeeSummaryItem']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  feeType?: Resolver<ResolversTypes['PaymentFeeType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9036,6 +9078,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   payoutActive?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutActiveArgs, 'projectId'>>;
   payoutGet?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutGetArgs, 'input'>>;
   payoutLatest?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutLatestArgs, 'projectId'>>;
+  payoutProcessing?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutProcessingArgs, 'projectId'>>;
   pledgeRefundGet?: Resolver<Maybe<ResolversTypes['PledgeRefundGetResponse']>, ParentType, ContextType, RequireFields<QueryPledgeRefundGetArgs, 'input'>>;
   pledgeRefundsGet?: Resolver<Maybe<ResolversTypes['PledgeRefundsGetResponse']>, ParentType, ContextType>;
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
@@ -9666,6 +9709,8 @@ export type Resolvers<ContextType = any> = {
   PayoutGetResponse?: PayoutGetResponseResolvers<ContextType>;
   PayoutInitiateResponse?: PayoutInitiateResponseResolvers<ContextType>;
   PayoutMetadata?: PayoutMetadataResolvers<ContextType>;
+  PayoutFeeSummary?: PayoutFeeSummaryResolvers<ContextType>;
+  PayoutFeeSummaryItem?: PayoutFeeSummaryItemResolvers<ContextType>;
   PayoutPaymentCreateResponse?: PayoutPaymentCreateResponseResolvers<ContextType>;
   PayoutRequestResponse?: PayoutRequestResponseResolvers<ContextType>;
   PayoutResponse?: PayoutResponseResolvers<ContextType>;
@@ -10886,7 +10931,10 @@ export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment',
 
 export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
 
-export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
+export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )>, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
     { __typename?: 'RskToLightningSwapPaymentDetails' }
     & RskToLightningSwapPaymentDetailsFragment
   ) | (
@@ -10903,7 +10951,7 @@ export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number,
     & PaymentForPayoutRefundFragment
   )> };
 
-export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, requiresUserLockTx: boolean, projectKey?: string | null };
+export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, requiresUserLockTx: boolean, projectKey?: string | null, feeSummary: { __typename?: 'PayoutFeeSummary', totalAmount: number, currency: FeeCurrency, items: Array<{ __typename?: 'PayoutFeeSummaryItem', feeType: PaymentFeeType, description?: string | null, amount: number, currency: FeeCurrency }> } };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -12136,6 +12184,19 @@ export type PayoutActiveQuery = { __typename?: 'Query', payoutActive?: { __typen
       & PayoutMetadataFragment
     ) } | null };
 
+export type PayoutProcessingQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type PayoutProcessingQuery = { __typename?: 'Query', payoutProcessing?: { __typename?: 'PayoutGetResponse', payout: (
+      { __typename?: 'Payout' }
+      & PayoutWithPaymentFragment
+    ), payoutMetadata: (
+      { __typename?: 'PayoutMetadata' }
+      & PayoutMetadataFragment
+    ) } | null };
+
 export type PayoutLatestQueryVariables = Exact<{
   projectId: Scalars['BigInt']['input'];
 }>;
@@ -13319,6 +13380,14 @@ export const PaymentForPayoutRefundFragmentDoc = gql`
   status
   linkedEntityUUID
   linkedEntityType
+  fees {
+    feeType
+    feeAmount
+    feePayer
+    description
+    feeCurrency
+    external
+  }
   paymentDetails {
     ... on RskToOnChainSwapPaymentDetails {
       ...RskToOnChainSwapPaymentDetails
@@ -13886,6 +13955,16 @@ export const PayoutMetadataFragmentDoc = gql`
   contractType
   requiresUserLockTx
   projectKey
+  feeSummary {
+    totalAmount
+    currency
+    items {
+      feeType
+      description
+      amount
+      currency
+    }
+  }
 }
     `;
 export const ProjectPostFragmentDoc = gql`
@@ -23144,6 +23223,52 @@ export type PayoutActiveQueryHookResult = ReturnType<typeof usePayoutActiveQuery
 export type PayoutActiveLazyQueryHookResult = ReturnType<typeof usePayoutActiveLazyQuery>;
 export type PayoutActiveSuspenseQueryHookResult = ReturnType<typeof usePayoutActiveSuspenseQuery>;
 export type PayoutActiveQueryResult = Apollo.QueryResult<PayoutActiveQuery, PayoutActiveQueryVariables>;
+export const PayoutProcessingDocument = gql`
+    query PayoutProcessing($projectId: BigInt!) {
+  payoutProcessing(projectId: $projectId) {
+    payout {
+      ...PayoutWithPayment
+    }
+    payoutMetadata {
+      ...PayoutMetadata
+    }
+  }
+}
+    ${PayoutWithPaymentFragmentDoc}
+${PayoutMetadataFragmentDoc}`;
+
+/**
+ * __usePayoutProcessingQuery__
+ *
+ * To run a query within a React component, call `usePayoutProcessingQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePayoutProcessingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePayoutProcessingQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function usePayoutProcessingQuery(baseOptions: Apollo.QueryHookOptions<PayoutProcessingQuery, PayoutProcessingQueryVariables> & ({ variables: PayoutProcessingQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PayoutProcessingQuery, PayoutProcessingQueryVariables>(PayoutProcessingDocument, options);
+      }
+export function usePayoutProcessingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PayoutProcessingQuery, PayoutProcessingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PayoutProcessingQuery, PayoutProcessingQueryVariables>(PayoutProcessingDocument, options);
+        }
+export function usePayoutProcessingSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PayoutProcessingQuery, PayoutProcessingQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PayoutProcessingQuery, PayoutProcessingQueryVariables>(PayoutProcessingDocument, options);
+        }
+export type PayoutProcessingQueryHookResult = ReturnType<typeof usePayoutProcessingQuery>;
+export type PayoutProcessingLazyQueryHookResult = ReturnType<typeof usePayoutProcessingLazyQuery>;
+export type PayoutProcessingSuspenseQueryHookResult = ReturnType<typeof usePayoutProcessingSuspenseQuery>;
+export type PayoutProcessingQueryResult = Apollo.QueryResult<PayoutProcessingQuery, PayoutProcessingQueryVariables>;
 export const PayoutLatestDocument = gql`
     query PayoutLatest($projectId: BigInt!) {
   payoutLatest(projectId: $projectId) {

@@ -32,6 +32,21 @@ export const QUERY_PAYOUT_ACTIVE = gql`
   }
 `
 
+export const QUERY_PAYOUT_PROCESSING = gql`
+  ${FRAGMENT_PAYOUT_WITH_PAYMENT}
+  ${FRAGMENT_PAYOUT_METADATA}
+  query PayoutProcessing($projectId: BigInt!) {
+    payoutProcessing(projectId: $projectId) {
+      payout {
+        ...PayoutWithPayment
+      }
+      payoutMetadata {
+        ...PayoutMetadata
+      }
+    }
+  }
+`
+
 export const QUERY_PAYOUT_LATEST = gql`
   ${FRAGMENT_PAYOUT_WITH_PAYMENT}
   ${FRAGMENT_PAYOUT_METADATA}

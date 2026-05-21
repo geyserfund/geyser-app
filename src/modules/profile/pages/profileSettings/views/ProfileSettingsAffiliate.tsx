@@ -187,7 +187,7 @@ export const ProfileSettingsAffiliate = () => {
               icon={PiLightning}
               title={t('Enabling contributions')}
               description={t(
-                'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Geyser promotion network contributions.',
+                'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Ambassador Network contributions.',
                 {
                   rate: formatEffectiveAffiliatePayoutRate(contributionReferralPayoutRate, GEYSER_PROMOTION_FEE_RATE),
                 },
@@ -222,7 +222,7 @@ export const ProfileSettingsAffiliate = () => {
               <ChakraLink as={Link} to={getPath('userProfileSettingsWallet', userId || '')} color="primary1.9">
                 {t('Wallet')}
               </ChakraLink>{' '}
-              {t('page.')}
+              {t('page. Payouts are only processed after a minimum of 20$ is reached.')}
             </Body>
             {!hasUserWalletConfigured ? (
               <Feedback variant={FeedBackVariant.WARNING} noIcon>

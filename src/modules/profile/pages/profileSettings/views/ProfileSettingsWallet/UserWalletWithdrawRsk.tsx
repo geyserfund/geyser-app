@@ -1,9 +1,9 @@
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
+import { Button, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { PiCheck, PiCopy, PiInfoBold } from 'react-icons/pi'
+import { PiInfoBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import {
@@ -13,6 +13,7 @@ import {
   QUERY_USER_WALLET_WITHDRAW_ACTIVE,
   QUERY_USER_WALLET_WITHDRAW_LATEST,
 } from '@/modules/profile/graphql/userWalletWithdraw.ts'
+import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { createCallDataForLockCall } from '@/modules/project/pages/projectFunding/utils/createCallDataForLockCall.ts'
@@ -22,11 +23,12 @@ import { BitcoinPayoutProcessed } from '@/modules/project/pages/projectFunding/v
 import { BitcoinPayoutWaitingConfirmation } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/LightningPayoutProcessed.tsx'
-import { PayoutMethodSelection } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/PayoutMethodSelection.tsx'
 import {
-  PayoutProgressSidebar,
+  PayoutFlowLayout,
   PayoutProgressStep,
-} from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/PayoutProgressSidebar.tsx'
+} from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/PayoutFlowLayout.tsx'
+import { PayoutMethodSelection } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/PayoutMethodSelection.tsx'
+import { PayoutSummaryPanel } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/components/PayoutSummaryPanel.tsx'
 import {
   DEFAULT_LIGHTNING_PAYOUT_MAX_SATS,
   MAX_SATS_FOR_LIGHTNING,
@@ -41,11 +43,10 @@ import {
 } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/hooks/usePayoutWithLightningForm.ts'
 import { PayoutRskSkeleton } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { PayoutFlowSwapData, PayoutMethod } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/types.ts'
-import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
+import { getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentForPayoutRefundFragment,
@@ -375,6 +376,7 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
           password: data.accountPassword || '',
         })
       }
+
       swapObj.paymentId = activeOnChainPayment.id
       setSwapData(swapObj)
       setLockTxId(activeOnChainDetails.onChainTxId || '')
@@ -509,41 +511,40 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
   function renderModalContent(params: {
     notice?: ReactNode
     title?: ReactNode
-    subtitle?: ReactNode
     description?: ReactNode
     content: ReactNode
     footer?: ReactNode
+    heading?: ReactNode
   }) {
     return (
-      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
-        <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} />
-        <VStack flex={1} spacing={4} align="stretch" minH="100%">
-          {(params.title || params.subtitle || params.description) && (
-            <VStack spacing={2} align="stretch">
-              {params.title && (
-                <Body as="h2" size="2xl" bold color="neutral1.12">
-                  {params.title}
-                </Body>
-              )}
-              {params.subtitle && (
-                <Body size="md" bold color="neutral1.12">
-                  {params.subtitle}
-                </Body>
-              )}
-              {params.description && (
-                <Body size="md" color="neutral1.10">
-                  {params.description}
-                </Body>
-              )}
-            </VStack>
-          )}
-          {params.notice}
-          <VStack flex={1} spacing={4} align="stretch">
-            {params.content}
-          </VStack>
-          {params.footer}
-        </VStack>
-      </Stack>
+      <PayoutFlowLayout
+        progressSteps={progressSteps}
+        heading={params.heading}
+        title={params.title}
+        description={params.description}
+        notice={params.notice}
+        content={params.content}
+        footer={params.footer}
+        summary={
+          totalAmount > 0 ? (
+            <PayoutSummaryPanel
+              title={t('Withdrawal Summary')}
+              totalLabel={t('Withdrawable balance')}
+              netLabel={t('Withdrawal amount')}
+              amount={totalAmount}
+              copyableId={
+                withdrawUuid
+                  ? {
+                      id: withdrawUuid,
+                      hasCopied: hasCopiedWithdrawId,
+                      onCopy: onCopyWithdrawId,
+                    }
+                  : undefined
+              }
+            />
+          ) : undefined
+        }
+      />
     )
   }
 
@@ -567,9 +568,9 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
 
   if (shouldShowProcessedScreen) {
     return (
-      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" noClose={true} contentProps={{ maxW: '980px' }}>
         {renderModalContent({
-          title:
+          heading:
             processedMethod === PayoutMethod.Lightning
               ? t('Withdrawal Processed (Off-Chain)')
               : t('Withdrawal Processed (On-Chain)'),
@@ -597,12 +598,12 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
     const waitingNotice = isWaitingClaimReady ? (
       t('Your funds are ready to be claimed')
     ) : (
-      <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>mempool.space</1>.">
+      <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>rootstock.blockscout.com</1>.">
         {
           'We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on '
         }
-        <ChakraLink href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
-          {'mempool.space'}
+        <ChakraLink href={getRootstockBlockscoutUrl(lockTxId || '')} textDecoration="underline" isExternal>
+          {'rootstock.blockscout.com'}
         </ChakraLink>
         {'.'}
       </Trans>
@@ -616,7 +617,6 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
               <Body>{waitingNotice}</Body>
             </Feedback>
           ),
-          title: isWaitingClaimReady ? t('Claim withdrawal') : t('Please wait for swap confirmation'),
           description: activeProgressDescription,
           content: (
             <BitcoinPayoutWaitingConfirmation
@@ -643,46 +643,30 @@ export const UserWalletWithdrawRsk: React.FC<UserWalletWithdrawRskProps> = ({
       </Body>
     </Feedback>
   ) : undefined
-  const modalSubtitle = withdrawUuid ? (
-    <HStack spacing={6} align="center" justify="space-between" w="full">
-      <HStack spacing={2} align="center">
-        <Body size="md" color="neutral1.12">
-          <Body as="span" bold color="neutral1.12">
-            {t('Withdrawal ID')}:
-          </Body>{' '}
-          {withdrawUuid}
-        </Body>
-        <IconButton
-          aria-label={hasCopiedWithdrawId ? t('Withdrawal ID copied') : t('Copy withdrawal ID')}
-          size="xs"
-          variant="ghost"
-          colorScheme={hasCopiedWithdrawId ? 'primary1' : 'neutral1'}
-          icon={hasCopiedWithdrawId ? <PiCheck /> : <PiCopy />}
-          onClick={onCopyWithdrawId}
-        />
-      </HStack>
-    </HStack>
-  ) : undefined
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="4xl"
+      noClose={true}
+      bodyProps={{ gap: 4 }}
+      contentProps={{ maxW: '980px' }}
+    >
       {prepareLoading
         ? renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: activeProgressDescription,
             content: <PayoutRskSkeleton />,
           })
         : prepareError
         ? renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: activeProgressDescription,
             content: <Feedback variant={FeedBackVariant.ERROR} text={prepareError} />,
           })
         : renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: shouldShowFailedRetryState
               ? t('Choose a withdrawal method below to start a new withdrawal.')
               : activeProgressDescription,
@@ -864,9 +848,10 @@ function getUserWalletWithdrawModalTitle(params: {
   shouldResumeOnChainWithdraw: boolean
   shouldRequestBitcoinAddressOnResume: boolean
   shouldShowFailedRetryState: boolean
-}) {
+}): string | undefined {
   if (params.shouldShowFailedRetryState) return t('Previous withdrawal attempt failed')
-  if (!params.shouldResumeOnChainWithdraw) return t('Choose a withdrawal method')
+  // The active step heading already says "Choose withdrawal method" — no need to repeat.
+  if (!params.shouldResumeOnChainWithdraw) return undefined
   if (params.shouldRequestBitcoinAddressOnResume) return t('Resume your withdrawal')
   return t('Confirm your password to resume the withdrawal')
 }
