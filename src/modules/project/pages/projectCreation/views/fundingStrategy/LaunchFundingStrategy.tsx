@@ -14,18 +14,21 @@ import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPage
 import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
 import { LAUNCH_FEE_USD_CENTS } from '../launch/constants/launchFees.ts'
 import { ProjectLaunchStrategy } from '../launch/views/LaunchStrategySelection.tsx'
+import { AON_GOAL_MAX_DURATION_IN_DAYS, AON_GOAL_MIN_DURATION_IN_DAYS } from './allOrNothingGoalValidation.ts'
 
 const options = {
   [ProjectFundingStrategy.AllOrNothing]: {
     title: t('All-or-nothing (Beta)'),
     body: t('Receive funds only if you reach your goal by the deadline. Builds momentum and trust.'),
     howDoesItWork: t(
-      'Set a funding goal and choose a deadline from 1 to 60 days. If you hit your goal, the funds unlock and you have 30 days to withdraw them. If not, contributors can claim refunds and the campaign closes.',
+      'Set a funding goal and choose a deadline from {{minDays}} to {{maxDays}} days. If you hit your goal, the funds unlock and you have 30 days to withdraw them. If not, contributors can claim refunds and the campaign closes.',
+      { minDays: AON_GOAL_MIN_DURATION_IN_DAYS, maxDays: AON_GOAL_MAX_DURATION_IN_DAYS },
     ),
     recommendedFor: t('Prototypes or projects needing a minimum amount to move forward.'),
     benefit: t('Encourages trust and often leads to more contributions.'),
     disadvantage: t(
-      'Reaching the goal can be a challenge, and not reaching it means you will not receive the funds. You can set the funding period between 1 and 60 days.',
+      'Reaching the goal can be a challenge, and not reaching it means you will not receive the funds. You can set the funding period between {{minDays}} and {{maxDays}} days.',
+      { minDays: AON_GOAL_MIN_DURATION_IN_DAYS, maxDays: AON_GOAL_MAX_DURATION_IN_DAYS },
     ),
   },
   [ProjectFundingStrategy.TakeItAll]: {

@@ -34,5 +34,15 @@ export const FRAGMENT_PAYOUT_METADATA = gql`
     contractType
     requiresUserLockTx
     projectKey
+    feeSummary {
+      totalAmount
+      currency
+      items {
+        feeType
+        description
+        amount
+        currency
+      }
+    }
   }
 `

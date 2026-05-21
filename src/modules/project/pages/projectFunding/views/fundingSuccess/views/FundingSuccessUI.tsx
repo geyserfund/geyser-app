@@ -15,6 +15,7 @@ import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 
 import { SuggestedProjects } from '../../../../projectView/views/body/sections/SuggestedProjects.tsx'
+import { FundingContributionSummary } from '../../../components/FundingContributionSummary.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary.tsx'
 import { FundingLayout } from '../../../layouts/FundingLayout.tsx'
 import { DownloadInvoice } from '../components/DownloadInvoice.tsx'
@@ -29,15 +30,10 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   const matchedAmountOverride =
-    !isPending && fundingContribution.matching
-      ? {
-          sats: fundingContribution.matchedAmountSats,
-          usdCents: fundingContribution.matchedAmountUsdCent,
-        }
-      : isPending &&
-        project.activeMatching &&
-        matchingPreview.hasActiveMatching &&
-        (matchingPreview.matchedAmountSats > 0 || matchingPreview.matchedAmountUsdCents > 0)
+    isPending &&
+    project.activeMatching &&
+    matchingPreview.hasActiveMatching &&
+    (matchingPreview.matchedAmountSats > 0 || matchingPreview.matchedAmountUsdCents > 0)
       ? {
           sats: matchingPreview.matchedAmountSats,
           usdCents: matchingPreview.matchedAmountUsdCents,
@@ -119,11 +115,15 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           )}
           <SafeToDeleteRefund />
           <Divider />
-          <ProjectFundingSummary
-            disableCollapse
-            referenceCode={fundingContribution.uuid}
-            matchedAmountOverride={matchedAmountOverride}
-          />
+          {isPending ? (
+            <ProjectFundingSummary
+              disableCollapse
+              referenceCode={fundingContribution.uuid}
+              matchedAmountOverride={matchedAmountOverride}
+            />
+          ) : (
+            <FundingContributionSummary disableCollapse referenceCode={fundingContribution.uuid} />
+          )}
           <HStack w="full" justifyContent="flex-end">
             <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
           </HStack>

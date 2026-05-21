@@ -79,6 +79,7 @@ export const ProjectDashboardStory = () => {
         onSubmit={form.handleSubmit(onSubmit, onInvalidSubmit)}
         w="full"
         height="full"
+        minHeight={0}
         paddingBottom={20}
       >
         <TopNavContainerBar>
@@ -91,6 +92,7 @@ export const ProjectDashboardStory = () => {
           backgroundColor="utils.pbg"
           w="full"
           h="full"
+          minHeight={0}
           flex={1}
           spacing={3}
           dense
@@ -101,6 +103,7 @@ export const ProjectDashboardStory = () => {
             width="full"
             overflow={'hidden'}
             flex={1}
+            minHeight={0}
             maxWidth={dimensions.project.posts.view.maxWidth}
             alignItems="start"
           >
@@ -112,7 +115,7 @@ export const ProjectDashboardStory = () => {
                 {t('Write a more in-depth description of the project. You can also add images and videos.')}
               </Body>
             </VStack>
-            <Box w="full" flex={1} height="calc(100% - 50px)" overflow="hidden">
+            <Box w="full" flex={1} minHeight={0} height="calc(100% - 50px)" overflow="hidden">
               <ProjectStoryForm autoFocus form={form} isLoading={loading || !project} />
             </Box>
           </VStack>

@@ -1,55 +1,8 @@
-import { Box, HStack, Icon, IconButton, Image, Switch, Tooltip, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, IconButton, Switch, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiInfo } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
-
-const PROMOTION_LOGOS = {
-  light: [
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-news-light.png',
-      altKey: 'Bitcoin News logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/lightning-news-light.png',
-      altKey: 'Lightning News logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bff-light.png',
-      altKey: 'BFF logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-light.png',
-      altKey: 'Bitcoin Bits logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg',
-      altKey: 'Geyser logo',
-    },
-  ],
-  dark: [
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-news-dark.png',
-      altKey: 'Bitcoin News logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/lightning-news-dark.png',
-      altKey: 'Lightning News logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bff-dark.png',
-      altKey: 'BFF logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-dark.png',
-      altKey: 'Bitcoin Bits logo',
-    },
-    {
-      src: 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg',
-      altKey: 'Geyser logo',
-    },
-  ],
-}
 
 type PromotionNetworkSettingsCardProps = {
   promotionsEnabled: boolean
@@ -65,8 +18,6 @@ export const PromotionNetworkSettingsCard = ({
   isLoading = false,
   contributionSummary,
 }: PromotionNetworkSettingsCardProps) => {
-  const promotionLogos = useColorModeValue(PROMOTION_LOGOS.light, PROMOTION_LOGOS.dark)
-
   return (
     <VStack w="full" spacing={4} align="start">
       <Body size="sm" light>
@@ -77,13 +28,13 @@ export const PromotionNetworkSettingsCard = ({
         <HStack w="full" justifyContent="space-between" alignItems="center">
           <HStack>
             <Body size="lg" medium>
-              {t('Geyser Promotion')}
+              {t('Ambassador Network Promotion')}
             </Body>
             <Body size="lg" medium color="neutral1.8">
               {t('10% fee')}
             </Body>
             <Tooltip
-              label={t('The fee is only applied to contributions enabled through Geyser promotions')}
+              label={t('The fee is only applied to contributions enabled through Ambassador Network promotions')}
               placement="top"
             >
               <IconButton
@@ -107,11 +58,6 @@ export const PromotionNetworkSettingsCard = ({
             "When enabled your project becomes eligible to be shared through Geyser's promotion network — including all Geyser Ambassadors who can earn through referrals — and partner digital media companies, bringing more eyes to your project to enable more contributions.",
           )}
         </Body>
-        <HStack spacing={4} mb={contributionSummary ? 4 : 0}>
-          {promotionLogos.map((logo) => (
-            <Image key={logo.altKey} src={logo.src} alt={t(logo.altKey)} h="20px" objectFit="contain" />
-          ))}
-        </HStack>
         {contributionSummary ? (
           <Box bg="green.100" p={3} borderRadius="md" w="fit-content">
             <Body size="sm" bold color="green.900">
