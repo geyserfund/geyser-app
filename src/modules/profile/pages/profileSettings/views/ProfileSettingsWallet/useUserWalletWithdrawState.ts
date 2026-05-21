@@ -1,16 +1,18 @@
-import { useQuery } from '@apollo/client'
 import { t } from 'i18next'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import {
-  QUERY_USER_WALLET_WITHDRAW_ACTIVE,
-  QUERY_USER_WALLET_WITHDRAW_LATEST,
-} from '@/modules/profile/graphql/userWalletWithdraw.ts'
 import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
+import {
+  PaymentStatus,
+  useUserWalletWithdrawActiveQuery,
+  useUserWalletWithdrawLatestQuery,
+  UserWalletWithdrawStatus,
+} from '@/types/index.ts'
 
+/** One PRISM unit is represented as 10,000,000,000 sats on Rootstock. */
 const SATS_PER_PRISM_UNIT = 10000000000n
-const ACTIVE_STATUSES = ['PENDING', 'PROCESSING']
+const ACTIVE_STATUSES = [UserWalletWithdrawStatus.Pending, UserWalletWithdrawStatus.Processing]
 
 type UseUserWalletWithdrawStateParams = {
   rskAddress: string
@@ -30,7 +32,7 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
     data: activeData,
     loading: isActiveLoading,
     refetch: refetchActive,
-  } = useQuery(QUERY_USER_WALLET_WITHDRAW_ACTIVE, {
+  } = useUserWalletWithdrawActiveQuery({
     fetchPolicy: 'cache-and-network',
     skip: !hasWalletConfigured,
   })
@@ -39,14 +41,16 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
     data: latestData,
     loading: isLatestLoading,
     refetch: refetchLatest,
-  } = useQuery(QUERY_USER_WALLET_WITHDRAW_LATEST, {
+  } = useUserWalletWithdrawLatestQuery({
     fetchPolicy: 'cache-and-network',
     skip: !hasWalletConfigured,
   })
 
   const withdrawableSats = withdrawable ? withdrawable / SATS_PER_PRISM_UNIT : 0n
-  const withdrawableUsd = getUSDCentsAmount(withdrawableSats) / 100
-  const isBelowMinimumWithdrawal = withdrawableUsd > 0 && withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
+  const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats)
+  const withdrawableUsd = withdrawableUsdCents / 100
+  const minPayoutCents = MIN_BITCOIN_PAYOUT_USD * 100
+  const isBelowMinimumWithdrawal = withdrawableUsdCents > 0 && withdrawableUsdCents < minPayoutCents
 
   const activeWithdraw = activeData?.userWalletWithdrawActive?.userWalletWithdraw
   const latestWithdraw = latestData?.userWalletWithdrawLatest?.userWalletWithdraw
@@ -55,18 +59,15 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
   )[0]
 
   const hasRetryableWithdraw =
-    latestWithdraw?.status === 'FAILED' && latestWithdrawPayment?.status === 'REFUNDED'
+    latestWithdraw?.status === UserWalletWithdrawStatus.Failed &&
+    latestWithdrawPayment?.status === PaymentStatus.Refunded
   const hasActiveWithdraw = Boolean(activeWithdraw && ACTIVE_STATUSES.includes(activeWithdraw.status))
   const canWithdraw =
-    !hasActiveWithdraw && (withdrawableUsd >= MIN_BITCOIN_PAYOUT_USD || hasRetryableWithdraw)
+    !hasActiveWithdraw && (withdrawableUsdCents >= minPayoutCents || hasRetryableWithdraw)
   const isWithdrawStateLoading = isActiveLoading || isLatestLoading
   const withdrawButtonLabel = hasRetryableWithdraw ? t('Retry') : t('Withdraw')
 
-  const refetchAll = () => {
-    refetchWithdrawable()
-    refetchActive()
-    refetchLatest()
-  }
+  const refetchAll = () => Promise.all([refetchWithdrawable(), refetchActive(), refetchLatest()])
 
   return {
     withdrawableSats,

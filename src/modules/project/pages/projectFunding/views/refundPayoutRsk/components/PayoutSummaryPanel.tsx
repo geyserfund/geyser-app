@@ -54,13 +54,6 @@ type PayoutSummaryPanelProps = {
   copyableId?: CopyableIdProps
 }
 
-const FEE_TYPE_LABELS: Record<string, string> = {
-  AMBASSADOR: t('Ambassador fee'),
-  PARTNER: t('Partner fee'),
-  PLATFORM: t('Platform fee'),
-  PROMOTION: t('Promotion fee'),
-}
-
 const formatFeeAmount = (amount: number, currency: string) => {
   if (currency === 'BTCSAT') {
     return t('{{amount}} sats', { amount: commaFormatted(amount) })
@@ -69,25 +62,34 @@ const formatFeeAmount = (amount: number, currency: string) => {
   return commaFormatted(amount)
 }
 
-const FeeBreakdownRows = ({ items }: { items: FeeBreakdownItem[] }) => (
-  <VStack align="stretch" spacing={1.5} pl={5}>
-    {items.map((item, index) => (
-      <HStack
-        key={`${item.feeType}-${item.currency}-${item.description}-${index}`}
-        justify="space-between"
-        spacing={3}
-        align="start"
-      >
-        <Body size="xs" color="neutral1.9" flex={1} minW={0}>
-          {item.description || FEE_TYPE_LABELS[item.feeType] || item.feeType}
-        </Body>
-        <Body size="xs" color="neutral1.11" flexShrink={0}>
-          {formatFeeAmount(item.amount, item.currency)}
-        </Body>
-      </HStack>
-    ))}
-  </VStack>
-)
+const FeeBreakdownRows = ({ items }: { items: FeeBreakdownItem[] }) => {
+  const feeTypeLabels: Record<string, string> = {
+    AMBASSADOR: t('Ambassador fee'),
+    PARTNER: t('Partner fee'),
+    PLATFORM: t('Platform fee'),
+    PROMOTION: t('Promotion fee'),
+  }
+
+  return (
+    <VStack align="stretch" spacing={1.5} pl={5}>
+      {items.map((item, index) => (
+        <HStack
+          key={`${item.feeType}-${item.currency}-${item.description}-${index}`}
+          justify="space-between"
+          spacing={3}
+          align="start"
+        >
+          <Body size="xs" color="neutral1.9" flex={1} minW={0}>
+            {item.description || feeTypeLabels[item.feeType] || item.feeType}
+          </Body>
+          <Body size="xs" color="neutral1.11" flexShrink={0}>
+            {formatFeeAmount(item.amount, item.currency)}
+          </Body>
+        </HStack>
+      ))}
+    </VStack>
+  )
+}
 
 const FeeSectionRow = ({ section }: { section: FeeSection }) => {
   const hasBreakdown = section.summary.items.length > 0

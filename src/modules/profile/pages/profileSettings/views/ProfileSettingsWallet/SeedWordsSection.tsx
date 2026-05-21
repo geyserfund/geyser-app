@@ -128,7 +128,7 @@ export const SeedWordsSection = () => {
           </InputRightElement>
         </InputGroup>
         {passwordError ? (
-          <Body size="sm" color="red.400">
+          <Body size="sm" color="error.9">
             {passwordError}
           </Body>
         ) : null}

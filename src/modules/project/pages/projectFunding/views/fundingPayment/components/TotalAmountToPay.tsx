@@ -36,7 +36,12 @@ export const TotalAmountToPay = ({
           sats
         </Body>
       </Body>
-      <Body light>{`($${commaFormatted(totalUsdCent / 100)})`}</Body>
+      <Body light>
+        {`($${(totalUsdCent / 100).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })})`}
+      </Body>
     </HStack>
   )
 }
