@@ -17,7 +17,6 @@ import ReactDatePicker from 'react-datepicker'
 import { useForm } from 'react-hook-form'
 import { PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
-import * as yup from 'yup'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -31,23 +30,12 @@ import { toInt } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
-
-const formSchema = yup.object({
-  amount: yup
-    .number()
-    .required(t('Amount is required'))
-    .min(210000, t('Goal must be at least 210,000 sats'))
-    .typeError(t('Amount must be a number')),
-  duration: yup
-    .number()
-    .required(t('Duration is required'))
-    .min(1, t('Duration must be at least 1 day'))
-    .typeError(t('Duration must be a number')),
-  launchDate: yup.date().optional().typeError(t('Launch date must be a valid date')),
-  amountUSD: yup.number().optional().typeError(t('Amount must be a number')),
-})
-
-type FormValues = yup.InferType<typeof formSchema>
+import type { AllOrNothingGoalFormValues } from '../allOrNothingGoalValidation.ts'
+import {
+  allOrNothingGoalFormSchema,
+  AON_GOAL_MAX_DURATION_IN_DAYS,
+  AON_GOAL_MIN_DURATION_IN_DAYS,
+} from '../allOrNothingGoalValidation.ts'
 
 export const AllOrNothingGoal = () => {
   const navigate = useNavigate()
@@ -57,8 +45,8 @@ export const AllOrNothingGoal = () => {
 
   const { getSatoshisFromUSDCents, getUSDAmount } = useBTCConverter()
 
-  const { handleSubmit, register, setValue, watch, formState, clearErrors } = useForm<FormValues>({
-    resolver: yupResolver(formSchema),
+  const { handleSubmit, register, setValue, watch, formState, clearErrors } = useForm<AllOrNothingGoalFormValues>({
+    resolver: yupResolver(allOrNothingGoalFormSchema),
     reValidateMode: 'onSubmit',
     mode: 'onSubmit',
     defaultValues: {
@@ -88,7 +76,7 @@ export const AllOrNothingGoal = () => {
     },
   }
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: AllOrNothingGoalFormValues) => {
     updateProjectWithLastCreationStep({
       aonGoal: {
         aonGoalAmount: {
@@ -166,7 +154,8 @@ export const AllOrNothingGoal = () => {
               <VStack align="flex-start" gap={0}>
                 <Body size="sm">
                   {t(
-                    'The project duration determines how long your project will be active for. We recommend projects to be 30 days or less. They cannot be longer than 60 days.',
+                    'The project duration determines how long your project will be active for. We recommend projects to be 30 days or less. They cannot be longer than {{days}} days.',
+                    { days: AON_GOAL_MAX_DURATION_IN_DAYS },
                   )}
                 </Body>
                 <Body size="sm">
@@ -187,8 +176,8 @@ export const AllOrNothingGoal = () => {
                 textAlign="right"
                 placeholder={'0'}
                 type="number"
-                max={60}
-                min={1}
+                max={AON_GOAL_MAX_DURATION_IN_DAYS}
+                min={AON_GOAL_MIN_DURATION_IN_DAYS}
                 {...register('duration')}
                 isInvalid={Boolean(formState.errors.duration)}
                 onFocus={() => {

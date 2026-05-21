@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Button, HStack, Stack, VStack } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { ReactNode, useMemo, useState } from 'react'
 
@@ -8,12 +8,13 @@ import { SwapData } from '@/modules/project/funding/state/swapAtom.ts'
 import { MUTATION_PAYMENT_SWAP_REFUND_TX_BROADCAST } from '@/modules/project/graphql/mutation/TxBroadcastMutation.ts'
 import { useRefund } from '@/modules/project/pages/projectFunding/views/fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { BitcoinPayoutForm } from '../../refundPayoutRsk/components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from '../../refundPayoutRsk/components/BitcoinPayoutProcessed.tsx'
-import { PayoutProgressSidebar, PayoutProgressStep } from '../../refundPayoutRsk/components/PayoutProgressSidebar.tsx'
+import { PayoutFlowLayout, PayoutProgressStep } from '../../refundPayoutRsk/components/PayoutFlowLayout.tsx'
+import { PayoutSummaryPanel } from '../../refundPayoutRsk/components/PayoutSummaryPanel.tsx'
 import {
   BitcoinPayoutFormData,
   usePayoutWithBitcoinForm,
@@ -157,52 +158,49 @@ export const PaymentAttemptRefundModal = ({
     }
   }
 
+  const { hasCopied: hasCopiedPaymentId, onCopy: onCopyPaymentId } = useCopyToClipboard(paymentUuid || '')
+
   function renderModalContent(params: {
+    heading?: ReactNode
     title?: ReactNode
-    subtitle?: ReactNode
     description?: ReactNode
     content: ReactNode
     footer?: ReactNode
   }) {
-    const { title, subtitle, description, content, footer } = params
-
     return (
-      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
-        <PayoutProgressSidebar amount={amount} steps={progressSteps} label={t('Pending refund')} />
-        <VStack flex={1} spacing={4} align="stretch" minH="100%">
-          {(title || subtitle || description) && (
-            <VStack spacing={2} align="stretch">
-              {title && (
-                <Body as="h2" size="2xl" bold color="neutral1.12">
-                  {title}
-                </Body>
-              )}
-              {subtitle && (
-                <Body size="md" bold color="neutral1.12">
-                  {subtitle}
-                </Body>
-              )}
-              {description && (
-                <Body size="md" color="neutral1.10">
-                  {description}
-                </Body>
-              )}
-            </VStack>
-          )}
-          <VStack flex={1} spacing={4} align="stretch">
-            {content}
-          </VStack>
-          {footer}
-        </VStack>
-      </Stack>
+      <PayoutFlowLayout
+        progressSteps={progressSteps}
+        heading={params.heading}
+        title={params.title}
+        description={params.description}
+        content={params.content}
+        footer={params.footer}
+        summary={
+          <PayoutSummaryPanel
+            title={t('Refund Summary')}
+            totalLabel={t('Refundable amount')}
+            amount={amount}
+            copyableId={
+              paymentUuid
+                ? {
+                    id: paymentUuid,
+                    label: t('Payment ID:'),
+                    hasCopied: hasCopiedPaymentId,
+                    onCopy: onCopyPaymentId,
+                  }
+                : undefined
+            }
+          />
+        }
+      />
     )
   }
 
   if (isProcessed) {
     return (
-      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" noClose={true} contentProps={{ maxW: '980px' }}>
         {renderModalContent({
-          title: t('Refund Processed (On-Chain)'),
+          heading: t('Refund Processed (On-Chain)'),
           content: <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleCompleted} />,
         })}
       </Modal>
@@ -210,32 +208,26 @@ export const PaymentAttemptRefundModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="4xl"
+      noClose={true}
+      bodyProps={{ gap: 4 }}
+      contentProps={{ maxW: '980px' }}
+    >
       {renderModalContent({
-        title: t('Enter your refund address'),
-        subtitle: paymentUuid ? (
-          <HStack spacing={2} align="center">
-            <Body size="md" color="neutral1.12">
-              <Body as="span" bold color="neutral1.12">
-                {t('Payment ID')}:
-              </Body>{' '}
-              {paymentUuid}
-            </Body>
-          </HStack>
-        ) : undefined,
         description: t(
           'Enter the Bitcoin address where you want to receive your refund and authorize the transaction.',
         ),
         content: (
-          <>
-            <BitcoinPayoutForm
-              form={bitcoinForm.form}
-              satsAmount={amount}
-              disablePassword={Boolean(refundFile?.privateKey)}
-              disableBitcoinAddress={false}
-              showBitcoinAddress={true}
-            />
-          </>
+          <BitcoinPayoutForm
+            form={bitcoinForm.form}
+            satsAmount={amount}
+            disablePassword={Boolean(refundFile?.privateKey)}
+            disableBitcoinAddress={false}
+            showBitcoinAddress={true}
+          />
         ),
         footer: (
           <Button

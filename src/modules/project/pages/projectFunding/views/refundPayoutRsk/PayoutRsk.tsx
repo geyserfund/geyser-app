@@ -1,9 +1,9 @@
 /* eslint-disable complexity */
-import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { PiCheck, PiCopy, PiInfoBold } from 'react-icons/pi'
+import { PiInfoBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -21,19 +21,20 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
+  PaymentFeeType,
   PaymentStatus,
   PaymentType,
-  PayoutActiveQuery,
   PayoutContractType,
+  PayoutProcessingQuery,
   PayoutStatus,
   ProjectForProfileContributionsFragment,
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
-  usePayoutActiveLazyQuery,
   usePayoutLatestLazyQuery,
   usePayoutPaymentInitiateMutation,
   usePayoutPaymentPrepareMutation,
   usePayoutPrepareMutation,
+  usePayoutProcessingLazyQuery,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -44,8 +45,9 @@ import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
+import { PayoutFlowLayout, PayoutProgressStep } from './components/PayoutFlowLayout.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
-import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
+import { FeeSection, PayoutSummaryPanel } from './components/PayoutSummaryPanel.tsx'
 import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { createAndSignClaimMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
@@ -64,6 +66,59 @@ type PayoutRskProps = {
 }
 
 type PayoutProgressStage = 'setup' | 'waiting_confirmation' | 'claim_ready' | 'completed'
+
+type PaymentFeeForSummary = {
+  feeType?: PaymentFeeType | null
+  feeAmount: number
+  feeCurrency?: string | null
+  description?: string | null
+}
+
+type PayoutPaymentFeeSummary = {
+  totalAmount: number
+  currency: string
+  items: {
+    feeType: string
+    description?: string | null
+    amount: number
+    currency: string
+  }[]
+}
+
+const buildPayoutNetworkFeeSummary = (
+  payment?: { fees?: PaymentFeeForSummary[] } | null,
+): PayoutPaymentFeeSummary | null => {
+  const items: PayoutPaymentFeeSummary['items'] = []
+
+  for (const fee of payment?.fees ?? []) {
+    const isNetworkFee =
+      fee.feeType === PaymentFeeType.Payment &&
+      fee.feeCurrency === 'BTCSAT' &&
+      fee.feeAmount > 0 &&
+      fee.description?.toLowerCase().includes('network')
+
+    if (!isNetworkFee) {
+      continue
+    }
+
+    items.push({
+      feeType: PaymentFeeType.Payment,
+      description: fee.description || t('Network fee'),
+      amount: fee.feeAmount,
+      currency: 'BTCSAT',
+    })
+  }
+
+  if (!items.length) {
+    return null
+  }
+
+  return {
+    totalAmount: items.reduce((total, item) => total + item.amount, 0),
+    currency: 'BTCSAT',
+    items,
+  }
+}
 
 const getPayoutProgressSteps = (params: { method: PayoutMethod; stage: PayoutProgressStage }): PayoutProgressStep[] => {
   const { method, stage } = params
@@ -216,7 +271,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
   const [payoutPrepare, { data: payoutPrepareData, loading: payoutPrepareLoading }] = usePayoutPrepareMutation()
   const [loadLatestPayout] = usePayoutLatestLazyQuery()
-  const [loadActivePayout] = usePayoutActiveLazyQuery()
+  const [loadProcessingPayout] = usePayoutProcessingLazyQuery()
 
   const [payoutPaymentPrepare, { loading: isPayoutPaymentPrepareLoading }] = usePayoutPaymentPrepareMutation()
   const [payoutPaymentInitiate, { loading: isPayoutPaymentInitiateLoading }] = usePayoutPaymentInitiateMutation()
@@ -225,7 +280,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const [payoutPrepareError, setPayoutPrepareError] = useState<string | null>(null)
   const [isInternalRetryPayout, setIsInternalRetryPayout] = useState(false)
   const [hasFailedPreviousPayout, setHasFailedPreviousPayout] = useState(false)
-  const [activePayoutResponse, setActivePayoutResponse] = useState<PayoutActiveQuery['payoutActive'] | null>(null)
+  const [processingPayoutResponse, setProcessingPayoutResponse] = useState<
+    PayoutProcessingQuery['payoutProcessing'] | null
+  >(null)
+  const [preparedPayoutNetworkFeeSummary, setPreparedPayoutNetworkFeeSummary] =
+    useState<PayoutPaymentFeeSummary | null>(null)
 
   useEffect(() => {
     if (!isOpen) {
@@ -233,7 +292,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       hasDefaultedMethodRef.current = false
       setIsInternalRetryPayout(false)
       setHasFailedPreviousPayout(false)
-      setActivePayoutResponse(null)
+      setProcessingPayoutResponse(null)
+      setPreparedPayoutNetworkFeeSummary(null)
       return
     }
 
@@ -258,9 +318,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         const latestPayoutPayment = [...(latestPayout?.payments ?? [])].sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )[0]
-        const hasActivePayout = Boolean(
-          latestPayout?.status && [PayoutStatus.Pending, PayoutStatus.Processing].includes(latestPayout.status),
-        )
+        const hasProcessingPayout = latestPayout?.status === PayoutStatus.Processing
 
         setHasFailedPreviousPayout(
           Boolean(
@@ -269,25 +327,26 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         )
         setIsInternalRetryPayout(Boolean(latestPayoutResult.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
 
-        if (hasActivePayout) {
-          const activePayoutResult = await loadActivePayout({
+        if (hasProcessingPayout) {
+          const processingPayoutResult = await loadProcessingPayout({
             variables: { projectId: project.id },
             fetchPolicy: 'network-only',
           })
 
-          if (activePayoutResult.error) {
-            throw activePayoutResult.error
+          if (processingPayoutResult.error) {
+            throw processingPayoutResult.error
           }
 
-          const payoutActive = activePayoutResult.data?.payoutActive
+          const payoutProcessing = processingPayoutResult.data?.payoutProcessing
 
-          if (payoutActive) {
-            setActivePayoutResponse(payoutActive)
+          if (payoutProcessing) {
+            setProcessingPayoutResponse(payoutProcessing)
             return
           }
         }
 
-        setActivePayoutResponse(null)
+        setProcessingPayoutResponse(null)
+        setPreparedPayoutNetworkFeeSummary(null)
         await payoutPrepare({
           variables: {
             input: {
@@ -303,10 +362,10 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
 
     preparePayout().catch(() => undefined)
-  }, [isOpen, loadActivePayout, loadLatestPayout, payoutPrepare, project.id])
+  }, [isOpen, loadLatestPayout, loadProcessingPayout, payoutPrepare, project.id])
 
-  const payoutResponse = activePayoutResponse
-    ? { payout: activePayoutResponse.payout, payoutMetadata: activePayoutResponse.payoutMetadata }
+  const payoutResponse = processingPayoutResponse
+    ? { payout: processingPayoutResponse.payout, payoutMetadata: processingPayoutResponse.payoutMetadata }
     : payoutPrepareData?.payoutPrepare
   const payout = payoutResponse?.payout
   const isProcessing = payout?.status === PayoutStatus.Processing
@@ -321,6 +380,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     ? (activeLightningPayment.paymentDetails as RskToLightningSwapPaymentDetailsFragment).lightningInvoiceId
     : ''
   const activeOnChainPaymentDetails = activeOnChainPayment?.paymentDetails as RskToOnChainSwapPaymentDetails | undefined
+  const payoutNetworkFeeSummary = preparedPayoutNetworkFeeSummary ?? buildPayoutNetworkFeeSummary(latestPayment)
   const persistedOnChainAddress = activeOnChainPaymentDetails?.onChainAddress || ''
   const isClaimable = activeOnChainPayment?.status === PaymentStatus.Claimable
   const isClaiming = activeOnChainPayment?.status === PaymentStatus.Claiming
@@ -446,6 +506,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       }
 
       const { swap, payment } = payoutPaymentPrepareResponse.payoutPaymentPrepare
+      setPreparedPayoutNetworkFeeSummary(buildPayoutNetworkFeeSummary(payment))
 
       const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
 
@@ -588,6 +649,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       }
 
       const { swap, payment } = payoutPaymentPrepareResponse.payoutPaymentPrepare
+      setPreparedPayoutNetworkFeeSummary(buildPayoutNetworkFeeSummary(payment))
       const paymentDetails = payment?.paymentDetails as RskToOnChainSwapPaymentDetails
 
       const swapObj = JSON.parse(swap)
@@ -750,46 +812,58 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
   }
 
+  const feeSections: FeeSection[] = []
+
+  if (payoutMetadata?.feeSummary?.totalAmount) {
+    feeSections.push({
+      key: 'platform',
+      label: t('Platform fees'),
+      tooltip: t('These fees were already deducted at the time of contribution.'),
+      summary: payoutMetadata.feeSummary,
+      deductsFromNet: false,
+    })
+  }
+
+  if (payoutNetworkFeeSummary?.totalAmount) {
+    feeSections.push({
+      key: 'network',
+      label: t('Network fees'),
+      tooltip: t('These fees are indicative and may vary slightly depending on network conditions.'),
+      summary: payoutNetworkFeeSummary,
+    })
+  }
+
   function renderModalContent(params: {
     notice?: ReactNode
     title?: ReactNode
-    subtitle?: ReactNode
     description?: ReactNode
     content: ReactNode
     footer?: ReactNode
   }) {
-    const { notice, title, subtitle, description, content, footer } = params
-
     return (
-      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
-        <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} />
-        <VStack flex={1} spacing={4} align="stretch" minH="100%">
-          {(title || subtitle || description) && (
-            <VStack spacing={2} align="stretch">
-              {title && (
-                <Body as="h2" size="2xl" bold color="neutral1.12">
-                  {title}
-                </Body>
-              )}
-              {subtitle && (
-                <Body size="md" bold color="neutral1.12">
-                  {subtitle}
-                </Body>
-              )}
-              {description && (
-                <Body size="md" color="neutral1.10">
-                  {description}
-                </Body>
-              )}
-            </VStack>
-          )}
-          {notice}
-          <VStack flex={1} spacing={4} align="stretch">
-            {content}
-          </VStack>
-          {footer}
-        </VStack>
-      </Stack>
+      <PayoutFlowLayout
+        progressSteps={progressSteps}
+        title={params.title}
+        description={params.description}
+        notice={params.notice}
+        content={params.content}
+        footer={params.footer}
+        summary={
+          <PayoutSummaryPanel
+            amount={totalAmount}
+            fees={feeSections}
+            copyableId={
+              payoutUuid
+                ? {
+                    id: payoutUuid,
+                    hasCopied: hasCopiedPayoutId,
+                    onCopy: onCopyPayoutId,
+                  }
+                : undefined
+            }
+          />
+        }
+      />
     )
   }
 
@@ -820,7 +894,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   // Show processed screen after successful submission
   if (shouldShowProcessedScreen) {
     return (
-      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" noClose={true} contentProps={{ maxW: '980px' }}>
         {renderModalContent({
           title:
             processedMethod === PayoutMethod.Lightning
@@ -850,7 +924,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
               <Body>{waitingNotice}</Body>
             </Feedback>
           ),
-          title: isWaitingClaimReady ? t('Claim payout') : t('Please wait for swap confirmation'),
           description: activeProgressDescription,
           content: (
             <BitcoinPayoutWaitingConfirmation
@@ -881,51 +954,30 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const resolvedModalDescription = shouldShowFailedRetryState
     ? t('Choose a payout method below to start a new payout.')
     : modalDescription
-  const modalSubtitle = payoutUuid ? (
-    <HStack spacing={6} align="center" justify="space-between" w="full">
-      <HStack spacing={6} align="center" flexWrap="wrap">
-        {payoutUuid && (
-          <HStack spacing={2} align="center">
-            <Body size="md" color="neutral1.12">
-              <Body as="span" bold color="neutral1.12">
-                {t('Payout ID')}:
-              </Body>{' '}
-              {payoutUuid}
-            </Body>
-
-            <IconButton
-              aria-label={hasCopiedPayoutId ? t('Payout ID copied') : t('Copy payout ID')}
-              size="xs"
-              variant="ghost"
-              colorScheme={hasCopiedPayoutId ? 'primary1' : 'neutral1'}
-              icon={hasCopiedPayoutId ? <PiCheck /> : <PiCopy />}
-              onClick={onCopyPayoutId}
-            />
-          </HStack>
-        )}
-      </HStack>
-    </HStack>
-  ) : undefined
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="4xl"
+      noClose={true}
+      bodyProps={{ gap: 4 }}
+      contentProps={{ maxW: '980px' }}
+    >
       {payoutPrepareLoading
         ? renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: resolvedModalDescription,
             content: <PayoutRskSkeleton />,
           })
         : payoutPrepareError
         ? renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: resolvedModalDescription,
             content: <Feedback variant={FeedBackVariant.ERROR} text={payoutPrepareError} />,
           })
         : renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: resolvedModalDescription,
             notice: failedRetryNotice,
             content: (
@@ -1033,15 +1085,16 @@ function getPayoutModalTitle(params: {
   shouldResumeOnChainPayout: boolean
   shouldRequestBitcoinAddressOnResume: boolean
   shouldShowFailedRetryState: boolean
-}): string {
+}): string | undefined {
   const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume, shouldShowFailedRetryState } = params
 
   if (shouldShowFailedRetryState) {
     return t('Previous payout attempt failed')
   }
 
+  // The active step heading already says "Choose payout method" — no need to repeat.
   if (!shouldResumeOnChainPayout) {
-    return t('Choose a payout method')
+    return undefined
   }
 
   if (shouldRequestBitcoinAddressOnResume) {

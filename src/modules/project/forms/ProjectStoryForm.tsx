@@ -22,10 +22,25 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, fieldContainerPro
 
   return (
     <FormProvider {...form}>
-      <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingBottom={{ base: 28, lg: 'unset' }}>
-        <FieldContainer width="100%" flexGrow={1} paddingBottom={{ base: 28, lg: 10 }} {...fieldContainerProps}>
-          <VStack width="100%" pt={3} flexGrow={1} alignItems="stretch" spacing={1}>
-            <CardLayout width="100%" flexGrow={1} backgroundColor="utils.surface" overflowY="auto">
+      <VStack
+        width="100%"
+        height="100%"
+        minHeight={0}
+        alignItems="flex-start"
+        spacing={6}
+        flexGrow={1}
+        paddingBottom={{ base: 28, lg: 'unset' }}
+      >
+        <FieldContainer
+          width="100%"
+          height="100%"
+          minHeight={0}
+          flexGrow={1}
+          paddingBottom={{ base: 28, lg: 10 }}
+          {...fieldContainerProps}
+        >
+          <VStack width="100%" height="100%" minHeight={0} pt={3} flexGrow={1} alignItems="stretch" spacing={1}>
+            <CardLayout width="100%" minHeight={0} flexGrow={1} backgroundColor="utils.surface" overflowY="auto">
               {isLoading ? (
                 <MarkdownFieldSkeleton />
               ) : (

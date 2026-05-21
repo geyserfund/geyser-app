@@ -17,6 +17,7 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentStatus,
   PaymentType,
@@ -27,7 +28,7 @@ import {
   usePledgeRefundPaymentCreateMutation,
   usePledgeRefundRequestMutation,
 } from '@/types/index.ts'
-import { commaFormatted, useNotification } from '@/utils/index.ts'
+import { useNotification } from '@/utils/index.ts'
 
 import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
 import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
@@ -36,8 +37,9 @@ import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
+import { PayoutFlowLayout, PayoutProgressStep } from './components/PayoutFlowLayout.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
-import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
+import { FeeSection, PayoutSummaryPanel } from './components/PayoutSummaryPanel.tsx'
 import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { createAndSignRefundMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
@@ -305,6 +307,9 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
 
   const totalAmount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
+  const refundProcessingFee = pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0
+  const refundId = pledgeRefundRequestData?.pledgeRefundRequest.refund.id?.toString() ?? ''
+  const { hasCopied: hasCopiedRefundId, onCopy: onCopyRefundId } = useCopyToClipboard(refundId)
   const shouldShowProcessedScreen = isProcessed || Boolean(activeLightningPayment)
   const progressMethod = shouldShowProcessedScreen
     ? activeLightningPayment
@@ -717,9 +722,9 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   // Show processed screen after successful submission
   if (isProcessed) {
     return (
-      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" noClose={true} contentProps={{ maxW: '980px' }}>
         {renderModalContent({
-          title:
+          heading:
             selectedMethod === PayoutMethod.Lightning
               ? t('Refund Processed (Off-Chain)')
               : t('Refund Processed (On-Chain)'),
@@ -744,7 +749,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
               <Body>{waitingNotice}</Body>
             </Feedback>
           ),
-          title: isWaitingClaimReady ? t('Claim refund') : t('Please wait for swap confirmation'),
           description: activeProgressDescription,
           content: (
             <BitcoinPayoutWaitingConfirmation
@@ -767,7 +771,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     shouldResumeOnChainRefund,
     shouldRequestBitcoinAddressOnResume,
   })
-  const modalSubtitle = `${t('Total refund amount')}: ${commaFormatted(totalAmount)} sats`
   const submitLabel = getRefundSubmitLabel({
     shouldResumeOnChainRefund,
     shouldRequestBitcoinAddressOnResume,
@@ -778,62 +781,85 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     ? activeProgressDescription
     : undefined
 
+  const refundFeeSections: FeeSection[] = []
+
+  if (refundProcessingFee > 0) {
+    refundFeeSections.push({
+      key: 'processing',
+      label: t('Processing fee'),
+      tooltip: t('Processing fee to facilitate your refund. Subtracted from the refund amount.'),
+      summary: {
+        totalAmount: refundProcessingFee,
+        currency: 'BTCSAT',
+        items: [],
+      },
+    })
+  }
+
   function renderModalContent(params: {
     notice?: ReactNode
     title?: ReactNode
-    subtitle?: ReactNode
     description?: ReactNode
     content: ReactNode
     footer?: ReactNode
+    /** When false, the right-side summary is hidden (e.g. for the confirm-refund prompt). */
+    showSummary?: boolean
+    /** When provided, this overrides the heading derived from the active progress step. */
+    heading?: ReactNode
   }) {
-    const { notice, title, subtitle, description, content, footer } = params
+    const showSummary = params.showSummary !== false
 
     return (
-      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
-        <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} label={t('Pending refund')} />
-        <VStack flex={1} spacing={4} align="stretch" minH="100%">
-          {(title || subtitle || description) && (
-            <VStack spacing={2} align="stretch">
-              {title && (
-                <Body as="h2" size="2xl" bold color="neutral1.12">
-                  {title}
-                </Body>
-              )}
-              {subtitle && (
-                <Body size="md" bold color="neutral1.12">
-                  {subtitle}
-                </Body>
-              )}
-              {description && (
-                <Body size="md" color="neutral1.10">
-                  {description}
-                </Body>
-              )}
-            </VStack>
-          )}
-          {notice}
-          <VStack flex={1} spacing={4} align="stretch">
-            {content}
-          </VStack>
-          {footer}
-        </VStack>
-      </Stack>
+      <PayoutFlowLayout
+        progressSteps={progressSteps}
+        heading={params.heading}
+        title={params.title}
+        description={params.description}
+        notice={params.notice}
+        content={params.content}
+        footer={params.footer}
+        summary={
+          showSummary && totalAmount > 0 ? (
+            <PayoutSummaryPanel
+              title={t('Refund Summary')}
+              totalLabel={t('Refundable balance')}
+              netLabel={t('Refund amount')}
+              amount={totalAmount}
+              fees={refundFeeSections}
+              copyableId={
+                refundId
+                  ? {
+                      id: refundId,
+                      hasCopied: hasCopiedRefundId,
+                      onCopy: onCopyRefundId,
+                    }
+                  : undefined
+              }
+            />
+          ) : undefined
+        }
+      />
     )
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="4xl"
+      noClose={true}
+      bodyProps={{ gap: 4 }}
+      contentProps={{ maxW: '980px' }}
+    >
       {pledgeRefundRequestLoading
         ? renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: modalDescription,
             content: <RefundRskSkeleton />,
           })
         : shouldShowContinueRefundPrompt
         ? renderModalContent({
-            title: t('Refund your contribution'),
-            subtitle: modalSubtitle,
+            heading: t('Refund your contribution'),
             content: <ContinueRefundContent />,
             footer: (
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4} w="full">
@@ -855,7 +881,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
           })
         : renderModalContent({
             title: modalTitle,
-            subtitle: modalSubtitle,
             description: modalDescription,
             content: (
               <>
@@ -959,15 +984,17 @@ function getRefundModalTitle(params: {
   shouldShowContinueRefundPrompt: boolean
   shouldResumeOnChainRefund: boolean
   shouldRequestBitcoinAddressOnResume: boolean
-}): string {
+}): string | undefined {
   const { shouldShowContinueRefundPrompt, shouldResumeOnChainRefund, shouldRequestBitcoinAddressOnResume } = params
 
+  // The continue-refund prompt uses a `heading` override, so no secondary title needed.
   if (shouldShowContinueRefundPrompt) {
-    return t('Refund your contribution')
+    return undefined
   }
 
+  // The active step heading already says "Choose refund method" — no need to repeat.
   if (!shouldResumeOnChainRefund) {
-    return t('Choose a refund method')
+    return undefined
   }
 
   if (shouldRequestBitcoinAddressOnResume) {
