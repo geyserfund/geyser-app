@@ -6,14 +6,7 @@ import { t } from 'i18next'
 import { Link } from 'react-router'
 
 import { SocialLinks } from '@/modules/project/pages/projectCreation/views/start/components/SocialLinks.tsx'
-import {
-  FAQUrl,
-  FeedbackUrl,
-  getPath,
-  GeyserAboutUrl,
-  GeyserPrivacyUrl,
-  GuideUrl,
-} from '@/shared/constants'
+import { FAQUrl, FeedbackUrl, getPath, GeyserAboutUrl, GuideUrl } from '@/shared/constants'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { Body } from '../components/typography/Body.tsx'
@@ -76,10 +69,16 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
           {t('FAQ')}
         </UserNavExternalButton>
 
-        <UserNavExternalButton as={ChakraLink} isExternal href={getPath('legalTerms')} color="neutral1.9" marginLeft={4}>
+        <UserNavExternalButton
+          as={ChakraLink}
+          isExternal
+          href={getPath('legalTerms')}
+          color="neutral1.9"
+          marginLeft={4}
+        >
           {t('Terms of Service')}
         </UserNavExternalButton>
-        <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl} color="neutral1.9">
+        <UserNavExternalButton as={Link} to={getPath('legalPrivacy')} color="neutral1.9">
           {t('Privacy Policy')}
         </UserNavExternalButton>
         <UserNavExternalButton as={Link} to={getPath('project', 'geyser')} color="neutral1.9">
