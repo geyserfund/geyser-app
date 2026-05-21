@@ -419,6 +419,7 @@ export type ContributionLightningToRskSwapPaymentDetailsBoltzInput = {
   claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  recovery?: InputMaybe<ContributionSwapRecoveryInput>;
 };
 
 export type ContributionLightningToRskSwapPaymentDetailsInput = {
@@ -475,6 +476,7 @@ export type ContributionOnChainToRskSwapPaymentDetailsBoltzInput = {
   claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  recovery?: InputMaybe<ContributionSwapRecoveryInput>;
 };
 
 export type ContributionOnChainToRskSwapPaymentDetailsInput = {
@@ -525,6 +527,14 @@ export type ContributionStatusUpdatedInput = {
 export type ContributionStatusUpdatedSubscriptionResponse = {
   __typename?: 'ContributionStatusUpdatedSubscriptionResponse';
   contribution: Contribution;
+};
+
+export type ContributionSwapRecoveryInput = {
+  contributorRskAddress: Scalars['String']['input'];
+  contributorRskPublicKey: Scalars['String']['input'];
+  encryptedPrivateKey: Scalars['String']['input'];
+  encryptionAlgorithm: Scalars['String']['input'];
+  encryptionVersion: Scalars['String']['input'];
 };
 
 export type ContributionsGetResponse = {
@@ -1328,38 +1338,6 @@ export enum ImpactFundApplicationFundingModel {
   Matching = 'MATCHING'
 }
 
-export enum ImpactFundApplicationStatus {
-  Accepted = 'ACCEPTED',
-  Canceled = 'CANCELED',
-  Funded = 'FUNDED',
-  InfoRequested = 'INFO_REQUESTED',
-  InReview = 'IN_REVIEW',
-  Ongoing = 'ONGOING',
-  Pending = 'PENDING',
-  Rejected = 'REJECTED',
-  UnderEvaluation = 'UNDER_EVALUATION',
-  Disbursement = 'DISBURSEMENT'
-}
-
-export type ImpactFundApplicationsGetResponse = {
-  __typename?: 'ImpactFundApplicationsGetResponse';
-  applications: Array<ImpactFundApplication>;
-  pagination?: Maybe<CursorPaginationResponse>;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type ImpactFundApplicationsInput = {
-  impactFundId: Scalars['BigInt']['input'];
-  pagination?: InputMaybe<PaginationInput>;
-  projectId?: InputMaybe<Scalars['BigInt']['input']>;
-  statusIn?: InputMaybe<Array<ImpactFundApplicationStatus>>;
-};
-
-export type ImpactFundApplyInput = {
-  impactFundId: Scalars['BigInt']['input'];
-  projectId: Scalars['BigInt']['input'];
-};
-
 export type ImpactFundApplicationFundingSetInput = {
   applicationId: Scalars['BigInt']['input'];
   contributionUuid: Scalars['String']['input'];
@@ -1394,10 +1372,42 @@ export type ImpactFundApplicationNoteUpdateInput = {
   noteId: Scalars['BigInt']['input'];
 };
 
+export enum ImpactFundApplicationStatus {
+  Accepted = 'ACCEPTED',
+  Canceled = 'CANCELED',
+  Disbursement = 'DISBURSEMENT',
+  Funded = 'FUNDED',
+  InfoRequested = 'INFO_REQUESTED',
+  InReview = 'IN_REVIEW',
+  Ongoing = 'ONGOING',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+  UnderEvaluation = 'UNDER_EVALUATION'
+}
+
 export type ImpactFundApplicationUpdateInput = {
   applicationId: Scalars['BigInt']['input'];
   fundingModel?: InputMaybe<ImpactFundApplicationFundingModel>;
   status?: InputMaybe<ImpactFundApplicationStatus>;
+};
+
+export type ImpactFundApplicationsGetResponse = {
+  __typename?: 'ImpactFundApplicationsGetResponse';
+  applications: Array<ImpactFundApplication>;
+  pagination?: Maybe<CursorPaginationResponse>;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type ImpactFundApplicationsInput = {
+  impactFundId: Scalars['BigInt']['input'];
+  pagination?: InputMaybe<PaginationInput>;
+  projectId?: InputMaybe<Scalars['BigInt']['input']>;
+  statusIn?: InputMaybe<Array<ImpactFundApplicationStatus>>;
+};
+
+export type ImpactFundApplyInput = {
+  impactFundId: Scalars['BigInt']['input'];
+  projectId: Scalars['BigInt']['input'];
 };
 
 export type ImpactFundDashboardApplicationRow = {
@@ -1465,7 +1475,7 @@ export type ImpactFundDashboardProject = {
 export type ImpactFundFundingSummaryRow = {
   __typename?: 'ImpactFundFundingSummaryRow';
   applicationsCount: Scalars['Int']['output'];
-  awardedTotalSats: Scalars['BigInt']['output'];
+  awardedTotalSats: Scalars['Int']['output'];
   category?: Maybe<ProjectCategory>;
   fundingModel: ImpactFundApplicationFundingModel;
 };
@@ -1480,7 +1490,7 @@ export type ImpactFundGetWhereInput = {
 
 export type ImpactFundMetrics = {
   __typename?: 'ImpactFundMetrics';
-  awardedTotalSats: Scalars['BigInt']['output'];
+  awardedTotalSats: Scalars['Int']['output'];
   projectsFundedCount: Scalars['Int']['output'];
 };
 
@@ -1837,24 +1847,28 @@ export type MutationGrantApplyArgs = {
 };
 
 
-export type MutationImpactFundApplyArgs = {
-  input: ImpactFundApplyInput;
-};
-
 export type MutationImpactFundApplicationFundingSetArgs = {
   input: ImpactFundApplicationFundingSetInput;
 };
+
 
 export type MutationImpactFundApplicationNoteCreateArgs = {
   input: ImpactFundApplicationNoteCreateInput;
 };
 
+
 export type MutationImpactFundApplicationNoteUpdateArgs = {
   input: ImpactFundApplicationNoteUpdateInput;
 };
 
+
 export type MutationImpactFundApplicationUpdateArgs = {
   input: ImpactFundApplicationUpdateInput;
+};
+
+
+export type MutationImpactFundApplyArgs = {
+  input: ImpactFundApplyInput;
 };
 
 
@@ -2782,6 +2796,28 @@ export type PaymentPendResponse = {
 export type PaymentPendSwapInput = {
   swapServerLockTxId?: InputMaybe<Scalars['String']['input']>;
   swapUserLockTxId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PaymentRecoveryByContributionInput = {
+  contributionUuid: Scalars['String']['input'];
+};
+
+export type PaymentRecoveryByContributionResponse = {
+  __typename?: 'PaymentRecoveryByContributionResponse';
+  contribution: Contribution;
+  payments: Array<PaymentRecoveryPayment>;
+  project: Project;
+};
+
+export type PaymentRecoveryPayment = {
+  __typename?: 'PaymentRecoveryPayment';
+  amount: Scalars['Int']['output'];
+  id: Scalars['BigInt']['output'];
+  paymentType: PaymentType;
+  status: PaymentStatus;
+  swapId: Scalars['String']['output'];
+  swapMetadata: Scalars['String']['output'];
+  uuid: Scalars['String']['output'];
 };
 
 export type PaymentRefund = {
@@ -4460,6 +4496,7 @@ export type Query = {
   ordersStatsGet: OrdersStatsBase;
   payment: Payment;
   paymentInvoiceSanctionCheckStatusGet: PaymentInvoiceSanctionCheckStatusResponse;
+  paymentRecoveryByContribution: PaymentRecoveryByContributionResponse;
   paymentRefundsGet?: Maybe<PaymentRefundsGetResponse>;
   paymentsGet: PaymentsGetResponse;
   /**
@@ -4514,6 +4551,7 @@ export type Query = {
   tagsGet: Array<TagsGetResult>;
   tagsMostFundedGet: Array<TagsMostFundedGetResult>;
   user: User;
+  userAccountPasswordFundsSummary: UserAccountPasswordFundsSummary;
   userBadge?: Maybe<UserBadge>;
   userBadges: Array<UserBadge>;
   userEmailIsAvailable: Scalars['Boolean']['output'];
@@ -4667,6 +4705,11 @@ export type QueryPaymentArgs = {
 
 export type QueryPaymentInvoiceSanctionCheckStatusGetArgs = {
   input: PaymentInvoiceSanctionCheckStatusGetInput;
+};
+
+
+export type QueryPaymentRecoveryByContributionArgs = {
+  input: PaymentRecoveryByContributionInput;
 };
 
 
@@ -5473,6 +5516,14 @@ export type UserAccountKeysUpdateInput = {
   rskKeyPair: RskKeyPairInput;
 };
 
+export type UserAccountPasswordFundsSummary = {
+  __typename?: 'UserAccountPasswordFundsSummary';
+  aonUnclaimedFundsSats: Scalars['Int']['output'];
+  pledgedSats: Scalars['Int']['output'];
+  tiaUnclaimedFundsSats: Scalars['Int']['output'];
+  unclaimedFundsSats: Scalars['Int']['output'];
+};
+
 export type UserBadge = {
   __typename?: 'UserBadge';
   badge: Badge;
@@ -5974,6 +6025,7 @@ export type ResolversTypes = {
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
+  ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: ResolverTypeWrapper<Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversTypes['Contribution']> }>;
   ContributionsSummary: ResolverTypeWrapper<ContributionsSummary>;
   ContributionsSummaryPeriod: ContributionsSummaryPeriod;
@@ -6088,15 +6140,23 @@ export type ResolversTypes = {
   ImpactFundAmountCommittedCurrency: ImpactFundAmountCommittedCurrency;
   ImpactFundApplication: ResolverTypeWrapper<Omit<ImpactFundApplication, 'project'> & { project: ResolversTypes['Project'] }>;
   ImpactFundApplicationFundingModel: ImpactFundApplicationFundingModel;
+  ImpactFundApplicationFundingSetInput: ImpactFundApplicationFundingSetInput;
+  ImpactFundApplicationNote: ResolverTypeWrapper<ImpactFundApplicationNote>;
+  ImpactFundApplicationNoteAuthor: ResolverTypeWrapper<ImpactFundApplicationNoteAuthor>;
+  ImpactFundApplicationNoteCreateInput: ImpactFundApplicationNoteCreateInput;
+  ImpactFundApplicationNoteUpdateInput: ImpactFundApplicationNoteUpdateInput;
   ImpactFundApplicationStatus: ImpactFundApplicationStatus;
+  ImpactFundApplicationUpdateInput: ImpactFundApplicationUpdateInput;
   ImpactFundApplicationsGetResponse: ResolverTypeWrapper<Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversTypes['ImpactFundApplication']> }>;
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
   ImpactFundDashboardApplicationRow: ResolverTypeWrapper<ImpactFundDashboardApplicationRow>;
   ImpactFundDashboardApplicationsInput: ImpactFundDashboardApplicationsInput;
   ImpactFundDashboardApplicationsResponse: ResolverTypeWrapper<ImpactFundDashboardApplicationsResponse>;
+  ImpactFundDashboardApplicationsSort: ImpactFundDashboardApplicationsSort;
   ImpactFundDashboardCreator: ResolverTypeWrapper<ImpactFundDashboardCreator>;
   ImpactFundDashboardProject: ResolverTypeWrapper<ImpactFundDashboardProject>;
+  ImpactFundFundingSummaryRow: ResolverTypeWrapper<ImpactFundFundingSummaryRow>;
   ImpactFundGetInput: ImpactFundGetInput;
   ImpactFundGetWhereInput: ImpactFundGetWhereInput;
   ImpactFundMetrics: ResolverTypeWrapper<ImpactFundMetrics>;
@@ -6188,6 +6248,9 @@ export type ResolversTypes = {
   PaymentPendInput: PaymentPendInput;
   PaymentPendResponse: ResolverTypeWrapper<PaymentPendResponse>;
   PaymentPendSwapInput: PaymentPendSwapInput;
+  PaymentRecoveryByContributionInput: PaymentRecoveryByContributionInput;
+  PaymentRecoveryByContributionResponse: ResolverTypeWrapper<Omit<PaymentRecoveryByContributionResponse, 'contribution' | 'project'> & { contribution: ResolversTypes['Contribution'], project: ResolversTypes['Project'] }>;
+  PaymentRecoveryPayment: ResolverTypeWrapper<PaymentRecoveryPayment>;
   PaymentRefund: ResolverTypeWrapper<PaymentRefund>;
   PaymentRefundCompleteInput: PaymentRefundCompleteInput;
   PaymentRefundCompleteResponse: ResolverTypeWrapper<PaymentRefundCompleteResponse>;
@@ -6466,6 +6529,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<Omit<User, 'affiliatePartnerPayoutSummary' | 'contributions' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { affiliatePartnerPayoutSummary: ResolversTypes['AffiliatePartnerPayoutSummary'], contributions: Array<ResolversTypes['Contribution']>, ownerOf: Array<ResolversTypes['OwnerOf']>, projectFollows: Array<ResolversTypes['Project']>, projects: Array<ResolversTypes['Project']>, wallet?: Maybe<ResolversTypes['Wallet']> }>;
   UserAccountKeys: ResolverTypeWrapper<UserAccountKeys>;
   UserAccountKeysUpdateInput: UserAccountKeysUpdateInput;
+  UserAccountPasswordFundsSummary: ResolverTypeWrapper<UserAccountPasswordFundsSummary>;
   UserBadge: ResolverTypeWrapper<UserBadge>;
   UserBadgeStatus: UserBadgeStatus;
   UserComplianceDetails: ResolverTypeWrapper<UserComplianceDetails>;
@@ -6576,6 +6640,7 @@ export type ResolversParentTypes = {
   ContributionPaymentsInput: ContributionPaymentsInput;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
+  ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
   ContributionsSummary: ContributionsSummary;
   ContributorContributionsSummary: ContributorContributionsSummary;
@@ -6675,6 +6740,12 @@ export type ResolversParentTypes = {
   ID: Scalars['ID']['output'];
   ImpactFund: Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications' | 'viewerApplications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversParentTypes['Project']>, fundedApplications: Array<ResolversParentTypes['ImpactFundApplication']>, viewerApplications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplication: Omit<ImpactFundApplication, 'project'> & { project: ResolversParentTypes['Project'] };
+  ImpactFundApplicationFundingSetInput: ImpactFundApplicationFundingSetInput;
+  ImpactFundApplicationNote: ImpactFundApplicationNote;
+  ImpactFundApplicationNoteAuthor: ImpactFundApplicationNoteAuthor;
+  ImpactFundApplicationNoteCreateInput: ImpactFundApplicationNoteCreateInput;
+  ImpactFundApplicationNoteUpdateInput: ImpactFundApplicationNoteUpdateInput;
+  ImpactFundApplicationUpdateInput: ImpactFundApplicationUpdateInput;
   ImpactFundApplicationsGetResponse: Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
@@ -6683,6 +6754,7 @@ export type ResolversParentTypes = {
   ImpactFundDashboardApplicationsResponse: ImpactFundDashboardApplicationsResponse;
   ImpactFundDashboardCreator: ImpactFundDashboardCreator;
   ImpactFundDashboardProject: ImpactFundDashboardProject;
+  ImpactFundFundingSummaryRow: ImpactFundFundingSummaryRow;
   ImpactFundGetInput: ImpactFundGetInput;
   ImpactFundGetWhereInput: ImpactFundGetWhereInput;
   ImpactFundMetrics: ImpactFundMetrics;
@@ -6756,6 +6828,9 @@ export type ResolversParentTypes = {
   PaymentPendInput: PaymentPendInput;
   PaymentPendResponse: PaymentPendResponse;
   PaymentPendSwapInput: PaymentPendSwapInput;
+  PaymentRecoveryByContributionInput: PaymentRecoveryByContributionInput;
+  PaymentRecoveryByContributionResponse: Omit<PaymentRecoveryByContributionResponse, 'contribution' | 'project'> & { contribution: ResolversParentTypes['Contribution'], project: ResolversParentTypes['Project'] };
+  PaymentRecoveryPayment: PaymentRecoveryPayment;
   PaymentRefund: PaymentRefund;
   PaymentRefundCompleteInput: PaymentRefundCompleteInput;
   PaymentRefundCompleteResponse: PaymentRefundCompleteResponse;
@@ -6981,6 +7056,7 @@ export type ResolversParentTypes = {
   User: Omit<User, 'affiliatePartnerPayoutSummary' | 'contributions' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { affiliatePartnerPayoutSummary: ResolversParentTypes['AffiliatePartnerPayoutSummary'], contributions: Array<ResolversParentTypes['Contribution']>, ownerOf: Array<ResolversParentTypes['OwnerOf']>, projectFollows: Array<ResolversParentTypes['Project']>, projects: Array<ResolversParentTypes['Project']>, wallet?: Maybe<ResolversParentTypes['Wallet']> };
   UserAccountKeys: UserAccountKeys;
   UserAccountKeysUpdateInput: UserAccountKeysUpdateInput;
+  UserAccountPasswordFundsSummary: UserAccountPasswordFundsSummary;
   UserBadge: UserBadge;
   UserComplianceDetails: UserComplianceDetails;
   UserContributionLimit: UserContributionLimit;
@@ -7667,6 +7743,25 @@ export type ImpactFundApplicationResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ImpactFundApplicationNoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationNote'] = ResolversParentTypes['ImpactFundApplicationNote']> = {
+  applicationId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['ImpactFundApplicationNoteAuthor'], ParentType, ContextType>;
+  authorUserId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  canEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpactFundApplicationNoteAuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationNoteAuthor'] = ResolversParentTypes['ImpactFundApplicationNoteAuthor']> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ImpactFundApplicationsGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationsGetResponse'] = ResolversParentTypes['ImpactFundApplicationsGetResponse']> = {
   applications?: Resolver<Array<ResolversTypes['ImpactFundApplication']>, ParentType, ContextType>;
   pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
@@ -7675,9 +7770,14 @@ export type ImpactFundApplicationsGetResponseResolvers<ContextType = any, Parent
 };
 
 export type ImpactFundDashboardApplicationRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardApplicationRow'] = ResolversParentTypes['ImpactFundDashboardApplicationRow']> = {
+  amountAwardedInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   applicationId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  awardedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  contributionUuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['ImpactFundDashboardCreator']>, ParentType, ContextType>;
   fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
+  notes?: Resolver<Array<ResolversTypes['ImpactFundApplicationNote']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['ImpactFundDashboardProject'], ParentType, ContextType>;
   projectPath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ImpactFundApplicationStatus'], ParentType, ContextType>;
@@ -7686,6 +7786,7 @@ export type ImpactFundDashboardApplicationRowResolvers<ContextType = any, Parent
 
 export type ImpactFundDashboardApplicationsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardApplicationsResponse'] = ResolversParentTypes['ImpactFundDashboardApplicationsResponse']> = {
   applications?: Resolver<Array<ResolversTypes['ImpactFundDashboardApplicationRow']>, ParentType, ContextType>;
+  fundingSummary?: Resolver<Array<ResolversTypes['ImpactFundFundingSummaryRow']>, ParentType, ContextType>;
   pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -7700,13 +7801,24 @@ export type ImpactFundDashboardCreatorResolvers<ContextType = any, ParentType ex
 };
 
 export type ImpactFundDashboardProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardProject'] = ResolversParentTypes['ImpactFundDashboardProject']> = {
+  aonGoalAmount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
   country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   fundingStrategy?: Resolver<ResolversTypes['ProjectFundingStrategy'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpactFundFundingSummaryRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundFundingSummaryRow'] = ResolversParentTypes['ImpactFundFundingSummaryRow']> = {
+  applicationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  awardedTotalSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
+  fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7798,6 +7910,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createStripeConnectAccount?: Resolver<ResolversTypes['StripeConnectOnboardingPayload'], ParentType, ContextType, RequireFields<MutationCreateStripeConnectAccountArgs, 'projectId'>>;
   creatorNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreatorNotificationConfigurationValueUpdateArgs, 'creatorNotificationConfigurationId' | 'value'>>;
   grantApply?: Resolver<ResolversTypes['GrantApplicant'], ParentType, ContextType, Partial<MutationGrantApplyArgs>>;
+  impactFundApplicationFundingSet?: Resolver<ResolversTypes['ImpactFundApplication'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationFundingSetArgs, 'input'>>;
+  impactFundApplicationNoteCreate?: Resolver<ResolversTypes['ImpactFundApplicationNote'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationNoteCreateArgs, 'input'>>;
+  impactFundApplicationNoteUpdate?: Resolver<ResolversTypes['ImpactFundApplicationNote'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationNoteUpdateArgs, 'input'>>;
+  impactFundApplicationUpdate?: Resolver<ResolversTypes['ImpactFundApplication'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationUpdateArgs, 'input'>>;
   impactFundApply?: Resolver<ResolversTypes['ImpactFundApplication'], ParentType, ContextType, RequireFields<MutationImpactFundApplyArgs, 'input'>>;
   orderStatusUpdate?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationOrderStatusUpdateArgs, 'input'>>;
   paymentCancel?: Resolver<ResolversTypes['PaymentCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentCancelArgs, 'input'>>;
@@ -8144,6 +8260,24 @@ export type PaymentMethodsResolvers<ContextType = any, ParentType extends Resolv
 export type PaymentPendResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentPendResponse'] = ResolversParentTypes['PaymentPendResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentRecoveryByContributionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRecoveryByContributionResponse'] = ResolversParentTypes['PaymentRecoveryByContributionResponse']> = {
+  contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType>;
+  payments?: Resolver<Array<ResolversTypes['PaymentRecoveryPayment']>, ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentRecoveryPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRecoveryPayment'] = ResolversParentTypes['PaymentRecoveryPayment']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  paymentType?: Resolver<ResolversTypes['PaymentType'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PaymentStatus'], ParentType, ContextType>;
+  swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8959,6 +9093,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ordersStatsGet?: Resolver<ResolversTypes['OrdersStatsBase'], ParentType, ContextType, RequireFields<QueryOrdersStatsGetArgs, 'input'>>;
   payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType, RequireFields<QueryPaymentArgs, 'input'>>;
   paymentInvoiceSanctionCheckStatusGet?: Resolver<ResolversTypes['PaymentInvoiceSanctionCheckStatusResponse'], ParentType, ContextType, RequireFields<QueryPaymentInvoiceSanctionCheckStatusGetArgs, 'input'>>;
+  paymentRecoveryByContribution?: Resolver<ResolversTypes['PaymentRecoveryByContributionResponse'], ParentType, ContextType, RequireFields<QueryPaymentRecoveryByContributionArgs, 'input'>>;
   paymentRefundsGet?: Resolver<Maybe<ResolversTypes['PaymentRefundsGetResponse']>, ParentType, ContextType>;
   paymentsGet?: Resolver<ResolversTypes['PaymentsGetResponse'], ParentType, ContextType, Partial<QueryPaymentsGetArgs>>;
   paymentsInProgressGet?: Resolver<ResolversTypes['PaymentsInProgressGetResponse'], ParentType, ContextType>;
@@ -9006,6 +9141,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
   tagsMostFundedGet?: Resolver<Array<ResolversTypes['TagsMostFundedGetResult']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
+  userAccountPasswordFundsSummary?: Resolver<ResolversTypes['UserAccountPasswordFundsSummary'], ParentType, ContextType>;
   userBadge?: Resolver<Maybe<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgeArgs, 'userBadgeId'>>;
   userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
   userEmailIsAvailable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryUserEmailIsAvailableArgs, 'email'>>;
@@ -9253,6 +9389,14 @@ export type UserAccountKeysResolvers<ContextType = any, ParentType extends Resol
   rskKeyPair?: Resolver<ResolversTypes['RskKeyPair'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserAccountPasswordFundsSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountPasswordFundsSummary'] = ResolversParentTypes['UserAccountPasswordFundsSummary']> = {
+  aonUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  pledgedSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tiaUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  unclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9518,11 +9662,14 @@ export type Resolvers<ContextType = any> = {
   HeroStats?: HeroStatsResolvers<ContextType>;
   ImpactFund?: ImpactFundResolvers<ContextType>;
   ImpactFundApplication?: ImpactFundApplicationResolvers<ContextType>;
+  ImpactFundApplicationNote?: ImpactFundApplicationNoteResolvers<ContextType>;
+  ImpactFundApplicationNoteAuthor?: ImpactFundApplicationNoteAuthorResolvers<ContextType>;
   ImpactFundApplicationsGetResponse?: ImpactFundApplicationsGetResponseResolvers<ContextType>;
   ImpactFundDashboardApplicationRow?: ImpactFundDashboardApplicationRowResolvers<ContextType>;
   ImpactFundDashboardApplicationsResponse?: ImpactFundDashboardApplicationsResponseResolvers<ContextType>;
   ImpactFundDashboardCreator?: ImpactFundDashboardCreatorResolvers<ContextType>;
   ImpactFundDashboardProject?: ImpactFundDashboardProjectResolvers<ContextType>;
+  ImpactFundFundingSummaryRow?: ImpactFundFundingSummaryRowResolvers<ContextType>;
   ImpactFundMetrics?: ImpactFundMetricsResolvers<ContextType>;
   ImpactFundSponsor?: ImpactFundSponsorResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
@@ -9566,6 +9713,8 @@ export type Resolvers<ContextType = any> = {
   PaymentInvoiceSanctionCheckStatusResponse?: PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
   PaymentMethods?: PaymentMethodsResolvers<ContextType>;
   PaymentPendResponse?: PaymentPendResponseResolvers<ContextType>;
+  PaymentRecoveryByContributionResponse?: PaymentRecoveryByContributionResponseResolvers<ContextType>;
+  PaymentRecoveryPayment?: PaymentRecoveryPaymentResolvers<ContextType>;
   PaymentRefund?: PaymentRefundResolvers<ContextType>;
   PaymentRefundCompleteResponse?: PaymentRefundCompleteResponseResolvers<ContextType>;
   PaymentRefundsGetResponse?: PaymentRefundsGetResponseResolvers<ContextType>;
@@ -9684,6 +9833,7 @@ export type Resolvers<ContextType = any> = {
   TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserAccountKeys?: UserAccountKeysResolvers<ContextType>;
+  UserAccountPasswordFundsSummary?: UserAccountPasswordFundsSummaryResolvers<ContextType>;
   UserBadge?: UserBadgeResolvers<ContextType>;
   UserComplianceDetails?: UserComplianceDetailsResolvers<ContextType>;
   UserContributionLimit?: UserContributionLimitResolvers<ContextType>;
@@ -10349,14 +10499,14 @@ export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation',
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: any, projectsFundedCount: number } }> };
+export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
 
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
 }>;
 
 
-export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, canAccessDashboard: boolean, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: any, projectsFundedCount: number }, viewerApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, name: string, title: string } }> } };
+export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, canAccessDashboard: boolean, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number }, viewerApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, name: string, title: string } }> } };
 
 export type ImpactFundApplicationsQueryVariables = Exact<{
   input: ImpactFundApplicationsInput;
@@ -10370,7 +10520,7 @@ export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: any }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
@@ -12022,7 +12172,7 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
 export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: any, tiaUnclaimedFundsSats: any, aonUnclaimedFundsSats: any, pledgedSats: any } };
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
@@ -16975,6 +17125,24 @@ export const ImpactFundApplicationUpdateDocument = gql`
 }
     `;
 export type ImpactFundApplicationUpdateMutationFn = Apollo.MutationFunction<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>;
+
+/**
+ * __useImpactFundApplicationUpdateMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationUpdateMutation, { data, loading, error }] = useImpactFundApplicationUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
 export function useImpactFundApplicationUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>(ImpactFundApplicationUpdateDocument, options);
@@ -16993,6 +17161,24 @@ export const ImpactFundApplicationFundingSetDocument = gql`
 }
     `;
 export type ImpactFundApplicationFundingSetMutationFn = Apollo.MutationFunction<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>;
+
+/**
+ * __useImpactFundApplicationFundingSetMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationFundingSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationFundingSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationFundingSetMutation, { data, loading, error }] = useImpactFundApplicationFundingSetMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
 export function useImpactFundApplicationFundingSetMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>(ImpactFundApplicationFundingSetDocument, options);
@@ -17019,6 +17205,24 @@ export const ImpactFundApplicationNoteCreateDocument = gql`
 }
     `;
 export type ImpactFundApplicationNoteCreateMutationFn = Apollo.MutationFunction<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>;
+
+/**
+ * __useImpactFundApplicationNoteCreateMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationNoteCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationNoteCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationNoteCreateMutation, { data, loading, error }] = useImpactFundApplicationNoteCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
 export function useImpactFundApplicationNoteCreateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>(ImpactFundApplicationNoteCreateDocument, options);
@@ -17045,6 +17249,24 @@ export const ImpactFundApplicationNoteUpdateDocument = gql`
 }
     `;
 export type ImpactFundApplicationNoteUpdateMutationFn = Apollo.MutationFunction<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>;
+
+/**
+ * __useImpactFundApplicationNoteUpdateMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationNoteUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationNoteUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationNoteUpdateMutation, { data, loading, error }] = useImpactFundApplicationNoteUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
 export function useImpactFundApplicationNoteUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useMutation<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>(ImpactFundApplicationNoteUpdateDocument, options);
@@ -17295,10 +17517,10 @@ export const ImpactFundDashboardApplicationsDocument = gql`
         id
         name
         title
-          thumbnailImage
-          shortDescription
-          description
-          country
+        thumbnailImage
+        shortDescription
+        description
+        country
         category
         fundingStrategy
         aonGoalAmount
@@ -22855,6 +23077,14 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
  * To run a query within a React component, call `useUserAccountPasswordFundsSummaryQuery` and pass it any options that fit your needs.
  * When your component renders, `useUserAccountPasswordFundsSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserAccountPasswordFundsSummaryQuery({
+ *   variables: {
+ *   },
+ * });
  */
 export function useUserAccountPasswordFundsSummaryQuery(baseOptions?: Apollo.QueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
