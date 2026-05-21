@@ -61,7 +61,7 @@ export const ProjectFundingSummary = ({
   const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
   const referrerHeroId = useAtomValue(referrerHeroIdAtom)
 
-  const { formState, hasSelectedRewards, project } = useFundingFormAtom()
+  const { formState, hasSelectedRewards, isRecurringDonationMode, project } = useFundingFormAtom()
   const matchingPreview = useProjectMatchingPreview()
 
   const currentGoal =
@@ -118,9 +118,7 @@ export const ProjectFundingSummary = ({
   const donation =
     formState.donationAmount > 0 && formState.fundingMode !== recurringFundingModes.membership
       ? {
-          label: t(
-            formState.fundingMode === recurringFundingModes.recurringDonation ? 'Recurring donation' : 'Donation',
-          ),
+          label: t(isRecurringDonationMode ? 'Recurring donation' : 'Donation'),
           sats: formState.donationAmount,
           usdCents: formState.donationAmountUsdCent,
         }
@@ -166,21 +164,20 @@ export const ProjectFundingSummary = ({
     tip:
       tip.sats > 0
         ? {
-            label:
-              formState.fundingMode === recurringFundingModes.recurringDonation ? (
-                <HStack spacing={1}>
-                  <Body as="span" size={{ base: 'sm', lg: 'md' }} light>
-                    {t('Geyser tip')}
-                  </Body>
-                  <TooltipPopover text={t('Applies to the first payment only.')}>
-                    <HStack as="span" h="full" alignItems="center">
-                      <Icon as={PiInfo} />
-                    </HStack>
-                  </TooltipPopover>
-                </HStack>
-              ) : (
-                t('Geyser tip')
-              ),
+            label: isRecurringDonationMode ? (
+              <HStack spacing={1}>
+                <Body as="span" size={{ base: 'sm', lg: 'md' }} light>
+                  {t('Geyser tip')}
+                </Body>
+                <TooltipPopover text={t('Applies to the first payment only.')}>
+                  <HStack as="span" h="full" alignItems="center">
+                    <Icon as={PiInfo} />
+                  </HStack>
+                </TooltipPopover>
+              </HStack>
+            ) : (
+              t('Geyser tip')
+            ),
             sats: tip.sats,
             usdCents: tip.usdCents,
           }

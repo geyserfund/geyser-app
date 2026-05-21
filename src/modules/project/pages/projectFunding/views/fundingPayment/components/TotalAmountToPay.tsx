@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
-import { BitcoinQuote } from '@/types/index.ts'
+import type { BitcoinQuote } from '@/types/index.ts'
 
 import { commaFormatted, convertAmount } from '../../../../../../../utils'
 
@@ -27,7 +27,7 @@ export const TotalAmountToPay = ({
 
   return (
     <HStack w="full" justifyContent="center" sx={{ fontVariantNumeric: 'tabular-nums' }}>
-      <Body light>{t(' Total to pay')}: </Body>
+      <Body light>{` ${t('Total to pay')}: `}</Body>
 
       <Body>
         {`${commaFormatted(amountDueSats)} `}

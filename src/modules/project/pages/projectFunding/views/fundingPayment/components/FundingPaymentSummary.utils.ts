@@ -3,6 +3,7 @@ import type { FundingContributionPaymentDetailsFragment } from '@/types/index.ts
 
 import { PaymentMethods } from '../state/paymentMethodAtom.ts'
 
+/** Returns the active funding payment details for the selected payment method. */
 export const getActiveFundingPaymentDetails = (
   paymentMethod: PaymentMethods | undefined,
   fundingPaymentDetails: FundingContributionPaymentDetailsFragment,
@@ -18,6 +19,7 @@ export const getActiveFundingPaymentDetails = (
   return undefined
 }
 
+/** Returns the sats amount due from the active funding payment details. */
 export const getFundingPaymentAmountDueSats = (
   paymentMethod: PaymentMethods | undefined,
   fundingPaymentDetails: FundingContributionPaymentDetailsFragment,

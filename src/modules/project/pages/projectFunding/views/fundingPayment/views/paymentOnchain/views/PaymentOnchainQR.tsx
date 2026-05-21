@@ -9,7 +9,7 @@ import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundi
 import { currentOnChainToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { BitcoinQuote } from '@/types/index.ts'
+import type { BitcoinQuote } from '@/types/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../components/QRCodeComponent'

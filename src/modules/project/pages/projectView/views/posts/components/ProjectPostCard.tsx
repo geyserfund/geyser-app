@@ -1,112 +1,314 @@
-import { Badge, Box, HStack, Icon, Image, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Icon, Image, Link, SkeletonText, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
-import { useMemo } from 'react'
-import { Link } from 'react-router'
+import type { MouseEvent } from 'react'
+import { useMemo, useState } from 'react'
+import { PiLink } from 'react-icons/pi'
+import { useNavigate } from 'react-router'
 
+import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { PostStatus, ProjectPostFragment } from '@/types'
+import { FundingResourceType, PostStatus, ProjectPostFragment } from '@/types'
 import { toInt } from '@/utils'
 
+import { useWriteUpdateModal } from '../../../hooks/useWriteUpdateModal.ts'
+import { sourceResourceAtom } from '../../../state/sourceActivityAtom.ts'
+import { useOgPreview } from '../hooks/useOgPreview.ts'
 import { postTypeOptions } from '../utils/postTypeLabel.ts'
+import { extractDomain, isValidUrl } from '../utils/postUrlUtils.tsx'
 import { PostEditMenu } from './PostEditMenu.tsx'
 import { PostShare } from './PostShare.tsx'
+import { PostViewModal } from './PostViewModal.tsx'
 import { ProjectPostCardThumbnailPlaceholder } from './ProjectPostCardThumbnailPlaceholder.tsx'
+
+type InlineOgPreviewProps = {
+  url: string
+  isDraft: boolean
+  /** When true, the card already shows a hero image above — only domain + text below */
+  skipFeaturedImage?: boolean
+}
+
+/**
+ * Inline OG preview for link-only posts: 16:9 featured media (unless skipped), domain row,
+ * then title/description at the same typography as regular post bodies. Published cards
+ * wrap the preview in an external link with stopPropagation so the card modal does not open.
+ */
+const InlineOgPreview = ({ url, isDraft, skipFeaturedImage }: InlineOgPreviewProps) => {
+  const { data, loading, error } = useOgPreview(url)
+  const domain = extractDomain(url)
+  const ogImage = data?.image && !data.image.includes('default') ? data.image : null
+
+  const renderFeatured = () => {
+    if (skipFeaturedImage) return null
+
+    return (
+      <Box
+        w="full"
+        borderRadius="8px"
+        overflow="hidden"
+        border="1px solid"
+        borderColor="neutral1.6"
+        position="relative"
+        style={{ aspectRatio: '16/9' }}
+      >
+        {loading ? (
+          <SkeletonLayout position="absolute" top={0} left={0} w="full" h="full" borderRadius={0} />
+        ) : ogImage ? (
+          <Image
+            src={ogImage}
+            alt={data?.title ?? ''}
+            objectFit="cover"
+            w="full"
+            h="full"
+            position="absolute"
+            top={0}
+            left={0}
+          />
+        ) : (
+          <Box position="absolute" top={0} left={0} w="full" h="full" bg="neutral1.3" />
+        )}
+      </Box>
+    )
+  }
+
+  const showTextSkeleton = loading && (skipFeaturedImage || error)
+
+  const inner = (
+    <VStack w="full" alignItems="start" spacing={2}>
+      {renderFeatured()}
+      <HStack spacing={1} color="neutral1.9" w="full">
+        <Icon as={PiLink} fontSize="11px" flexShrink={0} />
+        <Body size="xs" muted isTruncated>
+          {data?.domain ?? domain}
+        </Body>
+      </HStack>
+      {showTextSkeleton && (
+        <VStack w="full" alignItems="start" spacing={1}>
+          <SkeletonLayout height="16px" width="90%" />
+          <SkeletonLayout height="16px" width="55%" />
+        </VStack>
+      )}
+      {!loading && !error && data?.title && (
+        <Body medium dark wordBreak="break-word" noOfLines={2}>
+          {data.title}
+        </Body>
+      )}
+      {!loading && !error && data?.description && (
+        <Body medium dark wordBreak="break-word" noOfLines={3}>
+          {data.description}
+        </Body>
+      )}
+    </VStack>
+  )
+
+  if (isDraft) {
+    return inner
+  }
+
+  return (
+    <Link
+      href={url}
+      isExternal
+      rel="noopener noreferrer"
+      display="block"
+      w="full"
+      _hover={{ textDecoration: 'none' }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {inner}
+    </Link>
+  )
+}
 
 type Props = {
   post: ProjectPostFragment
 }
 
+/** Card that displays a project post in the updates list. Clicking opens a full-content modal. */
 export const ProjectPostCard = ({ post }: Props) => {
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
+  const { openWriteUpdateModal } = useWriteUpdateModal()
+  const { handleBlockedContribution } = useBlockedProjectContribution(project)
+  const [sourceResource, setSourceResource] = useAtom(sourceResourceAtom)
+  const navigate = useNavigate()
 
-  const isDraft = useMemo(() => {
-    return post.status === PostStatus.Unpublished
-  }, [post.status])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const isDraft = useMemo(() => post.status === PostStatus.Unpublished, [post.status])
+
+  const descriptionTrimmed = post.description?.trim() ?? ''
+  const isLinkOnly = isValidUrl(descriptionTrimmed)
+
+  const handleCardClick = () => {
+    if (isDraft) {
+      openWriteUpdateModal(String(post.id))
+    } else {
+      setIsModalOpen(true)
+    }
+  }
+
+  const handleContributeClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (handleBlockedContribution(e)) return
+    if (!sourceResource.resourceId) {
+      setSourceResource({ resourceId: post.id, resourceType: FundingResourceType.Entry })
+    }
+
+    navigate(getPath('projectFunding', project.name))
+  }
 
   return (
     <>
       <CardLayout
-        hover
-        as={Link}
-        to={
-          isDraft
-            ? getPath('projectPostEdit', project.name, post.id)
-            : getPath('projectPostView', project.name, post.id)
-        }
         dense
         spacing={0}
         w="100%"
+        role="button"
+        aria-label={t('Open post: {{title}}', { title: post.title })}
+        data-group=""
+        cursor="pointer"
+        border="1px solid"
+        borderColor="transparent"
+        borderRadius="card"
+        boxShadow="none"
+        transition="box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease"
+        _hover={{
+          cursor: 'pointer',
+          transform: 'translateY(-3px)',
+          boxShadow: 'md',
+          borderColor: 'neutral1.6',
+        }}
+        onClick={handleCardClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleCardClick()
+          }
+        }}
+        tabIndex={0}
       >
-        {post.image && (
-          <Box w="full" maxHeight="330px" overflow="hidden">
-            <Image
-              objectFit="cover"
-              boxSize="100%"
-              src={post.image || ''}
-              alt={post.title}
-              fallback={<ProjectPostCardThumbnailPlaceholder />}
-            />
-          </Box>
-        )}
-        <VStack w="full" p={{ base: 3, lg: 6 }} spacing={3} alignItems="start">
-          <VStack w="full" spacing={2} alignItems="start">
-            <HStack spacing={2}>
-              <Body size="xl" medium dark>
-                {post.title}
-              </Body>
+        <VStack w="full" p={{ base: 3, lg: 4 }} spacing={2} alignItems="start">
+          {/* Type badge + date — always at the top */}
+          <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2}>
+            <HStack spacing={2} flexWrap="wrap">
               {isDraft && (
-                <Badge variant="soft" colorScheme="neutral1">
-                  Draft
+                <Badge variant="soft" colorScheme="orange">
+                  {t('Draft')}
+                </Badge>
+              )}
+              {post.postType && (
+                <Badge variant="soft" colorScheme="neutral1" gap={2}>
+                  <Icon as={postTypeOptions.find((o) => o.value === post.postType)?.icon} />
+                  {postTypeOptions.find((o) => o.value === post.postType)?.label}
+                </Badge>
+              )}
+              {isLinkOnly && (
+                <Badge variant="outline" colorScheme="neutral1" gap={1}>
+                  <Icon as={PiLink} />
+                  {t('Link')}
                 </Badge>
               )}
             </HStack>
-            {post.postType && (
-              <Badge variant="soft" colorScheme="neutral1" gap={2}>
-                <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />
-                {postTypeOptions.find((option) => option.value === post.postType)?.label}
-              </Badge>
-            )}
             {post.publishedAt && (
-              <Body size="sm" medium muted whiteSpace="nowrap">
+              <Body size="xs" muted>
                 {DateTime.fromMillis(toInt(post.publishedAt)).toFormat('dd LLL, yyyy')}
               </Body>
             )}
-          </VStack>
-          <Body medium dark wordBreak={'break-all'}>
-            {post.description}
-          </Body>
-          <HStack w="full" justifyContent={'end'}>
-            <PostEditMenu post={post} />
+          </HStack>
 
-            <PostShare size="md" post={post} project={project} />
+          {/* Media area — 16:9, bordered, uniform padding from outer VStack */}
+          {post.image && (
+            <Box
+              w="full"
+              borderRadius="8px"
+              overflow="hidden"
+              border="1px solid"
+              borderColor="neutral1.6"
+              position="relative"
+              style={{ aspectRatio: '16/9' }}
+            >
+              <Image
+                objectFit="cover"
+                w="full"
+                h="full"
+                position="absolute"
+                top={0}
+                left={0}
+                src={post.image}
+                alt={post.title}
+                fallback={<ProjectPostCardThumbnailPlaceholder />}
+                transition="transform 0.3s ease"
+                _groupHover={{ transform: 'scale(1.03)' }}
+              />
+            </Box>
+          )}
+
+          {/* Title — hidden when empty, default placeholder, or auto-derived from description */}
+          {!isLinkOnly && post.title && post.title !== 'Project update' && !(post.description?.trim() ?? '').startsWith(post.title) && (
+            <Body size="lg" medium dark>
+              {post.title}
+            </Body>
+          )}
+
+          {/* Description or inline OG link preview */}
+          {isLinkOnly ? (
+            <InlineOgPreview url={descriptionTrimmed} isDraft={isDraft} skipFeaturedImage={Boolean(post.image)} />
+          ) : (
+            post.description && (
+              <Body medium dark wordBreak="break-word" noOfLines={3}>
+                {post.description}
+              </Body>
+            )
+          )}
+
+          {/* Action buttons — visible on hover */}
+          <HStack w="full" justifyContent="flex-end" opacity={0} _groupHover={{ opacity: 1 }} transition="opacity 0.2s">
+            <PostEditMenu post={post} />
+            {!isDraft && <PostShare size="md" post={post} project={project} />}
+            {!isDraft && !isProjectOwner && (
+              <Button size="md" variant="solid" colorScheme="primary1" onClick={handleContributeClick}>
+                {t('Contribute')}
+              </Button>
+            )}
           </HStack>
         </VStack>
       </CardLayout>
+
+      {!isDraft && (
+        <PostViewModal postId={String(post.id)} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      )}
     </>
   )
 }
 
 export const ProjectPostCardSkeleton = () => {
   return (
-    <CardLayout dense spacing={0} w="100%">
-      <Box w="full" maxHeight="330px" overflow="hidden">
-        <SkeletonLayout w="full" height="full" />
-      </Box>
-
-      <VStack w="full" p={{ base: 3, lg: 6 }} spacing={3} alignItems="start">
-        <VStack w="full" spacing={2} alignItems="start">
-          <SkeletonLayout width="300px" height="30px" />
-          {[1, 2].map((key) => {
-            return <SkeletonLayout key={key} width="150px" height="24px" />
-          })}
-        </VStack>
-        <SkeletonText height="200px" width="full" />
-        <HStack w="full" justifyContent={'end'}>
-          <SkeletonLayout width="px" height="40px" />
+    <CardLayout dense spacing={0} w="100%" border="none" boxShadow="none">
+      <VStack w="full" p={{ base: 3, lg: 4 }} spacing={2} alignItems="start">
+        <HStack w="full" justifyContent="space-between">
+          <SkeletonLayout width="120px" height="24px" />
+          <SkeletonLayout width="80px" height="16px" />
+        </HStack>
+        <Box
+          w="full"
+          borderRadius="8px"
+          overflow="hidden"
+          border="1px solid"
+          borderColor="neutral1.6"
+          style={{ aspectRatio: '16/9' }}
+        >
+          <SkeletonLayout w="full" h="full" />
+        </Box>
+        <SkeletonLayout width="300px" height="24px" />
+        <SkeletonText height="80px" width="full" />
+        <HStack w="full" justifyContent="flex-end">
+          <SkeletonLayout width="80px" height="36px" />
         </HStack>
       </VStack>
     </CardLayout>

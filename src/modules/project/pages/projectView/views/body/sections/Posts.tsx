@@ -23,9 +23,9 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
   const sortedPosts =
     posts && posts.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
 
-  const hasMorePosts = sortedPosts.length > 3
+  const hasMorePosts = sortedPosts.length > 6
 
-  const postsToRender = hasMorePosts ? sortedPosts.slice(0, 3) : sortedPosts
+  const postsToRender = hasMorePosts ? sortedPosts.slice(0, 6) : sortedPosts
 
   if (loading || queryProjectPosts.loading || queryUnpublishedProjectPosts.loading || postsToRender.length === 0) {
     return null
@@ -39,7 +39,7 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
       {hasMorePosts && (
         <HStack w="full" justifyContent="center">
           <Button variant="soft" colorScheme="neutral1" as={Link} to={getPath('projectPosts', project.name)}>
-            {t('See all')} {`${posts.length} posts`}
+            {t('See all updates')}
           </Button>
         </HStack>
       )}

@@ -1,17 +1,18 @@
+import i18next from 'i18next'
 import { createStore } from 'jotai'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
 import { SATOSHIS_IN_BTC } from '@/shared/constants' // Import constant
 import { usdRateAtom } from '@/shared/state/btcRateAtom' // Correct import for usdRateAtom
 // Import types needed here
-import { RewardCurrency } from '@/types'
-import { dollarsToCents } from '@/utils/index.ts'
+import { ProjectFundingStrategy, RewardCurrency } from '@/types'
 
 // Import atoms under test
 import {
   fundingFormStateAtom,
   FundingProjectState,
+  isFundingInputAmountValidAtom,
   rewardsCostAtoms,
   setFundFormStateAtom,
   setFundFormTargetAtom,
@@ -64,6 +65,15 @@ const createTestStore = (projectData: FundingProjectState = mockProjectDataUsd) 
 describe('fundingFormAtom Tests', () => {
   let store: ReturnType<typeof createStore>
   // const SATOSHI_RATE = 100_000_000 // No longer needed for test calculations
+
+  beforeAll(async () => {
+    await i18next.init({
+      fallbackLng: 'en',
+      interpolation: { escapeValue: false },
+      resources: {},
+      returnNull: false,
+    })
+  })
 
   // Use describe.each or separate describe blocks for different project currencies
   describe('Project with Usdcent Rewards', () => {
@@ -597,7 +607,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.name).toBe('Monthly USD Supporter')
       expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 500 })
       expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
+      expect(totalUsdCent).toBe(calculateExpectedTotalUsdCent(totalSats, mockBitcoinQuote))
     })
 
     it('updateFundingFormSubscriptionAtom should add a SATS subscription', () => {
@@ -618,7 +628,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.name).toBe('Annual SATS Backer')
       expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 2500 })
       expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
+      expect(totalUsdCent).toBe(calculateExpectedTotalUsdCent(totalSats, mockBitcoinQuote))
     })
 
     it('updateFundingFormSubscriptionAtom should overwrite previous subscription', () => {
@@ -638,7 +648,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.amountBtcSat).toBe(expectedSubCostSats)
       expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 2500 })
       expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
+      expect(totalUsdCent).toBe(calculateExpectedTotalUsdCent(totalSats, mockBitcoinQuote))
     })
 
     it('updateFundingFormSubscriptionAtom totals reflect subscription cost over reward cost', () => {
@@ -657,16 +667,14 @@ describe('fundingFormAtom Tests', () => {
       const totalUsdCentWithSub = store.get(totalAmountUsdCentAtom)
       const derivedRewardCostsAfterSub = store.get(rewardsCostAtoms)
 
-      expect(tipAfterSub).toEqual(tipWithReward)
-      const expectedTotalSats = 0 + rewardCosts.sats + subCosts.sats + tipAfterSub.sats
+      expect(tipAfterSub).toEqual({ sats: 0, usdCents: 0 })
+      const expectedTotalSats = subCosts.sats
       expect(totalSatsWithSub).toBe(expectedTotalSats)
       expect(totalSatsWithSub).not.toBe(totalSatsWithReward)
-      const expectedTipUsdCent = Math.round(dollarsToCents((tipAfterSub.sats / SATOSHIS_IN_BTC) * mockUsdRate))
-      const expectedTotalUsdCent = 0 + rewardCosts.usdCents + subCosts.usdCents + expectedTipUsdCent
-      expect(totalUsdCentWithSub).toBe(expectedTotalUsdCent)
+      expect(totalUsdCentWithSub).toBe(calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote))
 
-      expect(stateWithSub.rewardsByIDAndCount).toEqual({ '101': 1 })
-      expect(derivedRewardCostsAfterSub.sats).toBe(rewardCosts.sats)
+      expect(stateWithSub.rewardsByIDAndCount).toEqual({})
+      expect(derivedRewardCostsAfterSub.sats).toBe(0)
     })
   })
 
@@ -737,5 +745,86 @@ describe('fundingFormAtom Tests', () => {
     expect(store.get(tipAtoms)).toEqual({ sats: expectedTipSats, usdCents: expectedTipUsdCent })
     expect(store.get(totalAmountSatsAtom)).toBe(expectedSats + expectedTipSats)
     expect(store.get(totalAmountUsdCentAtom)).toBe(newDonationUsdCent + expectedTipUsdCent)
+  })
+
+  describe('Funding input minimum validation', () => {
+    it('requires Take-it-all projects to meet a 2500 sats total payment minimum', () => {
+      store = createTestStore({
+        ...mockProjectDataUsd,
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+      })
+
+      store.set(setFundFormStateAtom, 'donationAmount', 2000)
+
+      expect(store.get(totalAmountSatsAtom)).toBe(2042)
+      expect(store.get(isFundingInputAmountValidAtom)).toEqual({
+        title: 'The payment minimum is 2500 satoshi.',
+        description: 'Please update the amount.',
+        valid: false,
+      })
+    })
+
+    it('allows Take-it-all projects at or above the 2500 sats total payment minimum', () => {
+      store = createTestStore({
+        ...mockProjectDataUsd,
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+      })
+
+      store.set(setFundFormStateAtom, 'donationAmount', 2450)
+
+      expect(store.get(totalAmountSatsAtom)).toBe(2501)
+      expect(store.get(isFundingInputAmountValidAtom)).toEqual({ title: '', description: '', valid: true })
+    })
+
+    it('keeps the existing $10 minimum for one-time All-or-Nothing projects', () => {
+      store = createTestStore({
+        ...mockProjectDataUsd,
+        fundingStrategy: ProjectFundingStrategy.AllOrNothing,
+      })
+
+      store.set(setFundFormStateAtom, 'donationAmount', 1500)
+
+      expect(store.get(isFundingInputAmountValidAtom)).toEqual({
+        title: 'Amount less than $10.',
+        description: 'The minimum amount for an All-or-Nothing project is $10.',
+        valid: false,
+      })
+    })
+
+    it('keeps the generic 1000 sats minimum for non-Take-it-all projects', () => {
+      store = createTestStore({
+        ...mockProjectDataUsd,
+        fundingStrategy: undefined,
+      })
+
+      store.set(setFundFormStateAtom, 'donationAmount', 900)
+
+      expect(store.get(totalAmountSatsAtom)).toBe(919)
+      expect(store.get(isFundingInputAmountValidAtom)).toEqual({
+        title: 'The payment minimum is 1000 satoshi.',
+        description: 'Please update the amount.',
+        valid: false,
+      })
+    })
+
+    it('still applies wallet-specific minimums after the strategy minimum passes', () => {
+      store = createTestStore({
+        ...mockProjectDataUsd,
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+        wallet: {
+          ...mockProjectDataUsd.wallet!,
+          limits: { contribution: { min: 3000, max: 10000000, onChain: { min: 5000, max: 5000000 } } },
+        },
+      })
+
+      store.set(setFundFormStateAtom, 'donationAmount', 2450)
+
+      expect(store.get(totalAmountSatsAtom)).toBe(2501)
+      expect(store.get(isFundingInputAmountValidAtom)).toEqual({
+        title: 'The payment minimum is 3000 satoshi.',
+        description: 'Please update the amount.',
+        valid: false,
+      })
+    })
   })
 })

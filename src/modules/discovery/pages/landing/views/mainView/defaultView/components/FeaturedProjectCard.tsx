@@ -65,6 +65,7 @@ export const FeaturedProjectCard = ({
         startAnimating={startAnimating}
         comment={data?.Featured_Comment || project.shortDescription || ''}
         author={isAON ? undefined : data?.Featured_Author}
+        imageAspectRatio={1}
         onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
         {...rest}
       >
