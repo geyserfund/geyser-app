@@ -16,7 +16,7 @@ import {
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { PaymentStatus, PaymentType } from '@/types/index.ts'
+import { BitcoinQuote, PaymentStatus, PaymentType } from '@/types/index.ts'
 import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../components/QRCodeComponent'
@@ -25,16 +25,33 @@ import { WaitingForPayment } from '../../components/WaitingForPayment'
 import { useTransactionStatusUpdate } from '../paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 
 export const PaymentLightning = () => {
+  const fundingContribution = useAtomValue(fundingContributionAtom)
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  const paymentRequest = fundingPaymentDetails.lightningToRskSwap?.paymentRequest
+  const amountDue = fundingPaymentDetails.lightningToRskSwap?.amountDue
 
-  if (!fundingPaymentDetails.lightningToRskSwap?.paymentRequest) {
+  if (!paymentRequest || !amountDue || amountDue <= 0) {
     return null
   }
 
-  return <PaymentLightningContent paymentRequest={fundingPaymentDetails.lightningToRskSwap.paymentRequest} />
+  return (
+    <PaymentLightningContent
+      paymentRequest={paymentRequest}
+      amountDueSats={amountDue}
+      bitcoinQuote={fundingContribution.bitcoinQuote}
+    />
+  )
 }
 
-export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: string }) => {
+export const PaymentLightningContent = ({
+  paymentRequest,
+  amountDueSats,
+  bitcoinQuote,
+}: {
+  paymentRequest: string
+  amountDueSats: number
+  bitcoinQuote?: BitcoinQuote | null
+}) => {
   useListenFundingContributionSuccess()
 
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
@@ -81,7 +98,7 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
   return (
     <VStack w="full">
       <QRCodeComponent value={paymentRequest} onClick={handleLightningPayment} isColored={hasCopied} />
-      <TotalAmountToPay />
+      <TotalAmountToPay amountDueSats={amountDueSats} bitcoinQuote={bitcoinQuote} />
       <VStack w="full" spacing={6} pt={4}>
         <WaitingForPayment />
         <Button

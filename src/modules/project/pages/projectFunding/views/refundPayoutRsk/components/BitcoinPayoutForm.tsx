@@ -1,8 +1,8 @@
 import { Collapse, HStack, Icon, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useState } from 'react'
-import { PiQuestion } from 'react-icons/pi'
 import { UseFormReturn } from 'react-hook-form'
+import { PiQuestion } from 'react-icons/pi'
 
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -33,7 +33,7 @@ export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({
       {showBitcoinAddress && (
         <ControlledTextInput
           name="bitcoinAddress"
-          label={t('Enter your Bitcoin address')}
+          label={t('Bitcoin address')}
           control={control}
           size="md"
           isDisabled={disableBitcoinAddress}
@@ -43,8 +43,8 @@ export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({
       {!disablePassword && (
         <VStack w="full" spacing={2} alignItems="start">
           <HStack spacing={2} alignItems="center">
-            <Body size="md" medium>
-              {t('Enter your account password')}
+            <Body size="sm" color="neutral1.11">
+              {t('Account password')}
             </Body>
             <Tooltip label={t('This is the password you configured during your project setup.')} hasArrow>
               <span>

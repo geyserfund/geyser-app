@@ -32,6 +32,7 @@ import {
   ConfigureUserWalletModal,
   hasConfiguredUserWallet,
 } from '@/modules/profile/pages/profileSettings/components/ConfigureUserWalletModal.tsx'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -187,7 +188,7 @@ export const ProfileSettingsAffiliate = () => {
               icon={PiLightning}
               title={t('Enabling contributions')}
               description={t(
-                'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Geyser promotion network contributions.',
+                'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Ambassador Network contributions.',
                 {
                   rate: formatEffectiveAffiliatePayoutRate(contributionReferralPayoutRate, GEYSER_PROMOTION_FEE_RATE),
                 },
@@ -222,7 +223,9 @@ export const ProfileSettingsAffiliate = () => {
               <ChakraLink as={Link} to={getPath('userProfileSettingsWallet', userId || '')} color="primary1.9">
                 {t('Wallet')}
               </ChakraLink>{' '}
-              {t('page.')}
+              {t('page. Payouts are only processed after a minimum of ${{minPayout}} is reached.', {
+                minPayout: MIN_BITCOIN_PAYOUT_USD,
+              })}
             </Body>
             {!hasUserWalletConfigured ? (
               <Feedback variant={FeedBackVariant.WARNING} noIcon>

@@ -44,7 +44,7 @@ export const GeyserPromotionSection = () => {
     [project.id, updateProject, toast],
   )
 
-  // Fetch Geyser Promotion Contribution Stats using the generated hook
+  // Fetch Geyser Ambassador Network Promotion Contribution Stats using the generated hook
   const { data: promotionStatsData, loading: promotionStatsLoading } = useGeyserPromotionsContributionStatsQuery({
     variables: {
       input: {
@@ -76,7 +76,7 @@ export const GeyserPromotionSection = () => {
     displayedContributionSumUsd !== undefined ? formatAmount(displayedContributionSumUsd, FormatCurrencyType.Usd) : null
   const contributionSummary = formattedContributionAmount
     ? hasProjectPromotionContributions
-      ? t('{{amount}} has been enabled through Geyser promotions on this project so far.', {
+      ? t('{{amount}} has been enabled through Geyser Ambassador Network promotions on this project so far.', {
           amount: formattedContributionAmount,
         })
       : t('{{amount}} has been enabled through the Promotion Network so far.', {
