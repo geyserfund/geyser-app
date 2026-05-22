@@ -28,13 +28,13 @@ export const PromotionNetworkSettingsCard = ({
         <HStack w="full" justifyContent="space-between" alignItems="center">
           <HStack>
             <Body size="lg" medium>
-              {t('Ambassador Network Promotion')}
+              {t('Geyser Ambassador Network')}
             </Body>
             <Body size="lg" medium color="neutral1.8">
               {t('10% fee')}
             </Body>
             <Tooltip
-              label={t('The fee is only applied to contributions enabled through Ambassador Network promotions')}
+              label={t('The fee is only applied to contributions enabled through Geyser Ambassador Network promotions')}
               placement="top"
             >
               <IconButton
