@@ -56,6 +56,7 @@ type RefundRskProps = {
   rskAddress?: string
   privateKey?: string
   publicKey?: string
+  anonymousRecoveryCode?: string
   onCompleted?: () => void
 }
 
@@ -203,6 +204,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   rskAddress,
   privateKey,
   publicKey,
+  anonymousRecoveryCode,
   onCompleted,
 }) => {
   const toast = useNotification()
@@ -214,6 +216,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const refundFileAccountKeys = privateKey
     ? ({ derivationPath: '', address: rskAddress, privateKey, publicKey } as AccountKeys)
     : undefined
+  const hasRecoveredAccountKeys = Boolean(refundFileAccountKeys)
 
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -469,6 +472,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
     if (activeOnChainPayment && latestOnChainPaymentDetails) {
       const paymentDetails = latestOnChainPaymentDetails
+      const preimagePassword = anonymousRecoveryCode || data.accountPassword || ''
 
       const swapObj = JSON.parse(paymentDetails.swapMetadata)
 
@@ -477,7 +481,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       swapObj.preimageHash = paymentDetails.swapPreimageHash
       swapObj.preimageHex = await decryptString({
         encryptedString: swapObj.preimageHexEncrypted || '',
-        password: data.accountPassword || '',
+        password: preimagePassword,
       })
       swapObj.paymentId = activeOnChainPayment.id
       setSwapData(swapObj)
@@ -499,10 +503,11 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       // TODO: Implement actual Bitcoin on-chain refund API call
 
       const { preimageHash, preimageHex } = generatePreImageHash()
+      const preimagePassword = anonymousRecoveryCode || data.accountPassword || ''
 
       const preimageHexEncrypted = await encryptString({
         plainText: preimageHex,
-        password: data.accountPassword || '',
+        password: preimagePassword,
       })
 
       const amount =
@@ -770,10 +775,12 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     shouldShowContinueRefundPrompt,
     shouldResumeOnChainRefund,
     shouldRequestBitcoinAddressOnResume,
+    hasRecoveredAccountKeys,
   })
   const submitLabel = getRefundSubmitLabel({
     shouldResumeOnChainRefund,
     shouldRequestBitcoinAddressOnResume,
+    hasRecoveredAccountKeys,
   })
   const modalDescription = shouldResumeOnChainRefund
     ? undefined
@@ -896,20 +903,21 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                   <BitcoinPayoutForm
                     form={bitcoinForm.form}
                     satsAmount={totalAmount}
+                    disablePassword={hasRecoveredAccountKeys}
                     disableBitcoinAddress={shouldResumeOnChainRefund && !shouldRequestBitcoinAddressOnResume}
                     showBitcoinAddress={!shouldResumeOnChainRefund || shouldRequestBitcoinAddressOnResume}
                   />
                 ) : selectedMethod === PayoutMethod.Lightning ? (
                   <LightningPayoutForm
                     form={lightningForm.form}
-                    disablePassword={Boolean(privateKey)}
+                    disablePassword={hasRecoveredAccountKeys}
                     lightningAddress={lightningForm.lightningAddress}
                   />
                 ) : (
                   <BitcoinPayoutForm
                     form={bitcoinForm.form}
                     satsAmount={totalAmount}
-                    disablePassword={Boolean(privateKey)}
+                    disablePassword={hasRecoveredAccountKeys}
                     disableBitcoinAddress={false}
                     showBitcoinAddress={true}
                   />
@@ -984,8 +992,14 @@ function getRefundModalTitle(params: {
   shouldShowContinueRefundPrompt: boolean
   shouldResumeOnChainRefund: boolean
   shouldRequestBitcoinAddressOnResume: boolean
+  hasRecoveredAccountKeys: boolean
 }): string | undefined {
-  const { shouldShowContinueRefundPrompt, shouldResumeOnChainRefund, shouldRequestBitcoinAddressOnResume } = params
+  const {
+    shouldShowContinueRefundPrompt,
+    shouldResumeOnChainRefund,
+    shouldRequestBitcoinAddressOnResume,
+    hasRecoveredAccountKeys,
+  } = params
 
   // The continue-refund prompt uses a `heading` override, so no secondary title needed.
   if (shouldShowContinueRefundPrompt) {
@@ -997,7 +1011,7 @@ function getRefundModalTitle(params: {
     return undefined
   }
 
-  if (shouldRequestBitcoinAddressOnResume) {
+  if (shouldRequestBitcoinAddressOnResume || hasRecoveredAccountKeys) {
     return t('Resume your refund')
   }
 
@@ -1007,14 +1021,15 @@ function getRefundModalTitle(params: {
 function getRefundSubmitLabel(params: {
   shouldResumeOnChainRefund: boolean
   shouldRequestBitcoinAddressOnResume: boolean
+  hasRecoveredAccountKeys: boolean
 }): string {
-  const { shouldResumeOnChainRefund, shouldRequestBitcoinAddressOnResume } = params
+  const { shouldResumeOnChainRefund, shouldRequestBitcoinAddressOnResume, hasRecoveredAccountKeys } = params
 
   if (!shouldResumeOnChainRefund) {
     return t('Confirm refund method')
   }
 
-  if (shouldRequestBitcoinAddressOnResume) {
+  if (shouldRequestBitcoinAddressOnResume || hasRecoveredAccountKeys) {
     return t('Resume my refund')
   }
 

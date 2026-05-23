@@ -419,6 +419,7 @@ export type ContributionLightningToRskSwapPaymentDetailsBoltzInput = {
   claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  recovery?: InputMaybe<ContributionSwapRecoveryInput>;
 };
 
 export type ContributionLightningToRskSwapPaymentDetailsInput = {
@@ -475,6 +476,7 @@ export type ContributionOnChainToRskSwapPaymentDetailsBoltzInput = {
   claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  recovery?: InputMaybe<ContributionSwapRecoveryInput>;
 };
 
 export type ContributionOnChainToRskSwapPaymentDetailsInput = {
@@ -525,6 +527,14 @@ export type ContributionStatusUpdatedInput = {
 export type ContributionStatusUpdatedSubscriptionResponse = {
   __typename?: 'ContributionStatusUpdatedSubscriptionResponse';
   contribution: Contribution;
+};
+
+export type ContributionSwapRecoveryInput = {
+  contributorRskAddress: Scalars['String']['input'];
+  contributorRskPublicKey: Scalars['String']['input'];
+  encryptedPrivateKey: Scalars['String']['input'];
+  encryptionAlgorithm: Scalars['String']['input'];
+  encryptionVersion: Scalars['String']['input'];
 };
 
 export type ContributionsGetResponse = {
@@ -2788,6 +2798,28 @@ export type PaymentPendSwapInput = {
   swapUserLockTxId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type PaymentRecoveryByContributionInput = {
+  contributionUuid: Scalars['String']['input'];
+};
+
+export type PaymentRecoveryByContributionResponse = {
+  __typename?: 'PaymentRecoveryByContributionResponse';
+  contribution: Contribution;
+  payments: Array<PaymentRecoveryPayment>;
+  project: Project;
+};
+
+export type PaymentRecoveryPayment = {
+  __typename?: 'PaymentRecoveryPayment';
+  amount: Scalars['Int']['output'];
+  id: Scalars['BigInt']['output'];
+  paymentType: PaymentType;
+  status: PaymentStatus;
+  swapId: Scalars['String']['output'];
+  swapMetadata: Scalars['String']['output'];
+  uuid: Scalars['String']['output'];
+};
+
 export type PaymentRefund = {
   __typename?: 'PaymentRefund';
   amount: Scalars['Int']['output'];
@@ -4480,6 +4512,7 @@ export type Query = {
   ordersStatsGet: OrdersStatsBase;
   payment: Payment;
   paymentInvoiceSanctionCheckStatusGet: PaymentInvoiceSanctionCheckStatusResponse;
+  paymentRecoveryByContribution: PaymentRecoveryByContributionResponse;
   paymentRefundsGet?: Maybe<PaymentRefundsGetResponse>;
   paymentsGet: PaymentsGetResponse;
   /**
@@ -4689,6 +4722,11 @@ export type QueryPaymentArgs = {
 
 export type QueryPaymentInvoiceSanctionCheckStatusGetArgs = {
   input: PaymentInvoiceSanctionCheckStatusGetInput;
+};
+
+
+export type QueryPaymentRecoveryByContributionArgs = {
+  input: PaymentRecoveryByContributionInput;
 };
 
 
@@ -6009,6 +6047,7 @@ export type ResolversTypes = {
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
+  ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: ResolverTypeWrapper<Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversTypes['Contribution']> }>;
   ContributionsSummary: ResolverTypeWrapper<ContributionsSummary>;
   ContributionsSummaryPeriod: ContributionsSummaryPeriod;
@@ -6231,6 +6270,9 @@ export type ResolversTypes = {
   PaymentPendInput: PaymentPendInput;
   PaymentPendResponse: ResolverTypeWrapper<PaymentPendResponse>;
   PaymentPendSwapInput: PaymentPendSwapInput;
+  PaymentRecoveryByContributionInput: PaymentRecoveryByContributionInput;
+  PaymentRecoveryByContributionResponse: ResolverTypeWrapper<Omit<PaymentRecoveryByContributionResponse, 'contribution' | 'project'> & { contribution: ResolversTypes['Contribution'], project: ResolversTypes['Project'] }>;
+  PaymentRecoveryPayment: ResolverTypeWrapper<PaymentRecoveryPayment>;
   PaymentRefund: ResolverTypeWrapper<PaymentRefund>;
   PaymentRefundCompleteInput: PaymentRefundCompleteInput;
   PaymentRefundCompleteResponse: ResolverTypeWrapper<PaymentRefundCompleteResponse>;
@@ -6622,6 +6664,7 @@ export type ResolversParentTypes = {
   ContributionPaymentsInput: ContributionPaymentsInput;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
+  ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
   ContributionsSummary: ContributionsSummary;
   ContributorContributionsSummary: ContributorContributionsSummary;
@@ -6809,6 +6852,9 @@ export type ResolversParentTypes = {
   PaymentPendInput: PaymentPendInput;
   PaymentPendResponse: PaymentPendResponse;
   PaymentPendSwapInput: PaymentPendSwapInput;
+  PaymentRecoveryByContributionInput: PaymentRecoveryByContributionInput;
+  PaymentRecoveryByContributionResponse: Omit<PaymentRecoveryByContributionResponse, 'contribution' | 'project'> & { contribution: ResolversParentTypes['Contribution'], project: ResolversParentTypes['Project'] };
+  PaymentRecoveryPayment: PaymentRecoveryPayment;
   PaymentRefund: PaymentRefund;
   PaymentRefundCompleteInput: PaymentRefundCompleteInput;
   PaymentRefundCompleteResponse: PaymentRefundCompleteResponse;
@@ -8243,6 +8289,24 @@ export type PaymentPendResponseResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PaymentRecoveryByContributionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRecoveryByContributionResponse'] = ResolversParentTypes['PaymentRecoveryByContributionResponse']> = {
+  contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType>;
+  payments?: Resolver<Array<ResolversTypes['PaymentRecoveryPayment']>, ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentRecoveryPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRecoveryPayment'] = ResolversParentTypes['PaymentRecoveryPayment']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  paymentType?: Resolver<ResolversTypes['PaymentType'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PaymentStatus'], ParentType, ContextType>;
+  swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PaymentRefundResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRefund'] = ResolversParentTypes['PaymentRefund']> = {
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -9071,6 +9135,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ordersStatsGet?: Resolver<ResolversTypes['OrdersStatsBase'], ParentType, ContextType, RequireFields<QueryOrdersStatsGetArgs, 'input'>>;
   payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType, RequireFields<QueryPaymentArgs, 'input'>>;
   paymentInvoiceSanctionCheckStatusGet?: Resolver<ResolversTypes['PaymentInvoiceSanctionCheckStatusResponse'], ParentType, ContextType, RequireFields<QueryPaymentInvoiceSanctionCheckStatusGetArgs, 'input'>>;
+  paymentRecoveryByContribution?: Resolver<ResolversTypes['PaymentRecoveryByContributionResponse'], ParentType, ContextType, RequireFields<QueryPaymentRecoveryByContributionArgs, 'input'>>;
   paymentRefundsGet?: Resolver<Maybe<ResolversTypes['PaymentRefundsGetResponse']>, ParentType, ContextType>;
   paymentsGet?: Resolver<ResolversTypes['PaymentsGetResponse'], ParentType, ContextType, Partial<QueryPaymentsGetArgs>>;
   paymentsInProgressGet?: Resolver<ResolversTypes['PaymentsInProgressGetResponse'], ParentType, ContextType>;
@@ -9691,6 +9756,8 @@ export type Resolvers<ContextType = any> = {
   PaymentInvoiceSanctionCheckStatusResponse?: PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
   PaymentMethods?: PaymentMethodsResolvers<ContextType>;
   PaymentPendResponse?: PaymentPendResponseResolvers<ContextType>;
+  PaymentRecoveryByContributionResponse?: PaymentRecoveryByContributionResponseResolvers<ContextType>;
+  PaymentRecoveryPayment?: PaymentRecoveryPaymentResolvers<ContextType>;
   PaymentRefund?: PaymentRefundResolvers<ContextType>;
   PaymentRefundCompleteResponse?: PaymentRefundCompleteResponseResolvers<ContextType>;
   PaymentRefundsGetResponse?: PaymentRefundsGetResponseResolvers<ContextType>;
@@ -11846,6 +11913,13 @@ export type PaymentByOnChainSwapIdQueryVariables = Exact<{
 
 
 export type PaymentByOnChainSwapIdQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: any } };
+
+export type PaymentRecoveryByContributionQueryVariables = Exact<{
+  input: PaymentRecoveryByContributionInput;
+}>;
+
+
+export type PaymentRecoveryByContributionQuery = { __typename?: 'Query', paymentRecoveryByContribution: { __typename?: 'PaymentRecoveryByContributionResponse', contribution: { __typename?: 'Contribution', id: any, uuid?: string | null, projectId: any, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null }, project: { __typename?: 'Project', id: any, name: string, title: string, fundingStrategy?: ProjectFundingStrategy | null }, payments: Array<{ __typename?: 'PaymentRecoveryPayment', id: any, uuid: string, status: PaymentStatus, paymentType: PaymentType, amount: number, swapId: string, swapMetadata: string }> } };
 
 export type ProjectPostsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -21650,6 +21724,70 @@ export type PaymentByOnChainSwapIdQueryHookResult = ReturnType<typeof usePayment
 export type PaymentByOnChainSwapIdLazyQueryHookResult = ReturnType<typeof usePaymentByOnChainSwapIdLazyQuery>;
 export type PaymentByOnChainSwapIdSuspenseQueryHookResult = ReturnType<typeof usePaymentByOnChainSwapIdSuspenseQuery>;
 export type PaymentByOnChainSwapIdQueryResult = Apollo.QueryResult<PaymentByOnChainSwapIdQuery, PaymentByOnChainSwapIdQueryVariables>;
+export const PaymentRecoveryByContributionDocument = gql`
+    query PaymentRecoveryByContribution($input: PaymentRecoveryByContributionInput!) {
+  paymentRecoveryByContribution(input: $input) {
+    contribution {
+      id
+      uuid
+      projectId
+      createdAt
+      bitcoinQuote {
+        quote
+        quoteCurrency
+      }
+    }
+    project {
+      id
+      name
+      title
+      fundingStrategy
+    }
+    payments {
+      id
+      uuid
+      status
+      paymentType
+      amount
+      swapId
+      swapMetadata
+    }
+  }
+}
+    `;
+
+/**
+ * __usePaymentRecoveryByContributionQuery__
+ *
+ * To run a query within a React component, call `usePaymentRecoveryByContributionQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentRecoveryByContributionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentRecoveryByContributionQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentRecoveryByContributionQuery(baseOptions: Apollo.QueryHookOptions<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables> & ({ variables: PaymentRecoveryByContributionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>(PaymentRecoveryByContributionDocument, options);
+      }
+export function usePaymentRecoveryByContributionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>(PaymentRecoveryByContributionDocument, options);
+        }
+export function usePaymentRecoveryByContributionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>(PaymentRecoveryByContributionDocument, options);
+        }
+export type PaymentRecoveryByContributionQueryHookResult = ReturnType<typeof usePaymentRecoveryByContributionQuery>;
+export type PaymentRecoveryByContributionLazyQueryHookResult = ReturnType<typeof usePaymentRecoveryByContributionLazyQuery>;
+export type PaymentRecoveryByContributionSuspenseQueryHookResult = ReturnType<typeof usePaymentRecoveryByContributionSuspenseQuery>;
+export type PaymentRecoveryByContributionQueryResult = Apollo.QueryResult<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>;
 export const ProjectPostsDocument = gql`
     query ProjectPosts($where: UniqueProjectQueryInput!, $input: ProjectPostsGetInput) {
   projectGet(where: $where) {
