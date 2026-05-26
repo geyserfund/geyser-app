@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
 import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
+import { shouldShowProjectGoals } from '@/modules/project/utils/shouldShowProjectGoals.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
@@ -30,8 +31,8 @@ import {
   type ProjectImpactFundRecipient,
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
-import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
+import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
 export const ProjectBody = () => {
@@ -86,7 +87,7 @@ export const ProjectBody = () => {
 
         {project.rewardsCount && <Rewards />}
         {project.entriesCount && <Posts />}
-        {project.goalsCount && <Goals />}
+        {shouldShowProjectGoals(project) && <Goals />}
         <Details />
         <AonGoToRefundPage />
 

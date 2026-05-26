@@ -21,9 +21,10 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
-import { BackToProjectRow } from './components/BackToProjectRow.tsx'
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom.ts'
+import { shouldShowProjectGoals } from '../utils/shouldShowProjectGoals.ts'
+import { BackToProjectRow } from './components/BackToProjectRow.tsx'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {
@@ -42,6 +43,7 @@ export const ProjectNavigation = () => {
   const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
 
   const showProjectNavBarForDesktop = useAtomValue(showProjectNavBarForDesktopAtom)
+  const showGoalsNavItem = shouldShowProjectGoals(project)
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonList = [
@@ -75,7 +77,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (project.goalsCount) {
+    if (showGoalsNavItem) {
       buttonList.push({
         name: 'Goals',
         path: PathName.projectGoals,
@@ -112,7 +114,7 @@ export const ProjectNavigation = () => {
     isDraftUrl,
     navigate,
     project.entriesCount,
-    project.goalsCount,
+    showGoalsNavItem,
   ])
 
   const activeButtonIndex = useMemo(() => {
