@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { createSubscriber } from '@/api/index.ts'
+import { DEFAULT_BEEHIIV_NEWSLETTER_TAGS } from '@/shared/constants/beehiiv.ts'
+import { useBeehiivNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -17,6 +18,7 @@ type SubscriptionFormData = {
 
 export const useEmailForm = () => {
   const toast = useNotification()
+  const [subscribeToBeehiivNewsletter] = useBeehiivNewsletterSubscribeMutation()
 
   const {
     control,
@@ -34,13 +36,17 @@ export const useEmailForm = () => {
   const onSubmit = async (data: SubscriptionFormData) => {
     try {
       setSubmitting(true)
-      let records = {} as any
-
-      records = {
-        email: data.email,
-      }
-
-      await createSubscriber(records)
+      await subscribeToBeehiivNewsletter({
+        variables: {
+          input: {
+            email: data.email,
+            newsletterMonthly: true,
+            productUpdates: true,
+            projectSpotlights: true,
+            tags: DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
+          },
+        },
+      })
 
       setSubscribed(true)
 

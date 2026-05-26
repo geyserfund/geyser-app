@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { BeehiivTag } from '@/shared/constants/beehiiv.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { SubscriptionForm } from '@/shared/molecules/forms/SubscriptionForm.tsx'
-
-const GRANTS_SEGMENT_ID = '68023256928533361c8184e9'
 
 /** Section prompting users to subscribe to upcoming grant notifications or make a one-off contribution */
 export const GrantSubscriptionSection = () => {
@@ -59,7 +58,7 @@ export const GrantSubscriptionSection = () => {
       </CardLayout>
       <SubscriptionForm
         title={t('Subscribe to Geyser Grants')}
-        segmentIds={[GRANTS_SEGMENT_ID]}
+        tags={[BeehiivTag.IMPACT_FUND_GRANTEE]}
         {...subscriptionModal}
       />
     </>

@@ -23,8 +23,9 @@ import { Trans, useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 
-import { createSubscriber } from '../../api'
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../shared/constants'
+import { BeehiivTag, DEFAULT_BEEHIIV_NEWSLETTER_TAGS } from '../../shared/constants/beehiiv'
+import { useBeehiivNewsletterSubscribeMutation } from '../../types'
 import { useMobileMode, useNotification, validateEmail } from '../../utils'
 import { ButtonComponent, TextInputBox } from '../ui'
 
@@ -37,12 +38,11 @@ interface ISubscribe {
   titleSize?: string
 }
 
-const SUBSCRIBERS_SEGMENT_ID = '657d655a3d5e2300da54a743'
-
 export const Subscribe = ({ isOpen, onClose, style, interest, parentState, titleSize }: ISubscribe) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const isMobile = useMobileMode()
+  const [subscribeToBeehiivNewsletter] = useBeehiivNewsletterSubscribeMutation()
   const [submitting, setSubmitting] = useState(false)
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
@@ -65,21 +65,17 @@ export const Subscribe = ({ isOpen, onClose, style, interest, parentState, title
 
     try {
       setSubmitting(true)
-      let records = {} as any
-      if (interest === 'grants') {
-        records = {
-          email,
-          custom_fields: {
-            interest: 'grants',
+      await subscribeToBeehiivNewsletter({
+        variables: {
+          input: {
+            email,
+            newsletterMonthly: true,
+            productUpdates: true,
+            projectSpotlights: true,
+            tags: interest === 'grants' ? [BeehiivTag.IMPACT_FUND_GRANTEE] : DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
           },
-        }
-      } else {
-        records = { email }
-      }
-
-      records.segment_ids = [SUBSCRIBERS_SEGMENT_ID]
-
-      await createSubscriber(records)
+        },
+      })
 
       setSubmitting(false)
       setSuccess(true)

@@ -21,17 +21,17 @@ import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks'
 import { useFollowedProjectsValue } from '@/modules/auth/state'
 import { HorizontalFormField } from '@/modules/profile/pages/profileSettings/common/HorizontalFormField'
-import {
-  UserConfigName,
-  UserNotificationType,
-  useUserNotificationSettings,
-} from '@/modules/profile/pages/profileSettings/hooks/useUserNotificationSettings'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
+import { DEFAULT_BEEHIIV_NEWSLETTER_TAGS } from '@/shared/constants/beehiiv.ts'
 import { lightModeColors } from '@/shared/styles'
-import { useUserEmailIsAvailableLazyQuery } from '@/types'
-import { validEmail } from '@/utils'
+import {
+  useBeehiivNewsletterPreferencesGetQuery,
+  useBeehiivNewsletterSubscribeMutation,
+  useUserEmailIsAvailableLazyQuery,
+} from '@/types'
+import { useNotification, validEmail } from '@/utils'
 
 import { FieldContainer } from '../../../../../../../shared/components/form/FieldContainer'
 
@@ -45,6 +45,7 @@ const EMAIL_VALIDATION_STATE = {
 export const FundingDetailsUserEmailAndUpdates = () => {
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
+  const toast = useNotification()
   const followedProjects = useFollowedProjectsValue()
 
   const {
@@ -64,9 +65,18 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const [followsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
   const [userId] = useState(user?.id || 0)
 
-  const { getUserNotificationConfigValue } = useUserNotificationSettings(userId)
+  const { data: newsletterPreferencesData } = useBeehiivNewsletterPreferencesGetQuery({
+    skip: !isLoggedIn || !userId || !user?.email,
+    variables: { userId },
+  })
+  const [subscribeToBeehiivNewsletter, { loading: subscribingToBeehiivNewsletter }] =
+    useBeehiivNewsletterSubscribeMutation()
+  const newsletterPreferences = newsletterPreferencesData?.beehiivNewsletterPreferencesGet
   const subscribedToGeyserEmails =
-    getUserNotificationConfigValue(UserNotificationType.PRODUCT_UPDATES, UserConfigName.IS_ENABLED) === 'true'
+    newsletterPreferences?.status === 'active' &&
+    newsletterPreferences.newsletterMonthly &&
+    newsletterPreferences.productUpdates &&
+    newsletterPreferences.projectSpotlights
 
   const [emailValidationState, setEmailValidationState] = useState(EMAIL_VALIDATION_STATE.IDLE)
 
@@ -75,6 +85,35 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const shouldShowGuestFollowOption = !isLoggedIn && (isRecurringDonationMode || isMembershipFundingMode)
 
   const isEmailValidated = emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED
+  const showEmailOptions = isEmailValidated || Boolean(user.email)
+
+  const handleSubscribeToGeyserEmailsChange = async (checked: boolean) => {
+    setState('subscribeToGeyserEmails', checked)
+
+    if (!checked || !email) {
+      return
+    }
+
+    try {
+      await subscribeToBeehiivNewsletter({
+        variables: {
+          input: {
+            email,
+            newsletterMonthly: true,
+            productUpdates: true,
+            projectSpotlights: true,
+            tags: DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
+          },
+        },
+      })
+    } catch (error) {
+      setState('subscribeToGeyserEmails', false)
+      toast.error({
+        title: t('Subscription failed'),
+        description: (error as Error).message,
+      })
+    }
+  }
 
   /*
    Set the email from the user to the funding form. We do this because the input field
@@ -224,11 +263,11 @@ export const FundingDetailsUserEmailAndUpdates = () => {
               )}
             </FormControl>
           </FieldContainer>
-          {(isEmailValidated || user.email) && isLoggedIn && (
+          {showEmailOptions && (
             <>
-              {!followsProject && (
+              {isLoggedIn && !followsProject && (
                 <HorizontalFormField
-                  label="Follow Project: receive this project’s updates directly by email."
+                  label={t('Follow Project: receive this project’s updates directly by email.')}
                   htmlFor="creator-email-toggle"
                 >
                   <Switch
@@ -242,14 +281,17 @@ export const FundingDetailsUserEmailAndUpdates = () => {
               )}
               {!subscribedToGeyserEmails && (
                 <HorizontalFormField
-                  label="Subscribe to Geyser newsletter to discover new projects."
+                  label={t(
+                    'Subscribe to Geyser newsletter to receive monthly updates, product updates, and project spotlights.',
+                  )}
                   htmlFor="geyser-email-toggle"
                 >
                   <Switch
                     id="geyser-email-toggle"
                     isChecked={subscribeToGeyserEmails}
-                    onChange={(e) => {
-                      setState('subscribeToGeyserEmails', e.target.checked)
+                    isDisabled={subscribingToBeehiivNewsletter}
+                    onChange={async (e) => {
+                      await handleSubscribeToGeyserEmailsChange(e.target.checked)
                     }}
                   />
                 </HorizontalFormField>

@@ -114,6 +114,7 @@ type Query {
   guardianUsersGet(input: GuardianUsersGetInput!): GuardianUsersGetResponse
   userNotificationSettingsGet(userId: BigInt!): ProfileNotificationSettings!
   projectNotificationSettingsGet(projectId: BigInt!): CreatorNotificationSettings!
+  beehiivNewsletterPreferencesGet(userId: BigInt!): BeehiivNewsletterPreferences!
   paymentInvoiceSanctionCheckStatusGet(
     input: PaymentInvoiceSanctionCheckStatusGetInput!
   ): PaymentInvoiceSanctionCheckStatusResponse!
@@ -139,6 +140,35 @@ type Query {
   payoutActive(projectId: BigInt!): PayoutGetResponse
   payoutProcessing(projectId: BigInt!): PayoutGetResponse
   payoutLatest(projectId: BigInt!): PayoutGetResponse
+}
+
+type BeehiivNewsletterPreferences {
+  email: String!
+  status: String
+  newsletterMonthly: Boolean!
+  productUpdates: Boolean!
+  projectSpotlights: Boolean!
+  tags: [String!]!
+}
+
+input BeehiivNewsletterSubscribeInput {
+  email: String!
+  newsletterMonthly: Boolean = true
+  productUpdates: Boolean = true
+  projectSpotlights: Boolean = true
+  tags: [String!]
+}
+
+input BeehiivNewsletterPreferencesUpdateInput {
+  userId: BigInt!
+  newsletterMonthly: Boolean
+  productUpdates: Boolean
+  projectSpotlights: Boolean
+}
+
+input BeehiivNewsletterStatusUpdateInput {
+  userId: BigInt!
+  isActive: Boolean!
 }
 
 type Mutation {
@@ -246,6 +276,9 @@ type Mutation {
   orderStatusUpdate(input: OrderStatusUpdateInput!): Order
   userNotificationConfigurationValueUpdate(userNotificationConfigurationId: BigInt!, value: String!): Boolean
   creatorNotificationConfigurationValueUpdate(creatorNotificationConfigurationId: BigInt!, value: String!): Boolean
+  beehiivNewsletterSubscribe(input: BeehiivNewsletterSubscribeInput!): BeehiivNewsletterPreferences!
+  beehiivNewsletterPreferencesUpdate(input: BeehiivNewsletterPreferencesUpdateInput!): BeehiivNewsletterPreferences!
+  beehiivNewsletterStatusUpdate(input: BeehiivNewsletterStatusUpdateInput!): BeehiivNewsletterPreferences!
   publishNostrEvent(event: String!): Boolean
   userVerificationTokenGenerate(input: UserVerificationTokenGenerateInput!): UserVerificationTokenGenerateResponse!
   userTaxProfileUpdate(input: UserTaxProfileUpdateInput!): UserTaxProfile!

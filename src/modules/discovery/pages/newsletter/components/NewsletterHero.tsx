@@ -7,7 +7,7 @@ import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 import { fonts } from '@/shared/styles'
 
-import { NEWSLETTER_SEGMENTS } from '../constants.ts'
+import { NEWSLETTER_SEGMENTS, NewsletterSegmentId } from '../constants.ts'
 import { SegmentCheckboxGroup } from './SegmentCheckboxGroup.tsx'
 
 /** Hero section with headline, segment preferences and subscribe form. */
@@ -23,9 +23,14 @@ export const NewsletterHero = () => {
   const bodyColor = useColorModeValue('neutral1.9', 'neutral1.10')
   const mutedColor = useColorModeValue('neutral1.8', 'neutral1.9')
 
-  const [selectedSegments, setSelectedSegments] = useState<Set<string>>(
+  const [selectedSegments, setSelectedSegments] = useState<Set<NewsletterSegmentId>>(
     () => new Set(NEWSLETTER_SEGMENTS.map((s) => s.id)),
   )
+  const preferences = {
+    newsletterMonthly: selectedSegments.has('newsletterMonthly'),
+    productUpdates: selectedSegments.has('productUpdates'),
+    projectSpotlights: selectedSegments.has('projectSpotlights'),
+  }
 
   return (
     <Box w="full" position="relative" overflow="hidden" borderRadius="28px" bg={heroBg}>
@@ -70,7 +75,7 @@ export const NewsletterHero = () => {
         <VStack align="stretch" spacing={3} w="full">
           <SubscribeForm
             maxWidth="full"
-            segmentIds={[...selectedSegments]}
+            preferences={preferences}
             buttonProps={{
               children: t('Subscribe'),
               variant: 'solid',

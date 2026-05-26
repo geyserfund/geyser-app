@@ -5,11 +5,16 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { createSubscriber } from '@/api/flodesk.ts'
 import {
   ControlledTextInput,
   ControlledTextInputProps,
 } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
+import {
+  BeehiivNewsletterPreferenceKey,
+  BeehiivTag,
+  DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
+} from '@/shared/constants/beehiiv.ts'
+import { useBeehiivNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -21,17 +26,25 @@ type SubscriptionFormData = {
 }
 
 type SubscribeFormProps = StackProps & {
-  /** Flodesk segment IDs to assign the subscriber to on creation. */
-  segmentIds?: string[]
+  /** Beehiiv newsletter preferences to enable when the subscriber is created. */
+  preferences?: Partial<Record<BeehiivNewsletterPreferenceKey, boolean>>
+  tags?: BeehiivTag[]
   buttonProps?: ButtonProps
   inputProps?: Omit<ControlledTextInputProps, 'control' | 'name' | 'error'>
 }
 
-/** Inline email subscription form that creates a Flodesk subscriber. */
-export const SubscribeForm = ({ segmentIds, buttonProps, inputProps, ...props }: SubscribeFormProps) => {
+/** Inline email subscription form that creates a Beehiiv subscriber. */
+export const SubscribeForm = ({
+  preferences,
+  tags = DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
+  buttonProps,
+  inputProps,
+  ...props
+}: SubscribeFormProps) => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
+  const [subscribeToBeehiivNewsletter] = useBeehiivNewsletterSubscribeMutation()
 
   const {
     control,
@@ -47,16 +60,17 @@ export const SubscribeForm = ({ segmentIds, buttonProps, inputProps, ...props }:
     try {
       setSubmitting(true)
 
-      const subscriberPayload: Parameters<typeof createSubscriber>[0] = {
-        email: data.email,
-      }
-
-      if (segmentIds?.length) {
-        // eslint-disable-next-line camelcase
-        subscriberPayload.segment_ids = segmentIds
-      }
-
-      await createSubscriber(subscriberPayload)
+      await subscribeToBeehiivNewsletter({
+        variables: {
+          input: {
+            email: data.email,
+            newsletterMonthly: preferences?.newsletterMonthly ?? true,
+            productUpdates: preferences?.productUpdates ?? true,
+            projectSpotlights: preferences?.projectSpotlights ?? true,
+            tags,
+          },
+        },
+      })
 
       reset()
 
