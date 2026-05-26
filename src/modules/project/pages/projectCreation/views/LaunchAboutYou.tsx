@@ -27,7 +27,6 @@ import {
 
 import { ProjectCreationPageWrapper } from '../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
-import { useProjectStoryForm } from '../hooks/useProjectStoryForm.tsx'
 
 export const LaunchAboutYou = () => {
   const navigate = useNavigate()
@@ -36,22 +35,20 @@ export const LaunchAboutYou = () => {
 
   const { user, queryCurrentUser } = useAuthContext()
 
-  const [aboutYou, setAboutYou] = useState(user.bio)
+  const [aboutYou, setAboutYou] = useState(user.bio || '')
 
   useEffect(() => {
-    setAboutYou(user.bio)
+    setAboutYou(user.bio || '')
   }, [user.bio])
 
   const { project, loading } = useProjectAtom()
 
   const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
 
-  const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
+  const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.AboutYou,
     getPath('launchPayment', project.id),
   )
-
-  const form = useProjectStoryForm({ project })
 
   const onLeave = () => {
     if (!project) {
@@ -66,7 +63,10 @@ export const LaunchAboutYou = () => {
   }
 
   const onSubmit = async () => {
-    if (user.bio === aboutYou) {
+    const normalizedBio = aboutYou.trim()
+    const currentBio = user.bio || ''
+
+    if (currentBio === normalizedBio) {
       updateProjectWithLastCreationStep()
       return
     }
@@ -75,7 +75,7 @@ export const LaunchAboutYou = () => {
       variables: {
         input: {
           id: toInt(user.id),
-          bio: aboutYou,
+          bio: normalizedBio || null,
         },
       },
       onCompleted() {
@@ -84,16 +84,19 @@ export const LaunchAboutYou = () => {
       },
       onError(error) {
         toast.error({
-          title: 'failed to update user bio',
-          description: `${error}`,
+          title: t('Failed to update user bio'),
+          description: error.message,
         })
       },
     })
   }
 
+  const isSubmitting = updateUserLoading || updateProjectLoading
+
   const continueProps: ButtonProps = {
     onClick: onSubmit,
-    isLoading: updateUserLoading,
+    isLoading: isSubmitting,
+    isDisabled: isSubmitting,
   }
   const backProps = {
     onClick: onBackCLick,
@@ -116,7 +119,6 @@ export const LaunchAboutYou = () => {
         subtitle={t(
           'Building trust with your contributors is one of the most important aspects of a successful project. Tell contributors a bit more about yourself. This information will show on your project page and profile.',
         )}
-        error={form.formState.errors.description?.message}
       >
         <VStack
           w="full"
