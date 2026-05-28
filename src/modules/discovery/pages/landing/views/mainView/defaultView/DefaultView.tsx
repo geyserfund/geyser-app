@@ -16,7 +16,6 @@ import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
-import { SuccessStories } from './sections/SuccessStories.tsx'
 
 const CATEGORY_SECTION_GROUP_SIZE = 2
 const LANDING_CATEGORY_ORDER = [
@@ -94,12 +93,6 @@ export const DefaultView = () => {
       <VStack w="full" spacing={20} paddingBottom={40}>
         <CuratedProjects />
 
-        <SuccessStories />
-
-        <HowGeyserWorks />
-
-        <ProjectsInYourRegion />
-
         {showBelowTheFold && (
           <>
             {categoryGroups.map((categoryGroup, index) => (
@@ -121,7 +114,13 @@ export const DefaultView = () => {
                   </>
                 )}
                 {index === 1 && <CharityProjects />}
-                {index === 2 && <HeroesMainPage />}
+                {index === 2 && (
+                  <>
+                    <ProjectsInYourRegion />
+                    <HowGeyserWorks />
+                    <HeroesMainPage />
+                  </>
+                )}
                 {index === 3 && <TopProjects />}
               </Fragment>
             ))}

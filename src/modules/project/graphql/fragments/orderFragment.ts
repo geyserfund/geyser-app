@@ -8,6 +8,7 @@ export const FRAGMENT_ORDER_ITEM = gql`
     item {
       id
       name
+      images
       cost
       rewardCurrency
       category

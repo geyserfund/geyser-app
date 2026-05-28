@@ -1,12 +1,12 @@
 import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiPlus } from 'react-icons/pi'
-import { Link } from 'react-router'
 
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { getPath } from '@/shared/constants'
+
+import { useWriteUpdateModal } from '../../../hooks/useWriteUpdateModal.ts'
 
 export const CreatorPostPageTopBar = () => {
   const { isProjectOwner } = useProjectAtom()
@@ -35,20 +35,18 @@ export const CreatorPostPageBottomBar = () => {
 }
 
 export const CreatePostButtons = () => {
-  const { project } = useProjectAtom()
+  const { openWriteUpdateModal } = useWriteUpdateModal()
+
   return (
-    <>
-      <Button
-        as={Link}
-        to={getPath('projectPostCreate', project.name)}
-        flex={1}
-        size={'lg'}
-        variant="solid"
-        colorScheme="primary1"
-        rightIcon={<PiPlus />}
-      >
-        {t('Write post')}
-      </Button>
-    </>
+    <Button
+      flex={1}
+      size="lg"
+      variant="solid"
+      colorScheme="primary1"
+      rightIcon={<PiPlus />}
+      onClick={() => openWriteUpdateModal()}
+    >
+      {t('Write update')}
+    </Button>
   )
 }

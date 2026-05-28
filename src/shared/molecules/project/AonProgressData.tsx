@@ -13,7 +13,7 @@ export const AonProgressData = ({ project }: { project: ProjectForLandingPageFra
     <Body
       size="sm"
       bold
-      color={percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'}
+      color={percentage > 100 ? 'primary1.11' : timeLeft?.unit !== 'day' ? 'warning.11' : 'neutral1.12'}
       isTruncated
     >
       {percentage ? (

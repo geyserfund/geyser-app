@@ -8,6 +8,7 @@ import { RefundProcessedImageUrl } from '../constant.ts'
 import { PayoutStepLayout } from './PayoutStepLayout.tsx'
 
 type LightningPayoutProcessedProps = {
+  hideAction?: boolean
   isRefund?: boolean
   invoiceId?: string
   onClose: () => void
@@ -15,6 +16,7 @@ type LightningPayoutProcessedProps = {
 
 /** LightningPayoutProcessed: Success screen for Lightning (off-chain) payout completion */
 export const LightningPayoutProcessed: React.FC<LightningPayoutProcessedProps> = ({
+  hideAction = false,
   isRefund = false,
   invoiceId,
   onClose,
@@ -43,9 +45,11 @@ export const LightningPayoutProcessed: React.FC<LightningPayoutProcessedProps> =
         </VStack>
       }
       action={
-        <Button w="full" size="lg" colorScheme="neutral1" variant="outline" onClick={onClose}>
-          {isRefund ? t('Close') : t('Go back to my project')}
-        </Button>
+        hideAction ? undefined : (
+          <Button w="full" size="lg" colorScheme="neutral1" variant="outline" onClick={onClose}>
+            {isRefund ? t('Close') : t('Go back to my project')}
+          </Button>
+        )
       }
     />
   )

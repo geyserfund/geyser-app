@@ -5,6 +5,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import {
   MUTATION_PROJECT_SUBSCRIPTION_START,
   MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE,
@@ -45,6 +46,7 @@ import {
   generatePreImageHash,
   isValidRskPrivateKey,
 } from '../../forms/accountPassword/keyGenerationHelper.ts'
+import { createSwapRecoveryMetadata, generateRecoveryCode } from '../utils/recoveryKey.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import {
   createCallDataForBoltzClaimCall,
@@ -55,6 +57,7 @@ import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
   contributionCreatePreImagesAtom,
+  anonymousRecoveryCodeAtom,
   fiatOnlyPaymentsInputAtom,
   formattedFundingInputAtom,
   formattedProjectSubscriptionStartInputAtom,
@@ -88,9 +91,7 @@ const isRetryableClaimTxSetError = (error: unknown) => {
 }
 
 const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
-  Boolean(
-    payments.fiat || payments.fiatToLightningSwap || payments.lightningToRskSwap || payments.onChainToRskSwap,
-  )
+  Boolean(payments.fiat || payments.fiatToLightningSwap || payments.lightningToRskSwap || payments.onChainToRskSwap)
 
 const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): ContributionPaymentsInput => ({
   ...(paymentsInput?.fiat && {
@@ -173,6 +174,9 @@ export const useFundingAPI = () => {
   const setFundingInputAfterRequest = useSetAtom(setFundingInputAfterRequestAtom)
   const setContributionCreatePreImages = useSetAtom(contributionCreatePreImagesAtom)
   const existingContributionCreatePreImages = useAtomValue(contributionCreatePreImagesAtom)
+  const anonymousRecoveryCode = useAtomValue(anonymousRecoveryCodeAtom)
+  const setAnonymousRecoveryCode = useSetAtom(anonymousRecoveryCodeAtom)
+  const currentUser = useAtomValue(authUserAtom)
 
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
@@ -533,16 +537,10 @@ export const useFundingAPI = () => {
           onChain: existingContributionCreatePreImages.onChain ?? initialPreImages.onChain,
         }
 
-        if (
-          mergedPreImages.lightning.preimageHex &&
-          mergedPreImages.lightning.preimageHash
-        ) {
+        if (mergedPreImages.lightning.preimageHex && mergedPreImages.lightning.preimageHash) {
           requestContext.preImages.lightning = { ...mergedPreImages.lightning }
         }
-        if (
-          mergedPreImages.onChain.preimageHex &&
-          mergedPreImages.onChain.preimageHash
-        ) {
+        if (mergedPreImages.onChain.preimageHex && mergedPreImages.onChain.preimageHash) {
           requestContext.preImages.onChain = { ...mergedPreImages.onChain }
         }
 
@@ -591,6 +589,28 @@ export const useFundingAPI = () => {
 
         if (hasNewPreImages) {
           setContributionCreatePreImages(mergedPreImages)
+        }
+
+        if (!currentUser?.id) {
+          try {
+            const recoveryCode = anonymousRecoveryCode || generateRecoveryCode()
+            const recovery = await createSwapRecoveryMetadata(requestContext.accountKeys, recoveryCode)
+
+            if (!anonymousRecoveryCode) {
+              setAnonymousRecoveryCode(recoveryCode)
+            }
+
+            if (lightningToRskSwapInput) {
+              lightningToRskSwapInput.recovery = recovery
+            }
+
+            if (onChainToRskSwapInput) {
+              onChainToRskSwapInput.recovery = recovery
+            }
+          } catch (error) {
+            handleRequestError(error, t('Unable to prepare recovery key'))
+            return
+          }
         }
       }
 
@@ -713,6 +733,9 @@ export const useFundingAPI = () => {
       setContributionCreatePreImages,
       existingContributionCreatePreImages,
       stripeEmbeddedTheme,
+      currentUser?.id,
+      anonymousRecoveryCode,
+      setAnonymousRecoveryCode,
     ],
   )
 
@@ -894,8 +917,16 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
     preimage: string
     privateKey: string
   }) => {
-    const { claimAmountSats, fees, contributorAddress, aonContractAddress, refundAddress, timelock, preimage, privateKey } =
-      params
+    const {
+      claimAmountSats,
+      fees,
+      contributorAddress,
+      aonContractAddress,
+      refundAddress,
+      timelock,
+      preimage,
+      privateKey,
+    } = params
 
     const creatorFeesAmount = fees.reduce((acc, fee) => {
       if (fee.feePayer === PaymentFeePayer.Creator) {

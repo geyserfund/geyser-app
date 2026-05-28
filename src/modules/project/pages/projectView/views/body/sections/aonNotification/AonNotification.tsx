@@ -2,6 +2,7 @@ import { useAuthContext } from '@/context/index.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
+import { isAonRefundEligibleStatus } from '@/modules/project/utils/aonRefundEligibility.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ContributionStatus, PaymentStatus, ProjectAonGoalStatus, useProjectContributorQuery } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
@@ -27,9 +28,10 @@ export const AonNotification = () => {
   const refundModal = useModal()
 
   const isAon = isAllOrNothing(project)
+  const isAonRefundEligible = isAonRefundEligibleStatus(project.aonGoal?.status)
 
   const { data, loading } = useProjectContributorQuery({
-    skip: !project.id || !user.id || !isAon,
+    skip: !project.id || !user.id || !isAon || !project.aonGoal,
     fetchPolicy: 'network-only',
     variables: {
       input: {
@@ -50,7 +52,7 @@ export const AonNotification = () => {
   )
 
   const renderFunderNotification = () => {
-    if (!isAon || loading) {
+    if (!isAon || !project.aonGoal || loading) {
       return null
     }
 
@@ -58,13 +60,13 @@ export const AonNotification = () => {
       return <ContributionPendingToProjectNotification contribution={contributionPendingToProject} />
     }
 
-    if (fundedToCampaign) {
+    if (fundedToCampaign && isAonRefundEligible) {
       return <FundedToCampaign onOpen={refundModal.onOpen} />
     }
   }
 
   const renderNotification = () => {
-    if (!isAon || loading) {
+    if (!isAon || !project.aonGoal || loading) {
       return null
     }
 

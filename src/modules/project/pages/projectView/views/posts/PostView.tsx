@@ -30,9 +30,11 @@ import { toInt, useNotification } from '@/utils'
 import { MdxMarkdownEditor } from '../../../../../../shared/markdown/MdxMarkdownEditor.tsx'
 import { sourceResourceAtom } from '../../state/sourceActivityAtom.ts'
 import { LinkedRewardsAndGoals } from './components/LinkedRewardsAndGoals.tsx'
+import { OgLinkPreviewCard } from './components/OgLinkPreviewCard.tsx'
 import { PostEditMenu } from './components/PostEditMenu.tsx'
 import { PostShare } from './components/PostShare.tsx'
 import { postTypeOptions } from './utils/postTypeLabel.ts'
+import { isValidUrl, LinkifiedText } from './utils/postUrlUtils.tsx'
 
 export const PostView = () => {
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
@@ -95,6 +97,9 @@ export const PostView = () => {
 
   const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
 
+  const descriptionTrimmed = post.description?.trim() ?? ''
+  const isLinkOnly = descriptionTrimmed.length > 0 && isValidUrl(descriptionTrimmed)
+
   return (
     <>
       <Head
@@ -146,6 +151,7 @@ export const PostView = () => {
         </TopNavContainerBar>
 
         <CardLayout
+          noborder
           w="full"
           maxWidth={{ base: 'full', lg: dimensions.project.posts.view.maxWidth }}
           direction="row"
@@ -169,9 +175,11 @@ export const PostView = () => {
               </Box>
             )}
             <VStack w="full" spacing={3} alignItems="start">
-              <H2 flex={1} size="2xl" bold>
-                {post.title}
-              </H2>
+              {post.title && post.title !== 'Project update' && !descriptionTrimmed.startsWith(post.title) && (
+                <H2 flex={1} size="2xl" bold>
+                  {post.title}
+                </H2>
+              )}
 
               <Body size="sm" medium light>
                 {post.createdAt && DateTime.fromMillis(toInt(post.createdAt)).toFormat(' dd LLLL, yyyy')}
@@ -192,9 +200,14 @@ export const PostView = () => {
               </HStack>
             </VStack>
 
-            <Body size="md" bold dark>
-              {post.description}
-            </Body>
+            {descriptionTrimmed &&
+              (isLinkOnly ? (
+                <OgLinkPreviewCard url={descriptionTrimmed} />
+              ) : (
+                <Body size="md" dark>
+                  <LinkifiedText text={descriptionTrimmed} />
+                </Body>
+              ))}
 
             {post.markdown && (
               <Box
@@ -238,6 +251,7 @@ export const PostViewSkeleton = () => {
       </TopNavContainerBar>
 
       <CardLayout
+        noborder
         w="full"
         direction="row"
         justifyContent="center"

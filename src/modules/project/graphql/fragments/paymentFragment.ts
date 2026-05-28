@@ -118,6 +118,7 @@ export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
 export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
   ${FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_FEES}
   fragment PaymentForPayoutRefund on Payment {
     id
     method
@@ -127,6 +128,9 @@ export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
     status
     linkedEntityUUID
     linkedEntityType
+    fees {
+      ...ContributionFees
+    }
     paymentDetails {
       ... on RskToOnChainSwapPaymentDetails {
         ...RskToOnChainSwapPaymentDetails

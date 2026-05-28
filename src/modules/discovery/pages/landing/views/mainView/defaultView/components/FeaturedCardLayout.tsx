@@ -14,6 +14,7 @@ export const FeaturedCardLayout = ({
   title,
   children,
   imageContent,
+  imageAspectRatio = 3 / 2,
   ...rest
 }: {
   thumbnailImage: string
@@ -24,6 +25,7 @@ export const FeaturedCardLayout = ({
   loading?: boolean
   children?: React.ReactNode
   imageContent?: React.ReactNode
+  imageAspectRatio?: number
 } & CardLayoutProps) => {
   const hasTitle = title.trim().length > 0
 
@@ -47,7 +49,7 @@ export const FeaturedCardLayout = ({
         width="100%"
         height="100%"
         maxHeight="350px"
-        aspectRatio={3 / 2}
+        aspectRatio={imageAspectRatio}
         overflow="hidden"
         borderRadius="innerCard"
         position="relative"

@@ -12,15 +12,18 @@ export const FRAGMENT_FUNDING_CONTRIBUTION = gql`
   ${FRAGMENT_PROJECT_FUNDER}
   ${FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT}
   ${FRAGMENT_PROJECT_MATCHING}
+  ${FRAGMENT_ORDER_ITEM}
   fragment FundingContribution on Contribution {
     id
     uuid
     amount
+    donationAmount
     status
     comment
     media
     confirmedAt
     projectId
+    projectGoalId
     creatorEmail
     createdAt
     isAnonymous
@@ -36,6 +39,16 @@ export const FRAGMENT_FUNDING_CONTRIBUTION = gql`
     }
     payments {
       ...FundingContributionPayment
+    }
+    order {
+      id
+      referenceCode
+      totalInSats
+      itemsTotalInSats
+      shippingFeeTotalInSats
+      items {
+        ...OrderItem
+      }
     }
     funder {
       ...ProjectFunder

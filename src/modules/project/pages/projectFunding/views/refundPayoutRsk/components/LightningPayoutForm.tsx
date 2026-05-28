@@ -47,7 +47,7 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({
     <VStack w="full" spacing={6} alignItems="start">
       <ControlledTextInput
         name="lightningAddress"
-        label={t('Enter your lightning address')}
+        label={t('Lightning address')}
         control={control}
         size="md"
         type="email"
@@ -61,8 +61,8 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({
       {!disablePassword && (
         <VStack w="full" spacing={2} alignItems="start">
           <HStack spacing={2} alignItems="center">
-            <Body size="md" medium>
-              {t('Enter your account password')}
+            <Body size="sm" color="neutral1.11">
+              {t('Account password')}
             </Body>
             <Tooltip label={t('This is the password you configured during your project setup.')} hasArrow>
               <span>

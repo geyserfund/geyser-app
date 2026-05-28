@@ -419,6 +419,7 @@ export type ContributionLightningToRskSwapPaymentDetailsBoltzInput = {
   claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  recovery?: InputMaybe<ContributionSwapRecoveryInput>;
 };
 
 export type ContributionLightningToRskSwapPaymentDetailsInput = {
@@ -475,6 +476,7 @@ export type ContributionOnChainToRskSwapPaymentDetailsBoltzInput = {
   claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  recovery?: InputMaybe<ContributionSwapRecoveryInput>;
 };
 
 export type ContributionOnChainToRskSwapPaymentDetailsInput = {
@@ -525,6 +527,14 @@ export type ContributionStatusUpdatedInput = {
 export type ContributionStatusUpdatedSubscriptionResponse = {
   __typename?: 'ContributionStatusUpdatedSubscriptionResponse';
   contribution: Contribution;
+};
+
+export type ContributionSwapRecoveryInput = {
+  contributorRskAddress: Scalars['String']['input'];
+  contributorRskPublicKey: Scalars['String']['input'];
+  encryptedPrivateKey: Scalars['String']['input'];
+  encryptionAlgorithm: Scalars['String']['input'];
+  encryptionVersion: Scalars['String']['input'];
 };
 
 export type ContributionsGetResponse = {
@@ -1328,15 +1338,58 @@ export enum ImpactFundApplicationFundingModel {
   Matching = 'MATCHING'
 }
 
+export type ImpactFundApplicationFundingSetInput = {
+  applicationId: Scalars['BigInt']['input'];
+  contributionUuid: Scalars['String']['input'];
+};
+
+export type ImpactFundApplicationNote = {
+  __typename?: 'ImpactFundApplicationNote';
+  applicationId: Scalars['BigInt']['output'];
+  author: ImpactFundApplicationNoteAuthor;
+  authorUserId: Scalars['BigInt']['output'];
+  body: Scalars['String']['output'];
+  canEdit: Scalars['Boolean']['output'];
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['BigInt']['output'];
+  updatedAt: Scalars['Date']['output'];
+};
+
+export type ImpactFundApplicationNoteAuthor = {
+  __typename?: 'ImpactFundApplicationNoteAuthor';
+  id: Scalars['BigInt']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  username: Scalars['String']['output'];
+};
+
+export type ImpactFundApplicationNoteCreateInput = {
+  applicationId: Scalars['BigInt']['input'];
+  body: Scalars['String']['input'];
+};
+
+export type ImpactFundApplicationNoteUpdateInput = {
+  body: Scalars['String']['input'];
+  noteId: Scalars['BigInt']['input'];
+};
+
 export enum ImpactFundApplicationStatus {
   Accepted = 'ACCEPTED',
   Canceled = 'CANCELED',
+  Disbursement = 'DISBURSEMENT',
   Funded = 'FUNDED',
+  InfoRequested = 'INFO_REQUESTED',
   InReview = 'IN_REVIEW',
   Ongoing = 'ONGOING',
   Pending = 'PENDING',
-  Rejected = 'REJECTED'
+  Rejected = 'REJECTED',
+  UnderEvaluation = 'UNDER_EVALUATION'
 }
+
+export type ImpactFundApplicationUpdateInput = {
+  applicationId: Scalars['BigInt']['input'];
+  fundingModel?: InputMaybe<ImpactFundApplicationFundingModel>;
+  status?: InputMaybe<ImpactFundApplicationStatus>;
+};
 
 export type ImpactFundApplicationsGetResponse = {
   __typename?: 'ImpactFundApplicationsGetResponse';
@@ -1359,25 +1412,43 @@ export type ImpactFundApplyInput = {
 
 export type ImpactFundDashboardApplicationRow = {
   __typename?: 'ImpactFundDashboardApplicationRow';
+  amountAwardedInSats?: Maybe<Scalars['Int']['output']>;
   applicationId: Scalars['BigInt']['output'];
+  awardedAt?: Maybe<Scalars['Date']['output']>;
+  contributionUuid?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
   creator?: Maybe<ImpactFundDashboardCreator>;
   fundingModel: ImpactFundApplicationFundingModel;
+  notes: Array<ImpactFundApplicationNote>;
   project: ImpactFundDashboardProject;
   projectPath: Scalars['String']['output'];
   status: ImpactFundApplicationStatus;
 };
 
 export type ImpactFundDashboardApplicationsInput = {
+  fundingModelIn?: InputMaybe<Array<ImpactFundApplicationFundingModel>>;
   impactFundId: Scalars['BigInt']['input'];
   pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<ImpactFundDashboardApplicationsSort>;
+  statusIn?: InputMaybe<Array<ImpactFundApplicationStatus>>;
 };
 
 export type ImpactFundDashboardApplicationsResponse = {
   __typename?: 'ImpactFundDashboardApplicationsResponse';
   applications: Array<ImpactFundDashboardApplicationRow>;
+  fundingSummary: Array<ImpactFundFundingSummaryRow>;
   pagination?: Maybe<CursorPaginationResponse>;
   totalCount: Scalars['Int']['output'];
 };
+
+export enum ImpactFundDashboardApplicationsSort {
+  AmountAwardedAsc = 'AMOUNT_AWARDED_ASC',
+  AmountAwardedDesc = 'AMOUNT_AWARDED_DESC',
+  Latest = 'LATEST',
+  Oldest = 'OLDEST',
+  StatusAsc = 'STATUS_ASC',
+  StatusDesc = 'STATUS_DESC'
+}
 
 export type ImpactFundDashboardCreator = {
   __typename?: 'ImpactFundDashboardCreator';
@@ -1389,13 +1460,24 @@ export type ImpactFundDashboardCreator = {
 
 export type ImpactFundDashboardProject = {
   __typename?: 'ImpactFundDashboardProject';
+  aonGoalAmount?: Maybe<Scalars['Int']['output']>;
+  category?: Maybe<ProjectCategory>;
   country?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   fundingStrategy: ProjectFundingStrategy;
   id: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
   shortDescription?: Maybe<Scalars['String']['output']>;
   thumbnailImage?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+};
+
+export type ImpactFundFundingSummaryRow = {
+  __typename?: 'ImpactFundFundingSummaryRow';
+  applicationsCount: Scalars['Int']['output'];
+  awardedTotalSats: Scalars['Int']['output'];
+  category?: Maybe<ProjectCategory>;
+  fundingModel: ImpactFundApplicationFundingModel;
 };
 
 export type ImpactFundGetInput = {
@@ -1576,6 +1658,10 @@ export type Mutation = {
   createStripeConnectAccount: StripeConnectOnboardingPayload;
   creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   grantApply: GrantApplicant;
+  impactFundApplicationFundingSet: ImpactFundApplication;
+  impactFundApplicationNoteCreate: ImpactFundApplicationNote;
+  impactFundApplicationNoteUpdate: ImpactFundApplicationNote;
+  impactFundApplicationUpdate: ImpactFundApplication;
   impactFundApply: ImpactFundApplication;
   orderStatusUpdate?: Maybe<Order>;
   paymentCancel: PaymentCancelResponse;
@@ -1699,6 +1785,9 @@ export type Mutation = {
   userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   userTaxProfileUpdate: UserTaxProfile;
   userVerificationTokenGenerate: UserVerificationTokenGenerateResponse;
+  userWalletWithdrawPaymentInitiate: UserWalletWithdrawInitiateResponse;
+  userWalletWithdrawPaymentPrepare: UserWalletWithdrawPaymentCreateResponse;
+  userWalletWithdrawPrepare: UserWalletWithdrawRequestResponse;
   walletCreate: Wallet;
   walletDelete: Scalars['Boolean']['output'];
   /** This operation is currently not supported. */
@@ -1755,6 +1844,26 @@ export type MutationCreatorNotificationConfigurationValueUpdateArgs = {
 
 export type MutationGrantApplyArgs = {
   input?: InputMaybe<GrantApplyInput>;
+};
+
+
+export type MutationImpactFundApplicationFundingSetArgs = {
+  input: ImpactFundApplicationFundingSetInput;
+};
+
+
+export type MutationImpactFundApplicationNoteCreateArgs = {
+  input: ImpactFundApplicationNoteCreateInput;
+};
+
+
+export type MutationImpactFundApplicationNoteUpdateArgs = {
+  input: ImpactFundApplicationNoteUpdateInput;
+};
+
+
+export type MutationImpactFundApplicationUpdateArgs = {
+  input: ImpactFundApplicationUpdateInput;
 };
 
 
@@ -2215,6 +2324,16 @@ export type MutationUserVerificationTokenGenerateArgs = {
 };
 
 
+export type MutationUserWalletWithdrawPaymentInitiateArgs = {
+  input: UserWalletWithdrawInitiateInput;
+};
+
+
+export type MutationUserWalletWithdrawPaymentPrepareArgs = {
+  input: UserWalletWithdrawPaymentCreateInput;
+};
+
+
 export type MutationWalletCreateArgs = {
   input: CreateWalletInput;
 };
@@ -2515,7 +2634,7 @@ export type Payment = {
   paymentType: PaymentType;
   payoutAmount: Scalars['Int']['output'];
   payoutCurrency: PayoutCurrency;
-  projectId: Scalars['BigInt']['output'];
+  projectId?: Maybe<Scalars['BigInt']['output']>;
   status: PaymentStatus;
   updatedAt: Scalars['Date']['output'];
   userSubscriptionId?: Maybe<Scalars['BigInt']['output']>;
@@ -2649,7 +2768,8 @@ export enum PaymentLinkedEntityType {
   Contribution = 'CONTRIBUTION',
   ContributionPodcastKeysend = 'CONTRIBUTION_PODCAST_KEYSEND',
   Payout = 'PAYOUT',
-  PledgeRefund = 'PLEDGE_REFUND'
+  PledgeRefund = 'PLEDGE_REFUND',
+  UserWalletWithdraw = 'USER_WALLET_WITHDRAW'
 }
 
 export type PaymentMethods = {
@@ -2676,6 +2796,28 @@ export type PaymentPendResponse = {
 export type PaymentPendSwapInput = {
   swapServerLockTxId?: InputMaybe<Scalars['String']['input']>;
   swapUserLockTxId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PaymentRecoveryByContributionInput = {
+  contributionUuid: Scalars['String']['input'];
+};
+
+export type PaymentRecoveryByContributionResponse = {
+  __typename?: 'PaymentRecoveryByContributionResponse';
+  contribution: Contribution;
+  payments: Array<PaymentRecoveryPayment>;
+  project: Project;
+};
+
+export type PaymentRecoveryPayment = {
+  __typename?: 'PaymentRecoveryPayment';
+  amount: Scalars['Int']['output'];
+  id: Scalars['BigInt']['output'];
+  paymentType: PaymentType;
+  status: PaymentStatus;
+  swapId: Scalars['String']['output'];
+  swapMetadata: Scalars['String']['output'];
+  uuid: Scalars['String']['output'];
 };
 
 export type PaymentRefund = {
@@ -2927,10 +3069,26 @@ export type PayoutMetadata = {
   __typename?: 'PayoutMetadata';
   aonContractAddress?: Maybe<Scalars['String']['output']>;
   contractType: PayoutContractType;
+  feeSummary: PayoutFeeSummary;
   nonce: Scalars['Int']['output'];
   projectKey?: Maybe<Scalars['String']['output']>;
   requiresUserLockTx: Scalars['Boolean']['output'];
   swapContractAddress: Scalars['String']['output'];
+};
+
+export type PayoutFeeSummary = {
+  __typename?: 'PayoutFeeSummary';
+  currency: FeeCurrency;
+  items: Array<PayoutFeeSummaryItem>;
+  totalAmount: Scalars['Int']['output'];
+};
+
+export type PayoutFeeSummaryItem = {
+  __typename?: 'PayoutFeeSummaryItem';
+  amount: Scalars['Int']['output'];
+  currency: FeeCurrency;
+  description?: Maybe<Scalars['String']['output']>;
+  feeType: PaymentFeeType;
 };
 
 export type PayoutPaymentCreateInput = {
@@ -4354,6 +4512,7 @@ export type Query = {
   ordersStatsGet: OrdersStatsBase;
   payment: Payment;
   paymentInvoiceSanctionCheckStatusGet: PaymentInvoiceSanctionCheckStatusResponse;
+  paymentRecoveryByContribution: PaymentRecoveryByContributionResponse;
   paymentRefundsGet?: Maybe<PaymentRefundsGetResponse>;
   paymentsGet: PaymentsGetResponse;
   /**
@@ -4366,6 +4525,7 @@ export type Query = {
   payoutActive?: Maybe<PayoutGetResponse>;
   payoutGet?: Maybe<PayoutGetResponse>;
   payoutLatest?: Maybe<PayoutGetResponse>;
+  payoutProcessing?: Maybe<PayoutGetResponse>;
   pledgeRefundGet?: Maybe<PledgeRefundGetResponse>;
   pledgeRefundsGet?: Maybe<PledgeRefundsGetResponse>;
   post?: Maybe<Post>;
@@ -4408,12 +4568,15 @@ export type Query = {
   tagsGet: Array<TagsGetResult>;
   tagsMostFundedGet: Array<TagsMostFundedGetResult>;
   user: User;
+  userAccountPasswordFundsSummary: UserAccountPasswordFundsSummary;
   userBadge?: Maybe<UserBadge>;
   userBadges: Array<UserBadge>;
   userEmailIsAvailable: Scalars['Boolean']['output'];
   userEmailIsValid: UserEmailIsValidResponse;
   userIpCountry?: Maybe<Scalars['String']['output']>;
   userNotificationSettingsGet: ProfileNotificationSettings;
+  userWalletWithdrawActive?: Maybe<UserWalletWithdrawGetResponse>;
+  userWalletWithdrawLatest?: Maybe<UserWalletWithdrawGetResponse>;
 };
 
 
@@ -4562,6 +4725,11 @@ export type QueryPaymentInvoiceSanctionCheckStatusGetArgs = {
 };
 
 
+export type QueryPaymentRecoveryByContributionArgs = {
+  input: PaymentRecoveryByContributionInput;
+};
+
+
 export type QueryPaymentsGetArgs = {
   input?: InputMaybe<PaymentsGetInput>;
 };
@@ -4578,6 +4746,11 @@ export type QueryPayoutGetArgs = {
 
 
 export type QueryPayoutLatestArgs = {
+  projectId: Scalars['BigInt']['input'];
+};
+
+
+export type QueryPayoutProcessingArgs = {
   projectId: Scalars['BigInt']['input'];
 };
 
@@ -5365,6 +5538,14 @@ export type UserAccountKeysUpdateInput = {
   rskKeyPair: RskKeyPairInput;
 };
 
+export type UserAccountPasswordFundsSummary = {
+  __typename?: 'UserAccountPasswordFundsSummary';
+  aonUnclaimedFundsSats: Scalars['Int']['output'];
+  pledgedSats: Scalars['Int']['output'];
+  tiaUnclaimedFundsSats: Scalars['Int']['output'];
+  unclaimedFundsSats: Scalars['Int']['output'];
+};
+
 export type UserBadge = {
   __typename?: 'UserBadge';
   badge: Badge;
@@ -5546,6 +5727,78 @@ export type UserVerifiedDetails = {
   identity?: Maybe<VerificationResult>;
   phoneNumber?: Maybe<VerificationResult>;
 };
+
+export type UserWalletWithdraw = {
+  __typename?: 'UserWalletWithdraw';
+  amount: Scalars['Int']['output'];
+  expiresAt: Scalars['Date']['output'];
+  id: Scalars['BigInt']['output'];
+  payments: Array<Payment>;
+  status: UserWalletWithdrawStatus;
+  uuid: Scalars['String']['output'];
+};
+
+export type UserWalletWithdrawGetResponse = {
+  __typename?: 'UserWalletWithdrawGetResponse';
+  userWalletWithdraw: UserWalletWithdraw;
+  userWalletWithdrawMetadata: UserWalletWithdrawMetadata;
+};
+
+export type UserWalletWithdrawInitiateInput = {
+  callDataHex: Scalars['String']['input'];
+  claimTxHex?: InputMaybe<Scalars['String']['input']>;
+  paymentId: Scalars['BigInt']['input'];
+  rskAddress?: InputMaybe<Scalars['String']['input']>;
+  signature: Scalars['String']['input'];
+  userLockTxHex?: InputMaybe<Scalars['String']['input']>;
+  userWalletWithdrawId: Scalars['BigInt']['input'];
+};
+
+export type UserWalletWithdrawInitiateResponse = {
+  __typename?: 'UserWalletWithdrawInitiateResponse';
+  txHash: Scalars['String']['output'];
+  userWalletWithdraw: UserWalletWithdraw;
+};
+
+export type UserWalletWithdrawMetadata = {
+  __typename?: 'UserWalletWithdrawMetadata';
+  contractType: PayoutContractType;
+  nonce: Scalars['Int']['output'];
+  requiresUserLockTx: Scalars['Boolean']['output'];
+  swapContractAddress: Scalars['String']['output'];
+};
+
+export type UserWalletWithdrawPaymentCreateInput = {
+  userWalletWithdrawId: Scalars['BigInt']['input'];
+  userWalletWithdrawPaymentInput: UserWalletWithdrawPaymentInput;
+};
+
+export type UserWalletWithdrawPaymentCreateResponse = {
+  __typename?: 'UserWalletWithdrawPaymentCreateResponse';
+  payment: Payment;
+  swap?: Maybe<Scalars['String']['output']>;
+  userWalletWithdraw: UserWalletWithdraw;
+};
+
+export type UserWalletWithdrawPaymentInput = {
+  rskToLightningSwap?: InputMaybe<RskToLightningSwapPaymentDetailsInput>;
+  rskToOnChainSwap?: InputMaybe<RskToOnChainSwapPaymentDetailsInput>;
+};
+
+export type UserWalletWithdrawRequestResponse = {
+  __typename?: 'UserWalletWithdrawRequestResponse';
+  userWalletWithdraw: UserWalletWithdraw;
+  userWalletWithdrawMetadata: UserWalletWithdrawMetadata;
+};
+
+export enum UserWalletWithdrawStatus {
+  Cancelled = 'CANCELLED',
+  Completed = 'COMPLETED',
+  Expired = 'EXPIRED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING'
+}
 
 export type VerificationResult = {
   __typename?: 'VerificationResult';
@@ -5794,6 +6047,7 @@ export type ResolversTypes = {
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
+  ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: ResolverTypeWrapper<Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversTypes['Contribution']> }>;
   ContributionsSummary: ResolverTypeWrapper<ContributionsSummary>;
   ContributionsSummaryPeriod: ContributionsSummaryPeriod;
@@ -5908,15 +6162,23 @@ export type ResolversTypes = {
   ImpactFundAmountCommittedCurrency: ImpactFundAmountCommittedCurrency;
   ImpactFundApplication: ResolverTypeWrapper<Omit<ImpactFundApplication, 'project'> & { project: ResolversTypes['Project'] }>;
   ImpactFundApplicationFundingModel: ImpactFundApplicationFundingModel;
+  ImpactFundApplicationFundingSetInput: ImpactFundApplicationFundingSetInput;
+  ImpactFundApplicationNote: ResolverTypeWrapper<ImpactFundApplicationNote>;
+  ImpactFundApplicationNoteAuthor: ResolverTypeWrapper<ImpactFundApplicationNoteAuthor>;
+  ImpactFundApplicationNoteCreateInput: ImpactFundApplicationNoteCreateInput;
+  ImpactFundApplicationNoteUpdateInput: ImpactFundApplicationNoteUpdateInput;
   ImpactFundApplicationStatus: ImpactFundApplicationStatus;
+  ImpactFundApplicationUpdateInput: ImpactFundApplicationUpdateInput;
   ImpactFundApplicationsGetResponse: ResolverTypeWrapper<Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversTypes['ImpactFundApplication']> }>;
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
   ImpactFundDashboardApplicationRow: ResolverTypeWrapper<ImpactFundDashboardApplicationRow>;
   ImpactFundDashboardApplicationsInput: ImpactFundDashboardApplicationsInput;
   ImpactFundDashboardApplicationsResponse: ResolverTypeWrapper<ImpactFundDashboardApplicationsResponse>;
+  ImpactFundDashboardApplicationsSort: ImpactFundDashboardApplicationsSort;
   ImpactFundDashboardCreator: ResolverTypeWrapper<ImpactFundDashboardCreator>;
   ImpactFundDashboardProject: ResolverTypeWrapper<ImpactFundDashboardProject>;
+  ImpactFundFundingSummaryRow: ResolverTypeWrapper<ImpactFundFundingSummaryRow>;
   ImpactFundGetInput: ImpactFundGetInput;
   ImpactFundGetWhereInput: ImpactFundGetWhereInput;
   ImpactFundMetrics: ResolverTypeWrapper<ImpactFundMetrics>;
@@ -6008,6 +6270,9 @@ export type ResolversTypes = {
   PaymentPendInput: PaymentPendInput;
   PaymentPendResponse: ResolverTypeWrapper<PaymentPendResponse>;
   PaymentPendSwapInput: PaymentPendSwapInput;
+  PaymentRecoveryByContributionInput: PaymentRecoveryByContributionInput;
+  PaymentRecoveryByContributionResponse: ResolverTypeWrapper<Omit<PaymentRecoveryByContributionResponse, 'contribution' | 'project'> & { contribution: ResolversTypes['Contribution'], project: ResolversTypes['Project'] }>;
+  PaymentRecoveryPayment: ResolverTypeWrapper<PaymentRecoveryPayment>;
   PaymentRefund: ResolverTypeWrapper<PaymentRefund>;
   PaymentRefundCompleteInput: PaymentRefundCompleteInput;
   PaymentRefundCompleteResponse: ResolverTypeWrapper<PaymentRefundCompleteResponse>;
@@ -6048,6 +6313,8 @@ export type ResolversTypes = {
   PayoutInitiateInput: PayoutInitiateInput;
   PayoutInitiateResponse: ResolverTypeWrapper<Omit<PayoutInitiateResponse, 'payout'> & { payout: ResolversTypes['Payout'] }>;
   PayoutMetadata: ResolverTypeWrapper<PayoutMetadata>;
+  PayoutFeeSummary: ResolverTypeWrapper<PayoutFeeSummary>;
+  PayoutFeeSummaryItem: ResolverTypeWrapper<PayoutFeeSummaryItem>;
   PayoutPaymentCreateInput: PayoutPaymentCreateInput;
   PayoutPaymentCreateResponse: ResolverTypeWrapper<Omit<PayoutPaymentCreateResponse, 'payment' | 'payout'> & { payment: ResolversTypes['Payment'], payout: ResolversTypes['Payout'] }>;
   PayoutPaymentInput: PayoutPaymentInput;
@@ -6286,6 +6553,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<Omit<User, 'affiliatePartnerPayoutSummary' | 'contributions' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { affiliatePartnerPayoutSummary: ResolversTypes['AffiliatePartnerPayoutSummary'], contributions: Array<ResolversTypes['Contribution']>, ownerOf: Array<ResolversTypes['OwnerOf']>, projectFollows: Array<ResolversTypes['Project']>, projects: Array<ResolversTypes['Project']>, wallet?: Maybe<ResolversTypes['Wallet']> }>;
   UserAccountKeys: ResolverTypeWrapper<UserAccountKeys>;
   UserAccountKeysUpdateInput: UserAccountKeysUpdateInput;
+  UserAccountPasswordFundsSummary: ResolverTypeWrapper<UserAccountPasswordFundsSummary>;
   UserBadge: ResolverTypeWrapper<UserBadge>;
   UserBadgeStatus: UserBadgeStatus;
   UserComplianceDetails: ResolverTypeWrapper<UserComplianceDetails>;
@@ -6312,6 +6580,16 @@ export type ResolversTypes = {
   UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
   UserVerificationTokenGenerateResponse: ResolverTypeWrapper<UserVerificationTokenGenerateResponse>;
   UserVerifiedDetails: ResolverTypeWrapper<UserVerifiedDetails>;
+  UserWalletWithdraw: ResolverTypeWrapper<Omit<UserWalletWithdraw, 'payments'> & { payments: Array<ResolversTypes['Payment']> }>;
+  UserWalletWithdrawGetResponse: ResolverTypeWrapper<Omit<UserWalletWithdrawGetResponse, 'userWalletWithdraw'> & { userWalletWithdraw: ResolversTypes['UserWalletWithdraw'] }>;
+  UserWalletWithdrawInitiateInput: UserWalletWithdrawInitiateInput;
+  UserWalletWithdrawInitiateResponse: ResolverTypeWrapper<Omit<UserWalletWithdrawInitiateResponse, 'userWalletWithdraw'> & { userWalletWithdraw: ResolversTypes['UserWalletWithdraw'] }>;
+  UserWalletWithdrawMetadata: ResolverTypeWrapper<UserWalletWithdrawMetadata>;
+  UserWalletWithdrawPaymentCreateInput: UserWalletWithdrawPaymentCreateInput;
+  UserWalletWithdrawPaymentCreateResponse: ResolverTypeWrapper<Omit<UserWalletWithdrawPaymentCreateResponse, 'payment' | 'userWalletWithdraw'> & { payment: ResolversTypes['Payment'], userWalletWithdraw: ResolversTypes['UserWalletWithdraw'] }>;
+  UserWalletWithdrawPaymentInput: UserWalletWithdrawPaymentInput;
+  UserWalletWithdrawRequestResponse: ResolverTypeWrapper<Omit<UserWalletWithdrawRequestResponse, 'userWalletWithdraw'> & { userWalletWithdraw: ResolversTypes['UserWalletWithdraw'] }>;
+  UserWalletWithdrawStatus: UserWalletWithdrawStatus;
   VerificationResult: ResolverTypeWrapper<VerificationResult>;
   VotingSystem: VotingSystem;
   Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
@@ -6386,6 +6664,7 @@ export type ResolversParentTypes = {
   ContributionPaymentsInput: ContributionPaymentsInput;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
+  ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
   ContributionsSummary: ContributionsSummary;
   ContributorContributionsSummary: ContributorContributionsSummary;
@@ -6485,6 +6764,12 @@ export type ResolversParentTypes = {
   ID: Scalars['ID']['output'];
   ImpactFund: Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications' | 'viewerApplications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversParentTypes['Project']>, fundedApplications: Array<ResolversParentTypes['ImpactFundApplication']>, viewerApplications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplication: Omit<ImpactFundApplication, 'project'> & { project: ResolversParentTypes['Project'] };
+  ImpactFundApplicationFundingSetInput: ImpactFundApplicationFundingSetInput;
+  ImpactFundApplicationNote: ImpactFundApplicationNote;
+  ImpactFundApplicationNoteAuthor: ImpactFundApplicationNoteAuthor;
+  ImpactFundApplicationNoteCreateInput: ImpactFundApplicationNoteCreateInput;
+  ImpactFundApplicationNoteUpdateInput: ImpactFundApplicationNoteUpdateInput;
+  ImpactFundApplicationUpdateInput: ImpactFundApplicationUpdateInput;
   ImpactFundApplicationsGetResponse: Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
@@ -6493,6 +6778,7 @@ export type ResolversParentTypes = {
   ImpactFundDashboardApplicationsResponse: ImpactFundDashboardApplicationsResponse;
   ImpactFundDashboardCreator: ImpactFundDashboardCreator;
   ImpactFundDashboardProject: ImpactFundDashboardProject;
+  ImpactFundFundingSummaryRow: ImpactFundFundingSummaryRow;
   ImpactFundGetInput: ImpactFundGetInput;
   ImpactFundGetWhereInput: ImpactFundGetWhereInput;
   ImpactFundMetrics: ImpactFundMetrics;
@@ -6566,6 +6852,9 @@ export type ResolversParentTypes = {
   PaymentPendInput: PaymentPendInput;
   PaymentPendResponse: PaymentPendResponse;
   PaymentPendSwapInput: PaymentPendSwapInput;
+  PaymentRecoveryByContributionInput: PaymentRecoveryByContributionInput;
+  PaymentRecoveryByContributionResponse: Omit<PaymentRecoveryByContributionResponse, 'contribution' | 'project'> & { contribution: ResolversParentTypes['Contribution'], project: ResolversParentTypes['Project'] };
+  PaymentRecoveryPayment: PaymentRecoveryPayment;
   PaymentRefund: PaymentRefund;
   PaymentRefundCompleteInput: PaymentRefundCompleteInput;
   PaymentRefundCompleteResponse: PaymentRefundCompleteResponse;
@@ -6601,6 +6890,8 @@ export type ResolversParentTypes = {
   PayoutInitiateInput: PayoutInitiateInput;
   PayoutInitiateResponse: Omit<PayoutInitiateResponse, 'payout'> & { payout: ResolversParentTypes['Payout'] };
   PayoutMetadata: PayoutMetadata;
+  PayoutFeeSummary: PayoutFeeSummary;
+  PayoutFeeSummaryItem: PayoutFeeSummaryItem;
   PayoutPaymentCreateInput: PayoutPaymentCreateInput;
   PayoutPaymentCreateResponse: Omit<PayoutPaymentCreateResponse, 'payment' | 'payout'> & { payment: ResolversParentTypes['Payment'], payout: ResolversParentTypes['Payout'] };
   PayoutPaymentInput: PayoutPaymentInput;
@@ -6791,6 +7082,7 @@ export type ResolversParentTypes = {
   User: Omit<User, 'affiliatePartnerPayoutSummary' | 'contributions' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { affiliatePartnerPayoutSummary: ResolversParentTypes['AffiliatePartnerPayoutSummary'], contributions: Array<ResolversParentTypes['Contribution']>, ownerOf: Array<ResolversParentTypes['OwnerOf']>, projectFollows: Array<ResolversParentTypes['Project']>, projects: Array<ResolversParentTypes['Project']>, wallet?: Maybe<ResolversParentTypes['Wallet']> };
   UserAccountKeys: UserAccountKeys;
   UserAccountKeysUpdateInput: UserAccountKeysUpdateInput;
+  UserAccountPasswordFundsSummary: UserAccountPasswordFundsSummary;
   UserBadge: UserBadge;
   UserComplianceDetails: UserComplianceDetails;
   UserContributionLimit: UserContributionLimit;
@@ -6812,6 +7104,15 @@ export type ResolversParentTypes = {
   UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
   UserVerificationTokenGenerateResponse: UserVerificationTokenGenerateResponse;
   UserVerifiedDetails: UserVerifiedDetails;
+  UserWalletWithdraw: Omit<UserWalletWithdraw, 'payments'> & { payments: Array<ResolversParentTypes['Payment']> };
+  UserWalletWithdrawGetResponse: Omit<UserWalletWithdrawGetResponse, 'userWalletWithdraw'> & { userWalletWithdraw: ResolversParentTypes['UserWalletWithdraw'] };
+  UserWalletWithdrawInitiateInput: UserWalletWithdrawInitiateInput;
+  UserWalletWithdrawInitiateResponse: Omit<UserWalletWithdrawInitiateResponse, 'userWalletWithdraw'> & { userWalletWithdraw: ResolversParentTypes['UserWalletWithdraw'] };
+  UserWalletWithdrawMetadata: UserWalletWithdrawMetadata;
+  UserWalletWithdrawPaymentCreateInput: UserWalletWithdrawPaymentCreateInput;
+  UserWalletWithdrawPaymentCreateResponse: Omit<UserWalletWithdrawPaymentCreateResponse, 'payment' | 'userWalletWithdraw'> & { payment: ResolversParentTypes['Payment'], userWalletWithdraw: ResolversParentTypes['UserWalletWithdraw'] };
+  UserWalletWithdrawPaymentInput: UserWalletWithdrawPaymentInput;
+  UserWalletWithdrawRequestResponse: Omit<UserWalletWithdrawRequestResponse, 'userWalletWithdraw'> & { userWalletWithdraw: ResolversParentTypes['UserWalletWithdraw'] };
   VerificationResult: VerificationResult;
   Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
   WalletContributionLimits: WalletContributionLimits;
@@ -7468,6 +7769,25 @@ export type ImpactFundApplicationResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ImpactFundApplicationNoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationNote'] = ResolversParentTypes['ImpactFundApplicationNote']> = {
+  applicationId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['ImpactFundApplicationNoteAuthor'], ParentType, ContextType>;
+  authorUserId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  canEdit?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpactFundApplicationNoteAuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationNoteAuthor'] = ResolversParentTypes['ImpactFundApplicationNoteAuthor']> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ImpactFundApplicationsGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationsGetResponse'] = ResolversParentTypes['ImpactFundApplicationsGetResponse']> = {
   applications?: Resolver<Array<ResolversTypes['ImpactFundApplication']>, ParentType, ContextType>;
   pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
@@ -7476,9 +7796,14 @@ export type ImpactFundApplicationsGetResponseResolvers<ContextType = any, Parent
 };
 
 export type ImpactFundDashboardApplicationRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardApplicationRow'] = ResolversParentTypes['ImpactFundDashboardApplicationRow']> = {
+  amountAwardedInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   applicationId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  awardedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  contributionUuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['ImpactFundDashboardCreator']>, ParentType, ContextType>;
   fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
+  notes?: Resolver<Array<ResolversTypes['ImpactFundApplicationNote']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['ImpactFundDashboardProject'], ParentType, ContextType>;
   projectPath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ImpactFundApplicationStatus'], ParentType, ContextType>;
@@ -7487,6 +7812,7 @@ export type ImpactFundDashboardApplicationRowResolvers<ContextType = any, Parent
 
 export type ImpactFundDashboardApplicationsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardApplicationsResponse'] = ResolversParentTypes['ImpactFundDashboardApplicationsResponse']> = {
   applications?: Resolver<Array<ResolversTypes['ImpactFundDashboardApplicationRow']>, ParentType, ContextType>;
+  fundingSummary?: Resolver<Array<ResolversTypes['ImpactFundFundingSummaryRow']>, ParentType, ContextType>;
   pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -7501,13 +7827,24 @@ export type ImpactFundDashboardCreatorResolvers<ContextType = any, ParentType ex
 };
 
 export type ImpactFundDashboardProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundDashboardProject'] = ResolversParentTypes['ImpactFundDashboardProject']> = {
+  aonGoalAmount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
   country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   fundingStrategy?: Resolver<ResolversTypes['ProjectFundingStrategy'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpactFundFundingSummaryRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundFundingSummaryRow'] = ResolversParentTypes['ImpactFundFundingSummaryRow']> = {
+  applicationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  awardedTotalSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
+  fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7599,6 +7936,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createStripeConnectAccount?: Resolver<ResolversTypes['StripeConnectOnboardingPayload'], ParentType, ContextType, RequireFields<MutationCreateStripeConnectAccountArgs, 'projectId'>>;
   creatorNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreatorNotificationConfigurationValueUpdateArgs, 'creatorNotificationConfigurationId' | 'value'>>;
   grantApply?: Resolver<ResolversTypes['GrantApplicant'], ParentType, ContextType, Partial<MutationGrantApplyArgs>>;
+  impactFundApplicationFundingSet?: Resolver<ResolversTypes['ImpactFundApplication'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationFundingSetArgs, 'input'>>;
+  impactFundApplicationNoteCreate?: Resolver<ResolversTypes['ImpactFundApplicationNote'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationNoteCreateArgs, 'input'>>;
+  impactFundApplicationNoteUpdate?: Resolver<ResolversTypes['ImpactFundApplicationNote'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationNoteUpdateArgs, 'input'>>;
+  impactFundApplicationUpdate?: Resolver<ResolversTypes['ImpactFundApplication'], ParentType, ContextType, RequireFields<MutationImpactFundApplicationUpdateArgs, 'input'>>;
   impactFundApply?: Resolver<ResolversTypes['ImpactFundApplication'], ParentType, ContextType, RequireFields<MutationImpactFundApplyArgs, 'input'>>;
   orderStatusUpdate?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationOrderStatusUpdateArgs, 'input'>>;
   paymentCancel?: Resolver<ResolversTypes['PaymentCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentCancelArgs, 'input'>>;
@@ -7691,6 +8032,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
   userTaxProfileUpdate?: Resolver<ResolversTypes['UserTaxProfile'], ParentType, ContextType, RequireFields<MutationUserTaxProfileUpdateArgs, 'input'>>;
   userVerificationTokenGenerate?: Resolver<ResolversTypes['UserVerificationTokenGenerateResponse'], ParentType, ContextType, RequireFields<MutationUserVerificationTokenGenerateArgs, 'input'>>;
+  userWalletWithdrawPaymentInitiate?: Resolver<ResolversTypes['UserWalletWithdrawInitiateResponse'], ParentType, ContextType, RequireFields<MutationUserWalletWithdrawPaymentInitiateArgs, 'input'>>;
+  userWalletWithdrawPaymentPrepare?: Resolver<ResolversTypes['UserWalletWithdrawPaymentCreateResponse'], ParentType, ContextType, RequireFields<MutationUserWalletWithdrawPaymentPrepareArgs, 'input'>>;
+  userWalletWithdrawPrepare?: Resolver<ResolversTypes['UserWalletWithdrawRequestResponse'], ParentType, ContextType>;
   walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
   walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
   walletUpdate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletUpdateArgs, 'input'>>;
@@ -7875,7 +8219,7 @@ export type PaymentResolvers<ContextType = any, ParentType extends ResolversPare
   paymentType?: Resolver<ResolversTypes['PaymentType'], ParentType, ContextType>;
   payoutAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   payoutCurrency?: Resolver<ResolversTypes['PayoutCurrency'], ParentType, ContextType>;
-  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  projectId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['PaymentStatus'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   userSubscriptionId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
@@ -7942,6 +8286,24 @@ export type PaymentMethodsResolvers<ContextType = any, ParentType extends Resolv
 export type PaymentPendResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentPendResponse'] = ResolversParentTypes['PaymentPendResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentRecoveryByContributionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRecoveryByContributionResponse'] = ResolversParentTypes['PaymentRecoveryByContributionResponse']> = {
+  contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType>;
+  payments?: Resolver<Array<ResolversTypes['PaymentRecoveryPayment']>, ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentRecoveryPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentRecoveryPayment'] = ResolversParentTypes['PaymentRecoveryPayment']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  paymentType?: Resolver<ResolversTypes['PaymentType'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PaymentStatus'], ParentType, ContextType>;
+  swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8056,10 +8418,26 @@ export type PayoutInitiateResponseResolvers<ContextType = any, ParentType extend
 export type PayoutMetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutMetadata'] = ResolversParentTypes['PayoutMetadata']> = {
   aonContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contractType?: Resolver<ResolversTypes['PayoutContractType'], ParentType, ContextType>;
+  feeSummary?: Resolver<ResolversTypes['PayoutFeeSummary'], ParentType, ContextType>;
   nonce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   projectKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   requiresUserLockTx?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutFeeSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummary'] = ResolversParentTypes['PayoutFeeSummary']> = {
+  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['PayoutFeeSummaryItem']>, ParentType, ContextType>;
+  totalAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutFeeSummaryItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummaryItem'] = ResolversParentTypes['PayoutFeeSummaryItem']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  feeType?: Resolver<ResolversTypes['PaymentFeeType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8757,6 +9135,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ordersStatsGet?: Resolver<ResolversTypes['OrdersStatsBase'], ParentType, ContextType, RequireFields<QueryOrdersStatsGetArgs, 'input'>>;
   payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType, RequireFields<QueryPaymentArgs, 'input'>>;
   paymentInvoiceSanctionCheckStatusGet?: Resolver<ResolversTypes['PaymentInvoiceSanctionCheckStatusResponse'], ParentType, ContextType, RequireFields<QueryPaymentInvoiceSanctionCheckStatusGetArgs, 'input'>>;
+  paymentRecoveryByContribution?: Resolver<ResolversTypes['PaymentRecoveryByContributionResponse'], ParentType, ContextType, RequireFields<QueryPaymentRecoveryByContributionArgs, 'input'>>;
   paymentRefundsGet?: Resolver<Maybe<ResolversTypes['PaymentRefundsGetResponse']>, ParentType, ContextType>;
   paymentsGet?: Resolver<ResolversTypes['PaymentsGetResponse'], ParentType, ContextType, Partial<QueryPaymentsGetArgs>>;
   paymentsInProgressGet?: Resolver<ResolversTypes['PaymentsInProgressGetResponse'], ParentType, ContextType>;
@@ -8764,6 +9143,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   payoutActive?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutActiveArgs, 'projectId'>>;
   payoutGet?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutGetArgs, 'input'>>;
   payoutLatest?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutLatestArgs, 'projectId'>>;
+  payoutProcessing?: Resolver<Maybe<ResolversTypes['PayoutGetResponse']>, ParentType, ContextType, RequireFields<QueryPayoutProcessingArgs, 'projectId'>>;
   pledgeRefundGet?: Resolver<Maybe<ResolversTypes['PledgeRefundGetResponse']>, ParentType, ContextType, RequireFields<QueryPledgeRefundGetArgs, 'input'>>;
   pledgeRefundsGet?: Resolver<Maybe<ResolversTypes['PledgeRefundsGetResponse']>, ParentType, ContextType>;
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
@@ -8804,12 +9184,15 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
   tagsMostFundedGet?: Resolver<Array<ResolversTypes['TagsMostFundedGetResult']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
+  userAccountPasswordFundsSummary?: Resolver<ResolversTypes['UserAccountPasswordFundsSummary'], ParentType, ContextType>;
   userBadge?: Resolver<Maybe<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgeArgs, 'userBadgeId'>>;
   userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
   userEmailIsAvailable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryUserEmailIsAvailableArgs, 'email'>>;
   userEmailIsValid?: Resolver<ResolversTypes['UserEmailIsValidResponse'], ParentType, ContextType, RequireFields<QueryUserEmailIsValidArgs, 'email'>>;
   userIpCountry?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userNotificationSettingsGet?: Resolver<ResolversTypes['ProfileNotificationSettings'], ParentType, ContextType, RequireFields<QueryUserNotificationSettingsGetArgs, 'userId'>>;
+  userWalletWithdrawActive?: Resolver<Maybe<ResolversTypes['UserWalletWithdrawGetResponse']>, ParentType, ContextType>;
+  userWalletWithdrawLatest?: Resolver<Maybe<ResolversTypes['UserWalletWithdrawGetResponse']>, ParentType, ContextType>;
 };
 
 export type RecurringContributionResolvers<ContextType = any, ParentType extends ResolversParentTypes['RecurringContribution'] = ResolversParentTypes['RecurringContribution']> = {
@@ -9052,6 +9435,14 @@ export type UserAccountKeysResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserAccountPasswordFundsSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountPasswordFundsSummary'] = ResolversParentTypes['UserAccountPasswordFundsSummary']> = {
+  aonUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  pledgedSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tiaUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  unclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserBadgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserBadge'] = ResolversParentTypes['UserBadge']> = {
   badge?: Resolver<ResolversTypes['Badge'], ParentType, ContextType>;
   badgeAwardEventId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -9147,6 +9538,49 @@ export type UserVerifiedDetailsResolvers<ContextType = any, ParentType extends R
   email?: Resolver<Maybe<ResolversTypes['VerificationResult']>, ParentType, ContextType>;
   identity?: Resolver<Maybe<ResolversTypes['VerificationResult']>, ParentType, ContextType>;
   phoneNumber?: Resolver<Maybe<ResolversTypes['VerificationResult']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWalletWithdrawResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWalletWithdraw'] = ResolversParentTypes['UserWalletWithdraw']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  payments?: Resolver<Array<ResolversTypes['Payment']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['UserWalletWithdrawStatus'], ParentType, ContextType>;
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWalletWithdrawGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWalletWithdrawGetResponse'] = ResolversParentTypes['UserWalletWithdrawGetResponse']> = {
+  userWalletWithdraw?: Resolver<ResolversTypes['UserWalletWithdraw'], ParentType, ContextType>;
+  userWalletWithdrawMetadata?: Resolver<ResolversTypes['UserWalletWithdrawMetadata'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWalletWithdrawInitiateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWalletWithdrawInitiateResponse'] = ResolversParentTypes['UserWalletWithdrawInitiateResponse']> = {
+  txHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userWalletWithdraw?: Resolver<ResolversTypes['UserWalletWithdraw'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWalletWithdrawMetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWalletWithdrawMetadata'] = ResolversParentTypes['UserWalletWithdrawMetadata']> = {
+  contractType?: Resolver<ResolversTypes['PayoutContractType'], ParentType, ContextType>;
+  nonce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  requiresUserLockTx?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWalletWithdrawPaymentCreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWalletWithdrawPaymentCreateResponse'] = ResolversParentTypes['UserWalletWithdrawPaymentCreateResponse']> = {
+  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
+  swap?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userWalletWithdraw?: Resolver<ResolversTypes['UserWalletWithdraw'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserWalletWithdrawRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserWalletWithdrawRequestResponse'] = ResolversParentTypes['UserWalletWithdrawRequestResponse']> = {
+  userWalletWithdraw?: Resolver<ResolversTypes['UserWalletWithdraw'], ParentType, ContextType>;
+  userWalletWithdrawMetadata?: Resolver<ResolversTypes['UserWalletWithdrawMetadata'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9271,11 +9705,14 @@ export type Resolvers<ContextType = any> = {
   HeroStats?: HeroStatsResolvers<ContextType>;
   ImpactFund?: ImpactFundResolvers<ContextType>;
   ImpactFundApplication?: ImpactFundApplicationResolvers<ContextType>;
+  ImpactFundApplicationNote?: ImpactFundApplicationNoteResolvers<ContextType>;
+  ImpactFundApplicationNoteAuthor?: ImpactFundApplicationNoteAuthorResolvers<ContextType>;
   ImpactFundApplicationsGetResponse?: ImpactFundApplicationsGetResponseResolvers<ContextType>;
   ImpactFundDashboardApplicationRow?: ImpactFundDashboardApplicationRowResolvers<ContextType>;
   ImpactFundDashboardApplicationsResponse?: ImpactFundDashboardApplicationsResponseResolvers<ContextType>;
   ImpactFundDashboardCreator?: ImpactFundDashboardCreatorResolvers<ContextType>;
   ImpactFundDashboardProject?: ImpactFundDashboardProjectResolvers<ContextType>;
+  ImpactFundFundingSummaryRow?: ImpactFundFundingSummaryRowResolvers<ContextType>;
   ImpactFundMetrics?: ImpactFundMetricsResolvers<ContextType>;
   ImpactFundSponsor?: ImpactFundSponsorResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
@@ -9319,6 +9756,8 @@ export type Resolvers<ContextType = any> = {
   PaymentInvoiceSanctionCheckStatusResponse?: PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
   PaymentMethods?: PaymentMethodsResolvers<ContextType>;
   PaymentPendResponse?: PaymentPendResponseResolvers<ContextType>;
+  PaymentRecoveryByContributionResponse?: PaymentRecoveryByContributionResponseResolvers<ContextType>;
+  PaymentRecoveryPayment?: PaymentRecoveryPaymentResolvers<ContextType>;
   PaymentRefund?: PaymentRefundResolvers<ContextType>;
   PaymentRefundCompleteResponse?: PaymentRefundCompleteResponseResolvers<ContextType>;
   PaymentRefundsGetResponse?: PaymentRefundsGetResponseResolvers<ContextType>;
@@ -9337,6 +9776,8 @@ export type Resolvers<ContextType = any> = {
   PayoutGetResponse?: PayoutGetResponseResolvers<ContextType>;
   PayoutInitiateResponse?: PayoutInitiateResponseResolvers<ContextType>;
   PayoutMetadata?: PayoutMetadataResolvers<ContextType>;
+  PayoutFeeSummary?: PayoutFeeSummaryResolvers<ContextType>;
+  PayoutFeeSummaryItem?: PayoutFeeSummaryItemResolvers<ContextType>;
   PayoutPaymentCreateResponse?: PayoutPaymentCreateResponseResolvers<ContextType>;
   PayoutRequestResponse?: PayoutRequestResponseResolvers<ContextType>;
   PayoutResponse?: PayoutResponseResolvers<ContextType>;
@@ -9437,6 +9878,7 @@ export type Resolvers<ContextType = any> = {
   TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserAccountKeys?: UserAccountKeysResolvers<ContextType>;
+  UserAccountPasswordFundsSummary?: UserAccountPasswordFundsSummaryResolvers<ContextType>;
   UserBadge?: UserBadgeResolvers<ContextType>;
   UserComplianceDetails?: UserComplianceDetailsResolvers<ContextType>;
   UserContributionLimit?: UserContributionLimitResolvers<ContextType>;
@@ -9449,6 +9891,12 @@ export type Resolvers<ContextType = any> = {
   UserVerificationLevelStatus?: UserVerificationLevelStatusResolvers<ContextType>;
   UserVerificationTokenGenerateResponse?: UserVerificationTokenGenerateResponseResolvers<ContextType>;
   UserVerifiedDetails?: UserVerifiedDetailsResolvers<ContextType>;
+  UserWalletWithdraw?: UserWalletWithdrawResolvers<ContextType>;
+  UserWalletWithdrawGetResponse?: UserWalletWithdrawGetResponseResolvers<ContextType>;
+  UserWalletWithdrawInitiateResponse?: UserWalletWithdrawInitiateResponseResolvers<ContextType>;
+  UserWalletWithdrawMetadata?: UserWalletWithdrawMetadataResolvers<ContextType>;
+  UserWalletWithdrawPaymentCreateResponse?: UserWalletWithdrawPaymentCreateResponseResolvers<ContextType>;
+  UserWalletWithdrawRequestResponse?: UserWalletWithdrawRequestResponseResolvers<ContextType>;
   VerificationResult?: VerificationResultResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
   WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>;
@@ -9477,7 +9925,7 @@ export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGr
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
+export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, description?: string | null, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
 
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } };
 
@@ -10065,6 +10513,34 @@ export type ImpactFundApplyMutationVariables = Exact<{
 
 export type ImpactFundApplyMutation = { __typename?: 'Mutation', impactFundApply: { __typename?: 'ImpactFundApplication', id: any, impactFundId: any, status: ImpactFundApplicationStatus } };
 
+export type ImpactFundApplicationUpdateMutationVariables = Exact<{
+  input: ImpactFundApplicationUpdateInput;
+}>;
+
+
+export type ImpactFundApplicationUpdateMutation = { __typename?: 'Mutation', impactFundApplicationUpdate: { __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel } };
+
+export type ImpactFundApplicationFundingSetMutationVariables = Exact<{
+  input: ImpactFundApplicationFundingSetInput;
+}>;
+
+
+export type ImpactFundApplicationFundingSetMutation = { __typename?: 'Mutation', impactFundApplicationFundingSet: { __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null } };
+
+export type ImpactFundApplicationNoteCreateMutationVariables = Exact<{
+  input: ImpactFundApplicationNoteCreateInput;
+}>;
+
+
+export type ImpactFundApplicationNoteCreateMutation = { __typename?: 'Mutation', impactFundApplicationNoteCreate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
+
+export type ImpactFundApplicationNoteUpdateMutationVariables = Exact<{
+  input: ImpactFundApplicationNoteUpdateInput;
+}>;
+
+
+export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation', impactFundApplicationNoteUpdate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
+
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -10089,7 +10565,7 @@ export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, projectPath: string, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, country?: string | null, fundingStrategy: ProjectFundingStrategy }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
@@ -10324,13 +10800,81 @@ export type UserTaxProfileQuery = { __typename?: 'Query', user: { __typename?: '
       & UserTaxProfileFragment
     ) | null } };
 
-export type FundingContributionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, status: ContributionStatus, comment?: string | null, media?: string | null, confirmedAt?: any | null, projectId: any, creatorEmail?: string | null, createdAt?: any | null, isAnonymous: boolean, isSubscription: boolean, matchedAmountSats: number, matchedAmountUsdCent: number, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, matching?: (
+export type UserWalletWithdrawFragment = { __typename?: 'UserWalletWithdraw', id: any, uuid: string, status: UserWalletWithdrawStatus, amount: number, expiresAt: any };
+
+export type UserWalletWithdrawWithPaymentFragment = { __typename?: 'UserWalletWithdraw', amount: number, expiresAt: any, id: any, uuid: string, status: UserWalletWithdrawStatus, payments: Array<(
+    { __typename?: 'Payment' }
+    & PaymentForPayoutRefundFragment
+  )> };
+
+export type UserWalletWithdrawMetadataFragment = { __typename?: 'UserWalletWithdrawMetadata', nonce: number, swapContractAddress: string, contractType: PayoutContractType, requiresUserLockTx: boolean };
+
+export type UserWalletWithdrawActiveQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserWalletWithdrawActiveQuery = { __typename?: 'Query', userWalletWithdrawActive?: { __typename?: 'UserWalletWithdrawGetResponse', userWalletWithdraw: (
+      { __typename?: 'UserWalletWithdraw' }
+      & UserWalletWithdrawWithPaymentFragment
+    ), userWalletWithdrawMetadata: (
+      { __typename?: 'UserWalletWithdrawMetadata' }
+      & UserWalletWithdrawMetadataFragment
+    ) } | null };
+
+export type UserWalletWithdrawLatestQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserWalletWithdrawLatestQuery = { __typename?: 'Query', userWalletWithdrawLatest?: { __typename?: 'UserWalletWithdrawGetResponse', userWalletWithdraw: (
+      { __typename?: 'UserWalletWithdraw' }
+      & UserWalletWithdrawWithPaymentFragment
+    ), userWalletWithdrawMetadata: (
+      { __typename?: 'UserWalletWithdrawMetadata' }
+      & UserWalletWithdrawMetadataFragment
+    ) } | null };
+
+export type UserWalletWithdrawPrepareMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserWalletWithdrawPrepareMutation = { __typename?: 'Mutation', userWalletWithdrawPrepare: { __typename?: 'UserWalletWithdrawRequestResponse', userWalletWithdraw: (
+      { __typename?: 'UserWalletWithdraw' }
+      & UserWalletWithdrawWithPaymentFragment
+    ), userWalletWithdrawMetadata: (
+      { __typename?: 'UserWalletWithdrawMetadata' }
+      & UserWalletWithdrawMetadataFragment
+    ) } };
+
+export type UserWalletWithdrawPaymentPrepareMutationVariables = Exact<{
+  input: UserWalletWithdrawPaymentCreateInput;
+}>;
+
+
+export type UserWalletWithdrawPaymentPrepareMutation = { __typename?: 'Mutation', userWalletWithdrawPaymentPrepare: { __typename?: 'UserWalletWithdrawPaymentCreateResponse', swap?: string | null, userWalletWithdraw: (
+      { __typename?: 'UserWalletWithdraw' }
+      & UserWalletWithdrawFragment
+    ), payment: (
+      { __typename?: 'Payment' }
+      & PaymentForPayoutRefundFragment
+    ) } };
+
+export type UserWalletWithdrawPaymentInitiateMutationVariables = Exact<{
+  input: UserWalletWithdrawInitiateInput;
+}>;
+
+
+export type UserWalletWithdrawPaymentInitiateMutation = { __typename?: 'Mutation', userWalletWithdrawPaymentInitiate: { __typename?: 'UserWalletWithdrawInitiateResponse', txHash: string, userWalletWithdraw: (
+      { __typename?: 'UserWalletWithdraw' }
+      & UserWalletWithdrawFragment
+    ) } };
+
+export type FundingContributionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, donationAmount: number, status: ContributionStatus, comment?: string | null, media?: string | null, confirmedAt?: any | null, projectId: any, projectGoalId?: any | null, creatorEmail?: string | null, createdAt?: any | null, isAnonymous: boolean, isSubscription: boolean, matchedAmountSats: number, matchedAmountUsdCent: number, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, matching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingFragment
   ) | null, payments: Array<(
     { __typename?: 'Payment' }
     & FundingContributionPaymentFragment
-  )>, funder: (
+  )>, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, itemsTotalInSats: number, shippingFeeTotalInSats: number, items: Array<(
+      { __typename?: 'OrderItem' }
+      & OrderItemFragment
+    )> } | null, funder: (
     { __typename?: 'Funder' }
     & ProjectFunderFragment
   ) };
@@ -10400,7 +10944,7 @@ export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title:
 
 export type ProjectGrantApplicantFragment = { __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | { __typename?: 'CommunityVoteGrant', id: any, votingSystem: VotingSystem, type: GrantType, name: string, title: string, status: GrantStatusEnum } };
 
-export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
+export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, images: Array<string>, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
 export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, shippingFeeTotalInSats: number, itemsTotalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
     { __typename?: 'OrderItem' }
@@ -10454,7 +10998,10 @@ export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment',
 
 export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
 
-export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
+export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )>, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
     { __typename?: 'RskToLightningSwapPaymentDetails' }
     & RskToLightningSwapPaymentDetailsFragment
   ) | (
@@ -10471,7 +11018,7 @@ export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number,
     & PaymentForPayoutRefundFragment
   )> };
 
-export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, requiresUserLockTx: boolean, projectKey?: string | null };
+export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, requiresUserLockTx: boolean, projectKey?: string | null, feeSummary: { __typename?: 'PayoutFeeSummary', totalAmount: number, currency: FeeCurrency, items: Array<{ __typename?: 'PayoutFeeSummaryItem', feeType: PaymentFeeType, description?: string | null, amount: number, currency: FeeCurrency }> } };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -10500,10 +11047,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoal?: (
-    { __typename?: 'ProjectAonGoal' }
-    & ProjectAonGoalForProjectPageFragment
-  ) | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -10520,10 +11064,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoal?: (
-    { __typename?: 'ProjectAonGoal' }
-    & ProjectAonGoalForProjectPageFragment
-  ) | null, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -10540,15 +11081,9 @@ export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, 
     & ProjectReviewFragment
   )> };
 
-export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null, aonGoal?: (
-    { __typename?: 'ProjectAonGoal' }
-    & ProjectAonGoalForProjectPageFragment
-  ) | null };
+export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, aonGoal?: (
-    { __typename?: 'ProjectAonGoal' }
-    & ProjectAonGoalForProjectPageFragment
-  ) | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
 
 export type ProjectMatchingFragment = { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number };
 
@@ -11379,6 +11914,13 @@ export type PaymentByOnChainSwapIdQueryVariables = Exact<{
 
 export type PaymentByOnChainSwapIdQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: any } };
 
+export type PaymentRecoveryByContributionQueryVariables = Exact<{
+  input: PaymentRecoveryByContributionInput;
+}>;
+
+
+export type PaymentRecoveryByContributionQuery = { __typename?: 'Query', paymentRecoveryByContribution: { __typename?: 'PaymentRecoveryByContributionResponse', contribution: { __typename?: 'Contribution', id: any, uuid?: string | null, projectId: any, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null }, project: { __typename?: 'Project', id: any, name: string, title: string, fundingStrategy?: ProjectFundingStrategy | null }, payments: Array<{ __typename?: 'PaymentRecoveryPayment', id: any, uuid: string, status: PaymentStatus, paymentType: PaymentType, amount: number, swapId: string, swapMetadata: string }> } };
+
 export type ProjectPostsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
   input?: InputMaybe<ProjectPostsGetInput>;
@@ -11685,6 +12227,11 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
       & UserAccountKeysFragment
     ) | null } };
 
+export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number } };
+
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
 }>;
@@ -11704,6 +12251,19 @@ export type PayoutActiveQueryVariables = Exact<{
 
 
 export type PayoutActiveQuery = { __typename?: 'Query', payoutActive?: { __typename?: 'PayoutGetResponse', payout: (
+      { __typename?: 'Payout' }
+      & PayoutWithPaymentFragment
+    ), payoutMetadata: (
+      { __typename?: 'PayoutMetadata' }
+      & PayoutMetadataFragment
+    ) } | null };
+
+export type PayoutProcessingQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type PayoutProcessingQuery = { __typename?: 'Query', payoutProcessing?: { __typename?: 'PayoutGetResponse', payout: (
       { __typename?: 'Payout' }
       & PayoutWithPaymentFragment
     ), payoutMetadata: (
@@ -12090,6 +12650,7 @@ export const ProjectForOwnerFragmentDoc = gql`
   images
   thumbnailImage
   title
+  description
   status
   createdAt
   lastCreationStep
@@ -12857,6 +13418,81 @@ export const UserWalletConnectionDetailsFragmentDoc = gql`
   }
 }
     `;
+export const UserWalletWithdrawFragmentDoc = gql`
+    fragment UserWalletWithdraw on UserWalletWithdraw {
+  id
+  uuid
+  status
+  amount
+  expiresAt
+}
+    `;
+export const RskToOnChainSwapPaymentDetailsFragmentDoc = gql`
+    fragment RskToOnChainSwapPaymentDetails on RskToOnChainSwapPaymentDetails {
+  swapId
+  swapMetadata
+  swapPreimageHash
+  onChainAddress
+  onChainTxId
+}
+    `;
+export const RskToLightningSwapPaymentDetailsFragmentDoc = gql`
+    fragment RskToLightningSwapPaymentDetails on RskToLightningSwapPaymentDetails {
+  swapId
+  swapMetadata
+  swapPreimageHash
+  lightningInvoiceId
+}
+    `;
+export const PaymentForPayoutRefundFragmentDoc = gql`
+    fragment PaymentForPayoutRefund on Payment {
+  id
+  method
+  failureReason
+  paymentType
+  createdAt
+  status
+  linkedEntityUUID
+  linkedEntityType
+  fees {
+    feeType
+    feeAmount
+    feePayer
+    description
+    feeCurrency
+    external
+  }
+  paymentDetails {
+    ... on RskToOnChainSwapPaymentDetails {
+      ...RskToOnChainSwapPaymentDetails
+    }
+    ... on RskToLightningSwapPaymentDetails {
+      ...RskToLightningSwapPaymentDetails
+    }
+  }
+}
+    ${RskToOnChainSwapPaymentDetailsFragmentDoc}
+${RskToLightningSwapPaymentDetailsFragmentDoc}`;
+export const UserWalletWithdrawWithPaymentFragmentDoc = gql`
+    fragment UserWalletWithdrawWithPayment on UserWalletWithdraw {
+  amount
+  expiresAt
+  id
+  uuid
+  status
+  payments {
+    ...PaymentForPayoutRefund
+  }
+}
+    ${PaymentForPayoutRefundFragmentDoc}`;
+export const UserWalletWithdrawMetadataFragmentDoc = gql`
+    fragment UserWalletWithdrawMetadata on UserWalletWithdrawMetadata {
+  nonce
+  swapContractAddress
+  contractType
+  requiresUserLockTx
+}
+    `;
 export const FundingContributionPaymentFragmentDoc = gql`
     fragment FundingContributionPayment on Payment {
   id
@@ -12864,6 +13500,20 @@ export const FundingContributionPaymentFragmentDoc = gql`
   paymentAmount
   paymentType
   status
+}
+    `;
+export const OrderItemFragmentDoc = gql`
+    fragment OrderItem on OrderItem {
+  item {
+    id
+    name
+    images
+    cost
+    rewardCurrency
+    category
+  }
+  quantity
+  unitPriceInSats
 }
     `;
 export const UserAvatarFragmentDoc = gql`
@@ -12891,11 +13541,13 @@ export const FundingContributionFragmentDoc = gql`
   id
   uuid
   amount
+  donationAmount
   status
   comment
   media
   confirmedAt
   projectId
+  projectGoalId
   creatorEmail
   createdAt
   isAnonymous
@@ -12912,26 +13564,24 @@ export const FundingContributionFragmentDoc = gql`
   payments {
     ...FundingContributionPayment
   }
+  order {
+    id
+    referenceCode
+    totalInSats
+    itemsTotalInSats
+    shippingFeeTotalInSats
+    items {
+      ...OrderItem
+    }
+  }
   funder {
     ...ProjectFunder
   }
 }
     ${ProjectMatchingFragmentDoc}
 ${FundingContributionPaymentFragmentDoc}
+${OrderItemFragmentDoc}
 ${ProjectFunderFragmentDoc}`;
-export const OrderItemFragmentDoc = gql`
-    fragment OrderItem on OrderItem {
-  item {
-    id
-    name
-    cost
-    rewardCurrency
-    category
-  }
-  quantity
-  unitPriceInSats
-}
-    `;
 export const OrderContributionFragmentDoc = gql`
     fragment OrderContribution on Contribution {
   id
@@ -13359,44 +14009,6 @@ export const PayoutFragmentDoc = gql`
   expiresAt
 }
     `;
-export const RskToOnChainSwapPaymentDetailsFragmentDoc = gql`
-    fragment RskToOnChainSwapPaymentDetails on RskToOnChainSwapPaymentDetails {
-  swapId
-  swapMetadata
-  swapPreimageHash
-  onChainAddress
-  onChainTxId
-}
-    `;
-export const RskToLightningSwapPaymentDetailsFragmentDoc = gql`
-    fragment RskToLightningSwapPaymentDetails on RskToLightningSwapPaymentDetails {
-  swapId
-  swapMetadata
-  swapPreimageHash
-  lightningInvoiceId
-}
-    `;
-export const PaymentForPayoutRefundFragmentDoc = gql`
-    fragment PaymentForPayoutRefund on Payment {
-  id
-  method
-  failureReason
-  paymentType
-  createdAt
-  status
-  linkedEntityUUID
-  linkedEntityType
-  paymentDetails {
-    ... on RskToOnChainSwapPaymentDetails {
-      ...RskToOnChainSwapPaymentDetails
-    }
-    ... on RskToLightningSwapPaymentDetails {
-      ...RskToLightningSwapPaymentDetails
-    }
-  }
-}
-    ${RskToOnChainSwapPaymentDetailsFragmentDoc}
-${RskToLightningSwapPaymentDetailsFragmentDoc}`;
 export const PayoutWithPaymentFragmentDoc = gql`
     fragment PayoutWithPayment on Payout {
   amount
@@ -13417,6 +14029,16 @@ export const PayoutMetadataFragmentDoc = gql`
   contractType
   requiresUserLockTx
   projectKey
+  feeSummary {
+    totalAmount
+    currency
+    items {
+      feeType
+      description
+      amount
+      currency
+    }
+  }
 }
     `;
 export const ProjectPostFragmentDoc = gql`
@@ -13492,6 +14114,17 @@ export const ProjectPostViewFragmentDoc = gql`
 }
     ${PostPageProjectRewardFragmentDoc}
 ${ProjectGoalsFragmentDoc}`;
+export const ProjectAonGoalForProjectPageFragmentDoc = gql`
+    fragment ProjectAonGoalForProjectPage on ProjectAonGoal {
+  goalAmount
+  balance
+  goalDurationInDays
+  endsAt
+  deployedAt
+  status
+  contractAddress
+}
+    `;
 export const ProjectAonGoalForProjectUpdateFragmentDoc = gql`
     fragment ProjectAonGoalForProjectUpdate on ProjectAonGoal {
   goalAmount
@@ -13534,17 +14167,6 @@ export const ProjectNostrKeysFragmentDoc = gql`
       }
     }
   }
-}
-    `;
-export const ProjectAonGoalForProjectPageFragmentDoc = gql`
-    fragment ProjectAonGoalForProjectPage on ProjectAonGoal {
-  goalAmount
-  balance
-  goalDurationInDays
-  endsAt
-  deployedAt
-  status
-  contractAddress
 }
     `;
 export const ProjectLocationFragmentDoc = gql`
@@ -13666,9 +14288,6 @@ export const ProjectPageBodyFragmentDoc = gql`
   category
   subCategory
   links
-  aonGoal {
-    ...ProjectAonGoalForProjectPage
-  }
   location {
     ...ProjectLocation
   }
@@ -13692,8 +14311,7 @@ export const ProjectPageBodyFragmentDoc = gql`
     ...ProjectReviewPublic
   }
 }
-    ${ProjectAonGoalForProjectPageFragmentDoc}
-${ProjectLocationFragmentDoc}
+    ${ProjectLocationFragmentDoc}
 ${ProjectKeysFragmentDoc}
 ${ProjectPageCreatorFragmentDoc}
 ${ProjectPaymentMethodsFragmentDoc}
@@ -13731,9 +14349,6 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   category
   subCategory
   links
-  aonGoal {
-    ...ProjectAonGoalForProjectPage
-  }
   location {
     ...ProjectLocation
   }
@@ -13757,8 +14372,7 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
     ...ProjectReview
   }
 }
-    ${ProjectAonGoalForProjectPageFragmentDoc}
-${ProjectLocationFragmentDoc}
+    ${ProjectLocationFragmentDoc}
 ${ProjectKeysFragmentDoc}
 ${ProjectPageCreatorFragmentDoc}
 ${ProjectPaymentMethodsFragmentDoc}
@@ -13776,11 +14390,8 @@ export const ProjectHeaderSummaryFragmentDoc = gql`
     amountAwardedInSats
     awardedAt
   }
-  aonGoal {
-    ...ProjectAonGoalForProjectPage
-  }
 }
-    ${ProjectAonGoalForProjectPageFragmentDoc}`;
+    `;
 export const ProjectUpdateFragmentDoc = gql`
     fragment ProjectUpdate on Project {
   id
@@ -13805,12 +14416,9 @@ export const ProjectUpdateFragmentDoc = gql`
   rewardCurrency
   fundingStrategy
   lastCreationStep
-  aonGoal {
-    ...ProjectAonGoalForProjectPage
-  }
   launchScheduledAt
 }
-    ${ProjectAonGoalForProjectPageFragmentDoc}`;
+    `;
 export const ProjectActiveMatchingFragmentDoc = gql`
     fragment ProjectActiveMatching on Project {
   id
@@ -16610,6 +17218,165 @@ export function useImpactFundApplyMutation(baseOptions?: Apollo.MutationHookOpti
 export type ImpactFundApplyMutationHookResult = ReturnType<typeof useImpactFundApplyMutation>;
 export type ImpactFundApplyMutationResult = Apollo.MutationResult<ImpactFundApplyMutation>;
 export type ImpactFundApplyMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplyMutation, ImpactFundApplyMutationVariables>;
+export const ImpactFundApplicationUpdateDocument = gql`
+    mutation ImpactFundApplicationUpdate($input: ImpactFundApplicationUpdateInput!) {
+  impactFundApplicationUpdate(input: $input) {
+    id
+    status
+    fundingModel
+  }
+}
+    `;
+export type ImpactFundApplicationUpdateMutationFn = Apollo.MutationFunction<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>;
+
+/**
+ * __useImpactFundApplicationUpdateMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationUpdateMutation, { data, loading, error }] = useImpactFundApplicationUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundApplicationUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>(ImpactFundApplicationUpdateDocument, options);
+      }
+export type ImpactFundApplicationUpdateMutationHookResult = ReturnType<typeof useImpactFundApplicationUpdateMutation>;
+export type ImpactFundApplicationUpdateMutationResult = Apollo.MutationResult<ImpactFundApplicationUpdateMutation>;
+export type ImpactFundApplicationUpdateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationUpdateMutation, ImpactFundApplicationUpdateMutationVariables>;
+export const ImpactFundApplicationFundingSetDocument = gql`
+    mutation ImpactFundApplicationFundingSet($input: ImpactFundApplicationFundingSetInput!) {
+  impactFundApplicationFundingSet(input: $input) {
+    id
+    amountAwardedInSats
+    contributionUuid
+    awardedAt
+  }
+}
+    `;
+export type ImpactFundApplicationFundingSetMutationFn = Apollo.MutationFunction<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>;
+
+/**
+ * __useImpactFundApplicationFundingSetMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationFundingSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationFundingSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationFundingSetMutation, { data, loading, error }] = useImpactFundApplicationFundingSetMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundApplicationFundingSetMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>(ImpactFundApplicationFundingSetDocument, options);
+      }
+export type ImpactFundApplicationFundingSetMutationHookResult = ReturnType<typeof useImpactFundApplicationFundingSetMutation>;
+export type ImpactFundApplicationFundingSetMutationResult = Apollo.MutationResult<ImpactFundApplicationFundingSetMutation>;
+export type ImpactFundApplicationFundingSetMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationFundingSetMutation, ImpactFundApplicationFundingSetMutationVariables>;
+export const ImpactFundApplicationNoteCreateDocument = gql`
+    mutation ImpactFundApplicationNoteCreate($input: ImpactFundApplicationNoteCreateInput!) {
+  impactFundApplicationNoteCreate(input: $input) {
+    id
+    applicationId
+    authorUserId
+    body
+    createdAt
+    updatedAt
+    canEdit
+    author {
+      id
+      username
+      imageUrl
+    }
+  }
+}
+    `;
+export type ImpactFundApplicationNoteCreateMutationFn = Apollo.MutationFunction<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>;
+
+/**
+ * __useImpactFundApplicationNoteCreateMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationNoteCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationNoteCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationNoteCreateMutation, { data, loading, error }] = useImpactFundApplicationNoteCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundApplicationNoteCreateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>(ImpactFundApplicationNoteCreateDocument, options);
+      }
+export type ImpactFundApplicationNoteCreateMutationHookResult = ReturnType<typeof useImpactFundApplicationNoteCreateMutation>;
+export type ImpactFundApplicationNoteCreateMutationResult = Apollo.MutationResult<ImpactFundApplicationNoteCreateMutation>;
+export type ImpactFundApplicationNoteCreateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationNoteCreateMutation, ImpactFundApplicationNoteCreateMutationVariables>;
+export const ImpactFundApplicationNoteUpdateDocument = gql`
+    mutation ImpactFundApplicationNoteUpdate($input: ImpactFundApplicationNoteUpdateInput!) {
+  impactFundApplicationNoteUpdate(input: $input) {
+    id
+    applicationId
+    authorUserId
+    body
+    createdAt
+    updatedAt
+    canEdit
+    author {
+      id
+      username
+      imageUrl
+    }
+  }
+}
+    `;
+export type ImpactFundApplicationNoteUpdateMutationFn = Apollo.MutationFunction<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>;
+
+/**
+ * __useImpactFundApplicationNoteUpdateMutation__
+ *
+ * To run a mutation, you first call `useImpactFundApplicationNoteUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationNoteUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [impactFundApplicationNoteUpdateMutation, { data, loading, error }] = useImpactFundApplicationNoteUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundApplicationNoteUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>(ImpactFundApplicationNoteUpdateDocument, options);
+      }
+export type ImpactFundApplicationNoteUpdateMutationHookResult = ReturnType<typeof useImpactFundApplicationNoteUpdateMutation>;
+export type ImpactFundApplicationNoteUpdateMutationResult = Apollo.MutationResult<ImpactFundApplicationNoteUpdateMutation>;
+export type ImpactFundApplicationNoteUpdateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>;
 export const ImpactFundsDocument = gql`
     query ImpactFunds {
   impactFunds(status: LIVE) {
@@ -16821,18 +17588,45 @@ export const ImpactFundDashboardApplicationsDocument = gql`
     query ImpactFundDashboardApplications($input: ImpactFundDashboardApplicationsInput!) {
   impactFundDashboardApplications(input: $input) {
     totalCount
+    fundingSummary {
+      category
+      fundingModel
+      applicationsCount
+      awardedTotalSats
+    }
     applications {
       applicationId
+      createdAt
       status
       fundingModel
+      amountAwardedInSats
+      contributionUuid
+      awardedAt
+      notes {
+        id
+        applicationId
+        authorUserId
+        body
+        createdAt
+        updatedAt
+        canEdit
+        author {
+          id
+          username
+          imageUrl
+        }
+      }
       project {
         id
         name
         title
         thumbnailImage
         shortDescription
+        description
         country
+        category
         fundingStrategy
+        aonGoalAmount
       }
       creator {
         id
@@ -17660,6 +18454,210 @@ export type UserTaxProfileQueryHookResult = ReturnType<typeof useUserTaxProfileQ
 export type UserTaxProfileLazyQueryHookResult = ReturnType<typeof useUserTaxProfileLazyQuery>;
 export type UserTaxProfileSuspenseQueryHookResult = ReturnType<typeof useUserTaxProfileSuspenseQuery>;
 export type UserTaxProfileQueryResult = Apollo.QueryResult<UserTaxProfileQuery, UserTaxProfileQueryVariables>;
+export const UserWalletWithdrawActiveDocument = gql`
+    query UserWalletWithdrawActive {
+  userWalletWithdrawActive {
+    userWalletWithdraw {
+      ...UserWalletWithdrawWithPayment
+    }
+    userWalletWithdrawMetadata {
+      ...UserWalletWithdrawMetadata
+    }
+  }
+}
+    ${UserWalletWithdrawWithPaymentFragmentDoc}
+${UserWalletWithdrawMetadataFragmentDoc}`;
+
+/**
+ * __useUserWalletWithdrawActiveQuery__
+ *
+ * To run a query within a React component, call `useUserWalletWithdrawActiveQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserWalletWithdrawActiveQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserWalletWithdrawActiveQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserWalletWithdrawActiveQuery(baseOptions?: Apollo.QueryHookOptions<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>(UserWalletWithdrawActiveDocument, options);
+      }
+export function useUserWalletWithdrawActiveLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>(UserWalletWithdrawActiveDocument, options);
+        }
+export function useUserWalletWithdrawActiveSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>(UserWalletWithdrawActiveDocument, options);
+        }
+export type UserWalletWithdrawActiveQueryHookResult = ReturnType<typeof useUserWalletWithdrawActiveQuery>;
+export type UserWalletWithdrawActiveLazyQueryHookResult = ReturnType<typeof useUserWalletWithdrawActiveLazyQuery>;
+export type UserWalletWithdrawActiveSuspenseQueryHookResult = ReturnType<typeof useUserWalletWithdrawActiveSuspenseQuery>;
+export type UserWalletWithdrawActiveQueryResult = Apollo.QueryResult<UserWalletWithdrawActiveQuery, UserWalletWithdrawActiveQueryVariables>;
+export const UserWalletWithdrawLatestDocument = gql`
+    query UserWalletWithdrawLatest {
+  userWalletWithdrawLatest {
+    userWalletWithdraw {
+      ...UserWalletWithdrawWithPayment
+    }
+    userWalletWithdrawMetadata {
+      ...UserWalletWithdrawMetadata
+    }
+  }
+}
+    ${UserWalletWithdrawWithPaymentFragmentDoc}
+${UserWalletWithdrawMetadataFragmentDoc}`;
+
+/**
+ * __useUserWalletWithdrawLatestQuery__
+ *
+ * To run a query within a React component, call `useUserWalletWithdrawLatestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserWalletWithdrawLatestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserWalletWithdrawLatestQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserWalletWithdrawLatestQuery(baseOptions?: Apollo.QueryHookOptions<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>(UserWalletWithdrawLatestDocument, options);
+      }
+export function useUserWalletWithdrawLatestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>(UserWalletWithdrawLatestDocument, options);
+        }
+export function useUserWalletWithdrawLatestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>(UserWalletWithdrawLatestDocument, options);
+        }
+export type UserWalletWithdrawLatestQueryHookResult = ReturnType<typeof useUserWalletWithdrawLatestQuery>;
+export type UserWalletWithdrawLatestLazyQueryHookResult = ReturnType<typeof useUserWalletWithdrawLatestLazyQuery>;
+export type UserWalletWithdrawLatestSuspenseQueryHookResult = ReturnType<typeof useUserWalletWithdrawLatestSuspenseQuery>;
+export type UserWalletWithdrawLatestQueryResult = Apollo.QueryResult<UserWalletWithdrawLatestQuery, UserWalletWithdrawLatestQueryVariables>;
+export const UserWalletWithdrawPrepareDocument = gql`
+    mutation UserWalletWithdrawPrepare {
+  userWalletWithdrawPrepare {
+    userWalletWithdraw {
+      ...UserWalletWithdrawWithPayment
+    }
+    userWalletWithdrawMetadata {
+      ...UserWalletWithdrawMetadata
+    }
+  }
+}
+    ${UserWalletWithdrawWithPaymentFragmentDoc}
+${UserWalletWithdrawMetadataFragmentDoc}`;
+export type UserWalletWithdrawPrepareMutationFn = Apollo.MutationFunction<UserWalletWithdrawPrepareMutation, UserWalletWithdrawPrepareMutationVariables>;
+
+/**
+ * __useUserWalletWithdrawPrepareMutation__
+ *
+ * To run a mutation, you first call `useUserWalletWithdrawPrepareMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserWalletWithdrawPrepareMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userWalletWithdrawPrepareMutation, { data, loading, error }] = useUserWalletWithdrawPrepareMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserWalletWithdrawPrepareMutation(baseOptions?: Apollo.MutationHookOptions<UserWalletWithdrawPrepareMutation, UserWalletWithdrawPrepareMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserWalletWithdrawPrepareMutation, UserWalletWithdrawPrepareMutationVariables>(UserWalletWithdrawPrepareDocument, options);
+      }
+export type UserWalletWithdrawPrepareMutationHookResult = ReturnType<typeof useUserWalletWithdrawPrepareMutation>;
+export type UserWalletWithdrawPrepareMutationResult = Apollo.MutationResult<UserWalletWithdrawPrepareMutation>;
+export type UserWalletWithdrawPrepareMutationOptions = Apollo.BaseMutationOptions<UserWalletWithdrawPrepareMutation, UserWalletWithdrawPrepareMutationVariables>;
+export const UserWalletWithdrawPaymentPrepareDocument = gql`
+    mutation UserWalletWithdrawPaymentPrepare($input: UserWalletWithdrawPaymentCreateInput!) {
+  userWalletWithdrawPaymentPrepare(input: $input) {
+    userWalletWithdraw {
+      ...UserWalletWithdraw
+    }
+    swap
+    payment {
+      ...PaymentForPayoutRefund
+    }
+  }
+}
+    ${UserWalletWithdrawFragmentDoc}
+${PaymentForPayoutRefundFragmentDoc}`;
+export type UserWalletWithdrawPaymentPrepareMutationFn = Apollo.MutationFunction<UserWalletWithdrawPaymentPrepareMutation, UserWalletWithdrawPaymentPrepareMutationVariables>;
+
+/**
+ * __useUserWalletWithdrawPaymentPrepareMutation__
+ *
+ * To run a mutation, you first call `useUserWalletWithdrawPaymentPrepareMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserWalletWithdrawPaymentPrepareMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userWalletWithdrawPaymentPrepareMutation, { data, loading, error }] = useUserWalletWithdrawPaymentPrepareMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserWalletWithdrawPaymentPrepareMutation(baseOptions?: Apollo.MutationHookOptions<UserWalletWithdrawPaymentPrepareMutation, UserWalletWithdrawPaymentPrepareMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserWalletWithdrawPaymentPrepareMutation, UserWalletWithdrawPaymentPrepareMutationVariables>(UserWalletWithdrawPaymentPrepareDocument, options);
+      }
+export type UserWalletWithdrawPaymentPrepareMutationHookResult = ReturnType<typeof useUserWalletWithdrawPaymentPrepareMutation>;
+export type UserWalletWithdrawPaymentPrepareMutationResult = Apollo.MutationResult<UserWalletWithdrawPaymentPrepareMutation>;
+export type UserWalletWithdrawPaymentPrepareMutationOptions = Apollo.BaseMutationOptions<UserWalletWithdrawPaymentPrepareMutation, UserWalletWithdrawPaymentPrepareMutationVariables>;
+export const UserWalletWithdrawPaymentInitiateDocument = gql`
+    mutation UserWalletWithdrawPaymentInitiate($input: UserWalletWithdrawInitiateInput!) {
+  userWalletWithdrawPaymentInitiate(input: $input) {
+    userWalletWithdraw {
+      ...UserWalletWithdraw
+    }
+    txHash
+  }
+}
+    ${UserWalletWithdrawFragmentDoc}`;
+export type UserWalletWithdrawPaymentInitiateMutationFn = Apollo.MutationFunction<UserWalletWithdrawPaymentInitiateMutation, UserWalletWithdrawPaymentInitiateMutationVariables>;
+
+/**
+ * __useUserWalletWithdrawPaymentInitiateMutation__
+ *
+ * To run a mutation, you first call `useUserWalletWithdrawPaymentInitiateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserWalletWithdrawPaymentInitiateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userWalletWithdrawPaymentInitiateMutation, { data, loading, error }] = useUserWalletWithdrawPaymentInitiateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserWalletWithdrawPaymentInitiateMutation(baseOptions?: Apollo.MutationHookOptions<UserWalletWithdrawPaymentInitiateMutation, UserWalletWithdrawPaymentInitiateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserWalletWithdrawPaymentInitiateMutation, UserWalletWithdrawPaymentInitiateMutationVariables>(UserWalletWithdrawPaymentInitiateDocument, options);
+      }
+export type UserWalletWithdrawPaymentInitiateMutationHookResult = ReturnType<typeof useUserWalletWithdrawPaymentInitiateMutation>;
+export type UserWalletWithdrawPaymentInitiateMutationResult = Apollo.MutationResult<UserWalletWithdrawPaymentInitiateMutation>;
+export type UserWalletWithdrawPaymentInitiateMutationOptions = Apollo.BaseMutationOptions<UserWalletWithdrawPaymentInitiateMutation, UserWalletWithdrawPaymentInitiateMutationVariables>;
 export const PaymentSwapClaimTxBroadcastDocument = gql`
     mutation PaymentSwapClaimTxBroadcast($input: PaymentSwapClaimTxBroadcastInput!) {
   paymentSwapClaimTxBroadcast(input: $input) {
@@ -20726,6 +21724,70 @@ export type PaymentByOnChainSwapIdQueryHookResult = ReturnType<typeof usePayment
 export type PaymentByOnChainSwapIdLazyQueryHookResult = ReturnType<typeof usePaymentByOnChainSwapIdLazyQuery>;
 export type PaymentByOnChainSwapIdSuspenseQueryHookResult = ReturnType<typeof usePaymentByOnChainSwapIdSuspenseQuery>;
 export type PaymentByOnChainSwapIdQueryResult = Apollo.QueryResult<PaymentByOnChainSwapIdQuery, PaymentByOnChainSwapIdQueryVariables>;
+export const PaymentRecoveryByContributionDocument = gql`
+    query PaymentRecoveryByContribution($input: PaymentRecoveryByContributionInput!) {
+  paymentRecoveryByContribution(input: $input) {
+    contribution {
+      id
+      uuid
+      projectId
+      createdAt
+      bitcoinQuote {
+        quote
+        quoteCurrency
+      }
+    }
+    project {
+      id
+      name
+      title
+      fundingStrategy
+    }
+    payments {
+      id
+      uuid
+      status
+      paymentType
+      amount
+      swapId
+      swapMetadata
+    }
+  }
+}
+    `;
+
+/**
+ * __usePaymentRecoveryByContributionQuery__
+ *
+ * To run a query within a React component, call `usePaymentRecoveryByContributionQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentRecoveryByContributionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentRecoveryByContributionQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentRecoveryByContributionQuery(baseOptions: Apollo.QueryHookOptions<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables> & ({ variables: PaymentRecoveryByContributionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>(PaymentRecoveryByContributionDocument, options);
+      }
+export function usePaymentRecoveryByContributionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>(PaymentRecoveryByContributionDocument, options);
+        }
+export function usePaymentRecoveryByContributionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>(PaymentRecoveryByContributionDocument, options);
+        }
+export type PaymentRecoveryByContributionQueryHookResult = ReturnType<typeof usePaymentRecoveryByContributionQuery>;
+export type PaymentRecoveryByContributionLazyQueryHookResult = ReturnType<typeof usePaymentRecoveryByContributionLazyQuery>;
+export type PaymentRecoveryByContributionSuspenseQueryHookResult = ReturnType<typeof usePaymentRecoveryByContributionSuspenseQuery>;
+export type PaymentRecoveryByContributionQueryResult = Apollo.QueryResult<PaymentRecoveryByContributionQuery, PaymentRecoveryByContributionQueryVariables>;
 export const ProjectPostsDocument = gql`
     query ProjectPosts($where: UniqueProjectQueryInput!, $input: ProjectPostsGetInput) {
   projectGet(where: $where) {
@@ -22165,6 +23227,48 @@ export type AccountKeysQueryHookResult = ReturnType<typeof useAccountKeysQuery>;
 export type AccountKeysLazyQueryHookResult = ReturnType<typeof useAccountKeysLazyQuery>;
 export type AccountKeysSuspenseQueryHookResult = ReturnType<typeof useAccountKeysSuspenseQuery>;
 export type AccountKeysQueryResult = Apollo.QueryResult<AccountKeysQuery, AccountKeysQueryVariables>;
+export const UserAccountPasswordFundsSummaryDocument = gql`
+    query UserAccountPasswordFundsSummary {
+  userAccountPasswordFundsSummary {
+    unclaimedFundsSats
+    tiaUnclaimedFundsSats
+    aonUnclaimedFundsSats
+    pledgedSats
+  }
+}
+    `;
+
+/**
+ * __useUserAccountPasswordFundsSummaryQuery__
+ *
+ * To run a query within a React component, call `useUserAccountPasswordFundsSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAccountPasswordFundsSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserAccountPasswordFundsSummaryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserAccountPasswordFundsSummaryQuery(baseOptions?: Apollo.QueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>(UserAccountPasswordFundsSummaryDocument, options);
+      }
+export function useUserAccountPasswordFundsSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>(UserAccountPasswordFundsSummaryDocument, options);
+        }
+export function useUserAccountPasswordFundsSummarySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>(UserAccountPasswordFundsSummaryDocument, options);
+        }
+export type UserAccountPasswordFundsSummaryQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummaryQuery>;
+export type UserAccountPasswordFundsSummaryLazyQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummaryLazyQuery>;
+export type UserAccountPasswordFundsSummarySuspenseQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummarySuspenseQuery>;
+export type UserAccountPasswordFundsSummaryQueryResult = Apollo.QueryResult<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>;
 export const PayoutGetDocument = gql`
     query PayoutGet($input: PayoutGetInput!) {
   payoutGet(input: $input) {
@@ -22257,6 +23361,52 @@ export type PayoutActiveQueryHookResult = ReturnType<typeof usePayoutActiveQuery
 export type PayoutActiveLazyQueryHookResult = ReturnType<typeof usePayoutActiveLazyQuery>;
 export type PayoutActiveSuspenseQueryHookResult = ReturnType<typeof usePayoutActiveSuspenseQuery>;
 export type PayoutActiveQueryResult = Apollo.QueryResult<PayoutActiveQuery, PayoutActiveQueryVariables>;
+export const PayoutProcessingDocument = gql`
+    query PayoutProcessing($projectId: BigInt!) {
+  payoutProcessing(projectId: $projectId) {
+    payout {
+      ...PayoutWithPayment
+    }
+    payoutMetadata {
+      ...PayoutMetadata
+    }
+  }
+}
+    ${PayoutWithPaymentFragmentDoc}
+${PayoutMetadataFragmentDoc}`;
+
+/**
+ * __usePayoutProcessingQuery__
+ *
+ * To run a query within a React component, call `usePayoutProcessingQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePayoutProcessingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePayoutProcessingQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function usePayoutProcessingQuery(baseOptions: Apollo.QueryHookOptions<PayoutProcessingQuery, PayoutProcessingQueryVariables> & ({ variables: PayoutProcessingQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PayoutProcessingQuery, PayoutProcessingQueryVariables>(PayoutProcessingDocument, options);
+      }
+export function usePayoutProcessingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PayoutProcessingQuery, PayoutProcessingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PayoutProcessingQuery, PayoutProcessingQueryVariables>(PayoutProcessingDocument, options);
+        }
+export function usePayoutProcessingSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PayoutProcessingQuery, PayoutProcessingQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PayoutProcessingQuery, PayoutProcessingQueryVariables>(PayoutProcessingDocument, options);
+        }
+export type PayoutProcessingQueryHookResult = ReturnType<typeof usePayoutProcessingQuery>;
+export type PayoutProcessingLazyQueryHookResult = ReturnType<typeof usePayoutProcessingLazyQuery>;
+export type PayoutProcessingSuspenseQueryHookResult = ReturnType<typeof usePayoutProcessingSuspenseQuery>;
+export type PayoutProcessingQueryResult = Apollo.QueryResult<PayoutProcessingQuery, PayoutProcessingQueryVariables>;
 export const PayoutLatestDocument = gql`
     query PayoutLatest($projectId: BigInt!) {
   payoutLatest(projectId: $projectId) {

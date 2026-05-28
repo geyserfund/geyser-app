@@ -7,3 +7,35 @@ export const QUERY_PAYMENT_BY_ONCHAIN_SWAP_ID = gql`
     }
   }
 `
+
+export const QUERY_PAYMENT_RECOVERY_BY_CONTRIBUTION = gql`
+  query PaymentRecoveryByContribution($input: PaymentRecoveryByContributionInput!) {
+    paymentRecoveryByContribution(input: $input) {
+      contribution {
+        id
+        uuid
+        projectId
+        createdAt
+        bitcoinQuote {
+          quote
+          quoteCurrency
+        }
+      }
+      project {
+        id
+        name
+        title
+        fundingStrategy
+      }
+      payments {
+        id
+        uuid
+        status
+        paymentType
+        amount
+        swapId
+        swapMetadata
+      }
+    }
+  }
+`

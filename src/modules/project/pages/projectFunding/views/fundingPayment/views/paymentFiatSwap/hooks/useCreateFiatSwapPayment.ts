@@ -1,6 +1,7 @@
 import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 
+import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
   generateAccountKeys,
@@ -9,10 +10,14 @@ import {
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { useGenerateTransactionDataForClaimingRBTCToContract } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
-import { contributionAddPaymentPreImagesAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
+import {
+  anonymousRecoveryCodeAtom,
+  contributionAddPaymentPreImagesAtom,
+} from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { rskAccountKeysAtom } from '@/modules/project/funding/state/swapRskAtom.ts'
+import { createSwapRecoveryMetadata, generateRecoveryCode } from '@/modules/project/funding/utils/recoveryKey.ts'
 import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
@@ -41,9 +46,12 @@ export const useCreateFiatSwapPayment = () => {
   const setFiatFailureReason = useSetAtom(fiatFailureReasonAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
   const setContributionAddPaymentPreImages = useSetAtom(contributionAddPaymentPreImagesAtom)
+  const anonymousRecoveryCode = useAtomValue(anonymousRecoveryCodeAtom)
+  const setAnonymousRecoveryCode = useSetAtom(anonymousRecoveryCodeAtom)
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
+  const currentUser = useAtomValue(authUserAtom)
   const { generateTransactionForLightningToRskSwap } = useGenerateTransactionDataForClaimingRBTCToContract()
   const requiresLightningToRskSwap =
     project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing || isPrismEnabled(project)
@@ -154,6 +162,16 @@ export const useCreateFiatSwapPayment = () => {
       assertAccountKeysAreAvailable(accountKeys)
     }
 
+    const recoveryCode = anonymousRecoveryCode || generateRecoveryCode()
+    const recovery =
+      requiresLightningToRskSwap && accountKeys && !currentUser?.id
+        ? await createSwapRecoveryMetadata(accountKeys, recoveryCode)
+        : undefined
+
+    if (recovery && !anonymousRecoveryCode) {
+      setAnonymousRecoveryCode(recoveryCode)
+    }
+
     const banxaInput = {
       fiatCurrency,
       paymentMethodId,
@@ -179,6 +197,7 @@ export const useCreateFiatSwapPayment = () => {
                       claimPublicKey: accountKeys.publicKey,
                       claimAddress: accountKeys.address,
                       preimageHash: lightningPreImage.preimageHash,
+                      recovery,
                     },
                   },
                 }),
