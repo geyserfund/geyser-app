@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { BeehiivTag } from '@/shared/constants/beehiiv.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { SubscriptionForm } from '@/shared/molecules/forms/SubscriptionForm.tsx'
 
@@ -56,11 +55,7 @@ export const GrantSubscriptionSection = () => {
           </HStack>
         </Flex>
       </CardLayout>
-      <SubscriptionForm
-        title={t('Subscribe to Geyser Grants')}
-        tags={[BeehiivTag.IMPACT_FUND_GRANTEE]}
-        {...subscriptionModal}
-      />
+      <SubscriptionForm title={t('Subscribe to Geyser Grants')} {...subscriptionModal} />
     </>
   )
 }

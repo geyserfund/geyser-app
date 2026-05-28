@@ -24,11 +24,11 @@ import { HorizontalFormField } from '@/modules/profile/pages/profileSettings/com
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
-import { DEFAULT_BEEHIIV_NEWSLETTER_TAGS } from '@/shared/constants/beehiiv.ts'
+import { DEFAULT_NEWSLETTER_PREFERENCES } from '@/shared/constants/newsletter.ts'
 import { lightModeColors } from '@/shared/styles'
 import {
-  useBeehiivNewsletterPreferencesGetQuery,
-  useBeehiivNewsletterSubscribeMutation,
+  useNewsletterPreferencesGetQuery,
+  useNewsletterSubscribeMutation,
   useUserEmailIsAvailableLazyQuery,
 } from '@/types'
 import { useNotification, validEmail } from '@/utils'
@@ -65,13 +65,12 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const [followsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
   const [userId] = useState(user?.id || 0)
 
-  const { data: newsletterPreferencesData } = useBeehiivNewsletterPreferencesGetQuery({
+  const { data: newsletterPreferencesData } = useNewsletterPreferencesGetQuery({
     skip: !isLoggedIn || !userId || !user?.email,
     variables: { userId },
   })
-  const [subscribeToBeehiivNewsletter, { loading: subscribingToBeehiivNewsletter }] =
-    useBeehiivNewsletterSubscribeMutation()
-  const newsletterPreferences = newsletterPreferencesData?.beehiivNewsletterPreferencesGet
+  const [subscribeToNewsletter, { loading: subscribingToNewsletter }] = useNewsletterSubscribeMutation()
+  const newsletterPreferences = newsletterPreferencesData?.newsletterPreferencesGet
   const subscribedToGeyserEmails =
     newsletterPreferences?.status === 'active' &&
     newsletterPreferences.newsletterMonthly &&
@@ -95,14 +94,11 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     }
 
     try {
-      await subscribeToBeehiivNewsletter({
+      await subscribeToNewsletter({
         variables: {
-          input: {
+          beehiivNewsletterInput: {
             email,
-            newsletterMonthly: true,
-            productUpdates: true,
-            projectSpotlights: true,
-            tags: DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
           },
         },
       })
@@ -289,7 +285,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
                   <Switch
                     id="geyser-email-toggle"
                     isChecked={subscribeToGeyserEmails}
-                    isDisabled={subscribingToBeehiivNewsletter}
+                    isDisabled={subscribingToNewsletter}
                     onChange={async (e) => {
                       await handleSubscribeToGeyserEmailsChange(e.target.checked)
                     }}

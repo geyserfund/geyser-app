@@ -1,7 +1,7 @@
 import { t } from 'i18next'
 import { PiLightning, PiRocketLaunch, PiUsers } from 'react-icons/pi'
 
-import type { BeehiivNewsletterPreferenceKey } from '@/shared/constants/beehiiv.ts'
+import type { NewsletterPreferenceKey } from '@/shared/constants/newsletter.ts'
 
 export const NEWSLETTER_SEGMENTS = [
   { id: 'newsletterMonthly', label: t('Monthly Newsletter') },
@@ -9,7 +9,7 @@ export const NEWSLETTER_SEGMENTS = [
   { id: 'projectSpotlights', label: t('Project Spotlights') },
 ] as const
 
-export type NewsletterSegmentId = (typeof NEWSLETTER_SEGMENTS)[number]['id'] & BeehiivNewsletterPreferenceKey
+export type NewsletterSegmentId = (typeof NEWSLETTER_SEGMENTS)[number]['id'] & NewsletterPreferenceKey
 
 export const CONTENT_PILLARS = [
   {

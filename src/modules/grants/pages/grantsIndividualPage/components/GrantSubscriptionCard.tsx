@@ -4,7 +4,6 @@ import { PiBell } from 'react-icons/pi'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { BeehiivTag } from '@/shared/constants/beehiiv.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { SubscriptionForm } from '@/shared/molecules/forms/SubscriptionForm.tsx'
 
@@ -14,14 +13,12 @@ type GrantSubscriptionSectionProps = {
   title: string
   description: string
   modalTitle: string
-  tag: BeehiivTag
 } & CardLayoutProps
 
 export const GrantSubscriptionSection = ({
   title,
   description,
   modalTitle,
-  tag,
   ...rest
 }: GrantSubscriptionSectionProps) => {
   const subscriptionModal = useModal()
@@ -51,7 +48,7 @@ export const GrantSubscriptionSection = ({
           </Button>
         </Flex>
       </CardLayout>
-      <SubscriptionForm title={modalTitle} tags={[tag]} {...subscriptionModal} />
+      <SubscriptionForm title={modalTitle} {...subscriptionModal} />
     </>
   )
 }

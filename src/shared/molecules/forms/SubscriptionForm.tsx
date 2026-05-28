@@ -8,9 +8,9 @@ import * as yup from 'yup'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { BeehiivTag, DEFAULT_BEEHIIV_NEWSLETTER_TAGS } from '@/shared/constants/beehiiv.ts'
 import { FollowBellIllurationsUrl } from '@/shared/constants/index.ts'
-import { useBeehiivNewsletterSubscribeMutation } from '@/types/index.ts'
+import { DEFAULT_NEWSLETTER_PREFERENCES } from '@/shared/constants/newsletter.ts'
+import { useNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -23,22 +23,16 @@ type SubscriptionFormData = {
 
 interface SubscriptionFormProps {
   title?: string
-  tags?: BeehiivTag[]
   isOpen: boolean
   onClose: () => void
 }
 
-export const SubscriptionForm = ({
-  title,
-  tags = DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
-  isOpen,
-  onClose,
-}: SubscriptionFormProps) => {
+export const SubscriptionForm = ({ title, isOpen, onClose }: SubscriptionFormProps) => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [subscribeToBeehiivNewsletter] = useBeehiivNewsletterSubscribeMutation()
+  const [subscribeToNewsletter] = useNewsletterSubscribeMutation()
 
   const {
     control,
@@ -60,14 +54,11 @@ export const SubscriptionForm = ({
   const onSubmit = async (data: SubscriptionFormData) => {
     try {
       setSubmitting(true)
-      await subscribeToBeehiivNewsletter({
+      await subscribeToNewsletter({
         variables: {
-          input: {
+          beehiivNewsletterInput: {
             email: data.email,
-            newsletterMonthly: true,
-            productUpdates: true,
-            projectSpotlights: true,
-            tags,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
           },
         },
       })

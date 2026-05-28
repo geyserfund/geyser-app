@@ -5,16 +5,16 @@ import { PiEnvelopeSimple, PiLightning, PiStar } from 'react-icons/pi'
 import { useAuthContext } from '@/context'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { BeehiivNewsletterPreferenceKey } from '@/shared/constants/beehiiv.ts'
+import { NewsletterPreferenceKey } from '@/shared/constants/newsletter.ts'
 import {
-  useBeehiivNewsletterPreferencesGetQuery,
-  useBeehiivNewsletterPreferencesUpdateMutation,
-  useBeehiivNewsletterStatusUpdateMutation,
+  useNewsletterPreferencesGetQuery,
+  useNewsletterPreferencesUpdateMutation,
+  useNewsletterStatusUpdateMutation,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const newsletterRows: {
-  key: BeehiivNewsletterPreferenceKey
+  key: NewsletterPreferenceKey
   title: string
   description: string
   icon: typeof PiEnvelopeSimple
@@ -39,21 +39,21 @@ const newsletterRows: {
   },
 ]
 
-/** Beehiiv-backed controls for global Geyser newsletter preferences. */
+/** Controls for global Geyser newsletter preferences. */
 export const GeyserNewsletterNotifications = () => {
   const { user } = useAuthContext()
   const toast = useNotification()
   const iconBg = useColorModeValue('primaryAlpha.3', 'primaryAlpha.4')
   const dividerColor = useColorModeValue('neutral1.4', 'neutral1.6')
 
-  const { data, loading, refetch } = useBeehiivNewsletterPreferencesGetQuery({
+  const { data, loading, refetch } = useNewsletterPreferencesGetQuery({
     skip: !user?.id,
     variables: { userId: user.id },
   })
-  const [updatePreferences, { loading: isUpdatingPreferences }] = useBeehiivNewsletterPreferencesUpdateMutation()
-  const [updateStatus, { loading: isUpdatingStatus }] = useBeehiivNewsletterStatusUpdateMutation()
+  const [updatePreferences, { loading: isUpdatingPreferences }] = useNewsletterPreferencesUpdateMutation()
+  const [updateStatus, { loading: isUpdatingStatus }] = useNewsletterStatusUpdateMutation()
 
-  const preferences = data?.beehiivNewsletterPreferencesGet
+  const preferences = data?.newsletterPreferencesGet
   const isActive = preferences?.status === 'active'
   const isMutating = isUpdatingPreferences || isUpdatingStatus
 
@@ -76,7 +76,7 @@ export const GeyserNewsletterNotifications = () => {
     }
   }
 
-  const handlePreferenceChange = async (key: BeehiivNewsletterPreferenceKey, isChecked: boolean) => {
+  const handlePreferenceChange = async (key: NewsletterPreferenceKey, isChecked: boolean) => {
     try {
       await updatePreferences({
         variables: {

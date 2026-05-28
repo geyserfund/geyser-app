@@ -9,12 +9,8 @@ import {
   ControlledTextInput,
   ControlledTextInputProps,
 } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
-import {
-  BeehiivNewsletterPreferenceKey,
-  BeehiivTag,
-  DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
-} from '@/shared/constants/beehiiv.ts'
-import { useBeehiivNewsletterSubscribeMutation } from '@/types/index.ts'
+import { DEFAULT_NEWSLETTER_PREFERENCES, NewsletterPreferenceKey } from '@/shared/constants/newsletter.ts'
+import { useNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -26,25 +22,18 @@ type SubscriptionFormData = {
 }
 
 type SubscribeFormProps = StackProps & {
-  /** Beehiiv newsletter preferences to enable when the subscriber is created. */
-  preferences?: Partial<Record<BeehiivNewsletterPreferenceKey, boolean>>
-  tags?: BeehiivTag[]
+  /** Newsletter preferences to enable when the subscriber is created. */
+  preferences?: Partial<Record<NewsletterPreferenceKey, boolean>>
   buttonProps?: ButtonProps
   inputProps?: Omit<ControlledTextInputProps, 'control' | 'name' | 'error'>
 }
 
-/** Inline email subscription form that creates a Beehiiv subscriber. */
-export const SubscribeForm = ({
-  preferences,
-  tags = DEFAULT_BEEHIIV_NEWSLETTER_TAGS,
-  buttonProps,
-  inputProps,
-  ...props
-}: SubscribeFormProps) => {
+/** Inline email subscription form that creates a newsletter subscriber. */
+export const SubscribeForm = ({ preferences, buttonProps, inputProps, ...props }: SubscribeFormProps) => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
-  const [subscribeToBeehiivNewsletter] = useBeehiivNewsletterSubscribeMutation()
+  const [subscribeToNewsletter] = useNewsletterSubscribeMutation()
 
   const {
     control,
@@ -60,14 +49,12 @@ export const SubscribeForm = ({
     try {
       setSubmitting(true)
 
-      await subscribeToBeehiivNewsletter({
+      await subscribeToNewsletter({
         variables: {
-          input: {
+          beehiivNewsletterInput: {
             email: data.email,
-            newsletterMonthly: preferences?.newsletterMonthly ?? true,
-            productUpdates: preferences?.productUpdates ?? true,
-            projectSpotlights: preferences?.projectSpotlights ?? true,
-            tags,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
+            ...preferences,
           },
         },
       })

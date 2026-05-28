@@ -225,24 +225,23 @@ export enum BaseCurrency {
   Btc = 'BTC'
 }
 
-export type BeehiivNewsletterPreferences = {
-  __typename?: 'BeehiivNewsletterPreferences';
+export type NewsletterPreferences = {
+  __typename?: 'NewsletterPreferences';
   email: Scalars['String']['output'];
   newsletterMonthly: Scalars['Boolean']['output'];
   productUpdates: Scalars['Boolean']['output'];
   projectSpotlights: Scalars['Boolean']['output'];
   status?: Maybe<Scalars['String']['output']>;
-  tags: Array<Scalars['String']['output']>;
 };
 
-export type BeehiivNewsletterPreferencesUpdateInput = {
+export type NewsletterPreferencesUpdateInput = {
   newsletterMonthly?: InputMaybe<Scalars['Boolean']['input']>;
   productUpdates?: InputMaybe<Scalars['Boolean']['input']>;
   projectSpotlights?: InputMaybe<Scalars['Boolean']['input']>;
   userId: Scalars['BigInt']['input'];
 };
 
-export type BeehiivNewsletterStatusUpdateInput = {
+export type NewsletterStatusUpdateInput = {
   isActive: Scalars['Boolean']['input'];
   userId: Scalars['BigInt']['input'];
 };
@@ -252,7 +251,6 @@ export type BeehiivNewsletterSubscribeInput = {
   newsletterMonthly?: InputMaybe<Scalars['Boolean']['input']>;
   productUpdates?: InputMaybe<Scalars['Boolean']['input']>;
   projectSpotlights?: InputMaybe<Scalars['Boolean']['input']>;
-  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type BitcoinPaymentMethods = {
@@ -1679,9 +1677,9 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']['output']>;
   ambassadorAdd?: Maybe<Ambassador>;
   ambassadorUpdate?: Maybe<Ambassador>;
-  beehiivNewsletterPreferencesUpdate: BeehiivNewsletterPreferences;
-  beehiivNewsletterStatusUpdate: BeehiivNewsletterPreferences;
-  beehiivNewsletterSubscribe: BeehiivNewsletterPreferences;
+  newsletterPreferencesUpdate: NewsletterPreferences;
+  newsletterStatusUpdate: NewsletterPreferences;
+  newsletterSubscribe: NewsletterPreferences;
   claimBadge: UserBadge;
   contributionCreate: ContributionMutationResponse;
   contributionEmailUpdate: Contribution;
@@ -1838,18 +1836,18 @@ export type MutationAmbassadorUpdateArgs = {
 };
 
 
-export type MutationBeehiivNewsletterPreferencesUpdateArgs = {
-  input: BeehiivNewsletterPreferencesUpdateInput;
+export type MutationNewsletterPreferencesUpdateArgs = {
+  input: NewsletterPreferencesUpdateInput;
 };
 
 
-export type MutationBeehiivNewsletterStatusUpdateArgs = {
-  input: BeehiivNewsletterStatusUpdateInput;
+export type MutationNewsletterStatusUpdateArgs = {
+  input: NewsletterStatusUpdateInput;
 };
 
 
-export type MutationBeehiivNewsletterSubscribeArgs = {
-  input: BeehiivNewsletterSubscribeInput;
+export type MutationNewsletterSubscribeArgs = {
+  beehiivNewsletterInput: BeehiivNewsletterSubscribeInput;
 };
 
 
@@ -4529,7 +4527,7 @@ export type Query = {
   /** Returns all activities. */
   activitiesGet: ActivitiesGetResponse;
   badges: Array<Badge>;
-  beehiivNewsletterPreferencesGet: BeehiivNewsletterPreferences;
+  newsletterPreferencesGet: NewsletterPreferences;
   contribution: Contribution;
   contributionsGet?: Maybe<ContributionsGetResponse>;
   contributor: Funder;
@@ -4639,7 +4637,7 @@ export type QueryActivitiesGetArgs = {
 };
 
 
-export type QueryBeehiivNewsletterPreferencesGetArgs = {
+export type QueryNewsletterPreferencesGetArgs = {
   userId: Scalars['BigInt']['input'];
 };
 
@@ -6064,9 +6062,9 @@ export type ResolversTypes = {
   BadgesGetInput: BadgesGetInput;
   BadgesGetWhereInput: BadgesGetWhereInput;
   BaseCurrency: BaseCurrency;
-  BeehiivNewsletterPreferences: ResolverTypeWrapper<BeehiivNewsletterPreferences>;
-  BeehiivNewsletterPreferencesUpdateInput: BeehiivNewsletterPreferencesUpdateInput;
-  BeehiivNewsletterStatusUpdateInput: BeehiivNewsletterStatusUpdateInput;
+  NewsletterPreferences: ResolverTypeWrapper<NewsletterPreferences>;
+  NewsletterPreferencesUpdateInput: NewsletterPreferencesUpdateInput;
+  NewsletterStatusUpdateInput: NewsletterStatusUpdateInput;
   BeehiivNewsletterSubscribeInput: BeehiivNewsletterSubscribeInput;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
   BitcoinPaymentMethods: ResolverTypeWrapper<BitcoinPaymentMethods>;
@@ -6686,9 +6684,9 @@ export type ResolversParentTypes = {
   BadgeClaimInput: BadgeClaimInput;
   BadgesGetInput: BadgesGetInput;
   BadgesGetWhereInput: BadgesGetWhereInput;
-  BeehiivNewsletterPreferences: BeehiivNewsletterPreferences;
-  BeehiivNewsletterPreferencesUpdateInput: BeehiivNewsletterPreferencesUpdateInput;
-  BeehiivNewsletterStatusUpdateInput: BeehiivNewsletterStatusUpdateInput;
+  NewsletterPreferences: NewsletterPreferences;
+  NewsletterPreferencesUpdateInput: NewsletterPreferencesUpdateInput;
+  NewsletterStatusUpdateInput: NewsletterStatusUpdateInput;
   BeehiivNewsletterSubscribeInput: BeehiivNewsletterSubscribeInput;
   BigInt: Scalars['BigInt']['output'];
   BitcoinPaymentMethods: BitcoinPaymentMethods;
@@ -7305,7 +7303,7 @@ export type BadgeResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type BeehiivNewsletterPreferencesResolvers<ContextType = any, ParentType extends ResolversParentTypes['BeehiivNewsletterPreferences'] = ResolversParentTypes['BeehiivNewsletterPreferences']> = {
+export type NewsletterPreferencesResolvers<ContextType = any, ParentType extends ResolversParentTypes['NewsletterPreferences'] = ResolversParentTypes['NewsletterPreferences']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   newsletterMonthly?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   productUpdates?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -8000,9 +7998,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   ambassadorAdd?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorAddArgs, 'input'>>;
   ambassadorUpdate?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorUpdateArgs, 'input'>>;
-  beehiivNewsletterPreferencesUpdate?: Resolver<ResolversTypes['BeehiivNewsletterPreferences'], ParentType, ContextType, RequireFields<MutationBeehiivNewsletterPreferencesUpdateArgs, 'input'>>;
-  beehiivNewsletterStatusUpdate?: Resolver<ResolversTypes['BeehiivNewsletterPreferences'], ParentType, ContextType, RequireFields<MutationBeehiivNewsletterStatusUpdateArgs, 'input'>>;
-  beehiivNewsletterSubscribe?: Resolver<ResolversTypes['BeehiivNewsletterPreferences'], ParentType, ContextType, RequireFields<MutationBeehiivNewsletterSubscribeArgs, 'input'>>;
+  newsletterPreferencesUpdate?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterPreferencesUpdateArgs, 'input'>>;
+  newsletterStatusUpdate?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterStatusUpdateArgs, 'input'>>;
+  newsletterSubscribe?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterSubscribeArgs, 'beehiivNewsletterInput'>>;
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   contributionCreate?: Resolver<ResolversTypes['ContributionMutationResponse'], ParentType, ContextType, RequireFields<MutationContributionCreateArgs, 'input'>>;
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
@@ -9180,7 +9178,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   activitiesCountGroupedByProject?: Resolver<Array<ResolversTypes['ProjectActivitiesCount']>, ParentType, ContextType, RequireFields<QueryActivitiesCountGroupedByProjectArgs, 'input'>>;
   activitiesGet?: Resolver<ResolversTypes['ActivitiesGetResponse'], ParentType, ContextType, Partial<QueryActivitiesGetArgs>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
-  beehiivNewsletterPreferencesGet?: Resolver<ResolversTypes['BeehiivNewsletterPreferences'], ParentType, ContextType, RequireFields<QueryBeehiivNewsletterPreferencesGetArgs, 'userId'>>;
+  newsletterPreferencesGet?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<QueryNewsletterPreferencesGetArgs, 'userId'>>;
   contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<QueryContributionArgs>>;
   contributionsGet?: Resolver<Maybe<ResolversTypes['ContributionsGetResponse']>, ParentType, ContextType, Partial<QueryContributionsGetArgs>>;
   contributor?: Resolver<ResolversTypes['Funder'], ParentType, ContextType, RequireFields<QueryContributorArgs, 'input'>>;
@@ -9721,7 +9719,7 @@ export type Resolvers<ContextType = any> = {
   AmbassadorStats?: AmbassadorStatsResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
-  BeehiivNewsletterPreferences?: BeehiivNewsletterPreferencesResolvers<ContextType>;
+  NewsletterPreferences?: NewsletterPreferencesResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   BitcoinPaymentMethods?: BitcoinPaymentMethodsResolvers<ContextType>;
   BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
@@ -10708,26 +10706,26 @@ export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, u
 
 export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
-export type BeehiivNewsletterSubscribeMutationVariables = Exact<{
-  input: BeehiivNewsletterSubscribeInput;
+export type NewsletterSubscribeMutationVariables = Exact<{
+  beehiivNewsletterInput: BeehiivNewsletterSubscribeInput;
 }>;
 
 
-export type BeehiivNewsletterSubscribeMutation = { __typename?: 'Mutation', beehiivNewsletterSubscribe: { __typename?: 'BeehiivNewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean, tags: Array<string> } };
+export type NewsletterSubscribeMutation = { __typename?: 'Mutation', newsletterSubscribe: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
 
-export type BeehiivNewsletterPreferencesUpdateMutationVariables = Exact<{
-  input: BeehiivNewsletterPreferencesUpdateInput;
+export type NewsletterPreferencesUpdateMutationVariables = Exact<{
+  input: NewsletterPreferencesUpdateInput;
 }>;
 
 
-export type BeehiivNewsletterPreferencesUpdateMutation = { __typename?: 'Mutation', beehiivNewsletterPreferencesUpdate: { __typename?: 'BeehiivNewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean, tags: Array<string> } };
+export type NewsletterPreferencesUpdateMutation = { __typename?: 'Mutation', newsletterPreferencesUpdate: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
 
-export type BeehiivNewsletterStatusUpdateMutationVariables = Exact<{
-  input: BeehiivNewsletterStatusUpdateInput;
+export type NewsletterStatusUpdateMutationVariables = Exact<{
+  input: NewsletterStatusUpdateInput;
 }>;
 
 
-export type BeehiivNewsletterStatusUpdateMutation = { __typename?: 'Mutation', beehiivNewsletterStatusUpdate: { __typename?: 'BeehiivNewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean, tags: Array<string> } };
+export type NewsletterStatusUpdateMutation = { __typename?: 'Mutation', newsletterStatusUpdate: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
 
 export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -10780,12 +10778,12 @@ export type UserBadgesQuery = { __typename?: 'Query', userBadges: Array<(
     & UserBadgeFragment
   )> };
 
-export type BeehiivNewsletterPreferencesGetQueryVariables = Exact<{
+export type NewsletterPreferencesGetQueryVariables = Exact<{
   userId: Scalars['BigInt']['input'];
 }>;
 
 
-export type BeehiivNewsletterPreferencesGetQuery = { __typename?: 'Query', beehiivNewsletterPreferencesGet: { __typename?: 'BeehiivNewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean, tags: Array<string> } };
+export type NewsletterPreferencesGetQuery = { __typename?: 'Query', newsletterPreferencesGet: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
 
 export type UserOrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -17773,120 +17771,117 @@ export type ImpactFundDashboardApplicationsQueryHookResult = ReturnType<typeof u
 export type ImpactFundDashboardApplicationsLazyQueryHookResult = ReturnType<typeof useImpactFundDashboardApplicationsLazyQuery>;
 export type ImpactFundDashboardApplicationsSuspenseQueryHookResult = ReturnType<typeof useImpactFundDashboardApplicationsSuspenseQuery>;
 export type ImpactFundDashboardApplicationsQueryResult = Apollo.QueryResult<ImpactFundDashboardApplicationsQuery, ImpactFundDashboardApplicationsQueryVariables>;
-export const BeehiivNewsletterSubscribeDocument = gql`
-    mutation BeehiivNewsletterSubscribe($input: BeehiivNewsletterSubscribeInput!) {
-  beehiivNewsletterSubscribe(input: $input) {
+export const NewsletterSubscribeDocument = gql`
+    mutation NewsletterSubscribe($beehiivNewsletterInput: BeehiivNewsletterSubscribeInput!) {
+  newsletterSubscribe(beehiivNewsletterInput: $beehiivNewsletterInput) {
     email
     status
     newsletterMonthly
     productUpdates
     projectSpotlights
-    tags
   }
 }
     `;
-export type BeehiivNewsletterSubscribeMutationFn = Apollo.MutationFunction<BeehiivNewsletterSubscribeMutation, BeehiivNewsletterSubscribeMutationVariables>;
+export type NewsletterSubscribeMutationFn = Apollo.MutationFunction<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>;
 
 /**
- * __useBeehiivNewsletterSubscribeMutation__
+ * __useNewsletterSubscribeMutation__
  *
- * To run a mutation, you first call `useBeehiivNewsletterSubscribeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useBeehiivNewsletterSubscribeMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useNewsletterSubscribeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterSubscribeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [beehiivNewsletterSubscribeMutation, { data, loading, error }] = useBeehiivNewsletterSubscribeMutation({
+ * const [newsletterSubscribeMutation, { data, loading, error }] = useNewsletterSubscribeMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      beehiivNewsletterInput: // value for beehiivNewsletterInput
  *   },
  * });
  */
-export function useBeehiivNewsletterSubscribeMutation(baseOptions?: Apollo.MutationHookOptions<BeehiivNewsletterSubscribeMutation, BeehiivNewsletterSubscribeMutationVariables>) {
+export function useNewsletterSubscribeMutation(baseOptions?: Apollo.MutationHookOptions<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BeehiivNewsletterSubscribeMutation, BeehiivNewsletterSubscribeMutationVariables>(BeehiivNewsletterSubscribeDocument, options);
+        return Apollo.useMutation<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>(NewsletterSubscribeDocument, options);
       }
-export type BeehiivNewsletterSubscribeMutationHookResult = ReturnType<typeof useBeehiivNewsletterSubscribeMutation>;
-export type BeehiivNewsletterSubscribeMutationResult = Apollo.MutationResult<BeehiivNewsletterSubscribeMutation>;
-export type BeehiivNewsletterSubscribeMutationOptions = Apollo.BaseMutationOptions<BeehiivNewsletterSubscribeMutation, BeehiivNewsletterSubscribeMutationVariables>;
-export const BeehiivNewsletterPreferencesUpdateDocument = gql`
-    mutation BeehiivNewsletterPreferencesUpdate($input: BeehiivNewsletterPreferencesUpdateInput!) {
-  beehiivNewsletterPreferencesUpdate(input: $input) {
+export type NewsletterSubscribeMutationHookResult = ReturnType<typeof useNewsletterSubscribeMutation>;
+export type NewsletterSubscribeMutationResult = Apollo.MutationResult<NewsletterSubscribeMutation>;
+export type NewsletterSubscribeMutationOptions = Apollo.BaseMutationOptions<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>;
+export const NewsletterPreferencesUpdateDocument = gql`
+    mutation NewsletterPreferencesUpdate($input: NewsletterPreferencesUpdateInput!) {
+  newsletterPreferencesUpdate(input: $input) {
     email
     status
     newsletterMonthly
     productUpdates
     projectSpotlights
-    tags
   }
 }
     `;
-export type BeehiivNewsletterPreferencesUpdateMutationFn = Apollo.MutationFunction<BeehiivNewsletterPreferencesUpdateMutation, BeehiivNewsletterPreferencesUpdateMutationVariables>;
+export type NewsletterPreferencesUpdateMutationFn = Apollo.MutationFunction<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>;
 
 /**
- * __useBeehiivNewsletterPreferencesUpdateMutation__
+ * __useNewsletterPreferencesUpdateMutation__
  *
- * To run a mutation, you first call `useBeehiivNewsletterPreferencesUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useBeehiivNewsletterPreferencesUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useNewsletterPreferencesUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterPreferencesUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [beehiivNewsletterPreferencesUpdateMutation, { data, loading, error }] = useBeehiivNewsletterPreferencesUpdateMutation({
+ * const [newsletterPreferencesUpdateMutation, { data, loading, error }] = useNewsletterPreferencesUpdateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useBeehiivNewsletterPreferencesUpdateMutation(baseOptions?: Apollo.MutationHookOptions<BeehiivNewsletterPreferencesUpdateMutation, BeehiivNewsletterPreferencesUpdateMutationVariables>) {
+export function useNewsletterPreferencesUpdateMutation(baseOptions?: Apollo.MutationHookOptions<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BeehiivNewsletterPreferencesUpdateMutation, BeehiivNewsletterPreferencesUpdateMutationVariables>(BeehiivNewsletterPreferencesUpdateDocument, options);
+        return Apollo.useMutation<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>(NewsletterPreferencesUpdateDocument, options);
       }
-export type BeehiivNewsletterPreferencesUpdateMutationHookResult = ReturnType<typeof useBeehiivNewsletterPreferencesUpdateMutation>;
-export type BeehiivNewsletterPreferencesUpdateMutationResult = Apollo.MutationResult<BeehiivNewsletterPreferencesUpdateMutation>;
-export type BeehiivNewsletterPreferencesUpdateMutationOptions = Apollo.BaseMutationOptions<BeehiivNewsletterPreferencesUpdateMutation, BeehiivNewsletterPreferencesUpdateMutationVariables>;
-export const BeehiivNewsletterStatusUpdateDocument = gql`
-    mutation BeehiivNewsletterStatusUpdate($input: BeehiivNewsletterStatusUpdateInput!) {
-  beehiivNewsletterStatusUpdate(input: $input) {
+export type NewsletterPreferencesUpdateMutationHookResult = ReturnType<typeof useNewsletterPreferencesUpdateMutation>;
+export type NewsletterPreferencesUpdateMutationResult = Apollo.MutationResult<NewsletterPreferencesUpdateMutation>;
+export type NewsletterPreferencesUpdateMutationOptions = Apollo.BaseMutationOptions<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>;
+export const NewsletterStatusUpdateDocument = gql`
+    mutation NewsletterStatusUpdate($input: NewsletterStatusUpdateInput!) {
+  newsletterStatusUpdate(input: $input) {
     email
     status
     newsletterMonthly
     productUpdates
     projectSpotlights
-    tags
   }
 }
     `;
-export type BeehiivNewsletterStatusUpdateMutationFn = Apollo.MutationFunction<BeehiivNewsletterStatusUpdateMutation, BeehiivNewsletterStatusUpdateMutationVariables>;
+export type NewsletterStatusUpdateMutationFn = Apollo.MutationFunction<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>;
 
 /**
- * __useBeehiivNewsletterStatusUpdateMutation__
+ * __useNewsletterStatusUpdateMutation__
  *
- * To run a mutation, you first call `useBeehiivNewsletterStatusUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useBeehiivNewsletterStatusUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useNewsletterStatusUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterStatusUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [beehiivNewsletterStatusUpdateMutation, { data, loading, error }] = useBeehiivNewsletterStatusUpdateMutation({
+ * const [newsletterStatusUpdateMutation, { data, loading, error }] = useNewsletterStatusUpdateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useBeehiivNewsletterStatusUpdateMutation(baseOptions?: Apollo.MutationHookOptions<BeehiivNewsletterStatusUpdateMutation, BeehiivNewsletterStatusUpdateMutationVariables>) {
+export function useNewsletterStatusUpdateMutation(baseOptions?: Apollo.MutationHookOptions<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BeehiivNewsletterStatusUpdateMutation, BeehiivNewsletterStatusUpdateMutationVariables>(BeehiivNewsletterStatusUpdateDocument, options);
+        return Apollo.useMutation<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>(NewsletterStatusUpdateDocument, options);
       }
-export type BeehiivNewsletterStatusUpdateMutationHookResult = ReturnType<typeof useBeehiivNewsletterStatusUpdateMutation>;
-export type BeehiivNewsletterStatusUpdateMutationResult = Apollo.MutationResult<BeehiivNewsletterStatusUpdateMutation>;
-export type BeehiivNewsletterStatusUpdateMutationOptions = Apollo.BaseMutationOptions<BeehiivNewsletterStatusUpdateMutation, BeehiivNewsletterStatusUpdateMutationVariables>;
+export type NewsletterStatusUpdateMutationHookResult = ReturnType<typeof useNewsletterStatusUpdateMutation>;
+export type NewsletterStatusUpdateMutationResult = Apollo.MutationResult<NewsletterStatusUpdateMutation>;
+export type NewsletterStatusUpdateMutationOptions = Apollo.BaseMutationOptions<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>;
 export const CreatorNotificationsSettingsUpdateDocument = gql`
     mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
   creatorNotificationConfigurationValueUpdate(
@@ -18142,51 +18137,50 @@ export type UserBadgesQueryHookResult = ReturnType<typeof useUserBadgesQuery>;
 export type UserBadgesLazyQueryHookResult = ReturnType<typeof useUserBadgesLazyQuery>;
 export type UserBadgesSuspenseQueryHookResult = ReturnType<typeof useUserBadgesSuspenseQuery>;
 export type UserBadgesQueryResult = Apollo.QueryResult<UserBadgesQuery, UserBadgesQueryVariables>;
-export const BeehiivNewsletterPreferencesGetDocument = gql`
-    query BeehiivNewsletterPreferencesGet($userId: BigInt!) {
-  beehiivNewsletterPreferencesGet(userId: $userId) {
+export const NewsletterPreferencesGetDocument = gql`
+    query NewsletterPreferencesGet($userId: BigInt!) {
+  newsletterPreferencesGet(userId: $userId) {
     email
     status
     newsletterMonthly
     productUpdates
     projectSpotlights
-    tags
   }
 }
     `;
 
 /**
- * __useBeehiivNewsletterPreferencesGetQuery__
+ * __useNewsletterPreferencesGetQuery__
  *
- * To run a query within a React component, call `useBeehiivNewsletterPreferencesGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useBeehiivNewsletterPreferencesGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNewsletterPreferencesGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterPreferencesGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useBeehiivNewsletterPreferencesGetQuery({
+ * const { data, loading, error } = useNewsletterPreferencesGetQuery({
  *   variables: {
  *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useBeehiivNewsletterPreferencesGetQuery(baseOptions: Apollo.QueryHookOptions<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables> & ({ variables: BeehiivNewsletterPreferencesGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useNewsletterPreferencesGetQuery(baseOptions: Apollo.QueryHookOptions<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables> & ({ variables: NewsletterPreferencesGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables>(BeehiivNewsletterPreferencesGetDocument, options);
+        return Apollo.useQuery<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>(NewsletterPreferencesGetDocument, options);
       }
-export function useBeehiivNewsletterPreferencesGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables>) {
+export function useNewsletterPreferencesGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables>(BeehiivNewsletterPreferencesGetDocument, options);
+          return Apollo.useLazyQuery<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>(NewsletterPreferencesGetDocument, options);
         }
-export function useBeehiivNewsletterPreferencesGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables>) {
+export function useNewsletterPreferencesGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables>(BeehiivNewsletterPreferencesGetDocument, options);
+          return Apollo.useSuspenseQuery<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>(NewsletterPreferencesGetDocument, options);
         }
-export type BeehiivNewsletterPreferencesGetQueryHookResult = ReturnType<typeof useBeehiivNewsletterPreferencesGetQuery>;
-export type BeehiivNewsletterPreferencesGetLazyQueryHookResult = ReturnType<typeof useBeehiivNewsletterPreferencesGetLazyQuery>;
-export type BeehiivNewsletterPreferencesGetSuspenseQueryHookResult = ReturnType<typeof useBeehiivNewsletterPreferencesGetSuspenseQuery>;
-export type BeehiivNewsletterPreferencesGetQueryResult = Apollo.QueryResult<BeehiivNewsletterPreferencesGetQuery, BeehiivNewsletterPreferencesGetQueryVariables>;
+export type NewsletterPreferencesGetQueryHookResult = ReturnType<typeof useNewsletterPreferencesGetQuery>;
+export type NewsletterPreferencesGetLazyQueryHookResult = ReturnType<typeof useNewsletterPreferencesGetLazyQuery>;
+export type NewsletterPreferencesGetSuspenseQueryHookResult = ReturnType<typeof useNewsletterPreferencesGetSuspenseQuery>;
+export type NewsletterPreferencesGetQueryResult = Apollo.QueryResult<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>;
 export const UserOrdersGetDocument = gql`
     query UserOrdersGet($input: OrdersGetInput!) {
   ordersGet(input: $input) {

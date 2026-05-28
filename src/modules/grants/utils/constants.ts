@@ -4,7 +4,6 @@ import {
   Grant14AnnouncementImageUrl,
   Grant14AnnouncementTwitterUrl,
 } from '@/shared/constants'
-import { BeehiivTag } from '@/shared/constants/beehiiv.ts'
 import { GrantStatusEnum } from '@/types'
 
 export const GRANT_STATUS_MAP: Record<GrantStatusEnum, string> = {
@@ -41,13 +40,12 @@ export const GrantBalanceCurrency: { [key: string]: string } = {
 export const NoContributionInGrant = ['grant-round-008', 'grant-round-014', 'grant-round-016']
 
 export const GrantSubscribeSegment: {
-  [key: string]: { title: string; description: string; modalTitle: string; tag: BeehiivTag }
+  [key: string]: { title: string; description: string; modalTitle: string }
 } = {
   'grant-round-014': {
     title: 'Subscribe',
     description: 'Get updates on NWC Hackathon Grant',
     modalTitle: 'Subscribe to NWC Grants',
-    tag: BeehiivTag.IMPACT_FUND_HACKATHONS,
   },
 }
 
