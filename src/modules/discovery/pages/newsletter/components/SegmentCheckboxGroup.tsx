@@ -1,18 +1,18 @@
 import { Checkbox, useColorModeValue, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { NEWSLETTER_SEGMENTS } from '../constants.ts'
+import { NEWSLETTER_SEGMENTS, NewsletterSegmentId } from '../constants.ts'
 
 type SegmentCheckboxGroupProps = {
-  selected: Set<string>
-  onChange: (selected: Set<string>) => void
+  selected: Set<NewsletterSegmentId>
+  onChange: (selected: Set<NewsletterSegmentId>) => void
 }
 
 /** Checkbox group letting users opt into specific newsletter segments. */
 export const SegmentCheckboxGroup = ({ selected, onChange }: SegmentCheckboxGroupProps) => {
   const labelColor = useColorModeValue('neutral1.11', 'neutral1.12')
 
-  const toggle = (id: string) => {
+  const toggle = (id: NewsletterSegmentId) => {
     const next = new Set(selected)
     if (next.has(id)) {
       next.delete(id)

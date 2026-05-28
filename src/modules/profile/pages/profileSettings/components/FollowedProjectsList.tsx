@@ -1,6 +1,8 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { HStack, Input, InputGroup, InputLeftElement, Switch, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiMagnifyingGlass } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useFollowedProjectsValue } from '@/modules/auth/state'
@@ -12,8 +14,15 @@ import { Project } from '@/types'
 
 export const FollowedProjectsList = () => {
   const { t } = useTranslation()
+  const [search, setSearch] = useState('')
 
   const followedProjects = useFollowedProjectsValue()
+  const filteredProjects = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase()
+    if (!normalizedSearch) return followedProjects
+
+    return followedProjects.filter((project) => project.name.toLowerCase().includes(normalizedSearch))
+  }, [followedProjects, search])
 
   if (followedProjects.length === 0) {
     return null
@@ -24,13 +33,23 @@ export const FollowedProjectsList = () => {
       <Body size="lg" bold>
         {t('Projects I follow')}
       </Body>
-      <VStack w="full" alignItems="flex-start" p={3}>
-        <Body size="sm" light>
-          {t('You will receive project updates regarding the projects that you follow. ')}
+      <VStack w="full" alignItems="flex-start" spacing={4}>
+        <Body size="sm" color="neutralAlpha.11">
+          {t('Manage subscriptions for updates from the projects you follow.')}
         </Body>
+        <InputGroup maxW={{ base: 'full', md: '420px' }}>
+          <InputLeftElement pointerEvents="none">
+            <PiMagnifyingGlass />
+          </InputLeftElement>
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={t('Search projects...')}
+          />
+        </InputGroup>
         <VStack w="full" alignItems="flex-start" spacing={0}>
           <AnimatePresence>
-            {followedProjects.map((project) => (
+            {filteredProjects.map((project) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 1, height: 'auto' }}
@@ -66,9 +85,17 @@ const FollowedProjectItem = ({ project }: { project: Project }) => {
           {project.name}
         </Body>
       </HStack>
-      <Button colorScheme="primary1" size="md" onClick={handleUnFollow} isLoading={unfollowLoading}>
-        {t('Unfollow')}
-      </Button>
+      <Switch
+        colorScheme="primary1"
+        isChecked
+        isDisabled={unfollowLoading}
+        aria-label={t('Unfollow {{projectName}}', { projectName: project.name })}
+        onChange={(event) => {
+          if (!event.target.checked) {
+            handleUnFollow()
+          }
+        }}
+      />
     </HStack>
   )
 }

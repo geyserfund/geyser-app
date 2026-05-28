@@ -28,10 +28,13 @@ export const UserNotifications = () => {
     <>
       <VStack spacing={6} align="stretch" width="100%">
         <Body size="lg" bold>
-          {t('Notifications for Projects I follow')}
+          {t('Project Updates')}
         </Body>
-        <VStack spacing={4} align="stretch" p={4}>
-          <HorizontalFormField label="Project Updates" htmlFor="project-updates">
+        <Body size="sm" color="neutralAlpha.11">
+          {t('Manage emails related to projects and categories you follow.')}
+        </Body>
+        <VStack spacing={4} align="stretch">
+          <HorizontalFormField label={t('Project Digest')} htmlFor="project-updates">
             <Select
               value={
                 getUserNotificationConfigValue(UserNotificationType.PROJECT_SUMMARY, UserConfigName.FREQUENCY) || ''
@@ -44,11 +47,11 @@ export const UserNotifications = () => {
                 )
               }
               size="sm"
-              placeholder="Select frequency"
+              placeholder={t('Select frequency')}
               width="auto"
             >
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
+              <option value="weekly">{t('Weekly')}</option>
+              <option value="monthly">{t('Monthly')}</option>
             </Select>
             <Switch
               id="project-updates"
@@ -63,23 +66,6 @@ export const UserNotifications = () => {
                   e.target.checked ? 'true' : 'false',
                 )
               }}
-            />
-          </HorizontalFormField>
-
-          <HorizontalFormField label="Geyser product updates" htmlFor="geyser-product-updates">
-            <Switch
-              id="geyser-product-updates"
-              isChecked={
-                getUserNotificationConfigValue(UserNotificationType.PRODUCT_UPDATES, UserConfigName.IS_ENABLED) ===
-                'true'
-              }
-              onChange={(e) =>
-                updateUserNotificationConfigValue(
-                  UserNotificationType.PRODUCT_UPDATES,
-                  UserConfigName.IS_ENABLED,
-                  e.target.checked ? 'true' : 'false',
-                )
-              }
             />
           </HorizontalFormField>
         </VStack>
