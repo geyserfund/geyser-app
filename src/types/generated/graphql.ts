@@ -1688,6 +1688,7 @@ export type Mutation = {
   createProject: Project;
   createStripeConnectAccount: StripeConnectOnboardingPayload;
   creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
+  disconnectStripeConnect: StripeConnectStatus;
   grantApply: GrantApplicant;
   impactFundApplicationFundingSet: ImpactFundApplication;
   impactFundApplicationNoteCreate: ImpactFundApplicationNote;
@@ -1879,6 +1880,10 @@ export type MutationCreateProjectArgs = {
 export type MutationCreateStripeConnectAccountArgs = {
   projectId: Scalars['BigInt']['input'];
   returnUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationDisconnectStripeConnectArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -11739,6 +11744,13 @@ export type RefreshStripeConnectOnboardingLinkMutationVariables = Exact<{
 
 export type RefreshStripeConnectOnboardingLinkMutation = { __typename?: 'Mutation', refreshStripeConnectOnboardingLink: { __typename?: 'StripeConnectOnboardingPayload', accountId: string, onboardingUrl: string, status: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } } };
 
+export type DisconnectStripeConnectMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type DisconnectStripeConnectMutation = { __typename?: 'Mutation', disconnectStripeConnect: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } };
+
 export type ProjectStripeInterestNotifyMutationVariables = Exact<{
   projectId: Scalars['BigInt']['input'];
 }>;
@@ -20758,6 +20770,44 @@ export function useRefreshStripeConnectOnboardingLinkMutation(baseOptions?: Apol
 export type RefreshStripeConnectOnboardingLinkMutationHookResult = ReturnType<typeof useRefreshStripeConnectOnboardingLinkMutation>;
 export type RefreshStripeConnectOnboardingLinkMutationResult = Apollo.MutationResult<RefreshStripeConnectOnboardingLinkMutation>;
 export type RefreshStripeConnectOnboardingLinkMutationOptions = Apollo.BaseMutationOptions<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>;
+export const DisconnectStripeConnectDocument = gql`
+    mutation DisconnectStripeConnect($projectId: BigInt!) {
+  disconnectStripeConnect(projectId: $projectId) {
+    accountId
+    chargesEnabled
+    payoutsEnabled
+    detailsSubmitted
+    disabledReason
+    isReady
+  }
+}
+    `;
+export type DisconnectStripeConnectMutationFn = Apollo.MutationFunction<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>;
+
+/**
+ * __useDisconnectStripeConnectMutation__
+ *
+ * To run a mutation, you first call `useDisconnectStripeConnectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisconnectStripeConnectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disconnectStripeConnectMutation, { data, loading, error }] = useDisconnectStripeConnectMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useDisconnectStripeConnectMutation(baseOptions?: Apollo.MutationHookOptions<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>(DisconnectStripeConnectDocument, options);
+      }
+export type DisconnectStripeConnectMutationHookResult = ReturnType<typeof useDisconnectStripeConnectMutation>;
+export type DisconnectStripeConnectMutationResult = Apollo.MutationResult<DisconnectStripeConnectMutation>;
+export type DisconnectStripeConnectMutationOptions = Apollo.BaseMutationOptions<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>;
 export const ProjectStripeInterestNotifyDocument = gql`
     mutation ProjectStripeInterestNotify($projectId: BigInt!) {
   projectStripeInterestNotify(projectId: $projectId) {
