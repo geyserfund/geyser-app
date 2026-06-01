@@ -10,6 +10,94 @@ console.log(
 
 const PORT = process.env.PORT || 3000
 const app = express()
+const SITE_ORIGIN = 'https://geyser.fund'
+const DEFAULT_META_IMAGE = 'https://storage.googleapis.com/geyser-projects-media/app/seo/Geyser_main.png'
+
+const linkPreviewCrawlerUserAgentPatterns = [
+  /facebookexternalhit/i,
+  /facebot/i,
+  /facebookcatalog/i,
+  /meta-externalagent/i,
+  /meta-externalfetcher/i,
+]
+
+const staticLegalRouteMetadata = {
+  '/legal/privacy': {
+    title: 'Privacy Policy | Geyser',
+    description: "Read Geyser's Privacy Policy and how information is collected and used.",
+    url: `${SITE_ORIGIN}/legal/privacy`,
+  },
+  '/legal/terms': {
+    title: 'Terms and Conditions | Geyser',
+    description: "Read Geyser's Terms and Conditions and platform rules.",
+    url: `${SITE_ORIGIN}/legal/terms`,
+  },
+}
+
+const escapeHtml = (value = '') => {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+const normalizeStaticRoutePathname = (requestUrl = '/') => {
+  const pathname = getPrerenderPathname(requestUrl).toLowerCase()
+
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    return pathname.slice(0, -1)
+  }
+
+  return pathname
+}
+
+const isLinkPreviewCrawler = (request) => {
+  const userAgent = request?.headers?.['user-agent'] || ''
+
+  return linkPreviewCrawlerUserAgentPatterns.some((pattern) => pattern.test(String(userAgent)))
+}
+
+const getStaticLegalRouteMetadata = (requestUrl = '/') => {
+  return staticLegalRouteMetadata[normalizeStaticRoutePathname(requestUrl)]
+}
+
+const buildStaticMetadataHtml = ({ title, description, url }) => {
+  const safeTitle = escapeHtml(title)
+  const safeDescription = escapeHtml(description)
+  const safeUrl = escapeHtml(url)
+  const safeImage = escapeHtml(DEFAULT_META_IMAGE)
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>${safeTitle}</title>
+    <meta name="description" content="${safeDescription}" />
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <link rel="canonical" href="${safeUrl}" />
+    <meta property="og:title" content="${safeTitle}" />
+    <meta property="og:description" content="${safeDescription}" />
+    <meta property="og:url" content="${safeUrl}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Geyser" />
+    <meta property="og:image" content="${safeImage}" />
+    <meta property="og:image:secure_url" content="${safeImage}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="geyserfund" />
+    <meta name="twitter:title" content="${safeTitle}" />
+    <meta name="twitter:description" content="${safeDescription}" />
+    <meta name="twitter:image" content="${safeImage}" />
+  </head>
+  <body>
+    <main>
+      <h1>${safeTitle}</h1>
+      <p>${safeDescription}</p>
+    </main>
+  </body>
+</html>`
+}
 
 const isHtmlContentType = (headers = {}) => {
   const contentType = headers['content-type'] || headers['Content-Type'] || ''
@@ -93,6 +181,26 @@ app.use(
     credentials: true,
   }),
 )
+
+app.use((request, response, next) => {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return next()
+  }
+
+  if (!isLinkPreviewCrawler(request)) {
+    return next()
+  }
+
+  const metadata = getStaticLegalRouteMetadata(request.url)
+  if (!metadata) {
+    return next()
+  }
+
+  response.setHeader('Content-Type', 'text/html; charset=utf-8')
+  response.setHeader('Cache-Control', 'public, max-age=300')
+
+  return response.status(200).send(buildStaticMetadataHtml(metadata))
+})
 
 app.use(
   prerender

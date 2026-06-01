@@ -10,9 +10,7 @@ dotenv.config()
 const SITE_ORIGIN = 'https://geyser.fund'
 const FALLBACK_API_ENDPOINT = 'https://api.geyser.fund'
 const API_ENDPOINT = process.env.SITEMAP_API_ENDPOINT || process.env.VITE_APP_API_ENDPOINT || FALLBACK_API_ENDPOINT
-const GRAPHQL_ENDPOINT = API_ENDPOINT.endsWith('/graphql')
-  ? API_ENDPOINT
-  : `${API_ENDPOINT.replace(/\/$/, '')}/graphql`
+const GRAPHQL_ENDPOINT = API_ENDPOINT.endsWith('/graphql') ? API_ENDPOINT : `${API_ENDPOINT.replace(/\/$/, '')}/graphql`
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const publicDirectory = join(__dirname, 'public')
 const sitemapsDirectory = join(publicDirectory, 'sitemaps')
@@ -32,8 +30,8 @@ const staticSitemapRecords = [
   { url: '/grants', indexable: true },
   { url: '/launchpad', indexable: true },
   { url: '/about', indexable: true },
-  { url: '/terms-and-conditions', indexable: true },
-  { url: '/privacy-policy', indexable: true },
+  { url: '/legal/terms', indexable: true },
+  { url: '/legal/privacy', indexable: true },
 ]
 
 const impactFundsSitemapQuery = `
@@ -126,12 +124,7 @@ const buildUrlSetXml = async (records) => {
 const buildSitemapIndexXml = (entries) => {
   const body = entries
     .map((entry) => {
-      return [
-        '<sitemap>',
-        `<loc>${entry.loc}</loc>`,
-        `<lastmod>${entry.lastmod}</lastmod>`,
-        '</sitemap>',
-      ].join('')
+      return ['<sitemap>', `<loc>${entry.loc}</loc>`, `<lastmod>${entry.lastmod}</lastmod>`, '</sitemap>'].join('')
     })
     .join('')
 
