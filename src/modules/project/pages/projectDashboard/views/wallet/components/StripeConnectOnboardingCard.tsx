@@ -1,12 +1,17 @@
-import { Button, HStack, Icon, Link, Tag, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, Link, Tag, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect } from 'react'
 import { PiClock, PiWarningFill } from 'react-icons/pi'
 
+import { DeleteConfirmModal } from '@/components/molecules'
 import { type StripeStatusType, useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { useCreateStripeConnectAccountMutation, useRefreshStripeConnectOnboardingLinkMutation } from '@/types'
+import {
+  useCreateStripeConnectAccountMutation,
+  useDisconnectStripeConnectMutation,
+  useRefreshStripeConnectOnboardingLinkMutation,
+} from '@/types'
 
 type StripeConnectOnboardingCardProps = {
   isTiaProject: boolean
@@ -41,9 +46,11 @@ type StripeCompactContentProps = {
   isActionRequired: boolean
   isProcessing: boolean
   isReady: boolean
+  hasAccount: boolean
   isBusy: boolean
   onManageClick: () => void
   onResyncClick: () => void
+  onDisconnectClick: () => void
 }
 
 type StripeMainContentProps = {
@@ -151,11 +158,14 @@ function StripeCompactContent({
   isActionRequired,
   isProcessing,
   isReady,
+  hasAccount,
   isBusy,
   onManageClick,
   onResyncClick,
+  onDisconnectClick,
 }: StripeCompactContentProps) {
   const showInlineErrorWithAction = disabledReasonLabel && (isActionRequired || isProcessing) && !isReady
+  const showDisconnect = isTiaProject && hasAccount
 
   return (
     <VStack w="full" alignItems="start" spacing={4}>
@@ -215,6 +225,18 @@ function StripeCompactContent({
                 {t('Re-sync')}
               </Button>
             )}
+            {showDisconnect && (
+              <Button
+                size="md"
+                variant="outline"
+                colorScheme="red"
+                onClick={onDisconnectClick}
+                isDisabled={isBusy}
+                width={{ base: '100%', md: 'auto' }}
+              >
+                {t('Disconnect Stripe')}
+              </Button>
+            )}
           </HStack>
         </HStack>
       ) : (
@@ -249,6 +271,18 @@ function StripeCompactContent({
                 width={{ base: '100%', md: 'auto' }}
               >
                 {t('Re-sync')}
+              </Button>
+            )}
+            {showDisconnect && (
+              <Button
+                size="md"
+                variant="outline"
+                colorScheme="red"
+                onClick={onDisconnectClick}
+                isDisabled={isBusy}
+                width={{ base: '100%', md: 'auto' }}
+              >
+                {t('Disconnect Stripe')}
               </Button>
             )}
           </HStack>
@@ -411,9 +445,17 @@ export const useStripeConnectOnboardingState = ({
         refetch()
       },
     })
+  const [disconnectStripeConnect, disconnectStripeConnectOptions] = useDisconnectStripeConnectMutation({
+    onCompleted() {
+      refetch()
+    },
+  })
 
   const isBusy =
-    isStatusLoading || createStripeConnectAccountOptions.loading || refreshStripeConnectOnboardingLinkOptions.loading
+    isStatusLoading ||
+    createStripeConnectAccountOptions.loading ||
+    refreshStripeConnectOnboardingLinkOptions.loading ||
+    disconnectStripeConnectOptions.loading
 
   useEffect(() => {
     onReadyStateChange?.(isReady)
@@ -440,6 +482,10 @@ export const useStripeConnectOnboardingState = ({
     handleClick: handleManageClick,
     handleManageClick,
     handleResyncClick: refetch,
+    handleDisconnectClick: () => {
+      if (!projectId || !isTiaProject || !hasAccount) return
+      disconnectStripeConnect({ variables: { projectId } })
+    },
     actionLabel: getCardActionLabel(isTiaProject, isReady, statusType, hasAccount),
     minimalActionLabel: getMinimalActionLabel(statusType, hasAccount, isReady),
     compactIntroCopy: isTiaProject
@@ -465,6 +511,7 @@ export const StripeConnectOnboardingCard = ({
   const {
     status,
     isReady,
+    hasAccount,
     statusType,
     disabledReasonLabel,
     isActionRequired,
@@ -472,6 +519,7 @@ export const StripeConnectOnboardingCard = ({
     isBusy,
     handleManageClick,
     handleResyncClick,
+    handleDisconnectClick,
     actionLabel,
     compactIntroCopy,
     minimalStatusMessage,
@@ -482,6 +530,7 @@ export const StripeConnectOnboardingCard = ({
     onReadyStateChange,
   })
   const isSelected = selected || isReady
+  const disconnectConfirmModal = useDisclosure()
 
   const compactContent = (
     <StripeCompactContent
@@ -492,9 +541,11 @@ export const StripeConnectOnboardingCard = ({
       isActionRequired={isActionRequired}
       isProcessing={isProcessing}
       isReady={isReady}
+      hasAccount={hasAccount}
       isBusy={isBusy}
       onManageClick={handleManageClick}
       onResyncClick={handleResyncClick}
+      onDisconnectClick={disconnectConfirmModal.onOpen}
     />
   )
 
@@ -527,7 +578,26 @@ export const StripeConnectOnboardingCard = ({
   }
 
   if (compact) {
-    if (!withCard) return compactContent
+    const compactContentWithModal = (
+      <>
+        {compactContent}
+        <DeleteConfirmModal
+          isOpen={disconnectConfirmModal.isOpen}
+          onClose={disconnectConfirmModal.onClose}
+          title={t('Disconnect Stripe?')}
+          description={t(
+            'Stripe fiat and automatic recurring contributions will be disabled for this project. Active or pending Stripe payments must be cleared before disconnecting.',
+          )}
+          confirm={() => {
+            handleDisconnectClick()
+            disconnectConfirmModal.onClose()
+          }}
+          isLoading={isBusy}
+        />
+      </>
+    )
+
+    if (!withCard) return compactContentWithModal
     return (
       <VStack
         w="full"
@@ -538,7 +608,7 @@ export const StripeConnectOnboardingCard = ({
         alignItems="start"
         spacing={0}
       >
-        {compactContent}
+        {compactContentWithModal}
       </VStack>
     )
   }

@@ -7,11 +7,13 @@ const initialFundingContribution: FundingContributionFragment = {
   id: '',
   uuid: '',
   amount: 0,
+  donationAmount: 0,
   status: ContributionStatus.Pending,
   comment: null,
   media: null,
   confirmedAt: null,
   projectId: '',
+  projectGoalId: null,
   creatorEmail: null,
   createdAt: '',
   isAnonymous: false,
@@ -19,6 +21,7 @@ const initialFundingContribution: FundingContributionFragment = {
   matchedAmountSats: 0,
   matchedAmountUsdCent: 0,
   matching: null,
+  order: null,
   funder: {
     id: '',
     user: {

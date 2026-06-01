@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
-import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
+import { FundingPaymentSummary } from '../components/FundingPaymentSummary.tsx'
 
 export const FundingPaymentBottomContent = () => {
   return <FundingPaymentsSummary />
@@ -27,7 +27,7 @@ export const FundingPaymentsSummary = () => {
       spacing={4}
       alignItems="start"
     >
-      <ProjectFundingSummary />
+      <FundingPaymentSummary />
     </VStack>
   )
 }

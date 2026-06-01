@@ -5,11 +5,12 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { createSubscriber } from '@/api/flodesk.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { FollowBellIllurationsUrl } from '@/shared/constants/index.ts'
+import { DEFAULT_NEWSLETTER_PREFERENCES } from '@/shared/constants/newsletter.ts'
+import { useNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -22,17 +23,16 @@ type SubscriptionFormData = {
 
 interface SubscriptionFormProps {
   title?: string
-  segmentIds?: string[]
-  customFields?: Record<string, string>
   isOpen: boolean
   onClose: () => void
 }
 
-export const SubscriptionForm = ({ title, segmentIds, customFields, isOpen, onClose }: SubscriptionFormProps) => {
+export const SubscriptionForm = ({ title, isOpen, onClose }: SubscriptionFormProps) => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [subscribeToNewsletter] = useNewsletterSubscribeMutation()
 
   const {
     control,
@@ -54,16 +54,14 @@ export const SubscriptionForm = ({ title, segmentIds, customFields, isOpen, onCl
   const onSubmit = async (data: SubscriptionFormData) => {
     try {
       setSubmitting(true)
-      let records = {} as any
-
-      records = {
-        email: data.email,
-        custom_fields: customFields,
-      }
-
-      records.segment_ids = segmentIds
-
-      await createSubscriber(records)
+      await subscribeToNewsletter({
+        variables: {
+          beehiivNewsletterInput: {
+            email: data.email,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
+          },
+        },
+      })
 
       setSuccess(true)
 

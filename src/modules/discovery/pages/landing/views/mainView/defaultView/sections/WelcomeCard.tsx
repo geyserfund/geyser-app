@@ -7,13 +7,14 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { createSubscriber } from '@/api/index.ts'
 import { useAuthContext } from '@/context'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography'
 import { GeyserBannerLogoUrl } from '@/shared/constants'
+import { DEFAULT_NEWSLETTER_PREFERENCES } from '@/shared/constants/newsletter.ts'
 import { GradientBanner } from '@/shared/molecules/GradientBanner.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
+import { useNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -32,6 +33,7 @@ export const WelcomeCard = () => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
+  const [subscribeToNewsletter] = useNewsletterSubscribeMutation()
 
   const {
     control,
@@ -50,13 +52,14 @@ export const WelcomeCard = () => {
   const onSubmit = async (data: SubscriptionFormData) => {
     try {
       setSubmitting(true)
-      let records = {} as any
-
-      records = {
-        email: data.email,
-      }
-
-      await createSubscriber(records)
+      await subscribeToNewsletter({
+        variables: {
+          beehiivNewsletterInput: {
+            email: data.email,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
+          },
+        },
+      })
 
       reset()
 

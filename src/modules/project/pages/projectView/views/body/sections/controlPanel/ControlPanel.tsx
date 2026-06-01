@@ -1,10 +1,10 @@
 import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { useEffect, useMemo } from 'react'
-import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react-icons/pi'
-import { Link, useLocation, useSearchParams } from 'react-router'
 import { DateTime } from 'luxon'
+import { useEffect, useMemo } from 'react'
+import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiInfo, PiWarning } from 'react-icons/pi'
+import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
@@ -13,9 +13,11 @@ import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPa
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
-import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
+import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
+import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import {
   ProjectFundingStrategy,
@@ -31,9 +33,8 @@ import { useWriteUpdateModal } from '../../../../hooks/useWriteUpdateModal.ts'
 import { promotionsNoticeClosedByProjectAtom, stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
-import { ControlPanelImages } from './constant.ts'
-import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { ProjectReviewFeedbackModal } from './components/ProjectReviewFeedbackModal.tsx'
+import { ControlPanelImages } from './constant.ts'
 import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
 import { useImpactFundEligibility } from './hooks/useImpactFundEligibility.ts'
 import { useWithdrawFunds } from './hooks/useWithdrawFunds.ts'
@@ -43,6 +44,7 @@ type FinancialActionsProps = {
   showWithdrawableBalance: boolean
   aonPayoutModal: { onOpen: () => void }
   payoutRskModal: { onOpen: () => void }
+  projectRskEoa: string
   withdrawableSats: number
   withdrawableUsd: number
   isBelowMinWithdrawThreshold: boolean
@@ -51,12 +53,34 @@ type FinancialActionsProps = {
   showWithdraw: boolean
 }
 
+type OngoingWithdrawNoticeProps = {
+  onContinue: () => void
+}
+
+/** Shows the ongoing withdraw action outside the withdraw balance row. */
+const OngoingWithdrawNotice = ({ onContinue }: OngoingWithdrawNoticeProps) => {
+  return (
+    <ControlPanelNotification
+      icon={<Icon as={PiInfo} color="neutral1.11" boxSize="16px" flexShrink={0} />}
+      title={t('Ongoing payout')}
+      description={t('You have an ongoing payout. Continue to finish the withdrawal flow.')}
+      actionButton={
+        <Button colorScheme="primary1" variant="solid" size="sm" w={{ base: 'full', md: 'auto' }} onClick={onContinue}>
+          {t('Continue withdraw')}
+        </Button>
+      }
+      variant="info"
+    />
+  )
+}
+
 /** Renders the financial action rows (claim / withdraw) for the control panel. */
 const ControlPanelFinancialActions = ({
   showClaim,
   showWithdrawableBalance,
   aonPayoutModal,
   payoutRskModal,
+  projectRskEoa,
   withdrawableSats,
   withdrawableUsd,
   isBelowMinWithdrawThreshold,
@@ -100,12 +124,10 @@ const ControlPanelFinancialActions = ({
       )}
 
       {showWithdrawableBalance && (
-        <Stack
+        <VStack
           w="full"
-          direction={{ base: 'column', md: 'row' }}
-          spacing={{ base: 3, md: 4 }}
-          justifyContent={{ base: 'flex-start', md: 'space-between' }}
-          alignItems={{ base: 'stretch', md: 'center' }}
+          spacing={3}
+          alignItems="stretch"
           bg="utils.pbg"
           border="1px solid"
           borderColor="neutral1.6"
@@ -113,56 +135,77 @@ const ControlPanelFinancialActions = ({
           px={4}
           py={4}
         >
-          <HStack spacing={3} alignItems="center" flex={{ base: 'none', md: 1 }}>
-            <Image
-              src="/icons/creator_tools_bitcoin_coins.png"
-              alt={t('Coins')}
-              boxSize="52px"
-              objectFit="contain"
-              flexShrink={0}
-            />
-            <VStack align="start" spacing={0}>
-              <Body size="md" color="neutral1.11">
-                {t('Funds available to withdraw')}:{' '}
-                <Body as="span" size="md" bold color="neutral1.12">
-                  {commaFormatted(withdrawableSats)} {t('sats')}
-                </Body>{' '}
-                <Body as="span" size="md" color="neutral1.9">
-                  ≈${withdrawableUsd.toFixed(0)}
-                </Body>
-              </Body>
-              {hasOngoingWithdraw ? (
-                <Body size="sm" color="neutral1.11">
-                  {t('You have an ongoing payout. Continue to finish the withdrawal flow.')}
-                </Body>
-              ) : hasFailedWithdraw ? (
-                <Body size="sm" color="neutral1.11">
-                  {t('Your previous withdraw attempt failed. You can try again.')}
-                </Body>
-              ) : null}
-            </VStack>
-          </HStack>
-          <Tooltip
-            label={t('Minimum withdrawal is {{amount}} USD. Increase your balance to enable withdrawals.', {
-              amount: MIN_BITCOIN_PAYOUT_USD,
-            })}
-            hasArrow
-            shouldWrapChildren
-            isDisabled={hasOngoingWithdraw || !isBelowMinWithdrawThreshold}
+          <Stack
+            w="full"
+            direction={{ base: 'column', md: 'row' }}
+            spacing={{ base: 3, md: 4 }}
+            justifyContent={{ base: 'flex-start', md: 'space-between' }}
+            alignItems={{ base: 'stretch', md: 'center' }}
           >
-            <Button
-              colorScheme={showWithdraw ? 'primary1' : 'neutral1'}
-              variant="solid"
-              size="md"
-              w={{ base: 'full', md: 'auto' }}
-              flexShrink={0}
-              onClick={payoutRskModal.onOpen}
-              isDisabled={!showWithdraw}
+            <HStack spacing={3} alignItems="center" flex={{ base: 'none', md: 1 }}>
+              <Image
+                src="/icons/creator_tools_bitcoin_coins.png"
+                alt={t('Coins')}
+                boxSize="52px"
+                objectFit="contain"
+                flexShrink={0}
+              />
+              <VStack align="start" spacing={0}>
+                <Body size="md" color="neutral1.11">
+                  {t('Funds available to withdraw')}:{' '}
+                  <Body as="span" size="md" bold color="neutral1.12">
+                    {commaFormatted(withdrawableSats)} {t('sats')}
+                  </Body>{' '}
+                  <Body as="span" size="md" color="neutral1.9">
+                    ≈${withdrawableUsd.toFixed(0)}
+                  </Body>
+                </Body>
+                {projectRskEoa ? (
+                  <ChakraLink
+                    href={getRootstockExplorerAddressUrl(projectRskEoa)}
+                    isExternal
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={1}
+                    color="neutral1.10"
+                    _hover={{ color: 'neutral1.11', textDecoration: 'underline' }}
+                  >
+                    <Body as="span" size="sm" color="inherit" medium>
+                      {t('View on-chain')}
+                    </Body>
+                    <Icon as={PiArrowUpRight} boxSize="14px" aria-hidden />
+                  </ChakraLink>
+                ) : null}
+                {hasFailedWithdraw ? (
+                  <Body size="sm" color="neutral1.11">
+                    {t('Your previous withdraw attempt failed. You can try again.')}
+                  </Body>
+                ) : null}
+              </VStack>
+            </HStack>
+            <Tooltip
+              label={t('Minimum withdrawal is {{amount}} USD. Increase your balance to enable withdrawals.', {
+                amount: MIN_BITCOIN_PAYOUT_USD,
+              })}
+              hasArrow
+              shouldWrapChildren
+              isDisabled={hasOngoingWithdraw || !isBelowMinWithdrawThreshold}
             >
-              {hasOngoingWithdraw ? t('Continue withdraw') : hasFailedWithdraw ? t('Try again') : t('Withdraw')}
-            </Button>
-          </Tooltip>
-        </Stack>
+              <Button
+                colorScheme={showWithdraw ? 'primary1' : 'neutral1'}
+                variant="solid"
+                size="md"
+                w={{ base: 'full', md: 'auto' }}
+                flexShrink={0}
+                onClick={payoutRskModal.onOpen}
+                isDisabled={!showWithdraw || hasOngoingWithdraw}
+              >
+                {t('Withdraw')}
+              </Button>
+            </Tooltip>
+          </Stack>
+          {hasOngoingWithdraw ? <OngoingWithdrawNotice onContinue={payoutRskModal.onOpen} /> : null}
+        </VStack>
       )}
     </VStack>
   )
@@ -477,6 +520,7 @@ export const ControlPanel = () => {
         showWithdrawableBalance={showWithdrawableBalance}
         aonPayoutModal={aonPayoutModal}
         payoutRskModal={payoutRskModal}
+        projectRskEoa={projectRskEoa}
         withdrawableSats={withdrawableSats}
         withdrawableUsd={withdrawableUsd}
         isBelowMinWithdrawThreshold={isBelowMinWithdrawThreshold}

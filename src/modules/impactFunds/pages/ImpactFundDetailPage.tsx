@@ -1720,7 +1720,14 @@ function ApplicationSubmissionModal({
                   </Select>
                 </FormControl>
                 <FormControl isRequired isInvalid={hasProjectDescriptionError}>
-                  <FormLabel color={primaryTextColor}>{t('Project story')}</FormLabel>
+                  <FormLabel color={primaryTextColor} mb={1}>
+                    {t('Project story')}
+                  </FormLabel>
+                  <Body size="sm" color={secondaryTextColor} mb={2}>
+                    {t(
+                      'Note: you are editing your project story, any changes will be reflected in your story and be visible on your project page.',
+                    )}
+                  </Body>
                   <Box
                     h={{ base: '340px', md: '440px' }}
                     overflowY="auto"

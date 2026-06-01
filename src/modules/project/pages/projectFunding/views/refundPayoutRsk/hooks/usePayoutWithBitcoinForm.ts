@@ -41,22 +41,23 @@ export const usePayoutWithBitcoinForm = (
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const bitcoinPayoutSchema = yup.object({
-    bitcoinAddress: (keyDerivationOptions?.requireBitcoinAddress ?? true)
-      ? yup
-          .string()
-          .required(t('Bitcoin address is required'))
-          .test({
-            test(value) {
-              const bitcoinAddress = getBitcoinAddress(value)
-              if (bitcoinAddress.valid && bitcoinAddress.address) {
-                return validateBitcoinAddress(bitcoinAddress.address)
-              }
+    bitcoinAddress:
+      keyDerivationOptions?.requireBitcoinAddress ?? true
+        ? yup
+            .string()
+            .required(t('Bitcoin address is required'))
+            .test({
+              test(value) {
+                const bitcoinAddress = getBitcoinAddress(value)
+                if (bitcoinAddress.valid && bitcoinAddress.address) {
+                  return validateBitcoinAddress(bitcoinAddress.address)
+                }
 
-              return validateBitcoinAddress(value)
-            },
-            message: t('The Bitcoin address you entered is invalid'),
-          })
-      : yup.string(),
+                return validateBitcoinAddress(value)
+              },
+              message: t('The Bitcoin address you entered is invalid'),
+            })
+        : yup.string(),
     accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
   })
 
@@ -77,7 +78,9 @@ export const usePayoutWithBitcoinForm = (
     watch,
   } = form
 
-  const enableSubmit = isValid && isDirty && (Boolean(accountKeys) || !isLoadingUserAccountKeys)
+  const hasNoVisibleRequiredInput = Boolean(accountKeys) && keyDerivationOptions?.requireBitcoinAddress === false
+  const enableSubmit =
+    isValid && (isDirty || hasNoVisibleRequiredInput) && (Boolean(accountKeys) || !isLoadingUserAccountKeys)
 
   const handleFormSubmit = handleSubmit(async (data: BitcoinPayoutFormData) => {
     if (!accountKeys && isLoadingUserAccountKeys) {

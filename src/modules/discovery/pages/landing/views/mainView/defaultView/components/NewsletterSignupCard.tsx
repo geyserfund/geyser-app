@@ -1,12 +1,9 @@
 import { Box, HStack, Stack, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { NEWSLETTER_SEGMENTS } from '@/modules/discovery/pages/newsletter/constants.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
-
-const ALL_SEGMENT_IDS = NEWSLETTER_SEGMENTS.map((s) => s.id)
 
 type NewsletterSignupCardProps = {
   title?: string
@@ -80,7 +77,6 @@ export const NewsletterSignupCard = ({
           >
             <SubscribeForm
               maxWidth="full"
-              segmentIds={ALL_SEGMENT_IDS}
               buttonProps={{
                 children: t('Subscribe'),
                 variant: 'solid',

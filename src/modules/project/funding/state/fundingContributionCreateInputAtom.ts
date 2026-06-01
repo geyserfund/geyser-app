@@ -42,9 +42,9 @@ import {
 } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
 import type { FundFormType, FundingProjectState } from './fundingFormAtom.ts'
+import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
 import { shippingAddressAtom } from './shippingAddressAtom.ts'
-import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
 
 type BuildContributionCreateInputArgs = {
   formState: FundFormType
@@ -220,7 +220,8 @@ export const formattedRecurringDonationInputAtom = atom<RecurringDonationCreateM
         ? recurringPaymentMethods.stripe
         : recurringPaymentMethods.banxa
       : recurringPaymentMethods.bitcoin
-  const amount = paymentMethod === recurringPaymentMethods.bitcoin ? formState.donationAmount : formState.donationAmountUsdCent
+  const amount =
+    paymentMethod === recurringPaymentMethods.bitcoin ? formState.donationAmount : formState.donationAmountUsdCent
 
   return {
     input: {
@@ -261,8 +262,8 @@ export const formattedProjectSubscriptionStartInputAtom = atom<ProjectSubscripti
   }
 })
 
-export const formattedRecurringContributionRenewalInputAtom = atom<RecurringContributionRenewalCreateMutationVariables | null>(
-  (get) => {
+export const formattedRecurringContributionRenewalInputAtom =
+  atom<RecurringContributionRenewalCreateMutationVariables | null>((get) => {
     const renewal = get(recurringContributionRenewalAtom)
     const paymentsInput = get(recurringPaymentsInputAtom)
 
@@ -277,8 +278,7 @@ export const formattedRecurringContributionRenewalInputAtom = atom<RecurringCont
         paymentsInput,
       },
     }
-  },
-)
+  })
 
 /** Funding Input after request */
 export const fundingInputAfterRequestAtom = atom<
@@ -306,6 +306,8 @@ export const contributionAddPaymentPreImagesAtom = atom<{
   lightning?: { preimageHex: string; preimageHash: string }
 }>({})
 
+export const anonymousRecoveryCodeAtom = atom<string>('')
+
 /** Reset funding input after request */
 export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(fundingInputAfterRequestAtom, null)
@@ -316,6 +318,7 @@ export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(contributionAddPaymentPreImagesAtom, {
     lightning: { preimageHex: '', preimageHash: '' },
   })
+  set(anonymousRecoveryCodeAtom, '')
 })
 
 /** Payments input for fiat-only contribution creation */
@@ -331,12 +334,12 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   }
 
   return {
-      fiat: {
-        create: true,
-        stripe: {
-          returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
-        },
+    fiat: {
+      create: true,
+      stripe: {
+        returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
       },
+    },
   }
 })
 

@@ -5,11 +5,12 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { createSubscriber } from '@/api/flodesk.ts'
 import {
   ControlledTextInput,
   ControlledTextInputProps,
 } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
+import { DEFAULT_NEWSLETTER_PREFERENCES, NewsletterPreferenceKey } from '@/shared/constants/newsletter.ts'
+import { useNewsletterSubscribeMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -21,17 +22,18 @@ type SubscriptionFormData = {
 }
 
 type SubscribeFormProps = StackProps & {
-  /** Flodesk segment IDs to assign the subscriber to on creation. */
-  segmentIds?: string[]
+  /** Newsletter preferences to enable when the subscriber is created. */
+  preferences?: Partial<Record<NewsletterPreferenceKey, boolean>>
   buttonProps?: ButtonProps
   inputProps?: Omit<ControlledTextInputProps, 'control' | 'name' | 'error'>
 }
 
-/** Inline email subscription form that creates a Flodesk subscriber. */
-export const SubscribeForm = ({ segmentIds, buttonProps, inputProps, ...props }: SubscribeFormProps) => {
+/** Inline email subscription form that creates a newsletter subscriber. */
+export const SubscribeForm = ({ preferences, buttonProps, inputProps, ...props }: SubscribeFormProps) => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
+  const [subscribeToNewsletter] = useNewsletterSubscribeMutation()
 
   const {
     control,
@@ -47,16 +49,15 @@ export const SubscribeForm = ({ segmentIds, buttonProps, inputProps, ...props }:
     try {
       setSubmitting(true)
 
-      const subscriberPayload: Parameters<typeof createSubscriber>[0] = {
-        email: data.email,
-      }
-
-      if (segmentIds?.length) {
-        // eslint-disable-next-line camelcase
-        subscriberPayload.segment_ids = segmentIds
-      }
-
-      await createSubscriber(subscriberPayload)
+      await subscribeToNewsletter({
+        variables: {
+          beehiivNewsletterInput: {
+            email: data.email,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
+            ...preferences,
+          },
+        },
+      })
 
       reset()
 

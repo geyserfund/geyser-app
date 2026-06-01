@@ -19,8 +19,8 @@ import {
   intendedPaymentMethodAtom,
   PaymentMethods,
 } from '../../state/paymentMethodAtom.ts'
-import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
 import { PaymentLoadingContribution } from './PaymentLoadingContribution.tsx'
+import { PaymentRecoveryKey } from './PaymentRecoveryKey.tsx'
 
 export const PaymentLoading = () => {
   const location = useLocation()
@@ -31,7 +31,7 @@ export const PaymentLoading = () => {
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
   const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
-  const [downloadedRefundFile, setDownloadedRefundFile] = useState(false)
+  const [shouldShowRecoveryKey, setShouldShowRecoveryKey] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
   const hasStripePaymentMethod =
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(project?.paymentMethods?.fiat?.stripe)
@@ -64,7 +64,7 @@ export const PaymentLoading = () => {
     if (user.id) {
       handleNext(contributionId, forceCardRoute)
     } else {
-      setDownloadedRefundFile(true)
+      setShouldShowRecoveryKey(true)
       setCurrentContributionId(contributionId)
     }
   }
@@ -78,8 +78,14 @@ export const PaymentLoading = () => {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }
 
-    if (!user?.id && downloadedRefundFile) {
-      return <PaymentDownloadRefundFile isPrismContribution={isPrismEnabled} onComplete={handleNext} />
+    if (!user?.id && shouldShowRecoveryKey) {
+      return (
+        <PaymentRecoveryKey
+          contributionId={currentContributionId}
+          isPrismContribution={isPrismEnabled}
+          onComplete={handleNext}
+        />
+      )
     }
 
     return <PaymentLoadingContribution onComplete={handleComplete} />

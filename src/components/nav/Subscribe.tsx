@@ -23,8 +23,9 @@ import { Trans, useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 
-import { createSubscriber } from '../../api'
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../shared/constants'
+import { DEFAULT_NEWSLETTER_PREFERENCES } from '../../shared/constants/newsletter'
+import { useNewsletterSubscribeMutation } from '../../types'
 import { useMobileMode, useNotification, validateEmail } from '../../utils'
 import { ButtonComponent, TextInputBox } from '../ui'
 
@@ -37,12 +38,11 @@ interface ISubscribe {
   titleSize?: string
 }
 
-const SUBSCRIBERS_SEGMENT_ID = '657d655a3d5e2300da54a743'
-
-export const Subscribe = ({ isOpen, onClose, style, interest, parentState, titleSize }: ISubscribe) => {
+export const Subscribe = ({ isOpen, onClose, style, parentState, titleSize }: ISubscribe) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const isMobile = useMobileMode()
+  const [subscribeToNewsletter] = useNewsletterSubscribeMutation()
   const [submitting, setSubmitting] = useState(false)
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
@@ -65,21 +65,14 @@ export const Subscribe = ({ isOpen, onClose, style, interest, parentState, title
 
     try {
       setSubmitting(true)
-      let records = {} as any
-      if (interest === 'grants') {
-        records = {
-          email,
-          custom_fields: {
-            interest: 'grants',
+      await subscribeToNewsletter({
+        variables: {
+          beehiivNewsletterInput: {
+            email,
+            ...DEFAULT_NEWSLETTER_PREFERENCES,
           },
-        }
-      } else {
-        records = { email }
-      }
-
-      records.segment_ids = [SUBSCRIBERS_SEGMENT_ID]
-
-      await createSubscriber(records)
+        },
+      })
 
       setSubmitting(false)
       setSuccess(true)
