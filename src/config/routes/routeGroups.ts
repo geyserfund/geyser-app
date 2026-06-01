@@ -220,6 +220,7 @@ export const discoveryRoutes = [
   getPath('giveawayAcelerandoVip'),
   getPath('legalGiveawayAcelerandoVipTerms'),
   getPath('legalTerms'),
+  getPath('legalPrivacy'),
   getPath('discoveryNews'),
 ]
 

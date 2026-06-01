@@ -1,11 +1,12 @@
-import { Divider, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
-import { CreatorNotifications } from '../components/CreatorNotifications'
 import { FollowedProjectsList } from '../components/FollowedProjectsList'
+import { GeyserNewsletterNotifications } from '../components/GeyserNewsletterNotifications.tsx'
 import { UserNotifications } from '../components/UserNotifications'
 
 export const ProfileSettingsNotifications = () => {
@@ -17,10 +18,11 @@ export const ProfileSettingsNotifications = () => {
             {t('Customize your profile and project notifications.')}
           </Body>
         </VStack>
-        <CreatorNotifications />
-        <Divider />
-        <UserNotifications />
-        <FollowedProjectsList />
+        <GeyserNewsletterNotifications />
+        <CardLayout w="full" p={{ base: 4, lg: 5 }} spacing={6}>
+          <UserNotifications />
+          <FollowedProjectsList />
+        </CardLayout>
       </VStack>
     </ProfileSettingsLayout>
   )

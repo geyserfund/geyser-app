@@ -260,6 +260,7 @@ type Mutation {
   projectSubscriptionPlanDelete(id: BigInt!): Boolean!
   createStripeConnectAccount(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
   refreshStripeConnectOnboardingLink(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
+  disconnectStripeConnect(projectId: BigInt!): StripeConnectStatus!
   projectStripeInterestNotify(projectId: BigInt!): StripeInterestNotifyResponse!
   projectShippingConfigCreate(input: CreateProjectShippingConfigInput!): ShippingConfig!
   projectShippingConfigUpdate(input: UpdateProjectShippingConfigInput!): ShippingConfig!

@@ -40,13 +40,12 @@ export const GrantBalanceCurrency: { [key: string]: string } = {
 export const NoContributionInGrant = ['grant-round-008', 'grant-round-014', 'grant-round-016']
 
 export const GrantSubscribeSegment: {
-  [key: string]: { title: string; description: string; modalTitle: string; segmentId: string }
+  [key: string]: { title: string; description: string; modalTitle: string }
 } = {
   'grant-round-014': {
     title: 'Subscribe',
     description: 'Get updates on NWC Hackathon Grant',
     modalTitle: 'Subscribe to NWC Grants',
-    segmentId: '681b2095a76b1971e0153274',
   },
 }
 

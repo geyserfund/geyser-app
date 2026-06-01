@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Textarea, VStack } from '@chakra-ui/react'
 import {
   codeBlockPlugin,
   diffSourcePlugin,
@@ -14,9 +14,12 @@ import {
   tablePlugin,
   toolbarPlugin,
 } from '@mdxeditor/editor'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { t } from 'i18next'
+import type { ErrorInfo, ReactNode } from 'react'
+import { Component, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Control, useController } from 'react-hook-form'
 
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { useSignedUpload } from '@/shared/hooks/useSignedUpload.tsx'
 
 import { decodeMarkdownWhitespaceFromEditor, encodeMarkdownWhitespaceForEditor } from './markdownWhitespace.ts'
@@ -153,6 +156,7 @@ const MdxMarkdownEditorInternal = ({
   const editorRef = useRef<MDXEditorMethods>(null)
   const lastEmittedValueRef = useRef<string>('')
   const latestEditorValueRef = useRef<string>(value)
+  const [hasRichEditorError, setHasRichEditorError] = useState(false)
   const resolvedPlaceholder = placeholder || DEFAULT_MARKDOWN_PLACEHOLDER
 
   const { uploadFile } = useSignedUpload()
@@ -190,7 +194,8 @@ const MdxMarkdownEditorInternal = ({
       const decodedMarkdown = decodeMarkdownWhitespaceFromEditor(markdown)
       latestEditorValueRef.current = decodedMarkdown
 
-      if (initialMarkdownNormalize && decodedMarkdown === value) {
+      if (initialMarkdownNormalize) {
+        latestEditorValueRef.current = value
         return
       }
 
@@ -226,6 +231,21 @@ const MdxMarkdownEditorInternal = ({
       lastEmittedValueRef.current = value
     }
   }, [value])
+
+  const rawEditor = (
+    <MdxMarkdownRawEditor
+      value={value}
+      onChange={onChange}
+      placeholder={resolvedPlaceholder}
+      autoFocus={autoFocus}
+      minHeight={minHeight}
+      fontFamily={fontFamily}
+    />
+  )
+
+  if (hasRichEditorError) {
+    return rawEditor
+  }
 
   return (
     <Box
@@ -296,17 +316,85 @@ const MdxMarkdownEditorInternal = ({
         ...getMdxMarkdownContentStyles({ minHeight, fontFamily }),
       }}
     >
-      <MDXEditor
-        ref={editorRef}
-        markdown={initialMarkdown}
-        plugins={plugins}
-        onChange={handleChange}
-        placeholder={resolvedPlaceholder}
-        autoFocus={autoFocus}
-        className={MDX_EDITOR_CLASS_NAME}
-        contentEditableClassName={MDX_EDITOR_CONTENT_CLASS_NAME}
-        iconComponentFor={mdxEditorIconComponentFor}
-      />
+      <MdxMarkdownEditorErrorBoundary fallback={rawEditor} onError={() => setHasRichEditorError(true)}>
+        <MDXEditor
+          ref={editorRef}
+          markdown={initialMarkdown}
+          plugins={plugins}
+          onChange={handleChange}
+          placeholder={resolvedPlaceholder}
+          autoFocus={autoFocus}
+          className={MDX_EDITOR_CLASS_NAME}
+          contentEditableClassName={MDX_EDITOR_CONTENT_CLASS_NAME}
+          iconComponentFor={mdxEditorIconComponentFor}
+        />
+      </MdxMarkdownEditorErrorBoundary>
     </Box>
   )
+}
+
+const MdxMarkdownRawEditor = ({
+  value,
+  onChange,
+  placeholder,
+  autoFocus,
+  minHeight,
+  fontFamily,
+}: MdxMarkdownEditorInternalProps) => {
+  return (
+    <VStack width="full" alignItems="start" spacing={2} backgroundColor="utils.pbg">
+      <Body size="sm" color="neutral1.9">
+        {t('This markdown could not be opened in the rich editor. Edit the source markdown directly.')}
+      </Body>
+      <Textarea
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        minHeight={minHeight}
+        border="none"
+        borderRadius={0}
+        padding={0}
+        backgroundColor="utils.pbg"
+        color="utils.text"
+        fontFamily={fontFamily}
+        resize="vertical"
+        _focus={{ border: 'none' }}
+        _focusVisible={{ boxShadow: 'none' }}
+      />
+    </VStack>
+  )
+}
+
+type MdxMarkdownEditorErrorBoundaryProps = {
+  children: ReactNode
+  fallback: ReactNode
+  onError: () => void
+}
+
+type MdxMarkdownEditorErrorBoundaryState = {
+  hasError: boolean
+}
+
+class MdxMarkdownEditorErrorBoundary extends Component<
+  MdxMarkdownEditorErrorBoundaryProps,
+  MdxMarkdownEditorErrorBoundaryState
+> {
+  state: MdxMarkdownEditorErrorBoundaryState = { hasError: false }
+
+  static getDerivedStateFromError(): MdxMarkdownEditorErrorBoundaryState {
+    return { hasError: true }
+  }
+
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo) {
+    this.props.onError()
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback
+    }
+
+    return this.props.children
+  }
 }

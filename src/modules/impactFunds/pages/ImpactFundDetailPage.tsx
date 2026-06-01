@@ -49,7 +49,7 @@ import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
 import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import type { ImpactFundApplicationsQuery, ImpactFundQuery } from '@/types'
@@ -86,6 +86,8 @@ const CIRCULAR_ECONOMY_REPORT_PDF_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
+const projectStoryMinLength = ProjectValidations.description.minLength
+const projectStoryMaxLength = ProjectValidations.description.maxLength
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string; description?: string | null }
 type SponsorItem = Pick<ImpactFundDetails['liveSponsors'][number], 'id' | 'name' | 'image' | 'url'>
@@ -106,6 +108,24 @@ type CommunitySupporter = {
   id: string
   username: string
   imageUrl: string | null
+}
+
+const getImpactFundProjectDescriptionError = (value: string) => {
+  const trimmedLength = value.trim().length
+
+  if (trimmedLength === 0) {
+    return t('Project story is required.')
+  }
+
+  if (trimmedLength < projectStoryMinLength) {
+    return t('Project story should be longer than {{count}} characters.', { count: projectStoryMinLength })
+  }
+
+  if (value.length > projectStoryMaxLength) {
+    return t('Project story should be shorter than {{count}} characters.', { count: projectStoryMaxLength })
+  }
+
+  return ''
 }
 
 const fundingModelLabels: Record<ImpactFundApplicationFundingModel, string> = {
@@ -298,6 +318,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     () => availableOwnedProjects.find((project) => String(project.id) === selectedProjectId) ?? null,
     [availableOwnedProjects, selectedProjectId],
   )
+  const projectDescriptionError = getImpactFundProjectDescriptionError(projectDescription)
   const hasAvailableProjects = availableOwnedProjects.length > 0
   const shouldDisableApply = isLoggedIn && !hasAvailableProjects
 
@@ -344,7 +365,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     if (!impactFund || !selectedProjectId) return
 
     setHasSubmittedApplicationForm(true)
-    if (!projectDescription.trim() || !hasConfirmedProjectVision || !hasConfirmedImpactMetric) {
+    if (projectDescriptionError || !hasConfirmedProjectVision || !hasConfirmedImpactMetric) {
       return
     }
 
@@ -457,6 +478,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       onSelectedProjectIdChange={setSelectedProjectId}
       projectDescription={projectDescription}
       onProjectDescriptionChange={setProjectDescription}
+      projectDescriptionError={projectDescriptionError}
       hasConfirmedProjectVision={hasConfirmedProjectVision}
       onHasConfirmedProjectVisionChange={setHasConfirmedProjectVision}
       hasConfirmedImpactMetric={hasConfirmedImpactMetric}
@@ -493,6 +515,7 @@ type ImpactFundDetailContentProps = {
   onSelectedProjectIdChange: (projectId: string) => void
   projectDescription: string
   onProjectDescriptionChange: (value: string) => void
+  projectDescriptionError: string
   hasConfirmedProjectVision: boolean
   onHasConfirmedProjectVisionChange: (value: boolean) => void
   hasConfirmedImpactMetric: boolean
@@ -1612,6 +1635,7 @@ type ApplicationSubmissionModalProps = {
   onSelectedProjectIdChange: (projectId: string) => void
   projectDescription: string
   onProjectDescriptionChange: (value: string) => void
+  projectDescriptionError: string
   hasConfirmedProjectVision: boolean
   onHasConfirmedProjectVisionChange: (value: boolean) => void
   hasConfirmedImpactMetric: boolean
@@ -1634,6 +1658,7 @@ function ApplicationSubmissionModal({
   onSelectedProjectIdChange,
   projectDescription,
   onProjectDescriptionChange,
+  projectDescriptionError,
   hasConfirmedProjectVision,
   onHasConfirmedProjectVisionChange,
   hasConfirmedImpactMetric,
@@ -1646,6 +1671,8 @@ function ApplicationSubmissionModal({
   highlightedSurfaceBg,
   highlightedSurfaceBorderColor,
 }: ApplicationSubmissionModalProps): JSX.Element {
+  const hasProjectDescriptionError = hasSubmittedApplicationForm && Boolean(projectDescriptionError)
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={{ base: 'full', md: '4xl' }}>
       <ModalOverlay />
@@ -1692,14 +1719,21 @@ function ApplicationSubmissionModal({
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl isRequired isInvalid={hasSubmittedApplicationForm && !projectDescription.trim()}>
-                  <FormLabel color={primaryTextColor}>{t('Project story')}</FormLabel>
+                <FormControl isRequired isInvalid={hasProjectDescriptionError}>
+                  <FormLabel color={primaryTextColor} mb={1}>
+                    {t('Project story')}
+                  </FormLabel>
+                  <Body size="sm" color={secondaryTextColor} mb={2}>
+                    {t(
+                      'Note: you are editing your project story, any changes will be reflected in your story and be visible on your project page.',
+                    )}
+                  </Body>
                   <Box
                     h={{ base: '340px', md: '440px' }}
                     overflowY="auto"
                     bg="utils.pbg"
                     borderWidth="1px"
-                    borderColor={hasSubmittedApplicationForm && !projectDescription.trim() ? 'error.9' : 'neutral1.6'}
+                    borderColor={hasProjectDescriptionError ? 'error.9' : 'neutral1.6'}
                     borderRadius="md"
                   >
                     <MdxMarkdownEditor
@@ -1712,7 +1746,17 @@ function ApplicationSubmissionModal({
                       )}
                     />
                   </Box>
-                  <FormErrorMessage>{t('Project story is required.')}</FormErrorMessage>
+                  <HStack w="full" justifyContent="space-between" alignItems="start" pt={1}>
+                    <FormErrorMessage mt={0}>{projectDescriptionError}</FormErrorMessage>
+                    <Body
+                      size="xs"
+                      color={projectDescription.length > projectStoryMaxLength ? 'error.9' : secondaryTextColor}
+                      whiteSpace="nowrap"
+                      ml="auto"
+                    >
+                      {projectDescription.length}/{projectStoryMaxLength}
+                    </Body>
+                  </HStack>
                 </FormControl>
                 <VStack align="stretch" spacing={3}>
                   <Checkbox
@@ -1800,6 +1844,7 @@ function ImpactFundDetailContent({
   onSelectedProjectIdChange,
   projectDescription,
   onProjectDescriptionChange,
+  projectDescriptionError,
   hasConfirmedProjectVision,
   onHasConfirmedProjectVisionChange,
   hasConfirmedImpactMetric,
@@ -1947,6 +1992,7 @@ function ImpactFundDetailContent({
         onSelectedProjectIdChange={onSelectedProjectIdChange}
         projectDescription={projectDescription}
         onProjectDescriptionChange={onProjectDescriptionChange}
+        projectDescriptionError={projectDescriptionError}
         hasConfirmedProjectVision={hasConfirmedProjectVision}
         onHasConfirmedProjectVisionChange={onHasConfirmedProjectVisionChange}
         hasConfirmedImpactMetric={hasConfirmedImpactMetric}

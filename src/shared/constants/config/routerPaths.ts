@@ -494,7 +494,7 @@ const pathsMap = {
 
   about: () => `${AboutGeyserOrigin}`,
   legalTerms: () => `/${PathName.legal}/terms`,
-  legalPrivacy: () => `${AboutGeyserOrigin}/${PathName.legalPrivacy}`,
+  legalPrivacy: () => `/${PathName.legal}/privacy`,
 }
 
 export type PathsMap = typeof pathsMap

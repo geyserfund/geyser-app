@@ -34,6 +34,19 @@ export const MUTATION_REFRESH_STRIPE_CONNECT_ONBOARDING_LINK = gql`
   }
 `
 
+export const MUTATION_DISCONNECT_STRIPE_CONNECT = gql`
+  mutation DisconnectStripeConnect($projectId: BigInt!) {
+    disconnectStripeConnect(projectId: $projectId) {
+      accountId
+      chargesEnabled
+      payoutsEnabled
+      detailsSubmitted
+      disabledReason
+      isReady
+    }
+  }
+`
+
 export const MUTATION_PROJECT_STRIPE_INTEREST_NOTIFY = gql`
   mutation ProjectStripeInterestNotify($projectId: BigInt!) {
     projectStripeInterestNotify(projectId: $projectId) {

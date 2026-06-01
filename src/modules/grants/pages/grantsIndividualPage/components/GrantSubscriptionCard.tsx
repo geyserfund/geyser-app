@@ -13,14 +13,12 @@ type GrantSubscriptionSectionProps = {
   title: string
   description: string
   modalTitle: string
-  segmentId: string
 } & CardLayoutProps
 
 export const GrantSubscriptionSection = ({
   title,
   description,
   modalTitle,
-  segmentId,
   ...rest
 }: GrantSubscriptionSectionProps) => {
   const subscriptionModal = useModal()
@@ -50,7 +48,7 @@ export const GrantSubscriptionSection = ({
           </Button>
         </Flex>
       </CardLayout>
-      <SubscriptionForm title={modalTitle} segmentIds={[segmentId]} {...subscriptionModal} />
+      <SubscriptionForm title={modalTitle} {...subscriptionModal} />
     </>
   )
 }

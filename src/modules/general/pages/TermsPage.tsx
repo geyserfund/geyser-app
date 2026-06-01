@@ -3,6 +3,7 @@ import type { TFunction } from 'i18next'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link as ReactLink } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -253,7 +254,7 @@ export const TermsPage = () => {
           </TermsParagraph>
           <TermsParagraph>
             {t("You're also agreeing to our ")}
-            <ChakraLink href={getPath('legalPrivacy')} isExternal textDecoration="underline">
+            <ChakraLink as={ReactLink} to={getPath('legalPrivacy')} textDecoration="underline">
               {t('Privacy Policy')}
             </ChakraLink>
             {t(

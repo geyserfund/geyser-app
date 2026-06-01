@@ -1337,6 +1337,16 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
+    path: getPath('legalPrivacy'),
+    async lazy() {
+      const PrivacyPolicyPage = await import('@/modules/general/pages/PrivacyPolicyPage.tsx').then(
+        (m) => m.PrivacyPolicyPage,
+      )
+      return { Component: PrivacyPolicyPage }
+    },
+  },
+
+  {
     path: '/auth/twitter',
     Component: ExternalAuthSuccess,
   },

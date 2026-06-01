@@ -225,6 +225,34 @@ export enum BaseCurrency {
   Btc = 'BTC'
 }
 
+export type NewsletterPreferences = {
+  __typename?: 'NewsletterPreferences';
+  email: Scalars['String']['output'];
+  newsletterMonthly: Scalars['Boolean']['output'];
+  productUpdates: Scalars['Boolean']['output'];
+  projectSpotlights: Scalars['Boolean']['output'];
+  status?: Maybe<Scalars['String']['output']>;
+};
+
+export type NewsletterPreferencesUpdateInput = {
+  newsletterMonthly?: InputMaybe<Scalars['Boolean']['input']>;
+  productUpdates?: InputMaybe<Scalars['Boolean']['input']>;
+  projectSpotlights?: InputMaybe<Scalars['Boolean']['input']>;
+  userId: Scalars['BigInt']['input'];
+};
+
+export type NewsletterStatusUpdateInput = {
+  isActive: Scalars['Boolean']['input'];
+  userId: Scalars['BigInt']['input'];
+};
+
+export type BeehiivNewsletterSubscribeInput = {
+  email: Scalars['String']['input'];
+  newsletterMonthly?: InputMaybe<Scalars['Boolean']['input']>;
+  productUpdates?: InputMaybe<Scalars['Boolean']['input']>;
+  projectSpotlights?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type BitcoinPaymentMethods = {
   __typename?: 'BitcoinPaymentMethods';
   lightning: LightningPaymentMethods;
@@ -1649,6 +1677,9 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']['output']>;
   ambassadorAdd?: Maybe<Ambassador>;
   ambassadorUpdate?: Maybe<Ambassador>;
+  newsletterPreferencesUpdate: NewsletterPreferences;
+  newsletterStatusUpdate: NewsletterPreferences;
+  newsletterSubscribe: NewsletterPreferences;
   claimBadge: UserBadge;
   contributionCreate: ContributionMutationResponse;
   contributionEmailUpdate: Contribution;
@@ -1657,6 +1688,7 @@ export type Mutation = {
   createProject: Project;
   createStripeConnectAccount: StripeConnectOnboardingPayload;
   creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
+  disconnectStripeConnect: StripeConnectStatus;
   grantApply: GrantApplicant;
   impactFundApplicationFundingSet: ImpactFundApplication;
   impactFundApplicationNoteCreate: ImpactFundApplicationNote;
@@ -1805,6 +1837,21 @@ export type MutationAmbassadorUpdateArgs = {
 };
 
 
+export type MutationNewsletterPreferencesUpdateArgs = {
+  input: NewsletterPreferencesUpdateInput;
+};
+
+
+export type MutationNewsletterStatusUpdateArgs = {
+  input: NewsletterStatusUpdateInput;
+};
+
+
+export type MutationNewsletterSubscribeArgs = {
+  beehiivNewsletterInput: BeehiivNewsletterSubscribeInput;
+};
+
+
 export type MutationClaimBadgeArgs = {
   input: BadgeClaimInput;
 };
@@ -1833,6 +1880,10 @@ export type MutationCreateProjectArgs = {
 export type MutationCreateStripeConnectAccountArgs = {
   projectId: Scalars['BigInt']['input'];
   returnUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationDisconnectStripeConnectArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -3032,6 +3083,21 @@ export enum PayoutCurrency {
   Usdcent = 'USDCENT'
 }
 
+export type PayoutFeeSummary = {
+  __typename?: 'PayoutFeeSummary';
+  currency: FeeCurrency;
+  items: Array<PayoutFeeSummaryItem>;
+  totalAmount: Scalars['Int']['output'];
+};
+
+export type PayoutFeeSummaryItem = {
+  __typename?: 'PayoutFeeSummaryItem';
+  amount: Scalars['Int']['output'];
+  currency: FeeCurrency;
+  description?: Maybe<Scalars['String']['output']>;
+  feeType: PaymentFeeType;
+};
+
 export type PayoutGetInput = {
   payoutId?: InputMaybe<Scalars['BigInt']['input']>;
   projectId?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3074,21 +3140,6 @@ export type PayoutMetadata = {
   projectKey?: Maybe<Scalars['String']['output']>;
   requiresUserLockTx: Scalars['Boolean']['output'];
   swapContractAddress: Scalars['String']['output'];
-};
-
-export type PayoutFeeSummary = {
-  __typename?: 'PayoutFeeSummary';
-  currency: FeeCurrency;
-  items: Array<PayoutFeeSummaryItem>;
-  totalAmount: Scalars['Int']['output'];
-};
-
-export type PayoutFeeSummaryItem = {
-  __typename?: 'PayoutFeeSummaryItem';
-  amount: Scalars['Int']['output'];
-  currency: FeeCurrency;
-  description?: Maybe<Scalars['String']['output']>;
-  feeType: PaymentFeeType;
 };
 
 export type PayoutPaymentCreateInput = {
@@ -4481,6 +4532,7 @@ export type Query = {
   /** Returns all activities. */
   activitiesGet: ActivitiesGetResponse;
   badges: Array<Badge>;
+  newsletterPreferencesGet: NewsletterPreferences;
   contribution: Contribution;
   contributionsGet?: Maybe<ContributionsGetResponse>;
   contributor: Funder;
@@ -4587,6 +4639,11 @@ export type QueryActivitiesCountGroupedByProjectArgs = {
 
 export type QueryActivitiesGetArgs = {
   input?: InputMaybe<GetActivitiesInput>;
+};
+
+
+export type QueryNewsletterPreferencesGetArgs = {
+  userId: Scalars['BigInt']['input'];
 };
 
 
@@ -6010,6 +6067,10 @@ export type ResolversTypes = {
   BadgesGetInput: BadgesGetInput;
   BadgesGetWhereInput: BadgesGetWhereInput;
   BaseCurrency: BaseCurrency;
+  NewsletterPreferences: ResolverTypeWrapper<NewsletterPreferences>;
+  NewsletterPreferencesUpdateInput: NewsletterPreferencesUpdateInput;
+  NewsletterStatusUpdateInput: NewsletterStatusUpdateInput;
+  BeehiivNewsletterSubscribeInput: BeehiivNewsletterSubscribeInput;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
   BitcoinPaymentMethods: ResolverTypeWrapper<BitcoinPaymentMethods>;
   BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>;
@@ -6308,13 +6369,13 @@ export type ResolversTypes = {
   PayoutCancelInput: PayoutCancelInput;
   PayoutContractType: PayoutContractType;
   PayoutCurrency: PayoutCurrency;
+  PayoutFeeSummary: ResolverTypeWrapper<PayoutFeeSummary>;
+  PayoutFeeSummaryItem: ResolverTypeWrapper<PayoutFeeSummaryItem>;
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: ResolverTypeWrapper<Omit<PayoutGetResponse, 'payout'> & { payout: ResolversTypes['Payout'] }>;
   PayoutInitiateInput: PayoutInitiateInput;
   PayoutInitiateResponse: ResolverTypeWrapper<Omit<PayoutInitiateResponse, 'payout'> & { payout: ResolversTypes['Payout'] }>;
   PayoutMetadata: ResolverTypeWrapper<PayoutMetadata>;
-  PayoutFeeSummary: ResolverTypeWrapper<PayoutFeeSummary>;
-  PayoutFeeSummaryItem: ResolverTypeWrapper<PayoutFeeSummaryItem>;
   PayoutPaymentCreateInput: PayoutPaymentCreateInput;
   PayoutPaymentCreateResponse: ResolverTypeWrapper<Omit<PayoutPaymentCreateResponse, 'payment' | 'payout'> & { payment: ResolversTypes['Payment'], payout: ResolversTypes['Payout'] }>;
   PayoutPaymentInput: PayoutPaymentInput;
@@ -6628,6 +6689,10 @@ export type ResolversParentTypes = {
   BadgeClaimInput: BadgeClaimInput;
   BadgesGetInput: BadgesGetInput;
   BadgesGetWhereInput: BadgesGetWhereInput;
+  NewsletterPreferences: NewsletterPreferences;
+  NewsletterPreferencesUpdateInput: NewsletterPreferencesUpdateInput;
+  NewsletterStatusUpdateInput: NewsletterStatusUpdateInput;
+  BeehiivNewsletterSubscribeInput: BeehiivNewsletterSubscribeInput;
   BigInt: Scalars['BigInt']['output'];
   BitcoinPaymentMethods: BitcoinPaymentMethods;
   BitcoinQuote: BitcoinQuote;
@@ -6885,13 +6950,13 @@ export type ResolversParentTypes = {
   PaymentsInProgressGetResponse: Omit<PaymentsInProgressGetResponse, 'payments'> & { payments: Array<ResolversParentTypes['Payment']> };
   Payout: Omit<Payout, 'payments'> & { payments: Array<ResolversParentTypes['Payment']> };
   PayoutCancelInput: PayoutCancelInput;
+  PayoutFeeSummary: PayoutFeeSummary;
+  PayoutFeeSummaryItem: PayoutFeeSummaryItem;
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: Omit<PayoutGetResponse, 'payout'> & { payout: ResolversParentTypes['Payout'] };
   PayoutInitiateInput: PayoutInitiateInput;
   PayoutInitiateResponse: Omit<PayoutInitiateResponse, 'payout'> & { payout: ResolversParentTypes['Payout'] };
   PayoutMetadata: PayoutMetadata;
-  PayoutFeeSummary: PayoutFeeSummary;
-  PayoutFeeSummaryItem: PayoutFeeSummaryItem;
   PayoutPaymentCreateInput: PayoutPaymentCreateInput;
   PayoutPaymentCreateResponse: Omit<PayoutPaymentCreateResponse, 'payment' | 'payout'> & { payment: ResolversParentTypes['Payment'], payout: ResolversParentTypes['Payout'] };
   PayoutPaymentInput: PayoutPaymentInput;
@@ -7240,6 +7305,16 @@ export type BadgeResolvers<ContextType = any, ParentType extends ResolversParent
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thumb?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   uniqueName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NewsletterPreferencesResolvers<ContextType = any, ParentType extends ResolversParentTypes['NewsletterPreferences'] = ResolversParentTypes['NewsletterPreferences']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  newsletterMonthly?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  productUpdates?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  projectSpotlights?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7928,6 +8003,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   ambassadorAdd?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorAddArgs, 'input'>>;
   ambassadorUpdate?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorUpdateArgs, 'input'>>;
+  newsletterPreferencesUpdate?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterPreferencesUpdateArgs, 'input'>>;
+  newsletterStatusUpdate?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterStatusUpdateArgs, 'input'>>;
+  newsletterSubscribe?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterSubscribeArgs, 'beehiivNewsletterInput'>>;
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   contributionCreate?: Resolver<ResolversTypes['ContributionMutationResponse'], ParentType, ContextType, RequireFields<MutationContributionCreateArgs, 'input'>>;
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
@@ -8403,6 +8481,21 @@ export type PayoutResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PayoutFeeSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummary'] = ResolversParentTypes['PayoutFeeSummary']> = {
+  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['PayoutFeeSummaryItem']>, ParentType, ContextType>;
+  totalAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutFeeSummaryItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummaryItem'] = ResolversParentTypes['PayoutFeeSummaryItem']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  feeType?: Resolver<ResolversTypes['PaymentFeeType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PayoutGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutGetResponse'] = ResolversParentTypes['PayoutGetResponse']> = {
   payout?: Resolver<ResolversTypes['Payout'], ParentType, ContextType>;
   payoutMetadata?: Resolver<ResolversTypes['PayoutMetadata'], ParentType, ContextType>;
@@ -8423,21 +8516,6 @@ export type PayoutMetadataResolvers<ContextType = any, ParentType extends Resolv
   projectKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   requiresUserLockTx?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type PayoutFeeSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummary'] = ResolversParentTypes['PayoutFeeSummary']> = {
-  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
-  items?: Resolver<Array<ResolversTypes['PayoutFeeSummaryItem']>, ParentType, ContextType>;
-  totalAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type PayoutFeeSummaryItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutFeeSummaryItem'] = ResolversParentTypes['PayoutFeeSummaryItem']> = {
-  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  currency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  feeType?: Resolver<ResolversTypes['PaymentFeeType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9105,6 +9183,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   activitiesCountGroupedByProject?: Resolver<Array<ResolversTypes['ProjectActivitiesCount']>, ParentType, ContextType, RequireFields<QueryActivitiesCountGroupedByProjectArgs, 'input'>>;
   activitiesGet?: Resolver<ResolversTypes['ActivitiesGetResponse'], ParentType, ContextType, Partial<QueryActivitiesGetArgs>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
+  newsletterPreferencesGet?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<QueryNewsletterPreferencesGetArgs, 'userId'>>;
   contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<QueryContributionArgs>>;
   contributionsGet?: Resolver<Maybe<ResolversTypes['ContributionsGetResponse']>, ParentType, ContextType, Partial<QueryContributionsGetArgs>>;
   contributor?: Resolver<ResolversTypes['Funder'], ParentType, ContextType, RequireFields<QueryContributorArgs, 'input'>>;
@@ -9645,6 +9724,7 @@ export type Resolvers<ContextType = any> = {
   AmbassadorStats?: AmbassadorStatsResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
+  NewsletterPreferences?: NewsletterPreferencesResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   BitcoinPaymentMethods?: BitcoinPaymentMethodsResolvers<ContextType>;
   BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
@@ -9773,11 +9853,11 @@ export type Resolvers<ContextType = any> = {
   PaymentsGetResponse?: PaymentsGetResponseResolvers<ContextType>;
   PaymentsInProgressGetResponse?: PaymentsInProgressGetResponseResolvers<ContextType>;
   Payout?: PayoutResolvers<ContextType>;
+  PayoutFeeSummary?: PayoutFeeSummaryResolvers<ContextType>;
+  PayoutFeeSummaryItem?: PayoutFeeSummaryItemResolvers<ContextType>;
   PayoutGetResponse?: PayoutGetResponseResolvers<ContextType>;
   PayoutInitiateResponse?: PayoutInitiateResponseResolvers<ContextType>;
   PayoutMetadata?: PayoutMetadataResolvers<ContextType>;
-  PayoutFeeSummary?: PayoutFeeSummaryResolvers<ContextType>;
-  PayoutFeeSummaryItem?: PayoutFeeSummaryItemResolvers<ContextType>;
   PayoutPaymentCreateResponse?: PayoutPaymentCreateResponseResolvers<ContextType>;
   PayoutRequestResponse?: PayoutRequestResponseResolvers<ContextType>;
   PayoutResponse?: PayoutResponseResolvers<ContextType>;
@@ -10631,6 +10711,27 @@ export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, u
 
 export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
+export type NewsletterSubscribeMutationVariables = Exact<{
+  beehiivNewsletterInput: BeehiivNewsletterSubscribeInput;
+}>;
+
+
+export type NewsletterSubscribeMutation = { __typename?: 'Mutation', newsletterSubscribe: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
+
+export type NewsletterPreferencesUpdateMutationVariables = Exact<{
+  input: NewsletterPreferencesUpdateInput;
+}>;
+
+
+export type NewsletterPreferencesUpdateMutation = { __typename?: 'Mutation', newsletterPreferencesUpdate: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
+
+export type NewsletterStatusUpdateMutationVariables = Exact<{
+  input: NewsletterStatusUpdateInput;
+}>;
+
+
+export type NewsletterStatusUpdateMutation = { __typename?: 'Mutation', newsletterStatusUpdate: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
+
 export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
   value: Scalars['String']['input'];
@@ -10681,6 +10782,13 @@ export type UserBadgesQuery = { __typename?: 'Query', userBadges: Array<(
     { __typename?: 'UserBadge' }
     & UserBadgeFragment
   )> };
+
+export type NewsletterPreferencesGetQueryVariables = Exact<{
+  userId: Scalars['BigInt']['input'];
+}>;
+
+
+export type NewsletterPreferencesGetQuery = { __typename?: 'Query', newsletterPreferencesGet: { __typename?: 'NewsletterPreferences', email: string, status?: string | null, newsletterMonthly: boolean, productUpdates: boolean, projectSpotlights: boolean } };
 
 export type UserOrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -11635,6 +11743,13 @@ export type RefreshStripeConnectOnboardingLinkMutationVariables = Exact<{
 
 
 export type RefreshStripeConnectOnboardingLinkMutation = { __typename?: 'Mutation', refreshStripeConnectOnboardingLink: { __typename?: 'StripeConnectOnboardingPayload', accountId: string, onboardingUrl: string, status: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } } };
+
+export type DisconnectStripeConnectMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type DisconnectStripeConnectMutation = { __typename?: 'Mutation', disconnectStripeConnect: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } };
 
 export type ProjectStripeInterestNotifyMutationVariables = Exact<{
   projectId: Scalars['BigInt']['input'];
@@ -13427,6 +13542,14 @@ export const UserWalletWithdrawFragmentDoc = gql`
   expiresAt
 }
     `;
+export const ContributionFeesFragmentDoc = gql`
+    fragment ContributionFees on PaymentFee {
+  feeType
+  feeAmount
+  feePayer
+  description
+}
+    `;
 export const RskToOnChainSwapPaymentDetailsFragmentDoc = gql`
     fragment RskToOnChainSwapPaymentDetails on RskToOnChainSwapPaymentDetails {
   swapId
@@ -13455,12 +13578,7 @@ export const PaymentForPayoutRefundFragmentDoc = gql`
   linkedEntityUUID
   linkedEntityType
   fees {
-    feeType
-    feeAmount
-    feePayer
-    description
-    feeCurrency
-    external
+    ...ContributionFees
   }
   paymentDetails {
     ... on RskToOnChainSwapPaymentDetails {
@@ -13471,7 +13589,8 @@ export const PaymentForPayoutRefundFragmentDoc = gql`
     }
   }
 }
-    ${RskToOnChainSwapPaymentDetailsFragmentDoc}
+    ${ContributionFeesFragmentDoc}
+${RskToOnChainSwapPaymentDetailsFragmentDoc}
 ${RskToLightningSwapPaymentDetailsFragmentDoc}`;
 export const UserWalletWithdrawWithPaymentFragmentDoc = gql`
     fragment UserWalletWithdrawWithPayment on UserWalletWithdraw {
@@ -13939,14 +14058,6 @@ export const ContributionFiatPaymentDetailsFragmentDoc = gql`
 export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatSwapPaymentDetails on ContributionFiatToLightningSwapPaymentDetails {
   checkoutUrl
-}
-    `;
-export const ContributionFeesFragmentDoc = gql`
-    fragment ContributionFees on PaymentFee {
-  feeType
-  feeAmount
-  feePayer
-  description
 }
     `;
 export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
@@ -17672,6 +17783,117 @@ export type ImpactFundDashboardApplicationsQueryHookResult = ReturnType<typeof u
 export type ImpactFundDashboardApplicationsLazyQueryHookResult = ReturnType<typeof useImpactFundDashboardApplicationsLazyQuery>;
 export type ImpactFundDashboardApplicationsSuspenseQueryHookResult = ReturnType<typeof useImpactFundDashboardApplicationsSuspenseQuery>;
 export type ImpactFundDashboardApplicationsQueryResult = Apollo.QueryResult<ImpactFundDashboardApplicationsQuery, ImpactFundDashboardApplicationsQueryVariables>;
+export const NewsletterSubscribeDocument = gql`
+    mutation NewsletterSubscribe($beehiivNewsletterInput: BeehiivNewsletterSubscribeInput!) {
+  newsletterSubscribe(beehiivNewsletterInput: $beehiivNewsletterInput) {
+    email
+    status
+    newsletterMonthly
+    productUpdates
+    projectSpotlights
+  }
+}
+    `;
+export type NewsletterSubscribeMutationFn = Apollo.MutationFunction<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>;
+
+/**
+ * __useNewsletterSubscribeMutation__
+ *
+ * To run a mutation, you first call `useNewsletterSubscribeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterSubscribeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newsletterSubscribeMutation, { data, loading, error }] = useNewsletterSubscribeMutation({
+ *   variables: {
+ *      beehiivNewsletterInput: // value for beehiivNewsletterInput
+ *   },
+ * });
+ */
+export function useNewsletterSubscribeMutation(baseOptions?: Apollo.MutationHookOptions<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>(NewsletterSubscribeDocument, options);
+      }
+export type NewsletterSubscribeMutationHookResult = ReturnType<typeof useNewsletterSubscribeMutation>;
+export type NewsletterSubscribeMutationResult = Apollo.MutationResult<NewsletterSubscribeMutation>;
+export type NewsletterSubscribeMutationOptions = Apollo.BaseMutationOptions<NewsletterSubscribeMutation, NewsletterSubscribeMutationVariables>;
+export const NewsletterPreferencesUpdateDocument = gql`
+    mutation NewsletterPreferencesUpdate($input: NewsletterPreferencesUpdateInput!) {
+  newsletterPreferencesUpdate(input: $input) {
+    email
+    status
+    newsletterMonthly
+    productUpdates
+    projectSpotlights
+  }
+}
+    `;
+export type NewsletterPreferencesUpdateMutationFn = Apollo.MutationFunction<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>;
+
+/**
+ * __useNewsletterPreferencesUpdateMutation__
+ *
+ * To run a mutation, you first call `useNewsletterPreferencesUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterPreferencesUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newsletterPreferencesUpdateMutation, { data, loading, error }] = useNewsletterPreferencesUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useNewsletterPreferencesUpdateMutation(baseOptions?: Apollo.MutationHookOptions<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>(NewsletterPreferencesUpdateDocument, options);
+      }
+export type NewsletterPreferencesUpdateMutationHookResult = ReturnType<typeof useNewsletterPreferencesUpdateMutation>;
+export type NewsletterPreferencesUpdateMutationResult = Apollo.MutationResult<NewsletterPreferencesUpdateMutation>;
+export type NewsletterPreferencesUpdateMutationOptions = Apollo.BaseMutationOptions<NewsletterPreferencesUpdateMutation, NewsletterPreferencesUpdateMutationVariables>;
+export const NewsletterStatusUpdateDocument = gql`
+    mutation NewsletterStatusUpdate($input: NewsletterStatusUpdateInput!) {
+  newsletterStatusUpdate(input: $input) {
+    email
+    status
+    newsletterMonthly
+    productUpdates
+    projectSpotlights
+  }
+}
+    `;
+export type NewsletterStatusUpdateMutationFn = Apollo.MutationFunction<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>;
+
+/**
+ * __useNewsletterStatusUpdateMutation__
+ *
+ * To run a mutation, you first call `useNewsletterStatusUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterStatusUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newsletterStatusUpdateMutation, { data, loading, error }] = useNewsletterStatusUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useNewsletterStatusUpdateMutation(baseOptions?: Apollo.MutationHookOptions<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>(NewsletterStatusUpdateDocument, options);
+      }
+export type NewsletterStatusUpdateMutationHookResult = ReturnType<typeof useNewsletterStatusUpdateMutation>;
+export type NewsletterStatusUpdateMutationResult = Apollo.MutationResult<NewsletterStatusUpdateMutation>;
+export type NewsletterStatusUpdateMutationOptions = Apollo.BaseMutationOptions<NewsletterStatusUpdateMutation, NewsletterStatusUpdateMutationVariables>;
 export const CreatorNotificationsSettingsUpdateDocument = gql`
     mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
   creatorNotificationConfigurationValueUpdate(
@@ -17927,6 +18149,50 @@ export type UserBadgesQueryHookResult = ReturnType<typeof useUserBadgesQuery>;
 export type UserBadgesLazyQueryHookResult = ReturnType<typeof useUserBadgesLazyQuery>;
 export type UserBadgesSuspenseQueryHookResult = ReturnType<typeof useUserBadgesSuspenseQuery>;
 export type UserBadgesQueryResult = Apollo.QueryResult<UserBadgesQuery, UserBadgesQueryVariables>;
+export const NewsletterPreferencesGetDocument = gql`
+    query NewsletterPreferencesGet($userId: BigInt!) {
+  newsletterPreferencesGet(userId: $userId) {
+    email
+    status
+    newsletterMonthly
+    productUpdates
+    projectSpotlights
+  }
+}
+    `;
+
+/**
+ * __useNewsletterPreferencesGetQuery__
+ *
+ * To run a query within a React component, call `useNewsletterPreferencesGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNewsletterPreferencesGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewsletterPreferencesGetQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewsletterPreferencesGetQuery(baseOptions: Apollo.QueryHookOptions<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables> & ({ variables: NewsletterPreferencesGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>(NewsletterPreferencesGetDocument, options);
+      }
+export function useNewsletterPreferencesGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>(NewsletterPreferencesGetDocument, options);
+        }
+export function useNewsletterPreferencesGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>(NewsletterPreferencesGetDocument, options);
+        }
+export type NewsletterPreferencesGetQueryHookResult = ReturnType<typeof useNewsletterPreferencesGetQuery>;
+export type NewsletterPreferencesGetLazyQueryHookResult = ReturnType<typeof useNewsletterPreferencesGetLazyQuery>;
+export type NewsletterPreferencesGetSuspenseQueryHookResult = ReturnType<typeof useNewsletterPreferencesGetSuspenseQuery>;
+export type NewsletterPreferencesGetQueryResult = Apollo.QueryResult<NewsletterPreferencesGetQuery, NewsletterPreferencesGetQueryVariables>;
 export const UserOrdersGetDocument = gql`
     query UserOrdersGet($input: OrdersGetInput!) {
   ordersGet(input: $input) {
@@ -20504,6 +20770,44 @@ export function useRefreshStripeConnectOnboardingLinkMutation(baseOptions?: Apol
 export type RefreshStripeConnectOnboardingLinkMutationHookResult = ReturnType<typeof useRefreshStripeConnectOnboardingLinkMutation>;
 export type RefreshStripeConnectOnboardingLinkMutationResult = Apollo.MutationResult<RefreshStripeConnectOnboardingLinkMutation>;
 export type RefreshStripeConnectOnboardingLinkMutationOptions = Apollo.BaseMutationOptions<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>;
+export const DisconnectStripeConnectDocument = gql`
+    mutation DisconnectStripeConnect($projectId: BigInt!) {
+  disconnectStripeConnect(projectId: $projectId) {
+    accountId
+    chargesEnabled
+    payoutsEnabled
+    detailsSubmitted
+    disabledReason
+    isReady
+  }
+}
+    `;
+export type DisconnectStripeConnectMutationFn = Apollo.MutationFunction<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>;
+
+/**
+ * __useDisconnectStripeConnectMutation__
+ *
+ * To run a mutation, you first call `useDisconnectStripeConnectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisconnectStripeConnectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disconnectStripeConnectMutation, { data, loading, error }] = useDisconnectStripeConnectMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useDisconnectStripeConnectMutation(baseOptions?: Apollo.MutationHookOptions<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>(DisconnectStripeConnectDocument, options);
+      }
+export type DisconnectStripeConnectMutationHookResult = ReturnType<typeof useDisconnectStripeConnectMutation>;
+export type DisconnectStripeConnectMutationResult = Apollo.MutationResult<DisconnectStripeConnectMutation>;
+export type DisconnectStripeConnectMutationOptions = Apollo.BaseMutationOptions<DisconnectStripeConnectMutation, DisconnectStripeConnectMutationVariables>;
 export const ProjectStripeInterestNotifyDocument = gql`
     mutation ProjectStripeInterestNotify($projectId: BigInt!) {
   projectStripeInterestNotify(projectId: $projectId) {
