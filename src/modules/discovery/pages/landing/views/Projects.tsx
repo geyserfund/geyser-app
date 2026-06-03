@@ -124,6 +124,10 @@ const getProjectsSubCategoryPath = (projectTypeFilter: ProjectTypeFilter, subCat
   return getPath('discoveryProjectsSubCategory', subCategory)
 }
 
+const getIsSuccessfullyFundedCampaignsRoute = (pathname: string) => {
+  return pathname === getPath('discoveryCampaignsSuccessfullyFunded')
+}
+
 const getProjectTypeFilter = (pathname: string): ProjectTypeFilter => {
   const rootSegment = pathname.split('/').filter(Boolean)[0]
 
@@ -255,6 +259,14 @@ const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) =
       label: `🔥 ${t('Trending')}`,
       path: getBaseProjectsPath(projectTypeFilter),
     },
+    ...(projectTypeFilter === 'campaigns'
+      ? [
+          {
+            label: `🏆 ${t('Successfully Funded')}`,
+            path: getPath('discoveryCampaignsSuccessfullyFunded'),
+          },
+        ]
+      : []),
     {
       label: `📍 ${t('In your region')}`,
       path:
@@ -378,6 +390,7 @@ export const Projects = () => {
   } = useFilterContext()
 
   const projectTypeFilter = getProjectTypeFilter(location.pathname)
+  const isSuccessfullyFundedCampaignsRoute = getIsSuccessfullyFundedCampaignsRoute(location.pathname)
   const projectTypeFilters = useMemo<Array<{ key: ProjectTypeFilter; label: string; path: string }>>(
     () => [
       { key: 'all', label: t('All project types'), path: getPath('discoveryProjects') },
@@ -438,7 +451,7 @@ export const Projects = () => {
   const isRegionLookupFailed = shouldFilterByUserRegion && !loadingCountryCode && !countryCode
   const hasSearchFilter = Boolean(search?.trim())
   const tagFiltersCount = tagIds?.length ?? 0
-  const supportsMostFundedThisMonth = !hasSearchFilter && tagFiltersCount === 0
+  const supportsMostFundedThisMonth = !isSuccessfullyFundedCampaignsRoute && !hasSearchFilter && tagFiltersCount === 0
   const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM), supportsMostFundedThisMonth, projectTypeFilter)
   const sortOptions = useMemo<FilterDropdownOption<SortOption>[]>(
     () =>
@@ -461,13 +474,24 @@ export const Projects = () => {
       category: category as ProjectCategory | undefined,
       countryCode: countryCode ?? filterCountryCode,
       fundingStrategy: getFundingStrategy(projectTypeFilter),
+      aonGoalReached: isSuccessfullyFundedCampaignsRoute || undefined,
       region,
       search,
       status: ProjectsGetWhereInputStatus.Active,
       subCategory: subCategory as ProjectSubCategory | undefined,
       tagIds: tagIds?.length ? tagIds : undefined,
     }),
-    [category, countryCode, filterCountryCode, projectTypeFilter, region, search, subCategory, tagIds],
+    [
+      category,
+      countryCode,
+      filterCountryCode,
+      isSuccessfullyFundedCampaignsRoute,
+      projectTypeFilter,
+      region,
+      search,
+      subCategory,
+      tagIds,
+    ],
   )
 
   const orderBy = useMemo<ProjectsOrderByInput[]>(() => {
@@ -496,7 +520,7 @@ export const Projects = () => {
     ]
   }, [sort])
   const resultMap =
-    projectTypeFilter === 'campaigns'
+    projectTypeFilter === 'campaigns' && !isSuccessfullyFundedCampaignsRoute
       ? (projects: ProjectForLandingPageFragment[]) => projects.filter(isCampaignProjectStillRaising)
       : undefined
 
@@ -540,7 +564,8 @@ export const Projects = () => {
   const projectRows = shouldUseMostFundedThisMonth ? mostFundedThisMonthProjects : undefined
   const projectsError = shouldUseMostFundedThisMonth ? mostFundedThisMonthError : error
   const projectsLoading = shouldUseMostFundedThisMonth ? isMostFundedThisMonthLoading : isLoading
-  const projectFilter = projectTypeFilter === 'campaigns' ? isCampaignProjectStillRaising : undefined
+  const projectFilter =
+    projectTypeFilter === 'campaigns' && !isSuccessfullyFundedCampaignsRoute ? isCampaignProjectStillRaising : undefined
   const toolbarDividerColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
 
   useEffect(() => {

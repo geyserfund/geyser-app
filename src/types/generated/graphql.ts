@@ -4428,6 +4428,7 @@ export type ProjectsGetQueryInput = {
 };
 
 export type ProjectsGetWhereInput = {
+  aonGoalReached?: InputMaybe<Scalars['Boolean']['input']>;
   categories?: InputMaybe<Array<ProjectCategory>>;
   category?: InputMaybe<ProjectCategory>;
   countryCode?: InputMaybe<Scalars['String']['input']>;

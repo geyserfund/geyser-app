@@ -966,6 +966,7 @@ input ProjectsGetWhereInput {
   categories: [ProjectCategory!]
   subCategory: ProjectSubCategory
   fundingStrategy: ProjectFundingStrategy
+  aonGoalReached: Boolean
   ownerId: BigInt
 }
 
