@@ -12,8 +12,11 @@ import { FundingErrorOccured } from './components/FundingErrorOccured.tsx'
 import { FundingInactiveProject } from './components/FundingInactiveProject.tsx'
 import { FundingMaxLimit } from './components/FundingMaxLimit.tsx'
 import { FundingMinLimit } from './components/FundingMinLimit.tsx'
+import { FundingProjectClosed } from './components/FundingProjectClosed.tsx'
 import { FundingRewardsOutOfStock } from './components/FundingRewardsOutOfStock.tsx'
 import { FundingWalletUnreachable } from './components/FundingWalletUnreachable.tsx'
+
+const PROJECT_WALLET_CLOSED_ERROR = 'Project wallet is no longer active. This project has been closed.'
 
 export const PaymentFailed = () => {
   const { project } = useFundingFormAtom()
@@ -24,6 +27,10 @@ export const PaymentFailed = () => {
   const creatorId = project.owners?.[0]?.user.id
 
   const renderErrorPage = () => {
+    if (error.message === PROJECT_WALLET_CLOSED_ERROR) {
+      return <FundingProjectClosed message={error.message} />
+    }
+
     switch (error.code) {
       case ApolloErrors.INVALID_FUNDING_AMOUNT: {
         if (error.maxAmount) {

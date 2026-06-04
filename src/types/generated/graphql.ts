@@ -5596,9 +5596,21 @@ export type UserAccountKeysUpdateInput = {
   rskKeyPair: RskKeyPairInput;
 };
 
+export type AccountPasswordAffectedProject = {
+  __typename?: 'AccountPasswordAffectedProject';
+  balanceSats: Scalars['BigInt']['output'];
+  id: Scalars['BigInt']['output'];
+  name: Scalars['String']['output'];
+  rskEoa: Scalars['String']['output'];
+  status: ProjectStatus;
+  title: Scalars['String']['output'];
+};
+
 export type UserAccountPasswordFundsSummary = {
   __typename?: 'UserAccountPasswordFundsSummary';
+  affectedTiaProjects: Array<AccountPasswordAffectedProject>;
   aonUnclaimedFundsSats: Scalars['Int']['output'];
+  legacyTiaProjects: Array<AccountPasswordAffectedProject>;
   pledgedSats: Scalars['Int']['output'];
   tiaUnclaimedFundsSats: Scalars['Int']['output'];
   unclaimedFundsSats: Scalars['Int']['output'];
@@ -12346,7 +12358,7 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
 export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number } };
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }> } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
@@ -23539,6 +23551,22 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
     tiaUnclaimedFundsSats
     aonUnclaimedFundsSats
     pledgedSats
+    affectedTiaProjects {
+      id
+      name
+      title
+      status
+      rskEoa
+      balanceSats
+    }
+    legacyTiaProjects {
+      id
+      name
+      title
+      status
+      rskEoa
+      balanceSats
+    }
   }
 }
     `;

@@ -1107,6 +1107,17 @@ type UserAccountPasswordFundsSummary {
   tiaUnclaimedFundsSats: BigInt!
   aonUnclaimedFundsSats: BigInt!
   pledgedSats: BigInt!
+  affectedTiaProjects: [AccountPasswordAffectedProject!]!
+  legacyTiaProjects: [AccountPasswordAffectedProject!]!
+}
+
+type AccountPasswordAffectedProject {
+  id: BigInt!
+  name: String!
+  title: String!
+  status: ProjectStatus!
+  rskEoa: String!
+  balanceSats: BigInt!
 }
 
 type AffiliatePartnerTerms {

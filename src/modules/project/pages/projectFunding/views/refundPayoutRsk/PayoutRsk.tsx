@@ -120,6 +120,26 @@ const buildPayoutNetworkFeeSummary = (
   }
 }
 
+const assertInternalLockAccountMatchesProjectWallet = (params: {
+  requiresInternalLock: boolean
+  projectRskAddress?: string
+  accountRskAddress: string
+}) => {
+  const { requiresInternalLock, projectRskAddress, accountRskAddress } = params
+
+  if (!requiresInternalLock || !projectRskAddress) {
+    return
+  }
+
+  if (projectRskAddress.trim().toLowerCase() === accountRskAddress.trim().toLowerCase()) {
+    return
+  }
+
+  throw new Error(
+    'The account password does not match this project wallet. Recovering the password closes projects tied to the old wallet key.',
+  )
+}
+
 const getPayoutProgressSteps = (params: { method: PayoutMethod; stage: PayoutProgressStage }): PayoutProgressStep[] => {
   const { method, stage } = params
 
@@ -528,6 +548,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       const lockAmountSats = Number(swapObj?.expectedAmount ?? amount)
       const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
       const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
+      assertInternalLockAccountMatchesProjectWallet({
+        requiresInternalLock,
+        projectRskAddress: rskAddress,
+        accountRskAddress: accountKeys.address,
+      })
       const signature = requiresInternalLock
         ? '0x'
         : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
@@ -670,6 +695,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       const lockAmountSats = Number(swapObj?.lockupDetails?.amount ?? amount)
       const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
       const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
+      assertInternalLockAccountMatchesProjectWallet({
+        requiresInternalLock,
+        projectRskAddress: rskAddress,
+        accountRskAddress: accountKeys.address,
+      })
       const signature = requiresInternalLock
         ? '0x'
         : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature

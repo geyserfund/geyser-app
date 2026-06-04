@@ -10,6 +10,7 @@ import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
@@ -95,13 +96,21 @@ export const PaymentLoading = () => {
 }
 
 const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
+  const navigate = useNavigate()
+  const { project, isProjectOwner } = useProjectAtom()
   const setFundingUserAccountKeys = useSetAtom(userAccountKeysAtom)
   const passwordHelpTextColor = useColorModeValue('gray.500', 'gray.400')
+  const [hasRecoveredCreatorPassword, setHasRecoveredCreatorPassword] = useState(false)
 
   const { accountPasswordType, currentForm, renderForm, titles } = useAccountPasswordForm({
     onComplete(data) {
       if (data) {
         setFundingUserAccountKeys(data)
+      }
+
+      if (accountPasswordType === 'recover' && isProjectOwner) {
+        setHasRecoveredCreatorPassword(true)
+        return
       }
 
       onComplete()
@@ -112,6 +121,39 @@ const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
       },
     },
   })
+
+  if (hasRecoveredCreatorPassword) {
+    return (
+      <VStack w="full" spacing={6} alignItems="start">
+        <Body size="lg" bold>
+          {t('Project wallet closed')}
+        </Body>
+        <Feedback variant={FeedBackVariant.WARNING}>
+          <VStack alignItems="start" spacing={2}>
+            <Body size="sm">
+              {t(
+                'Your account password was recovered successfully. This project was tied to the previous wallet key, so it has been closed and cannot accept this contribution.',
+              )}
+            </Body>
+            <Body size="sm">
+              {t(
+                'Please return to the project page. You will need to create a new project to receive funds with the new wallet key.',
+              )}
+            </Body>
+          </VStack>
+        </Feedback>
+        <Button
+          width="200px"
+          size="lg"
+          colorScheme="primary1"
+          isDisabled={!project?.name}
+          onClick={() => project?.name && navigate(getPath('project', project.name))}
+        >
+          {t('Back to project')}
+        </Button>
+      </VStack>
+    )
+  }
 
   return (
     <VStack as="form" onSubmit={currentForm.onSubmit} w="full" spacing={6}>

@@ -41,6 +41,22 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
       tiaUnclaimedFundsSats
       aonUnclaimedFundsSats
       pledgedSats
+      affectedTiaProjects {
+        id
+        name
+        title
+        status
+        rskEoa
+        balanceSats
+      }
+      legacyTiaProjects {
+        id
+        name
+        title
+        status
+        rskEoa
+        balanceSats
+      }
     }
   }
 `

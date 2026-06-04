@@ -48,11 +48,31 @@ const getFundsSummaryText = (fundsSummary: {
   tiaUnclaimedFundsSats: string | number | bigint
   aonUnclaimedFundsSats: string | number | bigint
   pledgedSats: string | number | bigint
+  affectedTiaProjects?: AccountPasswordProjectImpact[]
+  legacyTiaProjects?: AccountPasswordProjectImpact[]
 }) => {
   const tiaUnclaimedFundsSats = toSatsBigInt(fundsSummary.tiaUnclaimedFundsSats)
   const aonUnclaimedFundsSats = toSatsBigInt(fundsSummary.aonUnclaimedFundsSats)
   const pledgedSats = toSatsBigInt(fundsSummary.pledgedSats)
+  const affectedTiaProjects = fundsSummary.affectedTiaProjects ?? []
+  const legacyTiaProjects = fundsSummary.legacyTiaProjects ?? []
   const messages = []
+
+  if (affectedTiaProjects.length > 0) {
+    messages.push(
+      t('{{count}} TIA project will be closed because it is tied to your current account key.', {
+        count: affectedTiaProjects.length,
+      }),
+    )
+  }
+
+  if (legacyTiaProjects.length > 0) {
+    messages.push(
+      t('{{count}} older TIA project will require wallet review before it can accept new contributions.', {
+        count: legacyTiaProjects.length,
+      }),
+    )
+  }
 
   if (tiaUnclaimedFundsSats > 0n) {
     messages.push(
@@ -83,6 +103,12 @@ const getFundsSummaryText = (fundsSummary: {
     : t('You currently have no TIA project funds, AON unclaimed funds, or pledged sats tied to this account password.')
 }
 
+type AccountPasswordProjectImpact = {
+  id: string | number | bigint
+  title: string
+  balanceSats: string | number | bigint
+}
+
 function toSatsBigInt(value: string | number | bigint): bigint {
   if (typeof value === 'bigint') return value
   if (typeof value === 'number') return Number.isFinite(value) ? BigInt(Math.trunc(value)) : 0n
@@ -91,6 +117,26 @@ function toSatsBigInt(value: string | number | bigint): bigint {
 
 function formatSatsBigInt(value: bigint): string {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+function renderProjectImpactList(projects: AccountPasswordProjectImpact[], label: string) {
+  if (!projects.length) return null
+
+  return (
+    <VStack w="full" alignItems="start" gap={1}>
+      <Body size="sm" bold>
+        {label}
+      </Body>
+      {projects.map((project) => (
+        <Body key={`${project.id}`} size="sm">
+          {t('{{projectTitle}} - {{balance}} sats', {
+            projectTitle: project.title,
+            balance: formatSatsBigInt(toSatsBigInt(project.balanceSats)),
+          })}
+        </Body>
+      ))}
+    </VStack>
+  )
 }
 
 /** Password recovery form component with new password fields and acknowledgment checkboxes */
@@ -106,7 +152,7 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
         <Feedback variant={FeedBackVariant.WARNING}>
           <Body>
             {t(
-              'If you have forgotten your password, you can set a new account password. Note that you will lose access to TIA project funds tied to your current account password. AON funds you can no longer claim will be refunded to contributors. You will also lose the ability to claim refunds on pledges made to other projects.',
+              'If you have forgotten your password, you can set a new account password. Projects tied to your current wallet key will be closed so they cannot receive funds to a wallet you may no longer control. AON funds you can no longer claim will be refunded to contributors. You will also lose the ability to claim refunds on pledges made to other projects.',
             )}
           </Body>
         </Feedback>
@@ -121,7 +167,13 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
           </Body>
         )}
 
-        {!loading && !error && fundsSummary && <Body>{getFundsSummaryText(fundsSummary)}</Body>}
+        {!loading && !error && fundsSummary && (
+          <VStack w="full" alignItems="start" gap={3}>
+            <Body>{getFundsSummaryText(fundsSummary)}</Body>
+            {renderProjectImpactList(fundsSummary.affectedTiaProjects, t('Projects that will be closed'))}
+            {renderProjectImpactList(fundsSummary.legacyTiaProjects, t('Projects that will require wallet review'))}
+          </VStack>
+        )}
       </VStack>
 
       <VStack w="full" gap={4}>
@@ -161,7 +213,7 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
           <Checkbox {...control.register('acknowledgeRefund')} colorScheme="primary1">
             <Body size="sm">
               {t(
-                'I would like to reset my password and acknowledge that TIA project funds may be lost, AON unclaimed funds may be refunded to contributors, and I may lose access to pledge refunds.',
+                'I would like to reset my password and acknowledge that projects tied to the current wallet key may be closed, TIA project funds may be lost, AON unclaimed funds may be refunded to contributors, and I may lose access to pledge refunds.',
               )}
             </Body>
           </Checkbox>
