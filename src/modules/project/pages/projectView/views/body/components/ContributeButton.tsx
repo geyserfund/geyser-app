@@ -102,6 +102,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
         <Button
           {...sharedButtonProps}
           {...rest}
+          data-testid="contribute-button"
           as={Link}
           href={getFullDomainUrl(getPath('projectFunding', project.name))}
           isExternal
@@ -110,7 +111,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
           {t('Contribute')}
         </Button>
       ) : (
-        <Button {...sharedButtonProps} {...rest} onClick={handleInlineClick}>
+        <Button {...sharedButtonProps} {...rest} data-testid="contribute-button" onClick={handleInlineClick}>
           {t('Contribute')}
         </Button>
       )}

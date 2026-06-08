@@ -285,6 +285,7 @@ export const DonationInput = () => {
         </SelectablePillButton>
       </HStack>
       <AmountInput
+        data-testid="donation-input-amount"
         inputRef={inputRef}
         satoshi={satoshi}
         dollar={dollar}

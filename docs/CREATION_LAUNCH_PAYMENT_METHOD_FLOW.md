@@ -57,7 +57,32 @@ If project already has `paidLaunch=true`, flow continues directly to finalize.
   - Fallback defaults:
     - production: `3075`
     - staging: `839`
-    - development/test fallback: `10`
+    - development: `939`
+    - test fallback: `10`
+- Backend launch-fee target ids (must align with frontend target):
+  - `geyser-server` env vars:
+    - `GEYSER_LAUNCH_PROJECT_ID` (single override)
+    - `GEYSER_LAUNCH_PROJECT_IDS` (comma-separated allowlist)
+  - Overrides are intended for `development`/`staging`; production keeps defaults.
+
+## Review Acceptance E2E Auth
+- `geyser-server` supports dev/staging-only custom JWT auth on `projectReviewSubmit` via:
+  - Header: `x-project-review-submit-jwt`
+  - Secret: `PROJECT_REVIEW_SUBMIT_JWT_SECRET`
+- Playwright full-launch test env:
+  - `PROJECT_REVIEW_SUBMIT_JWT` (short-lived JWT minted with scope `project-review-submit`)
+  - Optional `PROJECT_CREATION_ACCOUNT_PASSWORD` for password-confirmation screens.
+- JWT mint command (from `geyser-server`):
+  - `PROJECT_REVIEW_SUBMIT_JWT_SECRET=<secret> yarn mint:project-review-submit-jwt`
+  - Non-expiring test token (dev/staging only): `PROJECT_REVIEW_SUBMIT_JWT_SECRET=<secret> yarn mint:project-review-submit-jwt --never-expires`
+  - Optional tighter scope for one project: `... --project-id=<newProjectId>`
+
+## Fast Target Switch Procedure (Dev/Staging)
+1. Pick a known healthy launch-fee destination project id.
+2. Update frontend env: `VITE_APP_GEYSER_LAUNCH_PROJECT_ID=<id>`.
+3. Update backend env: `GEYSER_LAUNCH_PROJECT_ID=<id>` (or include in `GEYSER_LAUNCH_PROJECT_IDS`).
+4. Restart frontend/backend with updated env.
+5. Run Playwright full-launch smoke (`tests/projectCreation/aon.spec.ts`) and verify launch-fee payment settles and publish succeeds.
 
 ## Shared Launch Fee Amounts
 - `src/modules/project/pages/projectCreation/views/launch/constants/launchFees.ts`

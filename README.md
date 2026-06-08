@@ -274,19 +274,24 @@ With Docker running, navigate to the staging URL provided below.
 
 ### Testing
 
-We have end-to-end tests with Cypress. To run the tests locally, we'd need to create a `cypress.env.json` file in the root directory, with the following key values:
+We have end-to-end tests with Playwright. To run the live payment tests locally, create
+`packages/testing/playwright/.env.playwright` with the following key values:
+
 ```shell
 APP_URL,
 CONTRIBUTOR_LND_ENDPOINT,
 CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
 MINE_BLOCK_ADDRESS,
 BITCOIND_ENDPOINT,
-BITCOIND_AUTH
+BITCOIND_AUTH,
+PROJECT_REVIEW_SUBMIT_JWT,
+PROJECT_CREATION_ACCOUNT_PASSWORD
 ```
 
 then
+
 ```shell
-make test
+yarn test:e2e
 ```
 
 

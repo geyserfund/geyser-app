@@ -54,7 +54,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
       fiat: {
         create: true,
         stripe: {
-          returnUrl: expect.stringContaining('/project/tia-with-stripe/funding/success'),
+          returnUrl: expect.stringContaining('/project/tia-with-stripe/funding/awaiting-success'),
         },
       },
     })
