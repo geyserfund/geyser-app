@@ -36,6 +36,7 @@ export enum PathName {
   inYourRegion = 'region',
   almostFunded = 'almostfunded',
   almostOver = 'almostover',
+  successfullyFunded = 'successfully-funded',
 
   manifesto = 'manifesto',
   ambassadorProgram = 'ambassador-program',
@@ -212,6 +213,7 @@ const pathsMap = {
     `/${PathName.campaigns}/${PathName.subCategory}/${subCategory}`,
   discoveryCampaignsAlmostFunded: () => `/${PathName.campaigns}/${PathName.almostFunded}`,
   discoveryCampaignsAlmostOver: () => `/${PathName.campaigns}/${PathName.almostOver}`,
+  discoveryCampaignsSuccessfullyFunded: () => `/${PathName.campaigns}/${PathName.successfullyFunded}`,
   discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
   discoveryFundraisers: () => `/${PathName.fundraisers}`,
   discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
