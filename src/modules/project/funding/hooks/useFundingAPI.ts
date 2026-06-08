@@ -158,13 +158,14 @@ const getInitialClaimPreImages = (): ClaimPreImages => ({
 
 const getFundingGraphQLError = (error: ApolloError): FundingFlowGraphQLError | undefined => {
   const graphQLError = error.graphQLErrors[0]
-  const code = graphQLError?.extensions?.code
 
-  if (!code) return undefined
+  if (!graphQLError) return undefined
+
+  const code = graphQLError.extensions?.code
 
   return {
-    ...graphQLError.extensions,
-    code: String(code),
+    ...(graphQLError.extensions ?? {}),
+    ...(code ? { code: String(code) } : {}),
     message: graphQLError.message,
   }
 }

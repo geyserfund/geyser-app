@@ -28,7 +28,7 @@ export const PaymentFailed = () => {
 
   const renderErrorPage = () => {
     if (error.message === PROJECT_WALLET_CLOSED_ERROR) {
-      return <FundingProjectClosed message={error.message} />
+      return <FundingProjectClosed />
     }
 
     switch (error.code) {
