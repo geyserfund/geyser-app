@@ -62,7 +62,6 @@ type FieldPartnerLeaderboardRow = {
   fieldPartner: string
   country: string
   projectsLaunched: string
-  workshops: string
   enabledContribution: string
 }
 type SectionColors = {
@@ -293,10 +292,6 @@ const formatLeaderboardSats = (sats: number) => {
   return `${compactSatsFormatter.format(sats).replace('K', 'k')} sats`
 }
 
-const getHostedWorkshopCount = (project: FieldPartnerLeaderboardProject) => {
-  return project.tags.some((tag) => tag.label.toLowerCase().includes('workshop')) ? 1 : 0
-}
-
 const getLocationLabel = (project: FieldPartnerLeaderboardProject) => {
   return project.fieldPartner?.location || project.location?.country?.name || project.location?.region || 'Global'
 }
@@ -317,7 +312,6 @@ const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject
       fieldPartner: string
       countryCounts: Map<string, number>
       projectsLaunched: number
-      workshopsHosted: number
       enabledContributionSats: number
     }
   >()
@@ -332,14 +326,12 @@ const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject
       fieldPartner: project.fieldPartner.username,
       countryCounts: new Map<string, number>(),
       projectsLaunched: 0,
-      workshopsHosted: 0,
       enabledContributionSats: 0,
     }
     const locationLabel = getLocationLabel(project)
 
     current.countryCounts.set(locationLabel, (current.countryCounts.get(locationLabel) || 0) + 1)
     current.projectsLaunched += 1
-    current.workshopsHosted += getHostedWorkshopCount(project)
     current.enabledContributionSats += project.balance
     fieldPartners.set(fieldPartnerId, current)
   }
@@ -358,7 +350,6 @@ const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject
       fieldPartner: row.fieldPartner,
       country: getTopLocationLabel(row.countryCounts),
       projectsLaunched: `${row.projectsLaunched} onboarded`,
-      workshops: `${row.workshopsHosted} hosted`,
       enabledContribution: formatLeaderboardSats(row.enabledContributionSats),
     }))
 }
@@ -710,7 +701,7 @@ const LeaderboardSection = ({
         bg={colors.surfaceBg}
       >
         <Box overflowX="auto">
-          <Box minW="920px">
+          <Box w="full" minW={{ base: '640px', md: 'full' }}>
             <LeaderboardHeader colors={colors} />
             <VStack align="stretch" spacing={0}>
               {rows.length > 0 ? (
@@ -755,40 +746,42 @@ const LeaderboardSection = ({
   </PageSection>
 )
 
+const LEADERBOARD_RANK_COLUMN_WIDTH = '72px'
+
 const LeaderboardHeader = ({ colors }: { colors: SectionColors }) => {
-  const headers = ['Rank', 'Field Partner', 'Country', 'Projects launched', 'Workshops', 'Enabled contribution']
+  const headers = ['Rank', 'Field Partner', 'Country', 'Projects launched', 'Enabled contribution']
 
   return (
     <HStack
       spacing={0}
       h="44px"
       px={4}
+      w="full"
       bg={colors.mutedSurfaceBg}
       borderBottomWidth="1px"
       borderColor={colors.borderColor}
     >
       {headers.map((header, index) => (
-        <Body
-          key={header}
-          size="xs"
-          bold
-          color={colors.secondaryText}
-          letterSpacing="0.11em"
-          textTransform="uppercase"
-          w={['72px', '286px', '180px', '190px', '190px', '232px'][index]}
-          textAlign={index === headers.length - 1 ? 'right' : 'left'}
-          flexShrink={0}
-        >
-          {t(header)}
-        </Body>
+        <Box key={header} flex={index === 0 ? `0 0 ${LEADERBOARD_RANK_COLUMN_WIDTH}` : 1} minW={0}>
+          <Body
+            size="xs"
+            bold
+            color={colors.secondaryText}
+            letterSpacing="0.11em"
+            textTransform="uppercase"
+            textAlign={index === headers.length - 1 ? 'right' : 'left'}
+          >
+            {t(header)}
+          </Body>
+        </Box>
       ))}
     </HStack>
   )
 }
 
 const LeaderboardRow = ({ colors, row }: { colors: SectionColors; row: FieldPartnerLeaderboardRow }) => (
-  <HStack spacing={0} minH="42px" px={4} borderBottomWidth="1px" borderColor={colors.borderColor}>
-    <Box w="72px" flexShrink={0}>
+  <HStack spacing={0} minH="42px" px={4} w="full" align="center" borderBottomWidth="1px" borderColor={colors.borderColor}>
+    <Box flex={`0 0 ${LEADERBOARD_RANK_COLUMN_WIDTH}`} flexShrink={0}>
       <Flex
         align="center"
         justify="center"
@@ -797,26 +790,31 @@ const LeaderboardRow = ({ colors, row }: { colors: SectionColors; row: FieldPart
         borderRadius="full"
         bg={row.rank === 1 ? colors.accentBg : colors.mutedSurfaceBg}
       >
-        <Body size="xs" bold color={colors.primaryText}>
+        <Body size="xs" bold lineHeight={1} color={colors.primaryText}>
           {row.rank}
         </Body>
       </Flex>
     </Box>
-    <Body size="sm" bold color={colors.primaryText} w="286px" flexShrink={0}>
-      {row.fieldPartner}
-    </Body>
-    <Body size="sm" color={colors.secondaryText} w="180px" flexShrink={0}>
-      {row.country}
-    </Body>
-    <Body size="sm" color={colors.secondaryText} w="190px" flexShrink={0}>
-      {row.projectsLaunched}
-    </Body>
-    <Body size="sm" color={colors.secondaryText} w="190px" flexShrink={0}>
-      {row.workshops}
-    </Body>
-    <Body size="md" bold color={colors.primaryText} w="232px" textAlign="right" flexShrink={0}>
-      {row.enabledContribution}
-    </Body>
+    <Box flex={1} minW={0}>
+      <Body size="sm" bold color={colors.primaryText} noOfLines={1}>
+        {row.fieldPartner}
+      </Body>
+    </Box>
+    <Box flex={1} minW={0}>
+      <Body size="sm" color={colors.secondaryText} noOfLines={1}>
+        {row.country}
+      </Body>
+    </Box>
+    <Box flex={1} minW={0}>
+      <Body size="sm" color={colors.secondaryText} noOfLines={1}>
+        {row.projectsLaunched}
+      </Body>
+    </Box>
+    <Box flex={1} minW={0}>
+      <Body size="md" bold color={colors.primaryText} textAlign="right" noOfLines={1}>
+        {row.enabledContribution}
+      </Body>
+    </Box>
   </HStack>
 )
 
