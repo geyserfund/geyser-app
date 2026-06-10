@@ -6,9 +6,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
-export const RECOVERABLE_GRANT_EXPLAINER_TEXT = t(
-  'This project is a recoverable grant. The recipient will return the funds fully or in part. Returned funds are sent to the Bitcoin Adoption Impact Fund to be distributed to another recoverable grant in the future, maximizing the impact of every satoshi.',
-)
+import { RECOVERABLE_GRANT_EXPLAINER_TEXT } from './recoverableGrantConstants.ts'
 
 const IMPACT_FUND_PATH = getPath('impactFunds')
 

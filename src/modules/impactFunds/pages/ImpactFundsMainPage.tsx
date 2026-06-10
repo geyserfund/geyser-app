@@ -297,12 +297,21 @@ const getLocationLabel = (project: FieldPartnerLeaderboardProject) => {
 }
 
 const getTopLocationLabel = (countryCounts: Map<string, number>) => {
-  return (
-    Array.from(countryCounts.entries()).sort((a, b) => {
-      const countDifference = b[1] - a[1]
-      return countDifference === 0 ? a[0].localeCompare(b[0]) : countDifference
-    })[0]?.[0] || 'Global'
-  )
+  let topEntry: [string, number] | undefined
+
+  for (const entry of countryCounts.entries()) {
+    if (!topEntry) {
+      topEntry = entry
+      continue
+    }
+
+    const countDifference = entry[1] - topEntry[1]
+    if (countDifference > 0 || (countDifference === 0 && entry[0].localeCompare(topEntry[0]) < 0)) {
+      topEntry = entry
+    }
+  }
+
+  return topEntry?.[0] || 'Global'
 }
 
 const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject[]): FieldPartnerLeaderboardRow[] => {

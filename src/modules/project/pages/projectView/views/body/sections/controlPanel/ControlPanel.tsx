@@ -218,7 +218,17 @@ const WriteUpdateNudgeCard = () => {
 
   const latestPost = useMemo(
     () =>
-      [...posts].filter((p) => p.publishedAt).sort((a, b) => Number(b.publishedAt) - Number(a.publishedAt))[0] ?? null,
+      posts.reduce<(typeof posts)[number] | null>((latest, post) => {
+        if (!post.publishedAt) {
+          return latest
+        }
+
+        if (!latest?.publishedAt) {
+          return post
+        }
+
+        return Number(post.publishedAt) > Number(latest.publishedAt) ? post : latest
+      }, null),
     [posts],
   )
 

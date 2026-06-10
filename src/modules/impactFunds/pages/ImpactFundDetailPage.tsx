@@ -37,7 +37,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Trans } from 'react-i18next'
 import {
   PiArrowUpRightBold,
@@ -1598,7 +1598,7 @@ function ImpactFundFaqSection({
   primaryTextColor: string
   secondaryTextColor: string
   borderColor: string
-}): JSX.Element {
+}): ReactNode {
   return (
     <VStack align="stretch" spacing={4}>
       <H2 size="xl" bold>
@@ -1641,7 +1641,7 @@ function ImpactReportsSection({
   primaryTextColor: string
   reportUrl: string
   secondaryTextColor: string
-}): JSX.Element {
+}): ReactNode {
   const buttonBg = useColorModeValue('white', 'white')
   const buttonColor = useColorModeValue('neutral1.11', 'neutral1.11')
   const buttonHoverBg = useColorModeValue('neutral1.2', 'neutral1.2')
@@ -1718,7 +1718,7 @@ function LatamPageSection({
   children: React.ReactNode
   bg?: string
   py?: React.ComponentProps<typeof Box>['py']
-}): JSX.Element {
+}): ReactNode {
   return (
     <Box
       w="100vw"
@@ -1739,7 +1739,7 @@ function LatamPageSection({
   )
 }
 
-function LatamSurface({ children, bg = 'white' }: { children: React.ReactNode; bg?: string }): JSX.Element {
+function LatamSurface({ children, bg = 'white' }: { children: ReactNode; bg?: string }): ReactNode {
   return (
     <Box borderWidth="1px" borderColor="#E2E4E6" borderRadius="8px" bg={bg} color="black" p={{ base: 5, lg: 7 }}>
       {children}

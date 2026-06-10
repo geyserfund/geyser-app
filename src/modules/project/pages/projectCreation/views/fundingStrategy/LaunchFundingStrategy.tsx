@@ -1,7 +1,7 @@
 import { Badge, Circle, Divider, HStack, Icon, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import { PiCheck, PiQuestion } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
@@ -51,6 +51,22 @@ const options: Record<
   },
 }
 
+const resolveProjectFundingOption = ({
+  fundingStrategy,
+  isRecoverableGrant,
+  storedFundingOption,
+}: {
+  fundingStrategy?: ProjectFundingStrategy | null
+  isRecoverableGrant?: boolean
+  storedFundingOption: ProjectCreationFundingOption | null
+}): ProjectCreationFundingOption => {
+  if (isRecoverableGrant) {
+    return RecoverableGrantFundingOption
+  }
+
+  return fundingStrategy || storedFundingOption || ProjectFundingStrategy.TakeItAll
+}
+
 export const LaunchFundingStrategy = () => {
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
@@ -64,21 +80,23 @@ export const LaunchFundingStrategy = () => {
   )
 
   const isNewProject = !params.projectId || params.projectId === 'new'
+  const isRecoverableGrant = (project as { isRecoverableGrant?: boolean }).isRecoverableGrant
 
-  const getProjectFundingOption = (): ProjectCreationFundingOption => {
-    if ((project as { isRecoverableGrant?: boolean }).isRecoverableGrant) {
-      return RecoverableGrantFundingOption
-    }
+  const fundingOptionFromProject = resolveProjectFundingOption({
+    fundingStrategy: project.fundingStrategy,
+    isRecoverableGrant,
+    storedFundingOption,
+  })
 
-    return project.fundingStrategy || storedFundingOption || ProjectFundingStrategy.TakeItAll
+  const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(
+    () => fundingOptionFromProject,
+  )
+  const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
+
+  if (fundingOptionFromProject !== prevFundingOptionFromProjectRef.current) {
+    prevFundingOptionFromProjectRef.current = fundingOptionFromProject
+    setSelectedOption(fundingOptionFromProject)
   }
-
-  const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(getProjectFundingOption())
-
-  useEffect(() => {
-    setSelectedOption(getProjectFundingOption())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project.fundingStrategy, (project as { isRecoverableGrant?: boolean }).isRecoverableGrant, storedFundingOption])
 
   const continueProps = {
     onClick() {
