@@ -757,6 +757,33 @@ function useImpactFundThemeColors(): ImpactFundThemeColors {
   }
 }
 
+type LatamSectionColors = {
+  pageBg: string
+  surfaceBg: string
+  mutedSurfaceBg: string
+  darkSurfaceBg: string
+  primaryText: string
+  secondaryText: string
+  borderColor: string
+  amberBg: string
+  amberText: string
+}
+
+/** Theme tokens for the LATAM impact fund full-bleed page layout. */
+function useLatamSectionColors(): LatamSectionColors {
+  return {
+    pageBg: useColorModeValue('white', 'utils.pbg'),
+    surfaceBg: useColorModeValue('white', 'neutral1.3'),
+    mutedSurfaceBg: useColorModeValue('#F5F6F6', 'neutral1.3'),
+    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.1'),
+    primaryText: useColorModeValue('black', 'neutral1.12'),
+    secondaryText: useColorModeValue('#626872', 'neutral1.10'),
+    borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
+    amberBg: useColorModeValue('#F09A34', 'amber.400'),
+    amberText: useColorModeValue('black', 'neutral1.1'),
+  }
+}
+
 type ImpactFundOverviewSectionProps = {
   impactFund: ImpactFundDetails
   committedAmountDisplay: ReturnType<typeof getCommittedAmountDisplay>
@@ -1113,7 +1140,7 @@ function ImpactFundWideHero({
       ml="-50vw"
       mr="-50vw"
       overflow="hidden"
-      minH={{ base: '420px', lg: '396px' }}
+      minH={dimensions.impactLendingHero.minHeight}
       bg="neutral1.2"
     >
       {impactFund.heroImage && (
@@ -1132,7 +1159,7 @@ function ImpactFundWideHero({
         position="relative"
         w="full"
         maxW={`${dimensions.maxWidth + 24 * 2}px`}
-        minH={{ base: '420px', lg: '396px' }}
+        minH={dimensions.impactLendingHero.minHeight}
         mx="auto"
         px={standardPadding}
         py={{ base: 10, lg: 12 }}
@@ -1238,7 +1265,7 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
   return (
     <>
       <VStack align="stretch" spacing={6}>
-        <H2 size="xl" bold>
+        <H2 size="xl" bold color={colors.primaryTextColor}>
           {t('How It Works')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
@@ -1271,7 +1298,7 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
       </VStack>
 
       <VStack align="stretch" spacing={6}>
-        <H2 size="xl" bold>
+        <H2 size="xl" bold color={colors.primaryTextColor}>
           {t('How Are Funds Distributed')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
@@ -1712,10 +1739,12 @@ function ImpactReportsSection({
 
 function LatamPageSection({
   children,
+  colors,
   bg,
-  py = { base: 10, lg: 14 },
+  py = dimensions.impactLendingSection.paddingY,
 }: {
   children: React.ReactNode
+  colors: LatamSectionColors
   bg?: string
   py?: React.ComponentProps<typeof Box>['py']
 }): ReactNode {
@@ -1728,7 +1757,7 @@ function LatamPageSection({
       right="50%"
       ml="-50vw"
       mr="-50vw"
-      bg={bg || 'white'}
+      bg={bg ?? colors.pageBg}
       py={py}
       px={standardPadding}
     >
@@ -1739,9 +1768,24 @@ function LatamPageSection({
   )
 }
 
-function LatamSurface({ children, bg = 'white' }: { children: ReactNode; bg?: string }): ReactNode {
+function LatamSurface({
+  children,
+  colors,
+  bg,
+}: {
+  children: ReactNode
+  colors: LatamSectionColors
+  bg?: string
+}): ReactNode {
   return (
-    <Box borderWidth="1px" borderColor="#E2E4E6" borderRadius="8px" bg={bg} color="black" p={{ base: 5, lg: 7 }}>
+    <Box
+      borderWidth="1px"
+      borderColor={colors.borderColor}
+      borderRadius="8px"
+      bg={bg ?? colors.surfaceBg}
+      color={colors.primaryText}
+      p={{ base: 5, lg: 7 }}
+    >
       {children}
     </Box>
   )
@@ -2057,6 +2101,7 @@ function ImpactFundDetailContent({
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const colors = useImpactFundThemeColors()
+  const latamSectionColors = useLatamSectionColors()
   const committedAmountDisplay = getCommittedAmountDisplay({
     amountCommitted: impactFund.amountCommitted,
     amountCommittedCurrency: impactFund.amountCommittedCurrency,
@@ -2089,7 +2134,7 @@ function ImpactFundDetailContent({
   )
   const projectsAwardedSection = (
     <VStack align="stretch" spacing={6}>
-      <H2 size="xl" bold>
+      <H2 size="xl" bold color={colors.primaryTextColor}>
         {t('Projects Awarded')}
       </H2>
       <FundedApplicationsSection
@@ -2141,26 +2186,51 @@ function ImpactFundDetailContent({
   const finalCtaSection = (
     <Box
       p={8}
-      bg={showWideHero ? '#F09A34' : colors.highlightedSurfaceBg}
-      borderRadius={showWideHero ? '8px' : 'xl'}
+      bg={colors.highlightedSurfaceBg}
+      borderRadius="xl"
       textAlign="center"
-      boxShadow={showWideHero ? 'none' : '0 8px 24px rgba(15, 23, 42, 0.08)'}
+      boxShadow="0 8px 24px rgba(15, 23, 42, 0.08)"
     >
       <VStack spacing={4}>
-        <H2 size="2xl" bold color={showWideHero ? 'black' : colors.primaryTextColor}>
+        <H2 size="2xl" bold color={colors.primaryTextColor}>
           {t('Ready to make an impact?')}
         </H2>
-        <Body size="md" color={showWideHero ? 'black' : colors.secondaryTextColor} maxW="480px">
+        <Body size="md" color={colors.secondaryTextColor} maxW="480px">
           {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
         </Body>
         <Button
           size="lg"
-          colorScheme={showWideHero ? 'neutral1' : 'primary1'}
+          colorScheme="primary1"
           onClick={onApplyClick}
           isDisabled={shouldDisableApply}
           px={10}
           fontWeight="semibold"
           fontSize="lg"
+        >
+          {t('Apply for funding')}
+        </Button>
+      </VStack>
+    </Box>
+  )
+  const latamFinalCtaSection = (
+    <Box p={8} bg={latamSectionColors.amberBg} borderRadius="8px" textAlign="center">
+      <VStack spacing={4}>
+        <H2 size="2xl" bold color={latamSectionColors.amberText}>
+          {t('Ready to make an impact?')}
+        </H2>
+        <Body size="md" color={latamSectionColors.amberText} maxW="480px">
+          {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
+        </Body>
+        <Button
+          size="lg"
+          onClick={onApplyClick}
+          isDisabled={shouldDisableApply}
+          px={10}
+          fontWeight="semibold"
+          fontSize="lg"
+          bg={latamSectionColors.darkSurfaceBg}
+          color="white"
+          _hover={{ bg: latamSectionColors.darkSurfaceBg }}
         >
           {t('Apply for funding')}
         </Button>
@@ -2206,49 +2276,49 @@ function ImpactFundDetailContent({
 
   if (showWideHero) {
     return (
-      <VStack align="stretch" spacing={0}>
-        <Head
-          title={impactFund.title}
-          description={impactFund.subtitle || undefined}
-          image={seoImage || impactFund.heroImage || undefined}
-        />
+      <Box bg={latamSectionColors.pageBg} color={latamSectionColors.primaryText}>
+        <VStack align="stretch" spacing={0}>
+          <Head
+            title={impactFund.title}
+            description={impactFund.subtitle || undefined}
+            image={seoImage || impactFund.heroImage || undefined}
+          />
 
-        <ImpactFundWideHero
-          impactFund={impactFund}
-          onApplyClick={onApplyClick}
-          shouldDisableApply={shouldDisableApply}
-        />
-        <ImpactFundBreadcrumb currentLabel={impactFund.title} colors={colors} />
+          <ImpactFundWideHero
+            impactFund={impactFund}
+            onApplyClick={onApplyClick}
+            shouldDisableApply={shouldDisableApply}
+          />
+          <ImpactFundBreadcrumb currentLabel={impactFund.title} colors={colors} />
 
-        <LatamPageSection py={{ base: 8, lg: 12 }}>
-          <LatamSurface>{overviewSection}</LatamSurface>
-        </LatamPageSection>
+          <LatamPageSection colors={latamSectionColors} py={dimensions.impactLendingSection.paddingYCompact}>
+            <LatamSurface colors={latamSectionColors}>{overviewSection}</LatamSurface>
+          </LatamPageSection>
 
-        <LatamPageSection bg="#F5F6F6" py={{ base: 10, lg: 14 }}>
-          <ImpactFundInformationSection colors={colors} />
-        </LatamPageSection>
+          <LatamPageSection colors={latamSectionColors} bg={latamSectionColors.mutedSurfaceBg}>
+            <ImpactFundInformationSection colors={colors} />
+          </LatamPageSection>
 
-        <LatamPageSection py={{ base: 10, lg: 14 }}>
-          <LatamSurface>{projectsAwardedSection}</LatamSurface>
-        </LatamPageSection>
+          <LatamPageSection colors={latamSectionColors}>
+            <LatamSurface colors={latamSectionColors}>{projectsAwardedSection}</LatamSurface>
+          </LatamPageSection>
 
-        <LatamPageSection bg="#17120C" py={{ base: 10, lg: 14 }}>
-          <Box color="white">
-            <LatamSurface bg="white">{sponsorsSection}</LatamSurface>
-          </Box>
-        </LatamPageSection>
+          <LatamPageSection colors={latamSectionColors} bg={latamSectionColors.darkSurfaceBg}>
+            <LatamSurface colors={latamSectionColors}>{sponsorsSection}</LatamSurface>
+          </LatamPageSection>
 
-        <LatamPageSection py={{ base: 10, lg: 14 }}>
-          <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
-            {communitySupportersSection}
-            {impactReportsSection}
-            {faqSection}
-            {finalCtaSection}
-          </VStack>
-        </LatamPageSection>
+          <LatamPageSection colors={latamSectionColors}>
+            <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
+              {communitySupportersSection}
+              {impactReportsSection}
+              {faqSection}
+              {latamFinalCtaSection}
+            </VStack>
+          </LatamPageSection>
 
-        {modals}
-      </VStack>
+          {modals}
+        </VStack>
+      </Box>
     )
   }
 
