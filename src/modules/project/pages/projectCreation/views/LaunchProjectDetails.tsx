@@ -36,6 +36,7 @@ import {
   getProjectFundingStrategyInput,
   getProjectRecoverableGrantInput,
   projectCreationFundingOptionAtom,
+  RecoverableGrantFundingOption,
 } from '../states/fundingStrategyAtom.ts'
 
 export const LaunchProjectDetails = () => {
@@ -55,9 +56,14 @@ export const LaunchProjectDetails = () => {
 
   const exitModal = useModal()
 
+  const isRecoverableGrant = isEdit
+    ? Boolean((project as { isRecoverableGrant?: boolean }).isRecoverableGrant)
+    : selectedFundingOption === RecoverableGrantFundingOption
+
   const form = useProjectForm({
     isEdit,
     project,
+    isRecoverableGrant,
   })
   const referrerHeroId = form.watch('referrerHeroId')
 

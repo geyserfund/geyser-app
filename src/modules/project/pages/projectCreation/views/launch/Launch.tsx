@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { isLaunchFeeWaived } from '@/utils/index.ts'
 import {
   FundingContributionFragment,
   FundingContributionPaymentDetailsFragment,
@@ -66,17 +67,19 @@ export const Launch = () => {
     },
   })
 
+  const launchFeeWaived = isLaunchFeeWaived(project)
+
   useEffect(() => {
-    if (project.paidLaunch) {
+    if (launchFeeWaived) {
       setStep(LaunchStep.Finalize)
     }
 
     return () => {}
-  }, [project.paidLaunch])
+  }, [launchFeeWaived])
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
-      if (project.paidLaunch) {
+      if (launchFeeWaived) {
         setStep(LaunchStep.Finalize)
       } else {
         setStep(LaunchStep.Strategy)
@@ -86,7 +89,7 @@ export const Launch = () => {
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
-  }, [project.paidLaunch, step])
+  }, [launchFeeWaived, step])
 
   const handleBack = useCallback(() => {
     if (step === LaunchStep.Finalize) {

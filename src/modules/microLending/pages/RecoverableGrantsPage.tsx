@@ -1,8 +1,9 @@
-import { Box, Button, Flex, HStack, Image, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
+import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -11,14 +12,26 @@ import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platfo
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles/index.ts'
 
-const colors = {
-  pageBg: '#FFFFFF',
-  ink: '#17120C',
-  muted: '#5F6268',
-  line: '#E9E2D4',
-  cream: '#FFF8EA',
-  pale: '#F8F9F8',
-  gold: '#F1D05C',
+type RecoverableGrantsColors = {
+  pageBg: string
+  ink: string
+  muted: string
+  line: string
+  cream: string
+  pale: string
+  gold: string
+  amber: string
+  surfaceBg: string
+  darkSurfaceBg: string
+  onAmberText: string
+  heroAccentBg: string
+}
+
+const radius = {
+  section: '16px',
+  card: 'card',
+  inner: 'innerCard',
+  button: 'innerCard',
 }
 
 const RECOVERABLE_GRANTS_HERO_IMAGE_URL =
@@ -90,8 +103,26 @@ const faqItems = [
 const relatedResources = ['Field Partner Program', 'Impact Fund Reports', 'Afribit Kibera Case Study'] as const
 
 export const RecoverableGrantsPage = () => {
+  const { onDonateClick, donateModalElement } = useImpactFundsDonateModal()
+  const colors: RecoverableGrantsColors = {
+    pageBg: useColorModeValue('white', 'utils.pbg'),
+    ink: useColorModeValue('#17120C', 'neutral1.12'),
+    muted: useColorModeValue('#5F6268', 'neutral1.10'),
+    line: useColorModeValue('#E9E2D4', 'neutral1.6'),
+    cream: useColorModeValue('#FFF8EA', 'neutral1.2'),
+    pale: useColorModeValue('#F8F9F8', 'neutral1.3'),
+    gold: useColorModeValue('#F6CF4A', 'amber.9'),
+    amber: useColorModeValue('#F09A34', 'amber.9'),
+    surfaceBg: useColorModeValue('white', 'neutral1.3'),
+    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.1'),
+    onAmberText: useColorModeValue('#17120C', '#17120C'),
+    heroAccentBg: useColorModeValue('#F7931A', 'orange.400'),
+  }
+
   return (
     <>
+      {donateModalElement}
+
       <Head
         title={t('Recoverable Grants')}
         description={t(
@@ -105,15 +136,16 @@ export const RecoverableGrantsPage = () => {
         <VStack align="stretch" spacing={0}>
           <Box w="full" bg={colors.pageBg} py={{ base: 4, lg: 5 }}>
             <Box w="full" maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto" px={standardPadding}>
-              <Breadcrumb />
+              <Breadcrumb colors={colors} />
             </Box>
           </Box>
 
-          <HeroSection />
+          <HeroSection colors={colors} onDonateClick={onDonateClick} />
 
-          <PageSection py={{ base: 7, lg: 8 }}>
+          <PageSection>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 5, lg: 6 }}>
               <InfoCard
+                colors={colors}
                 eyebrow="01 What are recoverable grants"
                 title="Debt-free capital that comes back to the community"
               >
@@ -124,14 +156,21 @@ export const RecoverableGrantsPage = () => {
                 </Body>
                 <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3} pt={2}>
                   {infoPills.map((pill) => (
-                    <Box key={pill} bg="white" borderRadius="8px" p={4}>
+                    <Box
+                      key={pill}
+                      bg={colors.surfaceBg}
+                      borderRadius={radius.inner}
+                      borderWidth="1px"
+                      borderColor={colors.line}
+                      p={4}
+                    >
                       <Body bold>{t(pill)}</Body>
                     </Box>
                   ))}
                 </SimpleGrid>
               </InfoCard>
 
-              <InfoCard eyebrow="02 Why recoverable grants" title="Why this model matters">
+              <InfoCard colors={colors} eyebrow="02 Why recoverable grants" title="Why this model matters">
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
                     'It reduces dependence on loan sharks, opens fairer access to capital, and lets trusted local partners decide who is ready.',
@@ -139,7 +178,14 @@ export const RecoverableGrantsPage = () => {
                 </Body>
                 <VStack align="stretch" spacing={3} pt={2}>
                   {modelIssues.map((issue) => (
-                    <Box key={issue} bg="white" borderRadius="8px" p={4}>
+                    <Box
+                      key={issue}
+                      bg={colors.surfaceBg}
+                      borderRadius={radius.inner}
+                      borderWidth="1px"
+                      borderColor={colors.line}
+                      p={4}
+                    >
                       <Body bold>{t(issue)}</Body>
                     </Box>
                   ))}
@@ -148,8 +194,8 @@ export const RecoverableGrantsPage = () => {
             </SimpleGrid>
           </PageSection>
 
-          <PageSection py={{ base: 4, lg: 5 }}>
-            <Eyebrow>03 How it works</Eyebrow>
+          <PageSection>
+            <Eyebrow colors={colors}>03 How it works</Eyebrow>
             <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold maxW="620px">
               {t('Capital flows through trusted local partners')}
             </H2>
@@ -160,13 +206,13 @@ export const RecoverableGrantsPage = () => {
             </Body>
             <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={4} mt={6}>
               {flowSteps.map((step) => (
-                <FlowStep key={step.number} step={step} />
+                <FlowStep key={step.number} colors={colors} step={step} />
               ))}
             </SimpleGrid>
           </PageSection>
 
-          <PageSection py={{ base: 8, lg: 10 }}>
-            <Eyebrow>06 Afribit case study</Eyebrow>
+          <PageSection>
+            <Eyebrow colors={colors}>04 Afribit case study</Eyebrow>
             <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold>
               {t('Afribit Kibera shows the model in motion')}
             </H2>
@@ -176,19 +222,19 @@ export const RecoverableGrantsPage = () => {
               )}
             </Body>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} templateColumns={{ lg: '1.35fr 1fr' }} mt={6}>
-              <CaseStudyCard />
+              <CaseStudyCard colors={colors} />
               <VStack align="stretch" spacing={5}>
-                <InfoCard eyebrow="Pilot scope" title="2 cohorts 15 people each 6 projects" compact />
+                <InfoCard colors={colors} eyebrow="Pilot scope" title="2 cohorts 15 people each 6 projects" compact />
                 <Button
                   as={Link}
                   to={getPath('discoveryRecoverableGrantsAfribitCaseStudy')}
-                  h="64px"
-                  borderRadius="12px"
-                  bg={colors.ink}
+                  h="54px"
+                  borderRadius={radius.button}
+                  bg={colors.darkSurfaceBg}
                   color="white"
                   justifyContent="flex-start"
                   px={6}
-                  fontSize="lg"
+                  fontSize="md"
                   fontWeight="900"
                 >
                   {t('View full case study >')}
@@ -197,9 +243,9 @@ export const RecoverableGrantsPage = () => {
             </SimpleGrid>
           </PageSection>
 
-          <PageSection py={{ base: 8, lg: 10 }}>
+          <PageSection>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 12 }}>
-              <InfoCard eyebrow="04 Transparency" title="How the pilot stays visible and accountable">
+              <InfoCard colors={colors} eyebrow="05 Transparency" title="How the pilot stays visible and accountable">
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
                     'Recoverable grants are still being refined in the open. We share how capital is allocated, what Geyser covers operationally, and what we are learning as the pilot grows.',
@@ -208,14 +254,26 @@ export const RecoverableGrantsPage = () => {
               </InfoCard>
               <VStack align="stretch" spacing={5} justify="center">
                 <HStack spacing={5} align="stretch">
-                  <Box bg="#15201F" color="white" borderRadius="8px" p={5} minW="155px">
-                    <Eyebrow color={colors.gold}>Platform fee</Eyebrow>
+                  <Box
+                    bg={colors.darkSurfaceBg}
+                    color="white"
+                    borderRadius={radius.card}
+                    borderWidth="1px"
+                    borderColor={colors.line}
+                    p={5}
+                    minW="155px"
+                  >
+                    <Eyebrow colors={colors} color={colors.gold}>
+                      Platform fee
+                    </Eyebrow>
                     <H3 size="32px" bold>
                       {t('5%')}
                     </H3>
                   </Box>
-                  <Box p={5}>
-                    <Eyebrow color={colors.muted}>Local allocation</Eyebrow>
+                  <Box bg={colors.pale} borderRadius={radius.card} borderWidth="1px" borderColor={colors.line} p={5}>
+                    <Eyebrow colors={colors} color={colors.muted}>
+                      Local allocation
+                    </Eyebrow>
                     <H3 size="32px" bold>
                       {t('95%')}
                     </H3>
@@ -227,8 +285,14 @@ export const RecoverableGrantsPage = () => {
                 <Body bold lineHeight="27px">
                   {t('Quarterly reports will share progress, repayment patterns, and pilot learning')}
                 </Body>
-                <Box bg={colors.cream} borderRadius="10px" p={5}>
-                  <Body bold color="#8E6325">
+                <Box
+                  bg={colors.cream}
+                  borderRadius={radius.card}
+                  borderWidth="1px"
+                  borderColor={colors.line}
+                  p={5}
+                >
+                  <Body bold color={colors.muted}>
                     {t(
                       'The goal is to grow a sustainable reusable-capital model without losing local trust and accountability',
                     )}
@@ -238,71 +302,137 @@ export const RecoverableGrantsPage = () => {
             </SimpleGrid>
           </PageSection>
 
-          <PageSection py={{ base: 8, lg: 10 }}>
-            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-              <InfoCard
-                eyebrow="06 Play a part"
-                title="Launch your own Recoverable Grant pilot in your local community"
+          <PageSection>
+            <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
+              <Flex
+                direction={{ base: 'column', lg: 'row' }}
+                align="center"
+                justify="space-between"
+                gap={{ base: 6, lg: 8 }}
+                bg={colors.amber}
+                borderRadius={radius.card}
+                borderWidth="1px"
+                borderColor={colors.line}
+                p={{ base: 6, lg: 8 }}
               >
-                <Body color={colors.muted} lineHeight="27px">
-                  {t(
-                    'Help local circular economy hubs launch recoverable grants, reach more entrepreneurs, and turn recycled capital into visible local impact.',
-                  )}
-                </Body>
+                <VStack align="flex-start" spacing={{ base: 4, lg: 5 }} maxW="760px">
+                  <Eyebrow colors={colors} color={colors.onAmberText}>
+                    07 Donate
+                  </Eyebrow>
+                  <H2
+                    size={{ base: '30px', lg: '40px' }}
+                    lineHeight={{ base: '36px', lg: '47px' }}
+                    bold
+                    color={colors.onAmberText}
+                  >
+                    {t('Help grow the shared capital pool')}
+                  </H2>
+                  <Body
+                    size={{ base: 'md', lg: '20px' }}
+                    lineHeight={{ base: '27px', lg: '31px' }}
+                    color={colors.onAmberText}
+                  >
+                    {t(
+                      'We are allocating 3M sats per quarter to circular economy hubs. Donate to the Geyser Impact Fund to help expand this pilot and its reach.',
+                    )}
+                  </Body>
+                </VStack>
+                <VStack
+                  align="stretch"
+                  spacing={{ base: 5, lg: 6 }}
+                  bg={colors.darkSurfaceBg}
+                  borderRadius={radius.card}
+                  borderWidth="1px"
+                  borderColor={colors.line}
+                  p={{ base: 6, lg: 8 }}
+                  w={{ base: 'full', lg: '370px' }}
+                  justify="center"
+                  flexShrink={0}
+                >
+                  <Eyebrow colors={colors} color="whiteAlpha.800">
+                    {t('GEYSER Quarterly pool')}
+                  </Eyebrow>
+                  <H3 size={{ base: '48px', lg: '56px' }} lineHeight={{ base: '52px', lg: '60px' }} bold color="white">
+                    {t('3M sats')}
+                  </H3>
+                  <Button
+                    h="54px"
+                    borderRadius={radius.button}
+                    bg={colors.surfaceBg}
+                    color={colors.ink}
+                    fontSize={{ base: 'md', lg: '18px' }}
+                    fontWeight="900"
+                    onClick={onDonateClick}
+                  >
+                    {t('Donate')}
+                  </Button>
+                </VStack>
+              </Flex>
+
+              <Flex
+                direction={{ base: 'column', lg: 'row' }}
+                align={{ base: 'stretch', lg: 'center' }}
+                justify="space-between"
+                gap={6}
+                bg={colors.pale}
+                borderWidth="1px"
+                borderColor={colors.line}
+                borderRadius={radius.card}
+                p={{ base: 6, lg: 8 }}
+              >
+                <VStack align="flex-start" spacing={2} maxW="710px">
+                  <Eyebrow colors={colors} color={colors.muted}>
+                    06 Play a part
+                  </Eyebrow>
+                  <H2
+                    size={{ base: '30px', lg: '40px' }}
+                    lineHeight={{ base: '36px', lg: '46px' }}
+                    bold
+                    color={colors.ink}
+                  >
+                    {t('Launch your own Recoverable Grant pilot in your local community')}
+                  </H2>
+                  <Body
+                    size={{ base: 'md', lg: '20px' }}
+                    lineHeight={{ base: '26px', lg: '31px' }}
+                    color={colors.muted}
+                  >
+                    {t(
+                      'Help local circular economy hubs launch recoverable grants, reach more entrepreneurs, and turn recycled capital into visible local impact.',
+                    )}
+                  </Body>
+                </VStack>
                 <Button
                   as="a"
                   href={ImpactFundsFieldPartnerApplicationUrl}
                   target="_blank"
                   rel="noreferrer"
-                  alignSelf="flex-start"
-                  borderRadius="999px"
-                  bg={colors.ink}
+                  h="54px"
+                  borderRadius={radius.button}
+                  px={8}
+                  bg={colors.darkSurfaceBg}
                   color="white"
-                  mt={2}
+                  fontSize={{ base: 'md', lg: '18px' }}
+                  fontWeight="900"
+                  flexShrink={0}
+                  _hover={{ bg: colors.darkSurfaceBg }}
                 >
-                  {t('Fill in form')}
+                  {t('Apply to become a Field Partner')}
                 </Button>
-              </InfoCard>
-              <Box bg={colors.ink} color="white" borderRadius="16px" p={{ base: 6, lg: 8 }}>
-                <VStack align="flex-start" spacing={5}>
-                  <Eyebrow color={colors.gold}>07 Contribute</Eyebrow>
-                  <H2 size={{ base: '32px', lg: '42px' }} lineHeight={{ base: '38px', lg: '48px' }} bold>
-                    {t('Help grow the shared capital pool')}
-                  </H2>
-                  <Body color="whiteAlpha.800" lineHeight="27px">
-                    {t(
-                      'We are allocating 3M sats per quarter to circular economy hubs. Contribute to the Geyser Impact Fund to help expand this pilot and its reach.',
-                    )}
-                  </Body>
-                  <HStack spacing={4} flexWrap="wrap">
-                    <Button
-                      as={Link}
-                      to={getPath('discoveryImpactFunds')}
-                      bg={colors.gold}
-                      color={colors.ink}
-                      borderRadius="999px"
-                    >
-                      {t('Contribute')}
-                    </Button>
-                    <Body size="24px" bold color="white">
-                      {t('3M sats / quarter')}
-                    </Body>
-                  </HStack>
-                </VStack>
-              </Box>
-            </SimpleGrid>
+              </Flex>
+            </VStack>
           </PageSection>
 
-          <PageSection py={{ base: 8, lg: 12 }}>
+          <PageSection>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} templateColumns={{ lg: '1.4fr 0.75fr' }}>
               <Box
                 bg={colors.pale}
-                borderRadius="16px"
+                borderRadius={radius.section}
                 borderWidth="1px"
                 borderColor={colors.line}
                 p={{ base: 6, lg: 8 }}
               >
-                <Eyebrow>08 FAQ</Eyebrow>
+                <Eyebrow colors={colors}>08 FAQ</Eyebrow>
                 <H2 size={{ base: '32px', lg: '40px' }} bold mt={2} mb={5}>
                   {t('Common questions')}
                 </H2>
@@ -310,8 +440,8 @@ export const RecoverableGrantsPage = () => {
                   {faqItems.map((item) => (
                     <Box
                       key={item.question}
-                      bg="white"
-                      borderRadius="10px"
+                      bg={colors.surfaceBg}
+                      borderRadius={radius.card}
                       borderWidth="1px"
                       borderColor={colors.line}
                       p={5}
@@ -326,12 +456,12 @@ export const RecoverableGrantsPage = () => {
               </Box>
               <Box
                 bg={colors.cream}
-                borderRadius="16px"
+                borderRadius={radius.section}
                 borderWidth="1px"
                 borderColor={colors.line}
                 p={{ base: 6, lg: 8 }}
               >
-                <Eyebrow>Further reading</Eyebrow>
+                <Eyebrow colors={colors}>Further reading</Eyebrow>
                 <H3 size="28px" bold mt={2} mb={4}>
                   {t('Related resources')}
                 </H3>
@@ -353,7 +483,7 @@ export const RecoverableGrantsPage = () => {
   )
 }
 
-const Breadcrumb = () => (
+const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
   <HStack spacing={2} color={colors.muted}>
     <Body
       as={Link}
@@ -382,7 +512,13 @@ const Breadcrumb = () => (
   </HStack>
 )
 
-const HeroSection = () => (
+const HeroSection = ({
+  colors,
+  onDonateClick,
+}: {
+  colors: RecoverableGrantsColors
+  onDonateClick: () => void
+}) => (
   <Box
     w="100vw"
     maxW="100vw"
@@ -392,8 +528,8 @@ const HeroSection = () => (
     ml="-50vw"
     mr="-50vw"
     overflow="hidden"
-    minH={{ base: '420px', lg: '396px' }}
-    bg={colors.ink}
+    minH={dimensions.impactLendingHero.minHeight}
+    bg={colors.darkSurfaceBg}
   >
     <Box
       position="absolute"
@@ -412,7 +548,7 @@ const HeroSection = () => (
       position="relative"
       w="full"
       maxW={`${dimensions.maxWidth + 24 * 2}px`}
-      minH={{ base: '420px', lg: '396px' }}
+      minH={dimensions.impactLendingHero.minHeight}
       mx="auto"
       px={standardPadding}
       py={{ base: 10, lg: 12 }}
@@ -435,8 +571,8 @@ const HeroSection = () => (
             rel="noreferrer"
             h="42px"
             px="18px"
-            borderRadius="6px"
-            bg="white"
+            borderRadius={radius.button}
+            bg={colors.surfaceBg}
             color={colors.ink}
             fontSize="sm"
             fontWeight="600"
@@ -444,17 +580,17 @@ const HeroSection = () => (
             {t('Apply as partner')}
           </Button>
           <Button
-            as={Link}
-            to={getPath('discoveryImpactFunds')}
             h="42px"
             px="18px"
-            borderRadius="6px"
-            bg="#F7931A"
-            color={colors.ink}
+            borderRadius={radius.button}
+            bg={colors.heroAccentBg}
+            color={colors.onAmberText}
             fontSize="sm"
             fontWeight="600"
+            onClick={onDonateClick}
+            _hover={{ bg: colors.heroAccentBg }}
           >
-            {t('Contribute')}
+            {t('Donate')}
           </Button>
         </HStack>
       </VStack>
@@ -462,7 +598,13 @@ const HeroSection = () => (
   </Box>
 )
 
-const PageSection = ({ children, py }: { children: React.ReactNode; py?: React.ComponentProps<typeof Box>['py'] }) => (
+const PageSection = ({
+  children,
+  py = dimensions.impactLendingSection.paddingY,
+}: {
+  children: React.ReactNode
+  py?: React.ComponentProps<typeof Box>['py']
+}) => (
   <Box w="full" px={standardPadding} py={py}>
     <Box maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto">
       {children}
@@ -470,18 +612,28 @@ const PageSection = ({ children, py }: { children: React.ReactNode; py?: React.C
   </Box>
 )
 
-const Eyebrow = ({ children, color = colors.gold }: { children: React.ReactNode; color?: string }) => (
-  <Body size="xs" bold color={color} letterSpacing="0.18em" textTransform="uppercase">
+const Eyebrow = ({
+  children,
+  colors,
+  color,
+}: {
+  children: React.ReactNode
+  colors: RecoverableGrantsColors
+  color?: string
+}) => (
+  <Body size="xs" bold color={color ?? colors.gold} letterSpacing="0.18em" textTransform="uppercase">
     {children}
   </Body>
 )
 
 const InfoCard = ({
+  colors,
   eyebrow,
   title,
   children,
   compact,
 }: {
+  colors: RecoverableGrantsColors
   eyebrow: string
   title: string
   children?: React.ReactNode
@@ -490,13 +642,13 @@ const InfoCard = ({
   <VStack
     align="stretch"
     spacing={4}
-    bg={colors.cream}
-    borderRadius="16px"
+    bg={colors.pale}
+    borderRadius={radius.section}
     borderWidth="1px"
     borderColor={colors.line}
     p={{ base: 6, lg: 7 }}
   >
-    <Eyebrow>{eyebrow}</Eyebrow>
+    <Eyebrow colors={colors}>{eyebrow}</Eyebrow>
     <H2
       size={compact ? { base: '26px', lg: '32px' } : { base: '32px', lg: '40px' }}
       lineHeight={compact ? { base: '32px', lg: '38px' } : { base: '38px', lg: '46px' }}
@@ -508,9 +660,9 @@ const InfoCard = ({
   </VStack>
 )
 
-const FlowStep = ({ step }: { step: FlowStepItem }) => {
-  const bg = step.isDark ? colors.ink : step.isGold ? colors.gold : colors.cream
-  const color = step.isDark ? 'white' : colors.ink
+const FlowStep = ({ colors, step }: { colors: RecoverableGrantsColors; step: FlowStepItem }) => {
+  const bg = step.isDark ? colors.darkSurfaceBg : step.isGold ? colors.gold : colors.surfaceBg
+  const color = step.isDark ? 'white' : step.isGold ? colors.onAmberText : colors.ink
 
   return (
     <VStack
@@ -518,37 +670,51 @@ const FlowStep = ({ step }: { step: FlowStepItem }) => {
       spacing={3}
       bg={bg}
       color={color}
-      borderRadius="14px"
-      borderWidth={step.isDark || step.isGold ? 0 : '1px'}
+      borderRadius={radius.card}
+      borderWidth="1px"
       borderColor={colors.line}
       p={5}
       minH="170px"
     >
-      <Body size="xs" bold color={step.isDark ? colors.gold : colors.ink}>
+      <Body size="xs" bold color={step.isDark ? colors.gold : step.isGold ? colors.onAmberText : colors.ink}>
         {step.number}
       </Body>
       <H3 size="24px" lineHeight="30px" bold color="inherit">
         {t(step.title)}
       </H3>
-      <Body size="sm" color={step.isDark ? 'whiteAlpha.800' : colors.muted} lineHeight="23px">
+      <Body
+        size="sm"
+        color={step.isDark ? 'whiteAlpha.800' : step.isGold ? colors.onAmberText : colors.muted}
+        lineHeight="23px"
+        opacity={step.isGold ? 0.85 : undefined}
+      >
         {t(step.description)}
       </Body>
     </VStack>
   )
 }
 
-const CaseStudyCard = () => (
-  <Box bg={colors.ink} color="white" borderRadius="16px" p={5}>
+const CaseStudyCard = ({ colors }: { colors: RecoverableGrantsColors }) => (
+  <Box
+    bg={colors.darkSurfaceBg}
+    color="white"
+    borderRadius={radius.section}
+    borderWidth="1px"
+    borderColor={colors.line}
+    p={5}
+  >
     <VStack align="stretch" spacing={4}>
-      <Eyebrow>Pilot snapshot</Eyebrow>
-      <Box position="relative" overflow="hidden" borderRadius="10px">
+      <Eyebrow colors={colors} color={colors.gold}>
+        Pilot snapshot
+      </Eyebrow>
+      <Box position="relative" overflow="hidden" borderRadius={radius.card}>
         <Image
           src={AFRIBIT_RECOVERABLE_GRANT_COHORT_IMAGE_URL}
           alt={t('Afribit Kibera recoverable grant cohort')}
           w="full"
           h={{ base: '280px', lg: '370px' }}
           objectFit="cover"
-          borderRadius="10px"
+          borderRadius={radius.card}
         />
         <Box position="absolute" inset={0} bg="linear-gradient(0deg, rgba(0,0,0,0.64), rgba(0,0,0,0.05))" />
         <H3
@@ -564,7 +730,14 @@ const CaseStudyCard = () => (
           {t('Afribit Kibera recoverable grant cohort')}
         </H3>
       </Box>
-      <Box bg="#FFF1CC" color={colors.ink} borderRadius="10px" p={5}>
+      <Box
+        bg={colors.cream}
+        color={colors.ink}
+        borderRadius={radius.card}
+        borderWidth="1px"
+        borderColor={colors.line}
+        p={5}
+      >
         <Body bold lineHeight="25px">
           {t(
             'Local trust, borrower validation, and monthly follow-up keep capital accountable without formal debt enforcement.',

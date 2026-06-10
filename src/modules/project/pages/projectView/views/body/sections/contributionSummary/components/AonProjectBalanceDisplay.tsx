@@ -12,6 +12,7 @@ import { aonProjectTimeLeft, getFormattedAonGoalUserFacingDeadline } from '@/sha
 import { ProjectAonGoalStatus } from '@/types/index.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 import { RecoverableGrantTooltipLabel } from '../../recoverableGrant'
 
 const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus.Cancelled]
@@ -34,7 +35,7 @@ export const AonProjectBalanceDisplay = () => {
   const percent = getAonGoalPercentage()
 
   const fundingDisabled = isFundingDisabled()
-  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
+  const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const failedStatus = project.aonGoal?.status && aonGoalFailedStatuses.includes(project.aonGoal.status)
   const fillGradient = failedStatus
@@ -94,7 +95,7 @@ export const AonProjectBalanceDisplay = () => {
             <HStack spacing={1}>
               <span>{t('Recoverable Grant')}</span>
               <Tooltip label={<RecoverableGrantTooltipLabel />} hasArrow placement="top">
-                <span>
+                <span aria-label={t('Recoverable grant information')}>
                   <PiInfo />
                 </span>
               </Tooltip>

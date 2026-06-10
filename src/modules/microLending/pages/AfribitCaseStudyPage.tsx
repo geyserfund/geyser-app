@@ -1,8 +1,9 @@
-import { Box, Button, Flex, HStack, Image, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
+import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -10,15 +11,18 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles/index.ts'
 
-const colors = {
-  pageBg: '#FFFFFF',
-  ink: '#17120C',
-  muted: '#5F6268',
-  line: '#E9E2D4',
-  cream: '#FFF8EA',
-  pale: '#F8F9F8',
-  beige: '#EAE3D4',
-  gold: '#F6CF4A',
+type AfribitCaseStudyColors = {
+  pageBg: string
+  ink: string
+  muted: string
+  line: string
+  beige: string
+  gold: string
+  surfaceBg: string
+  darkSurfaceBg: string
+  onGoldText: string
+  heroAccentBg: string
+  accentTeal: string
 }
 
 const radius = {
@@ -33,6 +37,12 @@ const AFRIBIT_CASE_STUDY_HERO_IMAGE_URL =
 const AFRIBIT_LOGO_HERO_IMAGE_URL = 'https://storage.googleapis.com/geyser-media/impact-funds/afribit-logo-hero.png'
 
 const t = (value: string) => value
+
+const CHAMA_MODEL_SECTION_ID = 'chama-model'
+
+const scrollToChamaModel = () => {
+  document.getElementById(CHAMA_MODEL_SECTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const tags = ['0% interest', 'social collateral', 'local guarantor', 'reusable capital'] as const
 
@@ -62,10 +72,12 @@ const cohortGroups: readonly CohortGroup[] = [
   },
 ] as const
 
+type ModelCardBorderAccent = 'ink' | 'teal' | 'gold'
+
 type ModelCard = {
   title: string
   description: string
-  borderColor: string
+  borderAccent: ModelCardBorderAccent
   dark?: boolean
 }
 
@@ -73,22 +85,22 @@ const modelCards: readonly ModelCard[] = [
   {
     title: 'Geyser provides capital',
     description: 'Impact Fund capital backs selected local businesses as recoverable grants.',
-    borderColor: colors.ink,
+    borderAccent: 'ink',
   },
   {
     title: 'Afribit validates trust',
     description: 'Afribit acts as guarantor, insurer, monitor, and local reporting partner.',
-    borderColor: '#00A884',
+    borderAccent: 'teal',
   },
   {
     title: 'Borrowers commit',
     description: 'Businesses set clear goals, repayment commitments, updates, and communication channels.',
-    borderColor: colors.gold,
+    borderAccent: 'gold',
   },
   {
     title: 'Capital recirculates',
     description: 'Recovered funds can be reused for more Geyser projects in the same community.',
-    borderColor: colors.ink,
+    borderAccent: 'ink',
     dark: true,
   },
 ] as const
@@ -133,9 +145,37 @@ const impactStats = [
   ['Project list', '6'],
 ] as const
 
+const getModelCardBorderColor = (colors: AfribitCaseStudyColors, accent: ModelCardBorderAccent) => {
+  switch (accent) {
+    case 'teal':
+      return colors.accentTeal
+    case 'gold':
+      return colors.gold
+    default:
+      return colors.ink
+  }
+}
+
 export const AfribitCaseStudyPage = () => {
+  const { onDonateClick, donateModalElement } = useImpactFundsDonateModal()
+  const colors: AfribitCaseStudyColors = {
+    pageBg: useColorModeValue('white', 'utils.pbg'),
+    ink: useColorModeValue('#17120C', 'neutral1.12'),
+    muted: useColorModeValue('#5F6268', 'neutral1.10'),
+    line: useColorModeValue('#E9E2D4', 'neutral1.6'),
+    beige: useColorModeValue('#EAE3D4', 'neutral1.2'),
+    gold: useColorModeValue('#F6CF4A', 'amber.9'),
+    surfaceBg: useColorModeValue('white', 'neutral1.3'),
+    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.1'),
+    onGoldText: useColorModeValue('#17120C', '#17120C'),
+    heroAccentBg: useColorModeValue('#F7931A', 'orange.400'),
+    accentTeal: useColorModeValue('#00A884', 'primary1.300'),
+  }
+
   return (
     <>
+      {donateModalElement}
+
       <Head
         title={t('Afribit Case Study')}
         description={t(
@@ -148,22 +188,22 @@ export const AfribitCaseStudyPage = () => {
       <Box w="full" bg={colors.pageBg} color={colors.ink}>
         <VStack align="stretch" spacing={0}>
           <PageSection py={{ base: 4, lg: 5 }}>
-            <Breadcrumb />
+            <Breadcrumb colors={colors} />
           </PageSection>
 
-          <PageSection py={0}>
-            <HeroSection />
-          </PageSection>
+          <HeroSection colors={colors} onDonateClick={onDonateClick} />
 
-          <PageSection py={{ base: 10, lg: 14 }}>
+          <PageSection>
             <SimpleGrid
               columns={{ base: 1, lg: 2 }}
               templateColumns={{ lg: '1.15fr 0.85fr' }}
-              spacing={{ base: 7, lg: 12 }}
+              spacing={{ base: 6, lg: 10 }}
             >
-              <VideoCard />
+              <VideoCard colors={colors} />
               <VStack align="flex-start" spacing={5} justify="center">
-                <Eyebrow color={colors.muted}>{t('What this case study is')}</Eyebrow>
+                <Eyebrow colors={colors} color={colors.muted}>
+                  {t('What this case study is')}
+                </Eyebrow>
                 <H2 size={{ base: '32px', lg: '44px' }} lineHeight={{ base: '38px', lg: '50px' }} bold>
                   {t('Afribit turns local knowledge into safer recoverable capital.')}
                 </H2>
@@ -174,7 +214,15 @@ export const AfribitCaseStudyPage = () => {
                 </Body>
                 <HStack spacing={2} flexWrap="wrap">
                   {tags.map((tag) => (
-                    <Box key={tag} bg={colors.beige} borderRadius={radius.button} px={3} py={2}>
+                    <Box
+                      key={tag}
+                      bg={colors.beige}
+                      borderRadius={radius.button}
+                      borderWidth="1px"
+                      borderColor={colors.line}
+                      px={3}
+                      py={2}
+                    >
                       <Body size="xs" bold>
                         {t(tag)}
                       </Body>
@@ -185,8 +233,16 @@ export const AfribitCaseStudyPage = () => {
             </SimpleGrid>
           </PageSection>
 
-          <PageSection py={{ base: 6, lg: 9 }}>
-            <Box bg={colors.beige} borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
+          <PageSection>
+            <Box
+              id={CHAMA_MODEL_SECTION_ID}
+              scrollMarginTop={{ base: '72px', md: '88px' }}
+              bg={colors.beige}
+              borderRadius={radius.section}
+              borderWidth="1px"
+              borderColor={colors.line}
+              p={{ base: 6, lg: 8 }}
+            >
               <SimpleGrid
                 columns={{ base: 1, lg: 2 }}
                 templateColumns={{ lg: '0.85fr 1.15fr' }}
@@ -194,7 +250,9 @@ export const AfribitCaseStudyPage = () => {
                 mb={7}
               >
                 <VStack align="flex-start" spacing={3}>
-                  <Eyebrow color={colors.muted}>{t('The chama')}</Eyebrow>
+                  <Eyebrow colors={colors} color={colors.muted}>
+                    {t('The chama')}
+                  </Eyebrow>
                   <H2 size={{ base: '32px', lg: '42px' }} lineHeight={{ base: '38px', lg: '48px' }} bold>
                     {t('A cohort-based trust layer for capital.')}
                   </H2>
@@ -209,13 +267,17 @@ export const AfribitCaseStudyPage = () => {
                 {cohortGroups.map((group) => (
                   <Box
                     key={group.title}
-                    bg={group.dark ? colors.ink : 'white'}
+                    bg={group.dark ? colors.darkSurfaceBg : colors.surfaceBg}
                     color={group.dark ? 'white' : colors.ink}
                     borderRadius={radius.card}
+                    borderWidth="1px"
+                    borderColor={colors.line}
                     p={5}
                     minH="178px"
                   >
-                    <Eyebrow color={group.dark ? colors.gold : '#00A884'}>{t(group.eyebrow)}</Eyebrow>
+                    <Eyebrow colors={colors} color={group.dark ? colors.gold : colors.accentTeal}>
+                      {t(group.eyebrow)}
+                    </Eyebrow>
                     <H3 size="24px" lineHeight="30px" bold mt={3} color="inherit">
                       {t(group.title)}
                     </H3>
@@ -228,14 +290,16 @@ export const AfribitCaseStudyPage = () => {
             </Box>
           </PageSection>
 
-          <PageSection py={{ base: 10, lg: 14 }}>
+          <PageSection>
             <SimpleGrid
               columns={{ base: 1, lg: 2 }}
               templateColumns={{ lg: '0.85fr 1.15fr' }}
-              spacing={{ base: 7, lg: 12 }}
+              spacing={{ base: 6, lg: 10 }}
             >
               <VStack align="flex-start" spacing={4}>
-                <Eyebrow color={colors.muted}>{t('Recoverable grants')}</Eyebrow>
+                <Eyebrow colors={colors} color={colors.muted}>
+                  {t('Recoverable grants')}
+                </Eyebrow>
                 <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold>
                   {t('0% interest capital, without the debt burden.')}
                 </H2>
@@ -249,13 +313,16 @@ export const AfribitCaseStudyPage = () => {
                 {modelCards.map((card) => (
                   <Box
                     key={card.title}
-                    bg={card.dark ? colors.ink : 'white'}
+                    bg={card.dark ? colors.darkSurfaceBg : colors.surfaceBg}
                     color={card.dark ? 'white' : colors.ink}
-                    borderRadius={radius.card}
+                    borderBottomLeftRadius={radius.card}
+                    borderBottomRightRadius={radius.card}
+                    borderTopLeftRadius={0}
+                    borderTopRightRadius={0}
                     borderWidth="1px"
-                    borderColor={card.dark ? colors.ink : colors.line}
+                    borderColor={colors.line}
                     borderTopWidth="3px"
-                    borderTopColor={card.borderColor}
+                    borderTopColor={getModelCardBorderColor(colors, card.borderAccent)}
                     p={5}
                     minH="164px"
                   >
@@ -271,16 +338,25 @@ export const AfribitCaseStudyPage = () => {
             </SimpleGrid>
           </PageSection>
 
-          <PageSection py={{ base: 8, lg: 11 }}>
-            <Box bg={colors.ink} color="white" borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
+          <PageSection>
+            <Box
+              bg={colors.darkSurfaceBg}
+              color="white"
+              borderRadius={radius.section}
+              borderWidth="1px"
+              borderColor={colors.line}
+              p={{ base: 6, lg: 8 }}
+            >
               <SimpleGrid
                 columns={{ base: 1, lg: 2 }}
                 templateColumns={{ lg: '0.95fr 1.05fr' }}
-                spacing={{ base: 5, lg: 10 }}
+                spacing={{ base: 5, lg: 8 }}
                 mb={7}
               >
                 <VStack align="flex-start" spacing={3}>
-                  <Eyebrow color={colors.gold}>{t('The chama portfolio')}</Eyebrow>
+                  <Eyebrow colors={colors} color={colors.gold}>
+                    {t('The chama portfolio')}
+                  </Eyebrow>
                   <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold color="white">
                     {t('Six Geyser projects backed as recoverable grants.')}
                   </H2>
@@ -291,39 +367,61 @@ export const AfribitCaseStudyPage = () => {
                   )}
                 </Body>
               </SimpleGrid>
-              <PortfolioTable />
+              <PortfolioTable colors={colors} />
             </Box>
           </PageSection>
 
-          <PageSection py={{ base: 8, lg: 11 }}>
+          <PageSection>
             <SimpleGrid columns={{ base: 1, lg: 2 }} templateColumns={{ lg: '2fr 1fr' }} spacing={5}>
-              <Box bg={colors.gold} borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
-                <Eyebrow color={colors.ink}>{t('Fund reusable capital')}</Eyebrow>
-                <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold mt={3}>
+              <Box
+                bg={colors.gold}
+                borderRadius={radius.section}
+                borderWidth="1px"
+                borderColor={colors.line}
+                p={{ base: 6, lg: 8 }}
+              >
+                <Eyebrow colors={colors} color={colors.onGoldText}>
+                  {t('Fund reusable capital')}
+                </Eyebrow>
+                <H2
+                  size={{ base: '34px', lg: '44px' }}
+                  lineHeight={{ base: '40px', lg: '48px' }}
+                  bold
+                  mt={3}
+                  color={colors.onGoldText}
+                >
                   {t('Fund more Impact Fund recoverable grants.')}
                 </H2>
-                <Body lineHeight="27px" mt={4} maxW="720px">
+                <Body lineHeight="27px" mt={4} maxW="720px" color={colors.onGoldText}>
                   {t(
                     'Support businesses that can repay, recycle capital, and create compounding impact across local Bitcoin communities.',
                   )}
                 </Body>
                 <Button
-                  as={Link}
-                  to={getPath('discoveryImpactFunds')}
                   h="42px"
                   px={5}
                   mt={6}
                   borderRadius={radius.button}
-                  bg={colors.ink}
+                  bg={colors.darkSurfaceBg}
                   color="white"
                   fontSize="sm"
                   fontWeight="800"
+                  onClick={onDonateClick}
                 >
-                  {t('Fund recoverable grants')}
+                  {t('Donate')}
                 </Button>
               </Box>
-              <Box bg={colors.ink} color="white" borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
-                <Eyebrow color={colors.gold}>{t('Why it matters')}</Eyebrow>
+              <Box
+                bg={colors.darkSurfaceBg}
+                color="white"
+                borderRadius={radius.section}
+                borderWidth="1px"
+                borderColor={colors.line}
+                p={{ base: 6, lg: 8 }}
+              >
+                <Eyebrow colors={colors} color={colors.gold}>
+                  {t('Why it matters')}
+                </Eyebrow>
                 <VStack align="stretch" spacing={0} mt={5}>
                   {impactStats.map(([label, value]) => (
                     <HStack
@@ -351,7 +449,7 @@ export const AfribitCaseStudyPage = () => {
   )
 }
 
-const Breadcrumb = () => (
+const Breadcrumb = ({ colors }: { colors: AfribitCaseStudyColors }) => (
   <HStack spacing={2} color={colors.muted} flexWrap="wrap">
     <Body
       as={Link}
@@ -383,13 +481,24 @@ const Breadcrumb = () => (
   </HStack>
 )
 
-const HeroSection = () => (
+const HeroSection = ({
+  colors,
+  onDonateClick,
+}: {
+  colors: AfribitCaseStudyColors
+  onDonateClick: () => void
+}) => (
   <Box
+    w="100vw"
+    maxW="100vw"
     position="relative"
+    left="50%"
+    right="50%"
+    ml="-50vw"
+    mr="-50vw"
     overflow="hidden"
-    borderRadius={radius.section}
-    minH={{ base: '520px', lg: '525px' }}
-    bg={colors.ink}
+    minH={dimensions.impactLendingHero.minHeight}
+    bg={colors.darkSurfaceBg}
   >
     <Box
       position="absolute"
@@ -406,16 +515,21 @@ const HeroSection = () => (
     />
     <Flex
       position="relative"
-      minH={{ base: '520px', lg: '525px' }}
-      align={{ base: 'flex-end', lg: 'center' }}
+      w="full"
+      maxW={`${dimensions.maxWidth + 24 * 2}px`}
+      minH={dimensions.impactLendingHero.minHeight}
+      mx="auto"
+      align="center"
       justify="space-between"
       gap={8}
-      px={{ base: 6, lg: 8 }}
-      py={{ base: 8, lg: 10 }}
+      px={standardPadding}
+      py={{ base: 10, lg: 12 }}
       direction={{ base: 'column', lg: 'row' }}
     >
       <VStack align="flex-start" spacing={5} maxW={{ base: 'full', lg: '650px' }}>
-        <Eyebrow color={colors.gold}>{t('Geyser x Afribit Kibera')}</Eyebrow>
+        <Eyebrow colors={colors} color={colors.gold}>
+          {t('Geyser x Afribit Kibera')}
+        </Eyebrow>
         <H1 size={{ base: '36px', lg: '56px' }} lineHeight={{ base: '42px', lg: '62px' }} bold color="white">
           {t('Partnering to fund Kibera entrepreneurs with reusable capital.')}
         </H1>
@@ -426,28 +540,28 @@ const HeroSection = () => (
         </Body>
         <HStack spacing={3} flexWrap="wrap" pt={2}>
           <Button
-            as={Link}
-            to={getPath('discoveryImpactFunds')}
             h="42px"
             px={5}
             borderRadius={radius.button}
-            bg={colors.ink}
-            color="white"
+            bg={colors.heroAccentBg}
+            color={colors.onGoldText}
             fontSize="sm"
             fontWeight="800"
+            onClick={onDonateClick}
+            _hover={{ bg: colors.heroAccentBg }}
           >
-            {t('Fund the partnership')}
+            {t('Donate')}
           </Button>
           <Button
-            as="a"
-            href="#chama-model"
+            type="button"
             h="42px"
             px={5}
             borderRadius={radius.button}
             bg={colors.gold}
-            color={colors.ink}
+            color={colors.onGoldText}
             fontSize="sm"
             fontWeight="800"
+            onClick={scrollToChamaModel}
           >
             {t('See the Chama model')}
           </Button>
@@ -455,9 +569,11 @@ const HeroSection = () => (
       </VStack>
       <VStack
         spacing={2}
-        bg="white"
+        bg={colors.surfaceBg}
         color={colors.ink}
         borderRadius={radius.pill}
+        borderWidth="1px"
+        borderColor={colors.line}
         w={{ base: '210px', lg: '250px' }}
         h={{ base: '210px', lg: '250px' }}
         flexShrink={0}
@@ -478,9 +594,16 @@ const HeroSection = () => (
   </Box>
 )
 
-const VideoCard = () => (
+const VideoCard = ({ colors }: { colors: AfribitCaseStudyColors }) => (
   <VStack align="stretch" spacing={3}>
-    <Box bg={colors.ink} borderRadius={radius.section} minH={{ base: '280px', lg: '400px' }} position="relative">
+    <Box
+      bg={colors.darkSurfaceBg}
+      borderRadius={radius.section}
+      borderWidth="1px"
+      borderColor={colors.line}
+      minH={{ base: '280px', lg: '400px' }}
+      position="relative"
+    >
       <Box
         position="absolute"
         top="50%"
@@ -499,7 +622,7 @@ const VideoCard = () => (
           h={0}
           borderTop="9px solid transparent"
           borderBottom="9px solid transparent"
-          borderLeft={`15px solid ${colors.ink}`}
+          borderLeft={`15px solid ${colors.onGoldText}`}
           ml="4px"
         />
       </Box>
@@ -515,12 +638,29 @@ const VideoCard = () => (
   </VStack>
 )
 
-const PortfolioTable = () => (
+const PortfolioTable = ({ colors }: { colors: AfribitCaseStudyColors }) => (
   <Box overflowX="auto" borderRadius={radius.card}>
-    <Box minW="940px" bg="white" color={colors.ink} borderRadius={radius.card} overflow="hidden">
-      <SimpleGrid columns={4} templateColumns="1.1fr 1fr 1.75fr 0.65fr" bg={colors.gold}>
-        {['Project', 'Capital purpose', 'Chama status', ''].map((heading) => (
-          <Body key={heading || 'action'} size="xs" bold letterSpacing="0.12em" textTransform="uppercase" px={5} py={4}>
+    <Box
+      minW="780px"
+      bg={colors.surfaceBg}
+      color={colors.ink}
+      borderRadius={radius.card}
+      borderWidth="1px"
+      borderColor={colors.line}
+      overflow="hidden"
+    >
+      <SimpleGrid columns={3} templateColumns="1.1fr 1fr 1.75fr" bg={colors.gold}>
+        {['Project', 'Capital purpose', 'Chama status'].map((heading) => (
+          <Body
+            key={heading}
+            size="xs"
+            bold
+            letterSpacing="0.12em"
+            textTransform="uppercase"
+            color={colors.onGoldText}
+            px={5}
+            py={4}
+          >
             {t(heading)}
           </Body>
         ))}
@@ -528,8 +668,8 @@ const PortfolioTable = () => (
       {portfolioProjects.map((row) => (
         <SimpleGrid
           key={row.project}
-          columns={4}
-          templateColumns="1.1fr 1fr 1.75fr 0.65fr"
+          columns={3}
+          templateColumns="1.1fr 1fr 1.75fr"
           borderBottomWidth="1px"
           borderBottomColor={colors.line}
         >
@@ -542,16 +682,19 @@ const PortfolioTable = () => (
           <Body px={5} py={5} color={colors.muted} lineHeight="24px">
             {t(row.status)}
           </Body>
-          <Body px={5} py={5} bold>
-            {t('See project ->')}
-          </Body>
         </SimpleGrid>
       ))}
     </Box>
   </Box>
 )
 
-const PageSection = ({ children, py }: { children: React.ReactNode; py?: React.ComponentProps<typeof Box>['py'] }) => (
+const PageSection = ({
+  children,
+  py = dimensions.impactLendingSection.paddingY,
+}: {
+  children: React.ReactNode
+  py?: React.ComponentProps<typeof Box>['py']
+}) => (
   <Box w="full" px={standardPadding} py={py}>
     <Box maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto">
       {children}
@@ -559,8 +702,16 @@ const PageSection = ({ children, py }: { children: React.ReactNode; py?: React.C
   </Box>
 )
 
-const Eyebrow = ({ children, color = colors.gold }: { children: React.ReactNode; color?: string }) => (
-  <Body size="xs" bold color={color} letterSpacing="0.18em" textTransform="uppercase">
+const Eyebrow = ({
+  children,
+  colors,
+  color,
+}: {
+  children: React.ReactNode
+  colors: AfribitCaseStudyColors
+  color?: string
+}) => (
+  <Body size="xs" bold color={color ?? colors.gold} letterSpacing="0.18em" textTransform="uppercase">
     {children}
   </Body>
 )

@@ -81,10 +81,10 @@ export const ImpactFundsWorkshopsPage = () => {
       />
 
       <VStack align="stretch" spacing={0} bg={colors.pageBg} color={colors.primaryText} w="full">
-        <HeroSection colors={colors} onSponsorClick={donateModal.onOpen} />
         <WorkshopBreadcrumb colors={colors} />
-        <PageSection colors={colors} py={{ base: 12, lg: 16 }}>
-          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, lg: 16 }}>
+        <HeroSection colors={colors} onDonateClick={donateModal.onOpen} />
+        <PageSection colors={colors}>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 10 }}>
             <VStack align="flex-start" spacing={4}>
               <Eyebrow color={colors.accentText}>{t('What are workshops?')}</Eyebrow>
               <H2 size={{ base: '36px', lg: '52px' }} lineHeight={{ base: '42px', lg: '58px' }} bold>
@@ -110,8 +110,8 @@ export const ImpactFundsWorkshopsPage = () => {
           </SimpleGrid>
         </PageSection>
 
-        <PageSection colors={colors} bg={colors.mutedSurfaceBg} py={{ base: 12, lg: 16 }}>
-          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, lg: 12 }}>
+        <PageSection colors={colors} bg={colors.mutedSurfaceBg}>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 10 }}>
             <VStack align="flex-start" spacing={3}>
               <Eyebrow color={colors.secondaryText}>{t('How they work')}</Eyebrow>
               <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '50px' }} bold>
@@ -137,8 +137,8 @@ export const ImpactFundsWorkshopsPage = () => {
           </SimpleGrid>
         </PageSection>
 
-        <PageSection colors={colors} bg={colors.darkSurfaceBg} py={{ base: 12, lg: 16 }}>
-          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, lg: 16 }} mb={{ base: 8, lg: 10 }}>
+        <PageSection colors={colors} bg={colors.darkSurfaceBg}>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 10 }} mb={{ base: 6, lg: 8 }}>
             <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '50px' }} bold color="white">
               {t('Watch workshops already happening on the ground.')}
             </H2>
@@ -160,8 +160,8 @@ export const ImpactFundsWorkshopsPage = () => {
           </VStack>
         </PageSection>
 
-        <PageSection colors={colors} py={{ base: 12, lg: 16 }}>
-          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, lg: 14 }}>
+        <PageSection colors={colors}>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 10 }}>
             <VStack align="flex-start" spacing={4}>
               <Eyebrow color={colors.secondaryText}>{t('Host workshops')}</Eyebrow>
               <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '50px' }} bold>
@@ -185,13 +185,13 @@ export const ImpactFundsWorkshopsPage = () => {
           </SimpleGrid>
         </PageSection>
 
-        <PageSection colors={colors} pb={{ base: 12, lg: 18 }}>
+        <PageSection colors={colors}>
           <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
             <CalloutCard colors={colors} title="Create a Crowdfunding Workshop." buttonText="Apply now" isAmber />
             <CalloutCard
               colors={colors}
               title="Fund a local workshop."
-              buttonText="Sponsor a workshop"
+              buttonText="Donate"
               onClick={donateModal.onOpen}
             />
           </SimpleGrid>
@@ -203,7 +203,7 @@ export const ImpactFundsWorkshopsPage = () => {
   )
 }
 
-const HeroSection = ({ colors, onSponsorClick }: { colors: WorkshopColors; onSponsorClick: () => void }) => (
+const HeroSection = ({ colors, onDonateClick }: { colors: WorkshopColors; onDonateClick: () => void }) => (
   <Box
     w="100vw"
     maxW="100vw"
@@ -213,26 +213,27 @@ const HeroSection = ({ colors, onSponsorClick }: { colors: WorkshopColors; onSpo
     ml="-50vw"
     mr="-50vw"
     overflow="hidden"
-    minH={{ base: '420px', lg: '396px' }}
-    bg={colors.mutedSurfaceBg}
+    minH={dimensions.impactLendingHero.minHeight}
+    bg={colors.darkSurfaceBg}
   >
     <Box
       position="absolute"
       inset={0}
-      bgImage={`url(${WORKSHOP_HERO_IMAGE_URL})`}
-      bgSize="cover"
-      bgPosition="78% 34%"
+      backgroundImage={`url('${WORKSHOP_HERO_IMAGE_URL}')`}
+      backgroundPosition={{ base: 'center', lg: '78% 34%' }}
+      backgroundSize="cover"
+      backgroundRepeat="no-repeat"
     />
     <Box
       position="absolute"
       inset={0}
-      bgImage="linear-gradient(90deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.66) 42%, rgba(255,255,255,0.12) 72%)"
+      bg="linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.34), rgba(0,0,0,0.08))"
     />
     <Flex
       position="relative"
       w="full"
       maxW={`${dimensions.maxWidth + 24 * 2}px`}
-      minH={{ base: '420px', lg: '396px' }}
+      minH={dimensions.impactLendingHero.minHeight}
       mx="auto"
       px={standardPadding}
       py={{ base: 10, lg: 12 }}
@@ -243,16 +244,11 @@ const HeroSection = ({ colors, onSponsorClick }: { colors: WorkshopColors; onSpo
           size={{ base: '3xl', md: '4xl', lg: '48px' }}
           bold
           lineHeight={{ base: '1.12', lg: '54px' }}
-          color={colors.primaryText}
+          color="white"
         >
           {t('Crowdfunding Workshops')}
         </H1>
-        <Body
-          size={{ base: 'md', lg: 'lg' }}
-          medium
-          lineHeight={{ base: '26px', lg: '28px' }}
-          color={colors.primaryText}
-        >
+        <Body size={{ base: 'md', lg: 'lg' }} medium lineHeight={{ base: '26px', lg: '28px' }} color="whiteAlpha.900">
           {t(
             'Help local communities understand Bitcoin fundraising, launch credible projects, and turn trusted local activity into fundable impact.',
           )}
@@ -266,8 +262,8 @@ const HeroSection = ({ colors, onSponsorClick }: { colors: WorkshopColors; onSpo
             h="42px"
             borderRadius="6px"
             px="18px"
-            bg={colors.surfaceBg}
-            color={colors.primaryText}
+            bg="white"
+            color={colors.darkSurfaceBg}
             fontSize="sm"
             fontWeight="600"
           >
@@ -277,13 +273,14 @@ const HeroSection = ({ colors, onSponsorClick }: { colors: WorkshopColors; onSpo
             h="42px"
             borderRadius="6px"
             px="18px"
-            bg={colors.amberBg}
-            color={colors.primaryText}
+            bg="#F7931A"
+            color={colors.darkSurfaceBg}
             fontSize="sm"
             fontWeight="600"
-            onClick={onSponsorClick}
+            onClick={onDonateClick}
+            _hover={{ bg: '#F7931A' }}
           >
-            {t('Sponsor a workshop')}
+            {t('Donate')}
           </Button>
         </HStack>
       </VStack>
@@ -292,30 +289,35 @@ const HeroSection = ({ colors, onSponsorClick }: { colors: WorkshopColors; onSpo
 )
 
 const WorkshopBreadcrumb = ({ colors }: { colors: WorkshopColors }) => (
-  <Box w="full" bg={colors.pageBg} px={standardPadding} py={{ base: 4, lg: 5 }}>
-    <HStack
-      maxW={`${dimensions.maxWidth + 24 * 2}px`}
-      mx="auto"
-      spacing={3}
-      align="center"
-      color={colors.secondaryText}
-    >
-      <Body
-        as={Link}
-        to={getPath('discoveryImpactFunds')}
-        size="sm"
-        bold
-        letterSpacing="0.18em"
-        textTransform="uppercase"
-        color={colors.secondaryText}
-      >
-        {t('Impact Funds')}
-      </Body>
-      <PiCaretRightBold size={12} />
-      <Body size="sm" bold letterSpacing="0.18em" textTransform="uppercase" color={colors.primaryText}>
-        {t('Crowdfunding Workshop')}
-      </Body>
-    </HStack>
+  <Box w="full" bg={colors.pageBg} py={{ base: 4, lg: 5 }}>
+    <Box w="full" maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto" px={standardPadding}>
+      <HStack spacing={2} color={colors.secondaryText} flexWrap="wrap">
+        <Body
+          as={Link}
+          to={getPath('discoveryImpactFunds')}
+          size="xs"
+          bold
+          letterSpacing="0.18em"
+          textTransform="uppercase"
+          _hover={{ color: colors.primaryText }}
+        >
+          {t('Impact Fund')}
+        </Body>
+        <PiCaretRightBold size={11} />
+        <Body
+          as={Link}
+          to={getPath('discoveryImpactFundsWorkshops')}
+          size="xs"
+          bold
+          letterSpacing="0.18em"
+          textTransform="uppercase"
+          color={colors.primaryText}
+          aria-current="page"
+        >
+          {t('Crowdfunding Workshop')}
+        </Body>
+      </HStack>
+    </Box>
   </Box>
 )
 
@@ -323,13 +325,15 @@ const PageSection = ({
   colors,
   children,
   bg,
+  py = dimensions.impactLendingSection.paddingY,
   ...props
 }: {
   colors: WorkshopColors
   children: React.ReactNode
   bg?: string
-} & React.ComponentProps<typeof Box>) => (
-  <Box w="full" bg={bg || colors.pageBg} px={standardPadding} {...props}>
+  py?: React.ComponentProps<typeof Box>['py']
+} & Omit<React.ComponentProps<typeof Box>, 'py'>) => (
+  <Box w="full" bg={bg || colors.pageBg} px={standardPadding} py={py} {...props}>
     <Box maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto">
       {children}
     </Box>
@@ -484,7 +488,7 @@ const CalloutCard = ({
     p={{ base: 6, lg: 8 }}
     minH="260px"
   >
-    <Eyebrow color={isAmber ? colors.primaryText : colors.amberBg}>{isAmber ? t('Apply') : t('Sponsor')}</Eyebrow>
+    <Eyebrow color={isAmber ? colors.primaryText : colors.amberBg}>{isAmber ? t('Apply') : t('Donate')}</Eyebrow>
     <H2 size={{ base: '30px', lg: '38px' }} lineHeight={{ base: '36px', lg: '44px' }} bold>
       {t(title)}
     </H2>
