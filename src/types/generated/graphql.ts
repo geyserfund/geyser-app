@@ -10639,6 +10639,13 @@ export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
 
+export type ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables = Exact<{
+  input?: InputMaybe<ProjectsGetQueryInput>;
+}>;
+
+
+export type ImpactFundsFieldPartnerLeaderboardProjectsQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<{ __typename?: 'Project', id: any, title: string, balance: number, fieldPartner?: { __typename?: 'User', id: any, username: string, location?: string | null } | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }> }> } };
+
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
 }>;
@@ -17567,6 +17574,65 @@ export type ImpactFundsQueryHookResult = ReturnType<typeof useImpactFundsQuery>;
 export type ImpactFundsLazyQueryHookResult = ReturnType<typeof useImpactFundsLazyQuery>;
 export type ImpactFundsSuspenseQueryHookResult = ReturnType<typeof useImpactFundsSuspenseQuery>;
 export type ImpactFundsQueryResult = Apollo.QueryResult<ImpactFundsQuery, ImpactFundsQueryVariables>;
+export const ImpactFundsFieldPartnerLeaderboardProjectsDocument = gql`
+    query ImpactFundsFieldPartnerLeaderboardProjects($input: ProjectsGetQueryInput) {
+  projectsGet(input: $input) {
+    projects {
+      id
+      title
+      balance
+      fieldPartner {
+        id
+        username
+        location
+      }
+      location {
+        country {
+          name
+        }
+        region
+      }
+      tags {
+        id
+        label
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useImpactFundsFieldPartnerLeaderboardProjectsQuery__
+ *
+ * To run a query within a React component, call `useImpactFundsFieldPartnerLeaderboardProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundsFieldPartnerLeaderboardProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImpactFundsFieldPartnerLeaderboardProjectsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundsFieldPartnerLeaderboardProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>(ImpactFundsFieldPartnerLeaderboardProjectsDocument, options);
+      }
+export function useImpactFundsFieldPartnerLeaderboardProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>(ImpactFundsFieldPartnerLeaderboardProjectsDocument, options);
+        }
+export function useImpactFundsFieldPartnerLeaderboardProjectsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>(ImpactFundsFieldPartnerLeaderboardProjectsDocument, options);
+        }
+export type ImpactFundsFieldPartnerLeaderboardProjectsQueryHookResult = ReturnType<typeof useImpactFundsFieldPartnerLeaderboardProjectsQuery>;
+export type ImpactFundsFieldPartnerLeaderboardProjectsLazyQueryHookResult = ReturnType<typeof useImpactFundsFieldPartnerLeaderboardProjectsLazyQuery>;
+export type ImpactFundsFieldPartnerLeaderboardProjectsSuspenseQueryHookResult = ReturnType<typeof useImpactFundsFieldPartnerLeaderboardProjectsSuspenseQuery>;
+export type ImpactFundsFieldPartnerLeaderboardProjectsQueryResult = Apollo.QueryResult<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>;
 export const ImpactFundDocument = gql`
     query ImpactFund($input: ImpactFundGetInput!) {
   impactFund(input: $input) {

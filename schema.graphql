@@ -28,6 +28,7 @@ type Query {
   projectsAonAlmostOver(input: ProjectsAonAlmostOverInput): ProjectsAonAlmostOverResponse!
   me: User
   user(where: UserGetInput!): User!
+  projectReferrersSearch(input: ProjectReferrersSearchInput): ProjectReferrersSearchResult!
   userAccountPasswordFundsSummary: UserAccountPasswordFundsSummary!
   userEmailIsAvailable(email: String!): Boolean!
   userEmailIsValid(email: String!): UserEmailIsValidResponse!
@@ -577,6 +578,8 @@ type Project {
   Funding strategy
   """
   fundingStrategy: ProjectFundingStrategy
+  isRecoverableGrant: Boolean!
+  fieldPartner: User
   launchStrategy: String
   aonGoal: ProjectAonGoal
   impactFundRecipient: ProjectImpactFundRecipient
@@ -650,6 +653,7 @@ type User {
   heroId: String!
   imageUrl: String
   bio: String
+  location: String
   email: String
   taxProfileId: BigInt
   isEmailVerified: Boolean!
@@ -684,6 +688,7 @@ type User {
   affiliatePartnerTerms: AffiliatePartnerTerms!
   affiliatePartnerPayoutSummary: AffiliatePartnerPayoutSummary!
   affiliatePartnerPayouts: [AffiliatePartnerPayout!]!
+  isFieldPartner: Boolean!
   accountKeys: UserAccountKeys
 
   """
@@ -814,6 +819,17 @@ input CreateProjectInput {
   """
   tagIds: [Int!]
   referrerHeroId: String
+  fundingStrategy: ProjectFundingStrategy
+  isRecoverableGrant: Boolean
+}
+
+type ProjectReferrersSearchResult {
+  fieldPartners: [User!]!
+  others: [User!]!
+}
+
+input ProjectReferrersSearchInput {
+  heroId: String
 }
 
 input UpdateProjectInput {
@@ -966,6 +982,7 @@ input ProjectsGetWhereInput {
   categories: [ProjectCategory!]
   subCategory: ProjectSubCategory
   fundingStrategy: ProjectFundingStrategy
+  fieldPartnerUserId: BigInt
   aonGoalReached: Boolean
   ownerId: BigInt
 }
@@ -1164,6 +1181,7 @@ input UpdateUserInput {
   id: BigInt!
   username: String
   bio: String
+  location: String
   imageUrl: String
 }
 

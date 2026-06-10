@@ -15,7 +15,6 @@ import {
   ContributionSummary,
   ControlPanel,
   Creator,
-  Details,
   Goals,
   Header,
   LeaderboardSummary,
@@ -32,6 +31,7 @@ import {
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
 import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
+import { FieldPartnerSection, RecoverableGrantExplainer } from './sections/recoverableGrant'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
@@ -44,6 +44,7 @@ export const ProjectBody = () => {
   const { impactFundRecipient } = project as typeof project & {
     impactFundRecipient?: ProjectImpactFundRecipient | null
   }
+  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
 
   useEffect(() => {
     if (loading) return
@@ -79,16 +80,17 @@ export const ProjectBody = () => {
         <ControlPanel />
 
         <Header />
-        <Creator />
+        {!isRecoverableGrant && <Creator />}
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
+        {isRecoverableGrant && <RecoverableGrantExplainer />}
 
         <Story />
+        {isRecoverableGrant && <FieldPartnerSection />}
 
         {project.rewardsCount && <Rewards />}
         {project.entriesCount && <Posts />}
         {shouldShowProjectGoals(project) && <Goals />}
-        <Details />
         <AonGoToRefundPage />
 
         <SuggestedProjects

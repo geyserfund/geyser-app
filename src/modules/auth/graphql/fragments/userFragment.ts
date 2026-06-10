@@ -65,6 +65,7 @@ export const FRAGMENT_USER_ME = gql`
     email
     ranking
     isEmailVerified
+    isFieldPartner
     hasSocialAccount
     complianceDetails {
       ...UserComplianceDetails

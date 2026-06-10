@@ -1,6 +1,7 @@
 import { Button, HStack, Skeleton, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
+import { PiInfo } from 'react-icons/pi'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -11,6 +12,7 @@ import { aonProjectTimeLeft, getFormattedAonGoalUserFacingDeadline } from '@/sha
 import { ProjectAonGoalStatus } from '@/types/index.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
+import { RecoverableGrantTooltipLabel } from '../../recoverableGrant'
 
 const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus.Cancelled]
 
@@ -32,6 +34,7 @@ export const AonProjectBalanceDisplay = () => {
   const percent = getAonGoalPercentage()
 
   const fundingDisabled = isFundingDisabled()
+  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
 
   const failedStatus = project.aonGoal?.status && aonGoalFailedStatuses.includes(project.aonGoal.status)
   const fillGradient = failedStatus
@@ -86,7 +89,20 @@ export const AonProjectBalanceDisplay = () => {
         value={percent}
         height={22}
         radius={16}
-        label="All-or-Nothing (Beta)"
+        label={
+          isRecoverableGrant ? (
+            <HStack spacing={1}>
+              <span>{t('Recoverable Grant')}</span>
+              <Tooltip label={<RecoverableGrantTooltipLabel />} hasArrow placement="top">
+                <span>
+                  <PiInfo />
+                </span>
+              </Tooltip>
+            </HStack>
+          ) : (
+            t('All-or-Nothing (Beta)')
+          )
+        }
         fillGradient={fillGradient}
         glowColor={glowColor}
         flowSpeedSec={15}

@@ -1,7 +1,10 @@
 import {
+  Badge,
   Box,
   HStack,
+  Icon,
   IconButton,
+  Link as ChakraLink,
   Modal,
   ModalContent,
   ModalOverlay,
@@ -9,22 +12,24 @@ import {
   SkeletonText,
   Stack,
   StackProps,
+  Tooltip,
   useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
-import { PiCaretDoubleDown, PiQrCode } from 'react-icons/pi'
+import { PiArrowsClockwiseBold, PiFlag, PiMapPin } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { ProjectStatusBar } from '@/components/ui'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { ID } from '@/shared/constants/components/id.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectPageHeaderSummaryQuery } from '@/types'
 
@@ -50,25 +55,23 @@ import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
-import { PostOnNostr } from './components/PostOnNostr.tsx'
-import { ShareProjectButton } from './components/ShareProjectButton'
+import { ProjectShareModal } from './shareModal'
+
+const REPORT_PROJECT_AIRTABLE_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagpNDtO12bhTK6hQ/form'
 
 interface HeaderDetailsProps extends StackProps {
   onOpen: () => void
   summaryLoading: boolean
   summaryError: boolean
+  isProjectOwner: boolean
 }
 
-const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: HeaderDetailsProps) => {
+const HeaderDetails = ({ onOpen, summaryLoading, summaryError, isProjectOwner, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner } = useProjectAtom()
   const projectImages = project.images || []
+  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
 
   const thumbnailOutlineColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
-  const iconButtonPressStyles = {
-    transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)',
-    '&:active': { transform: 'scale(0.96)' },
-  }
-
   const [subscribers, setSubscribers] = useState(0)
   const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
 
@@ -84,20 +87,6 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
   const getSubscriptionValue = async (flashId: number) => {
     const value = await fetch(`${FlashMembershipCountUrl}?geyser_flash_id=${flashId}`).then((res) => res.json())
     setSubscribers(toInt(`${value.membership_count}`))
-  }
-
-  const handleClickDetails = () => {
-    const element = document.getElementById(ID.project.details.container)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
-  const handleClickLightingQR = () => {
-    const element = document.getElementById(ID.project.fundNow.container)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
   }
 
   return (
@@ -136,20 +125,23 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
         />
       </Box>
       <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
-        <HStack w="full" alignItems="center" gap={2}>
-          <H1 size={'2xl'} medium sx={{ textWrap: 'balance' }}>
-            {project.title}
-          </H1>
-          <NonProjectProjectIcon taxProfile={projectOwner?.user?.taxProfile} />
+        <HStack w="full" alignItems="start" justifyContent="space-between" gap={3}>
+          <HStack alignItems="center" gap={2} minW={0}>
+            <H1 size={'2xl'} medium sx={{ textWrap: 'balance' }}>
+              {project.title}
+            </H1>
+            <NonProjectProjectIcon taxProfile={projectOwner?.user?.taxProfile} />
+          </HStack>
+          <HeaderActions isProjectOwner={isProjectOwner} />
         </HStack>
 
-        {summaryLoading ? (
+        {summaryLoading && !isRecoverableGrant ? (
           <SkeletonLayout height="20px" w="250px" />
-        ) : summaryError ? (
+        ) : summaryError && !isRecoverableGrant ? (
           <Body size="md" medium light>
             {t('Unable to load project summary right now')}
           </Body>
-        ) : (
+        ) : !isRecoverableGrant ? (
           <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
             <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {t('Contributors: {{count}}', { count: project.fundersCount ?? 0 })}
@@ -164,35 +156,129 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
               </Body>
             )}
           </HStack>
-        )}
+        ) : null}
 
-        <HStack w="full" paddingTop={1} justifyContent="space-between" flexWrap={'wrap'}>
-          <HStack>
-            <IconButton
-              aria-label={t('Go to project details')}
-              icon={<PiCaretDoubleDown />}
-              variant="soft"
-              colorScheme="neutral1"
-              onClick={handleClickDetails}
-              sx={iconButtonPressStyles}
-            />
-            <IconButton
-              aria-label={t('Go to project Lightning QR')}
-              icon={<PiQrCode fontSize="20px" />}
-              variant="soft"
-              colorScheme="neutral1"
-              onClick={handleClickLightingQR}
-              sx={iconButtonPressStyles}
-            />
-            <FollowButton project={project} withLabel />
-            <ShareProjectButton />
-            <PostOnNostr />
-          </HStack>
-
-          <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} />
+        <HStack w="full" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={3}>
+          <ProjectHeaderTags />
         </HStack>
       </VStack>
     </Stack>
+  )
+}
+
+const HeaderActions = ({ isProjectOwner }: { isProjectOwner: boolean }) => {
+  const { project } = useProjectAtom()
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
+  const shareLabel = isRecoverableGrant ? t('Share') : t('Share & Earn')
+
+  if (isProjectOwner) {
+    return <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} flexShrink={0} />
+  }
+
+  return (
+    <>
+      <HStack spacing={2} flexShrink={0}>
+        <ReportProjectButton />
+        <Tooltip label={shareLabel}>
+          <IconButton
+            aria-label={shareLabel}
+            icon={<PiArrowsClockwiseBold />}
+            variant="soft"
+            colorScheme="neutral1"
+            size="md"
+            onClick={onOpen}
+          />
+        </Tooltip>
+        <FollowButton project={project} size="md" tooltipLabel={t('Follow')} />
+      </HStack>
+      <ProjectShareModal isOpen={isOpen} onClose={onClose} projectId={project.id} title={project.title} />
+    </>
+  )
+}
+
+const ReportProjectButton = () => {
+  return (
+    <Tooltip label={t('Report')}>
+      <IconButton
+        aria-label={t('Report')}
+        as={ChakraLink}
+        href={REPORT_PROJECT_AIRTABLE_URL}
+        isExternal
+        icon={<PiFlag />}
+        variant="soft"
+        colorScheme="neutral1"
+        size="md"
+      />
+    </Tooltip>
+  )
+}
+
+const ProjectHeaderTags = () => {
+  const { project } = useProjectAtom()
+  const { fieldPartner, isRecoverableGrant } = project as typeof project & {
+    fieldPartner?: { username?: string | null } | null
+    isRecoverableGrant?: boolean
+  }
+  const locationLabel = [project.location?.country?.name, project.location?.region].filter(Boolean).join(', ')
+
+  const labels = [
+    isRecoverableGrant && fieldPartner?.username
+      ? {
+          label: t('Facilitated by {{fieldPartnerName}}', { fieldPartnerName: fieldPartner.username }),
+          variant: 'facilitated',
+        }
+      : null,
+    !isRecoverableGrant && project.category
+      ? { label: ProjectCategoryLabel[project.category], variant: 'category' }
+      : null,
+    !isRecoverableGrant && project.subCategory
+      ? { label: ProjectSubCategoryLabel[project.subCategory], variant: 'category' }
+      : null,
+    locationLabel ? { label: locationLabel, variant: 'location' } : null,
+    project.launchedAt
+      ? {
+          label: t('Launched: {{date}}', {
+            date: DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy'),
+          }),
+          variant: 'tag',
+        }
+      : null,
+    ...(project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' })),
+  ].filter((label): label is { label: string; variant: 'category' | 'facilitated' | 'location' | 'tag' } =>
+    Boolean(label),
+  )
+
+  const uniqueLabels = [...new Map(labels.map((tag) => [tag.label, tag])).values()]
+
+  if (uniqueLabels.length === 0) {
+    return null
+  }
+
+  return (
+    <HStack flexWrap="wrap" gap={2} paddingTop={1}>
+      {uniqueLabels.map((tag) => (
+        <Badge
+          key={tag.label}
+          borderRadius="full"
+          paddingX={2.5}
+          paddingY={1}
+          textTransform="none"
+          fontWeight="medium"
+          backgroundColor={
+            tag.variant === 'category' ? 'warning.1' : tag.variant === 'facilitated' ? 'neutral1.3' : 'neutral1.1'
+          }
+          color={tag.variant === 'category' ? 'warning.11' : 'neutral1.10'}
+          border="1px solid"
+          borderColor={
+            tag.variant === 'category' ? 'warning.3' : tag.variant === 'facilitated' ? 'neutral1.3' : 'neutral1.6'
+          }
+        >
+          {tag.variant === 'location' && <Icon as={PiMapPin} mr={1} verticalAlign="text-bottom" />}
+          {tag.label}
+        </Badge>
+      ))}
+    </HStack>
   )
 }
 
@@ -319,7 +405,12 @@ export const Header = () => {
         )}
 
         {projectImages.length > 1 && <MediaCarousel altText={'Project header image'} links={projectImages} />}
-        <HeaderDetails onOpen={onOpen} summaryLoading={summaryLoading} summaryError={Boolean(summaryError)} />
+        <HeaderDetails
+          onOpen={onOpen}
+          summaryLoading={summaryLoading}
+          summaryError={Boolean(summaryError)}
+          isProjectOwner={isProjectOwner}
+        />
         {isMobile && !hideProjectAmount && <MobileBalanceInfo />}
       </CardLayout>
     </>

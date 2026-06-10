@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
-import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
@@ -221,7 +221,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           <Tooltip
             label={
               isWithdrawDisabled
-                ? t('{{amount}} USD minimum required to withdraw.', { amount: MIN_BITCOIN_PAYOUT_USD })
+                ? t('{{amount}} sats minimum required to withdraw.', {
+                    amount: MIN_BITCOIN_PAYOUT_SATS_FORMATTED,
+                  })
                 : ''
             }
             isDisabled={!isWithdrawDisabled}

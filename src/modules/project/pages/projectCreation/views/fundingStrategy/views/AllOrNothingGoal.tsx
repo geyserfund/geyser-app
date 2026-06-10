@@ -72,7 +72,7 @@ export const AllOrNothingGoal = () => {
 
   const backButtonProps = {
     onClick() {
-      navigate(getPath('launchFundingStrategy', project.id))
+      navigate(getPath('launchProjectDetails', project.id))
     },
   }
 

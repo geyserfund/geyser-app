@@ -1,17 +1,18 @@
 import { t } from 'i18next'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import {
   PaymentStatus,
+  UserWalletWithdrawStatus,
   useUserWalletWithdrawActiveQuery,
   useUserWalletWithdrawLatestQuery,
-  UserWalletWithdrawStatus,
 } from '@/types/index.ts'
 
 /** One PRISM unit is represented as 10,000,000,000 sats on Rootstock. */
 const SATS_PER_PRISM_UNIT = 10000000000n
+const MIN_BITCOIN_PAYOUT_SATS_BIGINT = BigInt(MIN_BITCOIN_PAYOUT_SATS)
 const ACTIVE_STATUSES = [UserWalletWithdrawStatus.Pending, UserWalletWithdrawStatus.Processing]
 
 type UseUserWalletWithdrawStateParams = {
@@ -49,8 +50,7 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
   const withdrawableSats = withdrawable ? withdrawable / SATS_PER_PRISM_UNIT : 0n
   const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats)
   const withdrawableUsd = withdrawableUsdCents / 100
-  const minPayoutCents = MIN_BITCOIN_PAYOUT_USD * 100
-  const isBelowMinimumWithdrawal = withdrawableUsdCents > 0 && withdrawableUsdCents < minPayoutCents
+  const isBelowMinimumWithdrawal = withdrawableSats > 0n && withdrawableSats < MIN_BITCOIN_PAYOUT_SATS_BIGINT
 
   const activeWithdraw = activeData?.userWalletWithdrawActive?.userWalletWithdraw
   const latestWithdraw = latestData?.userWalletWithdrawLatest?.userWalletWithdraw
@@ -62,8 +62,7 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
     latestWithdraw?.status === UserWalletWithdrawStatus.Failed &&
     latestWithdrawPayment?.status === PaymentStatus.Refunded
   const hasActiveWithdraw = Boolean(activeWithdraw && ACTIVE_STATUSES.includes(activeWithdraw.status))
-  const canWithdraw =
-    !hasActiveWithdraw && (withdrawableUsdCents >= minPayoutCents || hasRetryableWithdraw)
+  const canWithdraw = !hasActiveWithdraw && (withdrawableSats >= MIN_BITCOIN_PAYOUT_SATS_BIGINT || hasRetryableWithdraw)
   const isWithdrawStateLoading = isActiveLoading || isLatestLoading
   const withdrawButtonLabel = hasRetryableWithdraw ? t('Retry') : t('Withdraw')
 

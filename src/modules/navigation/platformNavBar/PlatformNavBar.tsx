@@ -27,7 +27,6 @@ import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
-  isPlatformNavShadowRouteAtom,
   isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
@@ -43,7 +42,6 @@ export const PlatformNavBar = () => {
   const creatorNavScrollThreshold = 20
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
-  const defaultNavShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
   const landingButtonSurface = useColorModeValue('white', 'neutral1.3')
   const landingButtonForeground = useColorModeValue('black', 'white')
   const landingButtonBorder = useColorModeValue('black', 'neutral1.6')
@@ -64,7 +62,6 @@ export const PlatformNavBar = () => {
   const isAmbassadorProgramPage = useIsAmbassadorProgramPage()
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
-  const isPlatformNavShadowRoute = useAtomValue(isPlatformNavShadowRouteAtom)
   const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
   const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
   const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
@@ -160,7 +157,6 @@ export const PlatformNavBar = () => {
     !isProjectDashboardRoutes &&
     !isMobileMode
   const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
-  const navShadow = isCreatorTransparentNav ? 'none' : isPlatformNavShadowRoute ? defaultNavShadow : 'none'
   const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
 
   const renderRightSide = useCallback(() => {
@@ -263,8 +259,8 @@ export const PlatformNavBar = () => {
       justifyContent={'center'}
       zIndex={99}
       bgColor={navBackgroundColor}
-      boxShadow={navShadow}
-      transition="background-color 0.25s ease, box-shadow 0.25s ease"
+      boxShadow="none"
+      transition="background-color 0.25s ease"
     >
       <VStack
         paddingTop={{ base: 3, lg: 5 }}
