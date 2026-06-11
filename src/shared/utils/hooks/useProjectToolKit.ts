@@ -34,10 +34,13 @@ export const useProjectToolkit = (
   const getProjectBalance = () => {
     const isAonFinalized = isAon && project.aonGoal?.status && isAonFinalizedStatuses.includes(project.aonGoal?.status)
     if (isAon && !isAonFinalized && project.aonGoal) {
+      const sats = project.aonGoal.balance ?? project.balance
+      const useProjectUsd = project.aonGoal.balance == null
+
       return {
-        sats: project.aonGoal.balance,
-        usdCents: getUSDCentsAmount(project.aonGoal.balance as Satoshis),
-        usd: getUSDCentsAmount(project.aonGoal.balance as Satoshis),
+        sats,
+        usdCents: useProjectUsd ? project.balanceUsdCent : getUSDCentsAmount(sats as Satoshis),
+        usd: useProjectUsd ? centsToDollars(project.balanceUsdCent) : getUSDCentsAmount(sats as Satoshis),
       }
     }
 
