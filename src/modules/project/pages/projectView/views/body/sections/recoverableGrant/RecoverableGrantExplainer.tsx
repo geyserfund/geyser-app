@@ -31,7 +31,7 @@ export const RecoverableGrantExplainer = () => {
             {t('Same sats, more impact.')}
           </Body>{' '}
           {t(
-            'This project is a recoverable grant. The recipient will return the funds fully or in part. Returned funds are sent to the',
+            'This project is a recoverable grant. The recipient may return the funds fully or in part through community agreements. Returned funds are sent to the',
           )}{' '}
           <ChakraLink as={Link} to={IMPACT_FUND_PATH} textDecoration="underline">
             {t('Bitcoin Adoption Impact Fund')}

@@ -1,10 +1,14 @@
-import { Box, Button, Flex, HStack, SimpleGrid, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
-import { ImpactFundsDonatePreferencesModal } from '@/modules/impactFunds/components/mainPage/ImpactFundsDonatePreferencesModal.tsx'
+import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
+import {
+  type ImpactFundDonateModalOpenOptions,
+  WORKSHOPS_OPERATIONS_CATEGORY_ID,
+} from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -12,7 +16,10 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles/index.ts'
-import { useImpactFundsQuery } from '@/types'
+
+const openWorkshopsDonateOptions: ImpactFundDonateModalOpenOptions = {
+  defaultCategoryIds: [WORKSHOPS_OPERATIONS_CATEGORY_ID],
+}
 
 const WORKSHOP_HERO_IMAGE_URL =
   'https://app.paper.design/file-assets/01KT2DBTZTEZXFBD7X82K0GAKQ/01KT9B8FMANZ6KR4BJWZ6F7W0V.jpg'
@@ -49,8 +56,8 @@ type WorkshopColors = {
 }
 
 export const ImpactFundsWorkshopsPage = () => {
-  const donateModal = useDisclosure()
-  const { data } = useImpactFundsQuery()
+  const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
+  const onDonateClick = () => openDonateModal(openWorkshopsDonateOptions)
   const colors: WorkshopColors = {
     pageBg: useColorModeValue('white', 'utils.pbg'),
     surfaceBg: useColorModeValue('white', 'neutral1.3'),
@@ -60,7 +67,7 @@ export const ImpactFundsWorkshopsPage = () => {
     secondaryText: useColorModeValue('#626872', 'neutral1.10'),
     borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
     accentText: useColorModeValue('#3F8F7C', 'primary1.200'),
-    amberBg: useColorModeValue('#F09A34', 'amber.400'),
+    amberBg: useColorModeValue('#F09A34', 'amber.9'),
   }
 
   return (
@@ -74,15 +81,11 @@ export const ImpactFundsWorkshopsPage = () => {
         url={`https://geyser.fund${getPath('discoveryImpactFundsWorkshops')}`}
       />
 
-      <ImpactFundsDonatePreferencesModal
-        isOpen={donateModal.isOpen}
-        onClose={donateModal.onClose}
-        impactFunds={data?.impactFunds || []}
-      />
+      {donateModalElement}
 
       <VStack align="stretch" spacing={0} bg={colors.pageBg} color={colors.primaryText} w="full">
         <WorkshopBreadcrumb colors={colors} />
-        <HeroSection colors={colors} onDonateClick={donateModal.onOpen} />
+        <HeroSection colors={colors} onDonateClick={onDonateClick} />
         <PageSection colors={colors}>
           <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 10 }}>
             <VStack align="flex-start" spacing={4}>
@@ -192,7 +195,7 @@ export const ImpactFundsWorkshopsPage = () => {
               colors={colors}
               title="Fund a local workshop."
               buttonText="Donate"
-              onClick={donateModal.onOpen}
+              onClick={onDonateClick}
             />
           </SimpleGrid>
         </PageSection>

@@ -1,15 +1,17 @@
-import { Box, Button, Flex, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
+import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
+import { VideoPlayer } from '@/shared/molecules/VideoPlayer.tsx'
 import { standardPadding } from '@/shared/styles/index.ts'
 
 type RecoverableGrantsColors = {
@@ -36,16 +38,15 @@ const radius = {
 
 const RECOVERABLE_GRANTS_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-hero.png'
-const AFRIBIT_RECOVERABLE_GRANT_COHORT_IMAGE_URL =
-  'https://storage.googleapis.com/geyser-media/impact-funds/afribit-recoverable-grant-cohort-lady.png'
+const AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL = 'https://youtu.be/pU1KxP0ddng'
 
 const t = (value: string) => value
 
 const infoPills = ['0% interest', 'No debt obligation', 'Capital reused locally'] as const
 
 const modelIssues = [
-  'Loan sharks and exploitative informal debt',
-  'Debt shaming and trauma from lack of repayment',
+  'Predatory informal debt and exploitative capital traps',
+  'Debt shaming and trauma when capital does not return',
   'Outside funders lack trusted local context',
 ] as const
 
@@ -76,17 +77,17 @@ const flowSteps: readonly FlowStepItem[] = [
   },
   {
     number: '4',
-    title: 'Repayment loop',
-    description: 'Capital returns and funds the next project',
+    title: 'Capital return loop',
+    description: 'Returned capital funds the next project',
     isGold: true,
   },
 ]
 
 const faqItems = [
   {
-    question: 'How is repayment handled without debt enforcement?',
+    question: 'How is capital return handled without debt enforcement?',
     answer:
-      'Repayment is supported through social contracts, field-partner follow-up, and chama accountability rather than legal debt collection.',
+      'Capital return is supported through community agreements, field-partner follow-up, and chama accountability rather than legal debt collection.',
   },
   {
     question: 'Who can start a recoverable grants program?',
@@ -103,7 +104,8 @@ const faqItems = [
 const relatedResources = ['Field Partner Program', 'Impact Fund Reports', 'Afribit Kibera Case Study'] as const
 
 export const RecoverableGrantsPage = () => {
-  const { onDonateClick, donateModalElement } = useImpactFundsDonateModal()
+  const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
+  const onDonateClick = () => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })
   const colors: RecoverableGrantsColors = {
     pageBg: useColorModeValue('white', 'utils.pbg'),
     ink: useColorModeValue('#17120C', 'neutral1.12'),
@@ -126,7 +128,7 @@ export const RecoverableGrantsPage = () => {
       <Head
         title={t('Recoverable Grants')}
         description={t(
-          'Reusable capital for trusted local economies through 0% interest, debt-free Bitcoin grants and local field-partner validation.',
+          'Reusable capital for trusted local economies through debt-free recoverable grant capital and local field-partner validation.',
         )}
         image={RECOVERABLE_GRANTS_HERO_IMAGE_URL}
         url={`https://geyser.fund${getPath('discoveryRecoverableGrants')}`}
@@ -151,7 +153,7 @@ export const RecoverableGrantsPage = () => {
               >
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'Recoverable grants fund local entrepreneurs with 0% interest and no debt obligation. When capital is repaid through social contracts, it can be deployed again in the same circular economy.',
+                    'Recoverable grants fund local entrepreneurs with debt-free recoverable grant capital and no debt obligation. When capital returns through community agreements, it can be deployed again in the same circular economy.',
                   )}
                 </Body>
                 <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3} pt={2}>
@@ -173,7 +175,7 @@ export const RecoverableGrantsPage = () => {
               <InfoCard colors={colors} eyebrow="02 Why recoverable grants" title="Why this model matters">
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'It reduces dependence on loan sharks, opens fairer access to capital, and lets trusted local partners decide who is ready.',
+                    'It reduces dependence on predatory informal debt, opens fairer access to capital, and lets trusted local partners decide who is ready.',
                   )}
                 </Body>
                 <VStack align="stretch" spacing={3} pt={2}>
@@ -201,7 +203,7 @@ export const RecoverableGrantsPage = () => {
             </H2>
             <Body color={colors.muted} maxW="670px" lineHeight="27px" mt={3}>
               {t(
-                'Geyser provides the capital pool and operating format. Field partners source projects, manage local operations, and support repayment through chamas and social accountability.',
+                'Geyser provides the capital pool and operating format. Field partners source projects, manage local operations, and support capital return through chamas and community agreements.',
               )}
             </Body>
             <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={4} mt={6}>
@@ -218,7 +220,7 @@ export const RecoverableGrantsPage = () => {
             </H2>
             <Body color={colors.muted} maxW="690px" lineHeight="27px" mt={3}>
               {t(
-                "In Kibera, recoverable grants are already being piloted through Afribit's trusted local network, borrower validation, and repayment follow-up.",
+                "In Kibera, recoverable grants are already being piloted through Afribit's trusted local network, participant validation, and capital return follow-up.",
               )}
             </Body>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} templateColumns={{ lg: '1.35fr 1fr' }} mt={6}>
@@ -283,7 +285,7 @@ export const RecoverableGrantsPage = () => {
                   {t('Geyser is currently supporting field-partner operations while the model is tested')}
                 </Body>
                 <Body bold lineHeight="27px">
-                  {t('Quarterly reports will share progress, repayment patterns, and pilot learning')}
+                  {t('Quarterly reports will share progress, capital return patterns, and pilot learning')}
                 </Body>
                 <Box
                   bg={colors.cream}
@@ -560,7 +562,7 @@ const HeroSection = ({
         </H1>
         <Body size={{ base: 'md', lg: 'lg' }} color="whiteAlpha.900" lineHeight={{ base: '26px', lg: '28px' }}>
           {t(
-            'Recoverable grants bring 0% interest, debt-free Bitcoin capital to local entrepreneurs through trusted field partners and reusable repayment loops.',
+            'Recoverable grants bring debt-free recoverable grant capital to local entrepreneurs through trusted field partners and reusable capital return loops.',
           )}
         </Body>
         <HStack spacing={3} flexWrap="wrap" pt="8px">
@@ -707,28 +709,16 @@ const CaseStudyCard = ({ colors }: { colors: RecoverableGrantsColors }) => (
       <Eyebrow colors={colors} color={colors.gold}>
         Pilot snapshot
       </Eyebrow>
-      <Box position="relative" overflow="hidden" borderRadius={radius.card}>
-        <Image
-          src={AFRIBIT_RECOVERABLE_GRANT_COHORT_IMAGE_URL}
-          alt={t('Afribit Kibera recoverable grant cohort')}
-          w="full"
-          h={{ base: '280px', lg: '370px' }}
-          objectFit="cover"
-          borderRadius={radius.card}
-        />
-        <Box position="absolute" inset={0} bg="linear-gradient(0deg, rgba(0,0,0,0.64), rgba(0,0,0,0.05))" />
-        <H3
-          position="absolute"
-          left={5}
-          bottom={5}
-          maxW="360px"
-          size={{ base: '28px', lg: '34px' }}
-          lineHeight={{ base: '34px', lg: '40px' }}
-          bold
-          color="white"
-        >
-          {t('Afribit Kibera recoverable grant cohort')}
-        </H3>
+      <H3
+        size={{ base: '28px', lg: '34px' }}
+        lineHeight={{ base: '34px', lg: '40px' }}
+        bold
+        color="white"
+      >
+        {t('Afribit Kibera recoverable grant cohort')}
+      </H3>
+      <Box overflow="hidden" borderRadius={radius.card}>
+        <VideoPlayer url={AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL} />
       </Box>
       <Box
         bg={colors.cream}
@@ -740,7 +730,7 @@ const CaseStudyCard = ({ colors }: { colors: RecoverableGrantsColors }) => (
       >
         <Body bold lineHeight="25px">
           {t(
-            'Local trust, borrower validation, and monthly follow-up keep capital accountable without formal debt enforcement.',
+            'Local trust, participant validation, and monthly follow-up keep capital accountable without formal debt enforcement.',
           )}
         </Body>
       </Box>

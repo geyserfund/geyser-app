@@ -4,21 +4,23 @@ import {
   Button,
   Flex,
   HStack,
+  Icon,
   Image,
   SimpleGrid,
   useColorModeValue,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
+import { PiArrowRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { ImpactFundsDonatePreferencesModal } from '@/modules/impactFunds/components/mainPage/ImpactFundsDonatePreferencesModal.tsx'
+import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '@/modules/impactFunds/utils/constants.ts'
+import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
@@ -69,6 +71,19 @@ type SectionColors = {
   surfaceBg: string
   mutedSurfaceBg: string
   darkSurfaceBg: string
+  emphasisCardBg: string
+  emphasisCardBorder: string
+  emphasisCardText: string
+  emphasisCardMutedText: string
+  emphasisCardEyebrow: string
+  emphasisCardAccent: string
+  emphasisCardMetric: string
+  emphasisCardButtonBg: string
+  emphasisCardButtonText: string
+  sponsorTileBg: string
+  sponsorLogoBackdrop: string
+  surfaceActionButtonBg: string
+  surfaceActionButtonText: string
   primaryText: string
   secondaryText: string
   mutedText: string
@@ -77,6 +92,7 @@ type SectionColors = {
   accentBg: string
   amberBg: string
   amberText: string
+  amberLinkHover: string
 }
 
 const howItWorksSteps = [
@@ -93,7 +109,7 @@ const howItWorksSteps = [
   {
     label: '03 Allocate',
     title: 'Sats enter the ecosystem and enable grassroots impact',
-    description: 'Recoverable grants help projects grow, repay, and keep capital circulating.',
+    description: 'Recoverable grants help projects grow, return capital, and keep sats circulating.',
   },
 ] as const
 
@@ -131,7 +147,7 @@ const resourceCards = {
 
 /** Main landing page for browsing live Impact Funds and understanding how the program works. */
 export const ImpactFundsMainPage = () => {
-  const donateModal = useDisclosure()
+  const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
   const [isShowingAllPartners, setIsShowingAllPartners] = useState(false)
   const { data } = useImpactFundsQuery()
   const { data: fieldPartnerProjectsData } = useImpactFundsFieldPartnerLeaderboardProjectsQuery({
@@ -148,17 +164,31 @@ export const ImpactFundsMainPage = () => {
 
   const colors: SectionColors = {
     pageBg: useColorModeValue('white', 'utils.pbg'),
-    surfaceBg: useColorModeValue('white', 'neutral1.3'),
-    mutedSurfaceBg: useColorModeValue('#F5F6F6', 'neutral1.3'),
-    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.1'),
+    surfaceBg: useColorModeValue('white', 'neutral1.4'),
+    mutedSurfaceBg: useColorModeValue('#F5F6F6', 'neutral1.2'),
+    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.2'),
+    emphasisCardBg: useColorModeValue('#17120C', 'neutral1.5'),
+    emphasisCardBorder: useColorModeValue('transparent', 'neutral1.6'),
+    emphasisCardText: useColorModeValue('white', 'neutral1.12'),
+    emphasisCardMutedText: useColorModeValue('whiteAlpha.800', 'neutral1.11'),
+    emphasisCardEyebrow: useColorModeValue('whiteAlpha.800', 'neutral1.10'),
+    emphasisCardAccent: useColorModeValue('#00E0B0', 'primary1.300'),
+    emphasisCardMetric: useColorModeValue('#F09A34', 'amber.9'),
+    emphasisCardButtonBg: useColorModeValue('white', 'neutral1.12'),
+    emphasisCardButtonText: useColorModeValue('black', 'neutral1.1'),
+    sponsorTileBg: useColorModeValue('white', 'neutral1.5'),
+    sponsorLogoBackdrop: useColorModeValue('white', 'neutral1.12'),
+    surfaceActionButtonBg: useColorModeValue('#17120C', 'neutral1.12'),
+    surfaceActionButtonText: useColorModeValue('white', 'neutral1.1'),
     primaryText: useColorModeValue('black', 'neutral1.12'),
     secondaryText: useColorModeValue('#626872', 'neutral1.10'),
     mutedText: useColorModeValue('#626872', 'neutral1.9'),
     borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
     accentText: useColorModeValue('#3F8F7C', 'primary1.200'),
     accentBg: useColorModeValue('#00E0B0', 'primary1.500'),
-    amberBg: useColorModeValue('#F09A34', 'amber.400'),
+    amberBg: useColorModeValue('#F09A34', 'amber.9'),
     amberText: useColorModeValue('black', 'neutral1.1'),
+    amberLinkHover: useColorModeValue('#17120C', 'neutral1.1'),
   }
 
   const impactFunds = data?.impactFunds || []
@@ -231,14 +261,10 @@ export const ImpactFundsMainPage = () => {
     <>
       {pageHead}
 
-      <ImpactFundsDonatePreferencesModal
-        isOpen={donateModal.isOpen}
-        onClose={donateModal.onClose}
-        impactFunds={impactFunds}
-      />
+      {donateModalElement}
 
       <PageShell colors={colors}>
-        <HeroSection colors={colors} onDonateClick={donateModal.onOpen} />
+        <HeroSection colors={colors} onDonateClick={() => openDonateModal()} />
         <AboutSection colors={colors} />
         <HowItWorksSection colors={colors} />
         <LeaderboardSection
@@ -254,7 +280,10 @@ export const ImpactFundsMainPage = () => {
           partnerFund={latinAmericaImpactFund}
           getFundAmountDisplay={getFundAmountDisplay}
         />
-        <CommitmentSection colors={colors} onDonateClick={donateModal.onOpen} />
+        <CommitmentSection
+          colors={colors}
+          onDonateClick={() => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })}
+        />
         <ResourcesSection colors={colors} />
         <FooterSection />
       </PageShell>
@@ -564,7 +593,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
             </Body>
             <Body size="md" lineHeight="27px" color={colors.secondaryText}>
               {t(
-                "They reduce distance, increase trust, help projects launch and promote campaigns, then support recoverable grants that can be repaid and redeployed where it's most needed.",
+                "They reduce distance, increase trust, help projects launch and promote campaigns, then support recoverable grants whose capital can return and be redeployed where it's most needed.",
               )}
             </Body>
           </VStack>
@@ -577,18 +606,18 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
               align="flex-start"
               justify="center"
               spacing="6px"
-              bg={stat.isDark ? colors.darkSurfaceBg : colors.mutedSurfaceBg}
+              bg={stat.isDark ? colors.emphasisCardBg : colors.mutedSurfaceBg}
               borderWidth="1px"
-              borderColor={stat.isDark ? colors.darkSurfaceBg : colors.borderColor}
+              borderColor={stat.isDark ? colors.emphasisCardBorder : colors.borderColor}
               borderRadius="8px"
               px="22px"
               py="20px"
               minH="126px"
             >
-              <Body size="30px" lineHeight="34px" bold color={stat.isDark ? colors.accentBg : topSectionTextColor}>
+              <Body size="30px" lineHeight="34px" bold color={stat.isDark ? colors.emphasisCardMetric : topSectionTextColor}>
                 {stat.value}
               </Body>
-              <Body size="sm" lineHeight="20px" medium color={stat.isDark ? 'white' : statMutedTextColor}>
+              <Body size="sm" lineHeight="20px" medium color={stat.isDark ? colors.emphasisCardMutedText : statMutedTextColor}>
                 {t(stat.label)}
               </Body>
             </VStack>
@@ -848,16 +877,24 @@ const SponsorsAndFundsSection = ({
           <SimpleGrid
             columns={{ base: 1, sm: 2, xl: 4 }}
             spacing={4}
-            bg={colors.surfaceBg}
+            bg={colors.mutedSurfaceBg}
             borderWidth="1px"
             borderColor={colors.borderColor}
             borderRadius="8px"
             p={{ base: 5, lg: 8 }}
             minH={{ base: 'auto', lg: '230px' }}
           >
-            {sponsors.slice(0, 10).map((sponsor) => (
-              <SponsorTile key={sponsor.id} sponsor={sponsor} colors={colors} />
-            ))}
+            {sponsors.length === 0 ? (
+              <Flex align="center" justify="center" gridColumn="1 / -1" minH={{ base: '120px', lg: '150px' }}>
+                <Body size="md" lineHeight="26px" color={colors.mutedText} textAlign="center" maxW="420px">
+                  {t('Partner sponsors will appear here as funds grow.')}
+                </Body>
+              </Flex>
+            ) : (
+              sponsors.slice(0, 10).map((sponsor) => (
+                <SponsorTile key={sponsor.id} sponsor={sponsor} colors={colors} />
+              ))
+            )}
           </SimpleGrid>
         </VStack>
         <VStack align="stretch" spacing={5}>
@@ -867,23 +904,36 @@ const SponsorsAndFundsSection = ({
             to={partnerFundPath}
             align="stretch"
             justify="space-between"
-            bg={colors.darkSurfaceBg}
+            bg={colors.emphasisCardBg}
+            borderWidth="1px"
+            borderColor={colors.emphasisCardBorder}
             borderRadius="8px"
             p={{ base: 7, lg: 9 }}
             minH={{ base: '260px', lg: '236px' }}
             _hover={{ textDecoration: 'none' }}
           >
             <VStack align="flex-start" spacing={3}>
-              <H3 size={{ base: '30px', lg: '33px' }} lineHeight={{ base: '36px', lg: '39px' }} bold color="white">
+              <H3
+                size={{ base: '30px', lg: '33px' }}
+                lineHeight={{ base: '36px', lg: '39px' }}
+                bold
+                color={colors.emphasisCardText}
+              >
                 {partnerFund?.title || t('Latin America Bitcoin Impact Fund')}
               </H3>
-              <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '28px' }} color="whiteAlpha.800">
-                {t('Additional partner funds can be routed through local Field Partners and recoverable grants.')}
+              <Body
+                size={{ base: 'md', lg: '18px' }}
+                lineHeight={{ base: '26px', lg: '28px' }}
+                color={colors.emphasisCardMutedText}
+              >
+                {t(
+                  'Additional partner funds can be routed through local Field Partners and debt-free recoverable grant capital.',
+                )}
               </Body>
             </VStack>
             <HStack justify="space-between" align="flex-end" pt={4}>
-              <Eyebrow color={colors.accentBg}>{t('LABIF')}</Eyebrow>
-              <Body size="24px" lineHeight="28px" bold color={colors.amberBg}>
+              <Eyebrow color={colors.emphasisCardAccent}>{t('LABIF')}</Eyebrow>
+              <Body size="24px" lineHeight="28px" bold color={colors.emphasisCardMetric}>
                 {partnerFund ? getFundAmountDisplay(partnerFund) : '$140,000'}
               </Body>
             </HStack>
@@ -907,10 +957,20 @@ const SponsorTile = ({ sponsor, colors }: { sponsor: SponsorListItem; colors: Se
     borderRadius="8px"
     h={{ base: '58px', lg: '68px' }}
     px={4}
-    bg={colors.surfaceBg}
+    bg={colors.sponsorTileBg}
   >
     {sponsor.image ? (
-      <Image src={sponsor.image} alt={sponsor.name} maxH="38px" maxW="160px" objectFit="contain" />
+      <Flex
+        align="center"
+        justify="center"
+        bg={colors.sponsorLogoBackdrop}
+        borderRadius="6px"
+        px={3}
+        py={2}
+        maxW="full"
+      >
+        <Image src={sponsor.image} alt={sponsor.name} maxH="38px" maxW="160px" objectFit="contain" />
+      </Flex>
     ) : (
       <Body size={{ base: 'md', lg: '20px' }} lineHeight="24px" bold color={colors.primaryText} textAlign="center">
         {sponsor.name}
@@ -953,7 +1013,7 @@ const CommitmentSection = ({ colors, onDonateClick }: { colors: SectionColors; o
             bold
             color={colors.amberText}
             textDecoration="underline"
-            _hover={{ color: colors.darkSurfaceBg }}
+            _hover={{ color: colors.amberLinkHover }}
           >
             {t('Learn about recoverable grants')}
           </Body>
@@ -961,25 +1021,33 @@ const CommitmentSection = ({ colors, onDonateClick }: { colors: SectionColors; o
         <VStack
           align="stretch"
           spacing={{ base: 5, lg: 6 }}
-          bg={colors.darkSurfaceBg}
+          bg={colors.emphasisCardBg}
+          borderWidth="1px"
+          borderColor={colors.emphasisCardBorder}
           borderRadius="8px"
           p={{ base: 6, lg: 8 }}
           w={{ base: 'full', lg: '370px' }}
           justify="center"
           flexShrink={0}
         >
-          <Eyebrow color="whiteAlpha.800">{t('GEYSER Quarterly pool')}</Eyebrow>
-          <H3 size={{ base: '48px', lg: '56px' }} lineHeight={{ base: '52px', lg: '60px' }} bold color="white">
+          <Eyebrow color={colors.emphasisCardEyebrow}>{t('GEYSER Quarterly pool')}</Eyebrow>
+          <H3
+            size={{ base: '48px', lg: '56px' }}
+            lineHeight={{ base: '52px', lg: '60px' }}
+            bold
+            color={colors.emphasisCardText}
+          >
             {t('3M sats')}
           </H3>
           <Button
             h="54px"
             borderRadius="8px"
-            bg={colors.surfaceBg}
-            color={colors.primaryText}
+            bg={colors.emphasisCardButtonBg}
+            color={colors.emphasisCardButtonText}
             fontSize={{ base: 'md', lg: '18px' }}
             fontWeight="900"
             onClick={onDonateClick}
+            _hover={{ bg: colors.emphasisCardButtonBg, opacity: 0.92 }}
           >
             {t('Donate to Impact Fund')}
           </Button>
@@ -1025,12 +1093,12 @@ const CommitmentSection = ({ colors, onDonateClick }: { colors: SectionColors; o
           h="54px"
           borderRadius="8px"
           px={8}
-          bg={colors.darkSurfaceBg}
-          color="white"
+          bg={colors.surfaceActionButtonBg}
+          color={colors.surfaceActionButtonText}
           fontSize={{ base: 'md', lg: '18px' }}
           fontWeight="900"
           flexShrink={0}
-          _hover={{ bg: colors.darkSurfaceBg }}
+          _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
         >
           {t('Apply to become a Field Partner')}
         </Button>
@@ -1050,14 +1118,14 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
       >
         <VStack align="flex-start" spacing={{ base: 4, lg: 5 }}>
           <Eyebrow color={colors.accentBg}>{t('Resources')}</Eyebrow>
-          <H2 size={{ base: '40px', lg: '56px' }} lineHeight={{ base: '46px', lg: '64px' }} bold color="white">
+          <H2 size={{ base: '40px', lg: '56px' }} lineHeight={{ base: '46px', lg: '64px' }} bold color={colors.emphasisCardText}>
             {t('Learn how local impact gets built')}
           </H2>
         </VStack>
         <Body
           size={{ base: 'md', lg: '22px' }}
           lineHeight={{ base: '26px', lg: '32px' }}
-          color="whiteAlpha.800"
+          color={colors.emphasisCardMutedText}
           maxW="430px"
         >
           {t('Case studies prove the model. Reports show results. Guides help you act.')}
@@ -1065,7 +1133,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
       </Flex>
 
       <VStack align="stretch" spacing={{ base: 5, lg: 7 }}>
-        <H3 size={{ base: '32px', lg: '40px' }} lineHeight={{ base: '38px', lg: '46px' }} bold color="white">
+        <H3 size={{ base: '32px', lg: '40px' }} lineHeight={{ base: '38px', lg: '46px' }} bold color={colors.emphasisCardText}>
           {t('Case Studies')}
         </H3>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }}>
@@ -1085,7 +1153,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
       </VStack>
 
       <VStack align="stretch" spacing={{ base: 5, lg: 7 }}>
-        <H3 size={{ base: '32px', lg: '40px' }} lineHeight={{ base: '38px', lg: '46px' }} bold color="white">
+        <H3 size={{ base: '32px', lg: '40px' }} lineHeight={{ base: '38px', lg: '46px' }} bold color={colors.emphasisCardText}>
           {t('Workshops')}
         </H3>
         <SimpleGrid columns={{ base: 1, xl: 2 }} spacing={{ base: 5, lg: 6 }} templateColumns={{ xl: '1.8fr 1fr' }}>
@@ -1096,14 +1164,14 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
 
       <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
         <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={{ base: 5, lg: 6 }}>
-          <H3 size={{ base: '32px', lg: '38px' }} lineHeight={{ base: '38px', lg: '44px' }} bold color="white">
+          <H3 size={{ base: '32px', lg: '38px' }} lineHeight={{ base: '38px', lg: '44px' }} bold color={colors.emphasisCardText}>
             {t('Impact Reports')}
           </H3>
           <H3
             size={{ base: '32px', lg: '38px' }}
             lineHeight={{ base: '38px', lg: '44px' }}
             bold
-            color="white"
+            color={colors.emphasisCardText}
             gridColumn={{ base: 'auto', lg: 'span 2' }}
           >
             {t('Guides')}
@@ -1178,6 +1246,19 @@ const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
       <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={colors.secondaryText}>
         {t(AFRIBIT_WORKSHOP_DESCRIPTION)}
       </Body>
+      <HStack
+        as={Link}
+        to={getPath('discoveryRecoverableGrantsAfribitCaseStudy')}
+        spacing={1.5}
+        color="#E75E4F"
+        textDecoration="underline"
+        _hover={{ color: colors.primaryText, textDecoration: 'underline' }}
+      >
+        <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} bold>
+          {t('See Afribit case study')}
+        </Body>
+        <Icon as={PiArrowRightBold} boxSize={4} />
+      </HStack>
     </VStack>
   </Flex>
 )
@@ -1205,10 +1286,11 @@ const WorkshopResourcesCard = ({ colors }: { colors: SectionColors }) => (
       to={getPath('discoveryImpactFundsWorkshops')}
       h="52px"
       borderRadius="innerCard"
-      bg={colors.darkSurfaceBg}
-      color="white"
+      bg={colors.surfaceActionButtonBg}
+      color={colors.surfaceActionButtonText}
       fontSize="md"
       fontWeight="900"
+      _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
     >
       {t('Open workshop resources')}
     </Button>

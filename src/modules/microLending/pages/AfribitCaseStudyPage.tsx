@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
+import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -44,7 +45,7 @@ const scrollToChamaModel = () => {
   document.getElementById(CHAMA_MODEL_SECTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-const tags = ['0% interest', 'social collateral', 'local guarantor', 'reusable capital'] as const
+const tags = ['0% interest', 'community agreements', 'local field partner', 'reusable capital'] as const
 
 type CohortGroup = {
   eyebrow: string
@@ -57,17 +58,18 @@ const cohortGroups: readonly CohortGroup[] = [
   {
     eyebrow: '5 people',
     title: 'Afribit alumni',
-    description: 'Previous loan recipients benchmark expectations and repayment behavior.',
+    description: 'Previous recoverable grant participants benchmark expectations and capital return behavior.',
   },
   {
     eyebrow: '5 people',
-    title: 'Shylock survivors',
-    description: 'Borrowers with informal lender experience identify pain points, urgency, and risk.',
+    title: 'Informal debt survivors',
+    description: 'Participants with predatory informal debt experience identify pain points, urgency, and risk.',
   },
   {
     eyebrow: '5 people',
-    title: 'First-time borrowers',
-    description: 'Clean-slate participants help clarify what fair credit needs to feel understandable and safe.',
+    title: 'First-time participants',
+    description:
+      'Clean-slate participants help clarify what fair recoverable grant support needs to feel understandable and safe.',
     dark: true,
   },
 ] as const
@@ -89,12 +91,12 @@ const modelCards: readonly ModelCard[] = [
   },
   {
     title: 'Afribit validates trust',
-    description: 'Afribit acts as guarantor, insurer, monitor, and local reporting partner.',
+    description: 'Afribit validates participants locally, supports community agreements, and handles reporting.',
     borderAccent: 'teal',
   },
   {
-    title: 'Borrowers commit',
-    description: 'Businesses set clear goals, repayment commitments, updates, and communication channels.',
+    title: 'Participants commit',
+    description: 'Businesses set clear goals, capital return commitments, updates, and communication channels.',
     borderAccent: 'gold',
   },
   {
@@ -109,7 +111,7 @@ const portfolioProjects = [
   {
     project: 'Krezzy Kicks',
     purpose: 'Inventory and merchant activation',
-    status: "Pilot business identified in Afribit's lending model with BTC Map listing.",
+    status: "Pilot business identified in Afribit's recoverable grant model with BTC Map listing.",
   },
   {
     project: 'Threewest Collections',
@@ -124,7 +126,7 @@ const portfolioProjects = [
   {
     project: 'Kibera BTC Shop',
     purpose: 'Merchant growth capital',
-    status: 'A local Bitcoin merchant that can demonstrate repayment behavior and impact.',
+    status: 'A local Bitcoin merchant that can demonstrate capital return and impact.',
   },
   {
     project: 'Ruth Shop',
@@ -157,7 +159,8 @@ const getModelCardBorderColor = (colors: AfribitCaseStudyColors, accent: ModelCa
 }
 
 export const AfribitCaseStudyPage = () => {
-  const { onDonateClick, donateModalElement } = useImpactFundsDonateModal()
+  const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
+  const onDonateClick = () => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })
   const colors: AfribitCaseStudyColors = {
     pageBg: useColorModeValue('white', 'utils.pbg'),
     ink: useColorModeValue('#17120C', 'neutral1.12'),
@@ -179,7 +182,7 @@ export const AfribitCaseStudyPage = () => {
       <Head
         title={t('Afribit Case Study')}
         description={t(
-          'How Geyser and Afribit are partnering to fund Kibera entrepreneurs with reusable recoverable grant capital.',
+          'How Geyser and Afribit are partnering to fund Kibera entrepreneurs with debt-free recoverable grant capital.',
         )}
         image={AFRIBIT_CASE_STUDY_HERO_IMAGE_URL}
         url={`https://geyser.fund${getPath('discoveryRecoverableGrantsAfribitCaseStudy')}`}
@@ -209,7 +212,7 @@ export const AfribitCaseStudyPage = () => {
                 </H2>
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'The pilot tests how Geyser-backed recoverable grants can support small Kibera businesses without interest, while Afribit validates borrowers through cohort sessions, guarantor sign-off, social collateral, and monthly reporting.',
+                    'The pilot tests how Geyser-backed recoverable grants can support small Kibera businesses without interest, while Afribit validates participants through cohort sessions, community agreements, and monthly reporting.',
                   )}
                 </Body>
                 <HStack spacing={2} flexWrap="wrap">
@@ -259,7 +262,7 @@ export const AfribitCaseStudyPage = () => {
                 </VStack>
                 <Body lineHeight="27px">
                   {t(
-                    'Each pilot cohort brings together 15 people and divides them into three feedback groups. The aim is to validate need, surface risk, set repayment commitments, and turn businesses into Geyser-listed recoverable grant projects.',
+                    'Each pilot cohort brings together 15 people and divides them into three feedback groups. The aim is to validate need, surface risk, set capital return commitments, and turn businesses into Geyser-listed recoverable grant projects.',
                   )}
                 </Body>
               </SimpleGrid>
@@ -305,7 +308,7 @@ export const AfribitCaseStudyPage = () => {
                 </H2>
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'A recoverable grant acts like patient working capital. If the business succeeds, funds are repaid into the system and can support the next entrepreneur. If it struggles, the model is designed around trust, reporting, and support rather than extractive interest.',
+                    'A recoverable grant acts like patient working capital. If the business succeeds, funds return to the system and can support the next entrepreneur. If it struggles, the model is designed around trust, reporting, and support rather than extractive interest.',
                   )}
                 </Body>
               </VStack>
@@ -363,7 +366,7 @@ export const AfribitCaseStudyPage = () => {
                 </VStack>
                 <Body color="whiteAlpha.850" lineHeight="27px">
                   {t(
-                    'Each project represents a small business or local merchant entering the cohort: clear story, clear use of funds, and a repayment commitment tracked with Afribit.',
+                    'Each project represents a small business or local merchant entering the cohort: clear story, clear use of funds, and a capital return commitment tracked with Afribit.',
                   )}
                 </Body>
               </SimpleGrid>
@@ -394,7 +397,7 @@ export const AfribitCaseStudyPage = () => {
                 </H2>
                 <Body lineHeight="27px" mt={4} maxW="720px" color={colors.onGoldText}>
                   {t(
-                    'Support businesses that can repay, recycle capital, and create compounding impact across local Bitcoin communities.',
+                    'Support businesses that can return capital, recycle sats, and create compounding impact across local Bitcoin communities.',
                   )}
                 </Body>
                 <Button
@@ -535,7 +538,7 @@ const HeroSection = ({
         </H1>
         <Body color="whiteAlpha.900" lineHeight="27px" maxW="620px">
           {t(
-            'Afribit brings local trust, borrower validation, and monthly monitoring. Geyser brings 0% recoverable grant capital that can return and fund the next business.',
+            'Afribit brings local trust, participant validation, and monthly monitoring. Geyser brings debt-free recoverable grant capital that can return and fund the next business.',
           )}
         </Body>
         <HStack spacing={3} flexWrap="wrap" pt={2}>

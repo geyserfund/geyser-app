@@ -779,7 +779,7 @@ function useLatamSectionColors(): LatamSectionColors {
     primaryText: useColorModeValue('black', 'neutral1.12'),
     secondaryText: useColorModeValue('#626872', 'neutral1.10'),
     borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
-    amberBg: useColorModeValue('#F09A34', 'amber.400'),
+    amberBg: useColorModeValue('#F09A34', 'amber.9'),
     amberText: useColorModeValue('black', 'neutral1.1'),
   }
 }
