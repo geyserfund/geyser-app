@@ -1,15 +1,4 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Icon,
-  Image,
-  SimpleGrid,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Box, Button, Flex, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
@@ -20,8 +9,8 @@ import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '@/modules/impactFunds/utils/constants.ts'
-import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
+import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getAiSeoPageContent, getPath } from '@/shared/constants'
@@ -61,6 +50,7 @@ type FieldPartnerLeaderboardProject = ImpactFundsFieldPartnerLeaderboardProjects
 type SponsorListItem = { id: string; name: string; image?: string | null; url?: string | null }
 type FieldPartnerLeaderboardRow = {
   rank: number
+  fieldPartnerId: string
   fieldPartner: string
   country: string
   projectsLaunched: string
@@ -347,6 +337,7 @@ const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject
   const fieldPartners = new Map<
     string,
     {
+      fieldPartnerId: string
       fieldPartner: string
       countryCounts: Map<string, number>
       projectsLaunched: number
@@ -361,6 +352,7 @@ const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject
 
     const fieldPartnerId = String(project.fieldPartner.id)
     const current = fieldPartners.get(fieldPartnerId) || {
+      fieldPartnerId,
       fieldPartner: project.fieldPartner.username,
       countryCounts: new Map<string, number>(),
       projectsLaunched: 0,
@@ -385,6 +377,7 @@ const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject
     .slice(0, LEADERBOARD_MAX_ROW_COUNT)
     .map((row, index) => ({
       rank: index + 1,
+      fieldPartnerId: row.fieldPartnerId,
       fieldPartner: row.fieldPartner,
       country: getTopLocationLabel(row.countryCounts),
       projectsLaunched: `${row.projectsLaunched} onboarded`,
@@ -431,17 +424,7 @@ const FullWidthSection = ({
   bg: string
   py?: React.ComponentProps<typeof Box>['py']
 }) => (
-  <Box
-    w="100vw"
-    maxW="100vw"
-    position="relative"
-    left="50%"
-    right="50%"
-    ml="-50vw"
-    mr="-50vw"
-    bg={bg}
-    py={py}
-  >
+  <Box w="100vw" maxW="100vw" position="relative" left="50%" right="50%" ml="-50vw" mr="-50vw" bg={bg} py={py}>
     <Box w="full" maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto" px={standardPadding}>
       {children}
     </Box>
@@ -455,6 +438,25 @@ const Eyebrow = ({ children, color }: { children: React.ReactNode; color: string
 )
 
 const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonateClick: () => void }) => {
+  const overlayGradient = useColorModeValue(
+    `linear-gradient(
+      90deg,
+      var(--chakra-colors-blackAlpha-900) 0%,
+      var(--chakra-colors-blackAlpha-900) 24%,
+      var(--chakra-colors-blackAlpha-800) 42%,
+      var(--chakra-colors-blackAlpha-500) 66%,
+      var(--chakra-colors-blackAlpha-200) 100%
+    )`,
+    `linear-gradient(
+      90deg,
+      var(--chakra-colors-blackAlpha-900) 0%,
+      var(--chakra-colors-blackAlpha-800) 24%,
+      var(--chakra-colors-blackAlpha-700) 42%,
+      var(--chakra-colors-blackAlpha-500) 66%,
+      var(--chakra-colors-blackAlpha-200) 100%
+    )`,
+  )
+
   return (
     <Box
       w="100vw"
@@ -476,11 +478,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
       />
-      <Box
-        position="absolute"
-        inset={0}
-        bg="linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.34), rgba(0,0,0,0.08))"
-      />
+      <Box position="absolute" inset={0} bg={overlayGradient} />
 
       <Flex
         position="relative"
@@ -614,10 +612,20 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
               py="20px"
               minH="126px"
             >
-              <Body size="30px" lineHeight="34px" bold color={stat.isDark ? colors.emphasisCardMetric : topSectionTextColor}>
+              <Body
+                size="30px"
+                lineHeight="34px"
+                bold
+                color={stat.isDark ? colors.emphasisCardMetric : topSectionTextColor}
+              >
                 {stat.value}
               </Body>
-              <Body size="sm" lineHeight="20px" medium color={stat.isDark ? colors.emphasisCardMutedText : statMutedTextColor}>
+              <Body
+                size="sm"
+                lineHeight="20px"
+                medium
+                color={stat.isDark ? colors.emphasisCardMutedText : statMutedTextColor}
+              >
                 {t(stat.label)}
               </Body>
             </VStack>
@@ -645,12 +653,7 @@ const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
         >
           <VStack align="flex-start" spacing="10px" maxW="620px">
             <Eyebrow color={sectionEyebrowColor}>{t('How it works')}</Eyebrow>
-            <H2
-              size={{ base: '3xl', lg: '36px' }}
-              lineHeight={{ base: '38px', lg: '40px' }}
-              bold
-              color={headingColor}
-            >
+            <H2 size={{ base: '3xl', lg: '36px' }} lineHeight={{ base: '38px', lg: '40px' }} bold color={headingColor}>
               {t('How impact moves through the trusted field network.')}
             </H2>
           </VStack>
@@ -818,7 +821,15 @@ const LeaderboardHeader = ({ colors }: { colors: SectionColors }) => {
 }
 
 const LeaderboardRow = ({ colors, row }: { colors: SectionColors; row: FieldPartnerLeaderboardRow }) => (
-  <HStack spacing={0} minH="42px" px={4} w="full" align="center" borderBottomWidth="1px" borderColor={colors.borderColor}>
+  <HStack
+    spacing={0}
+    minH="42px"
+    px={4}
+    w="full"
+    align="center"
+    borderBottomWidth="1px"
+    borderColor={colors.borderColor}
+  >
     <Box flex={`0 0 ${LEADERBOARD_RANK_COLUMN_WIDTH}`} flexShrink={0}>
       <Flex
         align="center"
@@ -834,7 +845,15 @@ const LeaderboardRow = ({ colors, row }: { colors: SectionColors; row: FieldPart
       </Flex>
     </Box>
     <Box flex={1} minW={0}>
-      <Body size="sm" bold color={colors.primaryText} noOfLines={1}>
+      <Body
+        as={Link}
+        to={getPath('userProfile', row.fieldPartnerId)}
+        size="sm"
+        bold
+        color={colors.primaryText}
+        noOfLines={1}
+        _hover={{ color: colors.accentText, textDecoration: 'underline' }}
+      >
         {row.fieldPartner}
       </Body>
     </Box>
@@ -891,9 +910,7 @@ const SponsorsAndFundsSection = ({
                 </Body>
               </Flex>
             ) : (
-              sponsors.slice(0, 10).map((sponsor) => (
-                <SponsorTile key={sponsor.id} sponsor={sponsor} colors={colors} />
-              ))
+              sponsors.slice(0, 10).map((sponsor) => <SponsorTile key={sponsor.id} sponsor={sponsor} colors={colors} />)
             )}
           </SimpleGrid>
         </VStack>
@@ -1118,7 +1135,12 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
       >
         <VStack align="flex-start" spacing={{ base: 4, lg: 5 }}>
           <Eyebrow color={colors.accentBg}>{t('Resources')}</Eyebrow>
-          <H2 size={{ base: '40px', lg: '56px' }} lineHeight={{ base: '46px', lg: '64px' }} bold color={colors.emphasisCardText}>
+          <H2
+            size={{ base: '40px', lg: '56px' }}
+            lineHeight={{ base: '46px', lg: '64px' }}
+            bold
+            color={colors.emphasisCardText}
+          >
             {t('Learn how local impact gets built')}
           </H2>
         </VStack>
@@ -1133,7 +1155,12 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
       </Flex>
 
       <VStack align="stretch" spacing={{ base: 5, lg: 7 }}>
-        <H3 size={{ base: '32px', lg: '40px' }} lineHeight={{ base: '38px', lg: '46px' }} bold color={colors.emphasisCardText}>
+        <H3
+          size={{ base: '32px', lg: '40px' }}
+          lineHeight={{ base: '38px', lg: '46px' }}
+          bold
+          color={colors.emphasisCardText}
+        >
           {t('Case Studies')}
         </H3>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }}>
@@ -1153,7 +1180,12 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
       </VStack>
 
       <VStack align="stretch" spacing={{ base: 5, lg: 7 }}>
-        <H3 size={{ base: '32px', lg: '40px' }} lineHeight={{ base: '38px', lg: '46px' }} bold color={colors.emphasisCardText}>
+        <H3
+          size={{ base: '32px', lg: '40px' }}
+          lineHeight={{ base: '38px', lg: '46px' }}
+          bold
+          color={colors.emphasisCardText}
+        >
           {t('Workshops')}
         </H3>
         <SimpleGrid columns={{ base: 1, xl: 2 }} spacing={{ base: 5, lg: 6 }} templateColumns={{ xl: '1.8fr 1fr' }}>
@@ -1164,7 +1196,12 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
 
       <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
         <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={{ base: 5, lg: 6 }}>
-          <H3 size={{ base: '32px', lg: '38px' }} lineHeight={{ base: '38px', lg: '44px' }} bold color={colors.emphasisCardText}>
+          <H3
+            size={{ base: '32px', lg: '38px' }}
+            lineHeight={{ base: '38px', lg: '44px' }}
+            bold
+            color={colors.emphasisCardText}
+          >
             {t('Impact Reports')}
           </H3>
           <H3

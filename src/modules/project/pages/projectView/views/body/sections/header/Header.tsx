@@ -27,9 +27,9 @@ import { ProjectStatusBar } from '@/components/ui'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
-import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectPageHeaderSummaryQuery } from '@/types'
 
@@ -214,40 +214,88 @@ const ReportProjectButton = () => {
   )
 }
 
+type ProjectHeaderTagVariant = 'category' | 'facilitated' | 'location' | 'tag'
+
+type ProjectHeaderTag = {
+  label: string
+  variant: ProjectHeaderTagVariant
+  to?: string
+}
+
+type ProjectHeaderTagProject = ReturnType<typeof useProjectAtom>['project'] & {
+  fieldPartner?: { username?: string | null } | null
+  isRecoverableGrant?: boolean
+}
+
+const getProjectHeaderLocationFilter = (project: ProjectHeaderTagProject) => {
+  const searchParams = new URLSearchParams()
+
+  if (project.location?.country?.code && project.location.country.name !== 'Online') {
+    searchParams.set('countryCode', project.location.country.code)
+  }
+
+  if (project.location?.region) {
+    searchParams.set('region', project.location.region)
+  }
+
+  return searchParams
+}
+
+const getProjectHeaderTags = (project: ProjectHeaderTagProject) => {
+  const tags: ProjectHeaderTag[] = []
+  const locationLabel = [project.location?.country?.name, project.location?.region].filter(Boolean).join(', ')
+  const locationFilter = getProjectHeaderLocationFilter(project)
+
+  if (project.isRecoverableGrant && project.fieldPartner?.username) {
+    tags.push({
+      label: t('Facilitated by {{fieldPartnerName}}', { fieldPartnerName: project.fieldPartner.username }),
+      variant: 'facilitated',
+    })
+  }
+
+  if (project.category) {
+    tags.push({
+      label: ProjectCategoryLabel[project.category] ?? project.category,
+      variant: 'category',
+      to: getPath('discoveryProjectsCategory', project.category),
+    })
+  }
+
+  if (project.subCategory) {
+    tags.push({
+      label: ProjectSubCategoryLabel[project.subCategory] ?? project.subCategory,
+      variant: 'category',
+      to: getPath('discoveryProjectsSubCategory', project.subCategory),
+    })
+  }
+
+  if (locationLabel) {
+    const locationSearch = locationFilter.toString()
+
+    tags.push({
+      label: locationLabel,
+      variant: 'location',
+      to: locationSearch ? `${getPath('discoveryProjects')}?${locationSearch}` : undefined,
+    })
+  }
+
+  if (project.launchedAt) {
+    tags.push({
+      label: t('Launched: {{date}}', {
+        date: DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy'),
+      }),
+      variant: 'tag',
+    })
+  }
+
+  tags.push(...(project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' as const })))
+
+  return tags
+}
+
 const ProjectHeaderTags = () => {
   const { project } = useProjectAtom()
-  const { fieldPartner, isRecoverableGrant } = project as typeof project & {
-    fieldPartner?: { username?: string | null } | null
-    isRecoverableGrant?: boolean
-  }
-  const locationLabel = [project.location?.country?.name, project.location?.region].filter(Boolean).join(', ')
-
-  const labels = [
-    isRecoverableGrant && fieldPartner?.username
-      ? {
-          label: t('Facilitated by {{fieldPartnerName}}', { fieldPartnerName: fieldPartner.username }),
-          variant: 'facilitated',
-        }
-      : null,
-    !isRecoverableGrant && project.category
-      ? { label: ProjectCategoryLabel[project.category], variant: 'category' }
-      : null,
-    !isRecoverableGrant && project.subCategory
-      ? { label: ProjectSubCategoryLabel[project.subCategory], variant: 'category' }
-      : null,
-    locationLabel ? { label: locationLabel, variant: 'location' } : null,
-    project.launchedAt
-      ? {
-          label: t('Launched: {{date}}', {
-            date: DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy'),
-          }),
-          variant: 'tag',
-        }
-      : null,
-    ...(project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' })),
-  ].filter((label): label is { label: string; variant: 'category' | 'facilitated' | 'location' | 'tag' } =>
-    Boolean(label),
-  )
+  const labels = getProjectHeaderTags(project as ProjectHeaderTagProject)
 
   const uniqueLabels = [...new Map(labels.map((tag) => [tag.label, tag])).values()]
 
@@ -260,11 +308,14 @@ const ProjectHeaderTags = () => {
       {uniqueLabels.map((tag) => (
         <Badge
           key={tag.label}
+          as={tag.to ? Link : undefined}
+          to={tag.to}
           borderRadius="full"
           paddingX={2.5}
           paddingY={1}
           textTransform="none"
           fontWeight="medium"
+          cursor={tag.to ? 'pointer' : undefined}
           backgroundColor={
             tag.variant === 'category' ? 'warning.1' : tag.variant === 'facilitated' ? 'neutral1.3' : 'neutral1.1'
           }
@@ -272,6 +323,14 @@ const ProjectHeaderTags = () => {
           border="1px solid"
           borderColor={
             tag.variant === 'category' ? 'warning.3' : tag.variant === 'facilitated' ? 'neutral1.3' : 'neutral1.6'
+          }
+          _hover={
+            tag.to
+              ? {
+                  textDecoration: 'none',
+                  backgroundColor: tag.variant === 'category' ? 'warning.2' : 'neutral1.2',
+                }
+              : undefined
           }
         >
           {tag.variant === 'location' && <Icon as={PiMapPin} mr={1} verticalAlign="text-bottom" />}

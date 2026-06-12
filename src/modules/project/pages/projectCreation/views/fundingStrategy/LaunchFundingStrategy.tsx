@@ -45,8 +45,12 @@ const options: Record<
   },
   [RecoverableGrantFundingOption]: {
     title: t('Recoverable Grant'),
-    body: t('Receive funds only if the project reaches its goal before the deadline.'),
-    recommendedFor: t('Field Partner-led projects that use grant onboarding and need clear attribution.'),
+    body: t(
+      '0% interest grants that are repaid over time, then reused to fund the next local project without creating a debt burden.',
+    ),
+    recommendedFor: t(
+      'Local businesses and entrepreneurs in circular economy hubs who need working capital, community trust, and a safer path to growth.',
+    ),
     benefit: t('Uses All-or-Nothing mechanics with recoverable grant reporting.'),
   },
 }
@@ -80,7 +84,7 @@ export const LaunchFundingStrategy = () => {
   )
 
   const isNewProject = !params.projectId || params.projectId === 'new'
-  const isRecoverableGrant = (project as { isRecoverableGrant?: boolean }).isRecoverableGrant
+  const { isRecoverableGrant } = project as { isRecoverableGrant?: boolean }
 
   const fundingOptionFromProject = resolveProjectFundingOption({
     fundingStrategy: project.fundingStrategy,
@@ -88,9 +92,7 @@ export const LaunchFundingStrategy = () => {
     storedFundingOption,
   })
 
-  const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(
-    () => fundingOptionFromProject,
-  )
+  const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(() => fundingOptionFromProject)
   const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
 
   if (fundingOptionFromProject !== prevFundingOptionFromProjectRef.current) {

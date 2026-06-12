@@ -1,25 +1,25 @@
 import { HStack, Spinner } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { isLaunchFeeWaived } from '@/utils/index.ts'
 import {
   FundingContributionFragment,
   FundingContributionPaymentDetailsFragment,
   ProjectReviewFragment,
   useProjectLaunchReviewsQuery,
 } from '@/types/index.ts'
+import { isLaunchFeeWaived } from '@/utils/index.ts'
 
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { useLaunchContributionCreate } from './hooks/useLaunchContributionCreate.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
-import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
 import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/LaunchPaymentMethodSelection.tsx'
+import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
 import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
 
@@ -68,14 +68,6 @@ export const Launch = () => {
   })
 
   const launchFeeWaived = isLaunchFeeWaived(project)
-
-  useEffect(() => {
-    if (launchFeeWaived) {
-      setStep(LaunchStep.Finalize)
-    }
-
-    return () => {}
-  }, [launchFeeWaived])
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
