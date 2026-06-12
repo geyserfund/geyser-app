@@ -30,6 +30,8 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
     "dev:language": "tsx language/languageServer.ts",
+    "i18n:check": "node scripts/i18n/sync-translations.mjs --check --locales es,fr",
+    "i18n:sync": "node scripts/i18n/sync-translations.mjs --write --locales es,fr",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip",
