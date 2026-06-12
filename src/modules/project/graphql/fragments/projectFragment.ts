@@ -186,6 +186,15 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
       guardianType
     }
     rskEoa
+    rskEoas {
+      id
+      rskAddress
+      rskPublicKey
+      derivationPath
+      isCurrent
+      createdAt
+      replacedAt
+    }
     lastCreationStep
     launchScheduledAt
     category

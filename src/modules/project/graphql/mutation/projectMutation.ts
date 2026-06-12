@@ -84,6 +84,15 @@ export const MUTATION_PROJECT_RSK_EOA_SET = gql`
     projectRskEoaSet(input: $input) {
       id
       rskEoa
+      rskEoas {
+        id
+        rskAddress
+        rskPublicKey
+        derivationPath
+        isCurrent
+        createdAt
+        replacedAt
+      }
     }
   }
 `

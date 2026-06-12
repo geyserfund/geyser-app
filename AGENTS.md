@@ -25,6 +25,7 @@
 ## Local Development
 
 - When verifying the app in a browser, use `https://dev.geyser.fund` instead of `http://localhost:3000` so frontend data loads correctly from the dev backend.
+- For local UI QA, navigate to the relevant `https://dev.geyser.fund` route rather than a localhost route; if the route requires authentication and the browser session is not logged in, state that explicitly instead of treating localhost verification as equivalent.
 
 ## Internationalization
 

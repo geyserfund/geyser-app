@@ -126,18 +126,18 @@ const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
     return (
       <VStack w="full" spacing={6} alignItems="start">
         <Body size="lg" bold>
-          {t('Project wallet closed')}
+          {t('Password reset completed')}
         </Body>
         <Feedback variant={FeedBackVariant.WARNING}>
           <VStack alignItems="start" spacing={2}>
             <Body size="sm">
               {t(
-                'Your account password was recovered successfully. This project was tied to the previous wallet key, so it has been closed and cannot accept this contribution.',
+                'Your account password was recovered successfully. Project wallet addresses tied to the old password may have been rotated, but funds on old addresses are not moved automatically.',
               )}
             </Body>
             <Body size="sm">
               {t(
-                'Please return to the project page. You will need to create a new project to receive funds with the new wallet key.',
+                'Please return to the project page and retry after any in-progress payments have settled. Historical wallet addresses remain visible in project wallet settings.',
               )}
             </Body>
           </VStack>

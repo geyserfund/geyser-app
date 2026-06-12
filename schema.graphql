@@ -411,6 +411,8 @@ input ProjectCloseMutationInput {
 input ProjectRskEoaSetInput {
   projectId: BigInt!
   rskEoa: String!
+  rskPublicKey: String
+  derivationPath: String
 }
 
 type ProjectDeleteResponse implements MutationResponse {
@@ -584,6 +586,7 @@ type Project {
   aonGoal: ProjectAonGoal
   impactFundRecipient: ProjectImpactFundRecipient
   rskEoa: String
+  rskEoas: [ProjectRskEoa!]!
 
   """
   By default, returns all the posts of a project, both published and unpublished but not deleted.
@@ -594,6 +597,16 @@ type Project {
   reviews: [ProjectReview!]!
   ambassadors: ProjectAmbassadorsConnection!
   paymentMethods: PaymentMethods!
+}
+
+type ProjectRskEoa {
+  id: BigInt!
+  rskAddress: String!
+  rskPublicKey: String
+  derivationPath: String
+  isCurrent: Boolean!
+  createdAt: Date!
+  replacedAt: Date
 }
 
 type ProjectImpactFundRecipient {
@@ -1121,11 +1134,13 @@ type DeleteUserResponse implements MutationResponse {
 
 type UserAccountPasswordFundsSummary {
   unclaimedFundsSats: BigInt!
+  userWalletBalanceSats: BigInt!
   tiaUnclaimedFundsSats: BigInt!
   aonUnclaimedFundsSats: BigInt!
   pledgedSats: BigInt!
   affectedTiaProjects: [AccountPasswordAffectedProject!]!
   legacyTiaProjects: [AccountPasswordAffectedProject!]!
+  pendingTiaProjects: [AccountPasswordAffectedProject!]!
 }
 
 type AccountPasswordAffectedProject {
@@ -1319,6 +1334,14 @@ input UserAccountKeysUpdateInput {
   encryptedSeed: String!
   encryptedMnemonic: String!
   rskKeyPair: RskKeyPairInput!
+  projectRskEoas: [ProjectRskEoaRotationInput!]
+}
+
+input ProjectRskEoaRotationInput {
+  projectId: BigInt!
+  rskEoa: String!
+  rskPublicKey: String!
+  derivationPath: String!
 }
 
 input RskKeyPairInput {

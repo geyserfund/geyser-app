@@ -91,6 +91,30 @@ export const QUERY_USER_WALLET = gql`
     }
   }
 `
+
+export const QUERY_USER_PROJECT_RSK_EOA_BACKUP = gql`
+  query UserProjectRskEoaBackup($where: UserGetInput!) {
+    user(where: $where) {
+      id
+      ownerOf {
+        project {
+          id
+          name
+          title
+          rskEoas {
+            id
+            rskAddress
+            derivationPath
+            isCurrent
+            createdAt
+            replacedAt
+          }
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_USER_TAX_PROFILE = gql`
   ${FRAGMENT_USER_TAX_PROFILE}
   query UserTaxProfile($where: UserGetInput!) {
