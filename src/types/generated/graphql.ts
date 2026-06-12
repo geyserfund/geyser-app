@@ -5765,6 +5765,7 @@ export type UserAccountPasswordFundsSummary = {
   affectedTiaProjects: Array<AccountPasswordAffectedProject>;
   aonUnclaimedFundsSats: Scalars['Int']['output'];
   legacyTiaProjects: Array<AccountPasswordAffectedProject>;
+  pendingTiaProjects: Array<AccountPasswordAffectedProject>;
   pledgedSats: Scalars['Int']['output'];
   tiaUnclaimedFundsSats: Scalars['Int']['output'];
   unclaimedFundsSats: Scalars['Int']['output'];
@@ -12096,7 +12097,7 @@ export type ProjectRskEoaSetMutationVariables = Exact<{
 }>;
 
 
-export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: any, rskEoa?: string | null } };
+export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: any, rskEoa?: string | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }> } };
 
 export type ProjectWalletConfigurationContributionAttemptNotifyMutationVariables = Exact<{
   input: ProjectWalletConfigurationContributionAttemptNotifyInput;
@@ -12891,7 +12892,7 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
 export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: number }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: number }> } };
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, userWalletBalanceSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }>, pendingTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }> } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
@@ -15125,6 +15126,15 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
     guardianType
   }
   rskEoa
+  rskEoas {
+    id
+    rskAddress
+    rskPublicKey
+    derivationPath
+    isCurrent
+    createdAt
+    replacedAt
+  }
   lastCreationStep
   launchScheduledAt
   category
@@ -21201,6 +21211,15 @@ export const ProjectRskEoaSetDocument = gql`
   projectRskEoaSet(input: $input) {
     id
     rskEoa
+    rskEoas {
+      id
+      rskAddress
+      rskPublicKey
+      derivationPath
+      isCurrent
+      createdAt
+      replacedAt
+    }
   }
 }
     `;
@@ -24813,6 +24832,7 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
     query UserAccountPasswordFundsSummary {
   userAccountPasswordFundsSummary {
     unclaimedFundsSats
+    userWalletBalanceSats
     tiaUnclaimedFundsSats
     aonUnclaimedFundsSats
     pledgedSats
@@ -24825,6 +24845,14 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
       balanceSats
     }
     legacyTiaProjects {
+      id
+      name
+      title
+      status
+      rskEoa
+      balanceSats
+    }
+    pendingTiaProjects {
       id
       name
       title

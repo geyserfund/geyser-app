@@ -7,6 +7,7 @@ import { ProjectFundingStrategy } from '../../../../../../types/index.ts'
 import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { DashboardLayout } from '../../common/index.ts'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
+import { ProjectRskEoaHistory } from './components/ProjectRskEoaHistory.tsx'
 
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
@@ -17,6 +18,7 @@ export const ProjectDashboardWallet = () => {
     <DashboardLayout desktopTitle={t('Payment Settings')}>
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
         <TiaRskEoaSetupNotice />
+        <ProjectRskEoaHistory rskEoas={(project as any).rskEoas} />
         <EnableFiatContributions
           isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
           projectId={project.id}
