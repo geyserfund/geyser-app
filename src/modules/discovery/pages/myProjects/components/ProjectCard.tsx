@@ -1,16 +1,25 @@
 import { Badge, Button, HStack, Icon, Image, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
+import {
+  PiArrowUpRight,
+  PiHandHeart,
+  PiInfo,
+  PiNotePencil,
+  PiRecycle,
+  PiRocketLaunch,
+  PiStorefront,
+} from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
-import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
@@ -29,9 +38,10 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const isMobile = useMobileMode()
   const [configuredRskEoa, setConfiguredRskEoa] = useState(project.rskEoa)
+  const minBitcoinPayoutSatsFormatted = new Intl.NumberFormat(i18n.language).format(MIN_BITCOIN_PAYOUT_SATS)
 
   const isPreLaunchReview = isProjectInPreLaunchReview(project)
   const isPostLaunchReview = isProjectInPostLaunchReview(project)
@@ -40,6 +50,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isInactive = project.status === ProjectStatus.Inactive
   const isActive = project.status === ProjectStatus.Active
   const isTiaProject = project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
   const { status: withdrawalStatus, withdrawableSats, withdrawableUsd } = useProjectWithdrawalStatus({ project })
@@ -65,6 +76,10 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   /** Get project type badge configuration */
   const getProjectTypeBadge = () => {
+    if (isRecoverableGrant) {
+      return { label: t('Recoverable Grant'), colorScheme: 'primary1', icon: PiRecycle }
+    }
+
     if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
       return { label: t('Campaign'), colorScheme: 'success', icon: PiRocketLaunch }
     }
@@ -221,7 +236,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           <Tooltip
             label={
               isWithdrawDisabled
-                ? t('{{amount}} USD minimum required to withdraw.', { amount: MIN_BITCOIN_PAYOUT_USD })
+                ? t('{{amount}} sats minimum required to withdraw.', {
+                    amount: minBitcoinPayoutSatsFormatted,
+                  })
                 : ''
             }
             isDisabled={!isWithdrawDisabled}

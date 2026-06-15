@@ -36,7 +36,6 @@ export const OpenFundingGoal = () => {
 
   const backButtonProps = {
     onClick() {
-      // navigate(getPath('launchFundingStrategy', project.id)) // TODO: uncomment when we release AON
       navigate(getPath('launchProjectDetails', project.id))
     },
   }

@@ -98,16 +98,24 @@ const schema = yup
   })
   .required()
 
+const getDefaultPromotionsEnabled = (isRecoverableGrant?: boolean) => !isRecoverableGrant
+
 type UseProjectFormProps = {
   isEdit: boolean
   project: ProjectPageBodyFragment | undefined | null
+  isRecoverableGrant?: boolean
 }
 
-export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
+export const useProjectForm = ({ isEdit, project, isRecoverableGrant = false }: UseProjectFormProps) => {
+  const defaultPromotionsEnabled = getDefaultPromotionsEnabled(isRecoverableGrant)
+
   const form = useForm<ProjectCreationVariables>({
     resolver: yupResolver(schema) as any,
     reValidateMode: 'onChange',
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: {
+      ...DEFAULT_VALUES,
+      promotionsEnabled: defaultPromotionsEnabled,
+    },
     values: useMemo(() => {
       if (isEdit && project) {
         return {
@@ -123,12 +131,15 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
           links: project.links || [],
           tags: project?.tags?.map((tag) => tag.id) || [],
           referrerHeroId: '',
-          promotionsEnabled: project.promotionsEnabled ?? true,
+          promotionsEnabled: project.promotionsEnabled ?? defaultPromotionsEnabled,
         }
       }
 
-      return { ...DEFAULT_VALUES }
-    }, [isEdit, project]),
+      return {
+        ...DEFAULT_VALUES,
+        promotionsEnabled: defaultPromotionsEnabled,
+      }
+    }, [defaultPromotionsEnabled, isEdit, project]),
   })
 
   return form

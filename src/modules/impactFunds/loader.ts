@@ -8,6 +8,8 @@ export const loadImpactFundsModule = () => {
 
 export const loadImpactFundsMainPage = () => import('./pages/ImpactFundsMainPage.tsx')
 
+export const loadImpactFundsWorkshopsPage = () => import('./pages/ImpactFundsWorkshopsPage.tsx')
+
 export const loadImpactFundDetailPage = () => import('./pages/ImpactFundDetailPage.tsx')
 
 export const loadImpactFundDashboardPage = () => import('./pages/ImpactFundDashboardPage.tsx')

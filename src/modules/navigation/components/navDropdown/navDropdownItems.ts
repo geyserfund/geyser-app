@@ -25,9 +25,9 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
       to: getPath('discoveryCampaigns'),
     },
     {
-      title: t('Micro-Loans'),
-      description: t('Small loans for Bitcoin communities. Join the waitlist.'),
-      to: getPath('discoveryMicroLending'),
+      title: t('Recoverable Grants'),
+      description: t('Reusable capital for trusted local economies.'),
+      to: getPath('discoveryRecoverableGrants'),
       badge: { label: t('new'), tone: 'new' },
     },
   ]

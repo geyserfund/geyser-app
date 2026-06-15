@@ -1,6 +1,6 @@
 import { HStack, Spinner } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -11,14 +11,15 @@ import {
   ProjectReviewFragment,
   useProjectLaunchReviewsQuery,
 } from '@/types/index.ts'
+import { isLaunchFeeWaived } from '@/utils/index.ts'
 
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { useLaunchContributionCreate } from './hooks/useLaunchContributionCreate.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
-import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
 import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/LaunchPaymentMethodSelection.tsx'
+import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
 import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
 
@@ -66,17 +67,11 @@ export const Launch = () => {
     },
   })
 
-  useEffect(() => {
-    if (project.paidLaunch) {
-      setStep(LaunchStep.Finalize)
-    }
-
-    return () => {}
-  }, [project.paidLaunch])
+  const launchFeeWaived = isLaunchFeeWaived(project)
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
-      if (project.paidLaunch) {
+      if (launchFeeWaived) {
         setStep(LaunchStep.Finalize)
       } else {
         setStep(LaunchStep.Strategy)
@@ -86,7 +81,7 @@ export const Launch = () => {
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
-  }, [project.paidLaunch, step])
+  }, [launchFeeWaived, step])
 
   const handleBack = useCallback(() => {
     if (step === LaunchStep.Finalize) {

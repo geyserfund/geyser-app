@@ -30,10 +30,13 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
     "dev:language": "tsx language/languageServer.ts",
+    "i18n:check": "node scripts/i18n/sync-translations.mjs --check --locales es,fr",
+    "i18n:sync": "node scripts/i18n/sync-translations.mjs --write --locales es,fr",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip",
-    "sitemap:generate": "node generate-sitemap.js"
+    "sitemap:generate": "node generate-sitemap.js",
+    "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -160,6 +163,7 @@
     "jsdom": "^21.1.0",
     "knip": "^5.41.1",
     "prettier": "^2.8.3",
+    "react-doctor": "^0.4.0",
     "sitemap": "^7.1.1",
     "tiny-secp256k1": "^2.2.3",
     "tsx": "^4.19.2",
