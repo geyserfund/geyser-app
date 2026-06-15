@@ -1,0 +1,70 @@
+name: i18n translations
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.ts'
+      - 'src/**/*.tsx'
+      - 'language/translations/*.json'
+      - 'scripts/i18n/**'
+      - 'package.json'
+      - '.github/workflows/i18n-translations.yml'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  translations:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Fetch base branch
+        run: |
+          git remote add upstream https://github.com/${{ github.repository }}.git
+          git fetch upstream ${{ github.base_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Sync translations with OpenAI
+        if: env.OPENAI_API_KEY != ''
+        run: yarn i18n:sync --base upstream/${{ github.base_ref }} --locales es,fr
+
+      - name: Commit translation updates
+        if: env.OPENAI_API_KEY != '' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- language/translations/en.json language/translations/es.json language/translations/fr.json; then
+            echo "No translation changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add language/translations/en.json language/translations/es.json language/translations/fr.json
+          git commit -m "chore: sync translations"
+          git push
+
+      - name: Check translations
+        run: yarn i18n:check --base upstream/${{ github.base_ref }} --locales es,fr

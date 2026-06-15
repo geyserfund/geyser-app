@@ -2,15 +2,15 @@ import { ProjectCreationStep } from '@/types/index.ts'
 
 export const projectCreationStepIndex = {
   [ProjectCreationStep.ProjectDetails]: 0,
-  [ProjectCreationStep.FundingType]: 1,
-  [ProjectCreationStep.FundingGoal]: 2,
-  [ProjectCreationStep.PerksAndProducts]: 3,
-  [ProjectCreationStep.Story]: 4,
-  [ProjectCreationStep.AboutYou]: 5,
-  [ProjectCreationStep.Wallet]: 6,
-  [ProjectCreationStep.TaxId]: 7,
-  [ProjectCreationStep.IdentityVerification]: 8,
-  [ProjectCreationStep.Launch]: 9,
+  [ProjectCreationStep.FundingType]: 0,
+  [ProjectCreationStep.FundingGoal]: 1,
+  [ProjectCreationStep.PerksAndProducts]: 2,
+  [ProjectCreationStep.Story]: 3,
+  [ProjectCreationStep.AboutYou]: 4,
+  [ProjectCreationStep.Wallet]: 5,
+  [ProjectCreationStep.TaxId]: 5,
+  [ProjectCreationStep.IdentityVerification]: 5,
+  [ProjectCreationStep.Launch]: 6,
 } as const
 
 /** Returns the next persisted creation step for the wallet flow and overall project creation flow. */

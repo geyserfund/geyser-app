@@ -7,13 +7,13 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
-import { FeedBackVariant, Feedback } from '@/shared/molecules/Feedback.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
 export const LaunchSummary = () => {
   const { project } = useProjectAtom()
-  const { formatAmount } = useCurrencyFormatter()
+  const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
 
   const navigate = useNavigate()
 
@@ -22,9 +22,8 @@ export const LaunchSummary = () => {
     if (!project?.aonGoal?.goalAmount) return '0 sats'
 
     const satsAmount = formatAmount(project.aonGoal.goalAmount, 'BTCSAT')
-    // Simplified USD conversion for display - replace with proper conversion
-    const usdAmount = Math.round(project.aonGoal.goalAmount * 0.001) // Placeholder conversion
-    return `${satsAmount} (~ ${usdAmount.toLocaleString()} USD)`
+    const usdAmount = formatUsdAmount(project.aonGoal.goalAmount)
+    return `${satsAmount} (~ ${usdAmount})`
   }
 
   /** Get formatted launch time */

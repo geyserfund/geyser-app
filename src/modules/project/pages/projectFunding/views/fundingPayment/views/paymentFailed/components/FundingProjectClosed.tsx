@@ -7,14 +7,14 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
 import { ErrorLayout } from './ErrorLayout'
 
-export const FundingProjectClosed = ({ message }: { message: string }) => {
+export const FundingProjectClosed = () => {
   const { t } = useTranslation()
 
   return (
     <ErrorLayout
       url={FundingErrorUrl}
       title={t('Project closed')}
-      body={<Body>{message}</Body>}
+      body={<Body>{t('This project is closed and can no longer accept contributions.')}</Body>}
     >
       <Feedback variant={FeedBackVariant.INFO}>
         <VStack w="full" alignItems="start">

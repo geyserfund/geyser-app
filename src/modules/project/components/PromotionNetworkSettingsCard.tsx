@@ -31,7 +31,7 @@ export const PromotionNetworkSettingsCard = ({
               {t('Geyser Ambassador Network')}
             </Body>
             <Body size="lg" medium color="neutral1.8">
-              {t('10% fee')}
+              {t('5% fee')}
             </Body>
             <Tooltip
               label={t('The fee is only applied to contributions enabled through Geyser Ambassador Network promotions')}

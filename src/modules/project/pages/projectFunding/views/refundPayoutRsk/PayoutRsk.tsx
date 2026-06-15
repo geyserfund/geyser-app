@@ -136,8 +136,14 @@ const assertInternalLockAccountMatchesProjectWallet = (params: {
   }
 
   throw new Error(
-    'The account password does not match this project wallet. Recovering the password closes projects tied to the old wallet key.',
+    t(
+      'The account password does not match this project wallet. Recovering the password closes projects tied to the old wallet key.',
+    ),
   )
+}
+
+const getPayoutErrorDescription = (error: unknown) => {
+  return error instanceof Error && error.message ? error.message : t('Please try again')
 }
 
 const getPayoutProgressSteps = (params: { method: PayoutMethod; stage: PayoutProgressStage }): PayoutProgressStep[] => {
@@ -498,6 +504,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
+      assertInternalLockAccountMatchesProjectWallet({
+        requiresInternalLock,
+        projectRskAddress: rskAddress,
+        accountRskAddress: accountKeys.address,
+      })
+
       const amount = payout?.amount || 0
       const payoutId = payout?.id
 
@@ -548,11 +560,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       const lockAmountSats = Number(swapObj?.expectedAmount ?? amount)
       const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
       const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
-      assertInternalLockAccountMatchesProjectWallet({
-        requiresInternalLock,
-        projectRskAddress: rskAddress,
-        accountRskAddress: accountKeys.address,
-      })
       const signature = requiresInternalLock
         ? '0x'
         : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
@@ -596,7 +603,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       console.error('Lightning payout error:', error)
       toast.error({
         title: t('Something went wrong'),
-        description: t('Please try again'),
+        description: getPayoutErrorDescription(error),
       })
     } finally {
       setIsSubmitting(false)
@@ -604,37 +611,43 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   }
 
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
-    if (activeOnChainPayment && activeOnChainPaymentDetails) {
-      const paymentDetails = activeOnChainPaymentDetails
-      const swapObj = JSON.parse(paymentDetails.swapMetadata)
-
-      swapObj.id = swapObj.id || paymentDetails.swapId
-      swapObj.privateKey = accountKeys.privateKey
-      swapObj.preimageHash = paymentDetails.swapPreimageHash
-      if (isClaimable) {
-        swapObj.preimageHex = await decryptString({
-          encryptedString: swapObj.preimageHexEncrypted || '',
-          password: data.accountPassword || '',
-        })
-      }
-
-      swapObj.paymentId = activeOnChainPayment.id
-      setSwapData(swapObj)
-
-      setLockTxId(paymentDetails.onChainTxId || '')
-      setIsWaitingClaimReady(isClaimable)
-      setIsWaitingConfirmation(true)
-      setRefundAddress(paymentDetails.onChainAddress || data.bitcoinAddress || null)
-      toast.info({
-        title: t('Payout initiated'),
-        description: t('Your Bitcoin on-chain payout will be processed shortly'),
-      })
-
-      return
-    }
-
     setIsSubmitting(true)
     try {
+      assertInternalLockAccountMatchesProjectWallet({
+        requiresInternalLock,
+        projectRskAddress: rskAddress,
+        accountRskAddress: accountKeys.address,
+      })
+
+      if (activeOnChainPayment && activeOnChainPaymentDetails) {
+        const paymentDetails = activeOnChainPaymentDetails
+        const swapObj = JSON.parse(paymentDetails.swapMetadata)
+
+        swapObj.id = swapObj.id || paymentDetails.swapId
+        swapObj.privateKey = accountKeys.privateKey
+        swapObj.preimageHash = paymentDetails.swapPreimageHash
+        if (isClaimable) {
+          swapObj.preimageHex = await decryptString({
+            encryptedString: swapObj.preimageHexEncrypted || '',
+            password: data.accountPassword || '',
+          })
+        }
+
+        swapObj.paymentId = activeOnChainPayment.id
+        setSwapData(swapObj)
+
+        setLockTxId(paymentDetails.onChainTxId || '')
+        setIsWaitingClaimReady(isClaimable)
+        setIsWaitingConfirmation(true)
+        setRefundAddress(paymentDetails.onChainAddress || data.bitcoinAddress || null)
+        toast.info({
+          title: t('Payout initiated'),
+          description: t('Your Bitcoin on-chain payout will be processed shortly'),
+        })
+
+        return
+      }
+
       // TODO: Implement actual Bitcoin on-chain refund API call
 
       const { preimageHash, preimageHex } = generatePreImageHash()
@@ -695,11 +708,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       const lockAmountSats = Number(swapObj?.lockupDetails?.amount ?? amount)
       const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
       const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
-      assertInternalLockAccountMatchesProjectWallet({
-        requiresInternalLock,
-        projectRskAddress: rskAddress,
-        accountRskAddress: accountKeys.address,
-      })
       const signature = requiresInternalLock
         ? '0x'
         : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
@@ -745,7 +753,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       console.error('Bitcoin payout error:', error)
       toast.error({
         title: t('Something went wrong'),
-        description: t('Please try again'),
+        description: getPayoutErrorDescription(error),
       })
     } finally {
       setIsSubmitting(false)

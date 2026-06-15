@@ -94,7 +94,7 @@ const getTermsContent = (t: TFunction): TermsContent => ({
   feeItems: [
     t('We will charge a 5% fee from any contribution made to a project that uses a lightning address.'),
     t(
-      'We will apply a +10% fee from any project that enlists into our Promotions Network, a portion of which goes automatically to the promoter.',
+      'We will apply a +5% fee from any project that enlists into our Promotions Network, a portion of which goes automatically to the promoter.',
     ),
     t(
       'Fees may also be charged in the event that the contribution is made via on-chain transaction to a project using a lightning address. Such fees may vary and will depend on the current fees in the Bitcoin main network and fees of third party services relating to on-chain payments to a lightning address.',

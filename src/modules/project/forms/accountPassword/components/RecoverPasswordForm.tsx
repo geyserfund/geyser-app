@@ -60,17 +60,21 @@ const getFundsSummaryText = (fundsSummary: {
 
   if (affectedTiaProjects.length > 0) {
     messages.push(
-      t('{{count}} TIA project will be closed because it is tied to your current account key.', {
-        count: affectedTiaProjects.length,
-      }),
+      affectedTiaProjects.length === 1
+        ? t('1 TIA project will be closed because it is tied to your current account key.')
+        : t('{{count}} TIA projects will be closed because they are tied to your current account key.', {
+            count: affectedTiaProjects.length,
+          }),
     )
   }
 
   if (legacyTiaProjects.length > 0) {
     messages.push(
-      t('{{count}} older TIA project will require wallet review before it can accept new contributions.', {
-        count: legacyTiaProjects.length,
-      }),
+      legacyTiaProjects.length === 1
+        ? t('1 older TIA project will require wallet review before it can accept new contributions.')
+        : t('{{count}} older TIA projects will require wallet review before they can accept new contributions.', {
+            count: legacyTiaProjects.length,
+          }),
     )
   }
 
@@ -104,9 +108,9 @@ const getFundsSummaryText = (fundsSummary: {
 }
 
 type AccountPasswordProjectImpact = {
-  id: string | number | bigint
+  id: string | bigint
   title: string
-  balanceSats: string | number | bigint
+  balanceSats: string | bigint
 }
 
 function toSatsBigInt(value: string | number | bigint): bigint {

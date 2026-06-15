@@ -8,14 +8,14 @@ import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { useNostrPostForProject } from '../../../hooks/useNostrPostForProject.tsx'
 
-export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
+export const usePostProjectOnNostr = () => {
   const { project } = useProjectAtom()
   const { createPostEvent, isPosting } = useNostrPostForProject()
   const toast = useNotification()
 
   const [publishNostrEvent, { loading: isPublishing }] = usePublishNostrEventMutation()
 
-  const handlePost = async () => {
+  const postProjectOnNostr = async () => {
     if (!project?.keys?.nostrKeys?.publicKey?.hex || !project.name) {
       return
     }
@@ -43,7 +43,19 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
     }
   }
 
-  if (!project?.keys?.nostrKeys?.publicKey?.hex || !window.nostr) {
+  return {
+    canPostProjectOnNostr: Boolean(
+      project?.keys?.nostrKeys?.publicKey?.hex && typeof window !== 'undefined' && window.nostr,
+    ),
+    isPostingProjectOnNostr: isPosting || isPublishing,
+    postProjectOnNostr,
+  }
+}
+
+export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
+  const { canPostProjectOnNostr, isPostingProjectOnNostr, postProjectOnNostr } = usePostProjectOnNostr()
+
+  if (!canPostProjectOnNostr) {
     return null
   }
 
@@ -55,8 +67,8 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
         variant="soft"
         colorScheme="nostr"
         size="md"
-        isLoading={isPosting || isPublishing}
-        onClick={handlePost}
+        isLoading={isPostingProjectOnNostr}
+        onClick={postProjectOnNostr}
         {...props}
       />
     </Tooltip>

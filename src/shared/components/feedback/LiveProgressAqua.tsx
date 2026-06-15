@@ -16,7 +16,7 @@ type LiveProgressAquaProps = {
   fillColor?: string
   fillGradient?: string
   glowColor?: string
-  label?: string
+  label?: React.ReactNode
   showPercent?: boolean
   transitionMs?: number
   flowSpeedSec?: number // stripes speed

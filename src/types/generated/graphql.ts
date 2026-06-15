@@ -10218,7 +10218,7 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, n
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }>, reviews: Array<(
@@ -10638,6 +10638,13 @@ export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
+
+export type ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables = Exact<{
+  input?: InputMaybe<ProjectsGetQueryInput>;
+}>;
+
+
+export type ImpactFundsFieldPartnerLeaderboardProjectsQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<{ __typename?: 'Project', id: any, title: string, balance: number, fieldPartner?: { __typename?: 'User', id: any, username: string, location?: string | null } | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }> }> } };
 
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
@@ -11168,7 +11175,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -11185,7 +11192,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -12999,6 +13006,7 @@ export const ProjectForMyProjectsFragmentDoc = gql`
   balanceUsdCent
   lastCreationStep
   fundingStrategy
+  isRecoverableGrant
   launchedAt
   rskEoa
   subCategory
@@ -14406,6 +14414,14 @@ export const ProjectPageBodyFragmentDoc = gql`
   followersCount
   rejectionReason
   fundingStrategy
+  isRecoverableGrant
+  fieldPartner {
+    id
+    username
+    imageUrl
+    bio
+    guardianType
+  }
   rskEoa
   lastCreationStep
   launchScheduledAt
@@ -14467,6 +14483,14 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   followersCount
   rejectionReason
   fundingStrategy
+  isRecoverableGrant
+  fieldPartner {
+    id
+    username
+    imageUrl
+    bio
+    guardianType
+  }
   rskEoa
   lastCreationStep
   launchScheduledAt
@@ -17567,6 +17591,65 @@ export type ImpactFundsQueryHookResult = ReturnType<typeof useImpactFundsQuery>;
 export type ImpactFundsLazyQueryHookResult = ReturnType<typeof useImpactFundsLazyQuery>;
 export type ImpactFundsSuspenseQueryHookResult = ReturnType<typeof useImpactFundsSuspenseQuery>;
 export type ImpactFundsQueryResult = Apollo.QueryResult<ImpactFundsQuery, ImpactFundsQueryVariables>;
+export const ImpactFundsFieldPartnerLeaderboardProjectsDocument = gql`
+    query ImpactFundsFieldPartnerLeaderboardProjects($input: ProjectsGetQueryInput) {
+  projectsGet(input: $input) {
+    projects {
+      id
+      title
+      balance
+      fieldPartner {
+        id
+        username
+        location
+      }
+      location {
+        country {
+          name
+        }
+        region
+      }
+      tags {
+        id
+        label
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useImpactFundsFieldPartnerLeaderboardProjectsQuery__
+ *
+ * To run a query within a React component, call `useImpactFundsFieldPartnerLeaderboardProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundsFieldPartnerLeaderboardProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImpactFundsFieldPartnerLeaderboardProjectsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundsFieldPartnerLeaderboardProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>(ImpactFundsFieldPartnerLeaderboardProjectsDocument, options);
+      }
+export function useImpactFundsFieldPartnerLeaderboardProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>(ImpactFundsFieldPartnerLeaderboardProjectsDocument, options);
+        }
+export function useImpactFundsFieldPartnerLeaderboardProjectsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>(ImpactFundsFieldPartnerLeaderboardProjectsDocument, options);
+        }
+export type ImpactFundsFieldPartnerLeaderboardProjectsQueryHookResult = ReturnType<typeof useImpactFundsFieldPartnerLeaderboardProjectsQuery>;
+export type ImpactFundsFieldPartnerLeaderboardProjectsLazyQueryHookResult = ReturnType<typeof useImpactFundsFieldPartnerLeaderboardProjectsLazyQuery>;
+export type ImpactFundsFieldPartnerLeaderboardProjectsSuspenseQueryHookResult = ReturnType<typeof useImpactFundsFieldPartnerLeaderboardProjectsSuspenseQuery>;
+export type ImpactFundsFieldPartnerLeaderboardProjectsQueryResult = Apollo.QueryResult<ImpactFundsFieldPartnerLeaderboardProjectsQuery, ImpactFundsFieldPartnerLeaderboardProjectsQueryVariables>;
 export const ImpactFundDocument = gql`
     query ImpactFund($input: ImpactFundGetInput!) {
   impactFund(input: $input) {
