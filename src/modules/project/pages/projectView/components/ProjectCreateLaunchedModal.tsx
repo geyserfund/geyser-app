@@ -11,7 +11,7 @@ export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) 
   const { t } = useTranslation()
 
   const { project } = useProjectAtom()
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isRecoverableGrant = Boolean(project && isRecoverableGrantProject(project))
 
   return (
     <Modal

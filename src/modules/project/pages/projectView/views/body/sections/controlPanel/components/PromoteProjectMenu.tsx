@@ -84,7 +84,7 @@ const PromoteOptionCard = ({
         </VStack>
       </HStack>
       <IconButton
-        aria-label="Go to option"
+        aria-label={t('Go to option')}
         icon={<PiArrowUpRight />}
         size="sm"
         variant="solid"
@@ -148,7 +148,7 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
             </VStack>
             <IconButton
               size="sm"
-              aria-label="close"
+              aria-label={t('Close')}
               icon={<PiX />}
               variant="ghost"
               colorScheme="neutral1"

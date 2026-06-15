@@ -12,7 +12,7 @@ import {
 } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
-import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
@@ -38,9 +38,10 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const isMobile = useMobileMode()
   const [configuredRskEoa, setConfiguredRskEoa] = useState(project.rskEoa)
+  const minBitcoinPayoutSatsFormatted = new Intl.NumberFormat(i18n.language).format(MIN_BITCOIN_PAYOUT_SATS)
 
   const isPreLaunchReview = isProjectInPreLaunchReview(project)
   const isPostLaunchReview = isProjectInPostLaunchReview(project)
@@ -236,7 +237,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             label={
               isWithdrawDisabled
                 ? t('{{amount}} sats minimum required to withdraw.', {
-                    amount: MIN_BITCOIN_PAYOUT_SATS_FORMATTED,
+                    amount: minBitcoinPayoutSatsFormatted,
                   })
                 : ''
             }
