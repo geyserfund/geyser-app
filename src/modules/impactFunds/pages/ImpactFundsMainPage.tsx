@@ -21,17 +21,15 @@ import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import {
-  type ImpactFundsFieldPartnerLeaderboardProjectsQuery,
+  type ImpactFundsFieldPartnerLeaderboardQuery,
   type ImpactFundsQuery,
-  ProjectsGetWhereInputStatus,
   ProjectSubCategory,
-  useImpactFundsFieldPartnerLeaderboardProjectsQuery,
+  useImpactFundsFieldPartnerLeaderboardQuery,
   useImpactFundsQuery,
 } from '@/types'
 
 const LATIN_AMERICA_IMPACT_FUND_NAME = 'latam-impact-fund'
 const FALLBACK_FIELD_PARTNER_COUNT = 100
-const FIELD_PARTNER_PROJECT_FETCH_LIMIT = 250
 const LEADERBOARD_INITIAL_ROW_COUNT = 7
 const LEADERBOARD_MAX_ROW_COUNT = 20
 const IMPACT_FUNDS_PAPER_HERO_IMAGE_URL =
@@ -44,9 +42,32 @@ const FIELD_PARTNERS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
 const RECOVERABLE_GRANTS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Recoverable%20Grant%20-%20Presentation%202026.06.pdf'
+const ABOUT_SECTION_STATS = [
+  {
+    value: '279M sats',
+    label: 'allocated through Impact Fund projects',
+    isDark: false,
+  },
+  {
+    value: '12.21M sats',
+    label: 'funding enabled by Field Partners',
+    isDark: false,
+  },
+  {
+    value: '20 projects',
+    label: 'launched, supported, or promoted by Field Partners',
+    isDark: false,
+  },
+  {
+    value: `${FALLBACK_FIELD_PARTNER_COUNT} partners`,
+    label: 'trusted local field network, and growing from 40 different countries',
+    isDark: true,
+  },
+] as const
+const LEADERBOARD_HEADERS = ['Rank', 'Field Partner', 'Country', 'Projects launched', 'Enabled contribution'] as const
 
 type ImpactFundListItem = ImpactFundsQuery['impactFunds'][number]
-type FieldPartnerLeaderboardProject = ImpactFundsFieldPartnerLeaderboardProjectsQuery['projectsGet']['projects'][number]
+type FieldPartnerLeaderboardItem = ImpactFundsFieldPartnerLeaderboardQuery['impactFundFieldPartnerLeaderboard']['rows'][number]
 type SponsorListItem = { id: string; name: string; image?: string | null; url?: string | null }
 type FieldPartnerLeaderboardRow = {
   rank: number
@@ -140,11 +161,10 @@ export const ImpactFundsMainPage = () => {
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
   const [isShowingAllPartners, setIsShowingAllPartners] = useState(false)
   const { data } = useImpactFundsQuery()
-  const { data: fieldPartnerProjectsData } = useImpactFundsFieldPartnerLeaderboardProjectsQuery({
+  const { data: fieldPartnerLeaderboardData } = useImpactFundsFieldPartnerLeaderboardQuery({
     variables: {
       input: {
-        where: { status: ProjectsGetWhereInputStatus.Active },
-        pagination: { take: FIELD_PARTNER_PROJECT_FETCH_LIMIT },
+        limit: LEADERBOARD_MAX_ROW_COUNT,
       },
     },
   })
@@ -152,42 +172,97 @@ export const ImpactFundsMainPage = () => {
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  const colors: SectionColors = {
-    pageBg: useColorModeValue('white', 'utils.pbg'),
-    surfaceBg: useColorModeValue('white', 'neutral1.4'),
-    mutedSurfaceBg: useColorModeValue('#F5F6F6', 'neutral1.2'),
-    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.2'),
-    emphasisCardBg: useColorModeValue('#17120C', 'neutral1.5'),
-    emphasisCardBorder: useColorModeValue('transparent', 'neutral1.6'),
-    emphasisCardText: useColorModeValue('white', 'neutral1.12'),
-    emphasisCardMutedText: useColorModeValue('whiteAlpha.800', 'neutral1.11'),
-    emphasisCardEyebrow: useColorModeValue('whiteAlpha.800', 'neutral1.10'),
-    emphasisCardAccent: useColorModeValue('#00E0B0', 'primary1.300'),
-    emphasisCardMetric: useColorModeValue('#F09A34', 'amber.9'),
-    emphasisCardButtonBg: useColorModeValue('white', 'neutral1.12'),
-    emphasisCardButtonText: useColorModeValue('black', 'neutral1.1'),
-    sponsorTileBg: useColorModeValue('white', 'neutral1.5'),
-    sponsorLogoBackdrop: useColorModeValue('white', 'neutral1.12'),
-    surfaceActionButtonBg: useColorModeValue('#17120C', 'neutral1.12'),
-    surfaceActionButtonText: useColorModeValue('white', 'neutral1.1'),
-    primaryText: useColorModeValue('black', 'neutral1.12'),
-    secondaryText: useColorModeValue('#626872', 'neutral1.10'),
-    mutedText: useColorModeValue('#626872', 'neutral1.9'),
-    borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
-    accentText: useColorModeValue('#3F8F7C', 'primary1.200'),
-    accentBg: useColorModeValue('#00E0B0', 'primary1.500'),
-    amberBg: useColorModeValue('#F09A34', 'amber.9'),
-    amberText: useColorModeValue('black', 'neutral1.1'),
-    amberLinkHover: useColorModeValue('#17120C', 'neutral1.1'),
-  }
+  const pageBg = useColorModeValue('white', 'utils.pbg')
+  const surfaceBg = useColorModeValue('white', 'neutral1.4')
+  const mutedSurfaceBg = useColorModeValue('#F5F6F6', 'neutral1.2')
+  const darkSurfaceBg = useColorModeValue('#17120C', 'neutral1.2')
+  const emphasisCardBg = useColorModeValue('#17120C', 'neutral1.5')
+  const emphasisCardBorder = useColorModeValue('transparent', 'neutral1.6')
+  const emphasisCardText = useColorModeValue('white', 'neutral1.12')
+  const emphasisCardMutedText = useColorModeValue('whiteAlpha.800', 'neutral1.11')
+  const emphasisCardEyebrow = useColorModeValue('whiteAlpha.800', 'neutral1.10')
+  const emphasisCardAccent = useColorModeValue('#00E0B0', 'primary1.300')
+  const emphasisCardMetric = useColorModeValue('#F09A34', 'amber.9')
+  const emphasisCardButtonBg = useColorModeValue('white', 'neutral1.12')
+  const emphasisCardButtonText = useColorModeValue('black', 'neutral1.1')
+  const sponsorTileBg = useColorModeValue('white', 'neutral1.5')
+  const sponsorLogoBackdrop = useColorModeValue('white', 'neutral1.12')
+  const surfaceActionButtonBg = useColorModeValue('#17120C', 'neutral1.12')
+  const surfaceActionButtonText = useColorModeValue('white', 'neutral1.1')
+  const primaryText = useColorModeValue('black', 'neutral1.12')
+  const secondaryText = useColorModeValue('#626872', 'neutral1.10')
+  const mutedText = useColorModeValue('#626872', 'neutral1.9')
+  const borderColor = useColorModeValue('#E2E4E6', 'neutral1.5')
+  const accentText = useColorModeValue('#3F8F7C', 'primary1.200')
+  const accentBg = useColorModeValue('#00E0B0', 'primary1.500')
+  const amberBg = useColorModeValue('#F09A34', 'amber.9')
+  const amberText = useColorModeValue('black', 'neutral1.1')
+  const amberLinkHover = useColorModeValue('#17120C', 'neutral1.1')
+  const colors: SectionColors = useMemo(
+    () => ({
+      pageBg,
+      surfaceBg,
+      mutedSurfaceBg,
+      darkSurfaceBg,
+      emphasisCardBg,
+      emphasisCardBorder,
+      emphasisCardText,
+      emphasisCardMutedText,
+      emphasisCardEyebrow,
+      emphasisCardAccent,
+      emphasisCardMetric,
+      emphasisCardButtonBg,
+      emphasisCardButtonText,
+      sponsorTileBg,
+      sponsorLogoBackdrop,
+      surfaceActionButtonBg,
+      surfaceActionButtonText,
+      primaryText,
+      secondaryText,
+      mutedText,
+      borderColor,
+      accentText,
+      accentBg,
+      amberBg,
+      amberText,
+      amberLinkHover,
+    }),
+    [
+      pageBg,
+      surfaceBg,
+      mutedSurfaceBg,
+      darkSurfaceBg,
+      emphasisCardBg,
+      emphasisCardBorder,
+      emphasisCardText,
+      emphasisCardMutedText,
+      emphasisCardEyebrow,
+      emphasisCardAccent,
+      emphasisCardMetric,
+      emphasisCardButtonBg,
+      emphasisCardButtonText,
+      sponsorTileBg,
+      sponsorLogoBackdrop,
+      surfaceActionButtonBg,
+      surfaceActionButtonText,
+      primaryText,
+      secondaryText,
+      mutedText,
+      borderColor,
+      accentText,
+      accentBg,
+      amberBg,
+      amberText,
+      amberLinkHover,
+    ],
+  )
 
   const impactFunds = data?.impactFunds || []
   const latinAmericaImpactFund = impactFunds.find((fund) => fund.name === LATIN_AMERICA_IMPACT_FUND_NAME)
   const aggregatedSponsors = getAggregatedSponsors(impactFunds)
   const sponsors = aggregatedSponsors
-  const fieldPartnerLeaderboardRows = useMemo(
-    () => getFieldPartnerLeaderboardRows(fieldPartnerProjectsData?.projectsGet.projects || []),
-    [fieldPartnerProjectsData?.projectsGet.projects],
+  const fieldPartnerLeaderboardRows = getFieldPartnerLeaderboardRows(
+    fieldPartnerLeaderboardData?.impactFundFieldPartnerLeaderboard.rows || [],
   )
   const rowsToShow = isShowingAllPartners
     ? fieldPartnerLeaderboardRows
@@ -311,78 +386,15 @@ const formatLeaderboardSats = (sats: number) => {
   return `${compactSatsFormatter.format(sats).replace('K', 'k')} sats`
 }
 
-const getLocationLabel = (project: FieldPartnerLeaderboardProject) => {
-  return project.fieldPartner?.location || project.location?.country?.name || project.location?.region || 'Global'
-}
-
-const getTopLocationLabel = (countryCounts: Map<string, number>) => {
-  let topEntry: [string, number] | undefined
-
-  for (const entry of countryCounts.entries()) {
-    if (!topEntry) {
-      topEntry = entry
-      continue
-    }
-
-    const countDifference = entry[1] - topEntry[1]
-    if (countDifference > 0 || (countDifference === 0 && entry[0].localeCompare(topEntry[0]) < 0)) {
-      topEntry = entry
-    }
-  }
-
-  return topEntry?.[0] || 'Global'
-}
-
-const getFieldPartnerLeaderboardRows = (projects: FieldPartnerLeaderboardProject[]): FieldPartnerLeaderboardRow[] => {
-  const fieldPartners = new Map<
-    string,
-    {
-      fieldPartnerId: string
-      fieldPartner: string
-      countryCounts: Map<string, number>
-      projectsLaunched: number
-      enabledContributionSats: number
-    }
-  >()
-
-  for (const project of projects) {
-    if (!project.fieldPartner) {
-      continue
-    }
-
-    const fieldPartnerId = String(project.fieldPartner.id)
-    const current = fieldPartners.get(fieldPartnerId) || {
-      fieldPartnerId,
-      fieldPartner: project.fieldPartner.username,
-      countryCounts: new Map<string, number>(),
-      projectsLaunched: 0,
-      enabledContributionSats: 0,
-    }
-    const locationLabel = getLocationLabel(project)
-
-    current.countryCounts.set(locationLabel, (current.countryCounts.get(locationLabel) || 0) + 1)
-    current.projectsLaunched += 1
-    current.enabledContributionSats += project.balance
-    fieldPartners.set(fieldPartnerId, current)
-  }
-
-  return Array.from(fieldPartners.values())
-    .sort((a, b) => {
-      const contributionDifference = b.enabledContributionSats - a.enabledContributionSats
-      if (contributionDifference !== 0) return contributionDifference
-
-      const projectDifference = b.projectsLaunched - a.projectsLaunched
-      return projectDifference === 0 ? a.fieldPartner.localeCompare(b.fieldPartner) : projectDifference
-    })
-    .slice(0, LEADERBOARD_MAX_ROW_COUNT)
-    .map((row, index) => ({
-      rank: index + 1,
-      fieldPartnerId: row.fieldPartnerId,
-      fieldPartner: row.fieldPartner,
-      country: getTopLocationLabel(row.countryCounts),
-      projectsLaunched: `${row.projectsLaunched} onboarded`,
-      enabledContribution: formatLeaderboardSats(row.enabledContributionSats),
-    }))
+const getFieldPartnerLeaderboardRows = (rows: FieldPartnerLeaderboardItem[]): FieldPartnerLeaderboardRow[] => {
+  return rows.map((row) => ({
+    rank: row.rank,
+    fieldPartnerId: String(row.fieldPartnerId),
+    fieldPartner: row.fieldPartner,
+    country: row.country,
+    projectsLaunched: `${row.projectsLaunched} onboarded`,
+    enabledContribution: formatLeaderboardSats(row.enabledContributionSats),
+  }))
 }
 
 const PageShell = ({ children, colors }: { children: React.ReactNode; colors: SectionColors }) => {
@@ -543,25 +555,6 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
 const AboutSection = ({ colors }: { colors: SectionColors }) => {
   const topSectionTextColor = useColorModeValue('black', 'white')
   const statMutedTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
-  const stats = [
-    {
-      value: '279M sats',
-      label: 'allocated through Impact Fund projects',
-    },
-    {
-      value: '12.21M sats',
-      label: 'funding enabled by Field Partners',
-    },
-    {
-      value: '20 projects',
-      label: 'launched, supported, or promoted by Field Partners',
-    },
-    {
-      value: t('{{count}} partners', { count: FALLBACK_FIELD_PARTNER_COUNT }),
-      label: 'trusted local field network, and growing from 40 different countries',
-      isDark: true,
-    },
-  ]
 
   return (
     <PageSection colors={colors}>
@@ -598,7 +591,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
         </SimpleGrid>
 
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing="14px">
-          {stats.map((stat) => (
+          {ABOUT_SECTION_STATS.map((stat) => (
             <VStack
               key={stat.label}
               align="flex-start"
@@ -790,8 +783,6 @@ const LeaderboardSection = ({
 const LEADERBOARD_RANK_COLUMN_WIDTH = '72px'
 
 const LeaderboardHeader = ({ colors }: { colors: SectionColors }) => {
-  const headers = ['Rank', 'Field Partner', 'Country', 'Projects launched', 'Enabled contribution']
-
   return (
     <HStack
       spacing={0}
@@ -802,7 +793,7 @@ const LeaderboardHeader = ({ colors }: { colors: SectionColors }) => {
       borderBottomWidth="1px"
       borderColor={colors.borderColor}
     >
-      {headers.map((header, index) => (
+      {LEADERBOARD_HEADERS.map((header, index) => (
         <Box key={header} flex={index === 0 ? `0 0 ${LEADERBOARD_RANK_COLUMN_WIDTH}` : 1} minW={0}>
           <Body
             size="xs"
@@ -810,7 +801,7 @@ const LeaderboardHeader = ({ colors }: { colors: SectionColors }) => {
             color={colors.secondaryText}
             letterSpacing="0.11em"
             textTransform="uppercase"
-            textAlign={index === headers.length - 1 ? 'right' : 'left'}
+            textAlign={index === LEADERBOARD_HEADERS.length - 1 ? 'right' : 'left'}
           >
             {t(header)}
           </Body>
