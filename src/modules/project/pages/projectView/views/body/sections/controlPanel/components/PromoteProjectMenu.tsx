@@ -167,19 +167,22 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
 interface PromoteOptionsProps {
   projectName: string
   onClose?: () => void
+  hideAffiliateOptions?: boolean
 }
 
-export const PromoteOptions = ({ projectName, onClose }: PromoteOptionsProps) => {
+export const PromoteOptions = ({ projectName, onClose, hideAffiliateOptions = false }: PromoteOptionsProps) => {
   return (
     <>
-      <PromoteOptionCard
-        emoji="🔗"
-        title={t('Add affiliates')}
-        description={t('Reward others to share your project and bring contributors')}
-        isNew
-        to={getPath('dashboardPromote', projectName)}
-        onClose={onClose}
-      />
+      {!hideAffiliateOptions && (
+        <PromoteOptionCard
+          emoji="🔗"
+          title={t('Add affiliates')}
+          description={t('Reward others to share your project and bring contributors')}
+          isNew
+          to={getPath('dashboardPromote', projectName)}
+          onClose={onClose}
+        />
+      )}
       <PromoteOptionCard
         emoji="🧠"
         title={t('Best practices / tips')}
@@ -187,13 +190,15 @@ export const PromoteOptions = ({ projectName, onClose }: PromoteOptionsProps) =>
         href={BEST_PRACTICES_URL}
         isExternal
       />
-      <PromoteOptionCard
-        emoji="📢"
-        title={t('Geyser Ambassador Network')}
-        description={t('Get visibility on the Geyser landing page, emails, and much more')}
-        to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
-        onClose={onClose}
-      />
+      {!hideAffiliateOptions && (
+        <PromoteOptionCard
+          emoji="📢"
+          title={t('Geyser Ambassador Network')}
+          description={t('Get visibility on the Geyser landing page, emails, and much more')}
+          to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
+          onClose={onClose}
+        />
+      )}
     </>
   )
 }

@@ -1545,5 +1545,7 @@
   "Bitcoin Adoption Impact Fund": "Fonds d'Impact pour l'Adoption du Bitcoin",
   "to be distributed to another recoverable grant in the future, maximizing the impact of every satoshi.": "pour être redistribués à une autre subvention récupérable à l'avenir, maximisant l'impact de chaque satoshi.",
   "This project is a recoverable grant. The recipient may return the funds fully or in part through community agreements. Returned funds are sent to the Bitcoin Adoption Impact Fund to be distributed to another recoverable grant in the future, maximizing the impact of every satoshi.": "Ce projet est une subvention récupérable. Le bénéficiaire peut retourner les fonds en totalité ou en partie par le biais d'accords communautaires. Les fonds retournés sont envoyés au Fonds d'Impact pour l'Adoption du Bitcoin pour être redistribués à une autre subvention récupérable à l'avenir, maximisant l'impact de chaque satoshi.",
+  "Pilot snapshot": "Aperçu du pilote",
+  "This recoverable grant is facilitated by our trusted Field Partner,": "Cette subvention récupérable est facilitée par notre Partenaire de Terrain de confiance,",
   "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "Le retrait minimum est de {{amount}} sats. Vous avez actuellement des fonds en dessous du minimum dans votre portefeuille de projet."
 }

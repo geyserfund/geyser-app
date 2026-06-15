@@ -1,14 +1,15 @@
 import { useQuery } from '@apollo/client'
-import { GridItem, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { GridItem, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
+import { Link } from 'react-router'
 
 import { Tooltip } from '@/components/ui/Tooltip.tsx'
 import { LandingProjectCard } from '@/modules/discovery/pages/landing/components/LandingProjectCard.tsx'
 import { QUERY_FIELD_PARTNER_PROJECTS } from '@/modules/project/graphql/queries/fieldPartnerProjectsQuery.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { getPathWithGeyserPromotionsHero } from '@/shared/constants'
+import { getPath, getPathWithGeyserPromotionsHero } from '@/shared/constants'
 import { ProjectForLandingPageFragment, ProjectStatus } from '@/types/index.ts'
 
 import { useProjectAtom } from '../../../../../../hooks/useProjectAtom'
@@ -84,6 +85,7 @@ export const FieldPartnerSection = () => {
   }
 
   const fieldPartnerName = fieldPartner.username || t('this Field Partner')
+  const fieldPartnerProfilePath = fieldPartner.id ? getPath('userProfile', fieldPartner.id) : undefined
   const description = fieldPartner.bio
 
   return (
@@ -104,9 +106,17 @@ export const FieldPartnerSection = () => {
       >
         <CardLayout w="full" spacing={6} paddingX={{ base: 3, lg: 5 }} paddingY={{ base: 4, lg: 5 }}>
           <Body size="md">
-            {t('This recoverable grant is facilitated by our trusted Field Partner, {{fieldPartnerName}}.', {
-              fieldPartnerName,
-            })}
+            {t('This recoverable grant is facilitated by our trusted Field Partner,')}{' '}
+            {fieldPartnerProfilePath ? (
+              <ChakraLink as={Link} to={fieldPartnerProfilePath} textDecoration="underline">
+                {fieldPartnerName}
+              </ChakraLink>
+            ) : (
+              <Body as="span" size="md" textDecoration="underline">
+                {fieldPartnerName}
+              </Body>
+            )}
+            {'.'}
             {description ? ` ${description}` : ''}
           </Body>
 

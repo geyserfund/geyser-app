@@ -1,4 +1,4 @@
-import { Center, HStack, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Center, HStack, Image, Link as ChakraLink, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Link } from 'react-router'
 
@@ -11,6 +11,8 @@ import { RECOVERABLE_GRANT_EXPLAINER_TEXT } from './recoverableGrantConstants.ts
 const IMPACT_FUND_PATH = getPath('impactFunds')
 
 export const RecoverableGrantExplainer = () => {
+  const recoverableGrantIconSrc = useColorModeValue('/icons/recoverable-grant.png', '/icons/recoverable-grant-dark.png')
+
   return (
     <CardLayout
       w="full"
@@ -23,7 +25,7 @@ export const RecoverableGrantExplainer = () => {
       backgroundColor="primary1.1"
     >
       <Center boxSize={{ base: '44px', lg: '52px' }} flexShrink={0}>
-        <Image src="/icons/recoverable-grant.png" alt="" boxSize={{ base: '38px', lg: '46px' }} />
+        <Image src={recoverableGrantIconSrc} alt="" boxSize={{ base: '38px', lg: '46px' }} />
       </Center>
       <VStack alignItems="start" spacing={0}>
         <Body size="sm">
@@ -45,8 +47,8 @@ export const RecoverableGrantExplainer = () => {
 
 export const RecoverableGrantTooltipLabel = () => (
   <HStack alignItems="start" spacing={2} maxW="320px">
-    <Body size="sm" color="white">
-      <Body as="span" size="sm" bold color="white">
+    <Body size="sm" color="neutral1.1">
+      <Body as="span" size="sm" bold color="neutral1.1">
         {t('Same sats, more impact.')}
       </Body>{' '}
       {RECOVERABLE_GRANT_EXPLAINER_TEXT}

@@ -223,7 +223,7 @@ type ProjectHeaderTag = {
 }
 
 type ProjectHeaderTagProject = ReturnType<typeof useProjectAtom>['project'] & {
-  fieldPartner?: { username?: string | null } | null
+  fieldPartner?: { id?: string | null; username?: string | null } | null
   isRecoverableGrant?: boolean
 }
 
@@ -250,6 +250,7 @@ const getProjectHeaderTags = (project: ProjectHeaderTagProject) => {
     tags.push({
       label: t('Facilitated by {{fieldPartnerName}}', { fieldPartnerName: project.fieldPartner.username }),
       variant: 'facilitated',
+      to: project.fieldPartner.id ? getPath('userProfile', project.fieldPartner.id) : undefined,
     })
   }
 

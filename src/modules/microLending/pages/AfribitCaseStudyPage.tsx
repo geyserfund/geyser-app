@@ -1,4 +1,5 @@
 import { Box, Button, Flex, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
@@ -36,8 +37,6 @@ const radius = {
 const AFRIBIT_CASE_STUDY_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/afribit-case-study-hero.png'
 const AFRIBIT_LOGO_HERO_IMAGE_URL = 'https://storage.googleapis.com/geyser-media/impact-funds/afribit-logo-hero.png'
-
-const t = (value: string) => value
 
 const CHAMA_MODEL_SECTION_ID = 'chama-model'
 
@@ -484,13 +483,7 @@ const Breadcrumb = ({ colors }: { colors: AfribitCaseStudyColors }) => (
   </HStack>
 )
 
-const HeroSection = ({
-  colors,
-  onDonateClick,
-}: {
-  colors: AfribitCaseStudyColors
-  onDonateClick: () => void
-}) => (
+const HeroSection = ({ colors, onDonateClick }: { colors: AfribitCaseStudyColors; onDonateClick: () => void }) => (
   <Box
     w="100vw"
     maxW="100vw"

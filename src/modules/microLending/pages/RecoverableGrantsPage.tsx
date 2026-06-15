@@ -1,4 +1,5 @@
 import { Box, Button, Flex, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
@@ -39,8 +40,6 @@ const radius = {
 const RECOVERABLE_GRANTS_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-hero.png'
 const AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL = 'https://youtu.be/pU1KxP0ddng'
-
-const t = (value: string) => value
 
 const infoPills = ['0% interest', 'No debt obligation', 'Capital reused locally'] as const
 
@@ -287,13 +286,7 @@ export const RecoverableGrantsPage = () => {
                 <Body bold lineHeight="27px">
                   {t('Quarterly reports will share progress, capital return patterns, and pilot learning')}
                 </Body>
-                <Box
-                  bg={colors.cream}
-                  borderRadius={radius.card}
-                  borderWidth="1px"
-                  borderColor={colors.line}
-                  p={5}
-                >
+                <Box bg={colors.cream} borderRadius={radius.card} borderWidth="1px" borderColor={colors.line} p={5}>
                   <Body bold color={colors.muted}>
                     {t(
                       'The goal is to grow a sustainable reusable-capital model without losing local trust and accountability',
@@ -450,7 +443,7 @@ export const RecoverableGrantsPage = () => {
                     >
                       <Body bold>{t(item.question)}</Body>
                       <Body color={colors.muted} lineHeight="25px" mt={2}>
-                        {t(`> ${item.answer}`)}
+                        {t(item.answer)}
                       </Body>
                     </Box>
                   ))}
@@ -514,13 +507,7 @@ const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
   </HStack>
 )
 
-const HeroSection = ({
-  colors,
-  onDonateClick,
-}: {
-  colors: RecoverableGrantsColors
-  onDonateClick: () => void
-}) => (
+const HeroSection = ({ colors, onDonateClick }: { colors: RecoverableGrantsColors; onDonateClick: () => void }) => (
   <Box
     w="100vw"
     maxW="100vw"
@@ -650,7 +637,7 @@ const InfoCard = ({
     borderColor={colors.line}
     p={{ base: 6, lg: 7 }}
   >
-    <Eyebrow colors={colors}>{eyebrow}</Eyebrow>
+    <Eyebrow colors={colors}>{t(eyebrow)}</Eyebrow>
     <H2
       size={compact ? { base: '26px', lg: '32px' } : { base: '32px', lg: '40px' }}
       lineHeight={compact ? { base: '32px', lg: '38px' } : { base: '38px', lg: '46px' }}
@@ -707,14 +694,9 @@ const CaseStudyCard = ({ colors }: { colors: RecoverableGrantsColors }) => (
   >
     <VStack align="stretch" spacing={4}>
       <Eyebrow colors={colors} color={colors.gold}>
-        Pilot snapshot
+        {t('Pilot snapshot')}
       </Eyebrow>
-      <H3
-        size={{ base: '28px', lg: '34px' }}
-        lineHeight={{ base: '34px', lg: '40px' }}
-        bold
-        color="white"
-      >
+      <H3 size={{ base: '28px', lg: '34px' }} lineHeight={{ base: '34px', lg: '40px' }} bold color="white">
         {t('Afribit Kibera recoverable grant cohort')}
       </H3>
       <Box overflow="hidden" borderRadius={radius.card}>

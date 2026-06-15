@@ -191,12 +191,7 @@ export const ImpactFundsWorkshopsPage = () => {
         <PageSection colors={colors}>
           <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
             <CalloutCard colors={colors} title="Create a Crowdfunding Workshop." buttonText="Apply now" isAmber />
-            <CalloutCard
-              colors={colors}
-              title="Fund a local workshop."
-              buttonText="Donate"
-              onClick={onDonateClick}
-            />
+            <CalloutCard colors={colors} title="Fund a local workshop." buttonText="Donate" onClick={onDonateClick} />
           </SimpleGrid>
         </PageSection>
 
@@ -243,12 +238,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: WorkshopColors; onDona
       align="center"
     >
       <VStack align="flex-start" spacing="22px" maxW={{ base: 'full', lg: '760px' }}>
-        <H1
-          size={{ base: '3xl', md: '4xl', lg: '48px' }}
-          bold
-          lineHeight={{ base: '1.12', lg: '54px' }}
-          color="white"
-        >
+        <H1 size={{ base: '3xl', md: '4xl', lg: '48px' }} bold lineHeight={{ base: '1.12', lg: '54px' }} color="white">
           {t('Crowdfunding Workshops')}
         </H1>
         <Body size={{ base: 'md', lg: 'lg' }} medium lineHeight={{ base: '26px', lg: '28px' }} color="whiteAlpha.900">
