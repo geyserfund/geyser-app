@@ -2227,9 +2227,7 @@
   "Fundraise": "Fundraise",
   "Earn": "Earn",
   "News": "News",
-  "FAQ": "FAQ",
   "Hackathons": "Hackathons",
-  "new": "new",
   "0% interest": "0% interest",
   "No debt obligation": "No debt obligation",
   "Capital reused locally": "Capital reused locally",
@@ -2326,5 +2324,6 @@
   "Create a Crowdfunding Workshop.": "Create a Crowdfunding Workshop.",
   "Fund a local workshop.": "Fund a local workshop.",
   "This recoverable grant is facilitated by our trusted Field Partner,": "This recoverable grant is facilitated by our trusted Field Partner,",
-  "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet."
+  "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.",
+  "Go to option": "Go to option"
 }
