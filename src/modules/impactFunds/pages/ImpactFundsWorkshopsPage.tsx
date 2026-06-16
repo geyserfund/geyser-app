@@ -25,6 +25,7 @@ const WORKSHOP_HERO_IMAGE_URL =
   'https://app.paper.design/file-assets/01KT2DBTZTEZXFBD7X82K0GAKQ/01KT9B8FMANZ6KR4BJWZ6F7W0V.jpg'
 const AFRIBIT_WORKSHOP_DESCRIPTION =
   'Afribit workshop activity shows the next step after education: meeting entrepreneurs, capturing their stories, and helping local businesses become fundable campaigns.'
+const BITCOIN_KAMPALA_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/embed/LlnZiT4DpuY'
 const workshopDecks = [
   {
     title: 'Bitcoin Crowdfunding Workshops - EN.pdf',
@@ -152,7 +153,12 @@ export const ImpactFundsWorkshopsPage = () => {
             </Body>
           </SimpleGrid>
           <VStack align="stretch" spacing={6}>
-            <WorkshopVideoCard colors={colors} eyebrow="Bitcoin Kampala" title="Crowdfunding workshop at Satoshi Hub.">
+            <WorkshopVideoCard
+              colors={colors}
+              eyebrow="Bitcoin Kampala"
+              title="Crowdfunding workshop at Satoshi Hub."
+              videoUrl={BITCOIN_KAMPALA_WORKSHOP_VIDEO_URL}
+            >
               {t(
                 'Students and community members learned Bitcoin crowdfunding, discussed local project ideas, and connected the workshop back to campaign creation on Geyser.',
               )}
@@ -383,11 +389,13 @@ const WorkshopVideoCard = ({
   colors,
   eyebrow,
   title,
+  videoUrl,
   children,
 }: {
   colors: WorkshopColors
   eyebrow: string
   title: string
+  videoUrl?: string
   children: React.ReactNode
 }) => (
   <Flex direction={{ base: 'column', lg: 'row' }} bg={colors.surfaceBg} p={{ base: 4, lg: 5 }} gap={{ base: 5, lg: 7 }}>
@@ -399,22 +407,38 @@ const WorkshopVideoCard = ({
       minH={{ base: '220px', lg: '330px' }}
       flex={1.5}
     >
-      <Flex align="center" justify="center" w="64px" h="46px" borderRadius="12px" bg="#F7CC45">
+      {videoUrl ? (
         <Box
-          as="span"
-          ml="4px"
-          w="0"
-          h="0"
-          borderTop="10px solid transparent"
-          borderBottom="10px solid transparent"
-          borderLeft="16px solid #111"
+          as="iframe"
+          src={videoUrl}
+          title={t(title)}
+          w="full"
+          h="full"
+          minH={{ base: '220px', lg: '330px' }}
+          border="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
         />
-      </Flex>
-      <Box position="absolute" bottom={4} left={4} bg="black" px={3} py={2}>
-        <Body size="xs" bold color="white">
-          {t(eyebrow)}
-        </Body>
-      </Box>
+      ) : (
+        <>
+          <Flex align="center" justify="center" w="64px" h="46px" borderRadius="12px" bg="#F7CC45">
+            <Box
+              as="span"
+              ml="4px"
+              w="0"
+              h="0"
+              borderTop="10px solid transparent"
+              borderBottom="10px solid transparent"
+              borderLeft="16px solid #111"
+            />
+          </Flex>
+          <Box position="absolute" bottom={4} left={4} bg="black" px={3} py={2}>
+            <Body size="xs" bold color="white">
+              {t(eyebrow)}
+            </Body>
+          </Box>
+        </>
+      )}
     </Flex>
     <VStack align="flex-start" justify="center" spacing={4} flex={0.9} py={{ base: 0, lg: 5 }}>
       <Eyebrow color="#E75E4F">{t(eyebrow)}</Eyebrow>
