@@ -70,7 +70,7 @@ export const PostEditMenu = ({ post, onDeleteComplete, ...props }: PostEditMenuP
           {...props}
         />
         <Portal>
-          <MenuList p={2} zIndex="99" shadow="md">
+          <MenuList p={2} zIndex="popover" shadow="md">
             <MenuItem
               icon={<PiNotePencil fontSize={'16px'} />}
               onClick={(e) => {

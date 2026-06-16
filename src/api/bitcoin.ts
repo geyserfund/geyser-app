@@ -1,5 +1,3 @@
-import { captureException } from '@sentry/react'
-
 const quoteSources = [
   {
     name: 'blockchain.info',
@@ -24,7 +22,7 @@ const getUsdQuote = async (): Promise<number> => {
       }),
   )
 
-  const usdQuote = Number(await Promise.any(requests).catch((error) => captureException(error))) || 0
+  const usdQuote = Number(await Promise.any(requests).catch(() => 0)) || 0
 
   return usdQuote
 }
