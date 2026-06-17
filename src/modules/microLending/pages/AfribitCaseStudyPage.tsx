@@ -37,6 +37,7 @@ const radius = {
 const AFRIBIT_CASE_STUDY_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/afribit-case-study-hero.png'
 const AFRIBIT_LOGO_HERO_IMAGE_URL = 'https://storage.googleapis.com/geyser-media/impact-funds/afribit-logo-hero.png'
+const AFRIBIT_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/embed/pU1KxP0ddng'
 
 const CHAMA_MODEL_SECTION_ID = 'chama-model'
 
@@ -601,32 +602,17 @@ const VideoCard = ({ colors }: { colors: AfribitCaseStudyColors }) => (
       position="relative"
     >
       <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        w="56px"
-        h="44px"
-        borderRadius={radius.card}
-        bg={colors.gold}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Box
-          w={0}
-          h={0}
-          borderTop="9px solid transparent"
-          borderBottom="9px solid transparent"
-          borderLeft={`15px solid ${colors.onGoldText}`}
-          ml="4px"
-        />
-      </Box>
-      <Box position="absolute" left={4} bottom={4} bg="black" borderRadius={radius.button} px={3} py={2}>
-        <Body size="xs" bold color="white">
-          {t('Afribit Kibera')}
-        </Body>
-      </Box>
+        as="iframe"
+        src={AFRIBIT_WORKSHOP_VIDEO_URL}
+        title={t('Afribit Kibera')}
+        w="full"
+        h="full"
+        minH={{ base: '280px', lg: '400px' }}
+        border="0"
+        borderRadius={radius.section}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      />
     </Box>
     <Body size="sm" color={colors.muted}>
       {t('Video: Afribit workshop activity and entrepreneur onboarding in Kibera.')}
