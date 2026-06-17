@@ -116,6 +116,39 @@ describe('shouldDropSentryEvent', () => {
     expect(shouldDropSentryEvent(event)).toBe(false)
   })
 
+  it('keeps Lexical editor errors visible', () => {
+    const event = createEvent({
+      exception: {
+        values: [
+          {
+            type: 'Error',
+            value: 'Minified Lexical error #222',
+          },
+        ],
+      },
+    })
+
+    expect(shouldDropSentryEvent(event)).toBe(false)
+  })
+
+  it('keeps Sumsub verification errors visible', () => {
+    const event = createEvent({
+      exception: {
+        values: [
+          {
+            type: 'TypeError',
+            value: "Cannot read properties of undefined (reading 'reviewAnswer')",
+            stacktrace: {
+              frames: [{ filename: '/assets/UserVerificationModal.js' }],
+            },
+          },
+        ],
+      },
+    })
+
+    expect(shouldDropSentryEvent(event)).toBe(false)
+  })
+
   it('keeps React removeChild errors visible for investigation', () => {
     const event = createEvent({
       exception: {

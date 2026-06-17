@@ -11,12 +11,28 @@ const BULK_UPDATE_CHUNK_SIZE = 100
 // Keep this empty before committing. Required scope: event:write.
 const SENTRY_AUTH_TOKEN = ''
 
+// Optional local defaults. Environment variables and CLI flags still work.
+const SENTRY_BASE_URL = DEFAULT_BASE_URL
+const SENTRY_ORG = DEFAULT_ORG
+const SENTRY_PROJECT = DEFAULT_PROJECT
+const SENTRY_ENVIRONMENT = DEFAULT_ENVIRONMENT
+const SENTRY_ISSUE_LIMIT = DEFAULT_LIMIT
+const SENTRY_GROUP_KEYS = []
+const SENTRY_APPLY = false
+
 const noiseGroups = [
   {
     key: 'service-worker',
     label: 'Service worker registration/update noise',
     queries: ['ServiceWorker', '"Service Worker"', 'sw.js', '"Background Sync is disabled"', 'newestWorker'],
-    patterns: ['serviceworker', 'service worker', 'sw.js', 'background sync is disabled', 'newestworker', 'workbox-window'],
+    patterns: [
+      'serviceworker',
+      'service worker',
+      'sw.js',
+      'background sync is disabled',
+      'newestworker',
+      'workbox-window',
+    ],
   },
   {
     key: 'tawk',
@@ -71,7 +87,12 @@ const noiseGroups = [
     key: 'local-storage',
     label: 'Browser localStorage access noise',
     queries: ['localStorage', '"Failed to access storage"'],
-    patterns: ['localstorage.getitem', 'localstorage.setitem', 'window.localstorage.getitem', 'failed to access storage'],
+    patterns: [
+      'localstorage.getitem',
+      'localstorage.setitem',
+      'window.localstorage.getitem',
+      'failed to access storage',
+    ],
   },
 ]
 
@@ -89,13 +110,13 @@ const keepVisiblePatterns = [
 
 const parseArgs = (argv) => {
   const options = {
-    apply: false,
-    baseUrl: process.env.SENTRY_BASE_URL || DEFAULT_BASE_URL,
-    environment: process.env.SENTRY_ENVIRONMENT || DEFAULT_ENVIRONMENT,
-    groupKeys: [],
-    limit: Number(process.env.SENTRY_ISSUE_LIMIT || DEFAULT_LIMIT),
-    org: process.env.SENTRY_ORG || DEFAULT_ORG,
-    project: process.env.SENTRY_PROJECT || DEFAULT_PROJECT,
+    apply: SENTRY_APPLY,
+    baseUrl: SENTRY_BASE_URL || process.env.SENTRY_BASE_URL || DEFAULT_BASE_URL,
+    environment: SENTRY_ENVIRONMENT || process.env.SENTRY_ENVIRONMENT || DEFAULT_ENVIRONMENT,
+    groupKeys: [...SENTRY_GROUP_KEYS],
+    limit: Number(SENTRY_ISSUE_LIMIT || process.env.SENTRY_ISSUE_LIMIT || DEFAULT_LIMIT),
+    org: SENTRY_ORG || process.env.SENTRY_ORG || DEFAULT_ORG,
+    project: SENTRY_PROJECT || process.env.SENTRY_PROJECT || DEFAULT_PROJECT,
     token: SENTRY_AUTH_TOKEN || process.env.SENTRY_AUTH_TOKEN || process.env.SENTRY_TOKEN || '',
   }
 
@@ -319,11 +340,9 @@ const ignoreIssues = async ({ issues, options }) => {
       pathname: `/api/0/projects/${options.org}/${options.project}/issues/`,
       query: {
         id: issueIdChunk,
-        status: 'unresolved',
       },
       body: {
         status: 'ignored',
-        statusDetails: {},
       },
     })
   }
@@ -375,7 +394,8 @@ const main = async () => {
   printSummary({ groups: selectedGroups, groupMatches, issues, options })
 
   if (!options.apply) {
-    console.log('No Sentry issues were changed. Re-run with --apply to ignore the matched issues.')
+    console.log('Dry run completed successfully. No Sentry issues were changed.')
+    console.log('To ignore the matched issues, either set SENTRY_APPLY = true in this file or re-run with --apply.')
     return
   }
 
