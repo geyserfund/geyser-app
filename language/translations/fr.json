@@ -1548,5 +1548,6 @@
   "Pilot snapshot": "Aperçu du pilote",
   "This recoverable grant is facilitated by our trusted Field Partner,": "Cette subvention récupérable est facilitée par notre Partenaire de Terrain de confiance,",
   "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "Le retrait minimum est de {{amount}} sats. Vous avez actuellement des fonds en dessous du minimum dans votre portefeuille de projet.",
-  "Go to option": "Aller à l'option"
+  "Go to option": "Aller à l'option",
+  "Failed to verify your identity": "Échec de la vérification de votre identité"
 }
