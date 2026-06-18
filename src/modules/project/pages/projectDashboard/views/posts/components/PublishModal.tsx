@@ -33,6 +33,12 @@ const sendToOptions = [
   { label: t('Product buyers'), value: EmailSubscriberSegment.RewardBuyers },
 ]
 
+const RewardOption = (props: OptionProps<ProjectRewardFragment, true, any>) => (
+  <components.Option {...props}>
+    <RewardItem imageUrl={props.data.images[0]} name={props.children} />
+  </components.Option>
+)
+
 export const PublishModal = ({
   post,
   postPublish,
@@ -143,14 +149,6 @@ export const PublishModal = ({
     setSelectedRewards((current) => current.filter((r) => r.id !== reward.id))
   }
 
-  const Option = (props: OptionProps<ProjectRewardFragment, true, any>) => {
-    return (
-      <components.Option {...props}>
-        <RewardItem imageUrl={props.data.images[0]} name={props.children} />
-      </components.Option>
-    )
-  }
-
   const sendEmailRender = () => {
     return (
       <>
@@ -186,7 +184,7 @@ export const PublishModal = ({
               options={rewards}
               getOptionLabel={(option: ProjectRewardFragment) => option.name}
               getOptionValue={(option: ProjectRewardFragment) => option.id}
-              components={{ Option }}
+              components={{ Option: RewardOption }}
             />
 
             <HStack w="full" flexWrap="wrap">

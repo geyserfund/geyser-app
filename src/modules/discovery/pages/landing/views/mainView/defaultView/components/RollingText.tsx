@@ -34,37 +34,26 @@ const getStripPhrases = (offset: number): string[] => {
 }
 
 const FONT_SIZE = { base: 'lg', sm: 'xl', md: '2xl', lg: '3xl' }
+const STRIP_SX = {
+  backfaceVisibility: 'hidden',
+  [`@keyframes ${ANIMATION_NAME}`]: KEYFRAMES,
+}
+const ANIMATION = `${ANIMATION_NAME} ${TOTAL_SECONDS}s cubic-bezier(0.4, 0, 0.2, 1) infinite`
 
-/** Vertically rolling text carousel driven by CSS keyframes for GPU-accelerated smoothness. */
-export const RollingText = () => {
+type PhraseStripProps = {
+  phrases: string[]
+  color?: string
+  fontWeight?: number
+  fontStyle?: string
+}
+
+/** Phrase-only animated strip, clipped to one line height */
+const PhraseStrip = ({ phrases, color, fontWeight, fontStyle }: PhraseStripProps) => {
   const { t } = useTranslation()
-  const mutedColor = useColorModeValue('neutral1.9', 'neutral1.7')
 
-  const centerPhrases = getStripPhrases(0)
-  const topPhrases = getStripPhrases(-1)
-  const bottomPhrases = getStripPhrases(1)
-
-  const stripSx = {
-    backfaceVisibility: 'hidden',
-    [`@keyframes ${ANIMATION_NAME}`]: KEYFRAMES,
-  }
-
-  const animation = `${ANIMATION_NAME} ${TOTAL_SECONDS}s cubic-bezier(0.4, 0, 0.2, 1) infinite`
-
-  /** Phrase-only animated strip, clipped to one line height */
-  const PhraseStrip = ({
-    phrases,
-    color,
-    fontWeight,
-    fontStyle,
-  }: {
-    phrases: string[]
-    color?: string
-    fontWeight?: number
-    fontStyle?: string
-  }) => (
+  return (
     <Box overflow="hidden" height={`${LINE_HEIGHT}px`}>
-      <Box animation={animation} willChange="transform" sx={stripSx}>
+      <Box animation={ANIMATION} willChange="transform" sx={STRIP_SX}>
         {phrases.map((phrase, i) => (
           <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
             <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle} whiteSpace="nowrap">
@@ -75,20 +64,16 @@ export const RollingText = () => {
       </Box>
     </Box>
   )
+}
 
-  const PhraseRow = ({
-    phrases,
-    color,
-    fontWeight,
-    fontStyle,
-    mutedTextVisibility,
-  }: {
-    phrases: string[]
-    color?: string
-    fontWeight?: number
-    fontStyle?: string
-    mutedTextVisibility?: 'visible' | 'hidden'
-  }) => (
+type PhraseRowProps = PhraseStripProps & {
+  mutedTextVisibility?: 'visible' | 'hidden'
+}
+
+const PhraseRow = ({ phrases, color, fontWeight, fontStyle, mutedTextVisibility }: PhraseRowProps) => {
+  const { t } = useTranslation()
+
+  return (
     <HStack spacing={2} justifyContent="center" minHeight={`${LINE_HEIGHT}px`} alignItems="center">
       <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
         Bitcoiners
@@ -99,23 +84,27 @@ export const RollingText = () => {
       </Text>
     </HStack>
   )
+}
 
-  const MobilePhraseOnlyRow = ({
-    phrases,
-    color,
-    fontStyle,
-  }: {
-    phrases: string[]
-    color?: string
-    fontStyle?: string
-  }) => (
-    <HStack spacing={1} alignItems="center">
-      <Text fontSize={FONT_SIZE} color={color} visibility="hidden" whiteSpace="nowrap" aria-hidden="true">
-        Bitcoiners
-      </Text>
-      <PhraseStrip phrases={phrases} color={color} fontStyle={fontStyle} />
-    </HStack>
-  )
+type MobilePhraseOnlyRowProps = Pick<PhraseStripProps, 'phrases' | 'color' | 'fontStyle'>
+
+const MobilePhraseOnlyRow = ({ phrases, color, fontStyle }: MobilePhraseOnlyRowProps) => (
+  <HStack spacing={1} alignItems="center">
+    <Text fontSize={FONT_SIZE} color={color} visibility="hidden" whiteSpace="nowrap" aria-hidden="true">
+      Bitcoiners
+    </Text>
+    <PhraseStrip phrases={phrases} color={color} fontStyle={fontStyle} />
+  </HStack>
+)
+
+/** Vertically rolling text carousel driven by CSS keyframes for GPU-accelerated smoothness. */
+export const RollingText = () => {
+  const { t } = useTranslation()
+  const mutedColor = useColorModeValue('neutral1.9', 'neutral1.7')
+
+  const centerPhrases = getStripPhrases(0)
+  const topPhrases = getStripPhrases(-1)
+  const bottomPhrases = getStripPhrases(1)
 
   return (
     <VStack spacing={{ base: 0, sm: 0 }} textAlign="center" pt={0} pb={2} w="full" alignItems="center">

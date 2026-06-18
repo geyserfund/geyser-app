@@ -42,7 +42,7 @@ export function ImpactFundsSecondaryFundsGrid({
   interactiveCardShadow,
   interactiveCardHoverShadow,
   numberFormatter,
-}: ImpactFundsSecondaryFundsGridProps): JSX.Element {
+}: ImpactFundsSecondaryFundsGridProps): React.ReactNode {
   if (funds.length === 0) {
     return <></>
   }

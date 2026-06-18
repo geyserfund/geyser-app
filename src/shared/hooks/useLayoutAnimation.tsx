@@ -44,9 +44,13 @@ export const useLayoutAnimation = () => {
     }
 
     if (className === classes.slideInLeft || className === classes.slideInRight) {
-      setTimeout(() => {
+      const resetTimer = setTimeout(() => {
         setClassName('')
       }, 300)
+
+      return () => {
+        clearTimeout(resetTimer)
+      }
     }
   }, [className, classes, isMobile])
 

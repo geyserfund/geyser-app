@@ -14,7 +14,7 @@ type DonateButtonProps =
     }
 
 /** Primary amber Donate CTA for Impact Funds surfaces. */
-export function ImpactFundDonateButton(props: DonateButtonProps): JSX.Element {
+export function ImpactFundDonateButton(props: DonateButtonProps): React.ReactNode {
   if ('onClick' in props) {
     return (
       <Button
@@ -45,7 +45,7 @@ type LearnMoreButtonProps = {
 }
 
 /** Ghost Learn more CTA with arrow affordance. */
-export function ImpactFundLearnMoreButton({ href, isExternal, to }: LearnMoreButtonProps): JSX.Element {
+export function ImpactFundLearnMoreButton({ href, isExternal, to }: LearnMoreButtonProps): React.ReactNode {
   const content = (
     <HStack spacing={1.5}>
       <Body bold color="neutral1.11">

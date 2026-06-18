@@ -11,7 +11,7 @@ type ImpactFundWhyDonateModalProps = {
 }
 
 /** Explains how the Impact Fund works, how capital is allocated, and why donations matter. */
-export function ImpactFundWhyDonateModal({ isOpen, onClose }: ImpactFundWhyDonateModalProps): JSX.Element {
+export function ImpactFundWhyDonateModal({ isOpen, onClose }: ImpactFundWhyDonateModalProps): React.ReactNode {
   const iconBg = useColorModeValue('primary1.100', 'primary1.900')
   const iconColor = useColorModeValue('primary1.700', 'primary1.300')
   const mutedTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
@@ -72,12 +72,7 @@ export function ImpactFundWhyDonateModal({ isOpen, onClose }: ImpactFundWhyDonat
       isOpen={isOpen}
       onClose={onClose}
       size="xl"
-      title={
-        <>
-          {t('Why donate to the Impact Fund')}
-          ?
-        </>
-      }
+      title={<>{t('Why donate to the Impact Fund')}?</>}
       contentProps={{ maxW: { base: 'calc(100vw - 1.5rem)', lg: '720px' } }}
       bodyProps={{ gap: 4, alignItems: 'stretch' }}
     >

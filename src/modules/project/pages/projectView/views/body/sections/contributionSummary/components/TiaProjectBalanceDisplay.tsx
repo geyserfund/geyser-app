@@ -20,6 +20,30 @@ enum BalanceView {
   PreLaunch = 'preLaunch',
 }
 
+type DotIndicatorProps = {
+  hasPreLaunch: boolean
+  hasGoal: boolean
+  hasTotalBalance: boolean
+  isPreLaunchView: boolean
+  isGoalView: boolean
+  isTotalView: boolean
+}
+
+const DotIndicator = ({
+  hasPreLaunch,
+  hasGoal,
+  hasTotalBalance,
+  isPreLaunchView,
+  isGoalView,
+  isTotalView,
+}: DotIndicatorProps) => (
+  <HStack width="100%" justifyContent="center" spacing={1}>
+    {hasPreLaunch && <Circle size="12px" bg={isPreLaunchView ? 'neutral.600' : 'neutral.200'} />}
+    {hasGoal && <Circle size="12px" bg={isGoalView ? 'neutral.600' : 'neutral.200'} />}
+    {hasTotalBalance && <Circle size="12px" bg={isTotalView ? 'neutral.600' : 'neutral.200'} />}
+  </HStack>
+)
+
 export const TiaProjectBalanceDisplay = () => {
   const { project, loading } = useProjectAtom()
   const { inProgressGoals, goalsLoading } = useGoalsAtom()
@@ -252,16 +276,6 @@ export const TiaProjectBalanceDisplay = () => {
     )
   }, [usdCentsAmount, amountUsdCentsToGoLive, isPreLaunchView, hasPreLaunch, formatAmount])
 
-  const DotIndicator = () => {
-    return (
-      <HStack width="100%" justifyContent="center" spacing={1}>
-        {hasPreLaunch && <Circle size="12px" bg={isPreLaunchView ? 'neutral.600' : 'neutral.200'} />}
-        {hasGoal && <Circle size="12px" bg={isGoalView ? 'neutral.600' : 'neutral.200'} />}
-        {hasTotalBalance && <Circle size="12px" bg={isTotalView ? 'neutral.600' : 'neutral.200'} />}
-      </HStack>
-    )
-  }
-
   if (loading) {
     return <SkeletonLayout height="90px" width="100%" />
   }
@@ -289,7 +303,16 @@ export const TiaProjectBalanceDisplay = () => {
         {renderProjectPreLaunchValue()}
       </VStack>
 
-      {shouldShowDotIndicator && <DotIndicator />}
+      {shouldShowDotIndicator && (
+        <DotIndicator
+          hasPreLaunch={hasPreLaunch}
+          hasGoal={hasGoal}
+          hasTotalBalance={hasTotalBalance}
+          isPreLaunchView={isPreLaunchView}
+          isGoalView={isGoalView}
+          isTotalView={isTotalView}
+        />
+      )}
     </VStack>
   )
 }

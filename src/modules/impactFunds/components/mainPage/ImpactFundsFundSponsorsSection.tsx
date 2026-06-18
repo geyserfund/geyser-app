@@ -28,7 +28,7 @@ export function ImpactFundsFundSponsorsSection({
   sectionSecondaryTextColor,
   sectionMutedTextColor,
   cardSurfaceBg,
-}: ImpactFundsFundSponsorsSectionProps): JSX.Element {
+}: ImpactFundsFundSponsorsSectionProps): React.ReactNode {
   return (
     <VStack align="stretch" spacing={{ base: 6, md: 8 }}>
       <H2 size="2xl" bold color={sectionPrimaryTextColor}>

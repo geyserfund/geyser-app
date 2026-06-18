@@ -37,7 +37,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
 import {
   PiArrowUpRightBold,
@@ -203,7 +203,7 @@ const faqItems = [
   },
 ]
 
-export function ImpactFundDetailPage(): JSX.Element | null {
+export function ImpactFundDetailPage(): React.ReactNode | null {
   const { impactFundName } = useParams<{ impactFundName: string }>()
   const decodedImpactFundName = impactFundName ? decodeURIComponent(impactFundName) : ''
   const { user, isLoggedIn } = useAuthContext()
@@ -566,7 +566,7 @@ function FundedApplicationsSection({
   subtleTextColor,
   tertiaryTextColor,
   fundingModelPillStyles,
-}: FundedApplicationsSectionProps): JSX.Element {
+}: FundedApplicationsSectionProps): React.ReactNode {
   const fallbackPillBg = useColorModeValue('gray.100', 'gray.700')
   const fallbackPillTextColor = useColorModeValue('gray.800', 'gray.100')
 
@@ -806,7 +806,7 @@ function ImpactFundOverviewSection({
   viewerApplications,
   colors,
   showHeader = true,
-}: ImpactFundOverviewSectionProps): JSX.Element {
+}: ImpactFundOverviewSectionProps): React.ReactNode {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const descriptionText = impactFund.description || ''
   const hasLongDescription = descriptionText.length > DESCRIPTION_PREVIEW_CHAR_LIMIT
@@ -1121,7 +1121,7 @@ function ImpactFundWideHero({
   impactFund: ImpactFundDetails
   onApplyClick: () => void
   shouldDisableApply: boolean
-}): JSX.Element {
+}): React.ReactNode {
   const heroTextColor = useColorModeValue('black', 'white')
   const heroPrimaryButtonBg = useColorModeValue('white', 'neutral1.12')
   const heroAccentButtonBg = useColorModeValue('#F7931A', 'orange.400')
@@ -1228,7 +1228,7 @@ function ImpactFundBreadcrumb({
 }: {
   currentLabel: string
   colors: ImpactFundThemeColors
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box w="100vw" maxW="100vw" position="relative" left="50%" right="50%" ml="-50vw" mr="-50vw" px={standardPadding}>
       <HStack
@@ -1259,7 +1259,7 @@ function ImpactFundBreadcrumb({
   )
 }
 
-function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColors }): JSX.Element {
+function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColors }): React.ReactNode {
   const sectionCardShadow = '0 8px 24px rgba(15, 23, 42, 0.08)'
 
   return (
@@ -1359,7 +1359,7 @@ type SponsorLogoProps = {
   fallbackTextColor: string
 }
 
-function SponsorLogo({ sponsor, imageMaxHeight, fallbackTextColor }: SponsorLogoProps): JSX.Element {
+function SponsorLogo({ sponsor, imageMaxHeight, fallbackTextColor }: SponsorLogoProps): React.ReactNode {
   const content = (
     <Box w="full" h={imageMaxHeight} display="flex" alignItems="center" justifyContent="center">
       {sponsor.image ? (
@@ -1403,7 +1403,7 @@ function SponsorTierList({
   sponsors,
   imageMaxHeight,
   secondaryTextColor,
-}: SponsorTierListProps): JSX.Element | null {
+}: SponsorTierListProps): React.ReactNode | null {
   if (sponsors.length === 0) {
     return null
   }
@@ -1434,7 +1434,7 @@ function ImpactFundSponsorsSection({
   impactFund,
   onBecomeSponsor,
   colors,
-}: ImpactFundSponsorsSectionProps): JSX.Element {
+}: ImpactFundSponsorsSectionProps): React.ReactNode {
   const foundingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier_1)
   const supportingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier_2)
   const hasAnyLiveSponsors = foundingSponsors.length > 0 || supportingSponsors.length > 0
@@ -1528,12 +1528,12 @@ function CommunitySupportersSection({
   communitySupportersLoading,
   communitySupportersError,
   colors,
-}: CommunitySupportersSectionProps): JSX.Element | null {
+}: CommunitySupportersSectionProps): React.ReactNode | null {
   if (!showSection) {
     return null
   }
 
-  let supportersContent: JSX.Element
+  let supportersContent: React.ReactNode
 
   if (communitySupportersLoading) {
     supportersContent = (
@@ -1809,7 +1809,7 @@ function SponsorInquiryModal({
   tertiaryTextColor,
   highlightedSurfaceBg,
   highlightedSurfaceBorderColor,
-}: SponsorInquiryModalProps): JSX.Element {
+}: SponsorInquiryModalProps): React.ReactNode {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
@@ -1912,7 +1912,7 @@ function ApplicationSubmissionModal({
   secondaryTextColor,
   highlightedSurfaceBg,
   highlightedSurfaceBorderColor,
-}: ApplicationSubmissionModalProps): JSX.Element {
+}: ApplicationSubmissionModalProps): React.ReactNode {
   const hasProjectDescriptionError = hasSubmittedApplicationForm && Boolean(projectDescriptionError)
 
   return (
@@ -2096,7 +2096,7 @@ function ImpactFundDetailContent({
   onProjectModalClose,
   applying,
   onSubmitApplication,
-}: ImpactFundDetailContentProps): JSX.Element {
+}: ImpactFundDetailContentProps): React.ReactNode {
   const sponsorModal = useDisclosure()
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()

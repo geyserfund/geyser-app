@@ -22,7 +22,7 @@ const scrollToWhatIsMicroLoans = () => {
 }
 
 /** Full-bleed hero aligned with Impact Funds hero (image, directional overlay, left-aligned headline + CTAs). */
-export function MicroLendingHero(): JSX.Element {
+export function MicroLendingHero(): React.ReactNode {
   const overlayGradient = useColorModeValue(
     {
       base: `linear-gradient(

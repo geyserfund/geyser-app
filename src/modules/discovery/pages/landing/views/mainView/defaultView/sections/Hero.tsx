@@ -7,7 +7,7 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 
 /** Renders the landing page hero section over the marketplace background image. */
-export const Hero = (props: BoxProps): JSX.Element => {
+export const Hero = (props: BoxProps): React.ReactNode => {
   const overlayGradient = useColorModeValue(
     {
       base: `linear-gradient(

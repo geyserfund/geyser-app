@@ -107,6 +107,7 @@ export const GrantsRoundTwo = ({
             <Box minWidth={'100%'} borderRadius="12px" rounded="md" overflow="hidden">
               <img
                 src={'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'}
+                alt={t('Geyser grant proposal preview')}
               />
             </Box>
 
