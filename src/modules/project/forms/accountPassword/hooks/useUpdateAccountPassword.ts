@@ -18,6 +18,7 @@ import {
 type AccountPasswordProjectImpact = {
   id: string | number | bigint
   title?: string
+  derivationPath?: string | null
 }
 
 export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragment) => void) => {
@@ -51,7 +52,7 @@ export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragmen
         ...(fundsSummary?.legacyTiaProjects ?? []),
       ])
       const projectRskEoas = rotationProjects.map((project) => {
-        const projectKeys = generateProjectKeysFromSeedHex(seedHex, project.id)
+        const projectKeys = generateProjectKeysFromSeedHex(seedHex, project.id, project.derivationPath)
 
         return {
           projectId: project.id,

@@ -48,6 +48,7 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
         title
         status
         rskEoa
+        derivationPath
         balanceSats
       }
       legacyTiaProjects {
@@ -56,6 +57,7 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
         title
         status
         rskEoa
+        derivationPath
         balanceSats
       }
       pendingTiaProjects {
@@ -64,6 +66,7 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
         title
         status
         rskEoa
+        derivationPath
         balanceSats
       }
     }
