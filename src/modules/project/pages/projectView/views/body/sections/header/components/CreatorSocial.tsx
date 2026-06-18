@@ -75,10 +75,11 @@ export const CreatorSocial = () => {
 const CreatorIdentityBadges = ({ user }: { user: ProjectPageCreatorFragment }) => {
   const verifiedCreatorBg = useColorModeValue('primary1.3', 'primary1.4')
   const verifiedCreatorColor = useColorModeValue('primary1.10', 'primary1.11')
+  const creatorIdentityLabel = getCreatorIdentityLabel(user)
 
   return (
     <HStack spacing={2} flexShrink={0}>
-      {isVerifiedCreator(user) && (
+      {creatorIdentityLabel && (
         <Badge
           display="inline-flex"
           alignItems="center"
@@ -92,7 +93,7 @@ const CreatorIdentityBadges = ({ user }: { user: ProjectPageCreatorFragment }) =
           textTransform="none"
         >
           <Icon as={PiSealCheckFill} boxSize={4} />
-          {t('Verified Creator')}
+          {creatorIdentityLabel}
         </Badge>
       )}
     </HStack>
@@ -157,6 +158,18 @@ const isVerifiedCreator = (user: ProjectPageCreatorFragment) =>
       user.complianceDetails?.verifiedDetails?.phoneNumber?.verified &&
       user.complianceDetails?.verifiedDetails?.identity?.verified,
   )
+
+const getCreatorIdentityLabel = (user: ProjectPageCreatorFragment) => {
+  if (user.isFieldPartner) {
+    return t('Field Partner')
+  }
+
+  if (isVerifiedCreator(user)) {
+    return t('Verified Creator')
+  }
+
+  return null
+}
 
 const getAccountLabel = (key: string) => {
   switch (key) {

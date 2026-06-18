@@ -246,7 +246,7 @@ const getProjectHeaderTags = (project: ProjectHeaderTagProject) => {
   const locationLabel = [project.location?.country?.name, project.location?.region].filter(Boolean).join(', ')
   const locationFilter = getProjectHeaderLocationFilter(project)
 
-  if (project.isRecoverableGrant && project.fieldPartner?.username) {
+  if (project.fieldPartner?.username) {
     tags.push({
       label: t('Facilitated by {{fieldPartnerName}}', { fieldPartnerName: project.fieldPartner.username }),
       variant: 'facilitated',
