@@ -25,6 +25,7 @@ export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
   externalAccounts: [],
   ownerOf: [],
   isEmailVerified: false,
+  isFieldPartner: false,
   hasSocialAccount: false,
   complianceDetails: {
     contributionLimits: {

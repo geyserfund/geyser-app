@@ -44,7 +44,8 @@ export const ProjectBody = () => {
   const { impactFundRecipient } = project as typeof project & {
     impactFundRecipient?: ProjectImpactFundRecipient | null
   }
-  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
+  const isRecoverableGrant = Boolean(project.isRecoverableGrant)
+  const hasFieldPartner = Boolean(project.fieldPartner)
 
   useEffect(() => {
     if (loading) return
@@ -86,7 +87,7 @@ export const ProjectBody = () => {
         {isRecoverableGrant && <RecoverableGrantExplainer />}
 
         <Story />
-        {isRecoverableGrant && <FieldPartnerSection />}
+        {hasFieldPartner && <FieldPartnerSection />}
 
         {project.rewardsCount && <Rewards />}
         {project.entriesCount && <Posts />}
