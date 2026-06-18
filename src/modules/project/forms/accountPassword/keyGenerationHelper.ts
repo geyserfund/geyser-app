@@ -21,8 +21,8 @@ const derivationPathMapRSK = {
 }
 
 const projectDerivationPathMapRSK = {
-  [Network.TESTNET]: "m/44'/37310'/0'/1",
-  [Network.MAINNET]: "m/44'/137'/0'/1",
+  [Network.TESTNET]: "m/44'/37310'/0'/0",
+  [Network.MAINNET]: "m/44'/137'/0'/0",
 }
 
 const getEntropy = (bytes = 32) => {
@@ -343,9 +343,13 @@ export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
   return generateKeysFromSeedHexWithPath(seedHex, derivationPath)
 }
 
-export const generateProjectKeysFromSeedHex = (seedHex: string, projectId: number | string | bigint): AccountKeys => {
+export const generateProjectKeysFromSeedHex = (
+  seedHex: string,
+  projectId: number | string | bigint,
+  derivationPathOverride?: string | null,
+): AccountKeys => {
   const network = __production__ ? Network.MAINNET : Network.TESTNET
-  const MIN_PROJECT_DERIVATION_INDEX = 0n
+  const MIN_PROJECT_DERIVATION_INDEX = 1n
   const MAX_PROJECT_DERIVATION_INDEX = 2147483647n
 
   let projectIndex: number
@@ -368,15 +372,35 @@ export const generateProjectKeysFromSeedHex = (seedHex: string, projectId: numbe
 
     projectIndex = Number(parsedProjectId)
   } else {
-    if (!Number.isInteger(projectId) || projectId < 0 || projectId > Number(MAX_PROJECT_DERIVATION_INDEX)) {
+    if (
+      !Number.isInteger(projectId) ||
+      projectId < Number(MIN_PROJECT_DERIVATION_INDEX) ||
+      projectId > Number(MAX_PROJECT_DERIVATION_INDEX)
+    ) {
       throw new Error('Invalid project id for derivation path')
     }
 
     projectIndex = projectId
   }
 
-  const derivationPath = `${projectDerivationPathMapRSK[network]}/${projectIndex}`
+  const derivationPath = derivationPathOverride || `${projectDerivationPathMapRSK[network]}/${projectIndex}`
+  validateProjectDerivationPath(derivationPath, projectIndex)
+
   return generateKeysFromSeedHexWithPath(seedHex, derivationPath)
+}
+
+const validateProjectDerivationPath = (derivationPath: string, projectId: number) => {
+  const supportedProjectDerivationPathBases = [
+    "m/44'/137'/0'/0",
+    "m/44'/37310'/0'/0",
+    "m/44'/137'/0'/1",
+    "m/44'/37310'/0'/1",
+  ]
+  const expectedPaths = supportedProjectDerivationPathBases.map((basePath) => `${basePath}/${projectId}`)
+
+  if (!expectedPaths.includes(derivationPath)) {
+    throw new Error('Invalid project derivation path')
+  }
 }
 
 export const generateAccountKeys = (): AccountKeys => {

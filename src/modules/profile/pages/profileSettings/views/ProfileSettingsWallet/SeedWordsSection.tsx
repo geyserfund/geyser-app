@@ -1,5 +1,5 @@
-import { Button, HStack, Input, InputGroup, InputRightElement, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useQuery } from '@apollo/client'
+import { Button, HStack, Input, InputGroup, InputRightElement, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
@@ -242,7 +242,7 @@ export const SeedWordsSection = () => {
 
   return (
     <>
-      <VStack spacing={4} align="flex-start" w="full">
+      <VStack id="recovery-seed" spacing={4} align="flex-start" w="full">
         <H2 size="md">{t('Recovery seed words')}</H2>
         <Body size="md" color="neutral1.10" maxW="4xl">
           {t(
@@ -264,7 +264,7 @@ export const SeedWordsSection = () => {
 
 const getProjectWalletBackupEntries = (backupData: any): ProjectWalletBackupEntry[] =>
   ((backupData as any)?.user?.ownerOf ?? []).flatMap((owner: any) => {
-    const project = owner.project
+    const { project } = owner
     if (!project?.rskEoas?.length) return []
 
     return project.rskEoas.map((rskEoa: any) => ({
