@@ -52,7 +52,7 @@ export function ImpactFundsDonatePreferencesModal({
   onClose,
   impactFunds,
   defaultCategoryIds = [],
-}: ImpactFundsDonatePreferencesModalProps): JSX.Element {
+}: ImpactFundsDonatePreferencesModalProps): React.ReactNode {
   const navigate = useNavigate()
   const { error: notifyError } = useNotification()
 

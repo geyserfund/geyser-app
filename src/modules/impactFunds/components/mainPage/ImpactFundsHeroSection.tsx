@@ -15,7 +15,7 @@ type ImpactFundsHeroSectionProps = BoxProps & {
 }
 
 /** Full-bleed hero aligned with discovery landing `Hero` (image, overlay, max width, H1 + body scale). */
-export function ImpactFundsHeroSection({ onDonateClick, ...boxProps }: ImpactFundsHeroSectionProps): JSX.Element {
+export function ImpactFundsHeroSection({ onDonateClick, ...boxProps }: ImpactFundsHeroSectionProps): React.ReactNode {
   const whyFundModal = useDisclosure()
   const overlayGradient = useColorModeValue(
     {

@@ -16,6 +16,10 @@ import { DashboardLayout } from '../common'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
 import { ProjectNameChangeConfirmModal } from '../components/ProjectNameChangeConfirmModal'
 
+const DashboardSaveButton = (props: ButtonProps) => (
+  <Button size="lg" variant="solid" colorScheme="primary1" type="submit" {...props} />
+)
+
 export const ProjectDashboardInfo = () => {
   const { t } = useTranslation()
   const toast = useNotification()
@@ -96,27 +100,18 @@ export const ProjectDashboardInfo = () => {
     })
   }
 
-  const SaveButton = (props: ButtonProps) => {
-    return (
-      <Button
-        size="lg"
-        variant="solid"
-        colorScheme="primary1"
-        type="submit"
-        isLoading={updateProject.loading}
-        {...props}
-      >
-        {t('Save')}
-      </Button>
-    )
-  }
-
   return (
     <DashboardLayout
       as={'form'}
       onSubmit={form.handleSubmit(onSubmit, onInvalidSubmit)}
-      mobileTopNavRightComponent={<SaveButton />}
-      deskTopBottomComponent={<SaveButton w="full" />}
+      mobileTopNavRightComponent={
+        <DashboardSaveButton isLoading={updateProject.loading}>{t('Save')}</DashboardSaveButton>
+      }
+      deskTopBottomComponent={
+        <DashboardSaveButton w="full" isLoading={updateProject.loading}>
+          {t('Save')}
+        </DashboardSaveButton>
+      }
       desktopTitle={t('Project info')}
       width="full"
       overflow="hidden"

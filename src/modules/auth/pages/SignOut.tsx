@@ -22,6 +22,8 @@ export const SignOut = () => {
   const toast = useNotification()
 
   useEffect(() => {
+    let logoutTimeout: ReturnType<typeof setTimeout> | undefined
+
     const logout = async () => {
       try {
         await fetch(`${authServiceEndPoint}/logout`, {
@@ -31,7 +33,7 @@ export const SignOut = () => {
           title: "You've been logged out.",
           description: 'Please login again.',
         })
-        setTimeout(() => {
+        logoutTimeout = setTimeout(() => {
           setUser({ ...defaultUser })
           setFollowedProjects([])
           setAccountPassword(null)
@@ -50,6 +52,11 @@ export const SignOut = () => {
     }
 
     // Navigate back to the previous page
+    return () => {
+      if (logoutTimeout) {
+        clearTimeout(logoutTimeout)
+      }
+    }
   }, [setUser, setFollowedProjects, setAccountPassword, navigate, toast, user])
 
   return (

@@ -81,18 +81,28 @@ export const MediaCarouselForCards = ({
   }
 
   useEffect(() => {
+    let isMounted = true
     setDownloadLoading(true)
-    setTimeout(async () => {
+    const downloadTimer = setTimeout(async () => {
       const url = await getObjectUrl({
         element: refElement,
       })
+      if (!isMounted) {
+        return
+      }
+
       if (url) {
         setDownloadUrl(url)
       }
 
       setDownloadLoading(false)
     }, 1000)
-  }, [refElement])
+
+    return () => {
+      isMounted = false
+      clearTimeout(downloadTimer)
+    }
+  }, [getObjectUrl, refElement])
 
   const links = useMemo(() => {
     return [
