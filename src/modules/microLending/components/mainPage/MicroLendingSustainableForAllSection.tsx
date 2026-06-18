@@ -18,7 +18,7 @@ export function MicroLendingSustainableForAllSection({
   parties,
   sectionPrimaryTextColor,
   sectionSecondaryTextColor,
-}: MicroLendingSustainableForAllSectionProps): JSX.Element {
+}: MicroLendingSustainableForAllSectionProps): React.ReactNode {
   const iconColor = useColorModeValue('neutral1.12', 'white')
 
   return (

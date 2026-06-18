@@ -14,6 +14,10 @@ import { useNotification } from '@/utils'
 import { useProjectStoryForm } from '../../projectCreation/hooks/useProjectStoryForm'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
 
+const DashboardSaveButton = (props: ButtonProps) => (
+  <Button size="lg" variant="solid" colorScheme="primary1" type="submit" {...props} />
+)
+
 export const ProjectDashboardStory = () => {
   const { t } = useTranslation()
   const toast = useNotification()
@@ -57,21 +61,6 @@ export const ProjectDashboardStory = () => {
     })
   }
 
-  const SaveButton = (props: ButtonProps) => {
-    return (
-      <Button
-        size="lg"
-        variant="solid"
-        colorScheme="primary1"
-        type="submit"
-        isLoading={updateProject.loading}
-        {...props}
-      >
-        {t('Save')}
-      </Button>
-    )
-  }
-
   return (
     <>
       <VStack
@@ -84,7 +73,7 @@ export const ProjectDashboardStory = () => {
       >
         <TopNavContainerBar>
           <BackButton />
-          <SaveButton />
+          <DashboardSaveButton isLoading={updateProject.loading}>{t('Save')}</DashboardSaveButton>
         </TopNavContainerBar>
 
         <CardLayout

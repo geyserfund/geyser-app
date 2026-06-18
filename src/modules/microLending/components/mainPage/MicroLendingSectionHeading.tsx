@@ -8,7 +8,7 @@ type MicroLendingSectionHeadingProps = {
 }
 
 /** Centered section title (no decorative rules). */
-export function MicroLendingSectionHeading({ children }: MicroLendingSectionHeadingProps): JSX.Element {
+export function MicroLendingSectionHeading({ children }: MicroLendingSectionHeadingProps): React.ReactNode {
   return (
     <Box w="full" textAlign="center">
       <H2 size={{ base: 'lg', md: '2xl' }} bold whiteSpace="normal">

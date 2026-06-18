@@ -91,7 +91,7 @@ export const ApplyGrantModal = ({ applicant, image, title, subtitle, isClose, ab
         borderTopLeftRadius="4px"
         overflow="hidden"
       >
-        <img src={image} width={isClose ? '100%' : '60%'} />
+        <img src={image} width={isClose ? '100%' : '60%'} alt={title} />
       </Box>
 
       <ModalBody>

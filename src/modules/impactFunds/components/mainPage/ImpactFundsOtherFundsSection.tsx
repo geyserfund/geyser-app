@@ -31,7 +31,7 @@ export function ImpactFundsOtherFundsSection({
   cardSurfaceBg,
   interactiveCardShadow,
   interactiveCardHoverShadow,
-}: ImpactFundsOtherFundsSectionProps): JSX.Element {
+}: ImpactFundsOtherFundsSectionProps): React.ReactNode {
   return (
     <VStack align="stretch" spacing={6}>
       <VStack align="stretch" spacing={2}>

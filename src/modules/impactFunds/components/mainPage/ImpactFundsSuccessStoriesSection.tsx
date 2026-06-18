@@ -21,7 +21,7 @@ export function ImpactFundsSuccessStoriesSection({
   sectionSecondaryTextColor,
   cardSurfaceBg,
   sectionCardShadow,
-}: ImpactFundsSuccessStoriesSectionProps): JSX.Element {
+}: ImpactFundsSuccessStoriesSectionProps): React.ReactNode {
   const placeholderImageBg = useColorModeValue('neutral1.2', 'neutral1.4')
 
   return (
@@ -42,13 +42,7 @@ export function ImpactFundsSuccessStoriesSection({
               objectFit="cover"
             />
           ) : (
-            <Flex
-              align="center"
-              justify="center"
-              h={{ base: '200px', md: '220px' }}
-              w="full"
-              bg={placeholderImageBg}
-            >
+            <Flex align="center" justify="center" h={{ base: '200px', md: '220px' }} w="full" bg={placeholderImageBg}>
               <Body size="sm" color={sectionSecondaryTextColor}>
                 {t('Image coming soon')}
               </Body>
@@ -85,13 +79,7 @@ export function ImpactFundsSuccessStoriesSection({
           return (
             <Box key={story.title}>
               {story.href ? (
-                <Link
-                  href={story.href}
-                  isExternal
-                  display="block"
-                  w="full"
-                  _hover={{ textDecoration: 'none' }}
-                >
+                <Link href={story.href} isExternal display="block" w="full" _hover={{ textDecoration: 'none' }}>
                   {card}
                 </Link>
               ) : (

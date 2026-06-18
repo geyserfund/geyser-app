@@ -31,7 +31,7 @@ export const useListenFundingContributionSuccess = () => {
 
   const { refetch } = useFundingContributionPolling()
   const handleComplete = useCallback(() => {
-    void refetch()
+    refetch()
   }, [refetch])
 
   useFundingContributionSubscription({
@@ -41,13 +41,21 @@ export const useListenFundingContributionSuccess = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   useEffect(() => {
+    let redirectTimer: ReturnType<typeof setTimeout> | undefined
+
     if (fundingContribution && StatusForSuccess.includes(fundingContribution.status)) {
       if (launchContributionProjectId) {
-        setTimeout(() => {
+        redirectTimer = setTimeout(() => {
           navigate({ pathname: getPath('launchProjectStrategy', `${launchContributionProjectId}`) }, { replace: true })
         }, 2000)
       } else {
         navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
+      }
+    }
+
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer)
       }
     }
   }, [fundingContribution, navigate, project.name, location.search, launchContributionProjectId])

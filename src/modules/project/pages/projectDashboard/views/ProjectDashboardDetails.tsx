@@ -14,6 +14,10 @@ import { ProjectCountryCodesThatAreRestricted } from '../../projectCreation/util
 import { DashboardLayout } from '../common'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
 
+const DashboardSaveButton = (props: ButtonProps) => (
+  <Button size="lg" variant="solid" colorScheme="primary1" type="submit" {...props} />
+)
+
 export const ProjectDashboardDetails = () => {
   const { t } = useTranslation()
   const toast = useNotification()
@@ -91,14 +95,6 @@ export const ProjectDashboardDetails = () => {
     }
   }
 
-  const SaveButton = (props: ButtonProps) => {
-    return (
-      <Button size="lg" variant="solid" colorScheme="primary1" type="submit" isLoading={saving} {...props}>
-        {t('Save')}
-      </Button>
-    )
-  }
-
   return (
     <form
       onSubmit={(e) => {
@@ -108,8 +104,12 @@ export const ProjectDashboardDetails = () => {
       style={{ flexGrow: 1, display: 'flex' }}
     >
       <DashboardLayout
-        mobileTopNavRightComponent={<SaveButton />}
-        deskTopBottomComponent={<SaveButton w="full" />}
+        mobileTopNavRightComponent={<DashboardSaveButton isLoading={saving}>{t('Save')}</DashboardSaveButton>}
+        deskTopBottomComponent={
+          <DashboardSaveButton w="full" isLoading={saving}>
+            {t('Save')}
+          </DashboardSaveButton>
+        }
         desktopTitle={t('Links & tags')}
         width="full"
       >

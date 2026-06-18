@@ -16,7 +16,7 @@ export function ImpactFundsTrustPillarsSection({
   pillars,
   sectionPrimaryTextColor,
   sectionSecondaryTextColor,
-}: ImpactFundsTrustPillarsSectionProps): JSX.Element {
+}: ImpactFundsTrustPillarsSectionProps): React.ReactNode {
   const iconColor = useColorModeValue('neutral1.12', 'white')
 
   return (
@@ -31,13 +31,7 @@ export function ImpactFundsTrustPillarsSection({
             maxW={{ base: 'full', md: '320px' }}
             mx="auto"
           >
-            <Icon
-              as={pillar.icon}
-              boxSize={{ base: 8, md: 10 }}
-              color={iconColor}
-              flexShrink={0}
-              aria-hidden
-            />
+            <Icon as={pillar.icon} boxSize={{ base: 8, md: 10 }} color={iconColor} flexShrink={0} aria-hidden />
             <H3 bold color={sectionPrimaryTextColor}>
               {pillar.title}
             </H3>

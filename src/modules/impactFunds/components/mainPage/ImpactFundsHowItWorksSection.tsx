@@ -19,7 +19,7 @@ export function ImpactFundsHowItWorksSection({
   steps,
   sectionPrimaryTextColor,
   sectionSecondaryTextColor,
-}: ImpactFundsHowItWorksSectionProps): JSX.Element {
+}: ImpactFundsHowItWorksSectionProps): React.ReactNode {
   const bandBg = useColorModeValue('neutral1.2', 'neutral1.4')
   const cardBg = useColorModeValue('white', 'neutral1.3')
 
