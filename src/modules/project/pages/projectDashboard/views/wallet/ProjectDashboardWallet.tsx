@@ -1,24 +1,33 @@
 import { VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAuthContext } from '@/context/auth.tsx'
+import {
+  ProjectWalletBackupEntry,
+  RecoveryAccountKeys,
+  SeedWordsModal,
+} from '@/modules/profile/pages/profileSettings/views/ProfileSettingsWallet/SeedWordsSection.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { useWithdrawFunds } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/hooks/useWithdrawFunds.ts'
-import { getPath } from '@/shared/constants/index.ts'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 import { useProjectPageBodyCreatorQuery } from '@/types/index.ts'
 
 import { ProjectFundingStrategy } from '../../../../../../types/index.ts'
 import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { DashboardLayout } from '../../common/index.ts'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
-import { ProjectRskEoaHistory } from './components/ProjectRskEoaHistory.tsx'
+import { ProjectRskEoaHistory, ProjectRskEoaHistoryItem } from './components/ProjectRskEoaHistory.tsx'
 
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
 
   const { project } = useProjectAtom()
-  const { user } = useAuthContext()
+  const seedWordsModal = useModal()
+  const [selectedRecoveryData, setSelectedRecoveryData] = useState<{
+    accountKeys: RecoveryAccountKeys
+    projectWallets: ProjectWalletBackupEntry[]
+  } | null>(null)
   const { data: creatorProjectData } = useProjectPageBodyCreatorQuery({
     variables: {
       where: { id: project.id },
@@ -39,6 +48,38 @@ export const ProjectDashboardWallet = () => {
   const creatorProject = creatorProjectData?.projectGet as typeof project & {
     rskEoas?: Parameters<typeof ProjectRskEoaHistory>[0]['rskEoas']
   }
+  const handleOpenRecoveryData = (rskEoa: ProjectRskEoaHistoryItem) => {
+    if (rskEoa.accountKeys?.encryptedMnemonic || rskEoa.accountKeys?.encryptedSeed) {
+      setSelectedRecoveryData({
+        accountKeys: rskEoa.accountKeys,
+        projectWallets: [
+          {
+            projectId: project.id,
+            projectName: project.name,
+            projectTitle: project.title,
+            address: rskEoa.rskAddress,
+            derivationPath: rskEoa.derivationPath,
+            current: rskEoa.isCurrent,
+            createdAt: rskEoa.createdAt?.toString(),
+            replacedAt: rskEoa.replacedAt?.toString(),
+          },
+        ],
+      })
+      seedWordsModal.onOpen()
+
+      return
+    }
+
+    if (rskEoa.isCurrent) {
+      setSelectedRecoveryData(null)
+      seedWordsModal.onOpen()
+    }
+  }
+
+  const handleCloseRecoveryData = () => {
+    seedWordsModal.onClose()
+    setSelectedRecoveryData(null)
+  }
 
   return (
     <DashboardLayout desktopTitle={t('Payment Settings')}>
@@ -48,9 +89,7 @@ export const ProjectDashboardWallet = () => {
           projectId={project.id}
           currentRskEoa={creatorProject?.rskEoa ?? project.rskEoa}
           rskEoas={creatorProject?.rskEoas}
-          profileSeedSettingsPath={
-            user.id ? `${getPath('userProfileSettingsWallet', user.id)}#recovery-seed` : undefined
-          }
+          onOpenSeedWords={handleOpenRecoveryData}
           withdraw={{
             showWithdrawableBalance,
             isBelowMinWithdrawThreshold,
@@ -74,6 +113,13 @@ export const ProjectDashboardWallet = () => {
           onCompleted={onCompleted}
         />
       )}
+
+      <SeedWordsModal
+        isOpen={seedWordsModal.isOpen}
+        onClose={handleCloseRecoveryData}
+        accountKeys={selectedRecoveryData?.accountKeys}
+        projectWallets={selectedRecoveryData?.projectWallets}
+      />
     </DashboardLayout>
   )
 }

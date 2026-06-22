@@ -192,6 +192,16 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
       rskPublicKey
       derivationPath
       isCurrent
+      accountKeys {
+        id
+        encryptedMnemonic
+        encryptedSeed
+        rskKeyPair {
+          address
+          publicKey
+          derivationPath
+        }
+      }
       createdAt
       replacedAt
     }

@@ -605,6 +605,7 @@ type ProjectRskEoa {
   rskPublicKey: String
   derivationPath: String
   isCurrent: Boolean!
+  accountKeys: UserAccountKeys
   createdAt: Date!
   replacedAt: Date
 }
@@ -1149,6 +1150,7 @@ type AccountPasswordAffectedProject {
   title: String!
   status: ProjectStatus!
   rskEoa: String!
+  derivationPath: String
   balanceSats: BigInt!
 }
 

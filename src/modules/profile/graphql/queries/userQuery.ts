@@ -106,6 +106,16 @@ export const QUERY_USER_PROJECT_RSK_EOA_BACKUP = gql`
             rskAddress
             derivationPath
             isCurrent
+            accountKeys {
+              id
+              encryptedMnemonic
+              encryptedSeed
+              rskKeyPair {
+                address
+                publicKey
+                derivationPath
+              }
+            }
             createdAt
             replacedAt
           }
