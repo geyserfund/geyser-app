@@ -63,16 +63,16 @@ export const getCommittedAmountDisplay = <TUsdAmount extends number, TSatoshisFr
   }
 
   if (amountCommittedCurrency === 'USDCENT') {
-    const primary = usdFormatter.format(amountCommitted / 100)
+    const secondary = usdFormatter.format(amountCommitted / 100)
 
     if (usdRate <= 0) {
-      return { primary }
+      return { primary: secondary }
     }
 
     const convertedSats = getSatoshisFromUSDCents(amountCommitted as TSatoshisFromUSDCentsAmount)
     return {
-      primary,
-      secondary: `${getShortAmountLabel(convertedSats, true)} sats`,
+      primary: `${getShortAmountLabel(convertedSats, true)} sats`,
+      secondary,
     }
   }
 

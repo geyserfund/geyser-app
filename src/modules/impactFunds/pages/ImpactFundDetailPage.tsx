@@ -37,7 +37,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Trans } from 'react-i18next'
 import {
   PiArrowUpRightBold,
@@ -87,6 +87,8 @@ const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
+const APPLY_HASH = '#apply'
+const BECOME_SPONSOR_HASH = '#become-a-sponsor'
 const LATAM_IMPACT_FUND_NAME = 'latam-impact-fund'
 const CIRCULAR_ECONOMY_IMPACT_FUND_NAME = 'circular-economies-impact-fund'
 const CIRCULAR_ECONOMY_REPORT_BANNER_URL =
@@ -94,7 +96,7 @@ const CIRCULAR_ECONOMY_REPORT_BANNER_URL =
 const CIRCULAR_ECONOMY_REPORT_PDF_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const satsNumberFormatter = new Intl.NumberFormat()
-const fundedStatus = [ImpactFundApplicationStatus.Funded]
+const awardedApplicationStatuses = [ImpactFundApplicationStatus.Disbursement, ImpactFundApplicationStatus.Funded]
 const projectStoryMinLength = ProjectValidations.description.minLength
 const projectStoryMaxLength = ProjectValidations.description.maxLength
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
@@ -159,7 +161,7 @@ function getQuarterFromDate(dateString: string): string {
 function buildFundedApplicationsInput(impactFundId: number, cursorId?: string) {
   return {
     impactFundId,
-    statusIn: fundedStatus,
+    statusIn: awardedApplicationStatuses,
     pagination: {
       take: APPLICATIONS_PAGE_SIZE,
       ...(cursorId ? { cursor: { id: cursorId } } : {}),
@@ -209,7 +211,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { success, error: notifyError } = useNotification()
-  const projectModal = useDisclosure()
+  const { isOpen: isProjectModalOpen, onOpen: onProjectModalOpen, onClose: onProjectModalClose } = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
   const [projectDescription, setProjectDescription] = useState('')
   const [hasConfirmedProjectVision, setHasConfirmedProjectVision] = useState(false)
@@ -355,7 +357,9 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     setHasSubmittedApplicationForm(false)
   }, [selectedProject?.id, selectedProject?.description])
 
-  const handleApplyClick = () => {
+  const handleApplyClick = useCallback(() => {
+    window.history.replaceState(null, '', APPLY_HASH)
+
     if (!isLoggedIn) {
       loginOnOpen({ showLightning: false })
       return
@@ -367,8 +371,14 @@ export function ImpactFundDetailPage(): JSX.Element | null {
 
     const firstOwnedProjectId = String(availableOwnedProjects[0]?.id || '')
     setSelectedProjectId(firstOwnedProjectId)
-    projectModal.onOpen()
-  }
+    onProjectModalOpen()
+  }, [availableOwnedProjects, hasAvailableProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
+
+  useEffect(() => {
+    if (window.location.hash === APPLY_HASH) {
+      handleApplyClick()
+    }
+  }, [handleApplyClick])
 
   const submitApplication = async () => {
     if (!impactFund || !selectedProjectId) return
@@ -397,7 +407,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       setHasConfirmedProjectVision(false)
       setHasConfirmedImpactMetric(false)
       setHasSubmittedApplicationForm(false)
-      projectModal.onClose()
+      onProjectModalClose()
     } catch (error) {
       notifyError({ title: t('Failed to apply to impact fund') })
     }
@@ -493,10 +503,10 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       hasConfirmedImpactMetric={hasConfirmedImpactMetric}
       onHasConfirmedImpactMetricChange={setHasConfirmedImpactMetric}
       hasSubmittedApplicationForm={hasSubmittedApplicationForm}
-      isProjectModalOpen={projectModal.isOpen}
+      isProjectModalOpen={isProjectModalOpen}
       onProjectModalClose={() => {
         setHasSubmittedApplicationForm(false)
-        projectModal.onClose()
+        onProjectModalClose()
       }}
       applying={applying || updatingProject}
       onSubmitApplication={submitApplication}
@@ -2097,7 +2107,7 @@ function ImpactFundDetailContent({
   applying,
   onSubmitApplication,
 }: ImpactFundDetailContentProps): JSX.Element {
-  const sponsorModal = useDisclosure()
+  const { isOpen: isSponsorModalOpen, onOpen: onSponsorModalOpen, onClose: onSponsorModalClose } = useDisclosure()
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const colors = useImpactFundThemeColors()
@@ -2117,6 +2127,16 @@ function ImpactFundDetailContent({
   const showAwardedAsPrimaryMetric = impactFund.amountCommitted === 0
   const showImpactReportsSection = impactFund.name === CIRCULAR_ECONOMY_IMPACT_FUND_NAME
   const showWideHero = impactFund.name === LATAM_IMPACT_FUND_NAME
+  const handleBecomeSponsorClick = useCallback(() => {
+    window.history.replaceState(null, '', BECOME_SPONSOR_HASH)
+    onSponsorModalOpen()
+  }, [onSponsorModalOpen])
+
+  useEffect(() => {
+    if (window.location.hash === BECOME_SPONSOR_HASH) {
+      onSponsorModalOpen()
+    }
+  }, [onSponsorModalOpen])
 
   const seoImage = IMPACT_FUND_DETAILS_SEO_IMAGES[impactFund.name as keyof typeof IMPACT_FUND_DETAILS_SEO_IMAGES]
   const overviewSection = (
@@ -2155,7 +2175,7 @@ function ImpactFundDetailContent({
     </VStack>
   )
   const sponsorsSection = (
-    <ImpactFundSponsorsSection impactFund={impactFund} onBecomeSponsor={sponsorModal.onOpen} colors={colors} />
+    <ImpactFundSponsorsSection impactFund={impactFund} onBecomeSponsor={handleBecomeSponsorClick} colors={colors} />
   )
   const communitySupportersSection = (
     <CommunitySupportersSection
@@ -2240,8 +2260,8 @@ function ImpactFundDetailContent({
   const modals = (
     <>
       <SponsorInquiryModal
-        isOpen={sponsorModal.isOpen}
-        onClose={sponsorModal.onClose}
+        isOpen={isSponsorModalOpen}
+        onClose={onSponsorModalClose}
         primaryTextColor={colors.primaryTextColor}
         secondaryTextColor={colors.secondaryTextColor}
         tertiaryTextColor={colors.tertiaryTextColor}
