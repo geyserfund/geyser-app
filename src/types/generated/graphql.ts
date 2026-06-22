@@ -9884,6 +9884,7 @@ export type UserAccountPasswordFundsSummaryResolvers<ContextType = any, ParentTy
   affectedTiaProjects?: Resolver<Array<ResolversTypes['AccountPasswordAffectedProject']>, ParentType, ContextType>;
   aonUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   legacyTiaProjects?: Resolver<Array<ResolversTypes['AccountPasswordAffectedProject']>, ParentType, ContextType>;
+  pendingTiaProjects?: Resolver<Array<ResolversTypes['AccountPasswordAffectedProject']>, ParentType, ContextType>;
   pledgedSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tiaUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   unclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -11421,6 +11422,13 @@ export type UserWalletQuery = { __typename?: 'Query', user: { __typename?: 'User
       & UserWalletConnectionDetailsFragment
     ) | null } };
 
+export type UserProjectRskEoaBackupQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserProjectRskEoaBackupQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, title: string, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null, accountKeys?: { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, rskKeyPair: { __typename?: 'RskKeyPair', address: string, publicKey: string, derivationPath: string } } | null }> } | null }> } };
+
 export type UserTaxProfileQueryVariables = Exact<{
   where: UserGetInput;
 }>;
@@ -11695,7 +11703,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null, accountKeys?: { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, rskKeyPair: { __typename?: 'RskKeyPair', address: string, publicKey: string, derivationPath: string } } | null }>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -12892,7 +12900,7 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
 export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, userWalletBalanceSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }>, pendingTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: any }> } };
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, userWalletBalanceSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: number }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: number }>, pendingTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: number }> } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
@@ -15132,6 +15140,16 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
     rskPublicKey
     derivationPath
     isCurrent
+    accountKeys {
+      id
+      encryptedMnemonic
+      encryptedSeed
+      rskKeyPair {
+        address
+        publicKey
+        derivationPath
+      }
+    }
     createdAt
     replacedAt
   }
@@ -19826,6 +19844,71 @@ export type UserWalletQueryHookResult = ReturnType<typeof useUserWalletQuery>;
 export type UserWalletLazyQueryHookResult = ReturnType<typeof useUserWalletLazyQuery>;
 export type UserWalletSuspenseQueryHookResult = ReturnType<typeof useUserWalletSuspenseQuery>;
 export type UserWalletQueryResult = Apollo.QueryResult<UserWalletQuery, UserWalletQueryVariables>;
+export const UserProjectRskEoaBackupDocument = gql`
+    query UserProjectRskEoaBackup($where: UserGetInput!) {
+  user(where: $where) {
+    id
+    ownerOf {
+      project {
+        id
+        name
+        title
+        rskEoas {
+          id
+          rskAddress
+          derivationPath
+          isCurrent
+          accountKeys {
+            id
+            encryptedMnemonic
+            encryptedSeed
+            rskKeyPair {
+              address
+              publicKey
+              derivationPath
+            }
+          }
+          createdAt
+          replacedAt
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserProjectRskEoaBackupQuery__
+ *
+ * To run a query within a React component, call `useUserProjectRskEoaBackupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProjectRskEoaBackupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProjectRskEoaBackupQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserProjectRskEoaBackupQuery(baseOptions: Apollo.QueryHookOptions<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables> & ({ variables: UserProjectRskEoaBackupQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables>(UserProjectRskEoaBackupDocument, options);
+      }
+export function useUserProjectRskEoaBackupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables>(UserProjectRskEoaBackupDocument, options);
+        }
+export function useUserProjectRskEoaBackupSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables>(UserProjectRskEoaBackupDocument, options);
+        }
+export type UserProjectRskEoaBackupQueryHookResult = ReturnType<typeof useUserProjectRskEoaBackupQuery>;
+export type UserProjectRskEoaBackupLazyQueryHookResult = ReturnType<typeof useUserProjectRskEoaBackupLazyQuery>;
+export type UserProjectRskEoaBackupSuspenseQueryHookResult = ReturnType<typeof useUserProjectRskEoaBackupSuspenseQuery>;
+export type UserProjectRskEoaBackupQueryResult = Apollo.QueryResult<UserProjectRskEoaBackupQuery, UserProjectRskEoaBackupQueryVariables>;
 export const UserTaxProfileDocument = gql`
     query UserTaxProfile($where: UserGetInput!) {
   user(where: $where) {
@@ -24842,6 +24925,7 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
       title
       status
       rskEoa
+      derivationPath
       balanceSats
     }
     legacyTiaProjects {
@@ -24850,6 +24934,7 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
       title
       status
       rskEoa
+      derivationPath
       balanceSats
     }
     pendingTiaProjects {
@@ -24858,6 +24943,7 @@ export const UserAccountPasswordFundsSummaryDocument = gql`
       title
       status
       rskEoa
+      derivationPath
       balanceSats
     }
   }

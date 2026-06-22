@@ -2,7 +2,6 @@ import { Button, HStack, Icon, Link as ChakraLink, Tooltip, VStack } from '@chak
 import { t } from 'i18next'
 import type { ReactNode } from 'react'
 import { PiArrowUpRight } from 'react-icons/pi'
-import { Link as RouterLink } from 'react-router'
 
 import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
@@ -17,20 +16,30 @@ const LEGACY_PROJECT_DERIVATION_PATH_BASE = __production__ ? "m/44'/137'/0'/1" :
 const PROJECT_WALLET_RECOVERY_GUIDE_URL =
   'https://guide.geyser.fund/geyser-docs/product-guides/project-features/recovering-funds-from-a-geyser-project-wallet'
 
-type ProjectRskEoaHistoryItem = {
+export type ProjectRskEoaHistoryItem = {
   id: string | number | bigint
   rskAddress: string
   derivationPath?: string | null
   isCurrent: boolean
   createdAt?: string | Date | null
   replacedAt?: string | Date | null
+  accountKeys?: {
+    id: string | number | bigint
+    encryptedMnemonic?: string | null
+    encryptedSeed?: string | null
+    rskKeyPair: {
+      address: string
+      publicKey?: string
+      derivationPath: string
+    }
+  } | null
 }
 
 type ProjectRskEoaHistoryProps = {
   projectId: string | number | bigint
   currentRskEoa?: string | null
   rskEoas?: ProjectRskEoaHistoryItem[] | null
-  profileSeedSettingsPath?: string
+  onOpenSeedWords: (rskEoa: ProjectRskEoaHistoryItem) => void
   withdraw?: ProjectWalletWithdrawButtonProps
 }
 
@@ -46,7 +55,7 @@ export const ProjectRskEoaHistory = ({
   projectId,
   currentRskEoa,
   rskEoas,
-  profileSeedSettingsPath,
+  onOpenSeedWords,
   withdraw,
 }: ProjectRskEoaHistoryProps) => {
   const walletRows = getWalletRows({ projectId, currentRskEoa, rskEoas })
@@ -78,18 +87,12 @@ export const ProjectRskEoaHistory = ({
         </VStack>
         <VStack align="stretch" spacing={1} pt={1} w="full">
           <Body size="md" medium>
-            {t('Recovery Seed')}
+            {t('Recovery Data')}
           </Body>
           <Body size="sm" color="neutral1.10">
-            {t('The same recovery seed is used for your user wallet and all project wallets. You can view it in your ')}
-            {profileSeedSettingsPath ? (
-              <ChakraLink as={RouterLink} to={profileSeedSettingsPath} textDecoration="underline">
-                {t('profile wallet settings')}
-              </ChakraLink>
-            ) : (
-              t('profile wallet settings')
+            {t(
+              'To recover your funds in an external wallet, you will need your seed and each project derivation path, or the private key for older project wallets. The same recovery seed is used for your user wallet and your project wallets. You can view recovery data by pressing "View Recovery Data" below. You will need to enter your password to view it. Historical addresses may require your historical password.',
             )}
-            .
           </Body>
         </VStack>
       </VStack>
@@ -99,7 +102,7 @@ export const ProjectRskEoaHistory = ({
           title={t('Current wallet')}
           action={withdraw ? <ProjectWalletWithdrawButton {...withdraw} /> : null}
         >
-          <ProjectRskEoaHistoryRow rskEoa={currentWallet} />
+          <ProjectRskEoaHistoryRow rskEoa={currentWallet} onOpenSeedWords={onOpenSeedWords} />
         </WalletSection>
       ) : null}
 
@@ -108,7 +111,7 @@ export const ProjectRskEoaHistory = ({
           <Feedback variant={FeedBackVariant.WARNING}>
             <Body size="sm">
               {t(
-                'Historical addresses are not used for new payouts. Funds on them can be recovered with their associated seed together with the derivation path shown above.',
+                'Historical addresses are not used for new payouts. Funds on them can be recovered with their associated seed and derivation path shown above, or with the private key shown in Recovery Data for older project wallets.',
               )}
               <Body as="span" size="sm">
                 {' '}
@@ -123,7 +126,7 @@ export const ProjectRskEoaHistory = ({
 
           <VStack spacing={3} align="stretch" w="full">
             {historicalWallets.map((rskEoa) => (
-              <ProjectRskEoaHistoryRow key={`${rskEoa.id}`} rskEoa={rskEoa} />
+              <ProjectRskEoaHistoryRow key={`${rskEoa.id}`} rskEoa={rskEoa} onOpenSeedWords={onOpenSeedWords} />
             ))}
           </VStack>
         </WalletSection>
@@ -176,7 +179,13 @@ const ProjectWalletWithdrawButton = ({
   )
 }
 
-const ProjectRskEoaHistoryRow = ({ rskEoa }: { rskEoa: ProjectRskEoaHistoryItem }) => {
+const ProjectRskEoaHistoryRow = ({
+  rskEoa,
+  onOpenSeedWords,
+}: {
+  rskEoa: ProjectRskEoaHistoryItem
+  onOpenSeedWords: (rskEoa: ProjectRskEoaHistoryItem) => void
+}) => {
   const { withdrawable, isLoading } = usePrismWithdrawable({ rskAddress: rskEoa.rskAddress })
   const balanceSats = withdrawable ? Number(withdrawable / SATS_PER_RBTC) : 0
   const balance = isLoading
@@ -208,6 +217,17 @@ const ProjectRskEoaHistoryRow = ({ rskEoa }: { rskEoa: ProjectRskEoaHistoryItem 
           />
         ) : null}
         <WalletDetail label={t('Balance')} value={balance} align={{ base: 'start', md: 'end' }} />
+        {rskEoa.isCurrent || rskEoa.accountKeys?.encryptedMnemonic || rskEoa.accountKeys?.encryptedSeed ? (
+          <Button
+            size="md"
+            variant="outline"
+            colorScheme="primary1"
+            flexShrink={0}
+            onClick={() => onOpenSeedWords(rskEoa)}
+          >
+            {t('View Recovery Data')}
+          </Button>
+        ) : null}
       </HStack>
     </VStack>
   )
@@ -260,7 +280,7 @@ const getWalletRows = ({
   projectId,
   currentRskEoa,
   rskEoas,
-}: ProjectRskEoaHistoryProps): ProjectRskEoaHistoryItem[] => {
+}: Pick<ProjectRskEoaHistoryProps, 'projectId' | 'currentRskEoa' | 'rskEoas'>): ProjectRskEoaHistoryItem[] => {
   const rows = rskEoas?.length
     ? rskEoas.map((rskEoa) => ({
         ...rskEoa,
