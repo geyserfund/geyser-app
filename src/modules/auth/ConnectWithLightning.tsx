@@ -18,7 +18,7 @@ import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { RejectionError, WebLNProvider } from 'webln'
+import { RejectionError } from 'webln'
 
 import { LogoDarkGreenImage } from '../../assets'
 import { BoltSvgIcon } from '../../components/icons'
@@ -30,45 +30,7 @@ import { lightModeColors } from '../../shared/styles'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
 import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps, ExternalAccountType } from './type'
-
-type LNURLResponse =
-  | {
-      status: 'OK'
-      data?: unknown
-    }
-  | { status: 'ERROR'; reason: string }
-interface WebLNAuthProvider extends WebLNProvider {
-  lnurl: (lnurl: string) => Promise<LNURLResponse>
-}
-
-const { webln }: { webln: WebLNAuthProvider } = window as any
-
-const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
-
-const requestWebLNUrlAuth = async (paymentRequest: string) => {
-  if (!webln) {
-    throw new Error('no provider')
-  }
-
-  try {
-    await webln.enable()
-  } catch (e) {
-    throw new Error(WEBLN_ENABLE_ERROR)
-  }
-
-  if (!paymentRequest) {
-    throw new Error('payment request not found')
-  }
-
-  try {
-    const res = await webln.lnurl(paymentRequest)
-    if (res.status !== 'OK') {
-      throw new Error(WEBLN_ENABLE_ERROR)
-    }
-  } catch (e) {
-    throw new Error(WEBLN_ENABLE_ERROR)
-  }
-}
+import { requestWebLNUrlAuth, WEBLN_ENABLE_ERROR } from './utils/weblnAuth.ts'
 
 interface ConnectWithLightningModalProps {
   isOpen: boolean
@@ -136,13 +98,9 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
 
   const startWebLNFlow = async ({ paymentRequest }: { paymentRequest: string }) => {
     try {
-      await requestWebLNUrlAuth(paymentRequest)
-    } catch (error: any) {
-      if (error.message === 'no provider') {
-        throw error
-      }
-
-      if (error.constructor === RejectionError || error.message === 'User rejected') {
+      return requestWebLNUrlAuth(paymentRequest)
+    } catch (error: unknown) {
+      if (error instanceof Error && (error.constructor === RejectionError || error.message === 'User rejected')) {
         toast({
           title: t('Requested operation declined'),
           description: t('Please use the invoice instead.'),
@@ -151,7 +109,16 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
         return false
       }
 
-      if (error.message === WEBLN_ENABLE_ERROR) {
+      if (error instanceof Error && error.message === WEBLN_ENABLE_ERROR) {
+        return false
+      }
+
+      if (!(error instanceof Error)) {
+        toast({
+          title: t('Oops! Something went wrong with WebLN.'),
+          description: t('Please copy the invoice manually instead.'),
+          status: 'error',
+        })
         return false
       }
 

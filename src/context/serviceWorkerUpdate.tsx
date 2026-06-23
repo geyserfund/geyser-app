@@ -25,6 +25,21 @@ const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 5 * 60 * 1000
 
 let defferedPrompt: any
 
+const expectedServiceWorkerErrorMessages = [
+  'Failed to register a ServiceWorker',
+  'Failed to update a ServiceWorker',
+  'ServiceWorker',
+  'sw.js',
+  'Background Sync is disabled',
+  'newestWorker is null',
+]
+
+const isExpectedServiceWorkerError = (error: unknown): boolean => {
+  const message = error instanceof Error ? error.message : String(error)
+
+  return expectedServiceWorkerErrorMessages.some((expectedMessage) => message.includes(expectedMessage))
+}
+
 export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode }) => {
   const [canInstall, setCanInstall] = useState(false)
 
@@ -54,6 +69,10 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
       }
     },
     onRegisterError(error: any) {
+      if (isExpectedServiceWorkerError(error)) {
+        return
+      }
+
       captureException(error, {
         tags: { 'Service Worker Registration Error': 'true' },
       })

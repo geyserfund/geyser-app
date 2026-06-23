@@ -32,6 +32,7 @@
     "dev:language": "tsx language/languageServer.ts",
     "i18n:check": "node scripts/i18n/sync-translations.mjs --check --locales es,fr",
     "i18n:sync": "node scripts/i18n/sync-translations.mjs --write --locales es,fr",
+    "sentry:ignore-noise": "node scripts/sentry-ignore-noise.mjs",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip",

@@ -2325,5 +2325,6 @@
   "Fund a local workshop.": "Fund a local workshop.",
   "This recoverable grant is facilitated by our trusted Field Partner,": "This recoverable grant is facilitated by our trusted Field Partner,",
   "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.",
-  "Go to option": "Go to option"
+  "Go to option": "Go to option",
+  "Failed to verify your identity": "Failed to verify your identity"
 }

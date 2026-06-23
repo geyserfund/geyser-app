@@ -1,14 +1,33 @@
+import * as ecc from '@bitcoinerlab/secp256k1'
 import { keccak_256 } from '@noble/hashes/sha3'
 import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
 import { BIP32Factory } from 'bip32'
 import * as bitcoin from 'bitcoinjs-lib'
-import * as ecc from 'tiny-secp256k1'
 
 import { __production__ } from '@/shared/constants/index.ts'
 
-// Initialize BIP32 with ecc
-const bip32 = BIP32Factory(ecc)
+let bip32: ReturnType<typeof BIP32Factory> | undefined
+
+export const isBrowserCryptoAvailable = (): boolean => {
+  return typeof window !== 'undefined' && Boolean(window.crypto?.getRandomValues) && Boolean(window.crypto?.subtle)
+}
+
+export const isWebAssemblyAvailable = (): boolean => {
+  return typeof WebAssembly !== 'undefined'
+}
+
+const assertBrowserCryptoAvailable = () => {
+  if (!isBrowserCryptoAvailable()) {
+    throw new Error('Crypto key generation is not supported in this browser')
+  }
+}
+
+const getBip32 = () => {
+  assertBrowserCryptoAvailable()
+  bip32 = bip32 || BIP32Factory(ecc)
+  return bip32
+}
 
 enum Network {
   MAINNET = 'mainnet',
@@ -26,6 +45,7 @@ const projectDerivationPathMapRSK = {
 }
 
 const getEntropy = (bytes = 32) => {
+  assertBrowserCryptoAvailable()
   const entropy = new Uint8Array(bytes)
   window.crypto.getRandomValues(entropy)
   return entropy
@@ -55,6 +75,7 @@ export const generateSeedHexForUser = () => {
 
 const encryptPayload = async (payload: Record<string, unknown>, password: string): Promise<string> => {
   try {
+    assertBrowserCryptoAvailable()
     // Generate random salt (16 bytes)
     const salt = window.crypto.getRandomValues(new Uint8Array(16))
 
@@ -129,6 +150,7 @@ const encryptPayload = async (payload: Record<string, unknown>, password: string
 
 const decryptPayload = async (encryptedPayload: string, password: string): Promise<Record<string, unknown>> => {
   try {
+    assertBrowserCryptoAvailable()
     // Decode base64 to get JSON string
     const jsonString = Buffer.from(encryptedPayload, 'base64').toString('utf8')
 
@@ -297,7 +319,7 @@ const generateKeysFromSeedHexWithPath = (seedInput: string, derivationPath: stri
   const seedFromSeedHex = Buffer.from(seedHex, 'hex')
 
   // Create BIP32 root from seed
-  const root = bip32.fromSeed(seedFromSeedHex, bitcoinNetwork)
+  const root = getBip32().fromSeed(seedFromSeedHex, bitcoinNetwork)
 
   // Derive child node
   const child = root.derivePath(derivationPath)
