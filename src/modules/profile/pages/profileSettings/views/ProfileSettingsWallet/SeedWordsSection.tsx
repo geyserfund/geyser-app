@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { Button, HStack, Input, InputGroup, InputRightElement, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -6,12 +5,13 @@ import { useState } from 'react'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { QUERY_USER_PROJECT_RSK_EOA_BACKUP } from '@/modules/profile/graphql/queries/userQuery.ts'
 import {
   decryptMnemonic,
   decryptSeedPayload,
+  generateKeysFromPrivateKey,
   generateProjectKeysFromSeedHex,
   getSeedWords,
+  isValidRskPrivateKey,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
@@ -20,6 +20,8 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { __production__ } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { useUserProjectRskEoaBackupQuery } from '@/types/index.ts'
+import type { UserProjectRskEoaBackupQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 const SeedWordsFeedback = () => (
@@ -92,7 +94,7 @@ export const SeedWordsModal = ({
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const recoveryAccountKeys = accountKeysOverride || userAccountKeys
   const setAccountPassword = useSetAtom(accountPasswordAtom)
-  const { data: backupData } = useQuery(QUERY_USER_PROJECT_RSK_EOA_BACKUP, {
+  const { data: backupData } = useUserProjectRskEoaBackupQuery({
     variables: { where: { id: user.id } },
     skip: !isOpen || !user.id || Boolean(projectWalletsOverride),
     fetchPolicy: 'network-only',
@@ -403,20 +405,20 @@ export const SeedWordsSection = () => {
 }
 
 const getProjectWalletBackupEntries = (
-  backupData: any,
+  backupData?: UserProjectRskEoaBackupQuery,
   accountKeysId?: string | number | bigint,
 ): ProjectWalletBackupEntry[] =>
-  ((backupData as any)?.user?.ownerOf ?? []).flatMap((owner: any) => {
+  (backupData?.user?.ownerOf ?? []).flatMap((owner) => {
     const { project } = owner
     if (!project?.rskEoas?.length) return []
 
     const normalizedAccountKeysId = accountKeysId?.toString()
 
     return project.rskEoas
-      .filter((rskEoa: any) =>
+      .filter((rskEoa) =>
         normalizedAccountKeysId ? rskEoa.accountKeys?.id?.toString() === normalizedAccountKeysId : rskEoa.isCurrent,
       )
-      .map((rskEoa: any) => ({
+      .map((rskEoa) => ({
         projectId: project.id,
         projectName: project.name,
         projectTitle: project.title,
@@ -458,6 +460,9 @@ const deriveProjectPrivateKey = (seedHex: string, projectWallets?: ProjectWallet
   }
 
   const { projectId } = wallet
+  const rawPrivateKeyRecovery = deriveProjectPrivateKeyFromRawPrivateKey(seedHex, wallet)
+  if (rawPrivateKeyRecovery) return rawPrivateKeyRecovery
+
   const coinType = __production__ ? '137' : '37310'
   const candidatePaths = [
     wallet.derivationPath,
@@ -479,4 +484,36 @@ const deriveProjectPrivateKey = (seedHex: string, projectWallets?: ProjectWallet
   }
 
   throw new Error('Unable to derive a private key for this project wallet')
+}
+
+const deriveProjectPrivateKeyFromRawPrivateKey = (privateKey: string, wallet: ProjectWalletBackupEntry) => {
+  const privateKeyCandidates = getPrivateKeyCandidates(privateKey)
+
+  for (const privateKeyCandidate of privateKeyCandidates) {
+    const keys = generateKeysFromPrivateKey(privateKeyCandidate, decodeHtmlEntities(wallet.derivationPath) || '')
+    if (wallet.address && keys.address.toLowerCase() !== wallet.address.toLowerCase()) continue
+
+    return {
+      privateKey: keys.privateKey,
+      wallet: {
+        ...wallet,
+        derivationPath: decodeHtmlEntities(wallet.derivationPath),
+      },
+    }
+  }
+
+  return null
+}
+
+const getPrivateKeyCandidates = (value: string) => {
+  const normalizedValue = value.replace(/^0x/i, '')
+  const candidates = [normalizedValue]
+
+  if (/^[0-9a-fA-F]{128}$/.test(normalizedValue)) {
+    candidates.push(normalizedValue.slice(0, 64), normalizedValue.slice(64))
+  }
+
+  return candidates.filter((candidate, index, allCandidates) => {
+    return isValidRskPrivateKey(candidate) && allCandidates.indexOf(candidate) === index
+  })
 }

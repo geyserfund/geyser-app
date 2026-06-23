@@ -11350,7 +11350,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null, accountKeys?: { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, rskKeyPair: { __typename?: 'RskKeyPair', address: string, publicKey: string, derivationPath: string } } | null }>, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -12335,6 +12335,20 @@ export type ProjectPageBodyCreatorQuery = { __typename?: 'Query', projectGet?: (
     { __typename?: 'Project' }
     & ProjectPageBodyCreatorFragment
   ) | null };
+
+export type ProjectRskEoaHistoryQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectRskEoaHistoryQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, rskEoa?: string | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null, accountKeys?: { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, rskKeyPair: { __typename?: 'RskKeyPair', address: string, publicKey: string, derivationPath: string } } | null }> } | null };
+
+export type ProjectRskEoaMetadataQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectRskEoaMetadataQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, rskEoa?: string | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, derivationPath?: string | null, isCurrent: boolean }> } | null };
 
 export type ProjectGrantApplicationsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -14675,16 +14689,6 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
     rskPublicKey
     derivationPath
     isCurrent
-    accountKeys {
-      id
-      encryptedMnemonic
-      encryptedSeed
-      rskKeyPair {
-        address
-        publicKey
-        derivationPath
-      }
-    }
     createdAt
     replacedAt
   }
@@ -22980,6 +22984,113 @@ export type ProjectPageBodyCreatorQueryHookResult = ReturnType<typeof useProject
 export type ProjectPageBodyCreatorLazyQueryHookResult = ReturnType<typeof useProjectPageBodyCreatorLazyQuery>;
 export type ProjectPageBodyCreatorSuspenseQueryHookResult = ReturnType<typeof useProjectPageBodyCreatorSuspenseQuery>;
 export type ProjectPageBodyCreatorQueryResult = Apollo.QueryResult<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>;
+export const ProjectRskEoaHistoryDocument = gql`
+    query ProjectRskEoaHistory($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    id
+    rskEoa
+    rskEoas {
+      id
+      rskAddress
+      rskPublicKey
+      derivationPath
+      isCurrent
+      accountKeys {
+        id
+        encryptedMnemonic
+        encryptedSeed
+        rskKeyPair {
+          address
+          publicKey
+          derivationPath
+        }
+      }
+      createdAt
+      replacedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useProjectRskEoaHistoryQuery__
+ *
+ * To run a query within a React component, call `useProjectRskEoaHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRskEoaHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRskEoaHistoryQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectRskEoaHistoryQuery(baseOptions: Apollo.QueryHookOptions<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables> & ({ variables: ProjectRskEoaHistoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables>(ProjectRskEoaHistoryDocument, options);
+      }
+export function useProjectRskEoaHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables>(ProjectRskEoaHistoryDocument, options);
+        }
+export function useProjectRskEoaHistorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables>(ProjectRskEoaHistoryDocument, options);
+        }
+export type ProjectRskEoaHistoryQueryHookResult = ReturnType<typeof useProjectRskEoaHistoryQuery>;
+export type ProjectRskEoaHistoryLazyQueryHookResult = ReturnType<typeof useProjectRskEoaHistoryLazyQuery>;
+export type ProjectRskEoaHistorySuspenseQueryHookResult = ReturnType<typeof useProjectRskEoaHistorySuspenseQuery>;
+export type ProjectRskEoaHistoryQueryResult = Apollo.QueryResult<ProjectRskEoaHistoryQuery, ProjectRskEoaHistoryQueryVariables>;
+export const ProjectRskEoaMetadataDocument = gql`
+    query ProjectRskEoaMetadata($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    id
+    rskEoa
+    rskEoas {
+      id
+      rskAddress
+      derivationPath
+      isCurrent
+    }
+  }
+}
+    `;
+
+/**
+ * __useProjectRskEoaMetadataQuery__
+ *
+ * To run a query within a React component, call `useProjectRskEoaMetadataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRskEoaMetadataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRskEoaMetadataQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectRskEoaMetadataQuery(baseOptions: Apollo.QueryHookOptions<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables> & ({ variables: ProjectRskEoaMetadataQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables>(ProjectRskEoaMetadataDocument, options);
+      }
+export function useProjectRskEoaMetadataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables>(ProjectRskEoaMetadataDocument, options);
+        }
+export function useProjectRskEoaMetadataSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables>(ProjectRskEoaMetadataDocument, options);
+        }
+export type ProjectRskEoaMetadataQueryHookResult = ReturnType<typeof useProjectRskEoaMetadataQuery>;
+export type ProjectRskEoaMetadataLazyQueryHookResult = ReturnType<typeof useProjectRskEoaMetadataLazyQuery>;
+export type ProjectRskEoaMetadataSuspenseQueryHookResult = ReturnType<typeof useProjectRskEoaMetadataSuspenseQuery>;
+export type ProjectRskEoaMetadataQueryResult = Apollo.QueryResult<ProjectRskEoaMetadataQuery, ProjectRskEoaMetadataQueryVariables>;
 export const ProjectGrantApplicationsDocument = gql`
     query ProjectGrantApplications($where: UniqueProjectQueryInput!, $input: ProjectGrantApplicationsInput) {
   projectGet(where: $where) {

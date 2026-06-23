@@ -337,6 +337,34 @@ const generateKeysFromSeedHexWithPath = (seedInput: string, derivationPath: stri
   }
 }
 
+export const generateKeysFromPrivateKey = (privateKey: string, derivationPath = ''): AccountKeys => {
+  if (!isValidRskPrivateKey(privateKey)) {
+    throw new Error('Invalid private key')
+  }
+
+  const normalizedPrivateKey = privateKey.replace(/^0x/i, '')
+  const privateKeyBuffer = Buffer.from(normalizedPrivateKey, 'hex')
+  const uncompressedPublicKey = ecc.pointFromScalar(privateKeyBuffer, false)
+  if (!uncompressedPublicKey) {
+    throw new Error('Failed to generate uncompressed public key')
+  }
+
+  const publicKeyForHashing = uncompressedPublicKey.slice(1)
+  const hash = keccak_256(publicKeyForHashing)
+  const address = '0x' + Buffer.from(hash.slice(-20)).toString('hex')
+  const compressedPublicKey = ecc.pointFromScalar(privateKeyBuffer, true)
+  if (!compressedPublicKey) {
+    throw new Error('Failed to generate compressed public key')
+  }
+
+  return {
+    derivationPath,
+    address,
+    privateKey: normalizedPrivateKey,
+    publicKey: Buffer.from(compressedPublicKey).toString('hex'),
+  }
+}
+
 export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
   const network = __production__ ? Network.MAINNET : Network.TESTNET
   const derivationPath = derivationPathMapRSK[network]

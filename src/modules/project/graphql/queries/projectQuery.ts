@@ -57,6 +57,49 @@ export const QUERY_PROJECT_PAGE_BODY_CREATOR = gql`
   }
 `
 
+export const QUERY_PROJECT_RSK_EOA_HISTORY = gql`
+  query ProjectRskEoaHistory($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      id
+      rskEoa
+      rskEoas {
+        id
+        rskAddress
+        rskPublicKey
+        derivationPath
+        isCurrent
+        accountKeys {
+          id
+          encryptedMnemonic
+          encryptedSeed
+          rskKeyPair {
+            address
+            publicKey
+            derivationPath
+          }
+        }
+        createdAt
+        replacedAt
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECT_RSK_EOA_METADATA = gql`
+  query ProjectRskEoaMetadata($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      id
+      rskEoa
+      rskEoas {
+        id
+        rskAddress
+        derivationPath
+        isCurrent
+      }
+    }
+  }
+`
+
 export const QUERY_PROJECT_GRANT_APPLICATION = gql`
   ${FRAGMENT_PROJECT_GRANT_APPLICANT}
   query ProjectGrantApplications($where: UniqueProjectQueryInput!, $input: ProjectGrantApplicationsInput) {
