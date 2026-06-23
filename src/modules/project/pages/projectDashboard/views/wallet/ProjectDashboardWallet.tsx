@@ -11,7 +11,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { useWithdrawFunds } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/hooks/useWithdrawFunds.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { useProjectPageBodyCreatorQuery } from '@/types/index.ts'
+import { useProjectRskEoaHistoryQuery } from '@/types/index.ts'
 
 import { ProjectFundingStrategy } from '../../../../../../types/index.ts'
 import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
@@ -28,7 +28,7 @@ export const ProjectDashboardWallet = () => {
     accountKeys: RecoveryAccountKeys
     projectWallets: ProjectWalletBackupEntry[]
   } | null>(null)
-  const { data: creatorProjectData } = useProjectPageBodyCreatorQuery({
+  const { data: walletHistoryData } = useProjectRskEoaHistoryQuery({
     variables: {
       where: { id: project.id },
     },
@@ -45,9 +45,12 @@ export const ProjectDashboardWallet = () => {
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
-  const creatorProject = creatorProjectData?.projectGet as typeof project & {
-    rskEoas?: Parameters<typeof ProjectRskEoaHistory>[0]['rskEoas']
-  }
+  const walletProject = walletHistoryData?.projectGet as
+    | (typeof project & {
+        rskEoas?: Parameters<typeof ProjectRskEoaHistory>[0]['rskEoas']
+      })
+    | undefined
+  const currentWallet = walletProject?.rskEoas?.find((rskEoa) => rskEoa.isCurrent)
   const handleOpenRecoveryData = (rskEoa: ProjectRskEoaHistoryItem) => {
     if (rskEoa.accountKeys?.encryptedMnemonic || rskEoa.accountKeys?.encryptedSeed) {
       setSelectedRecoveryData({
@@ -87,8 +90,8 @@ export const ProjectDashboardWallet = () => {
         <TiaRskEoaSetupNotice />
         <ProjectRskEoaHistory
           projectId={project.id}
-          currentRskEoa={creatorProject?.rskEoa ?? project.rskEoa}
-          rskEoas={creatorProject?.rskEoas}
+          currentRskEoa={walletProject?.rskEoa ?? project.rskEoa}
+          rskEoas={walletProject?.rskEoas}
           onOpenSeedWords={handleOpenRecoveryData}
           withdraw={{
             showWithdrawableBalance,
@@ -109,6 +112,7 @@ export const ProjectDashboardWallet = () => {
           {...payoutRskModal}
           project={project}
           rskAddress={projectRskEoa}
+          projectRskEoaDerivationPath={currentWallet?.derivationPath}
           payoutAmountOverride={withdrawableSats}
           onCompleted={onCompleted}
         />

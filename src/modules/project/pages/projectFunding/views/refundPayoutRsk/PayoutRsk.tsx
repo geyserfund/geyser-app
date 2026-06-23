@@ -35,6 +35,7 @@ import {
   usePayoutPaymentPrepareMutation,
   usePayoutPrepareMutation,
   usePayoutProcessingLazyQuery,
+  useProjectRskEoaMetadataQuery,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -61,6 +62,7 @@ type PayoutRskProps = {
   onClose: () => void
   project: ProjectForProfileContributionsFragment
   rskAddress?: string
+  projectRskEoaDerivationPath?: string | null
   payoutAmountOverride?: number
   onCompleted?: () => void
 }
@@ -274,6 +276,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   onClose,
   project,
   rskAddress,
+  projectRskEoaDerivationPath,
   payoutAmountOverride,
   onCompleted,
 }) => {
@@ -471,6 +474,17 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   })
   const isPrismPayout = contractType === PayoutContractType.Prism
   const requiresInternalLock = isPrismPayout || isInternalRetryPayout
+  const { data: projectRskEoaMetadataData } = useProjectRskEoaMetadataQuery({
+    variables: { where: { id: project.id } },
+    skip: !isOpen || !project.id || !rskAddress || !isPrismPayout,
+    fetchPolicy: 'cache-first',
+  })
+  const storedProjectRskEoa = projectRskEoaMetadataData?.projectGet?.rskEoas.find((projectWallet) => {
+    return rskAddress
+      ? projectWallet.rskAddress.toLowerCase() === rskAddress.toLowerCase()
+      : projectWallet.isCurrent
+  })
+  const effectiveProjectRskEoaDerivationPath = projectRskEoaDerivationPath ?? storedProjectRskEoa?.derivationPath
 
   useEffect(() => {
     if (!isOpen || latestPayment || shouldResumeOnChainPayout || hasDefaultedMethodRef.current) {
@@ -763,7 +777,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   // Get form objects from both hooks
   const keyDerivationOptions = isPrismPayout
     ? {
-        deriveKeysFromSeed: (seedHex: string) => generateProjectKeysFromSeedHex(seedHex, project.id),
+        deriveKeysFromSeed: (seedHex: string) =>
+          generateProjectKeysFromSeedHex(seedHex, project.id, effectiveProjectRskEoaDerivationPath),
         storeKeyPair: false,
         requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
       }
