@@ -2020,5 +2020,11 @@
   "Fund a local workshop.": "Financia un taller local.",
   "This recoverable grant is facilitated by our trusted Field Partner,": "Esta subvención recuperable es facilitada por nuestro Socio de Campo de confianza,",
   "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "El retiro mínimo es {{amount}} sats. Actualmente tienes fondos por debajo del mínimo en tu billetera de proyecto.",
-  "Go to option": "Ir a la opción"
+  "Go to option": "Ir a la opción",
+  "Sent email to 1 user.": "Correo enviado a 1 usuario.",
+  "Sent email to {{count}} users.": "Correo enviado a {{count}} usuarios.",
+  "{{rewardName}} product image": "Imagen del producto {{rewardName}}",
+  "Email will be sent to {{count}} members.": "El correo será enviado a {{count}} miembros.",
+  "Email sent": "Correo enviado",
+  "Email this post to users": "Enviar este post por correo a los usuarios"
 }

@@ -2325,5 +2325,11 @@
   "Fund a local workshop.": "Fund a local workshop.",
   "This recoverable grant is facilitated by our trusted Field Partner,": "This recoverable grant is facilitated by our trusted Field Partner,",
   "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.": "Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.",
-  "Go to option": "Go to option"
+  "Go to option": "Go to option",
+  "Sent email to 1 user.": "Sent email to 1 user.",
+  "Sent email to {{count}} users.": "Sent email to {{count}} users.",
+  "{{rewardName}} product image": "{{rewardName}} product image",
+  "Email will be sent to {{count}} members.": "Email will be sent to {{count}} members.",
+  "Email sent": "Email sent",
+  "Email this post to users": "Email this post to users"
 }
