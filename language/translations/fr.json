@@ -1554,5 +1554,6 @@
   "{{rewardName}} product image": "{{rewardName}} image du produit",
   "Email will be sent to {{count}} members.": "Un email sera envoyé à {{count}} membres.",
   "Email sent": "Email envoyé",
-  "Email this post to users": "Envoyer cet article par email aux utilisateurs"
+  "Email this post to users": "Envoyer cet article par email aux utilisateurs",
+  "QR code": "Code QR"
 }

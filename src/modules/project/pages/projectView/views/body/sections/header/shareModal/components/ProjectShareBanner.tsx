@@ -1,6 +1,7 @@
 import { Box, HStack, Image, StackProps, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { QRCodeSVG } from 'qrcode.react'
 import { forwardRef } from 'react'
-import { QRCode } from 'react-qrcode-logo'
 
 import { Body } from '@/shared/components/typography'
 
@@ -80,43 +81,43 @@ export const ProjectShareQrCodeComponent = ({
       borderColor={'neutral.1000'}
       overflow={'hidden'}
       _hover={{ cursor: 'pointer' }}
-      position="relative"
       backgroundColor="utils.whiteContrast"
       borderRadius={8}
-      gap={0}
-      pb={1}
+      gap={1}
+      padding={2}
     >
-      <HStack
-        background="white"
-        padding="2px"
-        position={'absolute'}
-        top={`${(qrSize - (logoSize - 6) / 2) / 2}px`}
-        left={`${(qrSize - (logoSize - 6) / 2) / 2}px`}
-        borderRadius="8px"
-        width={`${LOGO_SIZE + 4}px`}
-        height={`${LOGO_SIZE + 4}px`}
-      >
-        <HStack width={`${LOGO_SIZE}px`} height={`${LOGO_SIZE}px`} borderRadius="8px" justifyContent="center">
-          <img
-            alt="Geyser logo"
-            style={{
-              maxWidth: '100%',
-              height: '100%',
-            }}
-            src={centerLogo}
-          />
+      <Box position="relative" lineHeight={0}>
+        <QRCodeSVG
+          size={qrSize}
+          bgColor={lightModeColors.utils.pbg}
+          fgColor={lightModeColors.utils.text}
+          value={qrCodeValue}
+          level="H"
+          title={qrCodeText ?? t('QR code')}
+        />
+        <HStack
+          background="utils.pbg"
+          padding="2px"
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          borderRadius="8px"
+          width={`${logoSize + 4}px`}
+          height={`${logoSize + 4}px`}
+        >
+          <HStack width={`${logoSize}px`} height={`${logoSize}px`} borderRadius="8px" justifyContent="center">
+            <img
+              alt=""
+              style={{
+                maxWidth: '100%',
+                height: '100%',
+              }}
+              src={centerLogo}
+            />
+          </HStack>
         </HStack>
-      </HStack>
-
-      <QRCode
-        qrStyle="dots"
-        id={lightModeColors.neutral[1000]}
-        size={qrSize}
-        bgColor={lightModeColors.utils.pbg}
-        fgColor={lightModeColors.utils.text}
-        value={qrCodeValue}
-        removeQrCodeBehindLogo={true}
-      />
+      </Box>
       {qrCodeText && (
         <Body size="xs" light>
           {qrCodeText}
