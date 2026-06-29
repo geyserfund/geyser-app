@@ -15470,6 +15470,7 @@ __metadata:
     prerender-node: "npm:^3.8.0"
     prettier: "npm:^2.8.3"
     qr-scanner: "npm:^1.4.2"
+    qrcode.react: "npm:^4.2.0"
     react: "npm:^18.2.0"
     react-confetti: "npm:^6.1.0"
     react-cookie: "npm:^4.1.1"
@@ -20659,6 +20660,15 @@ __metadata:
   version: 1.4.4
   resolution: "qrcode-generator@npm:1.4.4"
   checksum: 10c0/3249fcff98cb9fa17c21329d3dfd895e294a2d6ea48161f7b377010779d41f0cd88668b7fb3478a659725061bb0a770b40a227c2f4853e8c4a6b947a9e8bf17a
+  languageName: node
+  linkType: hard
+
+"qrcode.react@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "qrcode.react@npm:4.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/68c691d130e5fda2f57cee505ed7aea840e7d02033100687b764601f9595e1116e34c13876628a93e1a5c2b85e4efc27d30b2fda72e2050c02f3e1c4e998d248
   languageName: node
   linkType: hard
 
