@@ -88,6 +88,7 @@
     "luxon": "^3.2.1",
     "nostr-tools": "^1.7.5",
     "prerender-node": "^3.8.0",
+    "qr-code-styling": "^1.9.2",
     "qr-scanner": "^1.4.2",
     "react": "^18.2.0",
     "react-confetti": "^6.1.0",
