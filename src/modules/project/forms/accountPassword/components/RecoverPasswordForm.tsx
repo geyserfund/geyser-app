@@ -51,7 +51,6 @@ type FundsSummary = {
   pledgedSats: string | number | bigint
   affectedTiaProjects?: AccountPasswordProjectImpact[]
   legacyTiaProjects?: AccountPasswordProjectImpact[]
-  pendingTiaProjects?: AccountPasswordProjectImpact[]
 }
 
 const getFundsSummaryItems = (fundsSummary: FundsSummary) => {
@@ -61,7 +60,6 @@ const getFundsSummaryItems = (fundsSummary: FundsSummary) => {
   const pledgedSats = toSatsBigInt(fundsSummary.pledgedSats)
   const affectedTiaProjects = fundsSummary.affectedTiaProjects ?? []
   const legacyTiaProjects = fundsSummary.legacyTiaProjects ?? []
-  const pendingTiaProjects = fundsSummary.pendingTiaProjects ?? []
 
   return [
     {
@@ -93,12 +91,6 @@ const getFundsSummaryItems = (fundsSummary: FundsSummary) => {
       value: t('{{count}} wallets', { count: affectedTiaProjects.length + legacyTiaProjects.length }),
       detail: t('Current and legacy TIA project wallets affected.'),
       isWarning: affectedTiaProjects.length + legacyTiaProjects.length > 0,
-    },
-    {
-      label: t('Payments in progress'),
-      value: t('{{count}} projects', { count: pendingTiaProjects.length }),
-      detail: t('May block reset until payments settle.'),
-      isWarning: pendingTiaProjects.length > 0,
     },
   ]
 }
@@ -228,7 +220,6 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
                 t('Project funds tied to your current password'),
               )}
               {renderProjectImpactList(fundsSummary.legacyTiaProjects, t('Legacy project wallets to rotate'))}
-              {renderProjectImpactList(fundsSummary.pendingTiaProjects, t('Projects with payments in progress'))}
             </VStack>
           )}
         </VStack>

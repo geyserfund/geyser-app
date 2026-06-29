@@ -60,15 +60,6 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
         derivationPath
         balanceSats
       }
-      pendingTiaProjects {
-        id
-        name
-        title
-        status
-        rskEoa
-        derivationPath
-        balanceSats
-      }
     }
   }
 `
