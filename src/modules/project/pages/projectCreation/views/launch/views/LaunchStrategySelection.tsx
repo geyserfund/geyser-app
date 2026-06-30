@@ -17,13 +17,17 @@ export enum ProjectLaunchStrategy {
 }
 
 export const LaunchStrategySelection = ({
+  launchFeeWaived = false,
   handleNext,
   handleBack,
 }: {
+  launchFeeWaived?: boolean
   handleNext: (strategy: ProjectLaunchStrategy) => void
   handleBack: () => void
 }) => {
-  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.PRO_LAUNCH)
+  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(
+    launchFeeWaived ? ProjectLaunchStrategy.STARTER_LAUNCH : ProjectLaunchStrategy.PRO_LAUNCH,
+  )
 
   const [basicPlan, visibilityBoostPlan, growthPlan, partnershipPlan] = getLaunchPlansData(t) as [
     LaunchPlanData,
@@ -59,7 +63,8 @@ export const LaunchStrategySelection = ({
           onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
           title={basicPlan.title}
           subtitle={basicPlan.subtitle}
-          price={basicPlan.price}
+          price={launchFeeWaived ? t('Paid or Waved') : basicPlan.price}
+          priceColor={launchFeeWaived ? 'primary1.9' : undefined}
           points={getCardPoints(basicPlan.points)}
         />
         <ProjectCreateStrategyCard
@@ -108,6 +113,7 @@ type ProjectCreateStrategyCardProps = {
   subtitle: string
   body?: string
   price?: string
+  priceColor?: string
   points?: string[][]
   isSelected?: boolean
   highlightedText?: string
@@ -118,6 +124,7 @@ export const ProjectCreateStrategyCard = ({
   subtitle,
   body,
   price,
+  priceColor,
   points,
   isSelected,
   highlightedText,
@@ -153,7 +160,7 @@ export const ProjectCreateStrategyCard = ({
             {subtitle}
           </Body>
         </VStack>
-        <Body size="lg" muted medium>
+        <Body size="lg" muted={!priceColor} color={priceColor} medium>
           {price}
         </Body>
       </HStack>
