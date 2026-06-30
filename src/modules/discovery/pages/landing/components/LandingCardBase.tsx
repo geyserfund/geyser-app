@@ -21,15 +21,18 @@ import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import { isAllOrNothing, isInactive, useMobileMode } from '@/utils/index.ts'
 
-import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '../../../../../types'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
+import {
+  ContributionsSummary,
+  ProjectAonGoalStatus,
+  ProjectForLandingPageFragment,
+} from '@/types/generated/graphql.ts'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
 
 const AON_FAILED_STATUSES = [
   ProjectAonGoalStatus.Failed,
   ProjectAonGoalStatus.Cancelled,
   ProjectAonGoalStatus.Unclaimed,
-  ProjectAonGoalStatus.Finalized,
 ]
 
 export interface LandingCardBaseProps extends CardLayoutProps {
@@ -343,7 +346,11 @@ export const LandingCardBase = ({
   const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
-  const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
+  const isAonFinalizedWithoutPayout =
+    project.aonGoal?.status === ProjectAonGoalStatus.Finalized && !project.aonGoal.hasCompletedPayout
+  const isAonFailed =
+    isAonProject &&
+    (AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus) || isAonFinalizedWithoutPayout)
 
   const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
   const shouldShowContributionAmount = contributionAmount >= MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD
