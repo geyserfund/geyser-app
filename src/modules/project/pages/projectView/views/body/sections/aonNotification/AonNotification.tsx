@@ -74,7 +74,10 @@ export const AonNotification = () => {
       return <CampaignSuccessNotification />
     }
 
-    if (project.aonGoal?.status === ProjectAonGoalStatus.Claimed) {
+    if (
+      project.aonGoal?.status === ProjectAonGoalStatus.Claimed ||
+      (project.aonGoal?.status === ProjectAonGoalStatus.Finalized && project.aonGoal.hasCompletedPayout)
+    ) {
       return <FundsClaimedNotification />
     }
 

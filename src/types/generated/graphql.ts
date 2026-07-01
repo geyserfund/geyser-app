@@ -10303,7 +10303,7 @@ export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
 
-export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, deployedAt?: any | null, endsAt?: any | null, status?: ProjectAonGoalStatus | null };
+export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, deployedAt?: any | null, endsAt?: any | null, status?: ProjectAonGoalStatus | null, hasCompletedPayout: boolean };
 
 export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: any, projectId: any, createdAt?: any | null, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null }, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
     { __typename?: 'Project' }
@@ -11265,7 +11265,7 @@ export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: str
       & ProjectGoalsFragment
     )> } };
 
-export type ProjectAonGoalForProjectPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, endsAt?: any | null, deployedAt?: any | null, status?: ProjectAonGoalStatus | null, contractAddress?: string | null };
+export type ProjectAonGoalForProjectPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, endsAt?: any | null, deployedAt?: any | null, status?: ProjectAonGoalStatus | null, hasCompletedPayout: boolean, contractAddress?: string | null };
 
 export type ProjectAonGoalForProjectUpdateFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, goalDurationInDays: number };
 
@@ -13007,6 +13007,7 @@ export const ProjectAonGoalForLandingPageFragmentDoc = gql`
   deployedAt
   endsAt
   status
+  hasCompletedPayout
 }
     `;
 export const ProjectMatchingFragmentDoc = gql`
@@ -14376,6 +14377,7 @@ export const ProjectAonGoalForProjectPageFragmentDoc = gql`
   endsAt
   deployedAt
   status
+  hasCompletedPayout
   contractAddress
 }
     `;
