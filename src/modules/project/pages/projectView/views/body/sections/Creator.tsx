@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { Badge, Box, Button, HStack, useColorModeValue, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
@@ -9,7 +9,7 @@ import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/u
 import { commaFormatted } from '@/utils'
 
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { BodySectionLayout } from '../components'
+import { BodySectionLayout } from '../components/BodySectionLayout'
 import { CreatorSocial } from './header/components/CreatorSocial'
 
 /** Displays project creator details and the creator bio when available. */
@@ -74,7 +74,7 @@ export const Creator = () => {
             </HStack>
           </Box>
         ) : null}
-        {creatorBio && <CreatorBio bio={creatorBio} />}
+        {creatorBio && <CreatorBio key={creatorBio} bio={creatorBio} />}
       </CardLayout>
     </BodySectionLayout>
   )
@@ -84,42 +84,47 @@ export const Creator = () => {
 const CreatorBio = ({ bio }: { bio: string }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isClamped, setIsClamped] = useState(false)
-  const bioRef = useRef<HTMLParagraphElement>(null)
+  const resizeObserverRef = useRef<ResizeObserver | null>(null)
 
-  useEffect(() => {
-    setIsExpanded(false)
-  }, [bio])
+  const updateIsClamped = useCallback((node: HTMLParagraphElement) => {
+    const nextIsClamped = node.scrollHeight > node.clientHeight
 
-  useEffect(() => {
-    const node = bioRef.current
+    setIsClamped((currentIsClamped) => {
+      if (currentIsClamped === nextIsClamped) {
+        return currentIsClamped
+      }
 
-    if (!node) {
-      return
-    }
+      return nextIsClamped
+    })
+  }, [])
 
-    const updateIsClamped = () => {
-      setIsClamped(node.scrollHeight > node.clientHeight)
-    }
+  const setBioNode = useCallback(
+    (node: HTMLParagraphElement | null) => {
+      resizeObserverRef.current?.disconnect()
+      resizeObserverRef.current = null
 
-    updateIsClamped()
+      if (!node) {
+        return
+      }
 
-    if (typeof ResizeObserver === 'undefined') {
-      return
-    }
+      updateIsClamped(node)
 
-    const resizeObserver = new ResizeObserver(updateIsClamped)
-    resizeObserver.observe(node)
+      if (typeof ResizeObserver === 'undefined') {
+        return
+      }
 
-    return () => {
-      resizeObserver.disconnect()
-    }
-  }, [bio, isExpanded])
+      const resizeObserver = new ResizeObserver(() => updateIsClamped(node))
+      resizeObserver.observe(node)
+      resizeObserverRef.current = resizeObserver
+    },
+    [updateIsClamped],
+  )
 
   const shouldShowSeeMore = isClamped && !isExpanded
 
   return (
     <Box w="full">
-      <Body ref={bioRef} size="sm" light noOfLines={isExpanded ? undefined : 2}>
+      <Body ref={setBioNode} size="sm" light noOfLines={isExpanded ? undefined : 2}>
         {bio}
       </Body>
       {shouldShowSeeMore ? (
