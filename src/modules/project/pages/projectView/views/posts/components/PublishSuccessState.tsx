@@ -1,13 +1,16 @@
 import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowSquareOut, PiCheck, PiCopy, PiPencilSimple } from 'react-icons/pi'
+import { useState } from 'react'
+import { PiArrowSquareOut, PiCheck, PiCopy, PiEnvelopeSimple, PiPencilSimple } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { PostEmailSendForm } from '@/modules/project/components/PostEmailSendForm.tsx'
+import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getProjectPostViewUrl } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { EmailSubscriberSegment } from '@/types/index.ts'
 
 type PublishSuccessStateProps = {
   /** The published post id */
@@ -22,6 +25,9 @@ type PublishSuccessStateProps = {
 export const PublishSuccessState = ({ postId, description, onWriteAnother, onClose }: PublishSuccessStateProps) => {
   const navigate = useNavigate()
   const { project } = useProjectAtom()
+  const { rewards } = useRewardsAtom()
+
+  const [showEmailForm, setShowEmailForm] = useState(false)
 
   const postUrl = getProjectPostViewUrl(project.name, postId)
   const { onCopy, hasCopied } = useCopyToClipboard(postUrl)
@@ -84,6 +90,28 @@ export const PublishSuccessState = ({ postId, description, onWriteAnother, onClo
           </Button>
         </HStack>
       </VStack>
+
+      {showEmailForm ? (
+        <PostEmailSendForm
+          postId={postId}
+          projectId={project.id}
+          rewards={rewards}
+          defaultSegment={EmailSubscriberSegment.Followers}
+          showSendButton
+          sendButtonLabel={t('Email this post to users')}
+        />
+      ) : (
+        <Button
+          w="full"
+          size="lg"
+          variant="solid"
+          colorScheme="primary1"
+          leftIcon={<PiEnvelopeSimple />}
+          onClick={() => setShowEmailForm(true)}
+        >
+          {t('Email this post to users')}
+        </Button>
+      )}
 
       {/* Action buttons */}
       <VStack w="full" spacing={2}>

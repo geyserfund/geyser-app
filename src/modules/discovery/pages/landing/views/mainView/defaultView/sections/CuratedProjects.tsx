@@ -1,24 +1,17 @@
 import { Box, Button, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
-import { fetchFeaturedProject } from '@/api/airtable.ts'
 import { LandingCardBaseSkeleton } from '@/shared/components/layouts/index.ts'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import {
-  type GlobalProjectLeaderboardRow,
-  LeaderboardPeriod,
-  ProjectCategory,
-  useFeaturedProjectForLandingPageQuery,
-  useLeaderboardGlobalProjectsQuery,
-} from '@/types/index.ts'
+import { type GlobalProjectLeaderboardRow } from '@/types/index.ts'
 
 import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
-import { FeatureAirtableData, FeaturedAirtableResponse } from './Featured.tsx'
+import { LandingProjectCardProject } from '../../../../graphql/landingPageTypes.ts'
 
-type CategoryKey = 'featured' | 'education' | 'culture' | 'community' | 'tools'
+export type CategoryKey = 'featured' | 'education' | 'culture' | 'community' | 'tools'
 
 type CategoryButton = {
   emoji: string
@@ -43,13 +36,35 @@ const CATEGORY_COPY_KEYS: Record<CategoryKey, string> = {
 }
 const CURATED_PROJECTS_COUNT = 6
 
-export const CuratedProjects = () => {
+type CuratedProjectsProps = {
+  activeCategory: CategoryKey
+  categoryError?: boolean
+  categoryLoading?: boolean
+  categoryProjectRows?: GlobalProjectLeaderboardRow[]
+  categoryProjects?: LandingProjectCardProject[]
+  featuredError?: boolean
+  featuredLoading?: boolean
+  featuredProjects?: LandingProjectCardProject[]
+  onCategoryChange: (category: CategoryKey) => void
+  onRetryCategory?: () => void
+  onRetryFeatured?: () => void
+}
+
+export const CuratedProjects = ({
+  activeCategory,
+  categoryError,
+  categoryLoading,
+  categoryProjectRows = [],
+  categoryProjects = [],
+  featuredError,
+  featuredLoading,
+  featuredProjects = [],
+  onCategoryChange,
+  onRetryCategory,
+  onRetryFeatured,
+}: CuratedProjectsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [activeCategory, setActiveCategory] = useState<CategoryKey>('featured')
-  const [featuredProjectNames, setFeaturedProjectNames] = useState<string[]>([])
-  const [loadingFeatured, setLoadingFeatured] = useState(true)
-  const [featuredError, setFeaturedError] = useState(false)
 
   const inactiveBg = useColorModeValue('utils.pbg', 'utils.surface')
   const activeBg = useColorModeValue('neutral1.2', 'neutral1.3')
@@ -71,145 +86,28 @@ export const CuratedProjects = () => {
     [t],
   )
 
-  const loadFeaturedProjects = useCallback(async () => {
-    setLoadingFeatured(true)
-    setFeaturedError(false)
-    try {
-      const response: FeaturedAirtableResponse = await fetchFeaturedProject()
-      const projectNames = response.records
-        .map((record) => record.fields)
-        .filter((data: FeatureAirtableData) => data.Type === 'project' && data.Name)
-        .map((data: FeatureAirtableData) => data.Name)
-        .slice(0, 6)
-
-      setFeaturedProjectNames(projectNames)
-    } catch (_error) {
-      setFeaturedError(true)
-      setFeaturedProjectNames([])
-    } finally {
-      setLoadingFeatured(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (activeCategory === 'featured') {
-      loadFeaturedProjects()
-    }
-  }, [activeCategory, loadFeaturedProjects])
-
-  const {
-    data: educationData,
-    loading: educationLoading,
-    error: educationError,
-    refetch: refetchEducation,
-  } = useLeaderboardGlobalProjectsQuery({
-    skip: activeCategory !== 'education',
-    variables: {
-      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Education },
-    },
-  })
-
-  const {
-    data: cultureData,
-    loading: cultureLoading,
-    error: cultureError,
-    refetch: refetchCulture,
-  } = useLeaderboardGlobalProjectsQuery({
-    skip: activeCategory !== 'culture',
-    variables: {
-      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Culture },
-    },
-  })
-
-  const {
-    data: communityData,
-    loading: communityLoading,
-    error: communityError,
-    refetch: refetchCommunity,
-  } = useLeaderboardGlobalProjectsQuery({
-    skip: activeCategory !== 'community',
-    variables: {
-      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Community },
-    },
-  })
-
-  const {
-    data: toolsData,
-    loading: toolsLoading,
-    error: toolsError,
-    refetch: refetchTools,
-  } = useLeaderboardGlobalProjectsQuery({
-    skip: activeCategory !== 'tools',
-    variables: {
-      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Tool },
-    },
-  })
-
   const getCategoryProjects = () => {
     if (activeCategory === 'featured') {
       return {
         emptyStateMessage: t('No featured projects found'),
         error: featuredError,
-        loading: loadingFeatured,
-        projectNames: featuredProjectNames,
-        retry: loadFeaturedProjects,
-      }
-    }
-
-    if (activeCategory === 'education') {
-      const projectRows = educationData?.leaderboardGlobalProjectsGet || []
-      return {
-        emptyStateMessage: t('No projects found'),
-        error: educationError,
-        loading: educationLoading,
-        projectRows,
-        retry: refetchEducation,
-      }
-    }
-
-    if (activeCategory === 'culture') {
-      const projectRows = cultureData?.leaderboardGlobalProjectsGet || []
-      return {
-        emptyStateMessage: t('No projects found'),
-        error: cultureError,
-        loading: cultureLoading,
-        projectRows,
-        retry: refetchCulture,
-      }
-    }
-
-    if (activeCategory === 'community') {
-      const projectRows = communityData?.leaderboardGlobalProjectsGet || []
-      return {
-        emptyStateMessage: t('No projects found'),
-        error: communityError,
-        loading: communityLoading,
-        projectRows,
-        retry: refetchCommunity,
-      }
-    }
-
-    if (activeCategory === 'tools') {
-      const projectRows = toolsData?.leaderboardGlobalProjectsGet || []
-      return {
-        emptyStateMessage: t('No tools found'),
-        error: toolsError,
-        loading: toolsLoading,
-        projectRows,
-        retry: refetchTools,
+        loading: featuredLoading,
+        projects: featuredProjects,
+        retry: onRetryFeatured,
       }
     }
 
     return {
-      emptyStateMessage: t('No projects found'),
-      error: undefined,
-      loading: false,
-      projectRows: [],
-      retry: undefined,
+      emptyStateMessage: activeCategory === 'tools' ? t('No tools found') : t('No projects found'),
+      error: categoryError,
+      loading: categoryLoading,
+      projectRows: categoryProjectRows,
+      projects: categoryProjects,
+      retry: onRetryCategory,
     }
   }
 
-  const { projectRows = [], projectNames, loading, error, retry, emptyStateMessage } = getCategoryProjects()
+  const { projectRows = [], projects = [], loading, error, retry, emptyStateMessage } = getCategoryProjects()
 
   const handleDiscoverMore = () => {
     navigate(getPath('discoveryProjects'))
@@ -250,7 +148,7 @@ export const CuratedProjects = () => {
               color={buttonTextColor}
               border="1px solid"
               borderColor={activeCategory === button.key ? activeBorderColor : inactiveBorderColor}
-              onClick={() => setActiveCategory(button.key)}
+              onClick={() => onCategoryChange(button.key)}
               leftIcon={<span>{button.emoji}</span>}
               bg={activeCategory === button.key ? activeBg : inactiveBg}
               fontSize={{ base: 'md', lg: 'lg' }}
@@ -285,10 +183,10 @@ export const CuratedProjects = () => {
         </VStack>
       ) : (
         <>
-          {activeCategory === 'featured' && projectNames && <FeaturedProjectsList projectNames={projectNames} />}
+          {activeCategory === 'featured' && <FeaturedProjectsList projects={projects} />}
 
           {activeCategory !== 'featured' && projectRows.length > 0 && (
-            <MonthlyTrendingProjectsList projectRows={projectRows} />
+            <MonthlyTrendingProjectsList projectRows={projectRows} projects={projects} />
           )}
 
           {activeCategory === 'tools' && projectRows.length === 0 && (
@@ -303,7 +201,7 @@ export const CuratedProjects = () => {
             </VStack>
           )}
 
-          {activeCategory === 'featured' && projectNames?.length === 0 && (
+          {activeCategory === 'featured' && projects.length === 0 && (
             <VStack w="full" spacing={4} py={8}>
               <Body color="neutral1.11">{emptyStateMessage}</Body>
             </VStack>
@@ -330,47 +228,38 @@ const CuratedProjectsSkeletonGrid = () => {
   )
 }
 
-const MonthlyTrendingProjectsList = ({ projectRows }: { projectRows: GlobalProjectLeaderboardRow[] }) => {
+const MonthlyTrendingProjectsList = ({
+  projectRows,
+  projects,
+}: {
+  projectRows: GlobalProjectLeaderboardRow[]
+  projects: LandingProjectCardProject[]
+}) => {
+  const projectByName = new Map(projects.map((project) => [project.name, project]))
+
   return (
     <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
-      {projectRows.map((projectRow) => (
-        <MonthlyTrendingProjectItem key={projectRow.projectName} projectRow={projectRow} />
-      ))}
+      {projectRows.flatMap((projectRow) => {
+        const project = projectByName.get(projectRow.projectName)
+
+        if (!project) {
+          return []
+        }
+
+        return [<MonthlyTrendingProjectItem key={projectRow.projectName} project={project} projectRow={projectRow} />]
+      })}
     </SimpleGrid>
   )
 }
 
-const MonthlyTrendingProjectItem = ({ projectRow }: { projectRow: GlobalProjectLeaderboardRow }) => {
+const MonthlyTrendingProjectItem = ({
+  project,
+  projectRow,
+}: {
+  project: LandingProjectCardProject
+  projectRow: GlobalProjectLeaderboardRow
+}) => {
   const { t } = useTranslation()
-  const { data, loading, error, refetch } = useFeaturedProjectForLandingPageQuery({
-    variables: {
-      where: {
-        name: projectRow.projectName,
-      },
-    },
-    skip: !projectRow.projectName,
-  })
-
-  const project = data?.projectGet
-
-  if (loading) {
-    return <LandingCardBaseSkeleton />
-  }
-
-  if (error) {
-    return (
-      <VStack w="full" spacing={4} py={8}>
-        <Body color="neutral1.11">{t('Failed to load curated project')}</Body>
-        <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => refetch()}>
-          {t('Retry')}
-        </Button>
-      </VStack>
-    )
-  }
-
-  if (!project) {
-    return null
-  }
 
   return (
     <LandingProjectCard
@@ -386,47 +275,12 @@ const MonthlyTrendingProjectItem = ({ projectRow }: { projectRow: GlobalProjectL
   )
 }
 
-const FeaturedProjectsList = ({ projectNames }: { projectNames: string[] }) => {
+const FeaturedProjectsList = ({ projects }: { projects: LandingProjectCardProject[] }) => {
   return (
     <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
-      {projectNames.map((projectName) => (
-        <FeaturedProjectItem key={projectName} projectName={projectName} />
+      {projects.map((project) => (
+        <LandingProjectCard key={project.name} project={project} />
       ))}
     </SimpleGrid>
   )
-}
-
-const FeaturedProjectItem = ({ projectName }: { projectName: string }) => {
-  const { t } = useTranslation()
-  const { data, loading, error, refetch } = useFeaturedProjectForLandingPageQuery({
-    variables: {
-      where: {
-        name: projectName,
-      },
-    },
-    skip: !projectName,
-  })
-
-  const project = data?.projectGet
-
-  if (loading) {
-    return <LandingCardBaseSkeleton />
-  }
-
-  if (error) {
-    return (
-      <VStack w="full" spacing={4} py={8}>
-        <Body color="neutral1.11">{t('Failed to load curated project')}</Body>
-        <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => refetch()}>
-          {t('Retry')}
-        </Button>
-      </VStack>
-    )
-  }
-
-  if (!project) {
-    return null
-  }
-
-  return <LandingProjectCard project={project} />
 }

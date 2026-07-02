@@ -1,8 +1,8 @@
-import { SetStateAction } from 'jotai'
-import { Dispatch } from 'react'
+import type { SetStateAction } from 'jotai'
+import type { Dispatch } from 'react'
 
-import { PaginationInput } from '../../../types'
-import { validNumber } from '../../../utils'
+import type { PaginationInput } from '../../../types/generated/graphql.ts'
+import { validNumber } from '../../../utils/validations/regex.ts'
 import { useListenerState } from '../useListenerState'
 import { getNestedValue } from '../useQueryWithPagination'
 

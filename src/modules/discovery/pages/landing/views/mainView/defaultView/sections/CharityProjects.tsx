@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { fetchCharityProjectsData } from '@/api/airtable.ts'
 
 import { ProjectCategory, ProjectSubCategory, useProjectsForLandingPageQuery } from '../../../../../../../../types'
+import type { ProjectDisplayItem } from '../components/ProjectDisplayBody'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 interface ProjectDisplayProps {
   category?: ProjectCategory
   subCategory?: ProjectSubCategory
+  loading?: boolean
+  projects?: ProjectDisplayItem[]
 }
 
 type AirtableResponse = {
@@ -25,13 +28,23 @@ type CharityProjects = {
   projectId: number
 }
 
-export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) => {
+export const CharityProjects = ({
+  category,
+  subCategory,
+  loading: providedLoading,
+  projects: providedProjects,
+}: ProjectDisplayProps) => {
   const { t } = useTranslation()
+  const hasProvidedProjects = providedProjects !== undefined || providedLoading !== undefined
 
   const [projectList, setProjectList] = useState<number[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    if (hasProvidedProjects) {
+      return
+    }
+
     setIsLoading(true)
     fetchCharityProjectsData().then((data: AirtableResponse) => {
       // Transform the Airtable response to our FeaturedWallet format
@@ -50,10 +63,10 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
       setProjectList(projectIds)
       setIsLoading(false)
     })
-  }, [])
+  }, [hasProvidedProjects])
 
   const { loading, data } = useProjectsForLandingPageQuery({
-    skip: isLoading || projectList.length === 0,
+    skip: hasProvidedProjects || isLoading || projectList.length === 0,
     variables: {
       input: {
         where: {
@@ -63,11 +76,11 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
     },
   })
 
-  if (loading || isLoading) {
+  if (providedLoading || loading || isLoading) {
     return <ProjectDisplayBodySkeleton />
   }
 
-  const projects = data?.projectsGet.projects || []
+  const projects = providedProjects ?? data?.projectsGet.projects ?? []
 
   if (projects.length === 0) {
     return null
