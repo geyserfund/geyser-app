@@ -1,5 +1,5 @@
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import {
   useProjectCompletedGoalsLazyQuery,
@@ -44,11 +44,6 @@ export const useProjectGoalsAPI = (load?: boolean) => {
 
   const [queryInProgressGoals, queryInProgressGoalsOptions] = useProjectInProgressGoalsLazyQuery({
     fetchPolicy: 'network-only',
-    variables: {
-      input: {
-        projectId: project.id,
-      },
-    },
     onCompleted(data) {
       const inProgressGoals = data?.projectGoals.inProgress || []
       setInProgressGoals(inProgressGoals)
@@ -62,11 +57,6 @@ export const useProjectGoalsAPI = (load?: boolean) => {
 
   const [queryCompletedGoals, queryCompletedGoalsOptions] = useProjectCompletedGoalsLazyQuery({
     fetchPolicy: 'cache-first',
-    variables: {
-      input: {
-        projectId: project.id,
-      },
-    },
     onCompleted(data) {
       const completedGoals = data?.projectGoals.completed || []
       setCompletedGoals(completedGoals)
@@ -111,20 +101,50 @@ export const useProjectGoalsAPI = (load?: boolean) => {
     },
   })
 
+  const executeInProgressGoalsQuery = useCallback(() => {
+    if (!project.id) {
+      return undefined
+    }
+
+    setGoalsLoading(true)
+
+    return queryInProgressGoals({
+      variables: {
+        input: {
+          projectId: project.id,
+        },
+      },
+    })
+  }, [project.id, queryInProgressGoals, setGoalsLoading])
+
+  const executeCompletedGoalsQuery = useCallback(() => {
+    if (!project.id) {
+      return undefined
+    }
+
+    return queryCompletedGoals({
+      variables: {
+        input: {
+          projectId: project.id,
+        },
+      },
+    })
+  }, [project.id, queryCompletedGoals])
+
   useEffect(() => {
     if (project.id && !loading && load && !initialGoalsLoad) {
-      queryInProgressGoals()
-      queryCompletedGoals()
+      executeInProgressGoalsQuery()
+      executeCompletedGoalsQuery()
     }
-  }, [project.id, loading, load, queryCompletedGoals, initialGoalsLoad, queryInProgressGoals])
+  }, [project.id, loading, load, executeCompletedGoalsQuery, initialGoalsLoad, executeInProgressGoalsQuery])
 
   return {
     queryInProgressGoals: {
-      execute: queryInProgressGoals,
+      execute: executeInProgressGoalsQuery,
       ...queryInProgressGoalsOptions,
     },
     queryCompletedGoals: {
-      execute: queryCompletedGoals,
+      execute: executeCompletedGoalsQuery,
       ...queryCompletedGoalsOptions,
     },
     createProjectGoal: {
