@@ -89,6 +89,7 @@ const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
 const APPLY_HASH = '#apply'
 const BECOME_SPONSOR_HASH = '#become-a-sponsor'
+const actionHashes = [APPLY_HASH, BECOME_SPONSOR_HASH]
 const LATAM_IMPACT_FUND_NAME = 'latam-impact-fund'
 const CIRCULAR_ECONOMY_IMPACT_FUND_NAME = 'circular-economies-impact-fund'
 const CIRCULAR_ECONOMY_REPORT_BANNER_URL =
@@ -171,6 +172,18 @@ function buildFundedApplicationsInput(impactFundId: number, cursorId?: string) {
 
 function hasValue<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined
+}
+
+function setImpactFundActionHash(hash: string): void {
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
+}
+
+function clearImpactFundActionHash(): void {
+  if (!actionHashes.includes(window.location.hash)) {
+    return
+  }
+
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
 }
 
 function getFundingModelLabel(fundingModel: ImpactFundApplicationFundingModel): string {
@@ -357,9 +370,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     setHasSubmittedApplicationForm(false)
   }, [selectedProject?.id, selectedProject?.description])
 
-  const handleApplyClick = useCallback(() => {
-    window.history.replaceState(null, '', APPLY_HASH)
-
+  const openApplyModal = useCallback(() => {
     if (!isLoggedIn) {
       loginOnOpen({ showLightning: false })
       return
@@ -374,11 +385,25 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     onProjectModalOpen()
   }, [availableOwnedProjects, hasAvailableProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
 
+  const handleApplyClick = useCallback(() => {
+    setImpactFundActionHash(APPLY_HASH)
+    openApplyModal()
+  }, [openApplyModal])
+
   useEffect(() => {
-    if (window.location.hash === APPLY_HASH) {
-      handleApplyClick()
+    const handleHashChange = () => {
+      if (window.location.hash === APPLY_HASH) {
+        openApplyModal()
+      }
     }
-  }, [handleApplyClick])
+
+    handleHashChange()
+    window.addEventListener('hashchange', handleHashChange)
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [openApplyModal])
 
   const submitApplication = async () => {
     if (!impactFund || !selectedProjectId) return
@@ -505,6 +530,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       hasSubmittedApplicationForm={hasSubmittedApplicationForm}
       isProjectModalOpen={isProjectModalOpen}
       onProjectModalClose={() => {
+        clearImpactFundActionHash()
         setHasSubmittedApplicationForm(false)
         onProjectModalClose()
       }}
@@ -2127,16 +2153,34 @@ function ImpactFundDetailContent({
   const showAwardedAsPrimaryMetric = impactFund.amountCommitted === 0
   const showImpactReportsSection = impactFund.name === CIRCULAR_ECONOMY_IMPACT_FUND_NAME
   const showWideHero = impactFund.name === LATAM_IMPACT_FUND_NAME
-  const handleBecomeSponsorClick = useCallback(() => {
-    window.history.replaceState(null, '', BECOME_SPONSOR_HASH)
+  const openSponsorModal = useCallback(() => {
     onSponsorModalOpen()
   }, [onSponsorModalOpen])
 
+  const handleBecomeSponsorClick = useCallback(() => {
+    setImpactFundActionHash(BECOME_SPONSOR_HASH)
+    openSponsorModal()
+  }, [openSponsorModal])
+
+  const handleSponsorModalClose = useCallback(() => {
+    clearImpactFundActionHash()
+    onSponsorModalClose()
+  }, [onSponsorModalClose])
+
   useEffect(() => {
-    if (window.location.hash === BECOME_SPONSOR_HASH) {
-      onSponsorModalOpen()
+    const handleHashChange = () => {
+      if (window.location.hash === BECOME_SPONSOR_HASH) {
+        openSponsorModal()
+      }
     }
-  }, [onSponsorModalOpen])
+
+    handleHashChange()
+    window.addEventListener('hashchange', handleHashChange)
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [openSponsorModal])
 
   const seoImage = IMPACT_FUND_DETAILS_SEO_IMAGES[impactFund.name as keyof typeof IMPACT_FUND_DETAILS_SEO_IMAGES]
   const overviewSection = (
@@ -2261,7 +2305,7 @@ function ImpactFundDetailContent({
     <>
       <SponsorInquiryModal
         isOpen={isSponsorModalOpen}
-        onClose={onSponsorModalClose}
+        onClose={handleSponsorModalClose}
         primaryTextColor={colors.primaryTextColor}
         secondaryTextColor={colors.secondaryTextColor}
         tertiaryTextColor={colors.tertiaryTextColor}

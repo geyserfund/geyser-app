@@ -30,7 +30,6 @@ const AON_FAILED_STATUSES = [
   ProjectAonGoalStatus.Failed,
   ProjectAonGoalStatus.Cancelled,
   ProjectAonGoalStatus.Unclaimed,
-  ProjectAonGoalStatus.Finalized,
 ]
 
 export interface LandingCardBaseProps extends CardLayoutProps {
@@ -344,7 +343,11 @@ export const LandingCardBase = ({
   const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
-  const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
+  const isAonFinalizedWithoutPayout =
+    project.aonGoal?.status === ProjectAonGoalStatus.Finalized && !project.aonGoal.hasCompletedPayout
+  const isAonFailed =
+    isAonProject &&
+    (AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus) || isAonFinalizedWithoutPayout)
 
   const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
   const shouldShowContributionAmount = contributionAmount >= MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD

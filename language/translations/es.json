@@ -2026,5 +2026,7 @@
   "{{rewardName}} product image": "Imagen del producto {{rewardName}}",
   "Email will be sent to {{count}} members.": "El correo será enviado a {{count}} miembros.",
   "Email sent": "Correo enviado",
-  "Email this post to users": "Enviar este post por correo a los usuarios"
+  "Email this post to users": "Enviar este post por correo a los usuarios",
+  "Paid or Waved": "Pagado o Olas",
+  "See more": "Ver más"
 }

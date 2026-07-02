@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
-import { Badge, Box, HStack, useColorModeValue, Wrap, WrapItem } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, useColorModeValue, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useCallback, useRef, useState } from 'react'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
@@ -8,7 +9,7 @@ import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/u
 import { commaFormatted } from '@/utils'
 
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { BodySectionLayout } from '../components'
+import { BodySectionLayout } from '../components/BodySectionLayout'
 import { CreatorSocial } from './header/components/CreatorSocial'
 
 /** Displays project creator details and the creator bio when available. */
@@ -73,15 +74,74 @@ export const Creator = () => {
             </HStack>
           </Box>
         ) : null}
-        {creatorBio && (
-          <Box w="full">
-            <Body size="sm" light noOfLines={2}>
-              {creatorBio}
-            </Body>
-          </Box>
-        )}
+        {creatorBio && <CreatorBio key={creatorBio} bio={creatorBio} />}
       </CardLayout>
     </BodySectionLayout>
+  )
+}
+
+/** Displays the creator bio with an expandable clamp when the text overflows. */
+const CreatorBio = ({ bio }: { bio: string }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isClamped, setIsClamped] = useState(false)
+  const resizeObserverRef = useRef<ResizeObserver | null>(null)
+
+  const updateIsClamped = useCallback((node: HTMLParagraphElement) => {
+    const nextIsClamped = node.scrollHeight > node.clientHeight
+
+    setIsClamped((currentIsClamped) => {
+      if (currentIsClamped === nextIsClamped) {
+        return currentIsClamped
+      }
+
+      return nextIsClamped
+    })
+  }, [])
+
+  const setBioNode = useCallback(
+    (node: HTMLParagraphElement | null) => {
+      resizeObserverRef.current?.disconnect()
+      resizeObserverRef.current = null
+
+      if (!node) {
+        return
+      }
+
+      updateIsClamped(node)
+
+      if (typeof ResizeObserver === 'undefined') {
+        return
+      }
+
+      const resizeObserver = new ResizeObserver(() => updateIsClamped(node))
+      resizeObserver.observe(node)
+      resizeObserverRef.current = resizeObserver
+    },
+    [updateIsClamped],
+  )
+
+  const shouldShowSeeMore = isClamped && !isExpanded
+
+  return (
+    <Box w="full">
+      <Body ref={setBioNode} size="sm" light noOfLines={isExpanded ? undefined : 2}>
+        {bio}
+      </Body>
+      {shouldShowSeeMore ? (
+        <Button
+          variant="link"
+          size="sm"
+          color="primary1.11"
+          height="auto"
+          minHeight="auto"
+          padding={0}
+          marginTop={1}
+          onClick={() => setIsExpanded(true)}
+        >
+          {t('See more')}
+        </Button>
+      ) : null}
+    </Box>
   )
 }
 

@@ -71,17 +71,13 @@ export const Launch = () => {
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
-      if (launchFeeWaived) {
-        setStep(LaunchStep.Finalize)
-      } else {
-        setStep(LaunchStep.Strategy)
-      }
+      setStep(LaunchStep.Strategy)
     }
 
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
-  }, [launchFeeWaived, step])
+  }, [step])
 
   const handleBack = useCallback(() => {
     if (step === LaunchStep.Finalize) {
@@ -108,10 +104,19 @@ export const Launch = () => {
     }
   }, [step, project?.id, navigate])
 
-  const handleNextStrategy = useCallback((selectedStrategy: ProjectLaunchStrategy) => {
-    setStrategy(selectedStrategy)
-    setStep(LaunchStep.PaymentMethod)
-  }, [])
+  const handleNextStrategy = useCallback(
+    (selectedStrategy: ProjectLaunchStrategy) => {
+      setStrategy(selectedStrategy)
+
+      if (launchFeeWaived && selectedStrategy === ProjectLaunchStrategy.STARTER_LAUNCH) {
+        setStep(LaunchStep.Finalize)
+        return
+      }
+
+      setStep(LaunchStep.PaymentMethod)
+    },
+    [launchFeeWaived],
+  )
 
   const handleContributionResult = useCallback(
     async (method: LaunchPaymentMethod) => {
@@ -150,7 +155,13 @@ export const Launch = () => {
     case LaunchStep.Review:
       return <LaunchReview handleNext={handleNext} />
     case LaunchStep.Strategy:
-      return <LaunchStrategySelection handleNext={handleNextStrategy} handleBack={handleBack} />
+      return (
+        <LaunchStrategySelection
+          launchFeeWaived={launchFeeWaived}
+          handleNext={handleNextStrategy}
+          handleBack={handleBack}
+        />
+      )
     case LaunchStep.PaymentMethod:
       return (
         <LaunchPaymentMethodSelection
