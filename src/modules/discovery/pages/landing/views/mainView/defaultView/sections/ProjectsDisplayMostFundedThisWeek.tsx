@@ -22,6 +22,7 @@ import {
   useProjectsForLandingPageQuery,
   useProjectsMostFundedByCategoryQuery,
 } from '../../../../../../../../types'
+import { LandingMostFundedGroup, LandingPostCardPost } from '../../../../graphql/landingPageTypes.ts'
 import {
   type ProjectDisplayItem,
   ProjectDisplayBody,
@@ -35,6 +36,12 @@ interface ProjectDisplayProps {
   category?: ProjectCategory
   categories?: ProjectCategory[]
   subCategory?: ProjectSubCategory
+  error?: boolean
+  latestProjects?: ProjectDisplayItem[]
+  loading?: boolean
+  onRetry?: () => void
+  posts?: LandingPostCardPost[]
+  trendingGroups?: LandingMostFundedGroup[]
 }
 
 const NO_OF_ITEMS_TO_SHOW = 3
@@ -70,10 +77,19 @@ export const ProjectsDisplayMostFundedThisWeek = ({
   categories,
   subCategory,
   noRightContent,
+  error,
+  latestProjects: latestProjectsProp,
+  loading,
+  onRetry,
+  posts: postsProp,
+  trendingGroups,
 }: ProjectDisplayProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const hasCategories = Boolean(categories?.length)
+  const hasContainerData = Boolean(
+    latestProjectsProp || trendingGroups || postsProp || loading !== undefined || error !== undefined || onRetry,
+  )
 
   const {
     loading: latestProjectsLoading,
@@ -81,7 +97,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     error: latestProjectsError,
     refetch: refetchLatestProjects,
   } = useProjectsForLandingPageQuery({
-    skip: !category && !hasCategories && !subCategory,
+    skip: hasContainerData || (!category && !hasCategories && !subCategory),
     variables: {
       input: {
         orderBy: [
@@ -108,7 +124,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     error: trendingProjectsError,
     refetch: refetchTrendingProjects,
   } = useProjectsMostFundedByCategoryQuery({
-    skip: !category && !subCategory,
+    skip: hasContainerData || (!category && !subCategory),
     variables: {
       input: {
         category,
@@ -120,7 +136,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
   })
 
   const { data: postsQueryData } = usePostsForLandingPageQuery({
-    skip: !category && !hasCategories,
+    skip: hasContainerData || (!category && !hasCategories),
     variables: {
       input: {
         orderBy: {
@@ -148,24 +164,26 @@ export const ProjectsDisplayMostFundedThisWeek = ({
   }
 
   const latestProjects = useMemo(
-    () => latestProjectsData?.projectsGet.projects ?? [],
-    [latestProjectsData?.projectsGet.projects],
+    () => latestProjectsProp ?? latestProjectsData?.projectsGet.projects ?? [],
+    [latestProjectsData?.projectsGet.projects, latestProjectsProp],
   )
   const weeklyTrendingProjects = useMemo(() => {
-    const matchingCategory = trendingProjectsData?.projectsMostFundedByCategory.find((projectGroup) => {
-      if (subCategory) {
-        return projectGroup.subCategory === subCategory
-      }
+    const matchingCategory = (trendingGroups ?? trendingProjectsData?.projectsMostFundedByCategory)?.find(
+      (projectGroup) => {
+        if (subCategory) {
+          return projectGroup.subCategory === subCategory
+        }
 
-      if (category) {
-        return projectGroup.category === category
-      }
+        if (category) {
+          return projectGroup.category === category
+        }
 
-      return true
-    })
+        return true
+      },
+    )
 
     return matchingCategory?.projects ?? []
-  }, [category, subCategory, trendingProjectsData?.projectsMostFundedByCategory])
+  }, [category, subCategory, trendingGroups, trendingProjectsData?.projectsMostFundedByCategory])
   const projects = useMemo<ProjectDisplayItem[]>(() => {
     const projectMap = new Map<string, ProjectDisplayItem>()
 
@@ -191,8 +209,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     ).slice(0, NO_OF_ITEMS_TO_SHOW)
   }, [latestProjects, t, weeklyTrendingProjects])
   const posts = useMemo(
-    () => filterPostsByUniqueProjects(postsQueryData?.posts ?? [], NO_OF_ITEMS_TO_SHOW),
-    [postsQueryData?.posts],
+    () => filterPostsByUniqueProjects(postsProp ?? postsQueryData?.posts ?? [], NO_OF_ITEMS_TO_SHOW),
+    [postsProp, postsQueryData?.posts],
   )
   const sectionLabel = category
     ? ProjectCategoryLabel[category]
@@ -205,12 +223,12 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     ? t("What's happening in {{label}}", { label: sectionLabel })
     : t('Recent Projects')
 
-  if (latestProjectsLoading || trendingProjectsLoading) {
+  if (loading || latestProjectsLoading || trendingProjectsLoading) {
     return <ProjectDisplayBodySkeleton />
   }
 
   if (projects.length === 0) {
-    if (latestProjectsError || trendingProjectsError) {
+    if (error || latestProjectsError || trendingProjectsError) {
       return (
         <ProjectRowLayout title={sectionTitle} width="100%">
           <VStack alignItems="start" spacing={4} py={4}>
@@ -220,6 +238,11 @@ export const ProjectsDisplayMostFundedThisWeek = ({
               variant="outline"
               colorScheme="neutral1"
               onClick={() => {
+                if (onRetry) {
+                  onRetry()
+                  return
+                }
+
                 refetchLatestProjects()
                 refetchTrendingProjects()
               }}
@@ -234,7 +257,11 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return null
   }
 
-  const discoverMoreId = category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''
+  const discoverMoreId = category
+    ? `discovery-see-all-${category}`
+    : subCategory
+    ? `discovery-see-all-${subCategory}`
+    : ''
 
   return (
     <ProjectDisplayBody

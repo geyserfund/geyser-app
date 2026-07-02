@@ -615,6 +615,7 @@ type ProjectAonGoal {
   contractCreationTxId: String
   deployedAt: Date
   endsAt: Date
+  hasCompletedPayout: Boolean!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -971,6 +972,10 @@ input ProjectsGetWhereInput {
   Unique name for the project. Used for the project URL and lightning address.
   """
   name: String
+  """
+  Unique names for projects. Used to batch project lookups by project URL names.
+  """
+  names: [String!]
   status: ProjectsGetWhereInputStatus
   statuses: [ProjectsGetWhereInputStatus!]
   type: ProjectType
@@ -3197,6 +3202,7 @@ input GetPostsInput {
 
 input GetPostsWhereInput {
   projectId: BigInt
+  projectName: String
   postType: [PostType!]
   category: ProjectCategory
   categories: [ProjectCategory!]

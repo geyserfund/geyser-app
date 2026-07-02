@@ -3,9 +3,10 @@ import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { LandingCardBase } from '../../../../../shared/components/layouts'
 import { getPathWithGeyserPromotionsHero } from '../../../../../shared/constants'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
+import { LandingProjectCardProject } from '../graphql/landingPageTypes.ts'
 
 interface LandingProjectCardProps extends CardLayoutProps {
-  project: ProjectForLandingPageFragment & {
+  project: (ProjectForLandingPageFragment | LandingProjectCardProject) & {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   }
   isMobile?: boolean

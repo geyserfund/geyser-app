@@ -46,7 +46,7 @@ export const cache: InMemoryCache = new InMemoryCache({
 
           merge: mergeIdentifiableCollectionUsingCursorIDs,
         },
-        projects: {
+        projectsGet: {
           // Don't cache separate results based on
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments

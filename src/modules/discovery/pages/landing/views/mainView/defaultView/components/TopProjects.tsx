@@ -5,17 +5,27 @@ import { useNavigate } from 'react-router'
 import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
-import { LeaderboardPeriod } from '@/types'
+import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
 
 import { ProjectHeroDisplay, ProjectHeroDisplaySkeleton } from '../../../../components/ProjectHeroDisplay.tsx'
 import { ProjectRowLayout } from './ProjectRowLayout.tsx'
 
 const MAX_PROJECTS = 12
 
-export const TopProjects = () => {
+export const TopProjects = ({
+  loading: providedLoading,
+  projects: providedProjects,
+}: {
+  loading?: boolean
+  projects?: GlobalProjectLeaderboardRow[]
+}) => {
   const navigate = useNavigate()
 
-  const { projects, loading } = useTopProjects(LeaderboardPeriod.Month, MAX_PROJECTS)
+  const { projects: fetchedProjects, loading: fetchedLoading } = useTopProjects(LeaderboardPeriod.Month, MAX_PROJECTS, {
+    skip: Boolean(providedProjects),
+  })
+  const projects = providedProjects ?? fetchedProjects
+  const loading = providedLoading ?? fetchedLoading
 
   return (
     <ProjectRowLayout

@@ -15,15 +15,26 @@ import {
   useGetUserIpCountryQuery,
   useProjectsForLandingPageQuery,
 } from '../../../../../../../../types'
+import type { ProjectDisplayItem } from '../components/ProjectDisplayBody'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 const NO_OF_PROJECT_TO_LOAD = 6
 
-export const ProjectsInYourRegion = () => {
+type ProjectsInYourRegionProps = {
+  loading?: boolean
+  projects?: ProjectDisplayItem[]
+}
+
+export const ProjectsInYourRegion = ({
+  loading: providedLoading,
+  projects: providedProjects,
+}: ProjectsInYourRegionProps) => {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
+  const hasProvidedProjects = providedProjects !== undefined || providedLoading !== undefined
 
   const { data: userIpCountryData } = useGetUserIpCountryQuery({
+    skip: hasProvidedProjects,
     onCompleted() {
       setLoading(false)
     },
@@ -50,7 +61,7 @@ export const ProjectsInYourRegion = () => {
   ] as ProjectsOrderByInput[]
 
   const { data, loading: loadingProjects } = useProjectsForLandingPageQuery({
-    skip: loading || !userIpCountryData?.userIpCountry,
+    skip: hasProvidedProjects || loading || !userIpCountryData?.userIpCountry,
     variables: {
       input: {
         where,
@@ -62,11 +73,11 @@ export const ProjectsInYourRegion = () => {
     },
   })
 
-  if (loading || loadingProjects) {
+  if (providedLoading || (!hasProvidedProjects && loading) || loadingProjects) {
     return <ProjectDisplayBodySkeleton />
   }
 
-  const ProjectByCategoryList = data?.projectsGet.projects || []
+  const ProjectByCategoryList = providedProjects ?? data?.projectsGet.projects ?? []
 
   if (ProjectByCategoryList.length === 0) {
     return null
