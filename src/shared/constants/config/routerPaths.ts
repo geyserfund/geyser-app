@@ -224,6 +224,13 @@ const pathsMap = {
   discoveryFundraisersCategory: (category: string) => `/${PathName.fundraisers}/${PathName.category}/${category}`,
   discoveryFundraisersSubCategory: (subCategory: string) =>
     `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
+  discoveryRecoverableGrantProjects: () => `/${PathName.recoverableGrants}`,
+  discoveryRecoverableGrantProjectsLatest: () => `/${PathName.recoverableGrants}/${PathName.latest}`,
+  discoveryRecoverableGrantProjectsInYourRegion: () => `/${PathName.recoverableGrants}/${PathName.inYourRegion}`,
+  discoveryRecoverableGrantProjectsCategory: (category: string) =>
+    `/${PathName.recoverableGrants}/${PathName.category}/${category}`,
+  discoveryRecoverableGrantProjectsSubCategory: (subCategory: string) =>
+    `/${PathName.recoverableGrants}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
   discoveryProductsCategory: (category: string) => `/${PathName.products}/${PathName.category}/${category}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,

@@ -41,6 +41,7 @@ import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
+import { RecoverableGrantProjects } from './sections/RecoverableGrantProjects.tsx'
 
 const CATEGORY_SECTION_GROUP_SIZE = 2
 const LANDING_CATEGORY_ORDER = [
@@ -358,6 +359,8 @@ export const DefaultView = () => {
             }
           }}
         />
+
+        <RecoverableGrantProjects />
 
         {showBelowTheFold && (
           <>

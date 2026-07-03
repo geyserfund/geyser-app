@@ -4480,6 +4480,7 @@ export type ProjectsGetWhereInput = {
   hasFeedbackSuggestion?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;
   ids?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  isRecoverableGrant?: InputMaybe<Scalars['Boolean']['input']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['BigInt']['input']>;
