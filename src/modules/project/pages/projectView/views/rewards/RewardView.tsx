@@ -13,19 +13,21 @@ import { isNumericString } from '@/modules/project/utils/checkId.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
-import { Body, H2 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import type { ProjectRewardFragment } from '@/types'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardGetQuery } from '@/types'
 import { toInt, useMobileMode } from '@/utils'
 
 import { ProjectRewardShippingEstimate } from '../../../../forms/shippingConfigForm/ProjectRewardShippingEstimate.tsx'
 import { PostsUpdates } from '../../components/PostsUpdates.tsx'
-import { useRewardBuy } from '../../hooks/index.ts'
+import { useRewardBuy } from '../../hooks/useRewardBuy.ts'
 import { FollowButton } from '../body/components/FollowButton.tsx'
 import { AonNotice } from './components/AonNotice.tsx'
 import { RewardEditMenu } from './components/RewardEditMenu.tsx'
@@ -71,35 +73,18 @@ export const RewardView = () => {
     }
   }, [isRewardID, data?.projectRewardGet, navigate, location.search])
 
+  useEffect(() => {
+    if (!loading && !reward && project?.name) {
+      navigate(getPath('project', project.name), { replace: true })
+    }
+  }, [loading, navigate, project?.name, reward])
+
   if (loading || isRewardID) {
     return <RewardViewSkeleton />
   }
 
   if (!reward) {
     return null
-  }
-
-  const renderAmountComponent = () => {
-    if (reward && reward.rewardCurrency === RewardCurrency.Usdcent)
-      return (
-        <Body bold dark>
-          {`$${reward.cost / 100} `}
-          <Box as="span" color={'neutral1.9'}>
-            {`(${formatSatsAmount(reward.cost as USDCents)})`}
-          </Box>
-        </Body>
-      )
-
-    return (
-      <Body bold dark>
-        {`${reward.cost.toLocaleString()}`}
-        <Box as="span" color={'neutral1.9'}>
-          {' '}
-          sats
-          {` (${formatUsdAmount(reward.cost as Satoshis)})`}
-        </Box>
-      </Body>
-    )
   }
 
   const isBuyDisabled = !isAvailable
@@ -184,7 +169,9 @@ export const RewardView = () => {
                   <ProjectRewardShippingEstimate reward={reward} />
                 </VStack>
 
-                <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
+                <HStack display={{ base: 'none', lg: 'flex' }}>
+                  <RewardAmount reward={reward} formatUsdAmount={formatUsdAmount} formatSatsAmount={formatSatsAmount} />
+                </HStack>
               </HStack>
             </VStack>
             {reward.images.length <= 1 ? (
@@ -259,7 +246,7 @@ export const RewardView = () => {
         </CardLayout>
         <BottomNavBarContainer direction="column">
           <HStack justifyContent={'space-between'} flexWrap="wrap">
-            {renderAmountComponent()}
+            <RewardAmount reward={reward} formatUsdAmount={formatUsdAmount} formatSatsAmount={formatSatsAmount} />
             {reward.isHidden && <HiddenRewardBadge />}
           </HStack>
           {isProjectOwner ? (
@@ -279,6 +266,36 @@ export const RewardView = () => {
         </BottomNavBarContainer>
       </VStack>
     </>
+  )
+}
+
+type RewardAmountProps = {
+  reward: Pick<ProjectRewardFragment, 'cost' | 'rewardCurrency'>
+  formatUsdAmount: ReturnType<typeof useCurrencyFormatter>['formatUsdAmount']
+  formatSatsAmount: ReturnType<typeof useCurrencyFormatter>['formatSatsAmount']
+}
+
+const RewardAmount = ({ reward, formatUsdAmount, formatSatsAmount }: RewardAmountProps) => {
+  if (reward.rewardCurrency === RewardCurrency.Usdcent) {
+    return (
+      <Body bold dark>
+        {`$${reward.cost / 100} `}
+        <Box as="span" color={'neutral1.9'}>
+          {`(${formatSatsAmount(reward.cost as USDCents)})`}
+        </Box>
+      </Body>
+    )
+  }
+
+  return (
+    <Body bold dark>
+      {`${reward.cost.toLocaleString()}`}
+      <Box as="span" color={'neutral1.9'}>
+        {' '}
+        sats
+        {` (${formatUsdAmount(reward.cost as Satoshis)})`}
+      </Box>
+    </Body>
   )
 }
 
