@@ -53,6 +53,7 @@ import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
+import { ProjectLinks } from '../../components/ProjectLinks.tsx'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { ProjectShareModal } from './shareModal'
@@ -142,9 +143,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, isProjectOwner, .
           subscribers={subscribers}
         />
 
-        <HStack w="full" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={3}>
-          <ProjectHeaderTags />
-        </HStack>
+        <ProjectHeaderMetadata />
       </VStack>
     </Stack>
   )
@@ -315,24 +314,48 @@ const getProjectHeaderTags = (project: ProjectHeaderTagProject) => {
     })
   }
 
-  tags.push(...(project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' as const })))
-
   return tags
 }
 
-const ProjectHeaderTags = () => {
+const getProjectHeaderProjectTags = (project: ProjectHeaderTagProject) => {
+  return (project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' as const }))
+}
+
+const getUniqueProjectHeaderTags = (tags: ProjectHeaderTag[]) => {
+  return [...new Map(tags.map((tag) => [tag.label, tag])).values()]
+}
+
+const ProjectHeaderMetadata = () => {
   const { project } = useProjectAtom()
-  const labels = getProjectHeaderTags(project as ProjectHeaderTagProject)
+  const primaryTags = getUniqueProjectHeaderTags(getProjectHeaderTags(project as ProjectHeaderTagProject))
+  const projectTags = getUniqueProjectHeaderTags(getProjectHeaderProjectTags(project as ProjectHeaderTagProject))
+  const projectLinks = project.links || []
 
-  const uniqueLabels = [...new Map(labels.map((tag) => [tag.label, tag])).values()]
-
-  if (uniqueLabels.length === 0) {
+  if (primaryTags.length === 0 && projectTags.length === 0 && projectLinks.length === 0) {
     return null
   }
 
   return (
-    <HStack flexWrap="wrap" gap={2} paddingTop={1}>
-      {uniqueLabels.map((tag) => (
+    <VStack alignItems="start" spacing={2} paddingTop={1}>
+      {primaryTags.length > 0 && (
+        <HStack flexWrap="wrap" gap={2}>
+          <ProjectHeaderTagList tags={primaryTags} />
+        </HStack>
+      )}
+      {(projectTags.length > 0 || projectLinks.length > 0) && (
+        <HStack flexWrap="wrap" gap={2}>
+          {projectLinks.length > 0 && <ProjectLinks links={projectLinks} />}
+          <ProjectHeaderTagList tags={projectTags} />
+        </HStack>
+      )}
+    </VStack>
+  )
+}
+
+const ProjectHeaderTagList = ({ tags }: { tags: ProjectHeaderTag[] }) => {
+  return (
+    <>
+      {tags.map((tag) => (
         <Badge
           key={tag.label}
           as={tag.to ? Link : undefined}
@@ -360,7 +383,7 @@ const ProjectHeaderTags = () => {
           {tag.label}
         </Badge>
       ))}
-    </HStack>
+    </>
   )
 }
 

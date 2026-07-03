@@ -13,19 +13,18 @@ type FieldPartnerVerificationBannerProject = ReturnType<typeof useProjectAtom>['
     id?: string | null
     username?: string | null
   } | null
-  isRecoverableGrant?: boolean
 }
 
 /** Displays the Field Partner verification banner for standard project pages. */
 export const FieldPartnerVerificationBanner = () => {
   const { project } = useProjectAtom()
-  const { fieldPartner, isRecoverableGrant } = project as FieldPartnerVerificationBannerProject
+  const { fieldPartner } = project as FieldPartnerVerificationBannerProject
   const fieldPartnerNetworkIconSrc = useColorModeValue(
     '/icons/field-partner-network-icon.png',
     '/icons/field-partner-network-icon-dark-mode.png',
   )
 
-  if (isRecoverableGrant || !fieldPartner?.username) {
+  if (!fieldPartner?.username) {
     return null
   }
 
