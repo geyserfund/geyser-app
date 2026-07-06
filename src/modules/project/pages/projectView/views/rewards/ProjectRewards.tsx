@@ -1,12 +1,14 @@
 import { Image, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
-import { Body, H1 } from '@/shared/components/typography'
-import { NoRewardsSoldUrl } from '@/shared/constants'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H1 } from '@/shared/components/typography/Heading.tsx'
+import { getPath, NoRewardsSoldUrl } from '@/shared/constants'
 
 import { AonNotice } from './components/AonNotice.tsx'
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar.tsx'
@@ -15,12 +17,13 @@ import { RewardCardWithBuy } from './components/RewardCardWithBuy.tsx'
 
 export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { loading: userLoading } = useAuthContext()
-  const { isProjectOwner, loading: projectLoading } = useProjectAtom()
-  const { activeRewards, hiddenRewards, hasRewards } = useRewardsAtom()
+  const { isProjectOwner, loading: projectLoading, project } = useProjectAtom()
+  const { activeRewards, hiddenRewards, hasRewards, initialRewardsLoading } = useRewardsAtom()
 
   const { queryProjectRewards } = useProjectRewardsAPI(true)
+  const navigate = useNavigate()
 
-  const loading = projectLoading || queryProjectRewards.loading || userLoading
+  const loading = projectLoading || queryProjectRewards.loading || initialRewardsLoading || userLoading
 
   const sortedActiveRewards = useMemo(() => {
     if (activeRewards.length > 0) {
@@ -29,6 +32,12 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
 
     return []
   }, [activeRewards])
+
+  useEffect(() => {
+    if (!loading && !hasRewards && project.name) {
+      navigate(getPath('project', project.name), { replace: true })
+    }
+  }, [hasRewards, loading, navigate, project.name])
 
   if (loading) {
     return (

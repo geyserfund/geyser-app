@@ -988,6 +988,7 @@ input ProjectsGetWhereInput {
   subCategory: ProjectSubCategory
   fundingStrategy: ProjectFundingStrategy
   fieldPartnerUserId: BigInt
+  isRecoverableGrant: Boolean
   aonGoalReached: Boolean
   ownerId: BigInt
 }

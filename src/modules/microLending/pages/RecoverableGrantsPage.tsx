@@ -4,6 +4,7 @@ import { PiCaretRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
+import { RecoverableGrantProjects } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/RecoverableGrantProjects.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -142,6 +143,10 @@ export const RecoverableGrantsPage = () => {
           </Box>
 
           <HeroSection colors={colors} onDonateClick={onDonateClick} />
+
+          <PageSection>
+            <RecoverableGrantProjects />
+          </PageSection>
 
           <PageSection>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 5, lg: 6 }}>

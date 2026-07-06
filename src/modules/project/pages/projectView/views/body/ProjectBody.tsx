@@ -26,6 +26,7 @@ import { AonGoToRefundPage } from './sections/AonGoToRefundPage.tsx'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { FieldPartnerVerificationBanner } from './sections/FieldPartnerVerificationBanner.tsx'
 import {
   type ProjectImpactFundRecipient,
   ImpactFundRecipientBanner,
@@ -81,6 +82,7 @@ export const ProjectBody = () => {
         <ControlPanel />
 
         <Header />
+        <FieldPartnerVerificationBanner />
         {!isRecoverableGrant && <Creator />}
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />

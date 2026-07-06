@@ -1070,6 +1070,46 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('discoveryRecoverableGrantProjects'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsLatest'),
+            element: (
+              <Navigate
+                to={{
+                  pathname: getPath('discoveryRecoverableGrantProjects'),
+                  search: '?sort=most_recent',
+                }}
+                replace
+              />
+            ),
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsInYourRegion'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsCategory', PathName.categoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsSubCategory', PathName.subCategoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
             path: getPath('discoveryProducts'),
             async lazy() {
               const Products = await loadLandingPages().then((m) => m.Products)
@@ -1256,10 +1296,6 @@ export const platformRoutes: RouteObject[] = [
       },
       {
         path: getPath('discoveryMicroLending'),
-        element: <Navigate to={getPath('discoveryRecoverableGrants')} replace />,
-      },
-      {
-        path: getPath('legacyDiscoveryRecoverableGrants'),
         element: <Navigate to={getPath('discoveryRecoverableGrants')} replace />,
       },
       {

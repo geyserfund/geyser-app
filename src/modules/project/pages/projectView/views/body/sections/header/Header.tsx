@@ -53,6 +53,7 @@ import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
+import { ProjectLinks } from '../../components/ProjectLinks.tsx'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { ProjectShareModal } from './shareModal'
@@ -135,32 +136,14 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, isProjectOwner, .
           <HeaderActions isProjectOwner={isProjectOwner} />
         </HStack>
 
-        {summaryLoading && !isRecoverableGrant ? (
-          <SkeletonLayout height="20px" w="250px" />
-        ) : summaryError && !isRecoverableGrant ? (
-          <Body size="md" medium light>
-            {t('Unable to load project summary right now')}
-          </Body>
-        ) : !isRecoverableGrant ? (
-          <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-            <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {t('Contributors: {{count}}', { count: project.fundersCount ?? 0 })}
-            </Body>
-            <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {t('Followers: {{count}}', { count: project.followersCount ?? 0 })}
-            </Body>
+        <ProjectHeaderSummary
+          summaryLoading={summaryLoading}
+          summaryError={summaryError}
+          isRecoverableGrant={isRecoverableGrant}
+          subscribers={subscribers}
+        />
 
-            {subscribers && (
-              <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-                {t('{{count}} subscribers', { count: subscribers || 0 })}
-              </Body>
-            )}
-          </HStack>
-        ) : null}
-
-        <HStack w="full" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={3}>
-          <ProjectHeaderTags />
-        </HStack>
+        <ProjectHeaderMetadata />
       </VStack>
     </Stack>
   )
@@ -214,7 +197,58 @@ const ReportProjectButton = () => {
   )
 }
 
-type ProjectHeaderTagVariant = 'category' | 'facilitated' | 'location' | 'tag'
+type ProjectHeaderSummaryProps = {
+  summaryLoading: boolean
+  summaryError: boolean
+  isRecoverableGrant: boolean
+  subscribers: number
+}
+
+const ProjectHeaderSummary = ({
+  summaryLoading,
+  summaryError,
+  isRecoverableGrant,
+  subscribers,
+}: ProjectHeaderSummaryProps) => {
+  const { project } = useProjectAtom()
+
+  if (summaryLoading && !isRecoverableGrant) {
+    return <SkeletonLayout height="20px" w="250px" />
+  }
+
+  if (summaryError && !isRecoverableGrant) {
+    return (
+      <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
+        <Body size="md" medium light>
+          {t('Unable to load project summary right now')}
+        </Body>
+      </HStack>
+    )
+  }
+
+  if (isRecoverableGrant) {
+    return null
+  }
+
+  return (
+    <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
+      <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
+        {t('Contributors: {{count}}', { count: project.fundersCount ?? 0 })}
+      </Body>
+      <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
+        {t('Followers: {{count}}', { count: project.followersCount ?? 0 })}
+      </Body>
+
+      {subscribers && (
+        <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
+          {t('{{count}} subscribers', { count: subscribers || 0 })}
+        </Body>
+      )}
+    </HStack>
+  )
+}
+
+type ProjectHeaderTagVariant = 'category' | 'location' | 'tag'
 
 type ProjectHeaderTag = {
   label: string
@@ -223,7 +257,6 @@ type ProjectHeaderTag = {
 }
 
 type ProjectHeaderTagProject = ReturnType<typeof useProjectAtom>['project'] & {
-  fieldPartner?: { id?: string | null; username?: string | null } | null
   isRecoverableGrant?: boolean
 }
 
@@ -245,14 +278,6 @@ const getProjectHeaderTags = (project: ProjectHeaderTagProject) => {
   const tags: ProjectHeaderTag[] = []
   const locationLabel = [project.location?.country?.name, project.location?.region].filter(Boolean).join(', ')
   const locationFilter = getProjectHeaderLocationFilter(project)
-
-  if (project.fieldPartner?.username) {
-    tags.push({
-      label: t('Facilitated by {{fieldPartnerName}}', { fieldPartnerName: project.fieldPartner.username }),
-      variant: 'facilitated',
-      to: project.fieldPartner.id ? getPath('userProfile', project.fieldPartner.id) : undefined,
-    })
-  }
 
   if (project.category) {
     tags.push({
@@ -289,24 +314,48 @@ const getProjectHeaderTags = (project: ProjectHeaderTagProject) => {
     })
   }
 
-  tags.push(...(project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' as const })))
-
   return tags
 }
 
-const ProjectHeaderTags = () => {
+const getProjectHeaderProjectTags = (project: ProjectHeaderTagProject) => {
+  return (project.tags || []).map((tag) => ({ label: tag.label, variant: 'tag' as const }))
+}
+
+const getUniqueProjectHeaderTags = (tags: ProjectHeaderTag[]) => {
+  return [...new Map(tags.map((tag) => [tag.label, tag])).values()]
+}
+
+const ProjectHeaderMetadata = () => {
   const { project } = useProjectAtom()
-  const labels = getProjectHeaderTags(project as ProjectHeaderTagProject)
+  const primaryTags = getUniqueProjectHeaderTags(getProjectHeaderTags(project as ProjectHeaderTagProject))
+  const projectTags = getUniqueProjectHeaderTags(getProjectHeaderProjectTags(project as ProjectHeaderTagProject))
+  const projectLinks = project.links || []
 
-  const uniqueLabels = [...new Map(labels.map((tag) => [tag.label, tag])).values()]
-
-  if (uniqueLabels.length === 0) {
+  if (primaryTags.length === 0 && projectTags.length === 0 && projectLinks.length === 0) {
     return null
   }
 
   return (
-    <HStack flexWrap="wrap" gap={2} paddingTop={1}>
-      {uniqueLabels.map((tag) => (
+    <VStack alignItems="start" spacing={2} paddingTop={1}>
+      {primaryTags.length > 0 && (
+        <HStack flexWrap="wrap" gap={2}>
+          <ProjectHeaderTagList tags={primaryTags} />
+        </HStack>
+      )}
+      {(projectTags.length > 0 || projectLinks.length > 0) && (
+        <HStack flexWrap="wrap" gap={2}>
+          {projectLinks.length > 0 && <ProjectLinks links={projectLinks} />}
+          <ProjectHeaderTagList tags={projectTags} />
+        </HStack>
+      )}
+    </VStack>
+  )
+}
+
+const ProjectHeaderTagList = ({ tags }: { tags: ProjectHeaderTag[] }) => {
+  return (
+    <>
+      {tags.map((tag) => (
         <Badge
           key={tag.label}
           as={tag.to ? Link : undefined}
@@ -317,14 +366,10 @@ const ProjectHeaderTags = () => {
           textTransform="none"
           fontWeight="medium"
           cursor={tag.to ? 'pointer' : undefined}
-          backgroundColor={
-            tag.variant === 'category' ? 'warning.1' : tag.variant === 'facilitated' ? 'neutral1.3' : 'neutral1.1'
-          }
+          backgroundColor={tag.variant === 'category' ? 'warning.1' : 'neutral1.1'}
           color={tag.variant === 'category' ? 'warning.11' : 'neutral1.10'}
           border="1px solid"
-          borderColor={
-            tag.variant === 'category' ? 'warning.3' : tag.variant === 'facilitated' ? 'neutral1.3' : 'neutral1.6'
-          }
+          borderColor={tag.variant === 'category' ? 'warning.3' : 'neutral1.6'}
           _hover={
             tag.to
               ? {
@@ -338,7 +383,7 @@ const ProjectHeaderTags = () => {
           {tag.label}
         </Badge>
       ))}
-    </HStack>
+    </>
   )
 }
 
