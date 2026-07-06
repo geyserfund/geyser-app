@@ -12,8 +12,10 @@ import type { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 import { useMobileMode } from '@/utils/info/useMobileMode.ts'
 
+import { LandingPostCardPost } from '../../../../graphql/landingPageTypes.ts'
+
 type LandingPostCardProps = {
-  post: PostForLandingPageFragment
+  post: PostForLandingPageFragment | LandingPostCardPost
   isMobile?: boolean
   showProjectCategory?: boolean
 } & StackProps

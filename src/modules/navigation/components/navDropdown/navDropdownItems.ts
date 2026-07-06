@@ -46,7 +46,7 @@ export const getFundraiseNavDropdownItems = (
 
   const startYourProjectItem: NavDropdownMenuItem = {
     title: t('Start your project'),
-    to: getPath('launchProjectDetails'),
+    to: getPath('launchFundingStrategy', 'new'),
     emphasis: 'cta',
     trailingIcon: PiRocketLaunch,
   }

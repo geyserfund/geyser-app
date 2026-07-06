@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { GridItem, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { Tooltip } from '@/components/ui/Tooltip.tsx'
@@ -106,17 +107,17 @@ export const FieldPartnerSection = () => {
       >
         <CardLayout w="full" spacing={6} paddingX={{ base: 3, lg: 5 }} paddingY={{ base: 4, lg: 5 }}>
           <Body size="md">
-            {t('This recoverable grant is facilitated by our trusted Field Partner,')}{' '}
-            {fieldPartnerProfilePath ? (
-              <ChakraLink as={Link} to={fieldPartnerProfilePath} textDecoration="underline">
-                {fieldPartnerName}
-              </ChakraLink>
-            ) : (
-              <Body as="span" size="md" textDecoration="underline">
-                {fieldPartnerName}
-              </Body>
-            )}
-            {'.'}
+            <Trans
+              i18nKey="This project is facilitated by our trusted Field Partner, <1>{{fieldPartnerName}}</1>."
+              values={{ fieldPartnerName }}
+              components={{
+                1: fieldPartnerProfilePath ? (
+                  <ChakraLink as={Link} to={fieldPartnerProfilePath} textDecoration="underline" />
+                ) : (
+                  <Body as="span" size="md" textDecoration="underline" />
+                ),
+              }}
+            />
             {description ? ` ${description}` : ''}
           </Body>
 

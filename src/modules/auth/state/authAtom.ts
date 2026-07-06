@@ -22,6 +22,7 @@ export const defaultUser: UserMeFragment = {
   externalAccounts: [],
   ownerOf: [],
   hasSocialAccount: false,
+  isFieldPartner: false,
   complianceDetails: {
     contributionLimits: {
       monthly: {

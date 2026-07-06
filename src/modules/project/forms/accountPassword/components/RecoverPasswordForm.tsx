@@ -110,7 +110,7 @@ const getFundsSummaryText = (fundsSummary: {
 type AccountPasswordProjectImpact = {
   id: string | bigint
   title: string
-  balanceSats: string | bigint
+  balanceSats: string | number | bigint
 }
 
 function toSatsBigInt(value: string | number | bigint): bigint {

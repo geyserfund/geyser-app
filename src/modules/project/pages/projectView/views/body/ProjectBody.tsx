@@ -26,6 +26,7 @@ import { AonGoToRefundPage } from './sections/AonGoToRefundPage.tsx'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { FieldPartnerVerificationBanner } from './sections/FieldPartnerVerificationBanner.tsx'
 import {
   type ProjectImpactFundRecipient,
   ImpactFundRecipientBanner,
@@ -44,7 +45,8 @@ export const ProjectBody = () => {
   const { impactFundRecipient } = project as typeof project & {
     impactFundRecipient?: ProjectImpactFundRecipient | null
   }
-  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
+  const isRecoverableGrant = Boolean(project.isRecoverableGrant)
+  const hasFieldPartner = Boolean(project.fieldPartner)
 
   useEffect(() => {
     if (loading) return
@@ -80,13 +82,14 @@ export const ProjectBody = () => {
         <ControlPanel />
 
         <Header />
+        <FieldPartnerVerificationBanner />
         {!isRecoverableGrant && <Creator />}
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
         {isRecoverableGrant && <RecoverableGrantExplainer />}
 
         <Story />
-        {isRecoverableGrant && <FieldPartnerSection />}
+        {hasFieldPartner && <FieldPartnerSection />}
 
         {project.rewardsCount && <Rewards />}
         {project.entriesCount && <Posts />}

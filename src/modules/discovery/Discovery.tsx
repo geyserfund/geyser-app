@@ -18,6 +18,7 @@ const LANDING_LAYOUT_PATTERNS = [
   { path: `${getPath('discoveryAllOrNothing')}/*`, end: false },
   { path: `${getPath('discoveryCampaigns')}/*`, end: false },
   { path: `${getPath('discoveryFundraisers')}/*`, end: false },
+  { path: `${getPath('discoveryRecoverableGrantProjects')}/*`, end: false },
   { path: `${getPath('discoveryProducts')}/*`, end: false },
 ] as const
 

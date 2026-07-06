@@ -10,9 +10,26 @@ export const contributionsAtom = atom<ProjectContributionFragment[]>([])
 /** Contribution list for Leaderboard page */
 export const contributionListAtom = atom<ProjectContributionFragment[]>([])
 
+const upsertLatestContribution = (
+  contributions: ProjectContributionFragment[],
+  contribution: ProjectContributionFragment,
+) => {
+  const existingContributionIndex = contributions.findIndex((item) => item.id === contribution.id)
+
+  if (existingContributionIndex === -1) {
+    return [contribution, ...contributions]
+  }
+
+  return [
+    contribution,
+    ...contributions.slice(0, existingContributionIndex),
+    ...contributions.slice(existingContributionIndex + 1),
+  ]
+}
+
 export const addContributionAtom = atom(null, (get, set, contribution: ProjectContributionFragment) => {
-  set(contributionsAtom, [contribution, ...get(contributionsAtom)])
-  set(contributionListAtom, [contribution, ...get(contributionListAtom)])
+  set(contributionsAtom, upsertLatestContribution(get(contributionsAtom), contribution))
+  set(contributionListAtom, upsertLatestContribution(get(contributionListAtom), contribution))
 })
 
 /** Project contributors for project page leaderboard sorted by highest contribution */

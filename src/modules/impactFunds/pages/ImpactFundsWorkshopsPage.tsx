@@ -26,6 +26,7 @@ const WORKSHOP_HERO_IMAGE_URL =
 const AFRIBIT_WORKSHOP_DESCRIPTION =
   'Afribit workshop activity shows the next step after education: meeting entrepreneurs, capturing their stories, and helping local businesses become fundable campaigns.'
 const BITCOIN_KAMPALA_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/embed/LlnZiT4DpuY'
+const AFRIBIT_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/embed/pU1KxP0ddng'
 const workshopDecks = [
   {
     title: 'Bitcoin Crowdfunding Workshops - EN.pdf',
@@ -163,7 +164,12 @@ export const ImpactFundsWorkshopsPage = () => {
                 'Students and community members learned Bitcoin crowdfunding, discussed local project ideas, and connected the workshop back to campaign creation on Geyser.',
               )}
             </WorkshopVideoCard>
-            <WorkshopVideoCard colors={colors} eyebrow="Afribit" title="Kibera projects preparing to fundraise.">
+            <WorkshopVideoCard
+              colors={colors}
+              eyebrow="Afribit"
+              title="Kibera projects preparing to fundraise."
+              videoUrl={AFRIBIT_WORKSHOP_VIDEO_URL}
+            >
               {t(AFRIBIT_WORKSHOP_DESCRIPTION)}
             </WorkshopVideoCard>
           </VStack>

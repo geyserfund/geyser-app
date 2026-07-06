@@ -942,7 +942,7 @@ const SponsorsAndFundsSection = ({
             <HStack justify="space-between" align="flex-end" pt={4}>
               <Eyebrow color={colors.emphasisCardAccent}>{t('LABIF')}</Eyebrow>
               <Body size="24px" lineHeight="28px" bold color={colors.emphasisCardMetric}>
-                {partnerFund ? getFundAmountDisplay(partnerFund) : '$140,000'}
+                {partnerFund ? getFundAmountDisplay(partnerFund) : t('1.4 BTC')}
               </Body>
             </HStack>
           </VStack>

@@ -1,14 +1,28 @@
 import { HStack, IconButton, Link } from '@chakra-ui/react'
+import { t } from 'i18next'
 
 import { getIconForLink } from '@/helpers/getIconForLinks'
 
-export const ProjectLinks = ({ links }: { links: string[] }) => {
+type ProjectLinksProps = {
+  links: string[]
+  size?: 'sm' | 'md'
+}
+
+export const ProjectLinks = ({ links, size = 'sm' }: ProjectLinksProps) => {
   return (
-    <HStack spacing={0.5}>
+    <HStack spacing={0.5} flexWrap="wrap">
       {links.map((link) => {
         const Icon = getIconForLink(link)
         return (
-          <IconButton size="sm" variant="soft" aria-label="link-icon" key={link} as={Link} href={link || ''} isExternal>
+          <IconButton
+            size={size}
+            variant="soft"
+            aria-label={t('Open project link')}
+            key={link}
+            as={Link}
+            href={link || ''}
+            isExternal
+          >
             <Icon fontSize="16px" />
           </IconButton>
         )
