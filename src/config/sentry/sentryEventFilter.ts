@@ -1,6 +1,6 @@
 import type { Event, EventHint } from '@sentry/react'
 
-const tawkPatterns = ['tawk', 'twk-', '$_tawk']
+const tawkPatterns = ['tawk', 'twk-', '$_tawk', 'twk-chunk-common']
 const serviceWorkerPatterns = [
   'serviceworker',
   'service worker',
@@ -36,7 +36,11 @@ const expectedProjectLookupPatterns = [
   'you do not have permission to view this project',
   'apolloerror: project not found for name:',
   'project not found for name:',
+  'apolloerror: project not found for id:',
+  'project not found for id:',
+  'response not successful: received status code 401',
 ]
+const expectedValidationPatterns = ['validationerror: email is required', 'validationerror email is required']
 const keepVisiblePatterns = [
   'stripe',
   'sk_live_',
@@ -46,6 +50,8 @@ const keepVisiblePatterns = [
   'userverificationmodal',
   'sumsub',
   'reviewanswer',
+  'removechild',
+  'insertbefore',
 ]
 
 const getExceptionValues = (event: Event): string[] =>
@@ -125,10 +131,13 @@ const isChromeMobileWebViewToLowerCaseNoise = (event: Event, text: string): bool
   return text.includes("reading 'tolowercase'") && (browserName.includes('webview') || browser.includes('webview'))
 }
 
-const isExpectedProjectLookupNoise = (event: Event, text: string): boolean => {
+export const isExpectedProjectLookupNoise = (event: Event, text: string): boolean => {
   const notFoundTag = String(event.tags?.['not-found'] || '').toLowerCase()
 
-  return hasPattern(text, expectedProjectLookupPatterns) && (notFoundTag === 'projectget' || text.includes('/project/'))
+  return (
+    hasPattern(text, expectedProjectLookupPatterns) &&
+    (notFoundTag === 'projectget' || text.includes('/project/') || text.includes('project-not-found'))
+  )
 }
 
 /** Returns true when a Sentry event matches a known non-actionable production noise class. */
@@ -145,6 +154,7 @@ export const shouldDropSentryEvent = (event: Event, hint?: EventHint): boolean =
     hasPattern(text, chunkLoadPatterns) ||
     hasPattern(text, networkNoisePatterns) ||
     hasPattern(text, localStoragePatterns) ||
+    hasPattern(text, expectedValidationPatterns) ||
     isChromeMobileWebViewToLowerCaseNoise(event, text) ||
     isExpectedProjectLookupNoise(event, text)
   )

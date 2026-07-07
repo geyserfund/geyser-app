@@ -38,9 +38,11 @@ export type UseInitProjectProps = {
 const expectedProjectLookupErrorMessages = [
   'You do not have permission to view this project',
   'Project not found for name:',
+  'Project not found for id:',
+  'Response not successful: Received status code 401',
 ]
 
-const isExpectedProjectLookupError = (error: unknown): boolean => {
+export const isExpectedProjectLookupError = (error: unknown): boolean => {
   const message = error instanceof Error ? error.message : String(error)
 
   return expectedProjectLookupErrorMessages.some((expectedMessage) => message.includes(expectedMessage))

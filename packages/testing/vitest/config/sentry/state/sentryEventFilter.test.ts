@@ -85,6 +85,42 @@ describe('shouldDropSentryEvent', () => {
     expect(shouldDropSentryEvent(event)).toBe(true)
   })
 
+  it('drops expected project lookup 401 errors', () => {
+    const event = createEvent({
+      exception: {
+        values: [
+          {
+            type: 'ApolloError',
+            value: 'Response not successful: Received status code 401',
+          },
+        ],
+      },
+      request: {
+        url: 'https://geyser.fund/project/bitcoinher',
+      },
+      tags: {
+        'not-found': 'projectGet',
+      },
+    })
+
+    expect(shouldDropSentryEvent(event)).toBe(true)
+  })
+
+  it('drops expected form validation errors', () => {
+    const event = createEvent({
+      exception: {
+        values: [
+          {
+            type: 'ValidationError',
+            value: 'Email is required',
+          },
+        ],
+      },
+    })
+
+    expect(shouldDropSentryEvent(event)).toBe(true)
+  })
+
   it('keeps Stripe account errors visible', () => {
     const event = createEvent({
       exception: {

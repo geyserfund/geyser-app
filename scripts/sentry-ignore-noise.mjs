@@ -24,6 +24,7 @@ const noiseGroups = [
   {
     key: 'service-worker',
     label: 'Service worker registration/update noise',
+    action: 'ignored',
     queries: ['ServiceWorker', '"Service Worker"', 'sw.js', '"Background Sync is disabled"', 'newestWorker'],
     patterns: [
       'serviceworker',
@@ -37,12 +38,22 @@ const noiseGroups = [
   {
     key: 'tawk',
     label: 'Tawk third-party script noise',
+    action: 'ignored',
     queries: ['Tawk', 'twk', '$_Tawk', 'BufferLoader', '"Unable to store cookie"', '"websocket error"'],
     patterns: ['tawk', 'twk-', '$_tawk', 'bufferloader', 'unable to store cookie', 'websocket error'],
   },
   {
+    key: 'tawk-parse',
+    label: 'Tawk third-party parse failures',
+    action: 'ignored',
+    queries: ['"SyntaxError: failed to parse"', 'twk-chunk-common'],
+    patterns: ['syntaxerror: failed to parse', 'twk-chunk-common'],
+    requireAny: ['twk-chunk-common', 'tawk'],
+  },
+  {
     key: 'chunk-load',
     label: 'Chunk, dynamic import, and CSS preload noise',
+    action: 'ignored',
     queries: [
       '"Failed to fetch dynamically imported module"',
       '"error loading dynamically imported module"',
@@ -61,6 +72,7 @@ const noiseGroups = [
   {
     key: 'webview-tolowercase',
     label: 'Android WebView anonymous toLowerCase noise',
+    action: 'ignored',
     queries: ['toLowerCase browser.name:"Chrome Mobile WebView"', '"reading \'toLowerCase\'"'],
     patterns: ['tolowercase'],
     requireAny: ['chrome mobile webview', 'htmldocument.<anonymous>', '<anonymous>'],
@@ -68,12 +80,25 @@ const noiseGroups = [
   {
     key: 'project-lookup',
     label: 'Expected project not-found/permission lookups',
-    queries: ['"You do not have permission to view this project"', '"Project not found for name:"'],
-    patterns: ['you do not have permission to view this project', 'project not found for name:'],
+    action: 'ignored',
+    queries: [
+      '"You do not have permission to view this project"',
+      '"Project not found for name:"',
+      '"Project not found for id:"',
+      '"Received status code 401"',
+    ],
+    patterns: [
+      'you do not have permission to view this project',
+      'project not found for name:',
+      'project not found for id:',
+      'received status code 401',
+    ],
   },
   {
     key: 'network-load',
     label: 'Generic browser network load noise',
+    action: 'ignored',
+    defaultEnabled: false,
     queries: ['"Failed to fetch"', '"Load failed"', '"NetworkError when attempting to fetch resource"'],
     patterns: [
       'typeerror: failed to fetch',
@@ -86,6 +111,7 @@ const noiseGroups = [
   {
     key: 'local-storage',
     label: 'Browser localStorage access noise',
+    action: 'ignored',
     queries: ['localStorage', '"Failed to access storage"'],
     patterns: [
       'localstorage.getitem',
@@ -93,6 +119,41 @@ const noiseGroups = [
       'window.localstorage.getitem',
       'failed to access storage',
     ],
+  },
+  {
+    key: 'webln-no-provider',
+    label: 'Fixed WebLN missing-provider fallback',
+    action: 'resolved',
+    queries: ['"Error: no provider"', '"no provider"'],
+    patterns: ['error: no provider', 'no provider'],
+  },
+  {
+    key: 'btc-quote',
+    label: 'Fixed public BTC quote-provider fallback',
+    action: 'resolved',
+    queries: ['"All promises were rejected"', '"No Promise in Promise.any was resolved"'],
+    patterns: ['all promises were rejected', 'no promise in promise.any was resolved'],
+  },
+  {
+    key: 'scrollto-fixed',
+    label: 'Fixed non-scrollable root scrollTo crashes',
+    action: 'resolved',
+    queries: ['"scrollTo is not a function"'],
+    patterns: ['scrollto is not a function'],
+  },
+  {
+    key: 'goals-dnd-fixed',
+    label: 'Fixed goals drag/drop null target crashes',
+    action: 'resolved',
+    queries: ['"Cannot read properties of null" "reading \'id\'"', 'RenderGoals'],
+    patterns: ["cannot read properties of null (reading 'id')", 'rendergoals'],
+  },
+  {
+    key: 'validation-fixed',
+    label: 'Fixed expected email validation rejection',
+    action: 'resolved',
+    queries: ['"ValidationError: Email is required"'],
+    patterns: ['validationerror: email is required'],
   },
 ]
 
@@ -174,7 +235,13 @@ Options:
   --project <slug>        Project slug. Defaults to ${DEFAULT_PROJECT}.
 
 Groups:
-${noiseGroups.map((group) => `  ${group.key.padEnd(18)} ${group.label}`).join('\n')}
+${noiseGroups
+  .map((group) => {
+    const mode = group.defaultEnabled === false ? 'manual' : 'default'
+
+    return `  ${group.key.padEnd(18)} ${(group.action || 'ignored').padEnd(8)} ${mode.padEnd(7)} ${group.label}`
+  })
+  .join('\n')}
 `)
 }
 
@@ -303,10 +370,13 @@ const collectIssues = async ({ groups, options }) => {
 
       for (const issue of issues) {
         if (!byId.has(issue.id)) {
-          byId.set(issue.id, { issue, groups: new Set() })
+          byId.set(issue.id, { issue, groups: new Set(), status: group.action || 'ignored' })
         }
 
         byId.get(issue.id).groups.add(group.key)
+        if (group.action === 'ignored') {
+          byId.get(issue.id).status = 'ignored'
+        }
       }
     }
   }
@@ -330,8 +400,8 @@ const chunk = (items, size) => {
   return chunks
 }
 
-const ignoreIssues = async ({ issues, options }) => {
-  const issueIds = issues.map(({ issue }) => issue.id)
+const updateIssues = async ({ issues, options, status }) => {
+  const issueIds = issues.filter((item) => item.status === status).map(({ issue }) => issue.id)
 
   for (const issueIdChunk of chunk(issueIds, BULK_UPDATE_CHUNK_SIZE)) {
     await requestSentry({
@@ -342,7 +412,7 @@ const ignoreIssues = async ({ issues, options }) => {
         id: issueIdChunk,
       },
       body: {
-        status: 'ignored',
+        status,
       },
     })
   }
@@ -358,7 +428,7 @@ const printSummary = ({ groups, groupMatches, issues, options }) => {
 
   for (const group of groups) {
     const matches = groupMatches.get(group.key) || []
-    console.log(`${group.key}: ${matches.length} issue(s)`)
+    console.log(`${group.key} (${group.action || 'ignored'}): ${matches.length} issue(s)`)
 
     matches.slice(0, 12).forEach((issue) => {
       console.log(`  - ${issue.shortId || issue.id}: ${issue.title}`)
@@ -372,6 +442,13 @@ const printSummary = ({ groups, groupMatches, issues, options }) => {
   console.log('')
 }
 
+const getSelectedGroups = (groupKeys) =>
+  groupKeys.length
+   
+   
+    ? noiseGroups.filter((group) => groupKeys.includes(group.key))
+    : noiseGroups.filter((group) => group.defaultEnabled !== false)
+
 const main = async () => {
   const options = parseArgs(process.argv.slice(2))
 
@@ -379,9 +456,7 @@ const main = async () => {
     throw new Error('Missing SENTRY_AUTH_TOKEN. Provide a token with event:write scope.')
   }
 
-  const selectedGroups = options.groupKeys.length
-    ? noiseGroups.filter((group) => options.groupKeys.includes(group.key))
-    : noiseGroups
+  const selectedGroups = getSelectedGroups(options.groupKeys)
 
   const unknownGroups = options.groupKeys.filter((groupKey) => !noiseGroups.some((group) => group.key === groupKey))
 
@@ -395,7 +470,7 @@ const main = async () => {
 
   if (!options.apply) {
     console.log('Dry run completed successfully. No Sentry issues were changed.')
-    console.log('To ignore the matched issues, either set SENTRY_APPLY = true in this file or re-run with --apply.')
+    console.log('To update the matched issues, either set SENTRY_APPLY = true in this file or re-run with --apply.')
     return
   }
 
@@ -404,11 +479,21 @@ const main = async () => {
     return
   }
 
-  await ignoreIssues({ issues, options })
-  console.log(`Ignored ${issues.length} Sentry issue(s).`)
+  await updateIssues({ issues, options, status: 'ignored' })
+  await updateIssues({ issues, options, status: 'resolved' })
+
+  const ignoredCount = issues.filter((item) => item.status === 'ignored').length
+  const resolvedCount = issues.filter((item) => item.status === 'resolved').length
+
+  console.log(`Ignored ${ignoredCount} Sentry issue(s).`)
+  console.log(`Resolved ${resolvedCount} Sentry issue(s).`)
 }
 
-main().catch((error) => {
-  console.error(error instanceof Error ? error.message : error)
-  process.exitCode = 1
-})
+export { collectIssues, getSelectedGroups, matchesNoiseGroup, noiseGroups, parseArgs }
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((error) => {
+    console.error(error instanceof Error ? error.message : error)
+    process.exitCode = 1
+  })
+}
