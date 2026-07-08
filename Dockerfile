@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ###########################
 # STEP 1: create base image  
 ###########################
@@ -51,6 +52,9 @@ ARG VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS
 ARG VITE_APP_ROOTSTOCK_RPC_URL
 ARG VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS
 ARG VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS
+ARG VITE_APP_SENTRY_ORG
+ARG VITE_APP_SENTRY_URL
+ARG VITE_APP_SENTRY_AUTH_TOKEN
 # Combine commands to reduce layers and use build cache
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env \
