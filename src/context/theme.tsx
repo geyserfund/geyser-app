@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { ThemeProvider as ReactJSSThemeProvider } from 'react-jss'
 
 import { theme } from '@/config/theme'
+import { getLocalStorageItem } from '@/shared/utils/browserStorage.ts'
 
 import { darkModeColors, lightModeColors } from '../shared/styles'
 import { UserSetColorMode } from '../utils'
@@ -27,7 +28,7 @@ export const ChakraThemeProvider = ({ children, ...props }: Omit<ThemeProviderPr
 
   useEffect(() => {
     if (systemColorMode) {
-      const userSet = localStorage.getItem(UserSetColorMode)
+      const userSet = getLocalStorageItem(UserSetColorMode)
       if (!userSet) {
         setColorMode(systemColorMode)
       }
