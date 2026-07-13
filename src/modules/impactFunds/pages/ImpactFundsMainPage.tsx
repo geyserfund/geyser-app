@@ -104,6 +104,7 @@ type SectionColors = {
   borderColor: string
   accentText: string
   accentBg: string
+  accentSurfaceText: string
   amberBg: string
   amberText: string
   amberLinkHover: string
@@ -198,7 +199,7 @@ export const ImpactFundsMainPage = () => {
   const emphasisCardText = useColorModeValue('white', 'neutral1.12')
   const emphasisCardMutedText = useColorModeValue('whiteAlpha.800', 'neutral1.11')
   const emphasisCardEyebrow = useColorModeValue('whiteAlpha.800', 'neutral1.10')
-  const emphasisCardAccent = useColorModeValue('#00E0B0', 'primary1.300')
+  const emphasisCardAccent = useColorModeValue('#00E0B0', 'primary1.9')
   const emphasisCardMetric = useColorModeValue('#F09A34', 'amber.9')
   const emphasisCardButtonBg = useColorModeValue('white', 'neutral1.12')
   const emphasisCardButtonText = useColorModeValue('black', 'neutral1.1')
@@ -206,12 +207,13 @@ export const ImpactFundsMainPage = () => {
   const sponsorLogoBackdrop = useColorModeValue('white', 'neutral1.12')
   const surfaceActionButtonBg = useColorModeValue('#17120C', 'neutral1.12')
   const surfaceActionButtonText = useColorModeValue('white', 'neutral1.1')
-  const primaryText = useColorModeValue('black', 'neutral1.12')
-  const secondaryText = useColorModeValue('#626872', 'neutral1.10')
-  const mutedText = useColorModeValue('#626872', 'neutral1.9')
+  const primaryText = useColorModeValue('black', 'utils.text')
+  const secondaryText = useColorModeValue('#626872', 'neutral1.11')
+  const mutedText = useColorModeValue('#626872', 'neutral1.10')
   const borderColor = useColorModeValue('#E2E4E6', 'neutral1.5')
-  const accentText = useColorModeValue('#3F8F7C', 'primary1.200')
-  const accentBg = useColorModeValue('#00E0B0', 'primary1.500')
+  const accentText = useColorModeValue('#3F8F7C', 'primary1.9')
+  const accentBg = useColorModeValue('#00E0B0', 'primary1.9')
+  const accentSurfaceText = useColorModeValue('black', 'neutral1.1')
   const amberBg = useColorModeValue('#F09A34', 'amber.9')
   const amberText = useColorModeValue('black', 'neutral1.1')
   const amberLinkHover = useColorModeValue('#17120C', 'neutral1.1')
@@ -242,6 +244,7 @@ export const ImpactFundsMainPage = () => {
       borderColor,
       accentText,
       accentBg,
+      accentSurfaceText,
       amberBg,
       amberText,
       amberLinkHover,
@@ -272,6 +275,7 @@ export const ImpactFundsMainPage = () => {
       borderColor,
       accentText,
       accentBg,
+      accentSurfaceText,
       amberBg,
       amberText,
       amberLinkHover,
@@ -577,7 +581,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
 
 const AboutSection = ({ colors }: { colors: SectionColors }) => {
   const topSectionTextColor = useColorModeValue('black', 'white')
-  const statMutedTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
+  const statMutedTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
 
   return (
     <PageSection colors={colors}>
@@ -654,7 +658,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
 
 const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
   const headingColor = useColorModeValue('black', 'white')
-  const sectionEyebrowColor = useColorModeValue('#0F8B75', 'primary1.300')
+  const sectionEyebrowColor = useColorModeValue('#0F8B75', 'primary1.9')
   const stepAccentColor = useColorModeValue('#F7931A', 'orange.400')
   const cardBorderColor = useColorModeValue('#E6E8EA', 'neutral1.5')
 
@@ -1323,11 +1327,20 @@ const WorkshopResourcesCard = ({ colors }: { colors: SectionColors }) => (
     minH={{ base: '230px', lg: '290px' }}
   >
     <VStack align="flex-start" spacing={4}>
-      <Eyebrow color={colors.primaryText}>{t('Workshop resources')}</Eyebrow>
-      <H3 size={{ base: '28px', lg: '34px' }} lineHeight={{ base: '34px', lg: '40px' }} bold color={colors.primaryText}>
+      <Eyebrow color={colors.accentSurfaceText}>{t('Workshop resources')}</Eyebrow>
+      <H3
+        size={{ base: '28px', lg: '34px' }}
+        lineHeight={{ base: '34px', lg: '40px' }}
+        bold
+        color={colors.accentSurfaceText}
+      >
         {t('View all Workshop resources')}
       </H3>
-      <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={colors.primaryText}>
+      <Body
+        size={{ base: 'md', lg: '18px' }}
+        lineHeight={{ base: '26px', lg: '29px' }}
+        color={colors.accentSurfaceText}
+      >
         {t('Find workshop decks, case studies, and ways to host or sponsor a local crowdfunding workshop.')}
       </Body>
     </VStack>
@@ -1421,8 +1434,13 @@ const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport 
     p={{ base: 6, lg: 7 }}
     minH={{ base: '240px', lg: '280px' }}
   >
-    <Eyebrow color={isAccent ? colors.primaryText : colors.resourceEyebrow}>{t(eyebrow)}</Eyebrow>
-    <H3 size={{ base: '24px', lg: '28px' }} lineHeight={{ base: '30px', lg: '34px' }} bold color={colors.primaryText}>
+    <Eyebrow color={isAccent ? colors.accentSurfaceText : colors.resourceEyebrow}>{t(eyebrow)}</Eyebrow>
+    <H3
+      size={{ base: '24px', lg: '28px' }}
+      lineHeight={{ base: '30px', lg: '34px' }}
+      bold
+      color={isAccent ? colors.accentSurfaceText : colors.primaryText}
+    >
       {t(title)}
     </H3>
     <Button
@@ -1432,11 +1450,12 @@ const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport 
       rel={url ? 'noreferrer' : undefined}
       h="52px"
       borderRadius="innerCard"
-      bg={isAccent ? colors.darkSurfaceBg : colors.amberBg}
-      color={isAccent ? 'white' : colors.amberText}
+      bg={isAccent ? colors.surfaceActionButtonBg : colors.amberBg}
+      color={isAccent ? colors.surfaceActionButtonText : colors.amberText}
       fontSize="md"
       fontWeight="900"
       mt="auto"
+      _hover={{ bg: isAccent ? colors.surfaceActionButtonBg : colors.amberBg, opacity: 0.92 }}
     >
       {t('Download PDF')}
     </Button>
