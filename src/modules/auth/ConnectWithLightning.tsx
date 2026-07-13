@@ -28,8 +28,9 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { lightModeColors } from '../../shared/styles'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
+import { getAuthFailureMessage } from './authFailure'
 import { loginMethodAtom } from './state'
-import { ConnectWithButtonProps, ExternalAccountType } from './type'
+import { AuthFlowIntent, ConnectWithButtonProps, ExternalAccountType } from './type'
 
 type LNURLResponse =
   | {
@@ -75,7 +76,12 @@ interface ConnectWithLightningModalProps {
   onClose: () => void
 }
 
-export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
+export const ConnectWithLightning = ({
+  onClose,
+  isIconOnly,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { isOpen: isModalOpen, onClose: onModalClose, onOpen: onModalOpen } = useDisclosure()
 
   const handleClose = () => {
@@ -110,12 +116,18 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
         {!isIconOnly && t('Lightning')}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
-      {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}
+      {isModalOpen && (
+        <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} authFlowIntent={authFlowIntent} />
+      )}
     </>
   )
 }
 
-export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightningModalProps) => {
+export const ConnectWithLightningModal = ({
+  isOpen,
+  onClose,
+  authFlowIntent = AuthFlowIntent.login,
+}: ConnectWithLightningModalProps & { authFlowIntent?: AuthFlowIntent }) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const { queryCurrentUser } = useAuthContext()
@@ -165,7 +177,7 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
   }
 
   const handleLnurlLogin = async () => {
-    fetch(`${authServiceEndPoint}/lnurl`, {
+    fetch(`${authServiceEndPoint}/lnurl?intent=${authFlowIntent.toLowerCase()}`, {
       credentials: 'include',
       redirect: 'follow',
     })
@@ -210,7 +222,9 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
         })
         .then((response) => {
           if (hasError) {
-            throw new Error(response.reason)
+            const error = new Error(response.reason)
+            ;(error as Error & { code?: string }).code = response.code
+            throw error
           }
 
           if (response.status === 'ok') {
@@ -224,14 +238,18 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
           clearInterval(id)
           toast({
             title: t('Something went wrong'),
-            description: `${t('The authentication request failed:')} ${err.message}.`,
+            description: getAuthFailureMessage(
+              t,
+              err.code,
+              `${t('The authentication request failed:')} ${err.message}.`,
+            ),
             status: 'error',
           })
         })
     }, 1000)
 
     return () => clearInterval(id)
-  }, [qrContent])
+  }, [qrContent, authFlowIntent])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

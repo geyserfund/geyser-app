@@ -11,9 +11,14 @@ import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
 import { useNostrExtensonLogin } from './hooks/useNostrExtensionLogin'
 import { loginMethodAtom } from './state'
-import { ConnectWithButtonProps, ExternalAccountType } from './type'
+import { AuthFlowIntent, ConnectWithButtonProps, ExternalAccountType } from './type'
 
-export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
+export const ConnectWithNostr = ({
+  onClose,
+  isIconOnly,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const setLoginMethod = useSetAtom(loginMethodAtom)
 
   const { connect, error, clearError } = useNostrExtensonLogin()
@@ -29,7 +34,7 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
     }
 
     try {
-      await connect()
+      await connect(authFlowIntent)
       setLoginMethod(ExternalAccountType.nostr)
     } finally {
       onClose?.()

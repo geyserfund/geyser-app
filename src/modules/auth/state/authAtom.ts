@@ -10,7 +10,7 @@ import {
   UserVerificationLevel,
   UserVerificationStatus,
 } from '../../../types'
-import { ExternalAccountType, SocialAccountType } from '../type'
+import { AuthFlowIntent, ExternalAccountType, SocialAccountType } from '../type'
 
 export const defaultUser: UserMeFragment = {
   id: 0,
@@ -54,6 +54,7 @@ export const defaultUser: UserMeFragment = {
 }
 
 export const defaultLoginAdditionalProps: AuthModalAdditionalprops = {
+  authFlowIntent: AuthFlowIntent.login,
   title: '',
   description: '',
   showTwitter: true,

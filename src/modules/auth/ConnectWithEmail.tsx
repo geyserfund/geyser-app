@@ -10,15 +10,23 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment } from '../../types'
 import { emailValidationSchema, useNotification } from '../../utils'
+import { getAuthFailureMessage } from './authFailure.ts'
 import { useNotificationPromptModal } from './hooks/useNotificationPromptModal'
 import { VerifyYourEmailContent } from './otp/VerifyYourEmailContent.tsx'
+import { AuthFlowIntent } from './type.ts'
 
 interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void
   isOTPStarted?: (_: boolean) => void
+  authFlowIntent?: AuthFlowIntent
 }
 
-export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWithEmailProps) => {
+export const ConnectWithEmail = ({
+  onClose,
+  isOTPStarted,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: ConnectWithEmailProps) => {
   const { isLoggedIn, queryCurrentUser } = useAuthContext()
   const { toast } = useNotification()
 
@@ -55,6 +63,7 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
             otp: otpCode,
             otpVerificationToken: otpData.otpVerificationToken,
             email,
+            authFlowIntent,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -71,7 +80,7 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
           toast({
             status: 'error',
             title: t('Failed to login with email'),
-            description: t('Please try again'),
+            description: getAuthFailureMessage(t, response?.code, response?.reason),
           })
         }
       } catch (error) {
@@ -88,7 +97,12 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
     <>
       {initEmail ? (
         <VStack w="full">
-          <VerifyYourEmailContent initEmail={initEmail} action={MfaAction.Login} handleVerify={handleLogin} />
+          <VerifyYourEmailContent
+            initEmail={initEmail}
+            action={MfaAction.Login}
+            handleVerify={handleLogin}
+            authFlowIntent={authFlowIntent}
+          />
         </VStack>
       ) : (
         <VStack as={'form'} onSubmit={handleSubmit(handleClick)} w="full">

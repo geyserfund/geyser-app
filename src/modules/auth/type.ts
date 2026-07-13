@@ -18,8 +18,14 @@ export enum SocialAccountType {
   nostr = 'nostr',
 }
 
+export enum AuthFlowIntent {
+  login = 'LOGIN',
+  signup = 'SIGNUP',
+}
+
 export interface ConnectWithButtonProps extends ButtonProps {
   onClose?: () => void
   isIconOnly?: boolean
   accountType: SocialAccountType
+  authFlowIntent?: AuthFlowIntent
 }

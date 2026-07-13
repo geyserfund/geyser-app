@@ -6,6 +6,8 @@ import { useAuthContext } from '@/context'
 import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '@/types'
 import { useNotification } from '@/utils'
 
+import { getAuthFailureMessage } from '../authFailure'
+import { AuthFlowIntent } from '../type'
 import { ReceiveOneTimePassword } from './components/ReceiveOneTimePassword'
 import { VerifyOneTimePassword } from './components/VerifyOneTimePassword'
 
@@ -16,6 +18,7 @@ export interface VerifyYourEmailContentProps {
   initEmail?: string
   handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
   onClose?: () => void
+  authFlowIntent?: AuthFlowIntent
 }
 
 export const VerifyYourEmailContent = ({
@@ -25,6 +28,7 @@ export const VerifyYourEmailContent = ({
   otpSent,
   otpData: otp,
   onClose,
+  authFlowIntent,
 }: VerifyYourEmailContentProps) => {
   const { toast } = useNotification()
   const { user } = useAuthContext()
@@ -38,7 +42,7 @@ export const VerifyYourEmailContent = ({
       toast({
         status: 'error',
         title: t('Failed to generate OTP.'),
-        description: `${error.message}`,
+        description: getAuthFailureMessage(t, error.graphQLErrors?.[0]?.extensions?.code as string, error.message),
       })
     },
     onCompleted(data) {
@@ -56,8 +60,9 @@ export const VerifyYourEmailContent = ({
         input: {
           action,
           email,
+          authFlowIntent,
         },
-      },
+      } as any,
     })
   }
 

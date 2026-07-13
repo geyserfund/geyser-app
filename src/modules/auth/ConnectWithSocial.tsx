@@ -8,14 +8,21 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeLazyQuery } from '../../types'
 import { useCustomTheme, useNotification } from '../../utils'
+import { getAuthFailureMessage } from './authFailure'
 import { SocialConfig } from './SocialConfig'
 import { loginMethodAtom } from './state'
-import { ConnectWithButtonProps } from './type'
+import { AuthFlowIntent, ConnectWithButtonProps } from './type'
 
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
 export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
 
-export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }: ConnectWithButtonProps) => {
+export const ConnectWithSocial = ({
+  onClose,
+  isIconOnly,
+  accountType,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -49,10 +56,14 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   const [pollAuthStatus, setPollAuthStatus] = useState(false)
 
   const handleToastError = useCallback(
-    (reason?: string) => {
+    (reason?: string, code?: string) => {
       toast({
         title: t('Something went wrong.'),
-        description: `${t('The authentication request failed.')} ${reason}.`,
+        description: getAuthFailureMessage(
+          t,
+          code,
+          reason ? `${t('The authentication request failed.')} ${reason}.` : undefined,
+        ),
         status: 'error',
       })
     },
@@ -76,7 +87,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
         }
 
         if (statusRes && statusRes.status === 200) {
-          const { status: authStatus, reason } = await statusRes.json()
+          const { status: authStatus, reason, code } = await statusRes.json()
           if (authStatus === 'success') {
             setPollAuthStatus(false)
           } else if (authStatus === 'failed') {
@@ -85,7 +96,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
             }
 
             setPollAuthStatus(false)
-            handleToastError(reason)
+            handleToastError(reason, code)
             onClose?.()
           }
         }
@@ -120,7 +131,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
       size="lg"
       variant="outline"
       colorScheme="neutral1"
-      href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
+      href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}&intent=${authFlowIntent.toLowerCase()}`}
       isExternal
       onClick={handleClick}
       {...buttonProps}
