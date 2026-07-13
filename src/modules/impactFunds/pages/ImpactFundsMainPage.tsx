@@ -38,6 +38,8 @@ const AFRIBIT_WORKSHOP_DESCRIPTION =
   'Afribit workshop activity shows the next step after education: meeting entrepreneurs, capturing their stories, and helping local businesses become fundable campaigns.'
 const CIRCULAR_ECONOMIES_REPORT_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
+const IMPACT_REPORTS_2022_2024_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/Impact%20Reports%20-%202022-2024.pdf'
 const FIELD_PARTNERS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
 const RECOVERABLE_GRANTS_PRESENTATION_URL =
@@ -67,7 +69,8 @@ const ABOUT_SECTION_STATS = [
 const LEADERBOARD_HEADERS = ['Rank', 'Field Partner', 'Country', 'Projects launched', 'Enabled contribution'] as const
 
 type ImpactFundListItem = ImpactFundsQuery['impactFunds'][number]
-type FieldPartnerLeaderboardItem = ImpactFundsFieldPartnerLeaderboardQuery['impactFundFieldPartnerLeaderboard']['rows'][number]
+type FieldPartnerLeaderboardItem =
+  ImpactFundsFieldPartnerLeaderboardQuery['impactFundFieldPartnerLeaderboard']['rows'][number]
 type SponsorListItem = { id: string; name: string; image?: string | null; url?: string | null }
 type FieldPartnerLeaderboardRow = {
   rank: number
@@ -104,6 +107,8 @@ type SectionColors = {
   amberBg: string
   amberText: string
   amberLinkHover: string
+  reportCardBg: string
+  resourceEyebrow: string
 }
 
 const howItWorksSteps = [
@@ -139,6 +144,18 @@ const resourceCards = {
       description: 'How a trusted local partner helped projects launch and raise.',
       imageUrl: IMPACT_FUNDS_PAPER_HERO_IMAGE_URL,
       url: 'https://guide.geyser.fund/geyser-docs/product-guides/impact-funds/bitcoin-kampala',
+    },
+  ],
+  reports: [
+    {
+      eyebrow: 'Report',
+      title: 'Circular Economies Report',
+      url: CIRCULAR_ECONOMIES_REPORT_URL,
+    },
+    {
+      eyebrow: 'Report',
+      title: 'Grants Impact Reports 2022–2024',
+      url: IMPACT_REPORTS_2022_2024_URL,
     },
   ],
   guides: [
@@ -198,6 +215,8 @@ export const ImpactFundsMainPage = () => {
   const amberBg = useColorModeValue('#F09A34', 'amber.9')
   const amberText = useColorModeValue('black', 'neutral1.1')
   const amberLinkHover = useColorModeValue('#17120C', 'neutral1.1')
+  const reportCardBg = useColorModeValue('#FFF7EC', 'neutral1.4')
+  const resourceEyebrow = useColorModeValue('#A9672C', 'amber.9')
   const colors: SectionColors = useMemo(
     () => ({
       pageBg,
@@ -226,6 +245,8 @@ export const ImpactFundsMainPage = () => {
       amberBg,
       amberText,
       amberLinkHover,
+      reportCardBg,
+      resourceEyebrow,
     }),
     [
       pageBg,
@@ -254,6 +275,8 @@ export const ImpactFundsMainPage = () => {
       amberBg,
       amberText,
       amberLinkHover,
+      reportCardBg,
+      resourceEyebrow,
     ],
   )
 
@@ -1185,8 +1208,8 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
         </SimpleGrid>
       </VStack>
 
-      <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
-        <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={{ base: 5, lg: 6 }}>
+      <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
+        <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
           <H3
             size={{ base: '32px', lg: '38px' }}
             lineHeight={{ base: '38px', lg: '44px' }}
@@ -1195,37 +1218,36 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
           >
             {t('Impact Reports')}
           </H3>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
+            {resourceCards.reports.map((card) => (
+              <ResourceCard key={card.title} colors={colors} {...card} variant="guide" isReport />
+            ))}
+          </SimpleGrid>
+        </VStack>
+
+        <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
           <H3
             size={{ base: '32px', lg: '38px' }}
             lineHeight={{ base: '38px', lg: '44px' }}
             bold
             color={colors.emphasisCardText}
-            gridColumn={{ base: 'auto', lg: 'span 2' }}
           >
             {t('Guides')}
           </H3>
-        </SimpleGrid>
-        <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
-          <ResourceCard
-            colors={colors}
-            eyebrow="Report"
-            title="Circular Economies Report"
-            url={CIRCULAR_ECONOMIES_REPORT_URL}
-            variant="guide"
-            isReport
-          />
-          {resourceCards.guides.map((card) => (
-            <ResourceCard
-              key={card.title}
-              colors={colors}
-              eyebrow={card.eyebrow}
-              title={card.title}
-              url={'url' in card ? card.url : undefined}
-              isAccent={'isAccent' in card ? card.isAccent : false}
-              variant="guide"
-            />
-          ))}
-        </SimpleGrid>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
+            {resourceCards.guides.map((card) => (
+              <ResourceCard
+                key={card.title}
+                colors={colors}
+                eyebrow={card.eyebrow}
+                title={card.title}
+                url={'url' in card ? card.url : undefined}
+                isAccent={'isAccent' in card ? card.isAccent : false}
+                variant="guide"
+              />
+            ))}
+          </SimpleGrid>
+        </VStack>
       </VStack>
     </VStack>
   </FullWidthSection>
@@ -1392,14 +1414,14 @@ const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport 
   <VStack
     align="stretch"
     spacing={6}
-    bg={isReport ? '#FFF7EC' : isAccent ? colors.accentBg : colors.surfaceBg}
+    bg={isReport ? colors.reportCardBg : isAccent ? colors.accentBg : colors.surfaceBg}
     borderWidth={isReport ? '1px' : undefined}
     borderColor={isReport ? colors.amberBg : undefined}
     borderRadius="card"
     p={{ base: 6, lg: 7 }}
     minH={{ base: '240px', lg: '280px' }}
   >
-    <Eyebrow color={isAccent ? colors.primaryText : '#A9672C'}>{t(eyebrow)}</Eyebrow>
+    <Eyebrow color={isAccent ? colors.primaryText : colors.resourceEyebrow}>{t(eyebrow)}</Eyebrow>
     <H3 size={{ base: '24px', lg: '28px' }} lineHeight={{ base: '30px', lg: '34px' }} bold color={colors.primaryText}>
       {t(title)}
     </H3>
@@ -1411,7 +1433,7 @@ const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport 
       h="52px"
       borderRadius="innerCard"
       bg={isAccent ? colors.darkSurfaceBg : colors.amberBg}
-      color={isAccent ? 'white' : colors.primaryText}
+      color={isAccent ? 'white' : colors.amberText}
       fontSize="md"
       fontWeight="900"
       mt="auto"
