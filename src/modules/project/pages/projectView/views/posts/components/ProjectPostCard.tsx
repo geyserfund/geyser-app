@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import type { MouseEvent } from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { PiLink } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
@@ -39,9 +39,37 @@ type InlineOgPreviewProps = {
  * wrap the preview in an external link with stopPropagation so the card modal does not open.
  */
 const InlineOgPreview = ({ url, isDraft, skipFeaturedImage }: InlineOgPreviewProps) => {
-  const { data, loading, error } = useOgPreview(url)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const { data, loading, error } = useOgPreview(url, { enabled: isVisible })
   const domain = extractDomain(url)
   const ogImage = data?.image && !data.image.includes('default') ? data.image : null
+
+  useEffect(() => {
+    const element = wrapperRef.current
+    if (!element || isVisible) {
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' },
+    )
+
+    observer.observe(element)
+
+    return () => observer.disconnect()
+  }, [isVisible])
 
   const renderFeatured = () => {
     if (skipFeaturedImage) return null
@@ -107,21 +135,27 @@ const InlineOgPreview = ({ url, isDraft, skipFeaturedImage }: InlineOgPreviewPro
   )
 
   if (isDraft) {
-    return inner
+    return (
+      <Box ref={wrapperRef} w="full">
+        {inner}
+      </Box>
+    )
   }
 
   return (
-    <Link
-      href={url}
-      isExternal
-      rel="noopener noreferrer"
-      display="block"
-      w="full"
-      _hover={{ textDecoration: 'none' }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      {inner}
-    </Link>
+    <Box ref={wrapperRef} w="full">
+      <Link
+        href={url}
+        isExternal
+        rel="noopener noreferrer"
+        display="block"
+        w="full"
+        _hover={{ textDecoration: 'none' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {inner}
+      </Link>
+    </Box>
   )
 }
 
@@ -250,11 +284,14 @@ export const ProjectPostCard = ({ post }: Props) => {
           )}
 
           {/* Title — hidden when empty, default placeholder, or auto-derived from description */}
-          {!isLinkOnly && post.title && post.title !== 'Project update' && !(post.description?.trim() ?? '').startsWith(post.title) && (
-            <Body size="lg" medium dark>
-              {post.title}
-            </Body>
-          )}
+          {!isLinkOnly &&
+            post.title &&
+            post.title !== 'Project update' &&
+            !(post.description?.trim() ?? '').startsWith(post.title) && (
+              <Body size="lg" medium dark>
+                {post.title}
+              </Body>
+            )}
 
           {/* Description or inline OG link preview */}
           {isLinkOnly ? (

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouteError } from 'react-router'
 
 import { refreshCacheAndReload } from '@/config/CacheBuster.tsx'
+import { getLocalStorageItem, setLocalStorageItem } from '@/shared/utils/browserStorage.ts'
 
 import { useServiceWorkerUpdate } from '../../../context'
 import { NotFoundPage } from '../../../modules/general/fallback'
@@ -20,7 +21,7 @@ const LOCAL_STORAGE_LAST_REFRESH_KEY = 'ChunkLoadError'
 const ONE_MINUTE_IN_MS = 60 * 1000
 
 const getRefreshStateFromLocalStorage = () => {
-  const values = localStorage.getItem(LOCAL_STORAGE_LAST_REFRESH_KEY)
+  const values = getLocalStorageItem(LOCAL_STORAGE_LAST_REFRESH_KEY)
   const timeLineMilis = values ? Number(values) : 0
   const now = DateTime.local().toMillis()
 
@@ -36,7 +37,7 @@ const getRefreshStateFromLocalStorage = () => {
 const storeRateToLocalStorage = () => {
   const newDate = DateTime.local().toMillis()
 
-  localStorage.setItem(LOCAL_STORAGE_LAST_REFRESH_KEY, `${newDate}`)
+  setLocalStorageItem(LOCAL_STORAGE_LAST_REFRESH_KEY, `${newDate}`)
 }
 
 export const ErrorBoundary = () => {

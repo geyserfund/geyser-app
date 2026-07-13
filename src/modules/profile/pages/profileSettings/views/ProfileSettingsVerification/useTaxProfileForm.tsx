@@ -47,6 +47,9 @@ export const useTaxProfileForm = ({ userId, onUpdate }: { userId: string; onUpda
   const form = useForm<TaxProfileFormData>({
     resolver: yupResolver(taxProfileSchema),
     mode: 'onBlur',
+    defaultValues: {
+      legalEntityType: LegalEntityType.Person,
+    },
   })
 
   const [updateTaxProfile] = useUserTaxProfileUpdateMutation()

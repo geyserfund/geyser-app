@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export type OgData = {
   title?: string
@@ -16,6 +16,10 @@ type OgPreviewState = {
 
 /** Module-level cache so the same URL is never fetched twice per session */
 const ogCache = new Map<string, OgData>()
+const ogInFlight = new Map<string, Promise<OgData>>()
+const MAX_CONCURRENT_OG_REQUESTS = 3
+let activeOgRequests = 0
+const queuedOgRequests: Array<() => void> = []
 
 function extractDomain(url: string): string {
   try {
@@ -25,57 +29,102 @@ function extractDomain(url: string): string {
   }
 }
 
+export const resetOgPreviewCacheForTests = () => {
+  ogCache.clear()
+  ogInFlight.clear()
+  activeOgRequests = 0
+  queuedOgRequests.splice(0, queuedOgRequests.length)
+}
+
+const runWithOgRequestLimit = async <T>(request: () => Promise<T>): Promise<T> => {
+  if (activeOgRequests >= MAX_CONCURRENT_OG_REQUESTS) {
+    await new Promise<void>((resolve) => {
+      queuedOgRequests.push(resolve)
+    })
+  }
+
+  activeOgRequests += 1
+
+  try {
+    return await request()
+  } finally {
+    activeOgRequests -= 1
+    queuedOgRequests.shift()?.()
+  }
+}
+
+export const fetchOgPreviewData = async (url: string): Promise<OgData> => {
+  if (ogCache.has(url)) {
+    return ogCache.get(url) as OgData
+  }
+
+  if (ogInFlight.has(url)) {
+    return ogInFlight.get(url) as Promise<OgData>
+  }
+
+  const request = runWithOgRequestLimit(async () => {
+    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`)
+    const json = await res.json()
+
+    if (json.status !== 'success') {
+      throw new Error('Open Graph preview unavailable')
+    }
+
+    const data: OgData = {
+      title: json.data?.title ?? undefined,
+      description: json.data?.description ?? undefined,
+      image: json.data?.image?.url ?? undefined,
+      url: json.data?.url ?? url,
+      domain: extractDomain(json.data?.url ?? url),
+    }
+
+    ogCache.set(url, data)
+    return data
+  }).finally(() => {
+    ogInFlight.delete(url)
+  })
+
+  ogInFlight.set(url, request)
+  return request
+}
+
 /**
  * Fetches Open Graph / SEO metadata for a URL via the microlink.io free-tier API.
  * Results are cached in memory for the session lifetime.
  */
-export const useOgPreview = (url: string | null | undefined) => {
+export const useOgPreview = (url: string | null | undefined, { enabled = true }: { enabled?: boolean } = {}) => {
   const [state, setState] = useState<OgPreviewState>({ data: null, loading: false, error: false })
-  const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
-    if (!url) {
+    if (!url || !enabled) {
       setState({ data: null, loading: false, error: false })
       return
     }
 
     if (ogCache.has(url)) {
-      setState({ data: ogCache.get(url)!, loading: false, error: false })
+      setState({ data: ogCache.get(url) as OgData, loading: false, error: false })
       return
     }
 
-    abortRef.current?.abort()
-    abortRef.current = new AbortController()
+    let isCurrent = true
     setState({ data: null, loading: true, error: false })
 
-    fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`, {
-      signal: abortRef.current.signal,
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.status === 'success') {
-          const data: OgData = {
-            title: json.data?.title ?? undefined,
-            description: json.data?.description ?? undefined,
-            image: json.data?.image?.url ?? undefined,
-            url: json.data?.url ?? url,
-            domain: extractDomain(json.data?.url ?? url),
-          }
-          ogCache.set(url, data)
+    fetchOgPreviewData(url)
+      .then((data) => {
+        if (isCurrent) {
           setState({ data, loading: false, error: false })
-        } else {
+        }
+      })
+      .catch(() => {
+        if (isCurrent) {
           setState({ data: null, loading: false, error: true })
         }
       })
-      .catch((err: Error) => {
-        if (err.name === 'AbortError') return
-        setState({ data: null, loading: false, error: true })
-      })
 
     return () => {
-      abortRef.current?.abort()
+      isCurrent = false
     }
-  }, [url])
+  }, [enabled, url])
 
   return state
 }
