@@ -155,6 +155,18 @@ const noiseGroups = [
     queries: ['"ValidationError: Email is required"'],
     patterns: ['validationerror: email is required'],
   },
+  {
+    key: 'google-logging-timeout',
+    label: 'Google Cloud Logging transport timeout noise',
+    action: 'ignored',
+    queries: [
+      '"LoggingServiceV2 exceeded 60000 milliseconds"',
+      '"google.logging.v2.LoggingServiceV2"',
+      '"Total timeout of API google.logging.v2.LoggingServiceV2"',
+    ],
+    patterns: ['google.logging.v2.loggingservicev2', 'exceeded 60000 milliseconds'],
+    requireAny: ['google-gax', 'normalcalls/retries.js', 'before any response was received'],
+  },
 ]
 
 const keepVisiblePatterns = [
