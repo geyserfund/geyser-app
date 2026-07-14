@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { RejectionError, WebLNProvider } from 'webln'
@@ -29,7 +29,8 @@ import { useAuthContext } from '../../context'
 import { lightModeColors } from '../../shared/styles'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
 import { getAuthFailureMessage } from './authFailure'
-import { loginMethodAtom } from './state'
+import { LastUsedBadge } from './components/LastUsedBadge'
+import { lastAuthMethodAtom, loginMethodAtom } from './state'
 import { AuthFlowIntent, ConnectWithButtonProps, ExternalAccountType } from './type'
 
 type LNURLResponse =
@@ -79,10 +80,12 @@ interface ConnectWithLightningModalProps {
 export const ConnectWithLightning = ({
   onClose,
   isIconOnly,
+  showLastUsed = true,
   authFlowIntent = AuthFlowIntent.login,
   ...rest
 }: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { isOpen: isModalOpen, onClose: onModalClose, onOpen: onModalOpen } = useDisclosure()
+  const lastAuthMethod = useAtomValue(lastAuthMethodAtom)
 
   const handleClose = () => {
     if (onClose) {
@@ -114,6 +117,7 @@ export const ConnectWithLightning = ({
         {...rest}
       >
         {!isIconOnly && t('Lightning')}
+        {!isIconOnly && showLastUsed && lastAuthMethod === ExternalAccountType.lightning && <LastUsedBadge />}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && (
@@ -134,6 +138,7 @@ export const ConnectWithLightningModal = ({
 
   const authServiceEndPoint = getAuthEndPoint()
   const setLoginMethod = useSetAtom(loginMethodAtom)
+  const setLastAuthMethod = useSetAtom(lastAuthMethodAtom)
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
@@ -230,6 +235,7 @@ export const ConnectWithLightningModal = ({
           if (response.status === 'ok') {
             queryCurrentUser()
             setLoginMethod(ExternalAccountType.lightning)
+            setLastAuthMethod(ExternalAccountType.lightning)
             onClose()
             clearInterval(id)
           }

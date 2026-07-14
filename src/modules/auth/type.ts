@@ -23,9 +23,16 @@ export enum AuthFlowIntent {
   signup = 'SIGNUP',
 }
 
+export const AuthMethod = {
+  email: 'email',
+} as const
+
+export type AuthMethod = (typeof AuthMethod)[keyof typeof AuthMethod] | ExternalAccountType | SocialAccountType
+
 export interface ConnectWithButtonProps extends ButtonProps {
   onClose?: () => void
   isIconOnly?: boolean
+  showLastUsed?: boolean
   accountType: SocialAccountType
   authFlowIntent?: AuthFlowIntent
 }

@@ -209,14 +209,21 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       useInert={false}
     >
       <VStack w="full" justifyContent="center" paddingTop={3} alignItems="start" spacing={4}>
+        {!isOtpStarted && modalDescription && (
+          <VStack w="full" alignItems="start" spacing={0}>
+            <Body size="sm">{modalDescription}</Body>
+          </VStack>
+        )}
         {!noEmailPopup && (
           <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} authFlowIntent={modalIntent} />
         )}
         {!isOtpStarted && (
           <>
-            <VStack w="full" alignItems="start" spacing={0}>
-              {modalDescription && <Body size="sm">{modalDescription}</Body>}
-            </VStack>
+            {!noEmailPopup && (
+              <Body size="xs" alignSelf="center" color="neutral1.7">
+                {t('or')}
+              </Body>
+            )}
             <ConnectAccounts
               onClose={onClose}
               onSuccess={onSuccess}

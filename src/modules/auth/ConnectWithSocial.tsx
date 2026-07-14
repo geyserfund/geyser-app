@@ -1,5 +1,5 @@
 import { Button, IconButton, Link } from '@chakra-ui/react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,8 +9,9 @@ import { useAuthContext } from '../../context'
 import { useMeLazyQuery } from '../../types'
 import { useCustomTheme, useNotification } from '../../utils'
 import { getAuthFailureMessage } from './authFailure'
+import { LastUsedBadge } from './components/LastUsedBadge'
 import { SocialConfig } from './SocialConfig'
-import { loginMethodAtom } from './state'
+import { lastAuthMethodAtom, loginMethodAtom } from './state'
 import { AuthFlowIntent, ConnectWithButtonProps } from './type'
 
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
@@ -19,6 +20,7 @@ export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 min
 export const ConnectWithSocial = ({
   onClose,
   isIconOnly,
+  showLastUsed = true,
   accountType,
   authFlowIntent = AuthFlowIntent.login,
   ...rest
@@ -30,6 +32,8 @@ export const ConnectWithSocial = ({
   const { colors } = useCustomTheme()
 
   const setLoginMethod = useSetAtom(loginMethodAtom)
+  const setLastAuthMethod = useSetAtom(lastAuthMethodAtom)
+  const lastAuthMethod = useAtomValue(lastAuthMethodAtom)
   const authServiceEndpoint = getAuthEndPoint()
 
   const { hasSocialAccount, icon: Icon, label } = SocialConfig[accountType]
@@ -48,6 +52,7 @@ export const ConnectWithSocial = ({
           stopPolling()
           login(data.me)
           setLoginMethod(accountType)
+          setLastAuthMethod(accountType)
         }
       }
     },
@@ -63,11 +68,12 @@ export const ConnectWithSocial = ({
           t,
           code,
           reason ? `${t('The authentication request failed.')} ${reason}.` : undefined,
+          label,
         ),
         status: 'error',
       })
     },
-    [toast, t],
+    [label, toast, t],
   )
 
   useEffect(() => {
@@ -137,7 +143,8 @@ export const ConnectWithSocial = ({
       {...buttonProps}
       {...rest}
     >
-      {!isIconOnly && rest.children ? rest.children : t(label)}
+      {!isIconOnly && (rest.children || t(label))}
+      {!isIconOnly && showLastUsed && lastAuthMethod === accountType && <LastUsedBadge />}
     </ButtonComponent>
   )
 }

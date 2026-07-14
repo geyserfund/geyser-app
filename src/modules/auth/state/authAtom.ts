@@ -10,7 +10,7 @@ import {
   UserVerificationLevel,
   UserVerificationStatus,
 } from '../../../types'
-import { AuthFlowIntent, ExternalAccountType, SocialAccountType } from '../type'
+import { AuthFlowIntent, AuthMethod, ExternalAccountType, SocialAccountType } from '../type'
 
 export const defaultUser: UserMeFragment = {
   id: 0,
@@ -92,6 +92,8 @@ export const resetLoginModalAdditionalPropsAtom = atom(null, (_get, set) => {
 
 /** Login method used by the current User */
 export const loginMethodAtom = atomWithStorage<ExternalAccountType | SocialAccountType | ''>('loginMethod', '')
+
+export const lastAuthMethodAtom = atomWithStorage<AuthMethod | ''>('lastAuthMethod', '')
 
 export const updateComplianceStatusForUserAtom = atom(
   null,

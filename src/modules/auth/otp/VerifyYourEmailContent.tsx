@@ -1,5 +1,5 @@
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import Loader from '@/components/ui/Loader'
 import { useAuthContext } from '@/context'
@@ -18,6 +18,7 @@ export interface VerifyYourEmailContentProps {
   initEmail?: string
   handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
   onClose?: () => void
+  onInitialOtpError?: () => void
   authFlowIntent?: AuthFlowIntent
 }
 
@@ -28,6 +29,7 @@ export const VerifyYourEmailContent = ({
   otpSent,
   otpData: otp,
   onClose,
+  onInitialOtpError,
   authFlowIntent,
 }: VerifyYourEmailContentProps) => {
   const { toast } = useNotification()
@@ -36,50 +38,76 @@ export const VerifyYourEmailContent = ({
   const [sentOtp, setSentOtp] = useState(otpSent || false)
   const [otpData, setOtpData] = useState<OtpResponseFragment | undefined>(otp)
   const [inputEmail, setInputEmail] = useState('')
+  const initialOtpRequestEmail = useRef<string>()
+  const initialOtpRequestPending = useRef(false)
 
   const [sendOtpByEmail, { loading }] = useSendOtpByEmailMutation({
     onError(error) {
+      const graphQLError =
+        error.graphQLErrors?.[0] ||
+        (
+          error.networkError as {
+            result?: { errors?: Array<{ message?: string; extensions?: { code?: string } }> }
+          } | null
+        )?.result?.errors?.[0]
+
       toast({
         status: 'error',
         title: t('Failed to generate OTP.'),
-        description: getAuthFailureMessage(t, error.graphQLErrors?.[0]?.extensions?.code as string, error.message),
+        description: getAuthFailureMessage(
+          t,
+          graphQLError?.extensions?.code as string | undefined,
+          graphQLError?.message || t('Please try again'),
+        ),
       })
+      if (initialOtpRequestPending.current) {
+        initialOtpRequestPending.current = false
+        onInitialOtpError?.()
+      }
     },
     onCompleted(data) {
       const otp = data.sendOTPByEmail
       if (otp) {
+        initialOtpRequestPending.current = false
         setSentOtp(true)
         setOtpData(otp)
       }
     },
   })
 
-  const handleSendOtpByEmail = (email: string) => {
-    sendOtpByEmail({
-      variables: {
-        input: {
-          action,
-          email,
-          authFlowIntent,
-        },
-      } as any,
-    })
-  }
+  const handleSendOtpByEmail = useCallback(
+    (email: string) => {
+      sendOtpByEmail({
+        variables: {
+          input: {
+            action,
+            email,
+            authFlowIntent,
+          },
+        } as any,
+      })
+    },
+    [action, authFlowIntent, sendOtpByEmail],
+  )
 
   useEffect(() => {
-    if (initEmail) {
-      setInputEmail(initEmail)
-      handleSendOtpByEmail(initEmail)
+    if (!initEmail || initialOtpRequestEmail.current === initEmail) {
+      return
     }
-  }, [initEmail])
 
-  if (!initEmail && loading) {
+    initialOtpRequestEmail.current = initEmail
+    initialOtpRequestPending.current = true
+    setInputEmail(initEmail)
+    handleSendOtpByEmail(initEmail)
+  }, [handleSendOtpByEmail, initEmail])
+
+  if (loading && !otpData) {
     return <Loader />
   }
 
   return (
     <>
-      {initEmail || (sentOtp && otpData) ? (
+      {sentOtp && otpData ? (
         <VerifyOneTimePassword
           action={action}
           otp={otpData || ({} as OtpResponseFragment)}

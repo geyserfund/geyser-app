@@ -56,16 +56,21 @@ export const useNostrExtensonLogin = () => {
         const { data } = await queryCurrentUser()
         if (data && data.me) {
           login(data.me)
+          return true
         }
       } else {
         const errorResponse = await response.json()
         setError(errorResponse)
         throwErrorToast(errorResponse?.reason, errorResponse?.code)
+        return false
       }
     } catch (e) {
       setError(e)
       throwErrorToast()
+      return false
     }
+
+    return false
   }
 
   const throwErrorToast = (description?: string, code?: string) => {

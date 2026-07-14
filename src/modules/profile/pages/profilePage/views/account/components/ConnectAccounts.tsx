@@ -67,14 +67,22 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
         <VStack w="full" alignItems="center" spacing={4}>
           <Body light>{t('Connect more social profiles to your Geyser account.')}</Body>
           <VStack>
-            {displayTwitterButton && <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />}
-            {displayNostrButton && <ConnectWithNostr w="full" />}
-            {displayFacebookButton && <ConnectWithSocial accountType={SocialAccountType.facebook} w="full" />}
-            {displayGoogleButton && <ConnectWithSocial accountType={SocialAccountType.google} w="full" />}
+            {displayTwitterButton && (
+              <ConnectWithSocial accountType={SocialAccountType.twitter} showLastUsed={false} w="full" />
+            )}
+            {displayNostrButton && <ConnectWithNostr showLastUsed={false} w="full" />}
+            {displayFacebookButton && (
+              <ConnectWithSocial accountType={SocialAccountType.facebook} showLastUsed={false} w="full" />
+            )}
+            {displayGoogleButton && (
+              <ConnectWithSocial accountType={SocialAccountType.google} showLastUsed={false} w="full" />
+            )}
 
-            {displayLightningButton && <ConnectWithLightning w="full" />}
+            {displayLightningButton && <ConnectWithLightning showLastUsed={false} w="full" />}
 
-            {displayGithubButton && <ConnectWithSocial accountType={SocialAccountType.github} w="full" />}
+            {displayGithubButton && (
+              <ConnectWithSocial accountType={SocialAccountType.github} showLastUsed={false} w="full" />
+            )}
           </VStack>
         </VStack>
       </Modal>

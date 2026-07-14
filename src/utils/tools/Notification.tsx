@@ -3,9 +3,12 @@ import { useCallback } from 'react'
 
 type IndividualToastProps = { title: string; description?: string; duration?: number }
 
+const DEFAULT_TOAST_DURATION = 3000
+const ERROR_TOAST_DURATION = 5000
+
 export const useNotification = (options?: UseToastOptions | undefined) => {
   const toast = useToast({
-    duration: 3000,
+    duration: DEFAULT_TOAST_DURATION,
     isClosable: true,
     position: 'top-right',
     variant: 'solid',
@@ -22,6 +25,7 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
         ...input,
         description: input.description || '',
         title: input.title,
+        duration: input.duration ?? (input.status === 'error' ? ERROR_TOAST_DURATION : DEFAULT_TOAST_DURATION),
       })
     },
     [toast],

@@ -1,5 +1,5 @@
 import { Button, IconButton } from '@chakra-ui/react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,18 +8,22 @@ import { NostrIcon } from '@/shared/components/icons'
 import { useModal } from '../../shared/hooks/useModal'
 import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
+import { LastUsedBadge } from './components/LastUsedBadge'
 import { NostrHelpModal } from './components/NostrHelpModal'
 import { useNostrExtensonLogin } from './hooks/useNostrExtensionLogin'
-import { loginMethodAtom } from './state'
+import { lastAuthMethodAtom, loginMethodAtom } from './state'
 import { AuthFlowIntent, ConnectWithButtonProps, ExternalAccountType } from './type'
 
 export const ConnectWithNostr = ({
   onClose,
   isIconOnly,
+  showLastUsed = true,
   authFlowIntent = AuthFlowIntent.login,
   ...rest
 }: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const setLoginMethod = useSetAtom(loginMethodAtom)
+  const setLastAuthMethod = useSetAtom(lastAuthMethodAtom)
+  const lastAuthMethod = useAtomValue(lastAuthMethodAtom)
 
   const { connect, error, clearError } = useNostrExtensonLogin()
 
@@ -33,12 +37,12 @@ export const ConnectWithNostr = ({
       return nostrHelpModal.onOpen()
     }
 
-    try {
-      await connect(authFlowIntent)
-      setLoginMethod(ExternalAccountType.nostr)
-    } finally {
-      onClose?.()
-    }
+    const connected = await connect(authFlowIntent)
+    if (!connected) return
+
+    setLoginMethod(ExternalAccountType.nostr)
+    setLastAuthMethod(ExternalAccountType.nostr)
+    onClose?.()
   }
 
   useEffect(() => {
@@ -76,7 +80,8 @@ export const ConnectWithNostr = ({
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && rest.children ? rest.children : t('Nostr')}
+        {!isIconOnly && (rest.children || t('Nostr'))}
+        {!isIconOnly && showLastUsed && lastAuthMethod === ExternalAccountType.nostr && <LastUsedBadge />}
       </ButtonComponent>
       <NostrHelpModal {...nostrHelpModal} />
       <FailedToConnectAccount {...failedModal} />
