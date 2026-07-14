@@ -2,6 +2,7 @@ import { Box, Divider, HStack, Text, useTheme, VStack } from '@chakra-ui/react'
 import {
   closestCenter,
   DndContext,
+  DragEndEvent,
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
@@ -32,6 +33,10 @@ import { GoalCompleted, GoalInProgress } from '../components'
 type RenderGoalsProps = {
   onNoGoals?: () => void
   creationMode?: boolean
+}
+
+export const shouldReorderGoals = (event: Pick<DragEndEvent, 'active' | 'over'>): boolean => {
+  return Boolean(event.over && event.active.id !== event.over.id)
 }
 
 export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
@@ -81,10 +86,10 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
     setActiveId(event.active.id)
   }
 
-  const handleDragEnd = async (event: any) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
 
-    if (active.id !== over.id) {
+    if (shouldReorderGoals(event) && over) {
       const oldIndex = items?.findIndex((item: ProjectGoalFragment) => item.id === active.id)
       const newIndex = items?.findIndex((item: ProjectGoalFragment) => item.id === over.id)
 

@@ -35,6 +35,19 @@ export type UseInitProjectProps = {
   projectName?: string
 }
 
+const expectedProjectLookupErrorMessages = [
+  'You do not have permission to view this project',
+  'Project not found for name:',
+  'Project not found for id:',
+  'Response not successful: Received status code 401',
+]
+
+export const isExpectedProjectLookupError = (error: unknown): boolean => {
+  const message = error instanceof Error ? error.message : String(error)
+
+  return expectedProjectLookupErrorMessages.some((expectedMessage) => message.includes(expectedMessage))
+}
+
 /**
  * Query, create, update, delete project for current Project context
  * @param load - Load project on mount
@@ -120,12 +133,14 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
       fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-and-network',
       onError(error) {
         setProjectLoading(false)
-        captureException(error, {
-          tags: {
-            'not-found': 'projectGet',
-            'error.on': 'query error',
-          },
-        })
+        if (!isExpectedProjectLookupError(error)) {
+          captureException(error, {
+            tags: {
+              'not-found': 'projectGet',
+              'error.on': 'query error',
+            },
+          })
+        }
 
         navigate(getPath('projectNotFound'))
       },
@@ -133,12 +148,6 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
         setProjectLoading(false)
 
         if (!data?.projectGet) {
-          captureException(data, {
-            tags: {
-              'not-found': 'projectGet',
-              'error.on': 'invalid data',
-            },
-          })
           navigate(getPath('projectNotFound'))
           return
         }

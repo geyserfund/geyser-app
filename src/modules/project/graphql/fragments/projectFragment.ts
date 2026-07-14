@@ -170,6 +170,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     preLaunchedAt
     preLaunchExpiresAt
     paidLaunch
+    launchStrategy
     goalsCount
     rewardsCount
     entriesCount

@@ -68,16 +68,20 @@ export const Launch = () => {
   })
 
   const launchFeeWaived = isLaunchFeeWaived(project)
+  const projectLaunchStrategy = (project as { launchStrategy?: string | null }).launchStrategy
+  const hasPaidLaunchStrategy = Object.values(ProjectLaunchStrategy).includes(
+    projectLaunchStrategy as ProjectLaunchStrategy,
+  )
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
-      setStep(LaunchStep.Strategy)
+      setStep(hasPaidLaunchStrategy ? LaunchStep.Finalize : LaunchStep.Strategy)
     }
 
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
-  }, [step])
+  }, [hasPaidLaunchStrategy, step])
 
   const handleBack = useCallback(() => {
     if (step === LaunchStep.Finalize) {

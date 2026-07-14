@@ -12,6 +12,7 @@ import {
 import * as Sentry from '@sentry/react'
 import { useEffect, useMemo, useRef } from 'react'
 
+import { getTwitterWidgets } from './MdxEditorEmbeds.tsx'
 import { mdxEditorIconComponentFor } from './MdxEditorIcons.tsx'
 
 export const MDX_EDITOR_CONTENT_CLASS_NAME = 'geyser-mdx-content'
@@ -118,12 +119,14 @@ export const MdxMarkdownPreview = ({ value, minHeight, fontFamily }: MdxMarkdown
   )
 
   useEffect(() => {
-    if (!wrapperRef.current || !twttr?.widgets?.load) {
+    const twitterWidgets = getTwitterWidgets()
+
+    if (!wrapperRef.current || !twitterWidgets?.load) {
       return
     }
 
     try {
-      twttr.widgets.load(wrapperRef.current)
+      twitterWidgets.load(wrapperRef.current)
     } catch (error) {
       Sentry.captureException(error, {
         tags: { area: 'twitter-widgets' },

@@ -110,31 +110,37 @@ const modelCards: readonly ModelCard[] = [
 const portfolioProjects = [
   {
     project: 'Krezzy Kicks',
+    projectName: 'krezzykickscollectionkibera',
     purpose: 'Inventory and merchant activation',
     status: "Pilot business identified in Afribit's recoverable grant model with BTC Map listing.",
   },
   {
     project: 'Threewest Collections',
+    projectName: '3westcollectionkibera',
     purpose: 'Stock, sales, and Bitcoin payments',
     status: 'Part of the initial cohort list and connected to local Bitcoin commerce.',
   },
   {
     project: 'Malega Shop',
+    projectName: null,
     purpose: 'Shop working capital',
     status: 'Listed as a pilot business to be brought online through the Chama process.',
   },
   {
     project: 'Kibera BTC Shop',
+    projectName: 'bitcoinshop',
     purpose: 'Merchant growth capital',
     status: 'A local Bitcoin merchant that can demonstrate capital return and impact.',
   },
   {
     project: 'Ruth Shop',
+    projectName: null,
     purpose: 'Retail float and stability',
     status: 'Included in the pilot business list with a BTC Map footprint.',
   },
   {
     project: 'Kingshop Kibera',
+    projectName: null,
     purpose: 'Story, profile, and campaign launch',
     status: 'A workshop entrepreneur profile that turns local business activity into a Geyser project.',
   },
@@ -655,9 +661,25 @@ const PortfolioTable = ({ colors }: { colors: AfribitCaseStudyColors }) => (
           borderBottomWidth="1px"
           borderBottomColor={colors.line}
         >
-          <Body bold px={5} py={5}>
-            {t(row.project)}
-          </Body>
+          {row.projectName ? (
+            <Body
+              as={Link}
+              to={getPath('project', row.projectName)}
+              bold
+              px={5}
+              py={5}
+              color={colors.accentTeal}
+              textDecoration="underline"
+              textUnderlineOffset="3px"
+              _hover={{ color: colors.ink }}
+            >
+              {t(row.project)}
+            </Body>
+          ) : (
+            <Body bold px={5} py={5}>
+              {t(row.project)}
+            </Body>
+          )}
           <Body px={5} py={5} lineHeight="24px">
             {t(row.purpose)}
           </Body>

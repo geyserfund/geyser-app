@@ -7,6 +7,12 @@ import { useMobileMode } from '../info'
 
 const SHOPS_PATH_PREFIX = '/products'
 
+export const canScrollTo = (
+  element: Element | Window | null,
+): element is Element & { scrollTo: Window['scrollTo'] } => {
+  return Boolean(element && typeof element.scrollTo === 'function')
+}
+
 export const useScrollToTop = () => {
   const location = useLocation()
   const isMobile = useMobileMode()
@@ -26,7 +32,12 @@ export const useScrollToTop = () => {
     if (isMobile) {
       window.scrollTo(0, 0)
     } else {
-      document.getElementById(ID.root)?.scrollTo(0, 0)
+      const rootElement = document.getElementById(ID.root)
+      if (canScrollTo(rootElement)) {
+        rootElement.scrollTo(0, 0)
+      } else {
+        window.scrollTo(0, 0)
+      }
     }
 
     previousPathRef.current = location.pathname
