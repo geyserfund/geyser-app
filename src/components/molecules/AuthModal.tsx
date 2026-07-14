@@ -176,13 +176,12 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
   const isSignup = modalIntent === AuthFlowIntent.signup
   const modalTitle = isOtpStarted
     ? t('Check your email')
-    : title || t(isSignup ? 'Create your Geyser account' : 'Sign in to Geyser')
-  const modalDescription = t(
+    : title || (isSignup ? t('Create your Geyser account') : t('Sign in to Geyser'))
+  const modalDescription =
     description ||
-      (isSignup
-        ? 'Create a new account with the method you want to use for future sign-ins.'
-        : 'Choose the same method you used when you created your account.'),
-  )
+    (isSignup
+      ? t('Create a new account with the method you want to use for future sign-ins.')
+      : t('Choose the same method you used when you created your account.'))
 
   useEffect(() => {
     return () => {

@@ -3,13 +3,18 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import Loader from '@/components/ui/Loader'
 import { useAuthContext } from '@/context'
-import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '@/types'
+import {
+  AuthFlowIntent as GeneratedAuthFlowIntent,
+  MfaAction,
+  OtpResponseFragment,
+  useSendOtpByEmailMutation,
+} from '@/types'
 import { useNotification } from '@/utils'
 
-import { getAuthFailureMessage } from '../authFailure'
-import { AuthFlowIntent } from '../type'
-import { ReceiveOneTimePassword } from './components/ReceiveOneTimePassword'
-import { VerifyOneTimePassword } from './components/VerifyOneTimePassword'
+import { getAuthFailureMessage } from '../authFailure.ts'
+import { AuthFlowIntent } from '../type.ts'
+import { ReceiveOneTimePassword } from './components/ReceiveOneTimePassword.tsx'
+import { VerifyOneTimePassword } from './components/VerifyOneTimePassword.tsx'
 
 export interface VerifyYourEmailContentProps {
   action: MfaAction
@@ -82,9 +87,10 @@ export const VerifyYourEmailContent = ({
           input: {
             action,
             email,
-            authFlowIntent,
+            authFlowIntent:
+              authFlowIntent === AuthFlowIntent.signup ? GeneratedAuthFlowIntent.Signup : GeneratedAuthFlowIntent.Login,
           },
-        } as any,
+        },
       })
     },
     [action, authFlowIntent, sendOtpByEmail],

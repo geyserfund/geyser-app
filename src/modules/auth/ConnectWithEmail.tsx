@@ -7,17 +7,16 @@ import { useForm } from 'react-hook-form'
 
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 
-import { getAuthEndPoint } from '../../config/domain'
-import { useAuthContext } from '../../context'
-import { MfaAction, OtpResponseFragment } from '../../types'
-import { emailValidationSchema, useNotification } from '../../utils'
+import { getAuthEndPoint } from '../../config/domain.ts'
+import { useAuthContext } from '../../context/index.ts'
+import { MfaAction, OtpResponseFragment } from '../../types/index.ts'
+import { emailValidationSchema, useNotification } from '../../utils/index.ts'
 import { getAuthFailureMessage } from './authFailure.ts'
-import { LastUsedBadge } from './components/LastUsedBadge'
-import { useNotificationPromptModal } from './hooks/useNotificationPromptModal'
+import { LastUsedBadge } from './components/LastUsedBadge.tsx'
+import { useNotificationPromptModal } from './hooks/useNotificationPromptModal.ts'
 import { VerifyYourEmailContent } from './otp/VerifyYourEmailContent.tsx'
-import { lastAuthMethodAtom } from './state'
-import { AuthMethod } from './type.ts'
-import { AuthFlowIntent } from './type.ts'
+import { lastAuthMethodAtom } from './state/authAtom.ts'
+import { AuthFlowIntent, AuthMethod } from './type.ts'
 
 interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void

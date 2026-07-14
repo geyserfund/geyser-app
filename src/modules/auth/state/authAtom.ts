@@ -10,7 +10,7 @@ import {
   UserVerificationLevel,
   UserVerificationStatus,
 } from '../../../types'
-import { AuthFlowIntent, AuthMethod, ExternalAccountType, SocialAccountType } from '../type'
+import { AuthFlowIntent, AuthMethod, ExternalAccountType, SocialAccountType } from '../type.ts'
 
 export const defaultUser: UserMeFragment = {
   id: 0,

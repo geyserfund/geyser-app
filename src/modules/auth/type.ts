@@ -18,10 +18,12 @@ export enum SocialAccountType {
   nostr = 'nostr',
 }
 
-export enum AuthFlowIntent {
-  login = 'LOGIN',
-  signup = 'SIGNUP',
-}
+export const AuthFlowIntent = {
+  login: 'LOGIN',
+  signup: 'SIGNUP',
+} as const
+
+export type AuthFlowIntent = (typeof AuthFlowIntent)[keyof typeof AuthFlowIntent]
 
 export const AuthMethod = {
   email: 'email',

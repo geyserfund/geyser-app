@@ -34,6 +34,13 @@ import { lastAuthMethodAtom, loginMethodAtom } from './state'
 import { AuthFlowIntent, ConnectWithButtonProps, ExternalAccountType } from './type'
 import { requestWebLNUrlAuth, WEBLN_ENABLE_ERROR } from './utils/weblnAuth.ts'
 
+class AuthError extends Error {
+  constructor(message: string, public readonly code?: string) {
+    super(message)
+    this.name = 'AuthError'
+  }
+}
+
 interface ConnectWithLightningModalProps {
   isOpen: boolean
   onClose: () => void
@@ -195,7 +202,7 @@ export const ConnectWithLightningModal = ({
         })
         .then((response) => {
           if (hasError) {
-            throw new Error(response.reason)
+            throw new AuthError(response.reason, response.code)
           }
 
           if (response.status === 'ok') {
@@ -213,7 +220,7 @@ export const ConnectWithLightningModal = ({
             description: getAuthFailureMessage(
               t,
               err.code,
-              `${t('The authentication request failed:')} ${err.message}.`,
+              `${t('The authentication request failed')}: ${err.message}.`,
             ),
             status: 'error',
           })

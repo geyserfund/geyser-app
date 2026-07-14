@@ -67,7 +67,7 @@ export const ConnectWithSocial = ({
         description: getAuthFailureMessage(
           t,
           code,
-          reason ? `${t('The authentication request failed.')} ${reason}.` : undefined,
+          reason ? `${t('The authentication request failed')}. ${reason}.` : undefined,
           label,
         ),
         status: 'error',
