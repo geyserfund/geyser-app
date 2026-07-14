@@ -1,25 +1,38 @@
 import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 
-import { getAuthEndPoint } from '../../config/domain'
-import { useAuthContext } from '../../context'
-import { MfaAction, OtpResponseFragment } from '../../types'
-import { emailValidationSchema, useNotification } from '../../utils'
-import { useNotificationPromptModal } from './hooks/useNotificationPromptModal'
+import { getAuthEndPoint } from '../../config/domain.ts'
+import { useAuthContext } from '../../context/index.ts'
+import { MfaAction, OtpResponseFragment } from '../../types/index.ts'
+import { emailValidationSchema, useNotification } from '../../utils/index.ts'
+import { getAuthFailureMessage } from './authFailure.ts'
+import { LastUsedBadge } from './components/LastUsedBadge.tsx'
+import { useNotificationPromptModal } from './hooks/useNotificationPromptModal.ts'
 import { VerifyYourEmailContent } from './otp/VerifyYourEmailContent.tsx'
+import { lastAuthMethodAtom } from './state/authAtom.ts'
+import { AuthFlowIntent, AuthMethod } from './type.ts'
 
 interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void
   isOTPStarted?: (_: boolean) => void
+  authFlowIntent?: AuthFlowIntent
 }
 
-export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWithEmailProps) => {
+export const ConnectWithEmail = ({
+  onClose,
+  isOTPStarted,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: ConnectWithEmailProps) => {
   const { isLoggedIn, queryCurrentUser } = useAuthContext()
+  const setLastAuthMethod = useSetAtom(lastAuthMethodAtom)
+  const lastAuthMethod = useAtomValue(lastAuthMethodAtom)
   const { toast } = useNotification()
 
   const { notificationPromptOnOpen } = useNotificationPromptModal()
@@ -55,6 +68,7 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
             otp: otpCode,
             otpVerificationToken: otpData.otpVerificationToken,
             email,
+            authFlowIntent,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -63,6 +77,7 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
         }).then((response) => response.json())
 
         if (response?.status === 'ok') {
+          setLastAuthMethod(AuthMethod.email)
           queryCurrentUser()
           notificationPromptOnOpen()
           onClose?.()
@@ -71,7 +86,7 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
           toast({
             status: 'error',
             title: t('Failed to login with email'),
-            description: t('Please try again'),
+            description: getAuthFailureMessage(t, response?.code, response?.reason),
           })
         }
       } catch (error) {
@@ -88,7 +103,16 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
     <>
       {initEmail ? (
         <VStack w="full">
-          <VerifyYourEmailContent initEmail={initEmail} action={MfaAction.Login} handleVerify={handleLogin} />
+          <VerifyYourEmailContent
+            initEmail={initEmail}
+            action={MfaAction.Login}
+            handleVerify={handleLogin}
+            onInitialOtpError={() => {
+              setInitEmail(undefined)
+              isOTPStarted?.(false)
+            }}
+            authFlowIntent={authFlowIntent}
+          />
         </VStack>
       ) : (
         <VStack as={'form'} onSubmit={handleSubmit(handleClick)} w="full">
@@ -103,6 +127,7 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
             {...rest}
           >
             {t('Continue with email')}
+            {lastAuthMethod === AuthMethod.email && <LastUsedBadge />}
           </Button>
         </VStack>
       )}

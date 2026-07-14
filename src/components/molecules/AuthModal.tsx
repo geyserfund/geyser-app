@@ -1,4 +1,4 @@
-import { Stack } from '@chakra-ui/react'
+import { Button, Stack } from '@chakra-ui/react'
 import { HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
@@ -18,6 +18,7 @@ import {
   TWITTER_AUTH_ATTEMPT_KEY,
   TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
 } from '../../modules/auth/ConnectWithSocial'
+import { AuthFlowIntent } from '../../modules/auth/type.ts'
 import { useAuthToken } from '../../modules/auth/useAuthToken.tsx'
 import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
 import { Caption } from '../typography'
@@ -33,6 +34,7 @@ export type AuthModalAdditionalprops = {
   showGoogle?: boolean
   showGithub?: boolean
   privateRoute?: boolean
+  authFlowIntent?: AuthFlowIntent
 }
 type AuthModalProps = {
   isOpen: boolean
@@ -49,6 +51,7 @@ const ConnectAccounts = ({
   showLightning,
   showGoogle,
   showGithub,
+  authFlowIntent,
 }: any) => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
@@ -79,24 +82,45 @@ const ConnectAccounts = ({
   return (
     <VStack width="full" justifyContent="center" alignItems="center">
       <Stack width="100%" spacing="10px">
-        {!hasNostrAccount(user) && showNostr && <ConnectWithNostr onClose={handleClose} />}
+        {!hasNostrAccount(user) && showNostr && (
+          <ConnectWithNostr onClose={handleClose} authFlowIntent={authFlowIntent} />
+        )}
         {!hasTwitterAccount(user) && showTwitter && (
-          <ConnectWithSocial accountType={SocialAccountType.twitter} onClose={handleClose} />
+          <ConnectWithSocial
+            accountType={SocialAccountType.twitter}
+            onClose={handleClose}
+            authFlowIntent={authFlowIntent}
+          />
         )}
 
         <HStack w="full" spacing="20px">
           {!hasFacebookAccount(user) && showFacebook && (
-            <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={handleClose} flex={1} />
+            <ConnectWithSocial
+              accountType={SocialAccountType.facebook}
+              onClose={handleClose}
+              authFlowIntent={authFlowIntent}
+              flex={1}
+            />
           )}
           {!hasGoogleAccount(user) && showGoogle && (
-            <ConnectWithSocial accountType={SocialAccountType.google} onClose={handleClose} flex={1} />
+            <ConnectWithSocial
+              accountType={SocialAccountType.google}
+              onClose={handleClose}
+              authFlowIntent={authFlowIntent}
+              flex={1}
+            />
           )}
         </HStack>
 
         <HStack w="full" spacing="20px">
-          {showLightning && <ConnectWithLightning flex={1} onClose={handleClose} />}
+          {showLightning && <ConnectWithLightning flex={1} onClose={handleClose} authFlowIntent={authFlowIntent} />}
           {!hasGithubAccount(user) && showGithub && (
-            <ConnectWithSocial flex={1} accountType={SocialAccountType.github} onClose={handleClose} />
+            <ConnectWithSocial
+              flex={1}
+              accountType={SocialAccountType.github}
+              onClose={handleClose}
+              authFlowIntent={authFlowIntent}
+            />
           )}
         </HStack>
       </Stack>
@@ -130,12 +154,14 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
     showGoogle = true,
     showGithub = true,
     privateRoute = false,
+    authFlowIntent = AuthFlowIntent.login,
   } = authModalProps
 
   const navigate = useNavigate()
   const location = useLocation()
+  const [modalIntent, setModalIntent] = useState(authFlowIntent)
 
-  useAuthToken(isOpen)
+  useAuthToken(isOpen, modalIntent)
 
   const handlePrivateRouteModalClose = () => {
     if (privateRoute) {
@@ -147,17 +173,27 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
     }
   }
 
-  const modalTitle = isOtpStarted ? t('Check your email') : title || t(title || 'Sign in to Geyser')
-  const modalDescription = t(
+  const isSignup = modalIntent === AuthFlowIntent.signup
+  const modalTitle = isOtpStarted
+    ? t('Check your email')
+    : title || (isSignup ? t('Create your Geyser account') : t('Sign in to Geyser'))
+  const modalDescription =
     description ||
-      'Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily',
-  )
+    (isSignup
+      ? t('Create a new account with the method you want to use for future sign-ins.')
+      : t('Choose the same method you used when you created your account.'))
 
   useEffect(() => {
     return () => {
       setIsOtpStarted(false)
     }
   }, [isOpen])
+
+  useEffect(() => {
+    if (isOpen) {
+      setModalIntent(authFlowIntent)
+    }
+  }, [authFlowIntent, isOpen])
 
   return (
     <Modal
@@ -172,12 +208,21 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       useInert={false}
     >
       <VStack w="full" justifyContent="center" paddingTop={3} alignItems="start" spacing={4}>
-        {!noEmailPopup && <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} />}
+        {!isOtpStarted && modalDescription && (
+          <VStack w="full" alignItems="start" spacing={0}>
+            <Body size="sm">{modalDescription}</Body>
+          </VStack>
+        )}
+        {!noEmailPopup && (
+          <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} authFlowIntent={modalIntent} />
+        )}
         {!isOtpStarted && (
           <>
-            <VStack w="full" alignItems="start" spacing={0}>
-              {modalDescription && <Body size="sm">{modalDescription}</Body>}
-            </VStack>
+            {!noEmailPopup && (
+              <Body size="xs" alignSelf="center" color="neutral1.7">
+                {t('or')}
+              </Body>
+            )}
             <ConnectAccounts
               onClose={onClose}
               onSuccess={onSuccess}
@@ -187,7 +232,17 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
               showFacebook={showFacebook}
               showGoogle={showGoogle}
               showGithub={showGithub}
+              authFlowIntent={modalIntent}
             />
+            <Button
+              alignSelf="center"
+              variant="link"
+              colorScheme="primary1"
+              size="sm"
+              onClick={() => setModalIntent(isSignup ? AuthFlowIntent.login : AuthFlowIntent.signup)}
+            >
+              {isSignup ? t('Already have an account? Sign in') : t('New to Geyser? Sign up')}
+            </Button>
           </>
         )}
       </VStack>

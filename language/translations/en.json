@@ -2333,5 +2333,18 @@
   "{{rewardName}} product image": "{{rewardName}} product image",
   "Email will be sent to {{count}} members.": "Email will be sent to {{count}} members.",
   "Email sent": "Email sent",
-  "Email this post to users": "Email this post to users"
+  "Email this post to users": "Email this post to users",
+  "Create your Geyser account": "Create your Geyser account",
+  "Create a new account with the method you want to use for future sign-ins.": "Create a new account with the method you want to use for future sign-ins.",
+  "Choose the same method you used when you created your account.": "Choose the same method you used when you created your account.",
+  "or": "or",
+  "Already have an account? Sign in": "Already have an account? Sign in",
+  "New to Geyser? Sign up": "New to Geyser? Sign up",
+  "The authentication request failed": "The authentication request failed",
+  "No Geyser account uses this method. Try another login method or sign up.": "No Geyser account uses this method. Try another login method or sign up.",
+  "This method already has a Geyser account. Sign in instead.": "This method already has a Geyser account. Sign in instead.",
+  "An account already exists for this email. Sign in with email, then connect {{provider}}.": "An account already exists for this email. Sign in with email, then connect {{provider}}.",
+  "An account already exists for this email. Sign in with email, then connect this provider.": "An account already exists for this email. Sign in with email, then connect this provider.",
+  "Too many authentication attempts. Please wait and try again.": "Too many authentication attempts. Please wait and try again.",
+  "Last used": "Last used"
 }

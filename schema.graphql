@@ -4073,6 +4073,11 @@ type Badge {
   thumb: String!
 }
 
+enum AuthFlowIntent {
+  LOGIN
+  SIGNUP
+}
+
 enum UserBadgeStatus {
   PENDING
   ACCEPTED
@@ -4081,6 +4086,7 @@ enum UserBadgeStatus {
 input SendOtpByEmailInput {
   email: String
   action: MFAAction!
+  authFlowIntent: AuthFlowIntent
 }
 
 type OTPResponse {
