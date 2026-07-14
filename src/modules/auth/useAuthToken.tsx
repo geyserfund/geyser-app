@@ -19,7 +19,7 @@ const refreshLoginTriggerAtom = atom(null, (get, set) => {
 export const useCanLogin = () => useAtomValue(canLoginAtom)
 
 /* useAuthToken: Used inside a social login to get the latest auth-token */
-export const useAuthToken = (isOpen?: boolean, authFlowIntent = AuthFlowIntent.login) => {
+export const useAuthToken = (isOpen?: boolean, authFlowIntent: AuthFlowIntent = AuthFlowIntent.login) => {
   const [canLogin, setCanLogin] = useAtom(canLoginAtom)
 
   const [refreshLogin, setRefreshLogin] = useAtom(refreshLoginAtom)

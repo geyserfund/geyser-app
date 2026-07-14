@@ -22,7 +22,7 @@ export const useNostrExtensonLogin = () => {
 
   const authServiceEndpoint = getAuthEndPoint()
 
-  const connect = async (authFlowIntent = AuthFlowIntent.login) => {
+  const connect = async (authFlowIntent: AuthFlowIntent = AuthFlowIntent.login) => {
     try {
       const pubkey = await getPubkey()
 
