@@ -3,6 +3,7 @@ import { useAtom, useSetAtom } from 'jotai'
 import { AuthModalAdditionalprops } from '@/components/molecules'
 
 import { isLoginModalOpenAtom, loginModalAdditionalPropsAtom, resetLoginModalAdditionalPropsAtom } from '../state'
+import { AuthFlowIntent } from '../type'
 
 export const useAuthModal = () => {
   const [loginIsOpen, setLoginIsOpen] = useAtom(isLoginModalOpenAtom)
@@ -11,9 +12,12 @@ export const useAuthModal = () => {
 
   const loginOnOpen = (props?: AuthModalAdditionalprops) => {
     setLoginIsOpen(true)
-    if (props) {
-      setLoginModalAdditionalProps(props)
-    }
+    setLoginModalAdditionalProps({ ...(props || {}), authFlowIntent: AuthFlowIntent.login })
+  }
+
+  const signupOnOpen = (props?: AuthModalAdditionalprops) => {
+    setLoginIsOpen(true)
+    setLoginModalAdditionalProps({ ...(props || {}), authFlowIntent: AuthFlowIntent.signup })
   }
 
   const loginOnClose = () => {
@@ -21,5 +25,5 @@ export const useAuthModal = () => {
     resetLoginModalAdditionalProps()
   }
 
-  return { loginIsOpen, loginOnOpen, loginOnClose, loginModalAdditionalProps }
+  return { loginIsOpen, loginOnOpen, signupOnOpen, loginOnClose, loginModalAdditionalProps }
 }

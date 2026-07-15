@@ -1672,6 +1672,11 @@ export enum MfaAction {
   UserEmailVerification = 'USER_EMAIL_VERIFICATION'
 }
 
+export enum AuthFlowIntent {
+  Login = 'LOGIN',
+  Signup = 'SIGNUP'
+}
+
 export type Milestone = {
   __typename?: 'Milestone';
   amount: Scalars['Int']['output'];
@@ -5254,6 +5259,7 @@ export type RskToOnChainSwapPaymentDetailsInput = {
 export type SendOtpByEmailInput = {
   action: MfaAction;
   email?: InputMaybe<Scalars['String']['input']>;
+  authFlowIntent?: InputMaybe<AuthFlowIntent>;
 };
 
 export enum SettingValueType {

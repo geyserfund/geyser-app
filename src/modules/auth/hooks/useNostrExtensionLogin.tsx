@@ -8,6 +8,8 @@ import { useAuthContext } from '../../../context'
 import { useMeLazyQuery } from '../../../types'
 import { useNotification } from '../../../utils'
 import { getPubkey, signEvent } from '../../../utils/nostr/nip07'
+import { getAuthFailureMessage } from '../authFailure'
+import { AuthFlowIntent } from '../type'
 
 export const useNostrExtensonLogin = () => {
   const { toast } = useNotification()
@@ -20,11 +22,11 @@ export const useNostrExtensonLogin = () => {
 
   const authServiceEndpoint = getAuthEndPoint()
 
-  const connect = async () => {
+  const connect = async (authFlowIntent: AuthFlowIntent = AuthFlowIntent.login) => {
     try {
       const pubkey = await getPubkey()
 
-      const getAuthEvent = await fetch(`${authServiceEndpoint}/nostr`, {
+      const getAuthEvent = await fetch(`${authServiceEndpoint}/nostr?intent=${authFlowIntent.toLowerCase()}`, {
         method: 'POST',
         credentials: 'include',
         redirect: 'follow',
@@ -54,23 +56,28 @@ export const useNostrExtensonLogin = () => {
         const { data } = await queryCurrentUser()
         if (data && data.me) {
           login(data.me)
+          return true
         }
       } else {
         const errorResponse = await response.json()
         setError(errorResponse)
-        throwErrorToast(errorResponse?.reason)
+        throwErrorToast(errorResponse?.reason, errorResponse?.code)
+        return false
       }
     } catch (e) {
       setError(e)
       throwErrorToast()
+      return false
     }
+
+    return false
   }
 
-  const throwErrorToast = (description?: string) => {
+  const throwErrorToast = (description?: string, code?: string) => {
     toast({
       status: 'error',
       title: t('Something went wrong.'),
-      description: description || t('Please try again'),
+      description: getAuthFailureMessage(t, code, description),
     })
   }
 

@@ -14,7 +14,7 @@ export interface ControlledCustomSelectProps<FormValues extends FieldValues, Opt
   name: Path<FormValues>
   label?: string
   control: Control<FormValues>
-  containerProps?: StackProps
+  containerProps?: StackProps & { 'data-testid'?: string }
   defaultValue?: any
   onChange?: (value: SingleValue<Option> | MultiValue<Option>) => void
   onBlur?: () => void

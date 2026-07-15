@@ -212,16 +212,13 @@ More on how to set up stories at: https://storybook.js.org/docs/writing-stories#
 
 ### Testing
 
-We use cypress end-to-end tests that run on the CI.
-All the tests related code are housed inside the `cypress` folder in the root.
+We use Playwright end-to-end tests that run on CI.
+All end-to-end test code is housed inside `packages/testing/playwright`.
 
 #### Structure
-`e2e` folder contain the definition of the tests.
-`actions` folder houses, all of the actions that the user takes through the test.
-`assertions` folder houses, all of the validations that we do based on what is rendered by the react app.
-`fixtures` folder contains, any raw data thta might be used during the tests.
-`utils` folder has common utility functions.
-`support` folder contains configuration for supporting packages that we use along with cypress for running tests.
+`tests` folder contains the test specs.
+`domains` folder houses reusable actions, assertions, fixtures, flows, and utilities grouped by product domain.
+`config` folder contains Playwright configuration and environment setup.
 
 
 ## Translations

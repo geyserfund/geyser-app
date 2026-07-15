@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 
 import { getAuthEndPoint } from '../../config/domain'
+import { AuthFlowIntent } from './type'
 
 const AUTH_TOKEN_EXPIRATION_MINUTES = 5
 
@@ -18,7 +19,7 @@ const refreshLoginTriggerAtom = atom(null, (get, set) => {
 export const useCanLogin = () => useAtomValue(canLoginAtom)
 
 /* useAuthToken: Used inside a social login to get the latest auth-token */
-export const useAuthToken = (isOpen?: boolean) => {
+export const useAuthToken = (isOpen?: boolean, authFlowIntent: AuthFlowIntent = AuthFlowIntent.login) => {
   const [canLogin, setCanLogin] = useAtom(canLoginAtom)
 
   const [refreshLogin, setRefreshLogin] = useAtom(refreshLoginAtom)
@@ -31,7 +32,7 @@ export const useAuthToken = (isOpen?: boolean) => {
     if (isOpen) {
       refreshAuthToken()
     }
-  }, [isOpen, refreshAuthToken])
+  }, [isOpen, refreshAuthToken, authFlowIntent])
 
   useEffect(() => {
     const initalizeLogin = async () => {
@@ -46,7 +47,7 @@ export const useAuthToken = (isOpen?: boolean) => {
       setRefreshLogin(DateTime.now())
 
       try {
-        const response = await fetch(`${authServiceEndpoint}/auth-token`, {
+        const response = await fetch(`${authServiceEndpoint}/auth-token?intent=${authFlowIntent.toLowerCase()}`, {
           credentials: 'include',
           redirect: 'follow',
         })
@@ -62,5 +63,5 @@ export const useAuthToken = (isOpen?: boolean) => {
     }
 
     initalizeLogin()
-  }, [authServiceEndpoint, setCanLogin, canLogin, refreshLogin, setRefreshLogin])
+  }, [authServiceEndpoint, setCanLogin, canLogin, refreshLogin, setRefreshLogin, authFlowIntent])
 }

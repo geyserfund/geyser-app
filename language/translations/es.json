@@ -2028,5 +2028,18 @@
   "Email sent": "Correo enviado",
   "Email this post to users": "Enviar este post por correo a los usuarios",
   "Paid or Waved": "Pagado o Olas",
-  "See more": "Ver más"
+  "See more": "Ver más",
+  "Create your Geyser account": "Crea tu cuenta de Geyser",
+  "Create a new account with the method you want to use for future sign-ins.": "Crea una nueva cuenta con el método que deseas usar para futuros inicios de sesión.",
+  "Choose the same method you used when you created your account.": "Elige el mismo método que usaste cuando creaste tu cuenta.",
+  "or": "o",
+  "Already have an account? Sign in": "¿Ya tienes una cuenta? Inicia sesión",
+  "New to Geyser? Sign up": "¿Nuevo en Geyser? Regístrate",
+  "The authentication request failed": "La solicitud de autenticación falló",
+  "No Geyser account uses this method. Try another login method or sign up.": "Ninguna cuenta de Geyser utiliza este método. Prueba otro método de inicio de sesión o regístrate.",
+  "This method already has a Geyser account. Sign in instead.": "Este método ya tiene una cuenta de Geyser. Inicia sesión en su lugar.",
+  "An account already exists for this email. Sign in with email, then connect {{provider}}.": "Ya existe una cuenta para este correo electrónico. Inicia sesión con el correo electrónico y luego conecta {{provider}}.",
+  "An account already exists for this email. Sign in with email, then connect this provider.": "Ya existe una cuenta para este correo electrónico. Inicia sesión con el correo electrónico y luego conecta este proveedor.",
+  "Too many authentication attempts. Please wait and try again.": "Demasiados intentos de autenticación. Por favor, espera y vuelve a intentarlo.",
+  "Last used": "Último uso"
 }

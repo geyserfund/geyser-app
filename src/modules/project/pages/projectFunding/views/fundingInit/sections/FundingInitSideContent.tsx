@@ -89,6 +89,7 @@ export const FundingInitSummary = () => {
             colorScheme="primary1"
             type="submit"
             isDisabled={isDisabled}
+            data-testid="continue-from-init-button"
             sx={{
               transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
               '&:active:not(:disabled)': { transform: 'scale(0.98)' },

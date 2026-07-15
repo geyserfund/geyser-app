@@ -5,7 +5,6 @@
     "server.ts",
     "storybook/**/*.tsx",
     "packages/storybook/.storybook/*.{ts,tsx}",
-    "cypress/**/*.ts",
     "eslint.config.mjs"
   ],
   "project": [
@@ -14,7 +13,6 @@
     "server.ts",
     "storybook/**/*.tsx",
     ".storybook/*.{ts,tsx}",
-    "cypress/**/*.ts",
 
     "!src/types/generated/graphql.ts",
     "!src/**/graphql/**/*.ts",
