@@ -1,6 +1,8 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { defineConfig, loadEnv, PluginOption } from 'vite'
+import type { PluginOption } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import topLevelAwait from 'vite-plugin-top-level-await'
@@ -8,6 +10,10 @@ import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { pwaOptions } from './config/pwaOptions'
+import packageJson from './package.json'
+
+const SENTRY_PROJECT = 'geyser-app'
+const SENTRY_RELEASE = `geyser-app@${packageJson.version}`
 
 export default defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -52,6 +58,10 @@ export default defineConfig(({ command, mode }) => {
   }
 
   const pwaOptionsMode = env.APP_ENV === 'development' ? 'development' : 'production'
+  const sentryAuthToken = process.env.VITE_APP_SENTRY_AUTH_TOKEN || env.VITE_APP_SENTRY_AUTH_TOKEN
+  const sentryOrg = process.env.VITE_APP_SENTRY_ORG || env.VITE_APP_SENTRY_ORG
+  const sentryUrl = process.env.VITE_APP_SENTRY_URL || env.VITE_APP_SENTRY_URL
+  const hasSentrySourceMapConfig = command === 'build' && Boolean(sentryAuthToken && sentryOrg)
   const plugins: PluginOption[] = [
     VitePWA({ ...pwaOptions, mode: pwaOptionsMode }),
     react(),
@@ -59,10 +69,27 @@ export default defineConfig(({ command, mode }) => {
     loadVersion(),
     wasm(),
     topLevelAwait(),
+    hasSentrySourceMapConfig &&
+      sentryVitePlugin({
+        org: sentryOrg,
+        project: SENTRY_PROJECT,
+        authToken: sentryAuthToken,
+        url: sentryUrl || undefined,
+        release: {
+          name: SENTRY_RELEASE,
+          setCommits: false,
+        },
+        sourcemaps: {
+          filesToDeleteAfterUpload: ['./dist/**/*.map'],
+        },
+      }),
   ]
 
   return {
     plugins,
+    build: {
+      sourcemap: hasSentrySourceMapConfig ? 'hidden' : false,
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

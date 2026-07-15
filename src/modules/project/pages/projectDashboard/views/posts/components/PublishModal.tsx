@@ -1,37 +1,19 @@
-import { Button, HStack, IconButton, Switch, Tooltip, VStack } from '@chakra-ui/react'
+import { Button, HStack, Switch, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
-import { PiEnvelopeSimple, PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
-import { components, MultiValue, OptionProps } from 'react-select'
 
-import { CustomSelect } from '@/components/ui/CustomSelect'
+import { PostEmailSendForm, PostEmailSendOptions } from '@/modules/project/components/PostEmailSendForm.tsx'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Modal } from '@/shared/components/layouts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
-import { Feedback, FeedBackVariant } from '@/shared/molecules'
-import {
-  EmailSubscriberSegment,
-  PostStatus,
-  ProjectPostFragment,
-  ProjectRewardFragment,
-  usePostEmailSegmentSizeGetQuery,
-  usePostSendByEmailMutation,
-} from '@/types'
+import { PostStatus, ProjectPostFragment, usePostSendByEmailMutation } from '@/types'
 import { isActive, useNotification } from '@/utils'
 
-import { RewardItem } from '../../../../projectView/views/posts/components/RewardItem'
 import { PostPublishProps } from '../hooks/usePostForm.tsx'
-
-const sendToOptions = [
-  { label: t('Followers (Everyone)'), value: EmailSubscriberSegment.Followers },
-  { label: t('Contributors'), value: EmailSubscriberSegment.Contributors },
-  { label: t('Product buyers'), value: EmailSubscriberSegment.RewardBuyers },
-]
 
 export const PublishModal = ({
   post,
@@ -53,26 +35,24 @@ export const PublishModal = ({
 
   const [sendEmail, setSendEmail] = useState(false)
 
-  const [sendTo, setSendTo] = useState<EmailSubscriberSegment | null>(null)
+  const [emailSendOptions, setEmailSendOptions] = useState<PostEmailSendOptions | undefined>(undefined)
   const [emailCount, setEmailCount] = useState<number>(0)
-  const [selectedRewards, setSelectedRewards] = useState<ProjectRewardFragment[]>([])
 
   const [postSendByEmail, { loading: postSendByEmailLoading }] = usePostSendByEmailMutation({
     variables: {
       input: {
         postId: post.id,
-        emailSendOptions: {
-          segment: sendTo as EmailSubscriberSegment,
-          projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
-        },
+        emailSendOptions: emailSendOptions as PostEmailSendOptions,
       },
     },
     onCompleted(data) {
       publishModal.onClose()
+      const recipientCount = data.postSendByEmail.recipientCount || 0
       toast.success({
-        title: `Sent email to ${
-          data.postSendByEmail.recipientCount === 1 ? '1 user' : `${data.postSendByEmail.recipientCount} users`
-        }.`,
+        title:
+          recipientCount === 1
+            ? t('Sent email to 1 user.')
+            : t('Sent email to {{count}} users.', { count: recipientCount }),
       })
       post.sentByEmailAt = new Date().toISOString()
     },
@@ -83,157 +63,21 @@ export const PublishModal = ({
     },
   })
 
-  usePostEmailSegmentSizeGetQuery({
-    skip: !sendTo,
-    variables: {
-      input: {
-        projectId: project.id,
-        emailSendOptions: {
-          segment: sendTo as EmailSubscriberSegment,
-          projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
-        },
-      },
-    },
-    onCompleted(data) {
-      setEmailCount(data.postEmailSegmentSizeGet)
-    },
-  })
-
-  const handleInput = (e: any) => {
-    setSendTo(e.value)
-  }
-
   const handleSendEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSendEmail(e.target.checked)
     if (!e.target.checked) {
-      setSendTo(null)
+      setEmailSendOptions(undefined)
       setEmailCount(0)
-      setSelectedRewards([])
     }
   }
 
   const handlePostPublish = async () => {
     postPublish({
-      emailSendOptions: sendTo
-        ? {
-            segment: sendTo as EmailSubscriberSegment,
-            projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
-          }
-        : undefined,
+      emailSendOptions,
       onCompleted() {
         navigate(getPath('projectPostView', project.name, post?.id), { state: { justPublished: true } })
       },
     })
-  }
-
-  const handleChange = (value: MultiValue<ProjectRewardFragment>) => {
-    if (!value[0]) {
-      return
-    }
-
-    const newReward: ProjectRewardFragment = { ...value[0] }
-    if (!selectedRewards.some((reward) => reward.id === newReward.id)) {
-      setSelectedRewards((current) => [newReward, ...current])
-    } else {
-      setSelectedRewards((current) => current.filter((reward) => reward.id !== newReward.id))
-    }
-  }
-
-  const handleRewardRemove = (reward: ProjectRewardFragment) => {
-    setSelectedRewards((current) => current.filter((r) => r.id !== reward.id))
-  }
-
-  const Option = (props: OptionProps<ProjectRewardFragment, true, any>) => {
-    return (
-      <components.Option {...props}>
-        <RewardItem imageUrl={props.data.images[0]} name={props.children} />
-      </components.Option>
-    )
-  }
-
-  const sendEmailRender = () => {
-    return (
-      <>
-        <Body size="sm" regular color="neutral1.11">
-          {t(
-            'The post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your post.',
-          )}
-        </Body>
-        <VStack w="full" alignItems="flex-start">
-          <Body size={'sm'} medium>
-            {' '}
-            {t('Send to')}
-          </Body>
-          <CustomSelect
-            placeholder={t('Select recipients')}
-            options={sendToOptions}
-            onChange={handleInput}
-            width={'100%'}
-            size="sm"
-            fontSize="sm"
-          />
-        </VStack>
-
-        {sendTo === EmailSubscriberSegment.RewardBuyers && (
-          <>
-            <CustomSelect<ProjectRewardFragment, true>
-              isMulti
-              width={'100%'}
-              onChange={handleChange}
-              name="rewards"
-              placeholder={t('Select products')}
-              value={[]}
-              options={rewards}
-              getOptionLabel={(option: ProjectRewardFragment) => option.name}
-              getOptionValue={(option: ProjectRewardFragment) => option.id}
-              components={{ Option }}
-            />
-
-            <HStack w="full" flexWrap="wrap">
-              {selectedRewards.map((reward) => (
-                <HStack
-                  key={reward.id}
-                  w="auto"
-                  maxWidth="40%"
-                  alignItems={'start'}
-                  backgroundColor="neutral1.3"
-                  padding="1"
-                  borderRadius="8px"
-                >
-                  <ImageWithReload
-                    borderRadius={'8px'}
-                    width="24px"
-                    minWidth={'24px'}
-                    height="24px"
-                    src={reward.images[0]}
-                    alt={`${reward.name} reward image`}
-                  />
-                  <Body size="sm" isTruncated>
-                    {reward.name}
-                  </Body>
-                  <IconButton
-                    aria-label="clear-product-selection"
-                    icon={<PiX />}
-                    size="sm"
-                    variant="surface"
-                    colorScheme="error"
-                    onClick={() => handleRewardRemove(reward)}
-                  />
-                </HStack>
-              ))}
-            </HStack>
-          </>
-        )}
-
-        {sendTo !== null && (
-          <Feedback variant={FeedBackVariant.INFO} icon={<PiEnvelopeSimple size="20px" />}>
-            <Body size="sm">
-              {t('Email will be sent to')} <strong> {emailCount}</strong> {t('members.')}
-            </Body>
-          </Feedback>
-        )}
-      </>
-    )
   }
 
   const canSendViaEmail = !post.sentByEmailAt
@@ -309,7 +153,14 @@ export const PublishModal = ({
             <Switch size="lg" isChecked={sendEmail} onChange={handleSendEmailChange} />
           </VStack>
         </CardLayout>
-        {sendEmail ? sendEmailRender() : null}
+        {sendEmail ? (
+          <PostEmailSendForm
+            projectId={project.id}
+            rewards={rewards}
+            onEmailSendOptionsChange={setEmailSendOptions}
+            onEmailCountChange={setEmailCount}
+          />
+        ) : null}
 
         <HStack w="full">
           <Button flex={1} variant="soft" colorScheme="neutral1" onClick={publishModal.onClose}>
@@ -321,7 +172,7 @@ export const PublishModal = ({
               variant="solid"
               colorScheme="primary1"
               onClick={() => postSendByEmail()}
-              isDisabled={emailCount === 0}
+              isDisabled={!emailSendOptions || emailCount === 0}
               isLoading={postSendByEmailLoading}
             >
               {t('Send via email')}

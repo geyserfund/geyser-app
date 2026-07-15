@@ -1,15 +1,14 @@
 import { Button, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS, MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { ProjectFundingStrategy, Satoshis } from '@/types/index.ts'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { useRefetchQueries } from '../aonNotification/hooks/useRefetchQueries.ts'
 import { usePrismWithdrawable } from './usePrismWithdrawable.ts'
@@ -19,20 +18,17 @@ export const TiaPayoutNotification = () => {
   const payoutRskModal = useModal()
   const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
-  const { getUSDCentsAmount } = useBTCConverter()
 
   const projectRskEoa = project?.rskEoa || ''
   const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
   const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
-  const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats as Satoshis)
-  const withdrawableUsd = withdrawableUsdCents / 100
-  const hasMinimumNotice = withdrawableUsd >= 1 && withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
+  const hasMinimumNotice = withdrawableSats > 0 && withdrawableSats < MIN_BITCOIN_PAYOUT_SATS
 
   if (!project || !isProjectOwner || project.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
     return null
   }
 
-  const hasWithdrawable = withdrawable !== null && withdrawable > 0n && withdrawableUsd >= 1
+  const hasWithdrawable = withdrawable !== null && withdrawable > 0n
 
   if (!projectRskEoa || isLoading || !hasWithdrawable) {
     return null
@@ -57,9 +53,9 @@ export const TiaPayoutNotification = () => {
               <Body dark>
                 {hasMinimumNotice
                   ? t(
-                      'Minimum withdrawal is {{amount}} USD. You currently have funds below the minimum in your project wallet.',
+                      'Minimum withdrawal is {{amount}} sats. You currently have funds below the minimum in your project wallet.',
                       {
-                        amount: MIN_BITCOIN_PAYOUT_USD,
+                        amount: MIN_BITCOIN_PAYOUT_SATS_FORMATTED,
                       },
                     )
                   : t('You have funds ready in your project wallet.')}

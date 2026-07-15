@@ -8,5 +8,6 @@ export const FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE = gql`
     deployedAt
     endsAt
     status
+    hasCompletedPayout
   }
 `

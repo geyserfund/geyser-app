@@ -8,7 +8,7 @@ import {
   ConfigureUserWalletModal,
   hasConfiguredUserWallet,
 } from '@/modules/profile/pages/profileSettings/components/ConfigureUserWalletModal.tsx'
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
@@ -67,7 +67,7 @@ export const ProfileWalletSettings = () => {
             hasActiveWithdraw={withdrawState.hasActiveWithdraw}
             canWithdraw={withdrawState.canWithdraw}
             withdrawButtonLabel={withdrawState.withdrawButtonLabel}
-            minimumUsd={MIN_BITCOIN_PAYOUT_USD}
+            minimumSats={MIN_BITCOIN_PAYOUT_SATS_FORMATTED}
             onOpenWithdrawModal={userWalletWithdrawModal.onOpen}
           />
           <SeedWordsSection />

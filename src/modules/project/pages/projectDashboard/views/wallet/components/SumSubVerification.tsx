@@ -1,5 +1,6 @@
 import { useColorMode } from '@chakra-ui/react'
 import SumsubWebSdk from '@sumsub/websdk-react'
+import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 
@@ -9,6 +10,29 @@ import { useNotification } from '@/utils/index.ts'
 
 const SUM_SUB_LEVEL_2 = 'phone-verification-only'
 const SUM_SUB_LEVEL_3 = 'id-and-phone-verification'
+
+type SumsubMessageData = {
+  levelName?: unknown
+  reviewResult?: {
+    reviewAnswer?: unknown
+  }
+}
+
+export const getSumsubVerificationLevelName = (verificationLevel?: UserVerificationLevel): string => {
+  return verificationLevel === UserVerificationLevel.Level_2 ? SUM_SUB_LEVEL_2 : SUM_SUB_LEVEL_3
+}
+
+export const isSuccessfulVerificationMessage = (
+  props: string,
+  data: SumsubMessageData | null | undefined,
+  verificationLevel?: UserVerificationLevel,
+): boolean => {
+  return (
+    props.includes('idCheck.onApplicantStatusChanged') &&
+    data?.reviewResult?.reviewAnswer === 'GREEN' &&
+    data.levelName === getSumsubVerificationLevelName(verificationLevel)
+  )
+}
 
 export const SumSubVerification = ({
   accessToken,
@@ -24,22 +48,16 @@ export const SumSubVerification = ({
 
   const updateComplianceStatusForUser = useSetAtom(updateComplianceStatusForUserAtom)
 
-  const handleError = (error: any) => {
+  const handleError = () => {
     toast.error({
-      title: 'Failed to verify your identity',
-      description: 'Please try again',
+      title: t('Failed to verify your identity'),
+      description: t('Please try again'),
     })
   }
 
-  const handleMessage = (props: string, data: any) => {
-    const levelName = verificationLevel === UserVerificationLevel.Level_2 ? SUM_SUB_LEVEL_2 : SUM_SUB_LEVEL_3
-
-    if (
-      props.includes('idCheck.onApplicantStatusChanged') &&
-      data.reviewResult.reviewAnswer === 'GREEN' &&
-      data.levelName === levelName
-    ) {
-      toast.success({ title: 'Verification Successful' })
+  const handleMessage = (props: string, data: SumsubMessageData) => {
+    if (isSuccessfulVerificationMessage(props, data, verificationLevel)) {
+      toast.success({ title: t('Verification Successful') })
       const level = verificationLevel === UserVerificationLevel.Level_2 ? 'phoneNumber' : 'identity'
       updateComplianceStatusForUser({
         [level]: {

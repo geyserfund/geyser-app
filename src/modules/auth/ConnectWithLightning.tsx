@@ -15,10 +15,10 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { RejectionError, WebLNProvider } from 'webln'
+import { RejectionError } from 'webln'
 
 import { LogoDarkGreenImage } from '../../assets'
 import { BoltSvgIcon } from '../../components/icons'
@@ -28,55 +28,34 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { lightModeColors } from '../../shared/styles'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
-import { loginMethodAtom } from './state'
-import { ConnectWithButtonProps, ExternalAccountType } from './type'
+import { getAuthFailureMessage } from './authFailure'
+import { LastUsedBadge } from './components/LastUsedBadge'
+import { lastAuthMethodAtom, loginMethodAtom } from './state'
+import { AuthFlowIntent, ConnectWithButtonProps, ExternalAccountType } from './type'
+import { requestWebLNUrlAuth, WEBLN_ENABLE_ERROR } from './utils/weblnAuth.ts'
 
-type LNURLResponse =
-  | {
-      status: 'OK'
-      data?: unknown
-    }
-  | { status: 'ERROR'; reason: string }
-interface WebLNAuthProvider extends WebLNProvider {
-  lnurl: (lnurl: string) => Promise<LNURLResponse>
-}
-
-const { webln }: { webln: WebLNAuthProvider } = window as any
-
-const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
-
-const requestWebLNUrlAuth = async (paymentRequest: string) => {
-  if (!webln) {
-    throw new Error('no provider')
-  }
-
-  try {
-    await webln.enable()
-  } catch (e) {
-    throw new Error(WEBLN_ENABLE_ERROR)
-  }
-
-  if (!paymentRequest) {
-    throw new Error('payment request not found')
-  }
-
-  try {
-    const res = await webln.lnurl(paymentRequest)
-    if (res.status !== 'OK') {
-      throw new Error(WEBLN_ENABLE_ERROR)
-    }
-  } catch (e) {
-    throw new Error(WEBLN_ENABLE_ERROR)
+class AuthError extends Error {
+  constructor(message: string, public readonly code?: string) {
+    super(message)
+    this.name = 'AuthError'
   }
 }
 
 interface ConnectWithLightningModalProps {
   isOpen: boolean
   onClose: () => void
+  authFlowIntent?: AuthFlowIntent
 }
 
-export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
+export const ConnectWithLightning = ({
+  onClose,
+  isIconOnly,
+  showLastUsed = true,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { isOpen: isModalOpen, onClose: onModalClose, onOpen: onModalOpen } = useDisclosure()
+  const lastAuthMethod = useAtomValue(lastAuthMethodAtom)
 
   const handleClose = () => {
     if (onClose) {
@@ -108,20 +87,28 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
         {...rest}
       >
         {!isIconOnly && t('Lightning')}
+        {!isIconOnly && showLastUsed && lastAuthMethod === ExternalAccountType.lightning && <LastUsedBadge />}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
-      {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}
+      {isModalOpen && (
+        <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} authFlowIntent={authFlowIntent} />
+      )}
     </>
   )
 }
 
-export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightningModalProps) => {
+export const ConnectWithLightningModal = ({
+  isOpen,
+  onClose,
+  authFlowIntent = AuthFlowIntent.login,
+}: ConnectWithLightningModalProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const { queryCurrentUser } = useAuthContext()
 
   const authServiceEndPoint = getAuthEndPoint()
   const setLoginMethod = useSetAtom(loginMethodAtom)
+  const setLastAuthMethod = useSetAtom(lastAuthMethodAtom)
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
@@ -136,13 +123,9 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
 
   const startWebLNFlow = async ({ paymentRequest }: { paymentRequest: string }) => {
     try {
-      await requestWebLNUrlAuth(paymentRequest)
-    } catch (error: any) {
-      if (error.message === 'no provider') {
-        throw error
-      }
-
-      if (error.constructor === RejectionError || error.message === 'User rejected') {
+      return await requestWebLNUrlAuth(paymentRequest)
+    } catch (error: unknown) {
+      if (error instanceof Error && (error.constructor === RejectionError || error.message === 'User rejected')) {
         toast({
           title: t('Requested operation declined'),
           description: t('Please use the invoice instead.'),
@@ -151,7 +134,16 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
         return false
       }
 
-      if (error.message === WEBLN_ENABLE_ERROR) {
+      if (error instanceof Error && error.message === WEBLN_ENABLE_ERROR) {
+        return false
+      }
+
+      if (!(error instanceof Error)) {
+        toast({
+          title: t('Oops! Something went wrong with WebLN.'),
+          description: t('Please copy the invoice manually instead.'),
+          status: 'error',
+        })
         return false
       }
 
@@ -165,7 +157,7 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
   }
 
   const handleLnurlLogin = async () => {
-    fetch(`${authServiceEndPoint}/lnurl`, {
+    fetch(`${authServiceEndPoint}/lnurl?intent=${authFlowIntent.toLowerCase()}`, {
       credentials: 'include',
       redirect: 'follow',
     })
@@ -210,12 +202,13 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
         })
         .then((response) => {
           if (hasError) {
-            throw new Error(response.reason)
+            throw new AuthError(response.reason, response.code)
           }
 
           if (response.status === 'ok') {
             queryCurrentUser()
             setLoginMethod(ExternalAccountType.lightning)
+            setLastAuthMethod(ExternalAccountType.lightning)
             onClose()
             clearInterval(id)
           }
@@ -224,14 +217,18 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
           clearInterval(id)
           toast({
             title: t('Something went wrong'),
-            description: `${t('The authentication request failed:')} ${err.message}.`,
+            description: getAuthFailureMessage(
+              t,
+              err.code,
+              `${t('The authentication request failed')}: ${err.message}.`,
+            ),
             status: 'error',
           })
         })
     }, 1000)
 
     return () => clearInterval(id)
-  }, [qrContent])
+  }, [authFlowIntent, qrContent])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

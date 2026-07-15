@@ -20,7 +20,7 @@ export const ProjectCreationLayoutMain = () => {
 
   useEffect(() => {
     if (!isMobile) {
-      navigate(getPath('launchProjectDetails', params.projectId))
+      navigate(getPath('launchFundingStrategy', params.projectId || 'new'))
     }
   }, [isMobile, navigate, params.projectId])
 

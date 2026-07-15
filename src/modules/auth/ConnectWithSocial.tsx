@@ -1,5 +1,5 @@
 import { Button, IconButton, Link } from '@chakra-ui/react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,14 +8,23 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeLazyQuery } from '../../types'
 import { useCustomTheme, useNotification } from '../../utils'
+import { getAuthFailureMessage } from './authFailure'
+import { LastUsedBadge } from './components/LastUsedBadge'
 import { SocialConfig } from './SocialConfig'
-import { loginMethodAtom } from './state'
-import { ConnectWithButtonProps } from './type'
+import { lastAuthMethodAtom, loginMethodAtom } from './state'
+import { AuthFlowIntent, ConnectWithButtonProps } from './type'
 
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
 export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
 
-export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }: ConnectWithButtonProps) => {
+export const ConnectWithSocial = ({
+  onClose,
+  isIconOnly,
+  showLastUsed = true,
+  accountType,
+  authFlowIntent = AuthFlowIntent.login,
+  ...rest
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -23,6 +32,8 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   const { colors } = useCustomTheme()
 
   const setLoginMethod = useSetAtom(loginMethodAtom)
+  const setLastAuthMethod = useSetAtom(lastAuthMethodAtom)
+  const lastAuthMethod = useAtomValue(lastAuthMethodAtom)
   const authServiceEndpoint = getAuthEndPoint()
 
   const { hasSocialAccount, icon: Icon, label } = SocialConfig[accountType]
@@ -41,6 +52,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
           stopPolling()
           login(data.me)
           setLoginMethod(accountType)
+          setLastAuthMethod(accountType)
         }
       }
     },
@@ -49,14 +61,19 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   const [pollAuthStatus, setPollAuthStatus] = useState(false)
 
   const handleToastError = useCallback(
-    (reason?: string) => {
+    (reason?: string, code?: string) => {
       toast({
         title: t('Something went wrong.'),
-        description: `${t('The authentication request failed.')} ${reason}.`,
+        description: getAuthFailureMessage(
+          t,
+          code,
+          reason ? `${t('The authentication request failed')}. ${reason}.` : undefined,
+          label,
+        ),
         status: 'error',
       })
     },
-    [toast, t],
+    [label, toast, t],
   )
 
   useEffect(() => {
@@ -76,7 +93,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
         }
 
         if (statusRes && statusRes.status === 200) {
-          const { status: authStatus, reason } = await statusRes.json()
+          const { status: authStatus, reason, code } = await statusRes.json()
           if (authStatus === 'success') {
             setPollAuthStatus(false)
           } else if (authStatus === 'failed') {
@@ -85,7 +102,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
             }
 
             setPollAuthStatus(false)
-            handleToastError(reason)
+            handleToastError(reason, code)
             onClose?.()
           }
         }
@@ -120,13 +137,14 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
       size="lg"
       variant="outline"
       colorScheme="neutral1"
-      href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
+      href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}&intent=${authFlowIntent.toLowerCase()}`}
       isExternal
       onClick={handleClick}
       {...buttonProps}
       {...rest}
     >
-      {!isIconOnly && rest.children ? rest.children : t(label)}
+      {!isIconOnly && (rest.children || t(label))}
+      {!isIconOnly && showLastUsed && lastAuthMethod === accountType && <LastUsedBadge />}
     </ButtonComponent>
   )
 }

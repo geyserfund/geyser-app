@@ -72,7 +72,7 @@ type EdgesArrayType = NonNullable<AmbassadorsConnectionType['edges']>
 type AmbassadorEdge = NonNullable<EdgesArrayType[number]>
 
 const LinkToGuideAffiliates =
-  'https://guide.geyser.fund/geyser-docs/product-features/project-features/add-project-affiliates'
+  'https://guide.geyser.fund/geyser-docs/product-guides/project-features/ambassador-earnings'
 
 /** AmbassadorPayoutsSection: Displays the Ambassador Payouts table and add form with full management capabilities */
 export const AmbassadorPayoutsSection = () => {

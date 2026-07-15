@@ -4,12 +4,12 @@ import { ProjectCreationStep } from '@/types/index.ts'
 /** Returns the creation-flow route for a given persisted creation step. */
 export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, projectId: string) => {
   switch (lastCreationStep) {
+    case ProjectCreationStep.FundingType:
+      return getPath('launchProjectDetails', projectId)
     case ProjectCreationStep.ProjectDetails:
       return getPath('launchProjectDetails', projectId)
     case ProjectCreationStep.FundingGoal:
       return getPath('launchFundingGoal', projectId)
-    case ProjectCreationStep.FundingType:
-      return getPath('launchFundingStrategy', projectId)
     case ProjectCreationStep.PerksAndProducts:
       return getPath('launchProjectRewards', projectId)
     case ProjectCreationStep.Story:

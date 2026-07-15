@@ -7,7 +7,7 @@ import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiInfo, PiWarning } fro
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -184,8 +184,8 @@ const ControlPanelFinancialActions = ({
               </VStack>
             </HStack>
             <Tooltip
-              label={t('Minimum withdrawal is {{amount}} USD. Increase your balance to enable withdrawals.', {
-                amount: MIN_BITCOIN_PAYOUT_USD,
+              label={t('Minimum withdrawal is {{amount}} sats. Increase your balance to enable withdrawals.', {
+                amount: MIN_BITCOIN_PAYOUT_SATS_FORMATTED,
               })}
               hasArrow
               shouldWrapChildren
@@ -218,9 +218,17 @@ const WriteUpdateNudgeCard = () => {
 
   const latestPost = useMemo(
     () =>
-      [...posts]
-        .filter((p) => p.publishedAt)
-        .sort((a, b) => Number(b.publishedAt) - Number(a.publishedAt))[0] ?? null,
+      posts.reduce<(typeof posts)[number] | null>((latest, post) => {
+        if (!post.publishedAt) {
+          return latest
+        }
+
+        if (!latest?.publishedAt) {
+          return post
+        }
+
+        return Number(post.publishedAt) > Number(latest.publishedAt) ? post : latest
+      }, null),
     [posts],
   )
 
@@ -230,9 +238,7 @@ const WriteUpdateNudgeCard = () => {
 
   const isUrgent = daysSinceLastPost === null || daysSinceLastPost > 7
 
-  const title = isUrgent
-    ? t('Keep your community in the loop')
-    : t('Write an update for your community')
+  const title = isUrgent ? t('Keep your community in the loop') : t('Write an update for your community')
 
   const subtitle = (() => {
     if (daysSinceLastPost === null) return t("You haven't posted yet — share your first update!")
@@ -273,13 +279,7 @@ const WriteUpdateNudgeCard = () => {
           </Body>
         </VStack>
       </HStack>
-      <Button
-        colorScheme="neutral1"
-        variant="soft"
-        size="md"
-        flexShrink={0}
-        onClick={() => openWriteUpdateModal()}
-      >
+      <Button colorScheme="neutral1" variant="soft" size="md" flexShrink={0} onClick={() => openWriteUpdateModal()}>
         {t('Start a post')}
       </Button>
     </HStack>

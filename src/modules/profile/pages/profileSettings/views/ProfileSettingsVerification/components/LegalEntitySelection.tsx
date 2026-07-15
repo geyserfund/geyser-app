@@ -11,23 +11,27 @@ import { LegalEntityType } from '@/types/index.ts'
 import { TaxProfileFormData } from '../useTaxProfileForm.tsx'
 import { TaxProfileForm } from './TaxProfileForm.tsx'
 
+type TaxProfileLegalEntityType = LegalEntityType.Company | LegalEntityType.NonProfit
+
 const options: { value: LegalEntityType; label: string; icon: React.ElementType }[] = [
-  { value: LegalEntityType.Person, label: t('Individual'), icon: PiUser },
-  { value: LegalEntityType.Company, label: t('Company'), icon: PiBuildings },
-  { value: LegalEntityType.NonProfit, label: t('Non-profit'), icon: PiHeartbeatFill },
+  { value: LegalEntityType.Person, label: 'Individual', icon: PiUser },
+  { value: LegalEntityType.Company, label: 'Company', icon: PiBuildings },
+  { value: LegalEntityType.NonProfit, label: 'Non-profit', icon: PiHeartbeatFill },
 ]
 
-const infoMap = {
-  [LegalEntityType.Person]: t('This information will be displayed in donations and sale invoices.'),
-  [LegalEntityType.Company]: t('This information will be displayed in donations and sale invoices.'),
-  [LegalEntityType.NonProfit]: t(
+const infoMap: Record<TaxProfileLegalEntityType, string> = {
+  [LegalEntityType.Company]: 'This information will be displayed in donations and sale invoices.',
+  [LegalEntityType.NonProfit]:
     'This information will be displayed in donations and sale invoices, to enable tax-deductible donations on elegible projects.',
-  ),
 }
 
-/** LegalEntitySelection: Allows selection of the legal entity type (Individual, Company, Non-profit). */
+const isTaxProfileLegalEntityType = (legalEntityType?: LegalEntityType): legalEntityType is TaxProfileLegalEntityType =>
+  legalEntityType === LegalEntityType.Company || legalEntityType === LegalEntityType.NonProfit
+
+/** LegalEntitySelection: Allows selection of the legal entity type (Company, Non-profit). */
 export const LegalEntitySelection = ({ form }: { form: UseFormReturn<TaxProfileFormData> }) => {
   const legalEntityType = form.watch('legalEntityType')
+  const selectedLegalEntityType = isTaxProfileLegalEntityType(legalEntityType) ? legalEntityType : undefined
 
   return (
     <VStack w="full" gap={6} alignItems="start">
@@ -52,17 +56,19 @@ export const LegalEntitySelection = ({ form }: { form: UseFormReturn<TaxProfileF
                 form.setValue('legalEntityType', option.value)
               }}
             >
-              {option.label}
+              {t(option.label)}
             </Button>
           )
         })}
       </HStack>
-      {legalEntityType && (
+      {selectedLegalEntityType && (
         <CardLayout noborder backgroundColor="neutral1.3" w="full">
           <Body size="lg" medium>
-            {`${t('Tax profile')} ${legalEntityType === LegalEntityType.NonProfit ? '(required)' : t('(optional)')}`}
+            {`${t('Tax profile')} ${
+              selectedLegalEntityType === LegalEntityType.NonProfit ? '(required)' : t('(optional)')
+            }`}
           </Body>
-          <Body>{infoMap[legalEntityType]}</Body>
+          <Body>{t(infoMap[selectedLegalEntityType])}</Body>
           <TaxProfileForm form={form} />
         </CardLayout>
       )}

@@ -15,7 +15,6 @@ import {
   ContributionSummary,
   ControlPanel,
   Creator,
-  Details,
   Goals,
   Header,
   LeaderboardSummary,
@@ -27,11 +26,13 @@ import { AonGoToRefundPage } from './sections/AonGoToRefundPage.tsx'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { FieldPartnerVerificationBanner } from './sections/FieldPartnerVerificationBanner.tsx'
 import {
   type ProjectImpactFundRecipient,
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
 import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
+import { FieldPartnerSection, RecoverableGrantExplainer } from './sections/recoverableGrant'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
@@ -44,6 +45,8 @@ export const ProjectBody = () => {
   const { impactFundRecipient } = project as typeof project & {
     impactFundRecipient?: ProjectImpactFundRecipient | null
   }
+  const isRecoverableGrant = Boolean(project.isRecoverableGrant)
+  const hasFieldPartner = Boolean(project.fieldPartner)
 
   useEffect(() => {
     if (loading) return
@@ -79,16 +82,18 @@ export const ProjectBody = () => {
         <ControlPanel />
 
         <Header />
-        <Creator />
+        <FieldPartnerVerificationBanner />
+        {!isRecoverableGrant && <Creator />}
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
+        {isRecoverableGrant && <RecoverableGrantExplainer />}
 
         <Story />
+        {hasFieldPartner && <FieldPartnerSection />}
 
         {project.rewardsCount && <Rewards />}
         {project.entriesCount && <Posts />}
         {shouldShowProjectGoals(project) && <Goals />}
-        <Details />
         <AonGoToRefundPage />
 
         <SuggestedProjects

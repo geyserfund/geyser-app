@@ -9,10 +9,11 @@ import {
   ProjectForLandingPageFragment,
 } from '../../../../../../../../types/index.ts'
 import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
+import { LandingPostCardPost, LandingProjectCardProject } from '../../../../graphql/landingPageTypes.ts'
 import { LandingPostCard } from './LandingPostCard.tsx'
 import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout.tsx'
 
-export type ProjectDisplayItem = ProjectForLandingPageFragment & {
+export type ProjectDisplayItem = (ProjectForLandingPageFragment | LandingProjectCardProject) & {
   contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   statusPillLabel?: string
 }
@@ -22,7 +23,7 @@ interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'
   onSubtitleClick?: () => void
   subtitleId?: string
   rightContent?: React.ReactNode
-  posts?: PostForLandingPageFragment[]
+  posts?: (PostForLandingPageFragment | LandingPostCardPost)[]
   description?: string
 }
 
@@ -60,11 +61,7 @@ export const ProjectDisplayBody = ({
         {projects.map((project) => {
           return (
             <GridItem key={project.id}>
-              <LandingProjectCard
-                key={project.id}
-                project={project}
-                statusPillLabel={project.statusPillLabel}
-              />
+              <LandingProjectCard key={project.id} project={project} statusPillLabel={project.statusPillLabel} />
             </GridItem>
           )
         })}

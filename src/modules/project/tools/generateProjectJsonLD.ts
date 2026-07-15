@@ -66,7 +66,7 @@ export const buildProjectJsonLd = (project: ProjectPageBodyFragment, rewards: Pr
           '@type': 'Product',
           name: reward.name,
           description: reward.shortDescription || reward.description?.slice(0, 200),
-          image: reward.images[0] || undefined,
+          image: reward.images?.[0] || undefined,
         },
       }))
 

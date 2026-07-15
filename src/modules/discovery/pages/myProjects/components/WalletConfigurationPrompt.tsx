@@ -6,17 +6,17 @@ import { PiCheckCircle, PiWarning } from 'react-icons/pi'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import {
   decryptSeed,
   generateProjectKeysFromSeedHex,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
-import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
+import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import type { UserAccountKeysFragment } from '@/types/index.ts'
 import { useProjectRskEoaSetMutation } from '@/types/index.ts'
@@ -213,8 +213,8 @@ export const WalletConfigurationPrompt = ({
                 </Body>
                 <Body size="sm" color="neutral1.11">
                   {t(
-                    'Payouts are no longer automatic. You will need to claim them manually to your own wallet. You can do so anytime, as long as the withdrawable balance is at least {{amount}} USD worth.',
-                    { amount: MIN_BITCOIN_PAYOUT_USD },
+                    'Payouts are no longer automatic. You will need to claim them manually to your own wallet. You can do so anytime, as long as the withdrawable balance is at least {{amount}} sats.',
+                    { amount: MIN_BITCOIN_PAYOUT_SATS_FORMATTED },
                   )}
                 </Body>
               </VStack>

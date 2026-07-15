@@ -37,9 +37,15 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Trans } from 'react-i18next'
-import { PiArrowUpRightBold, PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
+import {
+  PiArrowUpRightBold,
+  PiCaretRightBold,
+  PiCoinsBold,
+  PiCoinsDuotone,
+  PiRocketLaunchDuotone,
+} from 'react-icons/pi'
 import { Link, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
@@ -48,10 +54,12 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { H2 } from '@/shared/components/typography/Heading.tsx'
+import { H1, H2 } from '@/shared/components/typography/Heading.tsx'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
 import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
+import { standardPadding } from '@/shared/styles/index.ts'
 import type { ImpactFundApplicationsQuery, ImpactFundQuery } from '@/types'
 import {
   ImpactFundApplicationFundingModel,
@@ -79,13 +87,17 @@ const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
+const APPLY_HASH = '#apply'
+const BECOME_SPONSOR_HASH = '#become-a-sponsor'
+const actionHashes = [APPLY_HASH, BECOME_SPONSOR_HASH]
+const LATAM_IMPACT_FUND_NAME = 'latam-impact-fund'
 const CIRCULAR_ECONOMY_IMPACT_FUND_NAME = 'circular-economies-impact-fund'
 const CIRCULAR_ECONOMY_REPORT_BANNER_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/ce-report-banner.png'
 const CIRCULAR_ECONOMY_REPORT_PDF_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const satsNumberFormatter = new Intl.NumberFormat()
-const fundedStatus = [ImpactFundApplicationStatus.Funded]
+const awardedApplicationStatuses = [ImpactFundApplicationStatus.Disbursement, ImpactFundApplicationStatus.Funded]
 const projectStoryMinLength = ProjectValidations.description.minLength
 const projectStoryMaxLength = ProjectValidations.description.maxLength
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
@@ -150,7 +162,7 @@ function getQuarterFromDate(dateString: string): string {
 function buildFundedApplicationsInput(impactFundId: number, cursorId?: string) {
   return {
     impactFundId,
-    statusIn: fundedStatus,
+    statusIn: awardedApplicationStatuses,
     pagination: {
       take: APPLICATIONS_PAGE_SIZE,
       ...(cursorId ? { cursor: { id: cursorId } } : {}),
@@ -160,6 +172,18 @@ function buildFundedApplicationsInput(impactFundId: number, cursorId?: string) {
 
 function hasValue<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined
+}
+
+function setImpactFundActionHash(hash: string): void {
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
+}
+
+function clearImpactFundActionHash(): void {
+  if (!actionHashes.includes(window.location.hash)) {
+    return
+  }
+
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
 }
 
 function getFundingModelLabel(fundingModel: ImpactFundApplicationFundingModel): string {
@@ -200,7 +224,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { success, error: notifyError } = useNotification()
-  const projectModal = useDisclosure()
+  const { isOpen: isProjectModalOpen, onOpen: onProjectModalOpen, onClose: onProjectModalClose } = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
   const [projectDescription, setProjectDescription] = useState('')
   const [hasConfirmedProjectVision, setHasConfirmedProjectVision] = useState(false)
@@ -346,7 +370,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     setHasSubmittedApplicationForm(false)
   }, [selectedProject?.id, selectedProject?.description])
 
-  const handleApplyClick = () => {
+  const openApplyModal = useCallback(() => {
     if (!isLoggedIn) {
       loginOnOpen({ showLightning: false })
       return
@@ -358,8 +382,28 @@ export function ImpactFundDetailPage(): JSX.Element | null {
 
     const firstOwnedProjectId = String(availableOwnedProjects[0]?.id || '')
     setSelectedProjectId(firstOwnedProjectId)
-    projectModal.onOpen()
-  }
+    onProjectModalOpen()
+  }, [availableOwnedProjects, hasAvailableProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
+
+  const handleApplyClick = useCallback(() => {
+    setImpactFundActionHash(APPLY_HASH)
+    openApplyModal()
+  }, [openApplyModal])
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === APPLY_HASH) {
+        openApplyModal()
+      }
+    }
+
+    handleHashChange()
+    window.addEventListener('hashchange', handleHashChange)
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [openApplyModal])
 
   const submitApplication = async () => {
     if (!impactFund || !selectedProjectId) return
@@ -388,7 +432,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       setHasConfirmedProjectVision(false)
       setHasConfirmedImpactMetric(false)
       setHasSubmittedApplicationForm(false)
-      projectModal.onClose()
+      onProjectModalClose()
     } catch (error) {
       notifyError({ title: t('Failed to apply to impact fund') })
     }
@@ -484,10 +528,11 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       hasConfirmedImpactMetric={hasConfirmedImpactMetric}
       onHasConfirmedImpactMetricChange={setHasConfirmedImpactMetric}
       hasSubmittedApplicationForm={hasSubmittedApplicationForm}
-      isProjectModalOpen={projectModal.isOpen}
+      isProjectModalOpen={isProjectModalOpen}
       onProjectModalClose={() => {
+        clearImpactFundActionHash()
         setHasSubmittedApplicationForm(false)
-        projectModal.onClose()
+        onProjectModalClose()
       }}
       applying={applying || updatingProject}
       onSubmitApplication={submitApplication}
@@ -748,6 +793,33 @@ function useImpactFundThemeColors(): ImpactFundThemeColors {
   }
 }
 
+type LatamSectionColors = {
+  pageBg: string
+  surfaceBg: string
+  mutedSurfaceBg: string
+  darkSurfaceBg: string
+  primaryText: string
+  secondaryText: string
+  borderColor: string
+  amberBg: string
+  amberText: string
+}
+
+/** Theme tokens for the LATAM impact fund full-bleed page layout. */
+function useLatamSectionColors(): LatamSectionColors {
+  return {
+    pageBg: useColorModeValue('white', 'utils.pbg'),
+    surfaceBg: useColorModeValue('white', 'neutral1.3'),
+    mutedSurfaceBg: useColorModeValue('#F5F6F6', 'neutral1.3'),
+    darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.1'),
+    primaryText: useColorModeValue('black', 'neutral1.12'),
+    secondaryText: useColorModeValue('#626872', 'neutral1.10'),
+    borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
+    amberBg: useColorModeValue('#F09A34', 'amber.9'),
+    amberText: useColorModeValue('black', 'neutral1.1'),
+  }
+}
+
 type ImpactFundOverviewSectionProps = {
   impactFund: ImpactFundDetails
   committedAmountDisplay: ReturnType<typeof getCommittedAmountDisplay>
@@ -757,6 +829,7 @@ type ImpactFundOverviewSectionProps = {
   shouldDisableApply: boolean
   viewerApplications: ViewerApplication[]
   colors: ImpactFundThemeColors
+  showHeader?: boolean
 }
 
 function ImpactFundOverviewSection({
@@ -768,6 +841,7 @@ function ImpactFundOverviewSection({
   shouldDisableApply,
   viewerApplications,
   colors,
+  showHeader = true,
 }: ImpactFundOverviewSectionProps): JSX.Element {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const descriptionText = impactFund.description || ''
@@ -787,7 +861,7 @@ function ImpactFundOverviewSection({
 
   return (
     <VStack align="stretch" spacing={6}>
-      {impactFund.heroImage && (
+      {showHeader && impactFund.heroImage && (
         <Image
           src={impactFund.heroImage}
           alt={impactFund.title}
@@ -798,45 +872,47 @@ function ImpactFundOverviewSection({
         />
       )}
       <VStack align="stretch" spacing={4}>
-        <Flex justify="space-between" align={{ base: 'stretch', md: 'baseline' }} gap={4} flexWrap="wrap">
-          <H2 size="3xl" bold color={colors.primaryTextColor} lineHeight={1}>
-            {impactFund.title}
-          </H2>
-          <HStack spacing={3} align="center" flexWrap="wrap" justify={{ base: 'stretch', md: 'flex-end' }}>
-            {impactFund.canAccessDashboard && (
+        {showHeader && (
+          <Flex justify="space-between" align={{ base: 'stretch', md: 'baseline' }} gap={4} flexWrap="wrap">
+            <H2 size="3xl" bold color={colors.primaryTextColor} lineHeight={1}>
+              {impactFund.title}
+            </H2>
+            <HStack spacing={3} align="center" flexWrap="wrap" justify={{ base: 'stretch', md: 'flex-end' }}>
+              {impactFund.canAccessDashboard && (
+                <Button
+                  as={Link}
+                  to={getPath('impactFundDashboard', impactFund.name)}
+                  display={{ base: 'none', md: 'inline-flex' }}
+                  size="lg"
+                  variant="outline"
+                  colorScheme="primary1"
+                  flexShrink={0}
+                  px={8}
+                  minW="210px"
+                  fontWeight="semibold"
+                  fontSize="lg"
+                >
+                  {t('Access Moderator Dashboard')}
+                </Button>
+              )}
               <Button
-                as={Link}
-                to={getPath('impactFundDashboard', impactFund.name)}
                 display={{ base: 'none', md: 'inline-flex' }}
                 size="lg"
-                variant="outline"
                 colorScheme="primary1"
+                onClick={onApplyClick}
+                isDisabled={shouldDisableApply}
                 flexShrink={0}
                 px={8}
                 minW="210px"
                 fontWeight="semibold"
                 fontSize="lg"
               >
-                {t('Access Moderator Dashboard')}
+                {t('Apply for funding')}
               </Button>
-            )}
-            <Button
-              display={{ base: 'none', md: 'inline-flex' }}
-              size="lg"
-              colorScheme="primary1"
-              onClick={onApplyClick}
-              isDisabled={shouldDisableApply}
-              flexShrink={0}
-              px={8}
-              minW="210px"
-              fontWeight="semibold"
-              fontSize="lg"
-            >
-              {t('Apply for funding')}
-            </Button>
-          </HStack>
-        </Flex>
-        {impactFund.canAccessDashboard && (
+            </HStack>
+          </Flex>
+        )}
+        {showHeader && impactFund.canAccessDashboard && (
           <Button
             as={Link}
             to={getPath('impactFundDashboard', impactFund.name)}
@@ -851,18 +927,20 @@ function ImpactFundOverviewSection({
             {t('Access Moderator Dashboard')}
           </Button>
         )}
-        <Button
-          display={{ base: 'flex', md: 'none' }}
-          size="md"
-          colorScheme="primary1"
-          onClick={onApplyClick}
-          isDisabled={shouldDisableApply}
-          w="full"
-          fontWeight="semibold"
-          fontSize="lg"
-        >
-          {t('Apply for funding')}
-        </Button>
+        {showHeader && (
+          <Button
+            display={{ base: 'flex', md: 'none' }}
+            size="md"
+            colorScheme="primary1"
+            onClick={onApplyClick}
+            isDisabled={shouldDisableApply}
+            w="full"
+            fontWeight="semibold"
+            fontSize="lg"
+          >
+            {t('Apply for funding')}
+          </Button>
+        )}
         {impactFund.tags.length > 0 && (
           <HStack spacing={2} flexWrap="wrap">
             {impactFund.tags.map((tag) => (
@@ -1071,13 +1149,159 @@ function ImpactFundOverviewSection({
   )
 }
 
+function ImpactFundWideHero({
+  impactFund,
+  onApplyClick,
+  shouldDisableApply,
+}: {
+  impactFund: ImpactFundDetails
+  onApplyClick: () => void
+  shouldDisableApply: boolean
+}): JSX.Element {
+  const heroTextColor = useColorModeValue('black', 'white')
+  const heroPrimaryButtonBg = useColorModeValue('white', 'neutral1.12')
+  const heroAccentButtonBg = useColorModeValue('#F7931A', 'orange.400')
+  const overlayGradient = useColorModeValue(
+    'linear-gradient(90deg, var(--chakra-colors-whiteAlpha-800) 0%, var(--chakra-colors-whiteAlpha-700) 36%, var(--chakra-colors-whiteAlpha-300) 58%, var(--chakra-colors-whiteAlpha-100) 100%)',
+    'linear-gradient(90deg, var(--chakra-colors-blackAlpha-800) 0%, var(--chakra-colors-blackAlpha-600) 42%, var(--chakra-colors-blackAlpha-200) 100%)',
+  )
+
+  return (
+    <Box
+      w="100vw"
+      maxW="100vw"
+      position="relative"
+      left="50%"
+      right="50%"
+      ml="-50vw"
+      mr="-50vw"
+      overflow="hidden"
+      minH={dimensions.impactLendingHero.minHeight}
+      bg="neutral1.2"
+    >
+      {impactFund.heroImage && (
+        <Box
+          position="absolute"
+          inset={0}
+          backgroundImage={`url('${impactFund.heroImage}')`}
+          backgroundPosition={{ base: 'center', lg: '78% 34%' }}
+          backgroundSize="cover"
+          backgroundRepeat="no-repeat"
+        />
+      )}
+      <Box position="absolute" inset={0} background={overlayGradient} />
+
+      <Flex
+        position="relative"
+        w="full"
+        maxW={`${dimensions.maxWidth + 24 * 2}px`}
+        minH={dimensions.impactLendingHero.minHeight}
+        mx="auto"
+        px={standardPadding}
+        py={{ base: 10, lg: 12 }}
+        align="center"
+      >
+        <VStack align="flex-start" spacing="22px" maxW={{ base: 'full', lg: '760px' }}>
+          <H1
+            size={{ base: '3xl', md: '4xl', lg: '48px' }}
+            bold
+            lineHeight={{ base: '1.12', lg: '54px' }}
+            color={heroTextColor}
+          >
+            {impactFund.title}
+          </H1>
+          {impactFund.subtitle && (
+            <Body
+              size={{ base: 'md', lg: 'lg' }}
+              medium
+              lineHeight={{ base: '26px', lg: '28px' }}
+              color={heroTextColor}
+            >
+              {impactFund.subtitle}
+            </Body>
+          )}
+          <HStack spacing={3} flexWrap="wrap" pt="8px">
+            {impactFund.canAccessDashboard && (
+              <Button
+                as={Link}
+                to={getPath('impactFundDashboard', impactFund.name)}
+                h="42px"
+                px="18px"
+                borderRadius="6px"
+                variant="outline"
+                bg={heroPrimaryButtonBg}
+                color={heroTextColor}
+                fontSize="sm"
+                fontWeight="600"
+              >
+                {t('Access Moderator Dashboard')}
+              </Button>
+            )}
+            <Button
+              h="42px"
+              px="18px"
+              borderRadius="6px"
+              bg={heroAccentButtonBg}
+              color={heroTextColor}
+              onClick={onApplyClick}
+              isDisabled={shouldDisableApply}
+              fontSize="sm"
+              fontWeight="600"
+              _hover={{ bg: heroAccentButtonBg }}
+            >
+              {t('Apply for funding')}
+            </Button>
+          </HStack>
+        </VStack>
+      </Flex>
+    </Box>
+  )
+}
+
+function ImpactFundBreadcrumb({
+  currentLabel,
+  colors,
+}: {
+  currentLabel: string
+  colors: ImpactFundThemeColors
+}): JSX.Element {
+  return (
+    <Box w="100vw" maxW="100vw" position="relative" left="50%" right="50%" ml="-50vw" mr="-50vw" px={standardPadding}>
+      <HStack
+        maxW={`${dimensions.maxWidth + 24 * 2}px`}
+        mx="auto"
+        spacing={3}
+        align="center"
+        color={colors.secondaryTextColor}
+        py={{ base: 4, lg: 5 }}
+      >
+        <Body
+          as={Link}
+          to={getPath('impactFunds')}
+          size="sm"
+          bold
+          letterSpacing="0.18em"
+          textTransform="uppercase"
+          color={colors.secondaryTextColor}
+        >
+          {t('Impact Fund')}
+        </Body>
+        <PiCaretRightBold size={12} />
+        <Body size="sm" bold letterSpacing="0.18em" textTransform="uppercase" color={colors.primaryTextColor}>
+          {currentLabel}
+        </Body>
+      </HStack>
+    </Box>
+  )
+}
+
 function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColors }): JSX.Element {
   const sectionCardShadow = '0 8px 24px rgba(15, 23, 42, 0.08)'
 
   return (
     <>
       <VStack align="stretch" spacing={6}>
-        <H2 size="xl" bold>
+        <H2 size="xl" bold color={colors.primaryTextColor}>
           {t('How It Works')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
@@ -1110,7 +1334,7 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
       </VStack>
 
       <VStack align="stretch" spacing={6}>
-        <H2 size="xl" bold>
+        <H2 size="xl" bold color={colors.primaryTextColor}>
           {t('How Are Funds Distributed')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
@@ -1437,7 +1661,7 @@ function ImpactFundFaqSection({
   primaryTextColor: string
   secondaryTextColor: string
   borderColor: string
-}): JSX.Element {
+}): ReactNode {
   return (
     <VStack align="stretch" spacing={4}>
       <H2 size="xl" bold>
@@ -1480,7 +1704,7 @@ function ImpactReportsSection({
   primaryTextColor: string
   reportUrl: string
   secondaryTextColor: string
-}): JSX.Element {
+}): ReactNode {
   const buttonBg = useColorModeValue('white', 'white')
   const buttonColor = useColorModeValue('neutral1.11', 'neutral1.11')
   const buttonHoverBg = useColorModeValue('neutral1.2', 'neutral1.2')
@@ -1546,6 +1770,60 @@ function ImpactReportsSection({
         </Box>
       </ChakraLink>
     </VStack>
+  )
+}
+
+function LatamPageSection({
+  children,
+  colors,
+  bg,
+  py = dimensions.impactLendingSection.paddingY,
+}: {
+  children: React.ReactNode
+  colors: LatamSectionColors
+  bg?: string
+  py?: React.ComponentProps<typeof Box>['py']
+}): ReactNode {
+  return (
+    <Box
+      w="100vw"
+      maxW="100vw"
+      position="relative"
+      left="50%"
+      right="50%"
+      ml="-50vw"
+      mr="-50vw"
+      bg={bg ?? colors.pageBg}
+      py={py}
+      px={standardPadding}
+    >
+      <Box maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto">
+        {children}
+      </Box>
+    </Box>
+  )
+}
+
+function LatamSurface({
+  children,
+  colors,
+  bg,
+}: {
+  children: ReactNode
+  colors: LatamSectionColors
+  bg?: string
+}): ReactNode {
+  return (
+    <Box
+      borderWidth="1px"
+      borderColor={colors.borderColor}
+      borderRadius="8px"
+      bg={bg ?? colors.surfaceBg}
+      color={colors.primaryText}
+      p={{ base: 5, lg: 7 }}
+    >
+      {children}
+    </Box>
   )
 }
 
@@ -1855,10 +2133,11 @@ function ImpactFundDetailContent({
   applying,
   onSubmitApplication,
 }: ImpactFundDetailContentProps): JSX.Element {
-  const sponsorModal = useDisclosure()
+  const { isOpen: isSponsorModalOpen, onOpen: onSponsorModalOpen, onClose: onSponsorModalClose } = useDisclosure()
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const colors = useImpactFundThemeColors()
+  const latamSectionColors = useLatamSectionColors()
   const committedAmountDisplay = getCommittedAmountDisplay({
     amountCommitted: impactFund.amountCommitted,
     amountCommittedCurrency: impactFund.amountCommittedCurrency,
@@ -1873,109 +2152,160 @@ function ImpactFundDetailContent({
   })
   const showAwardedAsPrimaryMetric = impactFund.amountCommitted === 0
   const showImpactReportsSection = impactFund.name === CIRCULAR_ECONOMY_IMPACT_FUND_NAME
+  const showWideHero = impactFund.name === LATAM_IMPACT_FUND_NAME
+  const openSponsorModal = useCallback(() => {
+    onSponsorModalOpen()
+  }, [onSponsorModalOpen])
+
+  const handleBecomeSponsorClick = useCallback(() => {
+    setImpactFundActionHash(BECOME_SPONSOR_HASH)
+    openSponsorModal()
+  }, [openSponsorModal])
+
+  const handleSponsorModalClose = useCallback(() => {
+    clearImpactFundActionHash()
+    onSponsorModalClose()
+  }, [onSponsorModalClose])
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === BECOME_SPONSOR_HASH) {
+        openSponsorModal()
+      }
+    }
+
+    handleHashChange()
+    window.addEventListener('hashchange', handleHashChange)
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [openSponsorModal])
 
   const seoImage = IMPACT_FUND_DETAILS_SEO_IMAGES[impactFund.name as keyof typeof IMPACT_FUND_DETAILS_SEO_IMAGES]
-
-  return (
-    <VStack align="stretch" spacing={14}>
-      <Head
-        title={impactFund.title}
-        description={impactFund.subtitle || undefined}
-        image={seoImage || impactFund.heroImage || undefined}
-      />
-
-      <ImpactFundOverviewSection
-        impactFund={impactFund}
-        committedAmountDisplay={committedAmountDisplay}
-        awardedAmountDisplay={awardedAmountDisplay}
-        showAwardedAsPrimaryMetric={showAwardedAsPrimaryMetric}
-        onApplyClick={onApplyClick}
-        shouldDisableApply={shouldDisableApply}
-        viewerApplications={viewerApplications}
-        colors={colors}
-      />
-
-      <ImpactFundInformationSection colors={colors} />
-
-      <VStack align="stretch" spacing={6}>
-        <H2 size="xl" bold>
-          {t('Projects Awarded')}
-        </H2>
-        <FundedApplicationsSection
-          applicationsLoading={applicationsLoading}
-          applicationsError={applicationsError}
-          fundedApplications={fundedApplications}
-          hasMoreFundedApplications={hasMoreFundedApplications}
-          isLoadingMoreApplications={isLoadingMoreApplications}
-          onLoadMoreApplications={onLoadMoreApplications}
-          cardBg={colors.cardBg}
-          mutedBg={colors.mutedBg}
-          emphasisTextColor={colors.emphasisTextColor}
-          secondaryTextColor={colors.secondaryTextColor}
-          subtleTextColor={colors.subtleTextColor}
-          tertiaryTextColor={colors.tertiaryTextColor}
-          fundingModelPillStyles={colors.fundingModelPillStyles}
-        />
-      </VStack>
-
-      <ImpactFundSponsorsSection impactFund={impactFund} onBecomeSponsor={sponsorModal.onOpen} colors={colors} />
-
-      <CommunitySupportersSection
-        showSection={Boolean(impactFund.donateProjectId)}
-        donateProjectName={impactFund.donateProject?.name || undefined}
-        communitySupporters={communitySupporters}
-        communitySupportersLoading={communitySupportersLoading}
-        communitySupportersError={communitySupportersError}
-        colors={colors}
-      />
-
-      {showImpactReportsSection && (
-        <ImpactReportsSection
-          bannerAlt={t('Circular Economy impact report banner')}
-          bannerUrl={CIRCULAR_ECONOMY_REPORT_BANNER_URL}
-          primaryTextColor={colors.primaryTextColor}
-          reportUrl={CIRCULAR_ECONOMY_REPORT_PDF_URL}
-          secondaryTextColor={colors.secondaryTextColor}
-        />
-      )}
-
-      <ImpactFundFaqSection
-        primaryTextColor={colors.primaryTextColor}
+  const overviewSection = (
+    <ImpactFundOverviewSection
+      impactFund={impactFund}
+      committedAmountDisplay={committedAmountDisplay}
+      awardedAmountDisplay={awardedAmountDisplay}
+      showAwardedAsPrimaryMetric={showAwardedAsPrimaryMetric}
+      onApplyClick={onApplyClick}
+      shouldDisableApply={shouldDisableApply}
+      viewerApplications={viewerApplications}
+      colors={colors}
+      showHeader={!showWideHero}
+    />
+  )
+  const projectsAwardedSection = (
+    <VStack align="stretch" spacing={6}>
+      <H2 size="xl" bold color={colors.primaryTextColor}>
+        {t('Projects Awarded')}
+      </H2>
+      <FundedApplicationsSection
+        applicationsLoading={applicationsLoading}
+        applicationsError={applicationsError}
+        fundedApplications={fundedApplications}
+        hasMoreFundedApplications={hasMoreFundedApplications}
+        isLoadingMoreApplications={isLoadingMoreApplications}
+        onLoadMoreApplications={onLoadMoreApplications}
+        cardBg={colors.cardBg}
+        mutedBg={colors.mutedBg}
+        emphasisTextColor={colors.emphasisTextColor}
         secondaryTextColor={colors.secondaryTextColor}
-        borderColor={colors.archivedBadgeBorderColor}
+        subtleTextColor={colors.subtleTextColor}
+        tertiaryTextColor={colors.tertiaryTextColor}
+        fundingModelPillStyles={colors.fundingModelPillStyles}
       />
-
-      <Box
-        p={8}
-        bg={colors.highlightedSurfaceBg}
-        borderRadius="xl"
-        textAlign="center"
-        boxShadow="0 8px 24px rgba(15, 23, 42, 0.08)"
-      >
-        <VStack spacing={4}>
-          <H2 size="2xl" bold color={colors.primaryTextColor}>
-            {t('Ready to make an impact?')}
-          </H2>
-          <Body size="md" color={colors.secondaryTextColor} maxW="480px">
-            {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
-          </Body>
-          <Button
-            size="lg"
-            colorScheme="primary1"
-            onClick={onApplyClick}
-            isDisabled={shouldDisableApply}
-            px={10}
-            fontWeight="semibold"
-            fontSize="lg"
-          >
-            {t('Apply for funding')}
-          </Button>
-        </VStack>
-      </Box>
-
+    </VStack>
+  )
+  const sponsorsSection = (
+    <ImpactFundSponsorsSection impactFund={impactFund} onBecomeSponsor={handleBecomeSponsorClick} colors={colors} />
+  )
+  const communitySupportersSection = (
+    <CommunitySupportersSection
+      showSection={Boolean(impactFund.donateProjectId)}
+      donateProjectName={impactFund.donateProject?.name || undefined}
+      communitySupporters={communitySupporters}
+      communitySupportersLoading={communitySupportersLoading}
+      communitySupportersError={communitySupportersError}
+      colors={colors}
+    />
+  )
+  const impactReportsSection = showImpactReportsSection ? (
+    <ImpactReportsSection
+      bannerAlt={t('Circular Economy impact report banner')}
+      bannerUrl={CIRCULAR_ECONOMY_REPORT_BANNER_URL}
+      primaryTextColor={colors.primaryTextColor}
+      reportUrl={CIRCULAR_ECONOMY_REPORT_PDF_URL}
+      secondaryTextColor={colors.secondaryTextColor}
+    />
+  ) : null
+  const faqSection = (
+    <ImpactFundFaqSection
+      primaryTextColor={colors.primaryTextColor}
+      secondaryTextColor={colors.secondaryTextColor}
+      borderColor={colors.archivedBadgeBorderColor}
+    />
+  )
+  const finalCtaSection = (
+    <Box
+      p={8}
+      bg={colors.highlightedSurfaceBg}
+      borderRadius="xl"
+      textAlign="center"
+      boxShadow="0 8px 24px rgba(15, 23, 42, 0.08)"
+    >
+      <VStack spacing={4}>
+        <H2 size="2xl" bold color={colors.primaryTextColor}>
+          {t('Ready to make an impact?')}
+        </H2>
+        <Body size="md" color={colors.secondaryTextColor} maxW="480px">
+          {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
+        </Body>
+        <Button
+          size="lg"
+          colorScheme="primary1"
+          onClick={onApplyClick}
+          isDisabled={shouldDisableApply}
+          px={10}
+          fontWeight="semibold"
+          fontSize="lg"
+        >
+          {t('Apply for funding')}
+        </Button>
+      </VStack>
+    </Box>
+  )
+  const latamFinalCtaSection = (
+    <Box p={8} bg={latamSectionColors.amberBg} borderRadius="8px" textAlign="center">
+      <VStack spacing={4}>
+        <H2 size="2xl" bold color={latamSectionColors.amberText}>
+          {t('Ready to make an impact?')}
+        </H2>
+        <Body size="md" color={latamSectionColors.amberText} maxW="480px">
+          {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
+        </Body>
+        <Button
+          size="lg"
+          onClick={onApplyClick}
+          isDisabled={shouldDisableApply}
+          px={10}
+          fontWeight="semibold"
+          fontSize="lg"
+          bg={latamSectionColors.darkSurfaceBg}
+          color="white"
+          _hover={{ bg: latamSectionColors.darkSurfaceBg }}
+        >
+          {t('Apply for funding')}
+        </Button>
+      </VStack>
+    </Box>
+  )
+  const modals = (
+    <>
       <SponsorInquiryModal
-        isOpen={sponsorModal.isOpen}
-        onClose={sponsorModal.onClose}
+        isOpen={isSponsorModalOpen}
+        onClose={handleSponsorModalClose}
         primaryTextColor={colors.primaryTextColor}
         secondaryTextColor={colors.secondaryTextColor}
         tertiaryTextColor={colors.tertiaryTextColor}
@@ -2005,6 +2335,74 @@ function ImpactFundDetailContent({
         highlightedSurfaceBg={colors.highlightedSurfaceBg}
         highlightedSurfaceBorderColor={colors.highlightedSurfaceBorderColor}
       />
+    </>
+  )
+
+  if (showWideHero) {
+    return (
+      <Box bg={latamSectionColors.pageBg} color={latamSectionColors.primaryText}>
+        <VStack align="stretch" spacing={0}>
+          <Head
+            title={impactFund.title}
+            description={impactFund.subtitle || undefined}
+            image={seoImage || impactFund.heroImage || undefined}
+          />
+
+          <ImpactFundWideHero
+            impactFund={impactFund}
+            onApplyClick={onApplyClick}
+            shouldDisableApply={shouldDisableApply}
+          />
+          <ImpactFundBreadcrumb currentLabel={impactFund.title} colors={colors} />
+
+          <LatamPageSection colors={latamSectionColors} py={dimensions.impactLendingSection.paddingYCompact}>
+            <LatamSurface colors={latamSectionColors}>{overviewSection}</LatamSurface>
+          </LatamPageSection>
+
+          <LatamPageSection colors={latamSectionColors} bg={latamSectionColors.mutedSurfaceBg}>
+            <ImpactFundInformationSection colors={colors} />
+          </LatamPageSection>
+
+          <LatamPageSection colors={latamSectionColors}>
+            <LatamSurface colors={latamSectionColors}>{projectsAwardedSection}</LatamSurface>
+          </LatamPageSection>
+
+          <LatamPageSection colors={latamSectionColors} bg={latamSectionColors.darkSurfaceBg}>
+            <LatamSurface colors={latamSectionColors}>{sponsorsSection}</LatamSurface>
+          </LatamPageSection>
+
+          <LatamPageSection colors={latamSectionColors}>
+            <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
+              {communitySupportersSection}
+              {impactReportsSection}
+              {faqSection}
+              {latamFinalCtaSection}
+            </VStack>
+          </LatamPageSection>
+
+          {modals}
+        </VStack>
+      </Box>
+    )
+  }
+
+  return (
+    <VStack align="stretch" spacing={14}>
+      <Head
+        title={impactFund.title}
+        description={impactFund.subtitle || undefined}
+        image={seoImage || impactFund.heroImage || undefined}
+      />
+
+      {overviewSection}
+      <ImpactFundInformationSection colors={colors} />
+      {projectsAwardedSection}
+      {sponsorsSection}
+      {communitySupportersSection}
+      {impactReportsSection}
+      {faqSection}
+      {finalCtaSection}
+      {modals}
     </VStack>
   )
 }

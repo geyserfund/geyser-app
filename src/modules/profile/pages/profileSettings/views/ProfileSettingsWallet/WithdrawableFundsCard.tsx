@@ -13,7 +13,7 @@ type WithdrawableFundsCardProps = {
   hasActiveWithdraw: boolean
   canWithdraw: boolean
   withdrawButtonLabel: string
-  minimumUsd: number
+  minimumSats: string
   onOpenWithdrawModal: () => void
 }
 
@@ -26,7 +26,7 @@ export const WithdrawableFundsCard = ({
   hasActiveWithdraw,
   canWithdraw,
   withdrawButtonLabel,
-  minimumUsd,
+  minimumSats,
   onOpenWithdrawModal,
 }: WithdrawableFundsCardProps) => {
   return (
@@ -59,8 +59,8 @@ export const WithdrawableFundsCard = ({
           </Skeleton>
           {isBelowMinimumWithdrawal ? (
             <Body size="sm" color="neutral1.9">
-              {t('{{amount}} USD minimum required before withdrawals are enabled.', {
-                amount: minimumUsd,
+              {t('{{amount}} sats minimum required before withdrawals are enabled.', {
+                amount: minimumSats,
               })}
             </Body>
           ) : null}

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
 import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -46,11 +46,10 @@ export const useWithdrawFunds = () => {
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const showWithdrawableBalance = isTiaProject && Boolean(projectRskEoa) && !isLoading
   const hasWithdrawableBalance = withdrawable !== null && withdrawable > 0n
-  const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
+  const isBelowMinWithdrawThreshold = withdrawableSats < MIN_BITCOIN_PAYOUT_SATS
   const canResumeOrRetryWithdraw = hasOngoingWithdraw || hasFailedWithdraw
   const showWithdraw =
-    showWithdrawableBalance &&
-    (canResumeOrRetryWithdraw || (!isBelowMinWithdrawThreshold && hasWithdrawableBalance))
+    showWithdrawableBalance && (canResumeOrRetryWithdraw || (!isBelowMinWithdrawThreshold && hasWithdrawableBalance))
 
   const shouldTrackLatestPayout = isProjectOwner && isTiaProject && Boolean(projectRskEoa)
   const {

@@ -18,6 +18,7 @@ import {
   usePostsForLandingPageQuery,
 } from '@/types/index.ts'
 
+import { LandingPostCardPost } from '../../../../graphql/landingPageTypes.ts'
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
 const GEYSER_PROJECT_NAME = 'geyser'
@@ -172,10 +173,28 @@ const AnnouncementCard = ({
 }
 
 /** Landing section surfacing Geyser-managed announcements in the standard card layout. */
-export const GeyserNewsAndAnnouncements = () => {
-  const { data, error, loading, refetch } = useAcelerandoVipLeaderboardQuery()
+export const GeyserNewsAndAnnouncements = ({
+  giveawayEndAt,
+  giveawayError,
+  giveawayLoading,
+  onGiveawayRetry,
+  projectAnnouncements,
+}: {
+  giveawayEndAt?: string | null
+  giveawayError?: boolean
+  giveawayLoading?: boolean
+  onGiveawayRetry?: () => void
+  projectAnnouncements?: LandingPostCardPost[]
+}) => {
+  const hasProvidedAnnouncements = projectAnnouncements !== undefined
+  const hasProvidedGiveaway =
+    giveawayEndAt !== undefined || giveawayLoading !== undefined || giveawayError !== undefined
+  const { data, error, loading, refetch } = useAcelerandoVipLeaderboardQuery({
+    skip: hasProvidedGiveaway,
+  })
   const { data: projectData } = useFeaturedProjectForLandingPageQuery({
     variables: { where: { name: GEYSER_PROJECT_NAME } },
+    skip: hasProvidedAnnouncements,
   })
   const geyserProjectId = projectData?.projectGet?.id
   const { data: projectAnnouncementsData } = usePostsForLandingPageQuery({
@@ -186,7 +205,7 @@ export const GeyserNewsAndAnnouncements = () => {
         where: { postType: [PostType.Announcement], projectId: geyserProjectId },
       },
     },
-    skip: !geyserProjectId,
+    skip: hasProvidedAnnouncements || !geyserProjectId,
   })
   const accentColor = useColorModeValue('primary1.11', 'primary1.9')
   const mutedTextColor = 'neutralAlpha.11'
@@ -195,9 +214,13 @@ export const GeyserNewsAndAnnouncements = () => {
   const [canScrollRight, setCanScrollRight] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
 
-  const giveawayEndDate = data?.acelerandoVipLeaderboard?.endAt
+  const resolvedGiveawayEndAt = giveawayEndAt ?? data?.acelerandoVipLeaderboard?.endAt
+  const resolvedGiveawayLoading = giveawayLoading ?? loading
+  const resolvedGiveawayError = giveawayError ?? Boolean(error)
+
+  const giveawayEndDate = resolvedGiveawayEndAt
     ? (() => {
-        const parsedDate = DateTime.fromISO(data.acelerandoVipLeaderboard.endAt)
+        const parsedDate = DateTime.fromISO(resolvedGiveawayEndAt)
 
         return parsedDate.isValid ? parsedDate.toFormat('dd LLL, yyyy') : undefined
       })()
@@ -231,11 +254,11 @@ export const GeyserNewsAndAnnouncements = () => {
 
   const announcementCards = useMemo<AnnouncementCardData[]>(() => {
     const giveawayFooter = (() => {
-      if (loading && !giveawayEndDate) {
+      if (resolvedGiveawayLoading && !giveawayEndDate) {
         return <Skeleton height="20px" width="140px" borderRadius="md" />
       }
 
-      if (error) {
+      if (resolvedGiveawayError) {
         return (
           <HStack spacing={3} alignItems="center" flexWrap="wrap">
             <Body size="sm" color={mutedTextColor}>
@@ -248,6 +271,11 @@ export const GeyserNewsAndAnnouncements = () => {
               onClick={(event) => {
                 event.preventDefault()
                 event.stopPropagation()
+                if (onGiveawayRetry) {
+                  onGiveawayRetry()
+                  return
+                }
+
                 refetch().catch(() => undefined)
               }}
             >
@@ -335,26 +363,35 @@ export const GeyserNewsAndAnnouncements = () => {
       },
     ]
 
-    const projectAnnouncementCards =
-      projectAnnouncementsData?.posts
-        .filter((post) => post.project?.name)
-        .map<AnnouncementCardData>((post) => ({
-          description: post.description,
-          eyebrow: t('Project announcement'),
-          footer: (
-            <Body size="sm" color={accentColor} medium>
-              {t('Read announcement')}
-            </Body>
-          ),
-          id: `project-announcement-${post.id}`,
-          imageUrl: post.image || post.project?.thumbnailImage || '',
-          sortTimestamp: getSortTimestampFromPublishedAt(post.publishedAt),
-          title: post.title,
-          to: getPath('projectPostView', post.project?.name || '', post.id),
-        })) ?? []
+    const projectPosts = projectAnnouncements ?? projectAnnouncementsData?.posts ?? []
+    const projectAnnouncementCards = projectPosts
+      .filter((post) => post.project?.name)
+      .map<AnnouncementCardData>((post) => ({
+        description: post.description,
+        eyebrow: t('Project announcement'),
+        footer: (
+          <Body size="sm" color={accentColor} medium>
+            {t('Read announcement')}
+          </Body>
+        ),
+        id: `project-announcement-${post.id}`,
+        imageUrl: post.image || post.project?.thumbnailImage || '',
+        sortTimestamp: getSortTimestampFromPublishedAt(post.publishedAt),
+        title: post.title,
+        to: getPath('projectPostView', post.project?.name || '', post.id),
+      }))
 
     return [...projectAnnouncementCards, ...staticAnnouncementCards].sort((a, b) => b.sortTimestamp - a.sortTimestamp)
-  }, [accentColor, error, giveawayEndDate, loading, projectAnnouncementsData?.posts, refetch])
+  }, [
+    accentColor,
+    giveawayEndDate,
+    onGiveawayRetry,
+    projectAnnouncements,
+    projectAnnouncementsData?.posts,
+    refetch,
+    resolvedGiveawayError,
+    resolvedGiveawayLoading,
+  ])
 
   const scrollCards = (direction: 'left' | 'right') => {
     const element = scrollContainerRef.current

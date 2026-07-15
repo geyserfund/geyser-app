@@ -15,9 +15,10 @@ import { Project } from '../../../../../../../types'
 interface FollowButtonProps extends ButtonProps {
   project: Pick<Project, 'id' | 'name' | 'title'>
   withLabel?: boolean
+  tooltipLabel?: string
 }
 
-export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps) => {
+export const FollowButton = ({ project, withLabel, tooltipLabel, ...rest }: FollowButtonProps) => {
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
@@ -76,7 +77,7 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
   }
 
   return (
-    <Tooltip label={isFollowed ? t('unFollow') : t('Follow')}>
+    <Tooltip label={tooltipLabel || (isFollowed ? t('unFollow') : t('Follow'))}>
       <IconButton
         aria-label="follow-button"
         variant="soft"

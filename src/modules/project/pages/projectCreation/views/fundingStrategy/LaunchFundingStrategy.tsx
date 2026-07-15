@@ -1,74 +1,125 @@
-import { HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Badge, Circle, Divider, HStack, Icon, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useAtom } from 'jotai'
+import { useRef, useState } from 'react'
+import { PiCheck, PiQuestion } from 'react-icons/pi'
+import { useNavigate, useParams } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
-import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPageWrapper.tsx'
+import { useCurrentUserIsFieldPartner } from '../../hooks/useCurrentUserIsFieldPartner.ts'
 import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
-import { LAUNCH_FEE_USD_CENTS } from '../launch/constants/launchFees.ts'
-import { ProjectLaunchStrategy } from '../launch/views/LaunchStrategySelection.tsx'
-import { AON_GOAL_MAX_DURATION_IN_DAYS, AON_GOAL_MIN_DURATION_IN_DAYS } from './allOrNothingGoalValidation.ts'
+import {
+  getProjectFundingStrategyInput,
+  ProjectCreationFundingOption,
+  projectCreationFundingOptionAtom,
+  RecoverableGrantFundingOption,
+} from '../../states/fundingStrategyAtom.ts'
 
-const options = {
-  [ProjectFundingStrategy.AllOrNothing]: {
-    title: t('All-or-nothing (Beta)'),
-    body: t('Receive funds only if you reach your goal by the deadline. Builds momentum and trust.'),
-    howDoesItWork: t(
-      'Set a funding goal and choose a deadline from {{minDays}} to {{maxDays}} days. If you hit your goal, the funds unlock and you have 30 days to withdraw them. If not, contributors can claim refunds and the campaign closes.',
-      { minDays: AON_GOAL_MIN_DURATION_IN_DAYS, maxDays: AON_GOAL_MAX_DURATION_IN_DAYS },
-    ),
-    recommendedFor: t('Prototypes or projects needing a minimum amount to move forward.'),
-    benefit: t('Encourages trust and often leads to more contributions.'),
-    disadvantage: t(
-      'Reaching the goal can be a challenge, and not reaching it means you will not receive the funds. You can set the funding period between {{minDays}} and {{maxDays}} days.',
-      { minDays: AON_GOAL_MIN_DURATION_IN_DAYS, maxDays: AON_GOAL_MAX_DURATION_IN_DAYS },
-    ),
-  },
+const options: Record<
+  ProjectCreationFundingOption,
+  {
+    title: string
+    body: string
+    recommendedFor: string
+    benefit: string
+    badge?: string
+  }
+> = {
   [ProjectFundingStrategy.TakeItAll]: {
     title: t('Open Funding'),
-    body: t('Receive funds directly to your wallet as they come in. A flexible, trust-based model.'),
-    howDoesItWork: t('Every contribution goes straight to your wallet instantly.'),
-    recommendedFor: t(
-      'Charities, urgent humanitarian needs, causes where every sat counts, or products/services ready for delivery.',
-    ),
-    benefit: t('Immediate access to funds — no waiting, no minimum goal.'),
-    disadvantage: t('Relies more on trust and reputation, which can affect contributor confidence.'),
+    body: t('Receive contributions as they come in.'),
+    recommendedFor: t('Ongoing projects, donations, communities, and creators who want flexibility.'),
+    benefit: t('Funds are available immediately.'),
   },
+  [ProjectFundingStrategy.AllOrNothing]: {
+    title: t('All-or-Nothing'),
+    badge: t('Beta'),
+    body: t('Receive funds only if you reach your goal before the deadline.'),
+    recommendedFor: t('Projects that need a minimum amount to start, build, or deliver something.'),
+    benefit: t('Builds trust with contributors.'),
+  },
+  [RecoverableGrantFundingOption]: {
+    title: t('Recoverable Grant'),
+    body: t(
+      '0% interest grants that are repaid over time, then reused to fund the next local project without creating a debt burden.',
+    ),
+    recommendedFor: t(
+      'Local businesses and entrepreneurs in circular economy hubs who need working capital, community trust, and a safer path to growth.',
+    ),
+    benefit: t('Uses All-or-Nothing mechanics with recoverable grant reporting.'),
+  },
+}
+
+const resolveProjectFundingOption = ({
+  fundingStrategy,
+  isRecoverableGrant,
+  storedFundingOption,
+}: {
+  fundingStrategy?: ProjectFundingStrategy | null
+  isRecoverableGrant?: boolean
+  storedFundingOption: ProjectCreationFundingOption | null
+}): ProjectCreationFundingOption => {
+  if (isRecoverableGrant) {
+    return RecoverableGrantFundingOption
+  }
+
+  return fundingStrategy || storedFundingOption || ProjectFundingStrategy.TakeItAll
 }
 
 export const LaunchFundingStrategy = () => {
   const navigate = useNavigate()
-  const { formatAmount } = useCurrencyFormatter()
+  const params = useParams<{ projectId: string }>()
+  const [storedFundingOption, setStoredFundingOption] = useAtom(projectCreationFundingOptionAtom)
+  const { isFieldPartner } = useCurrentUserIsFieldPartner()
 
   const { project } = useProjectAtom()
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingType,
-    getPath('launchFundingGoal', project.id),
+    getPath('launchProjectDetails', project.id),
   )
 
-  const [selectedOption, setSelectedOption] = useState<ProjectFundingStrategy>(
-    project.fundingStrategy || ProjectFundingStrategy.TakeItAll,
-  )
+  const isNewProject = !params.projectId || params.projectId === 'new'
+  const { isRecoverableGrant } = project as { isRecoverableGrant?: boolean }
 
-  useEffect(() => {
-    setSelectedOption(project.fundingStrategy || ProjectFundingStrategy.TakeItAll)
-  }, [project.fundingStrategy])
+  const fundingOptionFromProject = resolveProjectFundingOption({
+    fundingStrategy: project.fundingStrategy,
+    isRecoverableGrant,
+    storedFundingOption,
+  })
+
+  const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(() => fundingOptionFromProject)
+  const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
+
+  if (fundingOptionFromProject !== prevFundingOptionFromProjectRef.current) {
+    prevFundingOptionFromProjectRef.current = fundingOptionFromProject
+    setSelectedOption(fundingOptionFromProject)
+  }
 
   const continueProps = {
     onClick() {
-      if (project.fundingStrategy === selectedOption) {
-        updateProjectWithLastCreationStep()
+      setStoredFundingOption(selectedOption)
+
+      if (isNewProject) {
+        navigate(getPath('launchProjectDetails', 'new'))
+        return
+      }
+
+      const selectedFundingStrategy = getProjectFundingStrategyInput(selectedOption)
+      if (project.fundingStrategy === selectedFundingStrategy) {
+        updateProjectWithLastCreationStep(undefined, undefined, ProjectCreationStep.ProjectDetails)
       } else {
-        updateProjectWithLastCreationStep({
-          fundingStrategy: selectedOption,
-        })
+        updateProjectWithLastCreationStep(
+          {
+            fundingStrategy: selectedFundingStrategy,
+          },
+          undefined,
+          ProjectCreationStep.ProjectDetails,
+        )
       }
     },
     isDisabled: false,
@@ -76,7 +127,7 @@ export const LaunchFundingStrategy = () => {
 
   const backButtonProps = {
     onClick() {
-      navigate(getPath('launchProjectDetails', project.id))
+      navigate(isNewProject ? getPath('launchStart') : getPath('launchProjectDetails', project.id))
     },
   }
 
@@ -86,9 +137,10 @@ export const LaunchFundingStrategy = () => {
       continueButtonProps={continueProps}
       backButtonProps={backButtonProps}
     >
-      <VStack w="full" h="full" align="flex-start" spacing={4}>
-        <Body>{t('Pick how you would like to raise funds, Unsure which to pick? We can help you choose.')}</Body>
-        <HStack w="full" alignItems="stretch">
+      <VStack w="full" h="full" align="flex-start" spacing={5}>
+        <Body size="lg">{t('Choose how you want to receive contributions.')}</Body>
+
+        <VStack w="full" alignItems="stretch" spacing={4}>
           <OptionButton
             fundingStrategy={ProjectFundingStrategy.TakeItAll}
             selectedOption={selectedOption}
@@ -99,83 +151,125 @@ export const LaunchFundingStrategy = () => {
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />
-        </HStack>
+          {isFieldPartner ? (
+            <OptionButton
+              fundingStrategy={RecoverableGrantFundingOption}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+            />
+          ) : null}
+        </VStack>
 
-        <InfoCard fundingStrategy={selectedOption} />
-        <CardLayout noborder backgroundColor="info.3" gap={0}>
-          <Body medium>
-            {t(`A {{launchFee}} launch fee is required to publish your project. `, {
-              launchFee: formatAmount(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.STARTER_LAUNCH], 'USDCENT'),
-            })}
-          </Body>
-          <Body medium>
-            {t('Humanitarian causes may qualify for a refund, contact us at support@geyser.fund to request it.')}
-          </Body>
-        </CardLayout>
+        <HelpCard isFieldPartner={isFieldPartner} />
       </VStack>
     </ProjectCreationPageWrapper>
   )
 }
 
-const InfoCard = ({ fundingStrategy }: { fundingStrategy: ProjectFundingStrategy }) => {
-  const { howDoesItWork, recommendedFor, benefit, disadvantage } = options[fundingStrategy]
-
+const HelpCard = ({ isFieldPartner }: { isFieldPartner: boolean }) => {
   return (
-    <CardLayout noborder backgroundColor="neutral1.3">
-      <VStack w="full" alignItems="flex-start" spacing={0}>
-        <Body bold>{t('How does it work?')}</Body>
-        <Body>{howDoesItWork}</Body>
+    <HStack
+      w="full"
+      alignItems="flex-start"
+      spacing={4}
+      border="1px solid"
+      borderColor="neutral1.4"
+      borderRadius="8px"
+      px={{ base: 4, md: 6 }}
+      py={5}
+    >
+      <Circle size="40px" bg="neutral1.3" flexShrink={0}>
+        <Icon as={PiQuestion} color="neutral1.9" fontSize="22px" />
+      </Circle>
+      <VStack alignItems="flex-start" spacing={1}>
+        <Body bold size="lg">
+          {t('Not sure which one to choose?')}
+        </Body>
+        <Body>
+          {isFieldPartner
+            ? t(
+                'Choose Open Funding if you want maximum flexibility. Choose All-or-Nothing if your project depends on hitting a clear target. Choose Recoverable Grant for Field Partner-led grant projects.',
+              )
+            : t(
+                'Choose Open Funding if you want maximum flexibility. Choose All-or-Nothing if your project depends on hitting a clear target.',
+              )}
+        </Body>
       </VStack>
-      <VStack w="full" alignItems="flex-start" spacing={0}>
-        <Body bold>{t('Recommended For')}</Body>
-        <Body>{recommendedFor}</Body>
-      </VStack>
-      <VStack w="full" alignItems="flex-start" spacing={0}>
-        <Body bold>{t('Benefit')}</Body>
-        <Body>{benefit}</Body>
-      </VStack>
-      <VStack w="full" alignItems="flex-start" spacing={0}>
-        <Body bold>{t('Disadvantage')}</Body>
-        <Body>{disadvantage}</Body>
-      </VStack>
-    </CardLayout>
+    </HStack>
   )
 }
 
-/** Reusable button component with title, subtitle, and body content */
 const OptionButton = ({
   fundingStrategy,
   selectedOption,
   setSelectedOption,
   ...rest
 }: {
-  fundingStrategy: ProjectFundingStrategy
-  selectedOption: ProjectFundingStrategy
-  setSelectedOption: (fundingStrategy: ProjectFundingStrategy) => void
+  fundingStrategy: ProjectCreationFundingOption
+  selectedOption: ProjectCreationFundingOption
+  setSelectedOption: (fundingStrategy: ProjectCreationFundingOption) => void
 } & StackProps) => {
-  const { title, body } = options[fundingStrategy]
+  const { title, body, recommendedFor, benefit, badge } = options[fundingStrategy]
   const isSelected = selectedOption === fundingStrategy
 
   return (
-    <VStack
+    <HStack
       w="full"
       border="1px solid"
       borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
-      _hover={{ borderColor: 'primary1.9' }}
-      outline={isSelected ? '1px solid' : 'none'}
-      outlineColor={isSelected ? 'primary1.9' : 'transparent'}
-      borderRadius="12px"
-      p={4}
+      bg={isSelected ? 'primary1.1' : 'utils.pbg'}
+      _hover={{ borderColor: isSelected ? 'primary1.9' : 'neutral1.8' }}
+      borderRadius="8px"
+      px={{ base: 4, md: 5 }}
+      py={5}
       cursor="pointer"
       alignItems="flex-start"
+      spacing={4}
       onClick={() => setSelectedOption(fundingStrategy)}
+      role="button"
+      aria-pressed={isSelected}
       {...rest}
     >
-      <H2 size="xl" bold>
-        {title}
-      </H2>
+      <Circle
+        size="32px"
+        border="2px solid"
+        borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
+        bg={isSelected ? 'primary1.9' : 'transparent'}
+        flexShrink={0}
+        mt={1}
+      >
+        {isSelected ? <Circle size="12px" bg="utils.pbg" /> : null}
+      </Circle>
 
-      <Body size="sm">{body}</Body>
-    </VStack>
+      <VStack w="full" alignItems="stretch" spacing={4}>
+        <VStack alignItems="flex-start" spacing={1}>
+          <HStack spacing={3} alignItems="center" flexWrap="wrap">
+            <H2 size="xl" bold>
+              {title}
+            </H2>
+            {badge ? (
+              <Badge colorScheme="primary1" borderRadius="full" px={3} py={1} textTransform="none">
+                {badge}
+              </Badge>
+            ) : null}
+          </HStack>
+          <Body>{body}</Body>
+        </VStack>
+
+        <VStack alignItems="flex-start" spacing={1}>
+          <Body bold>{t('Best for')}</Body>
+          <Body>{recommendedFor}</Body>
+        </VStack>
+
+        <Divider />
+
+        <HStack spacing={3}>
+          <Circle size="24px" border="2px solid" borderColor={isSelected ? 'primary1.9' : 'neutral1.7'} flexShrink={0}>
+            <Icon as={PiCheck} fontSize="14px" color={isSelected ? 'primary1.9' : 'neutral1.7'} />
+          </Circle>
+          <Body>{benefit}</Body>
+        </HStack>
+      </VStack>
+    </HStack>
   )
 }

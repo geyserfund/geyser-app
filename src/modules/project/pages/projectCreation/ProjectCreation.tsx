@@ -13,6 +13,7 @@ import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '@/mo
 import { toInt } from '@/utils'
 
 import { ProjectProvider } from '../../context/ProjectProvider.tsx'
+import { projectCreationFundingOptionAtom } from './states/fundingStrategyAtom.ts'
 import { creationReviewLockEnabledAtom, projectReviewsAtom } from './states/projectReviewAtom.ts'
 
 const listOfAtoms = [
@@ -29,6 +30,7 @@ const listOfAtoms = [
   projectFormErrorAtom,
   projectReviewsAtom,
   creationReviewLockEnabledAtom,
+  projectCreationFundingOptionAtom,
 ]
 
 export const ProjectCreation = () => {

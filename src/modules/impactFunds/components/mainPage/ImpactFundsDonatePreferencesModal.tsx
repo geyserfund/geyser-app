@@ -1,11 +1,12 @@
 import { Button, Flex, useColorModeValue, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { postImpactFundDonationPreference } from '@/api/airtable.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import type { ImpactFundsQuery } from '@/types'
 import { useNotification } from '@/utils'
@@ -17,7 +18,9 @@ import {
   CATEGORY_OPTIONS,
   clearImpactFundDonateSessionPref,
   LATAM_IMPACT_FUND_SLUG,
+  RECOVERABLE_GRANTS_CATEGORY_ID,
   REGION_OPTIONS,
+  WORKSHOPS_OPERATIONS_CATEGORY_ID,
   writeImpactFundDonateSessionPref,
 } from '../../utils/impactFundDonatePreferences.ts'
 
@@ -25,13 +28,30 @@ type ImpactFundsDonatePreferencesModalProps = {
   isOpen: boolean
   onClose: () => void
   impactFunds: ImpactFundsQuery['impactFunds']
+  defaultCategoryIds?: ImpactFundDonateCategoryId[]
 }
+
+const TOPIC_SECTIONS = [
+  {
+    id: RECOVERABLE_GRANTS_CATEGORY_ID,
+    titleKey: 'Recoverable grants' as const,
+    descriptionKey:
+      'Reusable capital deployed through Field Partners to local projects that can return capital and recycle sats.' as const,
+  },
+  {
+    id: WORKSHOPS_OPERATIONS_CATEGORY_ID,
+    titleKey: 'Workshops, operations' as const,
+    descriptionKey:
+      'Workshop kits, Field Partner operations, and on-the-ground support that helps projects launch and raise.' as const,
+  },
+] as const
 
 /** Donate preferences: single region, multi category, then route to the correct fund project funding flow. */
 export function ImpactFundsDonatePreferencesModal({
   isOpen,
   onClose,
   impactFunds,
+  defaultCategoryIds = [],
 }: ImpactFundsDonatePreferencesModalProps): JSX.Element {
   const navigate = useNavigate()
   const { error: notifyError } = useNotification()
@@ -43,11 +63,21 @@ export function ImpactFundsDonatePreferencesModal({
   const muted = useColorModeValue('neutral1.9', 'neutral1.11')
   const chipBorder = useColorModeValue('neutral1.4', 'whiteAlpha.300')
   const chipBg = useColorModeValue('white', 'neutral1.3')
+  const sectionTitleColor = useColorModeValue('neutral1.11', 'neutral1.12')
 
   const resetForm = useCallback(() => {
     setSelectedRegionId(null)
     setSelectedCategoryIds(new Set())
   }, [])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    setSelectedRegionId(null)
+    setSelectedCategoryIds(new Set(defaultCategoryIds))
+  }, [defaultCategoryIds, isOpen])
 
   const handleClose = useCallback(() => {
     resetForm()
@@ -163,27 +193,35 @@ export function ImpactFundsDonatePreferencesModal({
           </Wrap>
         </VStack>
 
-        <VStack align="stretch" spacing={4}>
+        <VStack align="stretch" spacing={5}>
           <Body color={muted} size="md" lineHeight={1.6}>
-            {t('Are there any topics you want to support more specifically?')}
+            {t('Which areas of the Impact Fund do you want to support?')}
           </Body>
-          <Wrap spacing={{ base: 3, md: 4 }} shouldWrapChildren>
-            {CATEGORY_OPTIONS.map((c) => {
-              const isSelected = selectedCategoryIds.has(c.id)
-              return (
-                <WrapItem key={c.id}>
-                  <Button
-                    type="button"
-                    {...chipButtonProps}
-                    isActive={isSelected}
-                    onClick={() => toggleCategory(c.id)}
-                  >
-                    {t(c.labelKey)}
-                  </Button>
-                </WrapItem>
-              )
-            })}
-          </Wrap>
+          {TOPIC_SECTIONS.map((section) => {
+            const isSelected = selectedCategoryIds.has(section.id)
+            return (
+              <VStack key={section.id} align="stretch" spacing={3}>
+                <H2 size="md" bold color={sectionTitleColor}>
+                  {t(section.titleKey)}
+                </H2>
+                <Body color={muted} size="sm" lineHeight={1.6}>
+                  {t(section.descriptionKey)}
+                </Body>
+                <Wrap spacing={{ base: 3, md: 4 }} shouldWrapChildren>
+                  <WrapItem>
+                    <Button
+                      type="button"
+                      {...chipButtonProps}
+                      isActive={isSelected}
+                      onClick={() => toggleCategory(section.id)}
+                    >
+                      {t(section.titleKey)}
+                    </Button>
+                  </WrapItem>
+                </Wrap>
+              </VStack>
+            )
+          })}
         </VStack>
 
         <Flex justify="flex-end" pt={{ base: 2, md: 4 }}>

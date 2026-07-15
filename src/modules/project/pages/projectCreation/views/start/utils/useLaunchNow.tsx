@@ -31,7 +31,7 @@ export const useLaunchNow = () => {
         isOpen={isOpen}
         onClose={onClose}
         onSuccess={() => {
-          navigate(getPath('launchProjectDetails'))
+          navigate(getPath('launchFundingStrategy', 'new'))
         }}
         title={t('Sign in to Geyser')}
         description={t(
@@ -46,7 +46,7 @@ export const useLaunchNow = () => {
 
   const handleLauchNowClick = () => {
     if (isLoggedIn && hasSocialLogin) {
-      navigate(getPath('launchProjectDetails'))
+      navigate(getPath('launchFundingStrategy', 'new'))
     } else {
       setIsOpen(true)
     }

@@ -1,4 +1,4 @@
-import * as secp256k1 from 'tiny-secp256k1'
+import * as secp256k1 from '@bitcoinerlab/secp256k1'
 
 /** Signs EIP-712 message hash with RSK private key */
 export const signEIP712Message = (digest: string, rskPrivateKey: string) => {

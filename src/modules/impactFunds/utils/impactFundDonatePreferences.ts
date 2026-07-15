@@ -19,15 +19,19 @@ export const REGION_OPTIONS = [
 
 export type ImpactFundDonateRegionId = (typeof REGION_OPTIONS)[number]['id']
 
+export const RECOVERABLE_GRANTS_CATEGORY_ID = 'recoverable-grants' as const
+export const WORKSHOPS_OPERATIONS_CATEGORY_ID = 'workshops-operations' as const
+
 export const CATEGORY_OPTIONS = [
-  { id: 'education', labelKey: 'Education' as const },
-  { id: 'culture', labelKey: 'Culture' as const },
-  { id: 'development', labelKey: 'Development' as const },
-  { id: 'small-businesses', labelKey: 'Small Businesses' as const },
-  { id: 'circular-economy', labelKey: 'Circular Economy' as const },
+  { id: RECOVERABLE_GRANTS_CATEGORY_ID, labelKey: 'Recoverable grants' as const },
+  { id: WORKSHOPS_OPERATIONS_CATEGORY_ID, labelKey: 'Workshops, operations' as const },
 ] as const
 
 export type ImpactFundDonateCategoryId = (typeof CATEGORY_OPTIONS)[number]['id']
+
+export type ImpactFundDonateModalOpenOptions = {
+  defaultCategoryIds?: ImpactFundDonateCategoryId[]
+}
 
 export function writeImpactFundDonateSessionPref(pref: ImpactFundDonateSessionPref): void {
   try {

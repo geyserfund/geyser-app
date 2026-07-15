@@ -104,6 +104,13 @@ export const dimensions = {
 
   pullDownThreshold: 120,
   maxWidth: 1200,
+  impactLendingHero: {
+    minHeight: { base: '520px', lg: '525px' },
+  },
+  impactLendingSection: {
+    paddingY: { base: 10, lg: 12 },
+    paddingYCompact: { base: 8, lg: 10 },
+  },
 }
 
 export const derivedDimensions = {

@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.43.4",
+  "version": "0.44.2",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -34,10 +34,14 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
     "dev:language": "tsx language/languageServer.ts",
+    "i18n:check": "node scripts/i18n/sync-translations.mjs --check --locales es,fr",
+    "i18n:sync": "node scripts/i18n/sync-translations.mjs --write --locales es,fr",
+    "sentry:ignore-noise": "node scripts/sentry-ignore-noise.mjs",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip",
-    "sitemap:generate": "node generate-sitemap.js"
+    "sitemap:generate": "node generate-sitemap.js",
+    "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -134,6 +138,7 @@
     "@graphql-codegen/typescript-react-apollo": "^4.3.0",
     "@graphql-codegen/typescript-resolvers": "^4.0.6",
     "@parcel/watcher": "^2.4.1",
+    "@sentry/vite-plugin": "^5.3.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/luxon": "^3.2.0",
@@ -164,6 +169,7 @@
     "jsdom": "^21.1.0",
     "knip": "^5.41.1",
     "prettier": "^2.8.3",
+    "react-doctor": "^0.4.0",
     "sitemap": "^7.1.1",
     "tiny-secp256k1": "^2.2.3",
     "tsx": "^4.19.2",

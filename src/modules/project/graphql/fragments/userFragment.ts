@@ -7,6 +7,7 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
     username
     bio
     email
+    isFieldPartner
     guardianType
     externalAccounts {
       accountType

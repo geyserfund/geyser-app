@@ -32,7 +32,7 @@ export const PlatformNav = () => {
       },
       {
         name: 'Adoption Impact Fund',
-        path: '/impact-funds',
+        path: '/impact-fund',
         icon: <Image src={ImpactFundsIconUrl} height={buttonDimension} width={buttonDimension} />,
         new: true,
       },

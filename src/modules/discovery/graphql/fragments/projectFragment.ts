@@ -102,6 +102,7 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     balanceUsdCent
     lastCreationStep
     fundingStrategy
+    isRecoverableGrant
     launchedAt
     rskEoa
     subCategory

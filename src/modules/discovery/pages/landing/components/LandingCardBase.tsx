@@ -12,6 +12,7 @@ import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
@@ -19,22 +20,21 @@ import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '@/types/generated/graphql.ts'
 import { isAllOrNothing, isInactive, useMobileMode } from '@/utils/index.ts'
 
-import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '../../../../../types'
+import { LandingProjectCardProject } from '../graphql/landingPageTypes.ts'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
 
 const AON_FAILED_STATUSES = [
   ProjectAonGoalStatus.Failed,
   ProjectAonGoalStatus.Cancelled,
   ProjectAonGoalStatus.Unclaimed,
-  ProjectAonGoalStatus.Finalized,
 ]
 
 export interface LandingCardBaseProps extends CardLayoutProps {
   isMobile?: boolean
-  project: ProjectForLandingPageFragment & {
+  project: (ProjectForLandingPageFragment | LandingProjectCardProject) & {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   }
   noMobile?: boolean
@@ -183,7 +183,7 @@ const CardFooter = ({
   onContribute,
   isDisabled,
 }: {
-  project: ProjectForLandingPageFragment
+  project: ProjectForLandingPageFragment | LandingProjectCardProject
   isAonProject: boolean
   isAonFailed: boolean
   isAonEndedFunded: boolean
@@ -266,7 +266,7 @@ const CardImage = ({
   statusPillLabel,
   compact,
 }: {
-  project: ProjectForLandingPageFragment
+  project: ProjectForLandingPageFragment | LandingProjectCardProject
   countryName?: string
   categoryLabel?: string
   statusPillLabel?: string
@@ -317,7 +317,7 @@ const CardImage = ({
   </Box>
 )
 
-function getCategoryLabel(project: ProjectForLandingPageFragment): string | undefined {
+function getCategoryLabel(project: ProjectForLandingPageFragment | LandingProjectCardProject): string | undefined {
   if (project.subCategory) return ProjectSubCategoryLabel[project.subCategory]
   if (project.category) return ProjectCategoryLabel[project.category]
   return undefined
@@ -343,7 +343,11 @@ export const LandingCardBase = ({
   const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
-  const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
+  const isAonFinalizedWithoutPayout =
+    project.aonGoal?.status === ProjectAonGoalStatus.Finalized && !project.aonGoal.hasCompletedPayout
+  const isAonFailed =
+    isAonProject &&
+    (AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus) || isAonFinalizedWithoutPayout)
 
   const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
   const shouldShowContributionAmount = contributionAmount >= MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD

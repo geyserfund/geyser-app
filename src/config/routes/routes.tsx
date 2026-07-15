@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, RouteObject, useLocation } from 'react-router'
+import { createBrowserRouter, Navigate, RouteObject, useLocation, useParams } from 'react-router'
 
 import { SignOut } from '@/modules/auth/pages/SignOut.tsx'
 import { loadDiscoveryModule } from '@/modules/discovery/loader.ts'
@@ -12,6 +12,7 @@ import {
   loadImpactFundDashboardPage,
   loadImpactFundDetailPage,
   loadImpactFundsMainPage,
+  loadImpactFundsWorkshopsPage,
   loadLegacyGrantRedirectPage,
 } from '@/modules/impactFunds/loader.ts'
 import { loadProfileModule } from '@/modules/profile/loader.ts'
@@ -41,6 +42,12 @@ const LaunchRedirect = () => {
   const { search } = useLocation()
 
   return <Navigate to={{ pathname: getPath('launchStart'), search }} replace />
+}
+
+const LegacyImpactFundRedirect = () => {
+  const { impactFundName } = useParams<{ impactFundName: string }>()
+
+  return <Navigate to={getPath('discoveryImpactFund', encodeURIComponent(impactFundName || ''))} replace />
 }
 
 export const platformRoutes: RouteObject[] = [
@@ -994,6 +1001,13 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('discoveryCampaignsSuccessfullyFunded'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
             path: getPath('discoveryCampaignsCategory', PathName.categoryName),
             async lazy() {
               const Projects = await loadLandingPages().then((m) => m.Projects)
@@ -1050,6 +1064,46 @@ export const platformRoutes: RouteObject[] = [
           },
           {
             path: getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjects'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsLatest'),
+            element: (
+              <Navigate
+                to={{
+                  pathname: getPath('discoveryRecoverableGrantProjects'),
+                  search: '?sort=most_recent',
+                }}
+                replace
+              />
+            ),
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsInYourRegion'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsCategory', PathName.categoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryRecoverableGrantProjectsSubCategory', PathName.subCategoryName),
             async lazy() {
               const Projects = await loadLandingPages().then((m) => m.Projects)
               return { Component: Projects }
@@ -1219,6 +1273,14 @@ export const platformRoutes: RouteObject[] = [
         element: <Navigate to={getPath('impactFunds')} replace />,
       },
       {
+        path: getPath('legacyDiscoveryImpactFunds'),
+        element: <Navigate to={getPath('discoveryImpactFunds')} replace />,
+      },
+      {
+        path: getPath('legacyDiscoveryImpactFundsWorkshops'),
+        element: <Navigate to={getPath('discoveryImpactFundsWorkshops')} replace />,
+      },
+      {
         path: getPath('discoveryImpactFunds'),
         async lazy() {
           const { ImpactFundsMainPage } = await loadImpactFundsMainPage()
@@ -1226,10 +1288,32 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
-        path: getPath('discoveryMicroLending'),
+        path: getPath('discoveryImpactFundsWorkshops'),
         async lazy() {
-          const { MicroLendingMainPage } = await import('@/modules/microLending/pages/MicroLendingMainPage.tsx')
-          return { Component: MicroLendingMainPage }
+          const { ImpactFundsWorkshopsPage } = await loadImpactFundsWorkshopsPage()
+          return { Component: ImpactFundsWorkshopsPage }
+        },
+      },
+      {
+        path: getPath('discoveryMicroLending'),
+        element: <Navigate to={getPath('discoveryRecoverableGrants')} replace />,
+      },
+      {
+        path: getPath('legacyDiscoveryRecoverableGrantsAfribitCaseStudy'),
+        element: <Navigate to={getPath('discoveryRecoverableGrantsAfribitCaseStudy')} replace />,
+      },
+      {
+        path: getPath('discoveryRecoverableGrants'),
+        async lazy() {
+          const { RecoverableGrantsPage } = await import('@/modules/microLending/pages/RecoverableGrantsPage.tsx')
+          return { Component: RecoverableGrantsPage }
+        },
+      },
+      {
+        path: getPath('discoveryRecoverableGrantsAfribitCaseStudy'),
+        async lazy() {
+          const { AfribitCaseStudyPage } = await import('@/modules/microLending/pages/AfribitCaseStudyPage.tsx')
+          return { Component: AfribitCaseStudyPage }
         },
       },
       {
@@ -1238,6 +1322,10 @@ export const platformRoutes: RouteObject[] = [
           const { LegacyGrantRedirectPage } = await loadLegacyGrantRedirectPage()
           return { Component: LegacyGrantRedirectPage }
         },
+      },
+      {
+        path: getPath('legacyDiscoveryImpactFund', PathName.impactFundName),
+        element: <LegacyImpactFundRedirect />,
       },
       {
         path: getPath('discoveryImpactFund', PathName.impactFundName),

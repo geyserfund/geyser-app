@@ -106,6 +106,14 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     followersCount
     rejectionReason
     fundingStrategy
+    isRecoverableGrant
+    fieldPartner {
+      id
+      username
+      imageUrl
+      bio
+      guardianType
+    }
     rskEoa
     lastCreationStep
     launchScheduledAt
@@ -162,6 +170,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     preLaunchedAt
     preLaunchExpiresAt
     paidLaunch
+    launchStrategy
     goalsCount
     rewardsCount
     entriesCount
@@ -169,6 +178,14 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     followersCount
     rejectionReason
     fundingStrategy
+    isRecoverableGrant
+    fieldPartner {
+      id
+      username
+      imageUrl
+      bio
+      guardianType
+    }
     rskEoa
     lastCreationStep
     launchScheduledAt
@@ -239,6 +256,7 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     subCategory
     rewardCurrency
     fundingStrategy
+    isRecoverableGrant
     lastCreationStep
     launchScheduledAt
   }

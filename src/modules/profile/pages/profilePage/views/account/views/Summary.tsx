@@ -16,6 +16,7 @@ import type { HeroStats } from '../../../../../../../types'
 import { useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
+import { FieldPartnerSummary } from './FieldPartnerSummary'
 
 export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
@@ -68,6 +69,8 @@ export const Summary = () => {
       {isViewingOwnProfile && userProfile.id ? (
         <AffiliatePromoCard affiliateDashboardPath={getPath('userProfileSettingsAffiliate', String(userProfile.id))} />
       ) : null}
+
+      <FieldPartnerSummary />
 
       <Body size="xl" medium>
         {t('Hero Rank')}

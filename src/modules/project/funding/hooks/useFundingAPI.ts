@@ -53,7 +53,7 @@ import {
   createCallDataForBoltzClaimCallWithCallee,
 } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
 import { createCallDataForPrismDepositFor } from '../../pages/projectFunding/utils/createCallDataForPrismDepositFor.ts'
-import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
+import { FundingFlowGraphQLError, fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
   contributionCreatePreImagesAtom,
@@ -155,6 +155,20 @@ const getInitialClaimPreImages = (): ClaimPreImages => ({
   lightning: { preimageHex: '', preimageHash: '' },
   onChain: { preimageHex: '', preimageHash: '' },
 })
+
+const getFundingGraphQLError = (error: ApolloError): FundingFlowGraphQLError | undefined => {
+  const graphQLError = error.graphQLErrors[0]
+
+  if (!graphQLError) return undefined
+
+  const code = graphQLError.extensions?.code
+
+  return {
+    ...(graphQLError.extensions ?? {}),
+    ...(code ? { code: String(code) } : {}),
+    message: graphQLError.message,
+  }
+}
 
 export const useFundingAPI = () => {
   const toast = useNotification()
@@ -320,14 +334,15 @@ export const useFundingAPI = () => {
 
   const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onError(error: ApolloError) {
-      if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code) {
-        setError(error?.graphQLErrors[0].extensions)
+      const fundingError = getFundingGraphQLError(error)
+      if (fundingError) {
+        setError(fundingError)
       }
 
       setFundingRequestErrored(true)
 
       toast.error({
-        title: t('Something went wrong'),
+        title: fundingError?.message || t('Something went wrong'),
         description: t('Please refresh the page and try again'),
       })
     },
@@ -357,13 +372,14 @@ export const useFundingAPI = () => {
     RecurringDonationCreateMutationVariables
   >(MUTATION_RECURRING_DONATION_CREATE, {
     onError(error: ApolloError) {
-      if (error?.graphQLErrors[0]?.extensions?.code) {
-        setError(error.graphQLErrors[0].extensions)
+      const fundingError = getFundingGraphQLError(error)
+      if (fundingError) {
+        setError(fundingError)
       }
 
       setFundingRequestErrored(true)
       toast.error({
-        title: t('Something went wrong'),
+        title: fundingError?.message || t('Something went wrong'),
         description: t('Please refresh the page and try again'),
       })
     },
@@ -374,13 +390,14 @@ export const useFundingAPI = () => {
     ProjectSubscriptionStartMutationVariables
   >(MUTATION_PROJECT_SUBSCRIPTION_START, {
     onError(error: ApolloError) {
-      if (error?.graphQLErrors[0]?.extensions?.code) {
-        setError(error.graphQLErrors[0].extensions)
+      const fundingError = getFundingGraphQLError(error)
+      if (fundingError) {
+        setError(fundingError)
       }
 
       setFundingRequestErrored(true)
       toast.error({
-        title: t('Something went wrong'),
+        title: fundingError?.message || t('Something went wrong'),
         description: t('Please refresh the page and try again'),
       })
     },
@@ -391,13 +408,14 @@ export const useFundingAPI = () => {
     RecurringContributionRenewalCreateMutationVariables
   >(MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE, {
     onError(error: ApolloError) {
-      if (error?.graphQLErrors[0]?.extensions?.code) {
-        setError(error.graphQLErrors[0].extensions)
+      const fundingError = getFundingGraphQLError(error)
+      if (fundingError) {
+        setError(fundingError)
       }
 
       setFundingRequestErrored(true)
       toast.error({
-        title: t('Something went wrong'),
+        title: fundingError?.message || t('Something went wrong'),
         description: t('Please refresh the page and try again'),
       })
     },

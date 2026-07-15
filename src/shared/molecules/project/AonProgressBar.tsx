@@ -9,7 +9,7 @@ export const AonProgressBar = ({
   wrapperProps,
   ...rest
 }: {
-  project: ProjectForLandingPageFragment
+  project: Pick<ProjectForLandingPageFragment, 'aonGoal' | 'balance' | 'balanceUsdCent' | 'fundingStrategy' | 'status'>
   wrapperProps?: StackProps
 } & ProgressBarProps) => {
   const { getAonGoalPercentage } = useProjectToolkit(project)

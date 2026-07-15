@@ -1,6 +1,6 @@
 import { HStack, Spinner } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -11,14 +11,15 @@ import {
   ProjectReviewFragment,
   useProjectLaunchReviewsQuery,
 } from '@/types/index.ts'
+import { isLaunchFeeWaived } from '@/utils/index.ts'
 
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { useLaunchContributionCreate } from './hooks/useLaunchContributionCreate.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
-import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
 import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/LaunchPaymentMethodSelection.tsx'
+import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
 import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
 
@@ -66,27 +67,21 @@ export const Launch = () => {
     },
   })
 
-  useEffect(() => {
-    if (project.paidLaunch) {
-      setStep(LaunchStep.Finalize)
-    }
-
-    return () => {}
-  }, [project.paidLaunch])
+  const launchFeeWaived = isLaunchFeeWaived(project)
+  const projectLaunchStrategy = (project as { launchStrategy?: string | null }).launchStrategy
+  const hasPaidLaunchStrategy = Object.values(ProjectLaunchStrategy).includes(
+    projectLaunchStrategy as ProjectLaunchStrategy,
+  )
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
-      if (project.paidLaunch) {
-        setStep(LaunchStep.Finalize)
-      } else {
-        setStep(LaunchStep.Strategy)
-      }
+      setStep(hasPaidLaunchStrategy ? LaunchStep.Finalize : LaunchStep.Strategy)
     }
 
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
-  }, [project.paidLaunch, step])
+  }, [hasPaidLaunchStrategy, step])
 
   const handleBack = useCallback(() => {
     if (step === LaunchStep.Finalize) {
@@ -113,10 +108,19 @@ export const Launch = () => {
     }
   }, [step, project?.id, navigate])
 
-  const handleNextStrategy = useCallback((selectedStrategy: ProjectLaunchStrategy) => {
-    setStrategy(selectedStrategy)
-    setStep(LaunchStep.PaymentMethod)
-  }, [])
+  const handleNextStrategy = useCallback(
+    (selectedStrategy: ProjectLaunchStrategy) => {
+      setStrategy(selectedStrategy)
+
+      if (launchFeeWaived && selectedStrategy === ProjectLaunchStrategy.STARTER_LAUNCH) {
+        setStep(LaunchStep.Finalize)
+        return
+      }
+
+      setStep(LaunchStep.PaymentMethod)
+    },
+    [launchFeeWaived],
+  )
 
   const handleContributionResult = useCallback(
     async (method: LaunchPaymentMethod) => {
@@ -155,7 +159,13 @@ export const Launch = () => {
     case LaunchStep.Review:
       return <LaunchReview handleNext={handleNext} />
     case LaunchStep.Strategy:
-      return <LaunchStrategySelection handleNext={handleNextStrategy} handleBack={handleBack} />
+      return (
+        <LaunchStrategySelection
+          launchFeeWaived={launchFeeWaived}
+          handleNext={handleNextStrategy}
+          handleBack={handleBack}
+        />
+      )
     case LaunchStep.PaymentMethod:
       return (
         <LaunchPaymentMethodSelection

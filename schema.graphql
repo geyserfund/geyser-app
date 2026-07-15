@@ -28,6 +28,7 @@ type Query {
   projectsAonAlmostOver(input: ProjectsAonAlmostOverInput): ProjectsAonAlmostOverResponse!
   me: User
   user(where: UserGetInput!): User!
+  projectReferrersSearch(input: ProjectReferrersSearchInput): ProjectReferrersSearchResult!
   userAccountPasswordFundsSummary: UserAccountPasswordFundsSummary!
   userEmailIsAvailable(email: String!): Boolean!
   userEmailIsValid(email: String!): UserEmailIsValidResponse!
@@ -577,6 +578,8 @@ type Project {
   Funding strategy
   """
   fundingStrategy: ProjectFundingStrategy
+  isRecoverableGrant: Boolean!
+  fieldPartner: User
   launchStrategy: String
   aonGoal: ProjectAonGoal
   impactFundRecipient: ProjectImpactFundRecipient
@@ -612,6 +615,7 @@ type ProjectAonGoal {
   contractCreationTxId: String
   deployedAt: Date
   endsAt: Date
+  hasCompletedPayout: Boolean!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -650,6 +654,7 @@ type User {
   heroId: String!
   imageUrl: String
   bio: String
+  location: String
   email: String
   taxProfileId: BigInt
   isEmailVerified: Boolean!
@@ -684,6 +689,7 @@ type User {
   affiliatePartnerTerms: AffiliatePartnerTerms!
   affiliatePartnerPayoutSummary: AffiliatePartnerPayoutSummary!
   affiliatePartnerPayouts: [AffiliatePartnerPayout!]!
+  isFieldPartner: Boolean!
   accountKeys: UserAccountKeys
 
   """
@@ -814,6 +820,17 @@ input CreateProjectInput {
   """
   tagIds: [Int!]
   referrerHeroId: String
+  fundingStrategy: ProjectFundingStrategy
+  isRecoverableGrant: Boolean
+}
+
+type ProjectReferrersSearchResult {
+  fieldPartners: [User!]!
+  others: [User!]!
+}
+
+input ProjectReferrersSearchInput {
+  heroId: String
 }
 
 input UpdateProjectInput {
@@ -955,6 +972,10 @@ input ProjectsGetWhereInput {
   Unique name for the project. Used for the project URL and lightning address.
   """
   name: String
+  """
+  Unique names for projects. Used to batch project lookups by project URL names.
+  """
+  names: [String!]
   status: ProjectsGetWhereInputStatus
   statuses: [ProjectsGetWhereInputStatus!]
   type: ProjectType
@@ -966,6 +987,9 @@ input ProjectsGetWhereInput {
   categories: [ProjectCategory!]
   subCategory: ProjectSubCategory
   fundingStrategy: ProjectFundingStrategy
+  fieldPartnerUserId: BigInt
+  isRecoverableGrant: Boolean
+  aonGoalReached: Boolean
   ownerId: BigInt
 }
 
@@ -1106,6 +1130,17 @@ type UserAccountPasswordFundsSummary {
   tiaUnclaimedFundsSats: BigInt!
   aonUnclaimedFundsSats: BigInt!
   pledgedSats: BigInt!
+  affectedTiaProjects: [AccountPasswordAffectedProject!]!
+  legacyTiaProjects: [AccountPasswordAffectedProject!]!
+}
+
+type AccountPasswordAffectedProject {
+  id: BigInt!
+  name: String!
+  title: String!
+  status: ProjectStatus!
+  rskEoa: String!
+  balanceSats: BigInt!
 }
 
 type AffiliatePartnerTerms {
@@ -1152,6 +1187,7 @@ input UpdateUserInput {
   id: BigInt!
   username: String
   bio: String
+  location: String
   imageUrl: String
 }
 
@@ -3167,6 +3203,7 @@ input GetPostsInput {
 
 input GetPostsWhereInput {
   projectId: BigInt
+  projectName: String
   postType: [PostType!]
   category: ProjectCategory
   categories: [ProjectCategory!]
@@ -4036,6 +4073,11 @@ type Badge {
   thumb: String!
 }
 
+enum AuthFlowIntent {
+  LOGIN
+  SIGNUP
+}
+
 enum UserBadgeStatus {
   PENDING
   ACCEPTED
@@ -4044,6 +4086,7 @@ enum UserBadgeStatus {
 input SendOtpByEmailInput {
   email: String
   action: MFAAction!
+  authFlowIntent: AuthFlowIntent
 }
 
 type OTPResponse {

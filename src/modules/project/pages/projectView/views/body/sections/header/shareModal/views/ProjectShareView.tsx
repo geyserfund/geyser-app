@@ -1,10 +1,12 @@
-import { VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
+import { PiArrowsClockwiseBold } from 'react-icons/pi'
 
 import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { usePostProjectOnNostr } from '@/modules/project/pages/projectView/views/body/sections/header/components/PostOnNostr.tsx'
 import {
   CampaignContent,
   getProjectShareUrlSuffix,
@@ -25,6 +27,7 @@ export const ProjectShareView = () => {
   const { user, isLoggedIn } = useAuthContext()
   const { project, isProjectOwner } = useProjectAtom()
   const { getShareProjectUrl } = useProjectShare()
+  const { canPostProjectOnNostr, isPostingProjectOnNostr, postProjectOnNostr } = usePostProjectOnNostr()
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
   const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
@@ -130,7 +133,9 @@ export const ProjectShareView = () => {
     if (isProjectOwner) {
       return (
         <Body zIndex={1} color={lightModeColors.neutral1[12]} size="md" regular textAlign="left">
-          {t('Share your project with your community, friends and family to spread the word about it and gain momentum.')}
+          {t(
+            'Share your project with your community, friends and family to spread the word about it and gain momentum.',
+          )}
         </Body>
       )
     }
@@ -165,6 +170,18 @@ export const ProjectShareView = () => {
         linkValue={isProjectOwner ? projectShareLink : heroLink}
         colorScheme="amber"
       />
+      {canPostProjectOnNostr ? (
+        <Button
+          width="full"
+          variant="soft"
+          colorScheme="neutral1"
+          leftIcon={<PiArrowsClockwiseBold />}
+          isLoading={isPostingProjectOnNostr}
+          onClick={postProjectOnNostr}
+        >
+          {t('Re-share on Nostr')}
+        </Button>
+      ) : null}
       {!isProjectOwner ? <AmbassadorReferralTermsNotice /> : null}
     </VStack>
   )

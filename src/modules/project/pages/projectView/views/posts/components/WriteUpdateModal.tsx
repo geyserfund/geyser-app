@@ -405,7 +405,9 @@ export const WriteUpdateModal = () => {
   }, [description, adjustTextarea])
 
   // ── build API inputs ──
-  const buildDescription = (): string => (linkUrl ? linkUrl : description)
+  const buildDescription = (): string => (linkUrl ? linkUrl : '')
+
+  const buildMarkdown = (): string | undefined => (view === 'write-post' ? description : undefined)
 
   /** Share-link posts get a hostname-derived title; write-post (short posts) use an empty title. */
   const buildTitle = (): string => (view === 'share-link' ? generateTitleFromUrl(linkUrl) : '')
@@ -414,6 +416,7 @@ export const WriteUpdateModal = () => {
     projectId: toInt(project.id),
     title: buildTitle(),
     description: buildDescription(),
+    markdown: buildMarkdown(),
     image: image || undefined,
     postType,
     projectGoalIds: [],
@@ -424,6 +427,7 @@ export const WriteUpdateModal = () => {
     postId: id,
     title: buildTitle(),
     description: buildDescription(),
+    markdown: buildMarkdown(),
     image: image || undefined,
     postType,
     projectGoalIds: [],
