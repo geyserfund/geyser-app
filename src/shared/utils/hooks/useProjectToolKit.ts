@@ -23,7 +23,12 @@ export const getIsAonActive = (project: Pick<ProjectForLandingPageFragment, 'aon
 }
 
 export const useProjectToolkit = (
-  project: Pick<ProjectForLandingPageFragment, 'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'>,
+  project: Pick<
+    ProjectForLandingPageFragment,
+    'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'
+  > & {
+    isRecoverableGrant?: boolean | null
+  },
 ) => {
   const { getUSDCentsAmount } = useBTCConverter()
 
@@ -35,7 +40,7 @@ export const useProjectToolkit = (
     const isAonFinalized = isAon && project.aonGoal?.status && isAonFinalizedStatuses.includes(project.aonGoal?.status)
     if (isAon && !isAonFinalized && project.aonGoal) {
       const sats = project.aonGoal.balance ?? project.balance
-      const useProjectUsd = project.aonGoal.balance == null
+      const useProjectUsd = project.aonGoal.balance === null || project.aonGoal.balance === undefined
 
       return {
         sats,
@@ -65,7 +70,19 @@ export const useProjectToolkit = (
     return 0
   }
 
+  const isRecoverableGrantGoalReached = () => {
+    if (!project.isRecoverableGrant || !project.aonGoal?.goalAmount) {
+      return false
+    }
+
+    return getProjectBalance().sats >= project.aonGoal.goalAmount
+  }
+
   const isFundingDisabled = () => {
+    if (isRecoverableGrantGoalReached()) {
+      return true
+    }
+
     if (isAon) {
       if (isAonActive) {
         return false
@@ -80,6 +97,7 @@ export const useProjectToolkit = (
   return {
     getProjectBalance,
     getAonGoalPercentage,
+    isRecoverableGrantGoalReached,
     isFundingDisabled,
   }
 }
