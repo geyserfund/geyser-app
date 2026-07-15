@@ -1,3 +1,18 @@
+## [0.45.0](https://github.com/geyserfund/geyser-app/compare/v0.44.1...v0.45.0) (2026-07-15)
+
+
+### Features
+
+* **auth:** separate login and signup flows ([10d8a62](https://github.com/geyserfund/geyser-app/commit/10d8a620774af2e31750fef6ae77a190a03959e0))
+* improve signin modal and add "last used" badge ([57aa33b](https://github.com/geyserfund/geyser-app/commit/57aa33bb729c9e37acb78f07ff2dbab0500b2f00))
+
+
+### Bug Fixes
+
+* **auth:** accept signup intent in auth helpers ([6b56232](https://github.com/geyserfund/geyser-app/commit/6b56232a45139f0f8cf31d53a2ca64666629026c))
+* **auth:** address PR review comments ([ac93e9c](https://github.com/geyserfund/geyser-app/commit/ac93e9c1a3f199314e20444994a719b694a1204e))
+* disable recoverable grant contributions at goal ([39c5d85](https://github.com/geyserfund/geyser-app/commit/39c5d8561226c6ac8415f4e512ef04d43551283b))
+
 ## [0.44.0](https://github.com/geyserfund/geyser-app/compare/v0.42.0...v0.44.0) (2026-07-03)
 
 
