@@ -5,6 +5,7 @@ import { Locator, Page } from '@playwright/test'
 const FUNDING_ERROR_HEADING = 'An Error Occured'
 
 type OnchainPaymentUiState = 'address' | 'prompt'
+export type BitcoinPaymentUiState = OnchainPaymentUiState | 'recovery-key'
 
 const getPaymentControlDiagnostics = async (page: Page, step: string): Promise<string> => {
   const onchainTab = page.getByRole('button', { name: /^Onchain$/i }).first()
@@ -20,8 +21,9 @@ const getPaymentControlDiagnostics = async (page: Page, step: string): Promise<s
     .getByRole('button', { name: 'Download & Continue' })
     .or(page.getByRole('link', { name: 'Download & Continue' }))
     .first()
-  const onchainTitle = await onchainTab.getAttribute('title').catch(() => null)
-  const onchainAriaLabel = await onchainTab.getAttribute('aria-label').catch(() => null)
+  const recoveryKeyHeading = page.getByText(/Copy your recovery key before proceeding/i).first()
+  const onchainTitle = await onchainTab.getAttribute('title', { timeout: 1000 }).catch(() => null)
+  const onchainAriaLabel = await onchainTab.getAttribute('aria-label', { timeout: 1000 }).catch(() => null)
   const isOnchainVisible = await onchainTab.isVisible().catch(() => false)
   const isOnchainEnabled = isOnchainVisible && (await onchainTab.isEnabled().catch(() => false))
   const onchainState = !isOnchainVisible ? 'not visible' : isOnchainEnabled ? 'visible/enabled' : 'visible/disabled'
@@ -32,6 +34,7 @@ const getPaymentControlDiagnostics = async (page: Page, step: string): Promise<s
     `Lightning invoice visible: ${await lightningInvoiceButton.isVisible().catch(() => false)}`,
     `Onchain address visible: ${await onchainAddressButton.isVisible().catch(() => false)}`,
     `Download prompt visible: ${await downloadControl.isVisible().catch(() => false)}`,
+    `Recovery key visible: ${await recoveryKeyHeading.isVisible().catch(() => false)}`,
     onchainTitle ? `Onchain title: ${onchainTitle}` : null,
     onchainAriaLabel ? `Onchain aria-label: ${onchainAriaLabel}` : null,
   ]
@@ -47,8 +50,8 @@ const getFundingErrorDiagnostics = async (page: Page, step: string): Promise<str
     .catch(() => null)
 
   const onchainTab = page.getByRole('button', { name: /Onchain/i }).first()
-  const onchainTitle = await onchainTab.getAttribute('title').catch(() => null)
-  const onchainAriaLabel = await onchainTab.getAttribute('aria-label').catch(() => null)
+  const onchainTitle = await onchainTab.getAttribute('title', { timeout: 1000 }).catch(() => null)
+  const onchainAriaLabel = await onchainTab.getAttribute('aria-label', { timeout: 1000 }).catch(() => null)
 
   return [
     `[Funding:${step}] Payment failed screen is visible.`,
@@ -65,7 +68,7 @@ export const waitForOnchainPaymentUi = async (
   page: Page,
   step = 'onchain-payment-ui',
   timeoutMs = 20000,
-): Promise<OnchainPaymentUiState> => {
+): Promise<BitcoinPaymentUiState> => {
   const startedAt = Date.now()
   const fundingErrorHeading = page.getByRole('heading', { name: FUNDING_ERROR_HEADING })
   const onchainAddressButton = page
@@ -76,6 +79,7 @@ export const waitForOnchainPaymentUi = async (
     .getByRole('button', { name: 'Download & Continue' })
     .or(page.getByRole('link', { name: 'Download & Continue' }))
     .first()
+  const recoveryKeyHeading = page.getByText(/Copy your recovery key before proceeding/i).first()
 
   while (Date.now() - startedAt < timeoutMs) {
     if (await onchainAddressButton.isVisible().catch(() => false)) {
@@ -84,6 +88,10 @@ export const waitForOnchainPaymentUi = async (
 
     if (await downloadControl.isVisible().catch(() => false)) {
       return 'prompt'
+    }
+
+    if (await recoveryKeyHeading.isVisible().catch(() => false)) {
+      return 'recovery-key'
     }
 
     if (await fundingErrorHeading.isVisible().catch(() => false)) {
@@ -221,10 +229,10 @@ export const clickCheckout = async (page: Page) => {
 }
 
 /** Click the Onchain tab to switch payment method */
-export const clickOnchainTab = async (page: Page) => {
+export const clickOnchainTab = async (page: Page, options: { forceSelection?: boolean } = {}) => {
   const onchainButton = page.getByRole('button', { name: /^Onchain$/i }).first()
 
-  if (await waitForOnchainPaymentUi(page, 'onchain-existing-state', 1000).catch(() => null)) {
+  if (!options.forceSelection && (await waitForOnchainPaymentUi(page, 'onchain-existing-state', 5000).catch(() => null))) {
     return
   }
 
@@ -238,6 +246,46 @@ export const clickOnchainTab = async (page: Page) => {
 
   await onchainButton.click()
   await waitForOnchainPaymentUi(page, 'onchain-tab-after-click')
+}
+
+/** Complete the recovery-key acknowledgement step shown before onchain payment details. */
+export const completeRecoveryKeyStepIfVisible = async (page: Page): Promise<boolean> => {
+  const recoveryKeyHeading = page.getByText(/Copy your recovery key before proceeding/i).first()
+  const isRecoveryKeyStepVisible = await recoveryKeyHeading
+    .waitFor({ state: 'visible', timeout: 2000 })
+    .then(() => true)
+    .catch(() => false)
+
+  if (!isRecoveryKeyStepVisible) {
+    return false
+  }
+
+  const copyRecoveryKeyButton = page.getByRole('button', { name: /Copy recovery key|Copied/i }).first()
+  await copyRecoveryKeyButton.waitFor({ state: 'visible', timeout: 10000 })
+  await copyRecoveryKeyButton.click().catch(() => undefined)
+
+  const savedRecoveryKeyCheckbox = page.getByRole('checkbox', {
+    name: /I saved this recovery key somewhere secure/i,
+  })
+  await savedRecoveryKeyCheckbox.waitFor({ state: 'visible', timeout: 10000 })
+  if (!(await savedRecoveryKeyCheckbox.isChecked().catch(() => false))) {
+    await savedRecoveryKeyCheckbox.setChecked(true, { force: true })
+  }
+
+  const continueButton = page.getByRole('button', { name: /^Continue$/i }).first()
+  await continueButton.waitFor({ state: 'visible', timeout: 10000 })
+
+  for (let attempt = 1; attempt <= 5; attempt += 1) {
+    if (await continueButton.isEnabled().catch(() => false)) {
+      await continueButton.click()
+      return true
+    }
+
+    await savedRecoveryKeyCheckbox.setChecked(true, { force: true })
+    await page.waitForTimeout(300)
+  }
+
+  throw new Error(await getPaymentControlDiagnostics(page, 'recovery-key-continue-enabled'))
 }
 
 /** Click Download & Continue button for onchain refund file

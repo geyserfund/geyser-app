@@ -11,6 +11,7 @@ import {
   clickDownloadAndContinue,
   clickOnchainTab,
   clickToggleDonationInput,
+  completeRecoveryKeyStepIfVisible,
   enterComment,
   enterDonationAmount,
   enterEmail,
@@ -20,6 +21,15 @@ import {
 import { FundingDetailsOptions } from './types'
 
 const parseBip21Payment = (bip21Uri: string): { address: string; amountSats: number } => {
+  const keyValueAddressMatch = bip21Uri.match(/address=([^\s&]+)/)
+  const keyValueAmountMatch = bip21Uri.match(/amount=([0-9]+)/)
+  if (keyValueAddressMatch && keyValueAmountMatch) {
+    const amountSats = parseInt(keyValueAmountMatch[1], 10)
+    if (Number.isFinite(amountSats) && amountSats > 0) {
+      return { address: keyValueAddressMatch[1], amountSats }
+    }
+  }
+
   const [bitcoinPart, queryPart] = bip21Uri.split('?')
   const address = bitcoinPart.split(':')[1] || ''
   const amountMatch = queryPart?.match(/amount=([0-9.]+)/)
@@ -75,7 +85,13 @@ export const getOnchainAddress = async (page: Page): Promise<{ address: string; 
   // Switch to onchain tab (goes to prompt page)
   await clickOnchainTab(page)
 
-  const initialOnchainState = await waitForOnchainPaymentUi(page, 'onchain-address-initial')
+  let initialOnchainState = await waitForOnchainPaymentUi(page, 'onchain-address-initial')
+
+  if (initialOnchainState === 'recovery-key') {
+    await completeRecoveryKeyStepIfVisible(page)
+    await clickOnchainTab(page, { forceSelection: true })
+    initialOnchainState = await waitForOnchainPaymentUi(page, 'onchain-address-after-recovery-key')
+  }
 
   if (initialOnchainState === 'prompt') {
     // Download refund file (navigates to QR page)
@@ -83,8 +99,31 @@ export const getOnchainAddress = async (page: Page): Promise<{ address: string; 
     await waitForOnchainAddressUi(page, 'onchain-address-after-download')
   }
 
-  // Copy BIP21 URI
-  const bip21Uri = await clickCopyOnchainAddress(page)
+  let bip21Uri = ''
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      bip21Uri = await clickCopyOnchainAddress(page)
+      break
+    } catch (error) {
+      if (attempt === 2) {
+        throw error
+      }
+
+      await clickOnchainTab(page, { forceSelection: true })
+      let retryOnchainState = await waitForOnchainPaymentUi(page, 'onchain-address-retry')
+      if (retryOnchainState === 'recovery-key') {
+        await completeRecoveryKeyStepIfVisible(page)
+        await clickOnchainTab(page, { forceSelection: true })
+        retryOnchainState = await waitForOnchainPaymentUi(page, 'onchain-address-retry-after-recovery-key')
+      }
+
+      if (retryOnchainState === 'prompt') {
+        await clickDownloadAndContinue(page)
+        await waitForOnchainAddressUi(page, 'onchain-address-retry-after-download')
+      }
+    }
+  }
+
   const { address, amountSats } = parseBip21Payment(bip21Uri)
 
   return { address, amountSats }

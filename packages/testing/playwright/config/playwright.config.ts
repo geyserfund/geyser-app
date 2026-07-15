@@ -45,6 +45,9 @@ export default defineConfig({
     /** Base URL to use in actions like `await page.goto('/')` */
     baseURL: process.env.APP_URL || 'https://dev.geyser.fund',
 
+    /** Dev services are served through the local Caddy/dev certificate chain */
+    ignoreHTTPSErrors: true,
+
     /** Collect trace when retrying the failed test */
     trace: 'on-first-retry',
 

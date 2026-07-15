@@ -3,7 +3,7 @@
 import { Page, test } from '@playwright/test'
 
 import { mineBlock, payLightningInvoice, payOnchain } from '../shared/bitcoin/lncli'
-import { clickCopyOnchainAddress, clickDownloadAndContinue } from './actions'
+import { clickCopyOnchainAddress, clickDownloadAndContinue, completeRecoveryKeyStepIfVisible } from './actions'
 import { expectFinalSuccessScreen, expectIntermediateSuccessScreen } from './assertions'
 import { getLightningInvoice, getOnchainAddress } from './flows'
 
@@ -34,6 +34,15 @@ export const mineBlockOrSkipWhenUnauthorized = async () => {
 }
 
 const parseBip21Payment = (bip21Uri: string): { address: string; amountSats: number } => {
+  const keyValueAddressMatch = bip21Uri.match(/address=([^\s&]+)/)
+  const keyValueAmountMatch = bip21Uri.match(/amount=([0-9]+)/)
+  if (keyValueAddressMatch && keyValueAmountMatch) {
+    const amountSats = parseInt(keyValueAmountMatch[1], 10)
+    if (Number.isFinite(amountSats) && amountSats > 0) {
+      return { address: keyValueAddressMatch[1], amountSats }
+    }
+  }
+
   const [bitcoinPart, queryPart] = bip21Uri.split('?')
   const address = bitcoinPart.split(':')[1] || ''
   const amountMatch = queryPart?.match(/amount=([0-9.]+)/)
@@ -54,6 +63,7 @@ const waitForVisibleBitcoinPaymentControl = async (page: Page) => {
     .getByRole('button', { name: /Download & Continue/i })
     .or(page.getByRole('link', { name: /Download & Continue/i }))
     .first()
+  const recoveryKeyHeading = page.getByText(/Copy your recovery key before proceeding/i).first()
   const lightningInvoiceButton = page
     .locator('#copy-lightning-invoice-button')
     .or(page.getByRole('button', { name: /Copy invoice/i }))
@@ -67,12 +77,14 @@ const waitForVisibleBitcoinPaymentControl = async (page: Page) => {
     // eslint-disable-next-line testing-library/await-async-utils
     onchainDownloadControl.waitFor({ state: 'visible', timeout: 15000 }).catch(() => undefined),
     // eslint-disable-next-line testing-library/await-async-utils
+    recoveryKeyHeading.waitFor({ state: 'visible', timeout: 15000 }).catch(() => undefined),
+    // eslint-disable-next-line testing-library/await-async-utils
     lightningInvoiceButton.waitFor({ state: 'visible', timeout: 15000 }).catch(() => undefined),
     // eslint-disable-next-line testing-library/await-async-utils
     onchainAddressButton.waitFor({ state: 'visible', timeout: 15000 }).catch(() => undefined),
   ])
 
-  return { lightningInvoiceButton, onchainAddressButton, onchainDownloadControl }
+  return { lightningInvoiceButton, onchainAddressButton, onchainDownloadControl, recoveryKeyHeading }
 }
 
 const getVisibleBitcoinPayment = async (
@@ -107,8 +119,17 @@ const getVisibleBitcoinPayment = async (
     }
   }
 
-  const { lightningInvoiceButton, onchainAddressButton, onchainDownloadControl } =
+  const { lightningInvoiceButton, onchainAddressButton, onchainDownloadControl, recoveryKeyHeading } =
     await waitForVisibleBitcoinPaymentControl(page)
+
+  if (await recoveryKeyHeading.isVisible().catch(() => false)) {
+    if (!allowedMethods.includes('onchain')) {
+      test.skip(true, skipReason)
+      throw new Error(skipReason)
+    }
+
+    await completeRecoveryKeyStepIfVisible(page)
+  }
 
   if (await onchainDownloadControl.isVisible().catch(() => false)) {
     if (!allowedMethods.includes('onchain')) {

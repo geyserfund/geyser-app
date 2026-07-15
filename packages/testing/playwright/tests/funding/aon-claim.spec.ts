@@ -9,7 +9,7 @@ import { TEST_COMMENT } from '../../domains/funding/constants'
 import { completeFundingDetails, completeFundingInitWithDonation } from '../../domains/funding/flows'
 import { completeAonOnchainPayout, openAonClaimModal, waitForAonClaimReady } from '../../domains/funding/payout'
 import { settleVisibleBitcoinPaymentAndConfirm } from '../../domains/funding/settlement'
-import { acceptProjectReviewViaJwt } from '../../domains/projectCreation/backend'
+import { acceptProjectReviewViaJwt, checkLaunchPaymentProjectReadiness } from '../../domains/projectCreation/backend'
 import { DEFAULT_PROJECT_DETAILS, MIN_AON_GOAL_AMOUNT, TEST_IMAGE_PATHS } from '../../domains/projectCreation/constants'
 import { createAONProject } from '../../domains/projectCreation/flows'
 import {
@@ -37,6 +37,11 @@ test.describe('AON Full Funding and Creator Claim', () => {
       !ENV.PROJECT_CREATION_ACCOUNT_PASSWORD,
       'Skipping AON claim test: PROJECT_CREATION_ACCOUNT_PASSWORD is required for creator payout.',
     )
+
+    const launchPaymentProject = await checkLaunchPaymentProjectReadiness(page.request, {
+      projectId: ENV.GEYSER_LAUNCH_PROJECT_ID,
+    })
+    test.skip(!launchPaymentProject.ok, `Skipping AON claim test: ${launchPaymentProject.reason}`)
 
     await setupRealAuth(page)
     await page.goto('/')

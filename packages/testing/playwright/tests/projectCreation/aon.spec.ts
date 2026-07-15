@@ -13,7 +13,7 @@ import { DEFAULT_AON_GOAL, DEFAULT_PROJECT_DETAILS, TEST_IMAGE_PATHS } from '../
 import { expect, test } from '../../domains/projectCreation/fixtures'
 import { checkLiveBackendAvailability } from '../../domains/shared/backend'
 import { ENV } from '../../domains/shared/constants'
-import { acceptProjectReviewViaJwt } from '../../domains/projectCreation/backend'
+import { acceptProjectReviewViaJwt, checkLaunchPaymentProjectReadiness } from '../../domains/projectCreation/backend'
 import {
   completeProjectDetails,
   createAONProject,
@@ -89,6 +89,11 @@ test.describe('AON Project Creation - Flow', () => {
       !ENV.PROJECT_REVIEW_SUBMIT_JWT,
       'Skipping full launch flow: PROJECT_REVIEW_SUBMIT_JWT is required for backend review acceptance.',
     )
+
+    const launchPaymentProject = await checkLaunchPaymentProjectReadiness(page.request, {
+      projectId: ENV.GEYSER_LAUNCH_PROJECT_ID,
+    })
+    test.skip(!launchPaymentProject.ok, `Skipping full launch flow: ${launchPaymentProject.reason}`)
 
     const uniqueSuffix = `${Date.now()}-${Math.floor(Math.random() * 1000)}`
     const projectDetails: ProjectDetailsOptions = {

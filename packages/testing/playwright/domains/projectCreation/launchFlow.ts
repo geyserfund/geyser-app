@@ -413,7 +413,29 @@ export const continueFromRewardsToLaunchReview = async (page: Page, options: Con
   await clickContinue(page)
   // The tax-id sub-step is skipped for accounts that already have tax info on file;
   // accept any downstream step as a valid landing point.
-  const afterPaymentEmail = await waitForAnyUrl(page, [...POST_PAYMENT_EMAIL_PATTERNS], 20000)
+  let afterPaymentEmail: RegExp | null = null
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    afterPaymentEmail = await waitForAnyUrlOrNull(page, [...POST_PAYMENT_EMAIL_PATTERNS], 12000)
+
+    if (afterPaymentEmail) {
+      break
+    }
+
+    if (!URL_PATTERNS.payment.test(page.url())) {
+      break
+    }
+
+    const emailContinueButton = await getEnabledContinueButton(page)
+    if (!emailContinueButton) {
+      break
+    }
+
+    await emailContinueButton.click()
+  }
+
+  if (!afterPaymentEmail) {
+    afterPaymentEmail = await waitForAnyUrl(page, [...POST_PAYMENT_EMAIL_PATTERNS], 12000)
+  }
 
   let nextPattern: RegExp | null = null
 

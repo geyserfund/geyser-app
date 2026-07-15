@@ -25,6 +25,16 @@ const PROJECT_FUNDING_STRATEGY_UPDATE_MUTATION = `
   }
 `
 
+const PROJECT_GET_FOR_LAUNCH_PAYMENT_QUERY = `
+  query ProjectGetForE2ELaunchPayment($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      id
+      fundingStrategy
+      rskEoa
+    }
+  }
+`
+
 type ProjectReviewSubmitGraphqlResponse = {
   data?: {
     projectReviewSubmit?: {
@@ -46,6 +56,17 @@ type ProjectFundingStrategyUpdateGraphqlResponse = {
         goalDurationInDays: number
       } | null
     }
+  }
+  errors?: Array<{ message?: string }>
+}
+
+type ProjectGetForLaunchPaymentGraphqlResponse = {
+  data?: {
+    projectGet?: {
+      id: string
+      fundingStrategy?: string | null
+      rskEoa?: string | null
+    } | null
   }
   errors?: Array<{ message?: string }>
 }
@@ -182,4 +203,59 @@ export const updateProjectAonGoalViaGraphql = async (
       }, duration ${project.aonGoal?.goalDurationInDays || 'missing'}`,
     )
   }
+}
+
+export const checkLaunchPaymentProjectReadiness = async (
+  request: APIRequestContext,
+  input: { projectId: string },
+): Promise<{ ok: true } | { ok: false; reason: string }> => {
+  const projectId = Number(input.projectId)
+
+  const getResponse = await request.post(`${ENV.API_URL}/graphql`, {
+    headers: {
+      'content-type': 'application/json',
+    },
+    failOnStatusCode: false,
+    data: {
+      query: PROJECT_GET_FOR_LAUNCH_PAYMENT_QUERY,
+      variables: {
+        where: {
+          id: projectId,
+        },
+      },
+    },
+  })
+
+  if (!getResponse.ok()) {
+    return { ok: false, reason: `launch payment project request failed with HTTP ${getResponse.status()}` }
+  }
+
+  const getBody = (await getResponse.json()) as ProjectGetForLaunchPaymentGraphqlResponse
+  if (getBody.errors?.length) {
+    const errorMessages = getBody.errors.map((error) => error.message || 'Unknown GraphQL error').join('; ')
+    return { ok: false, reason: `launch payment project query returned GraphQL errors: ${errorMessages}` }
+  }
+
+  const project = getBody.data?.projectGet
+  if (!project) {
+    return { ok: false, reason: `launch payment project ${input.projectId} was not found` }
+  }
+
+  if (project.fundingStrategy !== 'TAKE_IT_ALL') {
+    return {
+      ok: false,
+      reason: `launch payment project ${input.projectId} must be TAKE_IT_ALL; received ${
+        project.fundingStrategy || 'missing'
+      }`,
+    }
+  }
+
+  if (!project.rskEoa) {
+    return {
+      ok: false,
+      reason: `launch payment project ${input.projectId} is missing rskEoa and cannot receive launch-fee contributions`,
+    }
+  }
+
+  return { ok: true }
 }

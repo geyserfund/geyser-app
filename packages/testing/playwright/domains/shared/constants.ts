@@ -23,6 +23,7 @@ export const ENV = {
   MINE_BLOCK_ADDRESS: config.bitcoin.mineBlockAddress,
   PROJECT_REVIEW_SUBMIT_JWT: config.projectCreation.reviewSubmitJwt,
   PROJECT_CREATION_ACCOUNT_PASSWORD: config.projectCreation.accountPassword,
+  GEYSER_LAUNCH_PROJECT_ID: config.projectCreation.launchPaymentProjectId,
 } as const
 
 /** Test user credentials for Nostr authentication */

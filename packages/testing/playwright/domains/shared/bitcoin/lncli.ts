@@ -22,6 +22,7 @@ const createBitcoinContext = () => {
       'Content-Type': 'application/json',
       Authorization: `Basic ${ENV.BITCOIND_AUTH}`,
     },
+    ignoreHTTPSErrors: true,
   })
 }
 

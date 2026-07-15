@@ -35,7 +35,7 @@ import { AONGoalOptions, ProjectDetailsOptions } from './types'
 const waitForAONFundingGoalForm = async (page: Page) => {
   for (let attempt = 1; attempt <= 5; attempt += 1) {
     const amountInput = page.getByTestId('donation-input').first()
-    const durationInput = page.locator('input[type="number"][max="60"]').first()
+    const durationInput = page.getByRole('spinbutton').first()
     const hasAmountInput = await amountInput.isVisible().catch(() => false)
     const hasDurationInput = await durationInput.isVisible().catch(() => false)
 
