@@ -14539,6 +14539,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   preLaunchedAt
   preLaunchExpiresAt
   paidLaunch
+  launchStrategy
   goalsCount
   rewardsCount
   entriesCount
@@ -14608,6 +14609,7 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   preLaunchedAt
   preLaunchExpiresAt
   paidLaunch
+  launchStrategy
   goalsCount
   rewardsCount
   entriesCount
