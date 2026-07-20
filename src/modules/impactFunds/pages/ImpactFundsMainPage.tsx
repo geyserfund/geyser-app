@@ -1,6 +1,5 @@
-import { Badge, Box, Button, Flex, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 import { PiArrowRightBold } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -9,7 +8,6 @@ import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '@/modules/impactFunds/utils/constants.ts'
-import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
@@ -17,7 +15,6 @@ import { getAiSeoPageContent, getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
-import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import {
@@ -27,6 +24,8 @@ import {
   useImpactFundsFieldPartnerLeaderboardQuery,
   useImpactFundsQuery,
 } from '@/types'
+import type { USDCents } from '@/types/index.ts'
+import { getShortAmountLabel } from '@/utils/index.ts'
 
 const LATIN_AMERICA_IMPACT_FUND_NAME = 'latam-impact-fund'
 const FALLBACK_FIELD_PARTNER_COUNT = 100
@@ -36,6 +35,7 @@ const IMPACT_FUNDS_PAPER_HERO_IMAGE_URL =
   'https://app.paper.design/file-assets/01KT2DBTZTEZXFBD7X82K0GAKQ/01KT9B8FMANZ6KR4BJWZ6F7W0V.jpg'
 const AFRIBIT_WORKSHOP_DESCRIPTION =
   'Afribit workshop activity shows the next step after education: meeting entrepreneurs, capturing their stories, and helping local businesses become fundable campaigns.'
+const AFRIBIT_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/watch?v=pU1KxP0ddng'
 const CIRCULAR_ECONOMIES_REPORT_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const IMPACT_REPORTS_2022_2024_URL =
@@ -43,7 +43,7 @@ const IMPACT_REPORTS_2022_2024_URL =
 const FIELD_PARTNERS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
 const RECOVERABLE_GRANTS_PRESENTATION_URL =
-  'https://storage.googleapis.com/geyser-media/impact-funds/Recoverable%20Grant%20-%20Presentation%202026.06.pdf'
+  'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-booklet.pdf'
 const ABOUT_SECTION_STATS = [
   {
     value: '279M sats',
@@ -66,7 +66,7 @@ const ABOUT_SECTION_STATS = [
     isDark: true,
   },
 ] as const
-const LEADERBOARD_HEADERS = ['Rank', 'Field Partner', 'Country', 'Projects launched', 'Enabled contribution'] as const
+const LEADERBOARD_HEADERS = ['Rank', 'Field Partner', 'Country', 'Projects enabled', 'Enabled contribution'] as const
 
 type ImpactFundListItem = ImpactFundsQuery['impactFunds'][number]
 type FieldPartnerLeaderboardItem =
@@ -115,17 +115,17 @@ type SectionColors = {
 const howItWorksSteps = [
   {
     label: '01 Discover',
-    title: 'Field Partners find trusted local projects to raise funds',
+    title: 'Discover trusted local projects',
     description: 'Field Partners identify projects with real community context and proof of work.',
   },
   {
     label: '02 Launch',
-    title: 'They help them them and deploy reusable capital',
+    title: 'Launch projects and deploy reusable capital',
     description: 'They support onboarding, project creation, workshops, promotion, and contributor trust.',
   },
   {
     label: '03 Allocate',
-    title: 'Sats enter the ecosystem and enable grassroots impact',
+    title: 'Allocate capital for grassroots impact',
     description: 'Recoverable grants help projects grow, return capital, and keep sats circulating.',
   },
 ] as const
@@ -162,13 +162,13 @@ const resourceCards = {
   guides: [
     {
       eyebrow: 'Start here',
-      title: 'Become a Field Partner Guide',
+      title: 'Field Partner Booklet',
       url: FIELD_PARTNERS_PRESENTATION_URL,
       isAccent: true,
     },
     {
       eyebrow: 'Reusable capital',
-      title: 'Recoverable Grants Explainer',
+      title: 'Recoverable Grants Booklet',
       url: RECOVERABLE_GRANTS_PRESENTATION_URL,
     },
   ],
@@ -187,8 +187,7 @@ export const ImpactFundsMainPage = () => {
     },
   })
   const impactFundsSeoContent = getAiSeoPageContent('impactFunds')
-  const usdRate = useAtomValue(usdRateAtom)
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const { getSatoshisFromUSDCents } = useBTCConverter()
 
   const pageBg = useColorModeValue('white', 'utils.pbg')
   const surfaceBg = useColorModeValue('white', 'neutral1.4')
@@ -296,20 +295,14 @@ export const ImpactFundsMainPage = () => {
     : fieldPartnerLeaderboardRows.slice(0, LEADERBOARD_INITIAL_ROW_COUNT)
 
   const getFundAmountDisplay = (fund: ImpactFundListItem) => {
-    const committedAmountDisplay = getCommittedAmountDisplay({
-      amountCommitted: fund.amountCommitted,
-      amountCommittedCurrency: fund.amountCommittedCurrency,
-      usdRate,
-      getUSDAmount,
-      getSatoshisFromUSDCents,
-    })
-    const awardedAmountDisplay = getSatsAmountDisplay({
-      amountSats: fund.metrics.awardedTotalSats,
-      usdRate,
-      getUSDAmount,
-    })
+    const amountSats =
+      fund.amountCommitted === 0
+        ? fund.metrics.awardedTotalSats
+        : fund.amountCommittedCurrency === 'USDCENT'
+        ? getSatoshisFromUSDCents((fund.amountCommitted ?? 0) as USDCents)
+        : fund.amountCommitted ?? 0
 
-    return (fund.amountCommitted === 0 ? awardedAmountDisplay : committedAmountDisplay)?.primary || ''
+    return `${getShortAmountLabel(amountSats, true)} sats`
   }
 
   const pageHead = (
@@ -371,12 +364,10 @@ export const ImpactFundsMainPage = () => {
           sponsors={sponsors}
           partnerFund={latinAmericaImpactFund}
           getFundAmountDisplay={getFundAmountDisplay}
-        />
-        <CommitmentSection
-          colors={colors}
           onDonateClick={() => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })}
         />
         <ResourcesSection colors={colors} />
+        <BookletsSection colors={colors} />
         <FooterSection />
       </PageShell>
     </>
@@ -419,7 +410,7 @@ const getFieldPartnerLeaderboardRows = (rows: FieldPartnerLeaderboardItem[]): Fi
     fieldPartnerId: String(row.fieldPartnerId),
     fieldPartner: row.fieldPartner,
     country: row.country,
-    projectsLaunched: `${row.projectsLaunched} onboarded`,
+    projectsLaunched: String(row.projectsLaunched),
     enabledContribution: formatLeaderboardSats(row.enabledContributionSats),
   }))
 }
@@ -531,10 +522,11 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
       >
         <VStack align="flex-start" spacing="22px" maxW={{ base: 'full', lg: '760px' }}>
           <H1
-            size={{ base: '3xl', md: '4xl', lg: '48px' }}
+            size={{ base: '40px', md: '4xl', lg: '48px' }}
             bold
-            lineHeight={{ base: '1.12', lg: '54px' }}
+            lineHeight={{ base: '46px', lg: '54px' }}
             color="white"
+            sx={{ textWrap: 'balance' }}
           >
             {t('Geyser Impact Fund')}
           </H1>
@@ -586,7 +578,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
   return (
     <PageSection colors={colors}>
       <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 12 }}>
+        <VStack align="stretch" spacing={{ base: 6, lg: 8 }}>
           <VStack align="flex-start" spacing="14px">
             <Eyebrow color={colors.accentText}>{t('About the Impact Fund')}</Eyebrow>
             <H2
@@ -594,28 +586,17 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
               lineHeight={{ base: '38px', lg: '44px' }}
               bold
               color={topSectionTextColor}
+              sx={{ textWrap: 'balance' }}
             >
               {t('Impact happens locally. Field Partners bring Bitcoin tooling and capital to local realities.')}
             </H2>
           </VStack>
-          <VStack align="flex-start" spacing="18px" pt={{ base: 0, lg: 4 }}>
-            <Body
-              size={{ base: 'lg', lg: '22px' }}
-              medium
-              lineHeight={{ base: '30px', lg: '32px' }}
-              color={topSectionTextColor}
-            >
-              {t(
-                'The Impact Fund backs our vetted local partners who are closest to the work and best placed to identify credible projects.',
-              )}
-            </Body>
-            <Body size="md" lineHeight="27px" color={colors.secondaryText}>
-              {t(
-                "They reduce distance, increase trust, help projects launch and promote campaigns, then support recoverable grants whose capital can return and be redeployed where it's most needed.",
-              )}
-            </Body>
-          </VStack>
-        </SimpleGrid>
+          <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={topSectionTextColor}>
+            {t(
+              'The Geyser Impact Fund backs the Field Partners and the fundraisers, campaigns or recoverable grant projects they onboard.',
+            )}
+          </Body>
+        </VStack>
 
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing="14px">
           {ABOUT_SECTION_STATS.map((stat) => (
@@ -665,22 +646,18 @@ const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
   return (
     <FullWidthSection bg={colors.mutedSurfaceBg}>
       <VStack align="stretch" spacing={{ base: 6, lg: 8 }}>
-        <Flex
-          direction={{ base: 'column', lg: 'row' }}
-          justify="space-between"
-          align={{ base: 'flex-start', lg: 'flex-end' }}
-          gap={6}
-        >
-          <VStack align="flex-start" spacing="10px" maxW="620px">
-            <Eyebrow color={sectionEyebrowColor}>{t('How it works')}</Eyebrow>
-            <H2 size={{ base: '3xl', lg: '36px' }} lineHeight={{ base: '38px', lg: '40px' }} bold color={headingColor}>
-              {t('How impact moves through the trusted field network.')}
-            </H2>
-          </VStack>
-          <Body size="md" lineHeight="24px" color={colors.secondaryText} maxW={{ base: 'full', lg: '360px' }}>
-            {t('The model is built for trust, accountability, and reusable capital.')}
-          </Body>
-        </Flex>
+        <VStack align="flex-start" spacing="10px">
+          <Eyebrow color={sectionEyebrowColor}>{t('How it works')}</Eyebrow>
+          <H2
+            size={{ base: '32px', lg: '36px' }}
+            lineHeight={{ base: '38px', lg: '40px' }}
+            bold
+            color={headingColor}
+            sx={{ textWrap: 'balance' }}
+          >
+            {t('How impact moves through the Field Partner network.')}
+          </H2>
+        </VStack>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing="14px">
           {howItWorksSteps.map((step) => (
             <VStack
@@ -691,11 +668,16 @@ const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
               borderWidth="1px"
               borderColor={cardBorderColor}
               borderRadius="8px"
-              p="24px"
-              minH="190px"
+              p={{ base: 5, lg: 6 }}
+              minH={{ base: 'auto', lg: '190px' }}
             >
               <Eyebrow color={stepAccentColor}>{t(step.label)}</Eyebrow>
-              <H3 size="22px" lineHeight="27px" bold color={headingColor}>
+              <H3
+                size={{ base: '24px', lg: '22px' }}
+                lineHeight={{ base: '29px', lg: '27px' }}
+                bold
+                color={headingColor}
+              >
                 {t(step.title)}
               </H3>
               <Body size="15px" lineHeight="23px" color={colors.secondaryText}>
@@ -724,35 +706,15 @@ const LeaderboardSection = ({
 }) => (
   <PageSection colors={colors}>
     <VStack align="stretch" spacing={6}>
-      <Flex
-        direction={{ base: 'column', md: 'row' }}
-        justify="space-between"
-        align={{ base: 'flex-start', md: 'flex-end' }}
-        gap={4}
-      >
-        <VStack align="flex-start" spacing={3}>
-          <Eyebrow color={colors.accentText}>{t('Trusted Field Partners')}</Eyebrow>
-          <H2
-            size={{ base: '3xl', lg: '42px' }}
-            lineHeight={{ base: '38px', lg: '46px' }}
-            bold
-            color={colors.primaryText}
-          >
-            {t('Field Partner leaderboard')}
-          </H2>
-        </VStack>
-        <Badge
-          borderRadius="full"
-          px={4}
-          py={2}
-          bg={colors.accentBg}
-          color={colors.primaryText}
-          textTransform="none"
-          fontSize="sm"
-        >
-          {t('Quarterly rewards eligible')}
-        </Badge>
-      </Flex>
+      <H2 size={{ base: '32px', lg: '36px' }} lineHeight={{ base: '38px', lg: '42px' }} bold color={colors.primaryText}>
+        {t('Field Partners')}
+      </H2>
+
+      <Body size="md" lineHeight="26px" color={colors.secondaryText} w="full">
+        {t(
+          'Field Partners are vetted, local community leaders who are closest to the work happening on the ground. They onboard local projects that need funding, provide them with support and share impact reports.',
+        )}
+      </Body>
 
       <Box
         borderWidth="1px"
@@ -761,8 +723,8 @@ const LeaderboardSection = ({
         overflow="hidden"
         bg={colors.surfaceBg}
       >
-        <Box overflowX="auto">
-          <Box w="full" minW={{ base: '640px', md: 'full' }}>
+        <Box display={{ base: 'none', md: 'block' }}>
+          <Box w="full">
             <LeaderboardHeader colors={colors} />
             <VStack align="stretch" spacing={0}>
               {rows.length > 0 ? (
@@ -783,6 +745,7 @@ const LeaderboardSection = ({
             </VStack>
           </Box>
         </Box>
+        <MobileLeaderboardRows colors={colors} rows={rows} />
         <Flex
           direction={{ base: 'column', md: 'row' }}
           align={{ base: 'stretch', md: 'center' }}
@@ -803,11 +766,147 @@ const LeaderboardSection = ({
           ) : null}
         </Flex>
       </Box>
+      <Flex
+        direction={{ base: 'column', md: 'row' }}
+        align={{ base: 'flex-start', md: 'center' }}
+        justify="space-between"
+        gap={5}
+        bg={colors.mutedSurfaceBg}
+        borderWidth="1px"
+        borderColor={colors.borderColor}
+        borderRadius="card"
+        p={{ base: 5, lg: 6 }}
+      >
+        <VStack align="flex-start" spacing={1} maxW="760px">
+          <H3
+            size={{ base: '24px', lg: '26px' }}
+            lineHeight={{ base: '30px', lg: '32px' }}
+            bold
+            color={colors.primaryText}
+          >
+            {t('Become a Field Partner')}
+          </H3>
+          <Body
+            size={{ base: '15px', lg: '16px' }}
+            lineHeight={{ base: '23px', lg: '24px' }}
+            color={colors.secondaryText}
+            whiteSpace={{ base: 'normal', lg: 'nowrap' }}
+          >
+            {t('Help trusted local projects launch, fundraise, host workshops, and report their impact.')}
+          </Body>
+        </VStack>
+        <Flex direction={{ base: 'column', md: 'row' }} align="stretch" gap={3} w={{ base: 'full', md: 'auto' }}>
+          <Button
+            as="a"
+            href={FIELD_PARTNERS_PRESENTATION_URL}
+            target="_blank"
+            rel="noreferrer"
+            h="48px"
+            borderRadius="innerCard"
+            variant="outline"
+            borderColor={colors.borderColor}
+            color={colors.primaryText}
+            px={6}
+            w={{ base: 'full', md: 'auto' }}
+          >
+            {t('See Field Partner Booklet')}
+          </Button>
+          <Button
+            as="a"
+            href={ImpactFundsFieldPartnerApplicationUrl}
+            target="_blank"
+            rel="noreferrer"
+            h="48px"
+            borderRadius="innerCard"
+            bg={colors.surfaceActionButtonBg}
+            color={colors.surfaceActionButtonText}
+            px={6}
+            w={{ base: 'full', md: 'auto' }}
+            _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
+          >
+            {t('Apply now')}
+          </Button>
+        </Flex>
+      </Flex>
     </VStack>
   </PageSection>
 )
 
 const LEADERBOARD_RANK_COLUMN_WIDTH = '72px'
+
+const MobileLeaderboardRows = ({ colors, rows }: { colors: SectionColors; rows: FieldPartnerLeaderboardRow[] }) => {
+  if (rows.length === 0) {
+    return (
+      <Flex display={{ base: 'flex', md: 'none' }} minH="84px" align="center" justify="center" p={4}>
+        <Body size="sm" color={colors.secondaryText} textAlign="center">
+          {t('No Field Partner projects found yet.')}
+        </Body>
+      </Flex>
+    )
+  }
+
+  return (
+    <VStack display={{ base: 'flex', md: 'none' }} align="stretch" spacing={0}>
+      {rows.map((row) => (
+        <VStack
+          key={`${row.rank}-${row.fieldPartner}`}
+          align="stretch"
+          spacing={4}
+          p={4}
+          borderBottomWidth="1px"
+          borderColor={colors.borderColor}
+        >
+          <Flex align="center" justify="space-between" gap={3}>
+            <HStack spacing={3} minW={0}>
+              <Flex
+                align="center"
+                justify="center"
+                w="28px"
+                h="28px"
+                flexShrink={0}
+                borderRadius="full"
+                bg={row.rank === 1 ? colors.accentBg : colors.mutedSurfaceBg}
+              >
+                <Body size="xs" bold lineHeight={1} color={colors.primaryText}>
+                  {row.rank}
+                </Body>
+              </Flex>
+              <Body
+                as={Link}
+                to={getPath('userProfile', row.fieldPartnerId)}
+                size="md"
+                bold
+                color={colors.primaryText}
+                noOfLines={1}
+                _hover={{ color: colors.accentText, textDecoration: 'underline' }}
+              >
+                {row.fieldPartner}
+              </Body>
+            </HStack>
+            <Body size="md" bold color={colors.primaryText} textAlign="right" flexShrink={0}>
+              {row.enabledContribution}
+            </Body>
+          </Flex>
+          <SimpleGrid columns={2} spacing={3}>
+            <LeaderboardMetric label={t('Country')} value={row.country} colors={colors} />
+            <LeaderboardMetric label={t('Projects enabled')} value={row.projectsLaunched} colors={colors} />
+          </SimpleGrid>
+        </VStack>
+      ))}
+    </VStack>
+  )
+}
+
+const LeaderboardMetric = ({ label, value, colors }: { label: string; value: string; colors: SectionColors }) => (
+  <VStack align="flex-start" spacing={1} minW={0}>
+    <Body size="xs" bold color={colors.secondaryText} letterSpacing="0.08em" textTransform="uppercase">
+      {label}
+    </Body>
+    <Body size="sm" color={colors.secondaryText} noOfLines={1}>
+      {value}
+    </Body>
+  </VStack>
+)
 
 const LeaderboardHeader = ({ colors }: { colors: SectionColors }) => {
   return (
@@ -898,83 +997,213 @@ const SponsorsAndFundsSection = ({
   sponsors,
   partnerFund,
   getFundAmountDisplay,
+  onDonateClick,
 }: {
   colors: SectionColors
   sponsors: readonly SponsorListItem[]
   partnerFund?: ImpactFundListItem
   getFundAmountDisplay: (fund: ImpactFundListItem) => string
+  onDonateClick: () => void
 }) => {
   const partnerFundPath = getPath('impactFunds', LATIN_AMERICA_IMPACT_FUND_NAME)
 
   return (
     <PageSection colors={colors}>
-      <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 7, lg: 8 }} templateColumns={{ lg: '1fr 440px' }}>
+      <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
         <VStack align="stretch" spacing={5}>
-          <Eyebrow color={colors.accentText}>{t('Sponsors so far')}</Eyebrow>
-          <SimpleGrid
-            columns={{ base: 1, sm: 2, xl: 4 }}
-            spacing={4}
-            bg={colors.mutedSurfaceBg}
-            borderWidth="1px"
-            borderColor={colors.borderColor}
-            borderRadius="8px"
-            p={{ base: 5, lg: 8 }}
-            minH={{ base: 'auto', lg: '230px' }}
+          <VStack align="flex-start" spacing={2}>
+            <H2
+              size={{ base: '32px', lg: '42px' }}
+              lineHeight={{ base: '38px', lg: '48px' }}
+              bold
+              color={colors.primaryText}
+              sx={{ textWrap: 'balance' }}
+            >
+              {t('Active Funds')}
+            </H2>
+          </VStack>
+          <VStack align="stretch" spacing={5}>
+            <Flex
+              as={Link}
+              to={partnerFundPath}
+              direction={{ base: 'column', md: 'row' }}
+              justify="space-between"
+              align={{ base: 'flex-start', md: 'center' }}
+              gap={{ base: 6, md: 8 }}
+              bg={colors.emphasisCardBg}
+              borderWidth="1px"
+              borderColor={colors.emphasisCardBorder}
+              borderRadius="card"
+              p={{ base: 5, lg: 7 }}
+              minH={{ base: 'auto', lg: '220px' }}
+              _hover={{ textDecoration: 'none', opacity: 0.94 }}
+            >
+              <VStack align="flex-start" spacing={3} maxW="760px">
+                <H3
+                  size={{ base: '26px', lg: '33px' }}
+                  lineHeight={{ base: '32px', lg: '39px' }}
+                  bold
+                  color={colors.emphasisCardText}
+                  sx={{ textWrap: 'balance' }}
+                >
+                  {partnerFund?.title || t('Latin America Bitcoin Impact Fund')}
+                </H3>
+                <Body
+                  size={{ base: 'md', lg: '18px' }}
+                  lineHeight={{ base: '26px', lg: '28px' }}
+                  color={colors.emphasisCardMutedText}
+                >
+                  {t(
+                    'Additional partner funds can be routed through local Field Partners and debt-free recoverable grant capital.',
+                  )}
+                </Body>
+                <HStack
+                  spacing={2}
+                  bg={colors.emphasisCardButtonBg}
+                  color={colors.emphasisCardButtonText}
+                  borderRadius="innerCard"
+                  px={4}
+                  py={3}
+                >
+                  <Body size="sm" bold color="inherit">
+                    {t('Explore LABIF')}
+                  </Body>
+                  <Icon as={PiArrowRightBold} />
+                </HStack>
+              </VStack>
+              <VStack
+                align="flex-start"
+                spacing={2}
+                bg={colors.darkSurfaceBg}
+                borderRadius="innerCard"
+                p={{ base: 4, lg: 5 }}
+                w={{ base: 'full', md: '280px' }}
+                flexShrink={0}
+              >
+                <Eyebrow color={colors.emphasisCardAccent}>{t('LABIF')}</Eyebrow>
+                <Body
+                  size={{ base: '40px', lg: '48px' }}
+                  lineHeight={{ base: '46px', lg: '54px' }}
+                  bold
+                  color={colors.emphasisCardText}
+                >
+                  {partnerFund ? getFundAmountDisplay(partnerFund) : t('120,000,000 sats')}
+                </Body>
+                <Body size="md" bold color={colors.emphasisCardMutedText}>
+                  {t('Committed')}
+                </Body>
+              </VStack>
+            </Flex>
+            <Flex
+              direction={{ base: 'column', md: 'row' }}
+              justify="space-between"
+              align={{ base: 'flex-start', md: 'center' }}
+              gap={{ base: 6, md: 8 }}
+              bg={colors.amberBg}
+              borderRadius="card"
+              p={{ base: 5, lg: 7 }}
+              minH={{ base: 'auto', lg: '220px' }}
+            >
+              <VStack align="flex-start" spacing={3} maxW="760px">
+                <H3
+                  size={{ base: '26px', lg: '33px' }}
+                  lineHeight={{ base: '32px', lg: '39px' }}
+                  bold
+                  color={colors.amberText}
+                  sx={{ textWrap: 'balance' }}
+                >
+                  {t('Recoverable Grant Pool')}
+                </H3>
+                <Body
+                  size={{ base: 'md', lg: '18px' }}
+                  lineHeight={{ base: '26px', lg: '28px' }}
+                  color={colors.amberText}
+                >
+                  {t(
+                    'Donate reusable capital for local projects. Help Field Partners deploy and recycle debt-free capital in their local communities.',
+                  )}
+                </Body>
+                <Flex direction="row" align="stretch" gap={3} w={{ base: 'full', md: 'auto' }}>
+                  <Button
+                    as={Link}
+                    to={getPath('discoveryRecoverableGrants')}
+                    h="48px"
+                    borderRadius="innerCard"
+                    variant="outline"
+                    borderColor={colors.amberText}
+                    color={colors.amberText}
+                    w={{ base: 'full', md: 'auto' }}
+                  >
+                    {t('Learn more')}
+                  </Button>
+                  <Button
+                    h="48px"
+                    borderRadius="innerCard"
+                    bg={colors.surfaceActionButtonBg}
+                    color={colors.surfaceActionButtonText}
+                    onClick={onDonateClick}
+                    w={{ base: 'full', md: 'auto' }}
+                    _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
+                  >
+                    {t('Donate')}
+                  </Button>
+                </Flex>
+              </VStack>
+              <VStack
+                align={{ base: 'stretch', md: 'flex-end' }}
+                justify="space-between"
+                spacing={5}
+                w={{ base: 'full', md: '280px' }}
+                flexShrink={0}
+              >
+                <VStack
+                  align="flex-start"
+                  spacing={2}
+                  bg={colors.emphasisCardBg}
+                  borderRadius="innerCard"
+                  p={{ base: 4, lg: 5 }}
+                  w="full"
+                >
+                  <Eyebrow color={colors.emphasisCardMutedText}>{t('Geyser')}</Eyebrow>
+                  <Body
+                    size={{ base: '40px', lg: '48px' }}
+                    lineHeight={{ base: '46px', lg: '54px' }}
+                    bold
+                    color={colors.emphasisCardText}
+                  >
+                    {t('3M sats')}
+                  </Body>
+                  <Body size="md" bold color={colors.emphasisCardMutedText}>
+                    {t('Committed per quarter')}
+                  </Body>
+                </VStack>
+              </VStack>
+            </Flex>
+          </VStack>
+        </VStack>
+        <VStack align="flex-start" spacing={3}>
+          <H2
+            size={{ base: '32px', lg: '42px' }}
+            lineHeight={{ base: '38px', lg: '48px' }}
+            bold
+            color={colors.primaryText}
+            sx={{ textWrap: 'balance' }}
           >
+            {t('Sponsors')}
+          </H2>
+          <SimpleGrid columns={{ base: 2, sm: 3, lg: 4, xl: 5 }} spacing={4} w="full">
             {sponsors.length === 0 ? (
-              <Flex align="center" justify="center" gridColumn="1 / -1" minH={{ base: '120px', lg: '150px' }}>
+              <Flex align="center" justify="center" gridColumn="1 / -1" minH={{ base: '120px', lg: '170px' }}>
                 <Body size="md" lineHeight="26px" color={colors.mutedText} textAlign="center" maxW="420px">
                   {t('Partner sponsors will appear here as funds grow.')}
                 </Body>
               </Flex>
             ) : (
-              sponsors.slice(0, 10).map((sponsor) => <SponsorTile key={sponsor.id} sponsor={sponsor} colors={colors} />)
+              sponsors.map((sponsor) => <SponsorTile key={sponsor.id} sponsor={sponsor} colors={colors} />)
             )}
           </SimpleGrid>
         </VStack>
-        <VStack align="stretch" spacing={5}>
-          <Eyebrow color={colors.accentText}>{t('Partner funds')}</Eyebrow>
-          <VStack
-            as={Link}
-            to={partnerFundPath}
-            align="stretch"
-            justify="space-between"
-            bg={colors.emphasisCardBg}
-            borderWidth="1px"
-            borderColor={colors.emphasisCardBorder}
-            borderRadius="8px"
-            p={{ base: 7, lg: 9 }}
-            minH={{ base: '260px', lg: '236px' }}
-            _hover={{ textDecoration: 'none' }}
-          >
-            <VStack align="flex-start" spacing={3}>
-              <H3
-                size={{ base: '30px', lg: '33px' }}
-                lineHeight={{ base: '36px', lg: '39px' }}
-                bold
-                color={colors.emphasisCardText}
-              >
-                {partnerFund?.title || t('Latin America Bitcoin Impact Fund')}
-              </H3>
-              <Body
-                size={{ base: 'md', lg: '18px' }}
-                lineHeight={{ base: '26px', lg: '28px' }}
-                color={colors.emphasisCardMutedText}
-              >
-                {t(
-                  'Additional partner funds can be routed through local Field Partners and debt-free recoverable grant capital.',
-                )}
-              </Body>
-            </VStack>
-            <HStack justify="space-between" align="flex-end" pt={4}>
-              <Eyebrow color={colors.emphasisCardAccent}>{t('LABIF')}</Eyebrow>
-              <Body size="24px" lineHeight="28px" bold color={colors.emphasisCardMetric}>
-                {partnerFund ? getFundAmountDisplay(partnerFund) : t('1.4 BTC')}
-              </Body>
-            </HStack>
-          </VStack>
-        </VStack>
-      </SimpleGrid>
+      </VStack>
     </PageSection>
   )
 }
@@ -989,8 +1218,8 @@ const SponsorTile = ({ sponsor, colors }: { sponsor: SponsorListItem; colors: Se
     justify="center"
     borderWidth="1px"
     borderColor={colors.borderColor}
-    borderRadius="8px"
-    h={{ base: '58px', lg: '68px' }}
+    borderRadius="innerCard"
+    h={{ base: '84px', lg: '108px' }}
     px={4}
     bg={colors.sponsorTileBg}
   >
@@ -999,12 +1228,12 @@ const SponsorTile = ({ sponsor, colors }: { sponsor: SponsorListItem; colors: Se
         align="center"
         justify="center"
         bg={colors.sponsorLogoBackdrop}
-        borderRadius="6px"
+        borderRadius="innerCard"
         px={3}
         py={2}
         maxW="full"
       >
-        <Image src={sponsor.image} alt={sponsor.name} maxH="38px" maxW="160px" objectFit="contain" />
+        <Image src={sponsor.image} alt={sponsor.name} maxH="64px" maxW="200px" objectFit="contain" />
       </Flex>
     ) : (
       <Body size={{ base: 'md', lg: '20px' }} lineHeight="24px" bold color={colors.primaryText} textAlign="center">
@@ -1014,168 +1243,34 @@ const SponsorTile = ({ sponsor, colors }: { sponsor: SponsorListItem; colors: Se
   </Flex>
 )
 
-const CommitmentSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonateClick: () => void }) => (
-  <PageSection colors={colors}>
-    <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
-      <Flex
-        direction={{ base: 'column', lg: 'row' }}
-        align="center"
-        justify="space-between"
-        gap={{ base: 8, lg: 12 }}
-        bg={colors.amberBg}
-        borderRadius="8px"
-        p={{ base: 6, lg: 8 }}
-      >
-        <VStack align="flex-start" spacing={{ base: 4, lg: 5 }} maxW="760px">
-          <Eyebrow color={colors.amberText}>{t('Recoverable grant pool')}</Eyebrow>
-          <H2
-            size={{ base: '30px', lg: '40px' }}
-            lineHeight={{ base: '36px', lg: '47px' }}
-            bold
-            color={colors.amberText}
-          >
-            {t('Donate reusable capital for local projects.')}
-          </H2>
-          <Body size={{ base: 'md', lg: '20px' }} lineHeight={{ base: '27px', lg: '31px' }} color={colors.amberText}>
-            {t(
-              'Your contribution helps Field Partners deploy recoverable grants to projects they have helped launch, promote, and support on the ground.',
-            )}
-          </Body>
-          <Body
-            as={Link}
-            to={getPath('discoveryRecoverableGrants')}
-            size={{ base: 'md', lg: '18px' }}
-            bold
-            color={colors.amberText}
-            textDecoration="underline"
-            _hover={{ color: colors.amberLinkHover }}
-          >
-            {t('Learn about recoverable grants')}
-          </Body>
-        </VStack>
-        <VStack
-          align="stretch"
-          spacing={{ base: 5, lg: 6 }}
-          bg={colors.emphasisCardBg}
-          borderWidth="1px"
-          borderColor={colors.emphasisCardBorder}
-          borderRadius="8px"
-          p={{ base: 6, lg: 8 }}
-          w={{ base: 'full', lg: '370px' }}
-          justify="center"
-          flexShrink={0}
-        >
-          <Eyebrow color={colors.emphasisCardEyebrow}>{t('GEYSER Quarterly pool')}</Eyebrow>
-          <H3
-            size={{ base: '48px', lg: '56px' }}
-            lineHeight={{ base: '52px', lg: '60px' }}
-            bold
-            color={colors.emphasisCardText}
-          >
-            {t('3M sats')}
-          </H3>
-          <Button
-            h="54px"
-            borderRadius="8px"
-            bg={colors.emphasisCardButtonBg}
-            color={colors.emphasisCardButtonText}
-            fontSize={{ base: 'md', lg: '18px' }}
-            fontWeight="900"
-            onClick={onDonateClick}
-            _hover={{ bg: colors.emphasisCardButtonBg, opacity: 0.92 }}
-          >
-            {t('Donate to Impact Fund')}
-          </Button>
-        </VStack>
-      </Flex>
-
-      <Flex
-        direction={{ base: 'column', lg: 'row' }}
-        align={{ base: 'stretch', lg: 'center' }}
-        justify="space-between"
-        gap={6}
-        bg={colors.mutedSurfaceBg}
-        borderWidth="1px"
-        borderColor={colors.borderColor}
-        borderRadius="8px"
-        p={{ base: 6, lg: 9 }}
-      >
-        <VStack align="flex-start" spacing={2} maxW="710px">
-          <H2
-            size={{ base: '30px', lg: '40px' }}
-            lineHeight={{ base: '36px', lg: '46px' }}
-            bold
-            color={colors.primaryText}
-          >
-            {t('Become a trusted Field Partner')}
-          </H2>
-          <Body
-            size={{ base: 'md', lg: '20px' }}
-            lineHeight={{ base: '26px', lg: '31px' }}
-            color={colors.secondaryText}
-          >
-            {t(
-              'Apply if you are already active locally and ready to help projects launch, raise funds, host workshops, promote campaigns, and report impact.',
-            )}
-          </Body>
-        </VStack>
-        <Button
-          as="a"
-          href={ImpactFundsFieldPartnerApplicationUrl}
-          target="_blank"
-          rel="noreferrer"
-          size="lg"
-          h="54px"
-          borderRadius="8px"
-          px={8}
-          bg={colors.surfaceActionButtonBg}
-          color={colors.surfaceActionButtonText}
-          fontSize={{ base: 'md', lg: '18px' }}
-          fontWeight="900"
-          flexShrink={0}
-          _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
-        >
-          {t('Apply to become a Field Partner')}
-        </Button>
-      </Flex>
-    </VStack>
-  </PageSection>
-)
-
 const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
   <FullWidthSection bg={colors.darkSurfaceBg}>
     <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
-      <Flex
-        direction={{ base: 'column', lg: 'row' }}
-        justify="space-between"
-        align={{ base: 'flex-start', lg: 'flex-end' }}
-        gap={{ base: 5, lg: 10 }}
-      >
-        <VStack align="flex-start" spacing={{ base: 4, lg: 5 }}>
-          <Eyebrow color={colors.accentBg}>{t('Resources')}</Eyebrow>
-          <H2
-            size={{ base: '40px', lg: '56px' }}
-            lineHeight={{ base: '46px', lg: '64px' }}
-            bold
-            color={colors.emphasisCardText}
-          >
-            {t('Learn how local impact gets built')}
-          </H2>
-        </VStack>
+      <VStack align="flex-start" spacing={{ base: 4, lg: 5 }}>
+        <Eyebrow color={colors.accentBg}>{t('Impact in action')}</Eyebrow>
+        <H2
+          size={{ base: '36px', lg: '48px' }}
+          lineHeight={{ base: '42px', lg: '56px' }}
+          bold
+          color={colors.emphasisCardText}
+          sx={{ textWrap: 'balance' }}
+        >
+          {t('What was our impact so far?')}
+        </H2>
         <Body
           size={{ base: 'md', lg: '22px' }}
           lineHeight={{ base: '26px', lg: '32px' }}
           color={colors.emphasisCardMutedText}
-          maxW="430px"
+          w="full"
         >
-          {t('Case studies prove the model. Reports show results. Guides help you act.')}
+          {t('Explore the case studies, workshops, and reports made possible through the Impact Fund.')}
         </Body>
-      </Flex>
+      </VStack>
 
       <VStack align="stretch" spacing={{ base: 5, lg: 7 }}>
         <H3
-          size={{ base: '32px', lg: '40px' }}
-          lineHeight={{ base: '38px', lg: '46px' }}
+          size={{ base: '28px', lg: '34px' }}
+          lineHeight={{ base: '34px', lg: '40px' }}
           bold
           color={colors.emphasisCardText}
         >
@@ -1199,8 +1294,8 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
 
       <VStack align="stretch" spacing={{ base: 5, lg: 7 }}>
         <H3
-          size={{ base: '32px', lg: '40px' }}
-          lineHeight={{ base: '38px', lg: '46px' }}
+          size={{ base: '28px', lg: '34px' }}
+          lineHeight={{ base: '34px', lg: '40px' }}
           bold
           color={colors.emphasisCardText}
         >
@@ -1212,49 +1307,52 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
         </SimpleGrid>
       </VStack>
 
-      <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
-        <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
-          <H3
-            size={{ base: '32px', lg: '38px' }}
-            lineHeight={{ base: '38px', lg: '44px' }}
-            bold
-            color={colors.emphasisCardText}
-          >
-            {t('Impact Reports')}
-          </H3>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
-            {resourceCards.reports.map((card) => (
-              <ResourceCard key={card.title} colors={colors} {...card} variant="guide" isReport />
-            ))}
-          </SimpleGrid>
-        </VStack>
-
-        <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
-          <H3
-            size={{ base: '32px', lg: '38px' }}
-            lineHeight={{ base: '38px', lg: '44px' }}
-            bold
-            color={colors.emphasisCardText}
-          >
-            {t('Guides')}
-          </H3>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
-            {resourceCards.guides.map((card) => (
-              <ResourceCard
-                key={card.title}
-                colors={colors}
-                eyebrow={card.eyebrow}
-                title={card.title}
-                url={'url' in card ? card.url : undefined}
-                isAccent={'isAccent' in card ? card.isAccent : false}
-                variant="guide"
-              />
-            ))}
-          </SimpleGrid>
-        </VStack>
+      <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
+        <H3
+          size={{ base: '28px', lg: '34px' }}
+          lineHeight={{ base: '34px', lg: '40px' }}
+          bold
+          color={colors.emphasisCardText}
+        >
+          {t('Impact Reports')}
+        </H3>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
+          {resourceCards.reports.map((card) => (
+            <ResourceCard key={card.title} colors={colors} {...card} variant="guide" isReport />
+          ))}
+        </SimpleGrid>
       </VStack>
     </VStack>
   </FullWidthSection>
+)
+
+const BookletsSection = ({ colors }: { colors: SectionColors }) => (
+  <PageSection colors={colors}>
+    <VStack align="stretch" spacing={{ base: 5, lg: 6 }}>
+      <H2
+        size={{ base: '32px', lg: '42px' }}
+        lineHeight={{ base: '38px', lg: '48px' }}
+        bold
+        color={colors.primaryText}
+        sx={{ textWrap: 'balance' }}
+      >
+        {t('Booklets')}
+      </H2>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
+        {resourceCards.guides.map((card) => (
+          <ResourceCard
+            key={card.title}
+            colors={colors}
+            eyebrow={card.eyebrow}
+            title={card.title}
+            url={'url' in card ? card.url : undefined}
+            isAccent={'isAccent' in card ? card.isAccent : false}
+            variant="guide"
+          />
+        ))}
+      </SimpleGrid>
+    </VStack>
+  </PageSection>
 )
 
 const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
@@ -1266,50 +1364,50 @@ const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
     gap={{ base: 5, lg: 7 }}
     minH={{ base: 'auto', lg: '290px' }}
   >
-    <Flex
+    <Box
       position="relative"
-      align="center"
-      justify="center"
-      bg="#111"
+      overflow="hidden"
       borderRadius="innerCard"
-      minH={{ base: '220px', lg: '250px' }}
+      minH={{ base: '190px', lg: '250px' }}
       flex={{ base: 'none', lg: 1.45 }}
     >
-      <Flex align="center" justify="center" w="64px" h="46px" borderRadius="12px" bg="#F7CC45">
-        <Box
-          as="span"
-          ml="4px"
-          w="0"
-          h="0"
-          borderTop="10px solid transparent"
-          borderBottom="10px solid transparent"
-          borderLeft="16px solid #111"
-        />
-      </Flex>
+      <Box
+        as="iframe"
+        title={t('Afribit Kibera workshop video')}
+        src="https://www.youtube.com/embed/pU1KxP0ddng"
+        w="full"
+        h="full"
+        minH={{ base: '190px', lg: '250px' }}
+        border={0}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      />
       <Box position="absolute" bottom={4} left={4} bg="black" px={3} py={2}>
         <Body size="xs" bold color="white">
           {t('Afribit Kibera')}
         </Body>
       </Box>
-    </Flex>
+    </Box>
     <VStack align="flex-start" justify="center" spacing={4} flex={1} py={{ base: 0, lg: 4 }}>
       <Eyebrow color="#E75E4F">{t('Afribit')}</Eyebrow>
-      <H3 size={{ base: '28px', lg: '34px' }} lineHeight={{ base: '34px', lg: '40px' }} bold color={colors.primaryText}>
+      <H3 size={{ base: '26px', lg: '30px' }} lineHeight={{ base: '32px', lg: '36px' }} bold color={colors.primaryText}>
         {t('Kibera projects preparing to fundraise.')}
       </H3>
       <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={colors.secondaryText}>
         {t(AFRIBIT_WORKSHOP_DESCRIPTION)}
       </Body>
       <HStack
-        as={Link}
-        to={getPath('discoveryRecoverableGrantsAfribitCaseStudy')}
+        as="a"
+        href={AFRIBIT_WORKSHOP_VIDEO_URL}
+        target="_blank"
+        rel="noreferrer"
         spacing={1.5}
         color="#E75E4F"
         textDecoration="underline"
         _hover={{ color: colors.primaryText, textDecoration: 'underline' }}
       >
         <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} bold>
-          {t('See Afribit case study')}
+          {t('Watch Afribit workshop video')}
         </Body>
         <Icon as={PiArrowRightBold} boxSize={4} />
       </HStack>
@@ -1323,14 +1421,14 @@ const WorkshopResourcesCard = ({ colors }: { colors: SectionColors }) => (
     justify="space-between"
     bg={colors.accentBg}
     borderRadius="card"
-    p={{ base: 6, lg: 7 }}
-    minH={{ base: '230px', lg: '290px' }}
+    p={{ base: 5, lg: 7 }}
+    minH={{ lg: '290px' }}
   >
     <VStack align="flex-start" spacing={4}>
       <Eyebrow color={colors.accentSurfaceText}>{t('Workshop resources')}</Eyebrow>
       <H3
-        size={{ base: '28px', lg: '34px' }}
-        lineHeight={{ base: '34px', lg: '40px' }}
+        size={{ base: '26px', lg: '30px' }}
+        lineHeight={{ base: '32px', lg: '36px' }}
         bold
         color={colors.accentSurfaceText}
       >
@@ -1394,15 +1492,15 @@ const CaseStudyResourceCard = ({
     target={url ? '_blank' : undefined}
     rel={url ? 'noreferrer' : undefined}
     align="stretch"
-    spacing={6}
+    spacing={{ base: 5, lg: 6 }}
     bg={colors.surfaceBg}
     borderRadius="card"
-    p={{ base: 6, lg: 7 }}
-    minH={{ base: '290px', lg: '300px' }}
+    p={{ base: 5, lg: 7 }}
+    minH={{ lg: '300px' }}
     _hover={url ? { textDecoration: 'none', borderColor: colors.amberBg } : undefined}
   >
     <Eyebrow color="#A9672C">{t(eyebrow)}</Eyebrow>
-    <H3 size={{ base: '28px', lg: '34px' }} lineHeight={{ base: '34px', lg: '40px' }} bold color={colors.primaryText}>
+    <H3 size={{ base: '26px', lg: '30px' }} lineHeight={{ base: '32px', lg: '36px' }} bold color={colors.primaryText}>
       {t(title)}
     </H3>
     {imageUrl ? (
@@ -1426,13 +1524,13 @@ const CaseStudyResourceCard = ({
 const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport }: ResourceCardProps) => (
   <VStack
     align="stretch"
-    spacing={6}
+    spacing={{ base: 5, lg: 6 }}
     bg={isReport ? colors.reportCardBg : isAccent ? colors.accentBg : colors.surfaceBg}
-    borderWidth={isReport ? '1px' : undefined}
-    borderColor={isReport ? colors.amberBg : undefined}
+    borderWidth={isReport || !isAccent ? '1px' : undefined}
+    borderColor={isReport ? colors.amberBg : !isAccent ? colors.borderColor : undefined}
     borderRadius="card"
-    p={{ base: 6, lg: 7 }}
-    minH={{ base: '240px', lg: '280px' }}
+    p={{ base: 5, lg: 7 }}
+    minH={{ lg: '280px' }}
   >
     <Eyebrow color={isAccent ? colors.accentSurfaceText : colors.resourceEyebrow}>{t(eyebrow)}</Eyebrow>
     <H3

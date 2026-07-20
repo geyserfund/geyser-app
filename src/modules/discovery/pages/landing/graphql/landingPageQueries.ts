@@ -15,6 +15,14 @@ export const FRAGMENT_LANDING_PROJECT_CARD_PROJECT = gql`
     title
     status
     fundingStrategy
+    fundingSummary {
+      raisedSats
+      goalSats
+      percentageFunded
+      status
+      endsAt
+      isFundingOpen
+    }
     category
     subCategory
     location {

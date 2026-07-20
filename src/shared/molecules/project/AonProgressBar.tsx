@@ -6,14 +6,16 @@ import type { ProjectForLandingPageFragment } from '@/types/index.ts'
 
 export const AonProgressBar = ({
   project,
+  percentage,
   wrapperProps,
   ...rest
 }: {
   project: Pick<ProjectForLandingPageFragment, 'aonGoal' | 'balance' | 'balanceUsdCent' | 'fundingStrategy' | 'status'>
+  percentage?: number | null
   wrapperProps?: StackProps
 } & ProgressBarProps) => {
   const { getAonGoalPercentage } = useProjectToolkit(project)
-  const percentage = getAonGoalPercentage()
+  const calculatedPercentage = getAonGoalPercentage()
 
   if (!project) {
     return null
@@ -30,7 +32,7 @@ export const AonProgressBar = ({
     >
       <ProgressBar
         w="full"
-        value={percentage}
+        value={percentage ?? calculatedPercentage}
         height={{ base: '10px', lg: '14px' }}
         borderRadius="20px"
         overflow="hidden"

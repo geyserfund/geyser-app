@@ -14,6 +14,7 @@ export type LandingProjectCardProject = Pick<
   | 'category'
   | 'fundersCount'
   | 'fundingStrategy'
+  | 'fundingSummary'
   | 'id'
   | 'launchedAt'
   | 'location'

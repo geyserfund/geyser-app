@@ -239,7 +239,7 @@ const CardFooter = ({
             isFailed={isAonFailed}
             isEndedFunded={isAonEndedFunded}
           />
-          <AonProgressBar project={project} height="8px" />
+          <AonProgressBar project={project} percentage={percentage} height="8px" />
         </VStack>
         {contributeButton}
       </HStack>
@@ -336,23 +336,27 @@ export const LandingCardBase = ({
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
-  const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
+  const { getProjectBalance } = useProjectToolkit(project)
   const { handleBlockedContribution } = useBlockedProjectContribution(project)
   const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
   const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
-  const isAonFinalizedWithoutPayout =
-    project.aonGoal?.status === ProjectAonGoalStatus.Finalized && !project.aonGoal.hasCompletedPayout
-  const isAonFailed =
-    isAonProject &&
-    (AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus) || isAonFinalizedWithoutPayout)
+  const { fundingSummary } = project
+  const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(fundingSummary?.status as ProjectAonGoalStatus)
 
   const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
   const shouldShowContributionAmount = contributionAmount >= MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD
-  const percentage = getAonGoalPercentage()
-  const timeLeft = aonProjectTimeLeft(project.aonGoal)
+  const percentage = fundingSummary?.percentageFunded ?? 0
+  const timeLeft = fundingSummary
+    ? aonProjectTimeLeft({
+        endsAt: fundingSummary.endsAt,
+        deployedAt: null,
+        goalDurationInDays: 0,
+        status: fundingSummary.status as ProjectAonGoalStatus,
+      })
+    : null
   const isAonEndedFunded = isAonProject && !isAonFailed && !timeLeft && percentage >= 100
   const hasFire = (hasTrendingContribution && contributionAmount > 100) || contributionAmount > 1000
   const contributionLabel = hasTrendingContribution ? trendingAmountLabel ?? t('this week') : t('raised')
@@ -535,7 +539,7 @@ export const LandingCardBase = ({
             hasFire={hasFire}
             contributionLabel={contributionLabel}
             onContribute={handleContribute}
-            isDisabled={isFundingDisabled()}
+            isDisabled={!fundingSummary?.isFundingOpen}
           />
         )}
       </VStack>
