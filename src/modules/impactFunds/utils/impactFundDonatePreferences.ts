@@ -23,8 +23,8 @@ export const RECOVERABLE_GRANTS_CATEGORY_ID = 'recoverable-grants' as const
 export const WORKSHOPS_OPERATIONS_CATEGORY_ID = 'workshops-operations' as const
 
 export const CATEGORY_OPTIONS = [
-  { id: RECOVERABLE_GRANTS_CATEGORY_ID, labelKey: 'Recoverable grants' as const },
-  { id: WORKSHOPS_OPERATIONS_CATEGORY_ID, labelKey: 'Workshops, operations' as const },
+  { id: RECOVERABLE_GRANTS_CATEGORY_ID, labelKey: 'Grow Recoverable Grants' as const },
+  { id: WORKSHOPS_OPERATIONS_CATEGORY_ID, labelKey: 'Support Field Partners' as const },
 ] as const
 
 export type ImpactFundDonateCategoryId = (typeof CATEGORY_OPTIONS)[number]['id']
@@ -49,6 +49,7 @@ export function readImpactFundDonateSessionPref(): ImpactFundDonateSessionPref |
     if (typeof parsed.airtableRecordId === 'string' && typeof parsed.donateProjectName === 'string') {
       return parsed
     }
+
     return null
   } catch {
     return null

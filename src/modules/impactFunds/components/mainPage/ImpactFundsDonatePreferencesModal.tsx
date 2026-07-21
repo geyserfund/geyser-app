@@ -1,4 +1,4 @@
-import { Button, Flex, useColorModeValue, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Button, Flex, SimpleGrid, useColorModeValue, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router'
 import { postImpactFundDonationPreference } from '@/api/airtable.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import type { ImpactFundsQuery } from '@/types'
 import { useNotification } from '@/utils'
@@ -34,15 +33,15 @@ type ImpactFundsDonatePreferencesModalProps = {
 const TOPIC_SECTIONS = [
   {
     id: RECOVERABLE_GRANTS_CATEGORY_ID,
-    titleKey: 'Recoverable grants' as const,
+    titleKey: 'Grow Recoverable Grants' as const,
     descriptionKey:
-      'Reusable capital deployed through Field Partners to local projects that can return capital and recycle sats.' as const,
+      'Grow reusable capital pool deployed through Field Partners to local projects that can return capital and recycle sats' as const,
   },
   {
     id: WORKSHOPS_OPERATIONS_CATEGORY_ID,
-    titleKey: 'Workshops, operations' as const,
+    titleKey: 'Support Field Partners' as const,
     descriptionKey:
-      'Workshop kits, Field Partner operations, and on-the-ground support that helps projects launch and raise.' as const,
+      'Support Field Partner onboarding and operations for their work on-the-ground supporting projects.' as const,
   },
 ] as const
 
@@ -64,6 +63,9 @@ export function ImpactFundsDonatePreferencesModal({
   const chipBorder = useColorModeValue('neutral1.4', 'whiteAlpha.300')
   const chipBg = useColorModeValue('white', 'neutral1.3')
   const sectionTitleColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const selectedCardBg = useColorModeValue('primary1.2', 'primary1.3')
+  const cardHoverBg = useColorModeValue('neutral1.2', 'neutral1.4')
+  const cardActiveBg = useColorModeValue('neutral1.3', 'neutral1.5')
 
   const resetForm = useCallback(() => {
     setSelectedRegionId(null)
@@ -161,7 +163,7 @@ export function ImpactFundsDonatePreferencesModal({
       isOpen={isOpen}
       onClose={handleClose}
       size="4xl"
-      title={t('Donate to the Bitcoin Adoption Impact Fund')}
+      title={t('Donate to the Geyser Impact Fund')}
       contentProps={{
         maxW: { base: 'calc(100vw - 1rem)', md: '90vw', lg: '880px' },
         w: 'full',
@@ -197,31 +199,49 @@ export function ImpactFundsDonatePreferencesModal({
           <Body color={muted} size="md" lineHeight={1.6}>
             {t('Which areas of the Impact Fund do you want to support?')}
           </Body>
-          {TOPIC_SECTIONS.map((section) => {
-            const isSelected = selectedCategoryIds.has(section.id)
-            return (
-              <VStack key={section.id} align="stretch" spacing={3}>
-                <H2 size="md" bold color={sectionTitleColor}>
-                  {t(section.titleKey)}
-                </H2>
-                <Body color={muted} size="sm" lineHeight={1.6}>
-                  {t(section.descriptionKey)}
-                </Body>
-                <Wrap spacing={{ base: 3, md: 4 }} shouldWrapChildren>
-                  <WrapItem>
-                    <Button
-                      type="button"
-                      {...chipButtonProps}
-                      isActive={isSelected}
-                      onClick={() => toggleCategory(section.id)}
-                    >
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 3, md: 4 }}>
+            {TOPIC_SECTIONS.map((section) => {
+              const isSelected = selectedCategoryIds.has(section.id)
+              return (
+                <Button
+                  key={section.id}
+                  type="button"
+                  variant="outline"
+                  aria-pressed={isSelected}
+                  borderWidth="1px"
+                  borderColor={isSelected ? 'primary1.9' : chipBorder}
+                  bg={isSelected ? selectedCardBg : chipBg}
+                  color={sectionTitleColor}
+                  borderRadius="innerCard"
+                  minH={{ base: '148px', md: '164px' }}
+                  h="auto"
+                  px={{ base: 4, md: 5 }}
+                  py={{ base: 4, md: 5 }}
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  textAlign="left"
+                  whiteSpace="normal"
+                  _hover={{
+                    borderColor: 'primary1.9',
+                    bg: cardHoverBg,
+                  }}
+                  _active={{
+                    bg: cardActiveBg,
+                  }}
+                  onClick={() => toggleCategory(section.id)}
+                >
+                  <VStack align="flex-start" spacing={3}>
+                    <Body size="md" bold color={sectionTitleColor}>
                       {t(section.titleKey)}
-                    </Button>
-                  </WrapItem>
-                </Wrap>
-              </VStack>
-            )
-          })}
+                    </Body>
+                    <Body color={muted} size="sm" lineHeight={1.5}>
+                      {t(section.descriptionKey)}
+                    </Body>
+                  </VStack>
+                </Button>
+              )
+            })}
+          </SimpleGrid>
         </VStack>
 
         <Flex justify="flex-end" pt={{ base: 2, md: 4 }}>

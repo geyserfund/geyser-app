@@ -5,15 +5,20 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { fetchCharityProjectsData, fetchFeaturedProject } from '@/api/airtable.ts'
 import { Head } from '@/config/Head.tsx'
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
+import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
+import type { USDCents } from '@/types/index.ts'
 import {
   LeaderboardPeriod,
   ProjectCategory,
   useGetUserIpCountryQuery,
+  useImpactFundsQuery,
   useLandingRegionalProjectsSectionQuery,
   useLeaderboardGlobalProjectsQuery,
 } from '@/types/index.ts'
+import { getShortAmountLabel } from '@/utils/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import {
@@ -30,6 +35,7 @@ import {
   LandingOtherSectionQueryData,
 } from '../../../graphql/landingPageTypes.ts'
 import { TopProjects } from './components/TopProjects.tsx'
+import { ActiveImpactFunds } from './sections/ActiveImpactFunds.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { CategoryKey, CuratedProjects } from './sections/CuratedProjects.tsx'
 import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
@@ -95,6 +101,9 @@ export const DefaultView = () => {
   const [charityProjectIds, setCharityProjectIds] = useState<number[]>([])
   const [charityProjectsLoading, setCharityProjectsLoading] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
+  const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
+  const { getSatoshisFromUSDCents } = useBTCConverter()
+  const { data: impactFundsData } = useImpactFundsQuery()
 
   const categoryGroups = LANDING_CATEGORY_ORDER.reduce<(typeof LANDING_CATEGORY_ORDER)[number][][]>(
     (groups, category, index) => {
@@ -110,6 +119,22 @@ export const DefaultView = () => {
     },
     [],
   )
+
+  const latinAmericaImpactFund = impactFundsData?.impactFunds.find((fund) => fund.name === 'latam-impact-fund')
+  const labifCommittedAmount = (() => {
+    if (latinAmericaImpactFund?.amountCommitted === null || latinAmericaImpactFund?.amountCommitted === undefined) {
+      return t('120,000,000 sats')
+    }
+
+    const amountSats =
+      latinAmericaImpactFund.amountCommitted === 0
+        ? latinAmericaImpactFund.metrics.awardedTotalSats
+        : latinAmericaImpactFund.amountCommittedCurrency === 'USDCENT'
+        ? getSatoshisFromUSDCents(latinAmericaImpactFund.amountCommitted as USDCents)
+        : latinAmericaImpactFund.amountCommitted
+
+    return `${getShortAmountLabel(amountSats, true)} sats`
+  })()
 
   const loadFeaturedProjects = useCallback(async () => {
     setFeaturedProjectsLoading(true)
@@ -274,6 +299,7 @@ export const DefaultView = () => {
 
   return (
     <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
+      {donateModalElement}
       <Head
         title={defaultSeoContent.title}
         description={defaultSeoContent.description}
@@ -334,6 +360,8 @@ export const DefaultView = () => {
         />
 
         <RecoverableGrantProjects />
+
+        <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} onDonateClick={() => openDonateModal()} />
 
         {showBelowTheFold && (
           <>
