@@ -142,11 +142,11 @@ function createStripeManageClickHandler({
     if (!projectId || !isTiaProject) return
 
     if (!hasAccount) {
-      createStripeConnectAccount({ variables: { projectId, returnUrl } })
+      createStripeConnectAccount({ variables: { projectId: String(projectId), returnUrl } })
       return
     }
 
-    refreshStripeConnectOnboardingLink({ variables: { projectId, returnUrl } })
+    refreshStripeConnectOnboardingLink({ variables: { projectId: String(projectId), returnUrl } })
   }
 }
 
@@ -482,9 +482,9 @@ export const useStripeConnectOnboardingState = ({
     handleClick: handleManageClick,
     handleManageClick,
     handleResyncClick: refetch,
-    handleDisconnectClick: () => {
+    handleDisconnectClick() {
       if (!projectId || !isTiaProject || !hasAccount) return
-      disconnectStripeConnect({ variables: { projectId } })
+      disconnectStripeConnect({ variables: { projectId: String(projectId) } })
     },
     actionLabel: getCardActionLabel(isTiaProject, isReady, statusType, hasAccount),
     minimalActionLabel: getMinimalActionLabel(statusType, hasAccount, isReady),

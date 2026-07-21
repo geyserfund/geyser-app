@@ -92,7 +92,7 @@ const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantCont
           }}
           avatarOnly
           borderRadius="50%"
-          seed={user.id}
+          seed={Number(user.id)}
           user={user}
         />
         <Text fontWeight="bold" fontSize="16px">
@@ -146,7 +146,7 @@ const ContributorsAvatarDisplay = ({
               key={currentContributor?.user?.id}
               avatarOnly
               borderRadius="50%"
-              seed={currentContributor?.user?.id}
+              seed={currentContributor?.user?.id ? Number(currentContributor.user.id) : undefined}
               user={currentContributor?.user}
             />
           )}
@@ -160,7 +160,7 @@ const ContributorsAvatarDisplay = ({
                     key={contributor.user?.id}
                     avatarOnly
                     borderRadius="50%"
-                    seed={contributor?.user?.id}
+                    seed={contributor?.user?.id ? Number(contributor.user.id) : undefined}
                     user={contributor?.user}
                   />
                 ),

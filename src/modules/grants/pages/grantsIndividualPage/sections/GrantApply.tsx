@@ -147,7 +147,7 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
 
     return (
       <SelectAProject
-        grantId={grant.id}
+        grantId={Number(grant.id)}
         onSuccess={() => setIsSuccessfull(true)}
         projects={user.ownerOf.map((owner) => owner?.project as Project)}
         pendingApplicants={pendingApplicants}
@@ -240,7 +240,7 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
   const [selectedProjectId, setSelectedProjectId] = useState<number>(0)
 
   const isProjectPending = (projectId: number) => {
-    return pendingApplicants?.some((applicant) => applicant.project.id === projectId)
+    return pendingApplicants?.some((applicant) => Number(applicant.project.id) === projectId)
   }
 
   const [applyGrantMutation, { loading }] = useMutation<
@@ -287,8 +287,9 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
       </Body>
       <VStack w="full">
         {projects.map((project) => {
-          const isSelected = selectedProjectId === project.id
-          const isPending = isProjectPending(project.id)
+          const projectId = Number(project.id)
+          const isSelected = selectedProjectId === projectId
+          const isPending = isProjectPending(projectId)
 
           return (
             <CardLayout
@@ -300,7 +301,7 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
               direction="row"
               alignItems="center"
               overflow="hidden"
-              onClick={() => handleSelection(project.id)}
+              onClick={() => handleSelection(projectId)}
               borderColor={isSelected ? 'primary.400' : 'neutral.200'}
               _hover={{
                 cursor: 'pointer',

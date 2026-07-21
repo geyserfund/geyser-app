@@ -1,20 +1,43 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_MATCHING } from '@/modules/project/graphql/fragments/projectMatchingFragment.ts'
-
 export const FRAGMENT_LANDING_PROJECT_CARD_PROJECT = gql`
-  ${FRAGMENT_PROJECT_MATCHING}
   fragment LandingProjectCardProject on Project {
     id
     name
-    balance
-    balanceUsdCent
     fundersCount
     thumbnailImage
     shortDescription
     title
     status
-    fundingStrategy
+    fundingSummary {
+      fundingStrategy
+      isRecoverableGrant
+      raisedSats
+      raisedUsdCent
+      goalSats
+      percentageFunded
+      status
+      endsAt
+      isFundingOpen
+      isFundingFailed
+      matching {
+        activeMatching {
+          id
+          projectId
+          sponsorName
+          sponsorUrl
+          referenceCurrency
+          matchingType
+          maxCapAmount
+          status
+          startDate
+          totalMatchedAmount
+          totalMatchedAmountSats
+          totalMatchedAmountUsdCent
+          remainingCapAmount
+        }
+      }
+    }
     category
     subCategory
     location {
@@ -23,18 +46,6 @@ export const FRAGMENT_LANDING_PROJECT_CARD_PROJECT = gql`
         name
       }
       region
-    }
-    aonGoal {
-      goalAmount
-      balance
-      goalDurationInDays
-      deployedAt
-      endsAt
-      status
-      hasCompletedPayout
-    }
-    activeMatching {
-      ...ProjectMatching
     }
     launchedAt
     owners {
@@ -155,6 +166,40 @@ export const QUERY_LANDING_ANNOUNCEMENTS = gql`
     }
     acelerandoVipLeaderboard {
       endAt
+    }
+  }
+`
+
+export const QUERY_LANDING_RECOVERABLE_GRANT_PROJECTS_SECTION = gql`
+  ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
+  query LandingRecoverableGrantProjectsSection {
+    projectsGet(
+      input: {
+        orderBy: [{ direction: desc, field: launchedAt }]
+        where: { status: active, isRecoverableGrant: true }
+        pagination: { take: 3 }
+      }
+    ) {
+      projects {
+        ...LandingProjectCardProject
+      }
+    }
+  }
+`
+
+export const QUERY_LANDING_REGIONAL_PROJECTS_SECTION = gql`
+  ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
+  query LandingRegionalProjectsSection($countryCode: String!) {
+    projectsGet(
+      input: {
+        where: { fundingStrategy: TAKE_IT_ALL, countryCode: $countryCode, status: active }
+        orderBy: [{ direction: desc, field: launchedAt }, { direction: desc, field: balance }]
+        pagination: { take: 6 }
+      }
+    ) {
+      projects {
+        ...LandingProjectCardProject
+      }
     }
   }
 `

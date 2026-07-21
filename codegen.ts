@@ -7,6 +7,12 @@ const config: CodegenConfig = {
   config: {
     maybe: 'T | null | undefined',
     inputMaybe: 'T | null | undefined',
+    scalars: {
+      BigInt: {
+        input: 'string | number',
+        output: 'any',
+      },
+    },
   },
   generates: {
     'src/types/generated/graphql.ts': {

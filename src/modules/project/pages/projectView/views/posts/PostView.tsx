@@ -50,7 +50,7 @@ export const PostView = () => {
   const [queryPost, { data }] = useProjectPostLazyQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      postId,
+      postId: postId ?? '',
     },
   })
 

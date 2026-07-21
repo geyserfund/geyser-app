@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { ProjectAonGoalStatus, ProjectForLandingPageFragment, Satoshis } from '@/types/index.ts'
+import { centsToDollars } from '@/shared/utils/formatData/helperFunctions.ts'
+import type { ProjectForLandingPageFragment, ProjectFundingSummary } from '@/types/index.ts'
+import { ProjectAonGoalStatus, Satoshis } from '@/types/index.ts'
 
-import { centsToDollars } from '../../../utils/index.ts'
 import { isActive, isAllOrNothing } from '../../../utils/validations/project.ts'
 
 const isAonFinalizedStatuses = [
@@ -28,6 +29,7 @@ export const useProjectToolkit = (
     'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'
   > & {
     isRecoverableGrant?: boolean | null
+    fundingSummary?: Pick<ProjectFundingSummary, 'isRecoverableGrant'> | null
   },
 ) => {
   const { getUSDCentsAmount } = useBTCConverter()
@@ -71,7 +73,8 @@ export const useProjectToolkit = (
   }
 
   const isRecoverableGrantGoalReached = () => {
-    if (!project.isRecoverableGrant || !project.aonGoal?.goalAmount) {
+    const isRecoverableGrant = project.fundingSummary?.isRecoverableGrant ?? project.isRecoverableGrant
+    if (!isRecoverableGrant || !project.aonGoal?.goalAmount) {
       return false
     }
 

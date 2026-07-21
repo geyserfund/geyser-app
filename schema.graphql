@@ -578,6 +578,7 @@ type Project {
   Funding strategy
   """
   fundingStrategy: ProjectFundingStrategy
+  fundingSummary: ProjectFundingSummary!
   isRecoverableGrant: Boolean!
   fieldPartner: User
   launchStrategy: String
@@ -594,6 +595,16 @@ type Project {
   reviews: [ProjectReview!]!
   ambassadors: ProjectAmbassadorsConnection!
   paymentMethods: PaymentMethods!
+}
+
+type ProjectFundingSummary {
+  raisedSats: BigInt!
+  goalSats: BigInt
+  percentageFunded: Int
+  status: String!
+  endsAt: Date
+  isFundingOpen: Boolean!
+  isFundingFailed: Boolean!
 }
 
 type ProjectImpactFundRecipient {

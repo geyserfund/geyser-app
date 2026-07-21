@@ -13,7 +13,7 @@ import {
 import { AuthFlowIntent, AuthMethod, ExternalAccountType, SocialAccountType } from '../type.ts'
 
 export const defaultUser: UserMeFragment = {
-  id: 0,
+  id: '0',
   email: '',
   heroId: '',
   username: '',

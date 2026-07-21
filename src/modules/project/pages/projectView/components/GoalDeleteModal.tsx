@@ -39,7 +39,9 @@ export const GoalDeleteModal = () => {
     }
   }, [inputValue, currentGoal?.title, t])
 
-  const handleGoalDelete = () => [
+  const handleGoalDelete = () => {
+    if (!currentGoal?.id) return
+
     deleteProjectGoal.execute({
       variables: { projectGoalId: currentGoal?.id },
       onCompleted() {
@@ -52,8 +54,8 @@ export const GoalDeleteModal = () => {
           navigate(getPath('projectGoals', project?.name))
         }
       },
-    }),
-  ]
+    })
+  }
 
   const { title } = currentGoal || { title: '' }
 

@@ -1,7 +1,21 @@
-import { Box, Button, Flex, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Link as ChakraLink,
+  SimpleGrid,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretRightBold } from 'react-icons/pi'
-import { Link } from 'react-router'
+import { Link as RouterLink } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { RecoverableGrantProjects } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/RecoverableGrantProjects.tsx'
@@ -41,6 +55,8 @@ const radius = {
 const RECOVERABLE_GRANTS_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-hero.png'
 const AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL = 'https://youtu.be/pU1KxP0ddng'
+const FIELD_PARTNER_BOOKLET_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
 
 const infoPills = ['0% interest', 'No debt obligation', 'Capital reused locally'] as const
 
@@ -56,6 +72,12 @@ type FlowStepItem = {
   description: string
   isDark?: boolean
   isGold?: boolean
+}
+
+type FaqItem = {
+  question: string
+  answer: string
+  link?: string
 }
 
 const flowSteps: readonly FlowStepItem[] = [
@@ -83,7 +105,7 @@ const flowSteps: readonly FlowStepItem[] = [
   },
 ]
 
-const faqItems = [
+const faqItems: readonly FaqItem[] = [
   {
     question: 'How is capital return handled without debt enforcement?',
     answer:
@@ -95,13 +117,16 @@ const faqItems = [
       'Recoverable grants are currently available to Geyser field partners operating trusted local circular economy hubs.',
   },
   {
+    question: 'Where can I learn more about becoming a Field Partner?',
+    answer: 'Read the Field Partner Booklet for an overview of the program and how to apply.',
+    link: FIELD_PARTNER_BOOKLET_URL,
+  },
+  {
     question: 'Where can I follow progress and reporting?',
     answer:
       'Progress, pilot learning, and allocation updates will be shared through Geyser quarterly reports and field-partner case studies.',
   },
 ] as const
-
-const relatedResources = ['Field Partner Program', 'Impact Fund Reports', 'Afribit Kibera Case Study'] as const
 
 export const RecoverableGrantsPage = () => {
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
@@ -232,7 +257,7 @@ export const RecoverableGrantsPage = () => {
               <VStack align="stretch" spacing={5}>
                 <InfoCard colors={colors} eyebrow="Pilot scope" title="2 cohorts 15 people each 6 projects" compact />
                 <Button
-                  as={Link}
+                  as={RouterLink}
                   to={getPath('discoveryRecoverableGrantsAfribitCaseStudy')}
                   h="54px"
                   borderRadius={radius.button}
@@ -424,56 +449,73 @@ export const RecoverableGrantsPage = () => {
           </PageSection>
 
           <PageSection>
-            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} templateColumns={{ lg: '1.4fr 0.75fr' }}>
-              <Box
-                bg={colors.pale}
-                borderRadius={radius.section}
-                borderWidth="1px"
-                borderColor={colors.line}
-                p={{ base: 6, lg: 8 }}
+            <VStack align="stretch" spacing={{ base: 6, lg: 8 }} w="full">
+              <Body
+                size={{ base: 'lg', lg: '28px' }}
+                bold
+                color={colors.ink}
+                lineHeight={{ base: '24px', lg: '32px' }}
+                letterSpacing="0.18em"
+                textTransform="uppercase"
+                textAlign="center"
+                w="full"
               >
-                <Eyebrow colors={colors}>08 FAQ</Eyebrow>
-                <H2 size={{ base: '32px', lg: '40px' }} bold mt={2} mb={5}>
-                  {t('Common questions')}
-                </H2>
-                <VStack align="stretch" spacing={4}>
-                  {faqItems.map((item) => (
-                    <Box
-                      key={item.question}
-                      bg={colors.surfaceBg}
-                      borderRadius={radius.card}
-                      borderWidth="1px"
-                      borderColor={colors.line}
-                      p={5}
+                {t('FAQ')}
+              </Body>
+              <Accordion
+                allowToggle
+                w="full"
+                display="flex"
+                flexDirection="column"
+                gap={{ base: 2, lg: 3 }}
+                sx={{ '& > *:last-child': { borderBottom: '0 !important' } }}
+              >
+                {faqItems.map((item) => (
+                  <AccordionItem
+                    key={item.question}
+                    borderWidth="0"
+                    borderTopWidth="0"
+                    borderBottomWidth="0"
+                    borderRadius={radius.inner}
+                    sx={{ '&:last-of-type': { borderBottom: '0 !important' }, '&::before': { display: 'none' } }}
+                  >
+                    <AccordionButton
+                      minH={{ base: '64px', lg: '72px' }}
+                      px={{ base: 3, lg: 5 }}
+                      py={3}
+                      borderRadius={radius.inner}
+                      transition="background-color 160ms ease"
+                      _hover={{ bg: colors.pale }}
                     >
-                      <Body bold>{t(item.question)}</Body>
-                      <Body color={colors.muted} lineHeight="25px" mt={2}>
+                      <Box flex="1" textAlign="left">
+                        <Body bold sx={{ textWrap: 'pretty' }}>
+                          {t(item.question)}
+                        </Body>
+                      </Box>
+                      <AccordionIcon color={colors.muted} boxSize={5} />
+                    </AccordionButton>
+                    <AccordionPanel px={{ base: 3, lg: 5 }} pb={{ base: 5, lg: 6 }}>
+                      <Body color={colors.muted} lineHeight="25px">
                         {t(item.answer)}
                       </Body>
-                    </Box>
-                  ))}
-                </VStack>
-              </Box>
-              <Box
-                bg={colors.cream}
-                borderRadius={radius.section}
-                borderWidth="1px"
-                borderColor={colors.line}
-                p={{ base: 6, lg: 8 }}
-              >
-                <Eyebrow colors={colors}>Further reading</Eyebrow>
-                <H3 size="28px" bold mt={2} mb={4}>
-                  {t('Related resources')}
-                </H3>
-                <VStack align="flex-start" spacing={4}>
-                  {relatedResources.map((resource) => (
-                    <Body key={resource} color={colors.muted}>
-                      {t(resource)}
-                    </Body>
-                  ))}
-                </VStack>
-              </Box>
-            </SimpleGrid>
+                      {item.link && (
+                        <ChakraLink
+                          href={item.link}
+                          isExternal
+                          display="inline-block"
+                          color={colors.ink}
+                          fontWeight="700"
+                          mt={3}
+                          textDecor="underline"
+                        >
+                          {t('Open the Field Partner Booklet')}
+                        </ChakraLink>
+                      )}
+                    </AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </VStack>
           </PageSection>
 
           <FooterSection />
@@ -486,7 +528,7 @@ export const RecoverableGrantsPage = () => {
 const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
   <HStack spacing={2} color={colors.muted}>
     <Body
-      as={Link}
+      as={RouterLink}
       to={getPath('discoveryImpactFunds')}
       size="xs"
       bold
@@ -498,7 +540,7 @@ const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
     </Body>
     <PiCaretRightBold size={11} />
     <Body
-      as={Link}
+      as={RouterLink}
       to={getPath('discoveryRecoverableGrants')}
       size="xs"
       bold

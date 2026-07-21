@@ -5,9 +5,6 @@ import { useCallback, useMemo } from 'react'
 import { useAuthContext } from '@/context/auth.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { useGenerateTransactionDataForClaimingRBTCToContract } from '@/modules/project/funding/hooks/useFundingAPI.ts'
-import { useStripeEmbeddedTheme } from '@/modules/project/funding/hooks/useStripeEmbeddedTheme.ts'
-import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import {
   decryptSeed,
   generateKeysFromSeedHex,
@@ -15,6 +12,9 @@ import {
   hasValidRskAccountKeys,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
+import { useGenerateTransactionDataForClaimingRBTCToContract } from '@/modules/project/funding/hooks/useFundingAPI.ts'
+import { useStripeEmbeddedTheme } from '@/modules/project/funding/hooks/useStripeEmbeddedTheme.ts'
+import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { GEYSER_LAUNCH_PROJECT_ID, ORIGIN } from '@/shared/constants/config/env.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
@@ -23,10 +23,9 @@ import {
   FundingContributionFragment,
   FundingContributionPaymentDetailsFragment,
   FundingResourceType,
-  ProjectPageBodyFragment,
   QuoteCurrency,
   useContributionCreateMutation,
-  useProjectPageBodyQuery,
+  useLaunchPaymentProjectQuery,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -76,7 +75,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
   const { getSatoshisFromUSDCents } = useBTCConverter()
   const stripeEmbeddedTheme = useStripeEmbeddedTheme()
 
-  const { data: launchPaymentProjectData, loading: launchPaymentProjectLoading } = useProjectPageBodyQuery({
+  const { data: launchPaymentProjectData, loading: launchPaymentProjectLoading } = useLaunchPaymentProjectQuery({
     variables: {
       where: {
         id: GEYSER_LAUNCH_PROJECT_ID,
@@ -172,7 +171,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       contribution: FundingContributionFragment,
       payments: FundingContributionPaymentDetailsFragment,
       requestContext: LaunchRequestContext,
-      targetProject?: ProjectPageBodyFragment | null,
+      targetProject?: typeof launchPaymentProject | null,
     ) => {
       const contributionInfo = {
         projectTitle: project?.title,

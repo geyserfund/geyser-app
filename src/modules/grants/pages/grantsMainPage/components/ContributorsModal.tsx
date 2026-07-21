@@ -125,7 +125,7 @@ export const ContributorsItem = ({ contributor, ...rest }: ContributorsItemProps
           <LinkableAvatar
             imageSrc={contributor.user?.imageUrl || ''}
             avatarUsername={contributor.user?.username || ''}
-            userProfileID={contributor.user?.id}
+            userProfileID={contributor.user?.id ?? ''}
             underlineUsername={false}
           />
           <Body>{contributor.user?.username}</Body>

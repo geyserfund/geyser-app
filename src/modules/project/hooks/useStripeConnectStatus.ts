@@ -56,7 +56,7 @@ export const useStripeConnectStatus = ({
   fetchPolicy = 'cache-first',
 }: UseStripeConnectStatusProps) => {
   const { data, loading, error, refetch } = useProjectStripeConnectStatusQuery({
-    variables: { projectId },
+    variables: { projectId: projectId === undefined ? '' : String(projectId) },
     skip: !projectId || !isTiaProject,
     fetchPolicy,
   })

@@ -17,7 +17,7 @@ import {
 
 export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
   __typename: 'User',
-  id: 0,
+  id: '0',
   email: '',
   username: '',
   heroId: '',
@@ -160,7 +160,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    if (user.id === 0) {
+    if (user.id === '0') {
       setIsLoggedIn(false)
     } else {
       setIsLoggedIn(true)

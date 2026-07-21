@@ -22,6 +22,11 @@
   - `hasFiatPaymentMethodAtom` current behavior remains unchanged.
   - Apple Pay capability check with `ApplePaySession.canMakePayments()` remains unchanged.
 
+## Architecture Decision Records
+
+- Document every architectural change in `docs/adrs/`: create a new ADR or update the relevant existing ADR.
+- Give each ADR a clear, decision-focused title and record its context, decision, consequences, and implementation status.
+
 ## Local Development
 
 - When verifying the app in a browser, use `https://dev.geyser.fund` instead of `http://localhost:3000` so frontend data loads correctly from the dev backend.

@@ -7,13 +7,9 @@ import type {
 
 export type LandingProjectCardProject = Pick<
   ProjectForLandingPageFragment,
-  | 'activeMatching'
-  | 'aonGoal'
-  | 'balance'
-  | 'balanceUsdCent'
   | 'category'
   | 'fundersCount'
-  | 'fundingStrategy'
+  | 'fundingSummary'
   | 'id'
   | 'launchedAt'
   | 'location'
