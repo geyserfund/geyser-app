@@ -10459,7 +10459,10 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: string, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: string, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: string, user: { __typename?: 'User', id: string, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: string, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', raisedSats: string, goalSats?: string | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: string, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: string, raisedUsdCent: number, goalSats?: string | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
+        { __typename?: 'ProjectMatching' }
+        & ProjectMatchingFragment
+      ) | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, activeMatching?: (
@@ -13221,17 +13224,6 @@ export const PostForLandingPageFragmentDoc = gql`
   }
 }
     `;
-export const ProjectAonGoalForLandingPageFragmentDoc = gql`
-    fragment ProjectAonGoalForLandingPage on ProjectAonGoal {
-  goalAmount
-  balance
-  goalDurationInDays
-  deployedAt
-  endsAt
-  status
-  hasCompletedPayout
-}
-    `;
 export const ProjectMatchingFragmentDoc = gql`
     fragment ProjectMatching on ProjectMatching {
   id
@@ -13249,6 +13241,17 @@ export const ProjectMatchingFragmentDoc = gql`
   remainingCapAmount
 }
     `;
+export const ProjectAonGoalForLandingPageFragmentDoc = gql`
+    fragment ProjectAonGoalForLandingPage on ProjectAonGoal {
+  goalAmount
+  balance
+  goalDurationInDays
+  deployedAt
+  endsAt
+  status
+  hasCompletedPayout
+}
+    `;
 export const ProjectForLandingPageFragmentDoc = gql`
     fragment ProjectForLandingPage on Project {
   id
@@ -13262,13 +13265,20 @@ export const ProjectForLandingPageFragmentDoc = gql`
   status
   fundingStrategy
   fundingSummary {
+    fundingStrategy
     raisedSats
+    raisedUsdCent
     goalSats
     percentageFunded
     status
     endsAt
     isFundingOpen
     isFundingFailed
+    matching {
+      activeMatching {
+        ...ProjectMatching
+      }
+    }
   }
   rskEoa
   category
@@ -13306,8 +13316,8 @@ export const ProjectForLandingPageFragmentDoc = gql`
     }
   }
 }
-    ${ProjectAonGoalForLandingPageFragmentDoc}
-${ProjectMatchingFragmentDoc}`;
+    ${ProjectMatchingFragmentDoc}
+${ProjectAonGoalForLandingPageFragmentDoc}`;
 export const ProjectForLaunchpadPageFragmentDoc = gql`
     fragment ProjectForLaunchpadPage on Project {
   id

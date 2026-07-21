@@ -10,12 +10,21 @@ export const AonProgressBar = ({
   wrapperProps,
   ...rest
 }: {
-  project: Pick<ProjectForLandingPageFragment, 'aonGoal' | 'balance' | 'balanceUsdCent' | 'fundingStrategy' | 'status'>
+  project:
+    | Pick<ProjectForLandingPageFragment, 'aonGoal' | 'balance' | 'balanceUsdCent' | 'fundingStrategy' | 'status'>
+    | { fundingSummary: Pick<ProjectForLandingPageFragment['fundingSummary'], 'percentageFunded'> }
   percentage?: number | null
   wrapperProps?: StackProps
 } & ProgressBarProps) => {
-  const { getAonGoalPercentage } = useProjectToolkit(project)
-  const calculatedPercentage = getAonGoalPercentage()
+  const hasFundingSummary = 'fundingSummary' in project
+  const projectForToolkit = hasFundingSummary
+    ? ({ balance: 0, balanceUsdCent: 0, fundingStrategy: null, status: null, aonGoal: null } as Pick<
+        ProjectForLandingPageFragment,
+        'aonGoal' | 'balance' | 'balanceUsdCent' | 'fundingStrategy' | 'status'
+      >)
+    : project
+  const { getAonGoalPercentage } = useProjectToolkit(projectForToolkit)
+  const calculatedPercentage = hasFundingSummary ? project.fundingSummary.percentageFunded : getAonGoalPercentage()
 
   if (!project) {
     return null

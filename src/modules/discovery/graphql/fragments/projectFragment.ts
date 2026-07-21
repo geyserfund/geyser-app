@@ -20,13 +20,20 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     status
     fundingStrategy
     fundingSummary {
+      fundingStrategy
       raisedSats
+      raisedUsdCent
       goalSats
       percentageFunded
       status
       endsAt
       isFundingOpen
       isFundingFailed
+      matching {
+        activeMatching {
+          ...ProjectMatching
+        }
+      }
     }
     rskEoa
     category
