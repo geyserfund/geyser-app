@@ -21,6 +21,7 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     fundingStrategy
     fundingSummary {
       fundingStrategy
+      isRecoverableGrant
       raisedSats
       raisedUsdCent
       goalSats

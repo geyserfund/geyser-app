@@ -11,6 +11,7 @@ export const FRAGMENT_LANDING_PROJECT_CARD_PROJECT = gql`
     status
     fundingSummary {
       fundingStrategy
+      isRecoverableGrant
       raisedSats
       raisedUsdCent
       goalSats

@@ -3841,6 +3841,7 @@ export type ProjectFundingSummary = {
   goals: ProjectGoalFundingSummary;
   isFundingFailed: Scalars['Boolean']['output'];
   isFundingOpen: Scalars['Boolean']['output'];
+  isRecoverableGrant: Scalars['Boolean']['output'];
   matching: ProjectMatchingFundingSummary;
   percentageFunded?: Maybe<Scalars['Int']['output']>;
   raisedSats: Scalars['BigInt']['output'];
@@ -9046,6 +9047,7 @@ export type ProjectFundingSummaryResolvers<ContextType = any, ParentType extends
   goals?: Resolver<ResolversTypes['ProjectGoalFundingSummary'], ParentType, ContextType>;
   isFundingFailed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isFundingOpen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isRecoverableGrant?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   matching?: Resolver<ResolversTypes['ProjectMatchingFundingSummary'], ParentType, ContextType>;
   percentageFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   raisedSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -10459,7 +10461,7 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isRecoverableGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
         { __typename?: 'ProjectMatching' }
         & ProjectMatchingFragment
       ) | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
@@ -10761,7 +10763,7 @@ export type LeaderboardGlobalProjectsQuery = { __typename?: 'Query', leaderboard
     & TopProjectsFragmentFragment
   )> };
 
-export type LandingProjectCardProjectFragment = { __typename?: 'Project', id: any, name: string, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number } | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type LandingProjectCardProjectFragment = { __typename?: 'Project', id: any, name: string, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isRecoverableGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number } | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
 export type LandingPostCardPostFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null } | null };
 
@@ -13266,6 +13268,7 @@ export const ProjectForLandingPageFragmentDoc = gql`
   fundingStrategy
   fundingSummary {
     fundingStrategy
+    isRecoverableGrant
     raisedSats
     raisedUsdCent
     goalSats
@@ -13569,6 +13572,7 @@ export const LandingProjectCardProjectFragmentDoc = gql`
   status
   fundingSummary {
     fundingStrategy
+    isRecoverableGrant
     raisedSats
     raisedUsdCent
     goalSats
