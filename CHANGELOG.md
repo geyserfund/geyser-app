@@ -1,3 +1,64 @@
+## [0.46.0](https://github.com/geyserfund/geyser-app/compare/v0.45.1...v0.46.0) (2026-07-21)
+
+
+### Features
+
+* add funding tests ([4a7780d](https://github.com/geyserfund/geyser-app/commit/4a7780d7f32e70df7051cd298db9795dcaa3c192))
+* add onchain and lightning tests for tia ([c4f759a](https://github.com/geyserfund/geyser-app/commit/c4f759a802fba914dfee06768684047bd44615d9))
+* **discovery:** use canonical funding summaries ([de3c309](https://github.com/geyserfund/geyser-app/commit/de3c3094bdda187a7e9fdd9b87510cf9ee2ffbfe))
+* enhance funding and project creation flows with error handling and backend checks ([80f5009](https://github.com/geyserfund/geyser-app/commit/80f500938919c51d4761c8017d3787656592a176))
+* enhance project creation and funding flows with recovery key handling and launch payment readiness checks ([903f9de](https://github.com/geyserfund/geyser-app/commit/903f9de7a80c1a4ff267541c9dd475cbfd8f5dba))
+* **funding:** expose recoverable grant summary ([691b8a4](https://github.com/geyserfund/geyser-app/commit/691b8a4331e1ecc8b58bb60d145c8c65f3d6f4a8))
+* getting started with tests ([d659255](https://github.com/geyserfund/geyser-app/commit/d6592555f7fc9f57fda746de5eb98c7732a1660a))
+* **impact-funds:** add shared active fund surfaces ([2672418](https://github.com/geyserfund/geyser-app/commit/267241869d3cb9023c209dc0ae5e25865626a14e))
+* **impact-funds:** refine impact fund and recoverable grants pages ([e15d5e3](https://github.com/geyserfund/geyser-app/commit/e15d5e32237b645527a89317b5be3e88246c0dc5))
+* **translations:** expand English translations for Geyser platform ([3a66e40](https://github.com/geyserfund/geyser-app/commit/3a66e400cb5c9b1970da2264942016a1ee6443a6))
+
+
+### Bug Fixes
+
+* add first set of tests ([c21f270](https://github.com/geyserfund/geyser-app/commit/c21f270cab8692f65238aad3750682f6f3a96b37))
+* add real authentication to nostr logins ([22825fe](https://github.com/geyserfund/geyser-app/commit/22825fe8cd452397414e8ee19635e20afb626203))
+* **build:** preserve legacy bigint consumer compatibility ([3f610d3](https://github.com/geyserfund/geyser-app/commit/3f610d3cb230976725bddd7b44051df79d6e7c6c))
+* **e2e:** add LND/bitcoind request timeouts and increase launch URL wait ([f7c25cb](https://github.com/geyserfund/geyser-app/commit/f7c25cb5452eb08a030b4cf641e4d3c15f656921))
+* **e2e:** fix test asset gitignore, auth modal dismiss, and migrate off lndtestproject ([ba7132a](https://github.com/geyserfund/geyser-app/commit/ba7132a2d4149914f7512c5f234366cb8aba3145))
+* **e2e:** force-click dropdown past modal, optional tax-id step, skip rewardless buy test ([cee761c](https://github.com/geyserfund/geyser-app/commit/cee761c64a0ab0457d430f6b3288b6dd98656903))
+* get started with creating project tests ([39f3043](https://github.com/geyserfund/geyser-app/commit/39f3043de19e674654cc520319696ae6bf41d969))
+* **graphql:** align generated funding summary types ([185d4fd](https://github.com/geyserfund/geyser-app/commit/185d4fde592e0680dc9f527db8d0d1b65bf118a4))
+* **project-creation:** slim launch payment project query ([836700b](https://github.com/geyserfund/geyser-app/commit/836700b692b31ee99ed114a72c9b1dff57582ea4))
+* **project:** normalize reward identifier ([cca7d1e](https://github.com/geyserfund/geyser-app/commit/cca7d1e13ac6eeee6ec51749ca4e74a433193328))
+* **project:** resolve generated scalar type errors ([1c8c923](https://github.com/geyserfund/geyser-app/commit/1c8c9230fec377431575efab2ddd25f497ad08c7))
+
+## [0.46.0](https://github.com/geyserfund/geyser-app/compare/v0.45.1...v0.46.0) (2026-07-21)
+
+
+### Features
+
+* add funding tests ([4a7780d](https://github.com/geyserfund/geyser-app/commit/4a7780d7f32e70df7051cd298db9795dcaa3c192))
+* add onchain and lightning tests for tia ([c4f759a](https://github.com/geyserfund/geyser-app/commit/c4f759a802fba914dfee06768684047bd44615d9))
+* **discovery:** use canonical funding summaries ([de3c309](https://github.com/geyserfund/geyser-app/commit/de3c3094bdda187a7e9fdd9b87510cf9ee2ffbfe))
+* enhance funding and project creation flows with error handling and backend checks ([80f5009](https://github.com/geyserfund/geyser-app/commit/80f500938919c51d4761c8017d3787656592a176))
+* enhance project creation and funding flows with recovery key handling and launch payment readiness checks ([903f9de](https://github.com/geyserfund/geyser-app/commit/903f9de7a80c1a4ff267541c9dd475cbfd8f5dba))
+* **funding:** expose recoverable grant summary ([691b8a4](https://github.com/geyserfund/geyser-app/commit/691b8a4331e1ecc8b58bb60d145c8c65f3d6f4a8))
+* getting started with tests ([d659255](https://github.com/geyserfund/geyser-app/commit/d6592555f7fc9f57fda746de5eb98c7732a1660a))
+* **impact-funds:** refine impact fund and recoverable grants pages ([e15d5e3](https://github.com/geyserfund/geyser-app/commit/e15d5e32237b645527a89317b5be3e88246c0dc5))
+* **translations:** expand English translations for Geyser platform ([3a66e40](https://github.com/geyserfund/geyser-app/commit/3a66e400cb5c9b1970da2264942016a1ee6443a6))
+
+
+### Bug Fixes
+
+* add first set of tests ([c21f270](https://github.com/geyserfund/geyser-app/commit/c21f270cab8692f65238aad3750682f6f3a96b37))
+* add real authentication to nostr logins ([22825fe](https://github.com/geyserfund/geyser-app/commit/22825fe8cd452397414e8ee19635e20afb626203))
+* **build:** preserve legacy bigint consumer compatibility ([3f610d3](https://github.com/geyserfund/geyser-app/commit/3f610d3cb230976725bddd7b44051df79d6e7c6c))
+* **e2e:** add LND/bitcoind request timeouts and increase launch URL wait ([f7c25cb](https://github.com/geyserfund/geyser-app/commit/f7c25cb5452eb08a030b4cf641e4d3c15f656921))
+* **e2e:** fix test asset gitignore, auth modal dismiss, and migrate off lndtestproject ([ba7132a](https://github.com/geyserfund/geyser-app/commit/ba7132a2d4149914f7512c5f234366cb8aba3145))
+* **e2e:** force-click dropdown past modal, optional tax-id step, skip rewardless buy test ([cee761c](https://github.com/geyserfund/geyser-app/commit/cee761c64a0ab0457d430f6b3288b6dd98656903))
+* get started with creating project tests ([39f3043](https://github.com/geyserfund/geyser-app/commit/39f3043de19e674654cc520319696ae6bf41d969))
+* **graphql:** align generated funding summary types ([185d4fd](https://github.com/geyserfund/geyser-app/commit/185d4fde592e0680dc9f527db8d0d1b65bf118a4))
+* **project-creation:** slim launch payment project query ([836700b](https://github.com/geyserfund/geyser-app/commit/836700b692b31ee99ed114a72c9b1dff57582ea4))
+* **project:** normalize reward identifier ([cca7d1e](https://github.com/geyserfund/geyser-app/commit/cca7d1e13ac6eeee6ec51749ca4e74a433193328))
+* **project:** resolve generated scalar type errors ([1c8c923](https://github.com/geyserfund/geyser-app/commit/1c8c9230fec377431575efab2ddd25f497ad08c7))
+
 ## [0.45.0](https://github.com/geyserfund/geyser-app/compare/v0.44.1...v0.45.0) (2026-07-15)
 
 
