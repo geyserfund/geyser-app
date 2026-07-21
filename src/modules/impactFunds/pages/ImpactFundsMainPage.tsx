@@ -9,6 +9,8 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '@/modules/impactFunds/utils/constants.ts'
 import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
+import { LabifBanner } from '@/shared/components/LabifBanner.tsx'
+import { RecoverableGrantPoolCard } from '@/shared/components/RecoverableGrantPoolCard.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getAiSeoPageContent, getPath } from '@/shared/constants'
@@ -364,8 +366,9 @@ export const ImpactFundsMainPage = () => {
         <SponsorsAndFundsSection
           colors={colors}
           sponsors={sponsors}
-          partnerFund={latinAmericaImpactFund}
-          getFundAmountDisplay={getFundAmountDisplay}
+          committedAmount={
+            latinAmericaImpactFund ? getFundAmountDisplay(latinAmericaImpactFund) : t('120,000,000 sats')
+          }
           onDonateClick={() => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })}
         />
         <ResourcesSection colors={colors} />
@@ -997,14 +1000,12 @@ const LeaderboardRow = ({ colors, row }: { colors: SectionColors; row: FieldPart
 const SponsorsAndFundsSection = ({
   colors,
   sponsors,
-  partnerFund,
-  getFundAmountDisplay,
+  committedAmount,
   onDonateClick,
 }: {
   colors: SectionColors
   sponsors: readonly SponsorListItem[]
-  partnerFund?: ImpactFundListItem
-  getFundAmountDisplay: (fund: ImpactFundListItem) => string
+  committedAmount: string
   onDonateClick: () => void
 }) => {
   const partnerFundPath = getPath('impactFunds', LATIN_AMERICA_IMPACT_FUND_NAME)
@@ -1025,162 +1026,12 @@ const SponsorsAndFundsSection = ({
             </H2>
           </VStack>
           <VStack align="stretch" spacing={5}>
-            <Flex
-              as={Link}
-              to={partnerFundPath}
-              direction={{ base: 'column', md: 'row' }}
-              justify="space-between"
-              align={{ base: 'flex-start', md: 'center' }}
-              gap={{ base: 6, md: 8 }}
-              bg={colors.emphasisCardBg}
-              borderWidth="1px"
-              borderColor={colors.emphasisCardBorder}
-              borderRadius="card"
-              p={{ base: 5, lg: 7 }}
-              minH={{ base: 'auto', lg: '220px' }}
-              _hover={{ textDecoration: 'none', opacity: 0.94 }}
-            >
-              <VStack align="flex-start" spacing={3} maxW="760px">
-                <H3
-                  size={{ base: '26px', lg: '33px' }}
-                  lineHeight={{ base: '32px', lg: '39px' }}
-                  bold
-                  color={colors.emphasisCardText}
-                  sx={{ textWrap: 'balance' }}
-                >
-                  {partnerFund?.title || t('Latin America Bitcoin Impact Fund')}
-                </H3>
-                <Body
-                  size={{ base: 'md', lg: '18px' }}
-                  lineHeight={{ base: '26px', lg: '28px' }}
-                  color={colors.emphasisCardMutedText}
-                >
-                  {t(
-                    'Additional partner funds can be routed through local Field Partners and debt-free recoverable grant capital.',
-                  )}
-                </Body>
-                <HStack
-                  spacing={2}
-                  bg={colors.emphasisCardButtonBg}
-                  color={colors.emphasisCardButtonText}
-                  borderRadius="innerCard"
-                  px={4}
-                  py={3}
-                >
-                  <Body size="sm" bold color="inherit">
-                    {t('Explore LABIF')}
-                  </Body>
-                  <Icon as={PiArrowRightBold} />
-                </HStack>
-              </VStack>
-              <VStack
-                align="flex-start"
-                spacing={2}
-                bg={colors.darkSurfaceBg}
-                borderRadius="innerCard"
-                p={{ base: 4, lg: 5 }}
-                w={{ base: 'full', md: '280px' }}
-                flexShrink={0}
-              >
-                <Eyebrow color={colors.emphasisCardAccent}>{t('LABIF')}</Eyebrow>
-                <Body
-                  size={{ base: '40px', lg: '48px' }}
-                  lineHeight={{ base: '46px', lg: '54px' }}
-                  bold
-                  color={colors.emphasisCardText}
-                >
-                  {partnerFund ? getFundAmountDisplay(partnerFund) : t('120,000,000 sats')}
-                </Body>
-                <Body size="md" bold color={colors.emphasisCardMutedText}>
-                  {t('Committed')}
-                </Body>
-              </VStack>
-            </Flex>
-            <Flex
-              direction={{ base: 'column', md: 'row' }}
-              justify="space-between"
-              align={{ base: 'flex-start', md: 'center' }}
-              gap={{ base: 6, md: 8 }}
-              bg={colors.amberBg}
-              borderRadius="card"
-              p={{ base: 5, lg: 7 }}
-              minH={{ base: 'auto', lg: '220px' }}
-            >
-              <VStack align="flex-start" spacing={3} maxW="760px">
-                <H3
-                  size={{ base: '26px', lg: '33px' }}
-                  lineHeight={{ base: '32px', lg: '39px' }}
-                  bold
-                  color={colors.amberText}
-                  sx={{ textWrap: 'balance' }}
-                >
-                  {t('Recoverable Grant Pool')}
-                </H3>
-                <Body
-                  size={{ base: 'md', lg: '18px' }}
-                  lineHeight={{ base: '26px', lg: '28px' }}
-                  color={colors.amberText}
-                >
-                  {t(
-                    'Donate reusable capital for local projects. Help Field Partners deploy and recycle debt-free capital in their local communities.',
-                  )}
-                </Body>
-                <Flex direction="row" align="stretch" gap={3} w={{ base: 'full', md: 'auto' }}>
-                  <Button
-                    as={Link}
-                    to={getPath('discoveryRecoverableGrants')}
-                    h="48px"
-                    borderRadius="innerCard"
-                    variant="outline"
-                    borderColor={colors.amberText}
-                    color={colors.amberText}
-                    w={{ base: 'full', md: 'auto' }}
-                  >
-                    {t('Learn more')}
-                  </Button>
-                  <Button
-                    h="48px"
-                    borderRadius="innerCard"
-                    bg={colors.surfaceActionButtonBg}
-                    color={colors.surfaceActionButtonText}
-                    onClick={onDonateClick}
-                    w={{ base: 'full', md: 'auto' }}
-                    _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
-                  >
-                    {t('Donate')}
-                  </Button>
-                </Flex>
-              </VStack>
-              <VStack
-                align={{ base: 'stretch', md: 'flex-end' }}
-                justify="space-between"
-                spacing={5}
-                w={{ base: 'full', md: '280px' }}
-                flexShrink={0}
-              >
-                <VStack
-                  align="flex-start"
-                  spacing={2}
-                  bg={colors.emphasisCardBg}
-                  borderRadius="innerCard"
-                  p={{ base: 4, lg: 5 }}
-                  w="full"
-                >
-                  <Eyebrow color={colors.emphasisCardMutedText}>{t('Geyser')}</Eyebrow>
-                  <Body
-                    size={{ base: '40px', lg: '48px' }}
-                    lineHeight={{ base: '46px', lg: '54px' }}
-                    bold
-                    color={colors.emphasisCardText}
-                  >
-                    {t('3M sats')}
-                  </Body>
-                  <Body size="md" bold color={colors.emphasisCardMutedText}>
-                    {t('Committed per quarter')}
-                  </Body>
-                </VStack>
-              </VStack>
-            </Flex>
+            <LabifBanner
+              learnMoreTo={partnerFundPath}
+              applicationTo={`${partnerFundPath}#apply`}
+              committedAmount={committedAmount || t('200,000,000 sats')}
+            />
+            <RecoverableGrantPoolCard onDonateClick={onDonateClick} />
           </VStack>
         </VStack>
         <VStack align="flex-start" spacing={3}>
