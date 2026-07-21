@@ -71,7 +71,7 @@ export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxCla
   /** Removes the reward from the funding basket */
   const removeRewardFromBasket = useCallback(() => {
     if (count > 0 && reward?.id) {
-      updateReward({ id: reward.id, count: count - 1 })
+      updateReward({ id: Number(reward.id), count: count - 1 })
     }
   }, [count, updateReward, reward])
 
