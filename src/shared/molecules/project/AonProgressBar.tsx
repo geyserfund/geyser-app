@@ -41,7 +41,7 @@ export const AonProgressBar = ({
     >
       <ProgressBar
         w="full"
-        value={percentage ?? calculatedPercentage}
+        value={percentage ?? calculatedPercentage ?? 0}
         height={{ base: '10px', lg: '14px' }}
         borderRadius="20px"
         overflow="hidden"
