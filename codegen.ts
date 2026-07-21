@@ -10,7 +10,7 @@ const config: CodegenConfig = {
     scalars: {
       BigInt: {
         input: 'string | number',
-        output: 'string',
+        output: 'any',
       },
     },
   },

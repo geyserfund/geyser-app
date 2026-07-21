@@ -18,7 +18,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  BigInt: { input: string | number; output: string; }
+  BigInt: { input: string | number; output: any; }
   Date: { input: any; output: any; }
 };
 
@@ -10251,27 +10251,27 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type EmailUpdateUserFragment = { __typename?: 'User', email?: string | null, isEmailVerified: boolean, id: string };
+export type EmailUpdateUserFragment = { __typename?: 'User', email?: string | null, isEmailVerified: boolean, id: any };
 
 export type OtpResponseFragment = { __typename?: 'OTPResponse', otpVerificationToken: string, expiresAt: any };
 
-export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: string, title: string, targetAmount: number, currency: ProjectGoalCurrency, amountContributed: number };
+export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, targetAmount: number, currency: ProjectGoalCurrency, amountContributed: number };
 
-export type ProjectGoalFragment = { __typename?: 'ProjectGoal', id: string, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: string, amountContributed: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
+export type ProjectGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
 
-export type BoardVoteGrantsFragmentFragment = { __typename?: 'BoardVoteGrant', id: string, title: string, name: string, image?: string | null, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, type: GrantType, applicants: Array<{ __typename?: 'GrantApplicant', id: string }>, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, sponsors: Array<{ __typename?: 'Sponsor', id: string, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> };
+export type BoardVoteGrantsFragmentFragment = { __typename?: 'BoardVoteGrant', id: any, title: string, name: string, image?: string | null, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, type: GrantType, applicants: Array<{ __typename?: 'GrantApplicant', id: any }>, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> };
 
-export type CommunityVoteGrantsFragmentFragment = { __typename?: 'CommunityVoteGrant', id: string, title: string, name: string, image?: string | null, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, applicants: Array<{ __typename?: 'GrantApplicant', id: string }>, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, sponsors: Array<{ __typename?: 'Sponsor', id: string, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
+export type CommunityVoteGrantsFragmentFragment = { __typename?: 'CommunityVoteGrant', id: any, title: string, name: string, image?: string | null, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, applicants: Array<{ __typename?: 'GrantApplicant', id: any }>, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
 
-export type BoardVoteGrantFragmentFragment = { __typename?: 'BoardVoteGrant', id: string, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, user?: { __typename?: 'User', id: string, imageUrl?: string | null } | null }>, project: { __typename?: 'Project', id: string, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: string }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: string, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: string, public: boolean }> } }> };
+export type BoardVoteGrantFragmentFragment = { __typename?: 'BoardVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: any, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: any, public: boolean }> } }> };
 
-export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGrant', id: string, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, voteCount: number, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, voteCount: number, user?: { __typename?: 'User', id: string, imageUrl?: string | null, username: string } | null }>, project: { __typename?: 'Project', id: string, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: string }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: string, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
+export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, voteCount: number, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, voteCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
 
-export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: string | null } | null };
+export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectForOwnerFragment = { __typename?: 'Project', id: string, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, description?: string | null, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
+export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, description?: string | null, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
 
-export type ProjectWalletFragment = { __typename?: 'Wallet', id: string, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } };
+export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } };
 
 export type WalletLimitsFragment = { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null } | null };
 
@@ -10321,21 +10321,21 @@ export type OrderStatusUpdateMutationVariables = Exact<{
 }>;
 
 
-export type OrderStatusUpdateMutation = { __typename?: 'Mutation', orderStatusUpdate?: { __typename?: 'Order', status: string, id: string, shippedAt?: any | null, deliveredAt?: any | null } | null };
+export type OrderStatusUpdateMutation = { __typename?: 'Mutation', orderStatusUpdate?: { __typename?: 'Order', status: string, id: any, shippedAt?: any | null, deliveredAt?: any | null } | null };
 
 export type UnlinkExternalAccountMutationVariables = Exact<{
   id: Scalars['BigInt']['input'];
 }>;
 
 
-export type UnlinkExternalAccountMutation = { __typename?: 'Mutation', unlinkExternalAccount: { __typename?: 'User', id: string, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: string, accountType: string, externalUsername: string, externalId: string, public: boolean }> } };
+export type UnlinkExternalAccountMutation = { __typename?: 'Mutation', unlinkExternalAccount: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, accountType: string, externalUsername: string, externalId: string, public: boolean }> } };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'User', id: string, bio?: string | null, email?: string | null, username: string, imageUrl?: string | null, wallet?: { __typename?: 'Wallet', connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'User', id: any, bio?: string | null, email?: string | null, username: string, imageUrl?: string | null, wallet?: { __typename?: 'Wallet', connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate' } } | null } };
 
 export type UserDeleteMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -10401,7 +10401,7 @@ export type GrantGetQueryVariables = Exact<{
 }>;
 
 
-export type GrantGetQuery = { __typename?: 'Query', grant: { __typename?: 'BoardVoteGrant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: string } }> } | { __typename?: 'CommunityVoteGrant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: string } }> } };
+export type GrantGetQuery = { __typename?: 'Query', grant: { __typename?: 'BoardVoteGrant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: any } }> } | { __typename?: 'CommunityVoteGrant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: any } }> } };
 
 export type LightningAddressVerifyQueryVariables = Exact<{
   lightningAddress?: InputMaybe<Scalars['String']['input']>;
@@ -10417,16 +10417,16 @@ export type WalletLimitQueryVariables = Exact<{
 
 export type WalletLimitQuery = { __typename?: 'Query', getWallet: { __typename?: 'Wallet', limits?: { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', max?: number | null, min?: number | null } | null } | null } };
 
-export type ExternalAccountFragment = { __typename?: 'ExternalAccount', id: string, accountType: string, externalUsername: string, externalId: string, externalLink?: string | null, public: boolean };
+export type ExternalAccountFragment = { __typename?: 'ExternalAccount', id: any, accountType: string, externalUsername: string, externalId: string, externalLink?: string | null, public: boolean };
 
-export type ProjectOwnerUserFragment = { __typename?: 'User', id: string, username: string, imageUrl?: string | null, email?: string | null, ranking?: string | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
+export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )> };
 
 export type UserComplianceDetailsFragment = { __typename?: 'UserComplianceDetails', contributionLimits: { __typename?: 'UserContributionLimits', monthly: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number } }, currentVerificationLevel: { __typename?: 'UserVerificationLevelStatus', level: UserVerificationLevel, status: UserVerificationStatus, verifiedAt?: any | null }, verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } };
 
-export type UserMeFragment = { __typename?: 'User', id: string, username: string, heroId: string, bio?: string | null, guardianType?: GuardianType | null, imageUrl?: string | null, email?: string | null, ranking?: string | null, isEmailVerified: boolean, isFieldPartner: boolean, hasSocialAccount: boolean, complianceDetails: (
+export type UserMeFragment = { __typename?: 'User', id: any, username: string, heroId: string, bio?: string | null, guardianType?: GuardianType | null, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, isFieldPartner: boolean, hasSocialAccount: boolean, complianceDetails: (
     { __typename?: 'UserComplianceDetails' }
     & UserComplianceDetailsFragment
   ), externalAccounts: Array<(
@@ -10448,18 +10448,18 @@ export type MeQuery = { __typename?: 'Query', me?: (
 export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, projectFollows: Array<{ __typename?: 'Project', id: string, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
+export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
 
 export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, deployedAt?: any | null, endsAt?: any | null, status?: ProjectAonGoalStatus | null, hasCompletedPayout: boolean };
 
-export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: string, projectId: string, createdAt?: any | null, funder: { __typename?: 'Funder', id: string, user?: { __typename?: 'User', id: string, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null }, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
+export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: any, projectId: any, createdAt?: any | null, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null }, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
   ) | null };
 
-export type PostForLandingPageFragment = { __typename?: 'Post', id: string, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: string, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: string, user: { __typename?: 'User', id: string, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
+export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: string, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: string, raisedUsdCent: number, goalSats?: string | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
         { __typename?: 'ProjectMatching' }
         & ProjectMatchingFragment
       ) | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
@@ -10468,23 +10468,23 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: string
   ) | null, activeMatching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingFragment
-  ) | null, owners: Array<{ __typename?: 'Owner', id: string, user: { __typename?: 'User', id: string, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+  ) | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: string, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: string, user: { __typename?: 'User', id: string, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: string, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
-  ) | null, wallets: Array<{ __typename?: 'Wallet', id: string, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }>, reviews: Array<(
+  ) | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }>, reviews: Array<(
     { __typename?: 'ProjectReview' }
     & ProjectReviewFragment
   )> };
 
-export type ProjectThumbnailImageFragment = { __typename?: 'Project', id: string, title: string, name: string, thumbnailImage?: string | null };
+export type ProjectThumbnailImageFragment = { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null };
 
-export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: string, uuid: string, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: string, name: string, title: string, thumbnailImage?: string | null } };
+export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
-export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: string, uuid: string, category?: string | null, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: string, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
+export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
 
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>;
@@ -10506,24 +10506,24 @@ export type LandingPageFeaturedContributionsGetQuery = { __typename?: 'Query', c
 export type AcelerandoVipLeaderboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AcelerandoVipLeaderboardQuery = { __typename?: 'Query', acelerandoVipLeaderboard: { __typename?: 'AcelerandoVipLeaderboardResponse', giveawayId: string, updatedAt: any, startAt: any, endAt: any, timezone: string, leaderboardSize: number, topCutoffScore: string, entries: Array<{ __typename?: 'AcelerandoVipLeaderboardEntry', rank: number, userId: string, displayName: string, avatarUrl?: string | null, scoreSats: string, eligibleContributionsCount: number, uniqueProjectsBacked: number }> } };
+export type AcelerandoVipLeaderboardQuery = { __typename?: 'Query', acelerandoVipLeaderboard: { __typename?: 'AcelerandoVipLeaderboardResponse', giveawayId: string, updatedAt: any, startAt: any, endAt: any, timezone: string, leaderboardSize: number, topCutoffScore: any, entries: Array<{ __typename?: 'AcelerandoVipLeaderboardEntry', rank: number, userId: any, displayName: string, avatarUrl?: string | null, scoreSats: any, eligibleContributionsCount: number, uniqueProjectsBacked: number }> } };
 
 export type AcelerandoVipMyPositionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AcelerandoVipMyPositionQuery = { __typename?: 'Query', acelerandoVipMyPosition?: { __typename?: 'AcelerandoVipMyPositionResponse', userId: string, rank?: number | null, scoreSats: string, inTop3: boolean, top3CutoffScore: string, distanceToTop3Sats: string, distanceToNextRankSats?: string | null, progressToTop3: number, eligibleContributionsCount: number, uniqueProjectsBacked: number, excludedSelfContributionsCount: number } | null };
+export type AcelerandoVipMyPositionQuery = { __typename?: 'Query', acelerandoVipMyPosition?: { __typename?: 'AcelerandoVipMyPositionResponse', userId: any, rank?: number | null, scoreSats: any, inTop3: boolean, top3CutoffScore: any, distanceToTop3Sats: any, distanceToNextRankSats?: any | null, progressToTop3: number, eligibleContributionsCount: number, uniqueProjectsBacked: number, excludedSelfContributionsCount: number } | null };
 
 export type PostsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetPostsInput>;
 }>;
 
 
-export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: string, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: string, user: { __typename?: 'User', id: string, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
+export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
 
 export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProjectsSummaryQuery = { __typename?: 'Query', projectsSummary: { __typename?: 'ProjectsSummary', fundedTotal?: string | null, fundersCount?: number | null, projectsCount?: number | null } };
+export type ProjectsSummaryQuery = { __typename?: 'Query', projectsSummary: { __typename?: 'ProjectsSummary', fundedTotal?: any | null, fundersCount?: number | null, projectsCount?: number | null } };
 
 export type FeaturedProjectForLandingPageQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -10674,10 +10674,10 @@ export type ProjectRewardsCatalogGetQueryVariables = Exact<{
 }>;
 
 
-export type ProjectRewardsCatalogGetQuery = { __typename?: 'Query', projectRewardsCatalogGet: { __typename?: 'ProjectRewardsCatalogGetResponse', rewards: Array<{ __typename?: 'ProjectRewardCatalogRow', id: string, count: number, projectReward: (
+export type ProjectRewardsCatalogGetQuery = { __typename?: 'Query', projectRewardsCatalogGet: { __typename?: 'ProjectRewardsCatalogGetResponse', rewards: Array<{ __typename?: 'ProjectRewardCatalogRow', id: any, count: number, projectReward: (
         { __typename?: 'ProjectReward' }
         & RewardForProductsPageFragment
-      ) }>, pagination?: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: string | null } | null } | null } };
+      ) }>, pagination?: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null } | null } };
 
 export type TagsGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10699,7 +10699,7 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
-export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: string, title: string, name: string, thumbnailImage?: string | null, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } } }, resource: { __typename?: 'Contribution', id: string, amount: number, projectId: string, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: string, username: string, imageUrl?: string | null, guardianType?: GuardianType | null } | null } } | { __typename?: 'Post', id: string, title: string, content?: string | null, postType?: PostType | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: string, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', id: string, currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: string, uuid: string, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
+export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } } }, resource: { __typename?: 'Contribution', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, guardianType?: GuardianType | null } | null } } | { __typename?: 'Post', id: any, title: string, content?: string | null, postType?: PostType | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', id: any, currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
 
 export type ActivityFeedQueryVariables = Exact<{
   input: GetActivitiesInput;
@@ -10709,15 +10709,15 @@ export type ActivityFeedQueryVariables = Exact<{
 export type ActivityFeedQuery = { __typename?: 'Query', activitiesGet: { __typename?: 'ActivitiesGetResponse', activities: Array<(
       { __typename?: 'Activity' }
       & ActivityFeedFragmentFragment
-    )>, pagination?: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: string | null } | null } | null } };
+    )>, pagination?: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null } | null } };
 
-export type SummaryBannerFragmentFragment = { __typename?: 'ProjectsSummary', fundedTotal?: string | null, fundersCount?: number | null, projectsCount?: number | null };
+export type SummaryBannerFragmentFragment = { __typename?: 'ProjectsSummary', fundedTotal?: any | null, fundersCount?: number | null, projectsCount?: number | null };
 
-export type TopAmbassadorsFragmentFragment = { __typename?: 'GlobalAmbassadorLeaderboardRow', contributionsTotal: number, contributionsTotalUsd: number, projectsCount: number, userId: string, userHeroId?: string | null, userGuardianType?: GuardianType | null, userImageUrl?: string | null, username: string };
+export type TopAmbassadorsFragmentFragment = { __typename?: 'GlobalAmbassadorLeaderboardRow', contributionsTotal: number, contributionsTotalUsd: number, projectsCount: number, userId: any, userHeroId?: string | null, userGuardianType?: GuardianType | null, userImageUrl?: string | null, username: string };
 
-export type TopContributorsFragmentFragment = { __typename?: 'GlobalContributorLeaderboardRow', contributionsCount: number, contributionsTotal: number, contributionsTotalUsd: number, projectsContributedCount: number, userId: string, userHeroId?: string | null, userGuardianType?: GuardianType | null, username: string, userImageUrl?: string | null };
+export type TopContributorsFragmentFragment = { __typename?: 'GlobalContributorLeaderboardRow', contributionsCount: number, contributionsTotal: number, contributionsTotalUsd: number, projectsContributedCount: number, userId: any, userHeroId?: string | null, userGuardianType?: GuardianType | null, username: string, userImageUrl?: string | null };
 
-export type TopCreatorsFragmentFragment = { __typename?: 'GlobalCreatorLeaderboardRow', contributionsTotal: number, contributionsTotalUsd: number, projectsCount: number, userId: string, userHeroId?: string | null, userGuardianType?: GuardianType | null, userImageUrl?: string | null, username: string };
+export type TopCreatorsFragmentFragment = { __typename?: 'GlobalCreatorLeaderboardRow', contributionsTotal: number, contributionsTotalUsd: number, projectsCount: number, userId: any, userHeroId?: string | null, userGuardianType?: GuardianType | null, userImageUrl?: string | null, username: string };
 
 export type TopProjectsFragmentFragment = { __typename?: 'GlobalProjectLeaderboardRow', projectName: string, projectTitle: string, projectThumbnailUrl?: string | null, contributionsTotal: number, contributionsTotalUsd: number, contributionsCount: number, contributorsCount: number };
 
@@ -10761,9 +10761,9 @@ export type LeaderboardGlobalProjectsQuery = { __typename?: 'Query', leaderboard
     & TopProjectsFragmentFragment
   )> };
 
-export type LandingProjectCardProjectFragment = { __typename?: 'Project', id: string, name: string, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: string, raisedUsdCent: number, goalSats?: string | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: { __typename?: 'ProjectMatching', id: string, projectId: string, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number } | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, owners: Array<{ __typename?: 'Owner', id: string, user: { __typename?: 'User', id: string, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type LandingProjectCardProjectFragment = { __typename?: 'Project', id: any, name: string, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number } | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type LandingPostCardPostFragment = { __typename?: 'Post', id: string, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: string, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null } | null };
+export type LandingPostCardPostFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null } | null };
 
 export type LandingAboveFoldQueryVariables = Exact<{
   input: ProjectsGetQueryInput;
@@ -10829,9 +10829,9 @@ export type LandingRegionalProjectsSectionQuery = { __typename?: 'Query', projec
       & LandingProjectCardProjectFragment
     )> } };
 
-export type FollowedProjectsActivitiesCountFragmentFragment = { __typename?: 'ProjectActivitiesCount', count: number, project: { __typename?: 'Project', id: string, name: string, thumbnailImage?: string | null, title: string } };
+export type FollowedProjectsActivitiesCountFragmentFragment = { __typename?: 'ProjectActivitiesCount', count: number, project: { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string } };
 
-export type OrdersStatsFragmentFragment = { __typename?: 'OrdersStatsBase', projectRewards: { __typename?: 'ProjectRewardsStats', count: number }, projectRewardsGroupedByProjectRewardId: Array<{ __typename?: 'ProjectRewardsGroupedByRewardIdStats', count: number, projectReward: { __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward', id: string, uuid: string, name: string, image?: string | null, sold: number, maxClaimable?: number | null } }> };
+export type OrdersStatsFragmentFragment = { __typename?: 'OrdersStatsBase', projectRewards: { __typename?: 'ProjectRewardsStats', count: number }, projectRewardsGroupedByProjectRewardId: Array<{ __typename?: 'ProjectRewardsGroupedByRewardIdStats', count: number, projectReward: { __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward', id: any, uuid: string, name: string, image?: string | null, sold: number, maxClaimable?: number | null } }> };
 
 export type ProjectContributionsStatsFragment = { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', total: number, totalUsd: number } };
 
@@ -10890,11 +10890,11 @@ export type GrantProjectQuery = { __typename?: 'Query', projectGet?: { __typenam
 export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null, grantGuardiansFunding: { __typename?: 'GrantGuardiansFunding', contributedTotal: string, contributorsCount: string } } };
+export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null, grantGuardiansFunding: { __typename?: 'GrantGuardiansFunding', contributedTotal: any, contributorsCount: any } } };
 
-export type GuardianProjectRewardFragment = { __typename?: 'ProjectReward', id: string, uuid: string, name: string, cost: number, images: Array<string>, description?: string | null, shortDescription?: string | null, maxClaimable?: number | null, sold: number, rewardCurrency: RewardCurrency, isHidden: boolean };
+export type GuardianProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, cost: number, images: Array<string>, description?: string | null, shortDescription?: string | null, maxClaimable?: number | null, sold: number, rewardCurrency: RewardCurrency, isHidden: boolean };
 
-export type GuardianUserFragment = { __typename?: 'GuardianUser', guardianType: string, heroId: string, imageUrl?: string | null, userId: string, username: string };
+export type GuardianUserFragment = { __typename?: 'GuardianUser', guardianType: string, heroId: string, imageUrl?: string | null, userId: any, username: string };
 
 export type GuardianResultFragment = { __typename?: 'GuardianResult', guardianType: GuardianType, soldCount: number, users: Array<(
     { __typename?: 'GuardianUser' }
@@ -10926,132 +10926,132 @@ export type ImpactFundApplyMutationVariables = Exact<{
 }>;
 
 
-export type ImpactFundApplyMutation = { __typename?: 'Mutation', impactFundApply: { __typename?: 'ImpactFundApplication', id: string, impactFundId: string, status: ImpactFundApplicationStatus } };
+export type ImpactFundApplyMutation = { __typename?: 'Mutation', impactFundApply: { __typename?: 'ImpactFundApplication', id: any, impactFundId: any, status: ImpactFundApplicationStatus } };
 
 export type ImpactFundApplicationUpdateMutationVariables = Exact<{
   input: ImpactFundApplicationUpdateInput;
 }>;
 
 
-export type ImpactFundApplicationUpdateMutation = { __typename?: 'Mutation', impactFundApplicationUpdate: { __typename?: 'ImpactFundApplication', id: string, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel } };
+export type ImpactFundApplicationUpdateMutation = { __typename?: 'Mutation', impactFundApplicationUpdate: { __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel } };
 
 export type ImpactFundApplicationFundingSetMutationVariables = Exact<{
   input: ImpactFundApplicationFundingSetInput;
 }>;
 
 
-export type ImpactFundApplicationFundingSetMutation = { __typename?: 'Mutation', impactFundApplicationFundingSet: { __typename?: 'ImpactFundApplication', id: string, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null } };
+export type ImpactFundApplicationFundingSetMutation = { __typename?: 'Mutation', impactFundApplicationFundingSet: { __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null } };
 
 export type ImpactFundApplicationNoteCreateMutationVariables = Exact<{
   input: ImpactFundApplicationNoteCreateInput;
 }>;
 
 
-export type ImpactFundApplicationNoteCreateMutation = { __typename?: 'Mutation', impactFundApplicationNoteCreate: { __typename?: 'ImpactFundApplicationNote', id: string, applicationId: string, authorUserId: string, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: string, username: string, imageUrl?: string | null } } };
+export type ImpactFundApplicationNoteCreateMutation = { __typename?: 'Mutation', impactFundApplicationNoteCreate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
 
 export type ImpactFundApplicationNoteUpdateMutationVariables = Exact<{
   input: ImpactFundApplicationNoteUpdateInput;
 }>;
 
 
-export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation', impactFundApplicationNoteUpdate: { __typename?: 'ImpactFundApplicationNote', id: string, applicationId: string, authorUserId: string, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: string, username: string, imageUrl?: string | null } } };
+export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation', impactFundApplicationNoteUpdate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
 
 export type ImpactFundsFieldPartnerLeaderboardQueryVariables = Exact<{
   input?: InputMaybe<ImpactFundFieldPartnerLeaderboardInput>;
 }>;
 
 
-export type ImpactFundsFieldPartnerLeaderboardQuery = { __typename?: 'Query', impactFundFieldPartnerLeaderboard: { __typename?: 'ImpactFundFieldPartnerLeaderboardResponse', rows: Array<{ __typename?: 'ImpactFundFieldPartnerLeaderboardRow', rank: number, fieldPartnerId: string, fieldPartner: string, country: string, projectsLaunched: number, enabledContributionSats: number }> } };
+export type ImpactFundsFieldPartnerLeaderboardQuery = { __typename?: 'Query', impactFundFieldPartnerLeaderboard: { __typename?: 'ImpactFundFieldPartnerLeaderboardResponse', rows: Array<{ __typename?: 'ImpactFundFieldPartnerLeaderboardRow', rank: number, fieldPartnerId: any, fieldPartner: string, country: string, projectsLaunched: number, enabledContributionSats: number }> } };
 
 export type ImpactFundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: string, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: string | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: string, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: string, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
+export type ImpactFundsQuery = { __typename?: 'Query', impactFunds: Array<{ __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, tier: ImpactFundSponsorTier }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } }> };
 
 export type ImpactFundQueryVariables = Exact<{
   input: ImpactFundGetInput;
 }>;
 
 
-export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: string, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: string | null, status: ImpactFundStatus, canAccessDashboard: boolean, donateProject?: { __typename?: 'Project', id: string, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: string, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: string, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number }, viewerApplications: Array<{ __typename?: 'ImpactFundApplication', id: string, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: string, name: string, title: string } }> } };
+export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, canAccessDashboard: boolean, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number }, viewerApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, name: string, title: string } }> } };
 
 export type ImpactFundApplicationsQueryVariables = Exact<{
   input: ImpactFundApplicationsInput;
 }>;
 
 
-export type ImpactFundApplicationsQuery = { __typename?: 'Query', impactFundApplications: { __typename?: 'ImpactFundApplicationsGetResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundApplication', id: string, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, project: { __typename?: 'Project', id: string, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }> } };
+export type ImpactFundApplicationsQuery = { __typename?: 'Query', impactFundApplications: { __typename?: 'ImpactFundApplicationsGetResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }> } };
 
 export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
   input: ImpactFundDashboardApplicationsInput;
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: string, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: string, applicationId: string, authorUserId: string, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: string, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: string, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: string, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
-export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: string, contributions: Array<{ __typename?: 'Contribution', id: string, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, bitcoinQuote?: (
+export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, contributions: Array<{ __typename?: 'Contribution', id: any, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, bitcoinQuote?: (
       { __typename?: 'BitcoinQuote' }
       & BitcoinQuoteFragment
     ) | null }> };
 
-export type UserProjectContributionFragment = { __typename?: 'Contribution', id: string, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, status: ContributionStatus, projectId: string, bitcoinQuote?: (
+export type UserProjectContributionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, status: ContributionStatus, projectId: any, bitcoinQuote?: (
     { __typename?: 'BitcoinQuote' }
     & BitcoinQuoteFragment
   ) | null };
 
-export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: string, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, images: Array<string>, category?: string | null } };
+export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, images: Array<string>, category?: string | null } };
 
-export type ProfileOrderFragment = { __typename?: 'Order', id: string, referenceCode: string, totalInSats: number, status: string, confirmedAt?: any | null, updatedAt: any, items: Array<(
+export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, status: string, confirmedAt?: any | null, updatedAt: any, items: Array<(
     { __typename?: 'OrderItem' }
     & ProfileOrderItemFragment
-  )>, contribution: { __typename?: 'Contribution', id: string, amount: number, status: ContributionStatus, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
+  )>, contribution: { __typename?: 'Contribution', id: any, amount: number, status: ContributionStatus, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
       { __typename?: 'Project' }
       & ProjectAvatarFragment
     ) | null } };
 
-export type NotificationConfigurationFragment = { __typename?: 'NotificationConfiguration', id: string, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> };
+export type NotificationConfigurationFragment = { __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> };
 
 export type NotificationSettingsFragment = { __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<(
     { __typename?: 'NotificationConfiguration' }
     & NotificationConfigurationFragment
   )> };
 
-export type ProfileNotificationsSettingsFragment = { __typename?: 'ProfileNotificationSettings', userSettings: { __typename?: 'UserNotificationSettings', userId: string, notificationSettings: Array<(
+export type ProfileNotificationsSettingsFragment = { __typename?: 'ProfileNotificationSettings', userSettings: { __typename?: 'UserNotificationSettings', userId: any, notificationSettings: Array<(
       { __typename?: 'NotificationSettings' }
       & NotificationSettingsFragment
-    )> }, creatorSettings: Array<{ __typename?: 'CreatorNotificationSettings', userId: string, project: { __typename?: 'CreatorNotificationSettingsProject', id: string, title: string, image?: string | null }, notificationSettings: Array<(
+    )> }, creatorSettings: Array<{ __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<(
       { __typename?: 'NotificationSettings' }
       & NotificationSettingsFragment
     )> }> };
 
-export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificationSettings', userSettings: { __typename?: 'UserNotificationSettings', userId: string, notificationSettings: Array<(
+export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificationSettings', userSettings: { __typename?: 'UserNotificationSettings', userId: any, notificationSettings: Array<(
       { __typename?: 'NotificationSettings' }
       & NotificationSettingsFragment
     )> } };
 
-export type ProjectForProfilePageFragment = { __typename?: 'Project', id: string, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: string, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
-export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: string, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, status?: ProjectStatus | null, aonGoal?: { __typename?: 'ProjectAonGoal', balance?: number | null, goalAmount: number, status?: ProjectAonGoalStatus | null } | null };
+export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, status?: ProjectStatus | null, aonGoal?: { __typename?: 'ProjectAonGoal', balance?: number | null, goalAmount: number, status?: ProjectAonGoalStatus | null } | null };
 
-export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: string, project: { __typename?: 'CreatorNotificationSettingsProject', id: string, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: string, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
+export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
 
 export type BadgeFragment = { __typename?: 'Badge', id: string, name: string, thumb: string, uniqueName: string, image: string, description: string, createdAt: any };
 
-export type UserBadgeFragment = { __typename?: 'UserBadge', id: string, userId: string, updatedAt: any, status?: UserBadgeStatus | null, contributionId?: string | null, createdAt: any, badgeAwardEventId?: string | null, badge: (
+export type UserBadgeFragment = { __typename?: 'UserBadge', id: any, userId: any, updatedAt: any, status?: UserBadgeStatus | null, contributionId?: any | null, createdAt: any, badgeAwardEventId?: string | null, badge: (
     { __typename?: 'Badge' }
     & BadgeFragment
   ) };
 
-export type UserForProfilePageFragment = { __typename?: 'User', id: string, bio?: string | null, heroId: string, username: string, imageUrl?: string | null, ranking?: string | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
+export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, heroId: string, username: string, imageUrl?: string | null, ranking?: any | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
-export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: string, userId: string, legalEntityType: LegalEntityType, fullName?: string | null, country?: string | null, state?: string | null, taxId?: string | null, verified?: boolean | null };
+export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, userId: any, legalEntityType: LegalEntityType, fullName?: string | null, country?: string | null, state?: string | null, taxId?: string | null, verified?: boolean | null };
 
-export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: string, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
+export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
 export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -11105,7 +11105,7 @@ export type UserAffiliatePayoutsQueryVariables = Exact<{
 }>;
 
 
-export type UserAffiliatePayoutsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, heroId: string, accountKeys?: { __typename?: 'UserAccountKeys', id: string, encryptedMnemonic?: string | null, rskKeyPair: { __typename?: 'RskKeyPair', address: string, publicKey: string, derivationPath: string } } | null, affiliatePartnerTerms: { __typename?: 'AffiliatePartnerTerms', contributionReferralPayoutRate: number, projectReferralPayoutRate: number, projectReferralPayoutCapSats: number }, affiliatePartnerPayoutSummary: { __typename?: 'AffiliatePartnerPayoutSummary', totalEarned: number, totalPending: number }, affiliatePartnerPayouts: Array<{ __typename?: 'AffiliatePartnerPayout', id: string, uuid: string, amount: number, status: AffiliatePayoutStatus, source: AffiliatePartnerPayoutSource, createdAt: any, paidAt?: any | null, project?: { __typename?: 'Project', id: string, name: string, title: string } | null }> } };
+export type UserAffiliatePayoutsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, heroId: string, accountKeys?: { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, rskKeyPair: { __typename?: 'RskKeyPair', address: string, publicKey: string, derivationPath: string } } | null, affiliatePartnerTerms: { __typename?: 'AffiliatePartnerTerms', contributionReferralPayoutRate: number, projectReferralPayoutRate: number, projectReferralPayoutCapSats: number }, affiliatePartnerPayoutSummary: { __typename?: 'AffiliatePartnerPayoutSummary', totalEarned: number, totalPending: number }, affiliatePartnerPayouts: Array<{ __typename?: 'AffiliatePartnerPayout', id: any, uuid: string, amount: number, status: AffiliatePayoutStatus, source: AffiliatePartnerPayoutSource, createdAt: any, paidAt?: any | null, project?: { __typename?: 'Project', id: any, name: string, title: string } | null }> } };
 
 export type BadgesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -11140,7 +11140,7 @@ export type UserOrdersGetQueryVariables = Exact<{
 export type UserOrdersGetQuery = { __typename?: 'Query', ordersGet?: { __typename?: 'OrdersGetResponse', orders: Array<(
       { __typename?: 'Order' }
       & ProfileOrderFragment
-    )>, pagination?: { __typename?: 'CursorPaginationResponse', count?: number | null, take?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: string | null } | null } | null } | null };
+    )>, pagination?: { __typename?: 'CursorPaginationResponse', count?: number | null, take?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null } | null } | null };
 
 export type ProfileNotificationsSettingsQueryVariables = Exact<{
   userId: Scalars['BigInt']['input'];
@@ -11197,7 +11197,7 @@ export type UserProfileProjectsQueryVariables = Exact<{
 }>;
 
 
-export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
         { __typename?: 'Project' }
         & ProjectForProfilePageFragment
       ) | null }> } };
@@ -11218,7 +11218,7 @@ export type UserProfileContributionsQueryVariables = Exact<{
 }>;
 
 
-export type UserProfileContributionsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, contributions: Array<(
+export type UserProfileContributionsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, contributions: Array<(
       { __typename?: 'Contribution' }
       & UserProjectContributionFragment
     )> } };
@@ -11228,7 +11228,7 @@ export type UserHeroStatsQueryVariables = Exact<{
 }>;
 
 
-export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
+export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
 
 export type UserWalletQueryVariables = Exact<{
   where: UserGetInput;
@@ -11250,9 +11250,9 @@ export type UserTaxProfileQuery = { __typename?: 'Query', user: { __typename?: '
       & UserTaxProfileFragment
     ) | null } };
 
-export type UserWalletWithdrawFragment = { __typename?: 'UserWalletWithdraw', id: string, uuid: string, status: UserWalletWithdrawStatus, amount: number, expiresAt: any };
+export type UserWalletWithdrawFragment = { __typename?: 'UserWalletWithdraw', id: any, uuid: string, status: UserWalletWithdrawStatus, amount: number, expiresAt: any };
 
-export type UserWalletWithdrawWithPaymentFragment = { __typename?: 'UserWalletWithdraw', amount: number, expiresAt: any, id: string, uuid: string, status: UserWalletWithdrawStatus, payments: Array<(
+export type UserWalletWithdrawWithPaymentFragment = { __typename?: 'UserWalletWithdraw', amount: number, expiresAt: any, id: any, uuid: string, status: UserWalletWithdrawStatus, payments: Array<(
     { __typename?: 'Payment' }
     & PaymentForPayoutRefundFragment
   )> };
@@ -11315,13 +11315,13 @@ export type UserWalletWithdrawPaymentInitiateMutation = { __typename?: 'Mutation
       & UserWalletWithdrawFragment
     ) } };
 
-export type FundingContributionFragment = { __typename?: 'Contribution', id: string, uuid?: string | null, amount: number, donationAmount: number, status: ContributionStatus, comment?: string | null, media?: string | null, confirmedAt?: any | null, projectId: string, projectGoalId?: string | null, creatorEmail?: string | null, createdAt?: any | null, isAnonymous: boolean, isSubscription: boolean, matchedAmountSats: number, matchedAmountUsdCent: number, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, matching?: (
+export type FundingContributionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, donationAmount: number, status: ContributionStatus, comment?: string | null, media?: string | null, confirmedAt?: any | null, projectId: any, projectGoalId?: any | null, creatorEmail?: string | null, createdAt?: any | null, isAnonymous: boolean, isSubscription: boolean, matchedAmountSats: number, matchedAmountUsdCent: number, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, matching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingFragment
   ) | null, payments: Array<(
     { __typename?: 'Payment' }
     & FundingContributionPaymentFragment
-  )>, order?: { __typename?: 'Order', id: string, referenceCode: string, totalInSats: number, itemsTotalInSats: number, shippingFeeTotalInSats: number, items: Array<(
+  )>, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, itemsTotalInSats: number, shippingFeeTotalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
       & OrderItemFragment
     )> } | null, funder: (
@@ -11329,33 +11329,33 @@ export type FundingContributionFragment = { __typename?: 'Contribution', id: str
     & ProjectFunderFragment
   ) };
 
-export type OrderContributionFragment = { __typename?: 'Contribution', id: string, status: ContributionStatus, donationAmount: number, amount: number, email?: string | null, uuid?: string | null, confirmedAt?: any | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: string, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: string, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: string, referenceCode: string, totalInSats: number, items: Array<(
+export type OrderContributionFragment = { __typename?: 'Contribution', id: any, status: ContributionStatus, donationAmount: number, amount: number, email?: string | null, uuid?: string | null, confirmedAt?: any | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
       & OrderItemFragment
     )> } | null };
 
-export type ProjectContributionFragment = { __typename?: 'Contribution', id: string, amount: number, matchedAmountSats: number, media?: string | null, comment?: string | null, confirmedAt?: any | null, createdAt?: any | null, projectGoalId?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: string, timesFunded?: number | null, user?: (
+export type ProjectContributionFragment = { __typename?: 'Contribution', id: any, amount: number, matchedAmountSats: number, media?: string | null, comment?: string | null, confirmedAt?: any | null, createdAt?: any | null, projectGoalId?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, timesFunded?: number | null, user?: (
       { __typename?: 'User' }
       & UserAvatarFragment
     ) | null } };
 
-export type FundingContributionSubscriptionFragment = { __typename?: 'Contribution', id: string, uuid?: string | null, status: ContributionStatus, projectGoalId?: string | null, matchedAmountSats: number, matchedAmountUsdCent: number, matching?: (
+export type FundingContributionSubscriptionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, status: ContributionStatus, projectGoalId?: any | null, matchedAmountSats: number, matchedAmountUsdCent: number, matching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingFragment
   ) | null };
 
-export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution', id: string, uuid?: string | null, status: ContributionStatus, creatorEmail?: string | null, isAnonymous: boolean, matchedAmountSats: number, matchedAmountUsdCent: number, matching?: (
+export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, status: ContributionStatus, creatorEmail?: string | null, isAnonymous: boolean, matchedAmountSats: number, matchedAmountUsdCent: number, matching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingFragment
   ) | null };
 
-export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: string, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: string, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feePayer?: PaymentFeePayer | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
+export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feePayer?: PaymentFeePayer | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
 
-export type ContributionForRefundFragment = { __typename?: 'Contribution', id: string, amount: number, status: ContributionStatus, uuid?: string | null, projectId: string, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', id: string, paymentType: PaymentType, status: PaymentStatus, paidAt?: any | null, paymentAmount: number }> };
+export type ContributionForRefundFragment = { __typename?: 'Contribution', id: any, amount: number, status: ContributionStatus, uuid?: string | null, projectId: any, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', id: any, paymentType: PaymentType, status: PaymentStatus, paidAt?: any | null, paymentAmount: number }> };
 
-export type ProjectContributionRefundFragment = { __typename?: 'Contribution', id: string, amount: number, uuid?: string | null, status: ContributionStatus, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | { __typename?: 'Project', id: string, name: string } | null };
+export type ProjectContributionRefundFragment = { __typename?: 'Contribution', id: any, amount: number, uuid?: string | null, status: ContributionStatus, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | { __typename?: 'Project', id: any, name: string } | null };
 
-export type UserProjectContributionStatusFragment = { __typename?: 'Contribution', id: string, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, status: ContributionStatus, projectId: string, bitcoinQuote?: (
+export type UserProjectContributionStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, status: ContributionStatus, projectId: any, bitcoinQuote?: (
     { __typename?: 'BitcoinQuote' }
     & BitcoinQuoteFragment
   ) | null, payments: Array<(
@@ -11363,12 +11363,12 @@ export type UserProjectContributionStatusFragment = { __typename?: 'Contribution
     & FundingContributionPaymentStatusFragment
   )> };
 
-export type ProjectFunderFragment = { __typename?: 'Funder', id: string, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: (
+export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: (
     { __typename?: 'User' }
     & UserAvatarFragment
   ) | null };
 
-export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: string, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: (
+export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: (
     { __typename?: 'User' }
     & UserAvatarFragment
   ) | null };
@@ -11378,28 +11378,28 @@ export type ProjectLeaderboardAmbassadorsFragment = { __typename?: 'ProjectLeade
     & UserAvatarFragment
   ) | null };
 
-export type UserContributorFragment = { __typename?: 'Funder', id: string, rank?: number | null, user?: (
+export type UserContributorFragment = { __typename?: 'Funder', id: any, rank?: number | null, user?: (
     { __typename?: 'User' }
     & UserAvatarFragment
   ) | null };
 
 export type ContributorContributionsSummaryFragment = { __typename?: 'ContributorContributionsSummary', contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number };
 
-export type ProjectContributorFragment = { __typename?: 'Funder', id: string, amountFunded?: number | null, contributions: Array<(
+export type ProjectContributorFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, contributions: Array<(
     { __typename?: 'Contribution' }
     & UserProjectContributionStatusFragment
   )> };
 
-export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: string, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: string, amountContributed: number, progress: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
+export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, progress: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
 
-export type ProjectGrantApplicantFragment = { __typename?: 'GrantApplicant', id: string, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | { __typename?: 'CommunityVoteGrant', id: string, votingSystem: VotingSystem, type: GrantType, name: string, title: string, status: GrantStatusEnum } };
+export type ProjectGrantApplicantFragment = { __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | { __typename?: 'CommunityVoteGrant', id: any, votingSystem: VotingSystem, type: GrantType, name: string, title: string, status: GrantStatusEnum } };
 
-export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: string, name: string, images: Array<string>, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
+export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, images: Array<string>, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
-export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: string, shippedAt?: any | null, status: string, totalInSats: number, shippingFeeTotalInSats: number, itemsTotalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: string, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
+export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, shippingFeeTotalInSats: number, itemsTotalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
     { __typename?: 'OrderItem' }
     & OrderItemFragment
-  )>, contribution: { __typename?: 'Contribution', id: string, amount: number, donationAmount: number, email?: string | null, isAnonymous: boolean, status: ContributionStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null }, shippingAddress?: (
+  )>, contribution: { __typename?: 'Contribution', id: any, amount: number, donationAmount: number, email?: string | null, isAnonymous: boolean, status: ContributionStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null }, shippingAddress?: (
     { __typename?: 'ShippingAddress' }
     & ShippingAddressFragment
   ) | null };
@@ -11418,12 +11418,12 @@ export type ContributionFiatPaymentDetailsFragment = { __typename?: 'Contributio
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string };
 
-export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: string, amountToClaim: number, amountDue: number, fees: Array<(
+export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountToClaim: number, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
 
-export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: string, amountDue: number, fees: Array<(
+export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: any, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
@@ -11442,13 +11442,13 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
     & ContributionOnChainToRskSwapPaymentDetailsFragment
   ) | null };
 
-export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: string, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus };
+export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus };
 
-export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment', id: string, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapId: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } };
+export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapId: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } };
 
-export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: string, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
+export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
 
-export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: string, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, fees: Array<(
+export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )>, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
@@ -11461,18 +11461,18 @@ export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: strin
 
 export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', enabled: boolean, stripe: boolean } };
 
-export type PayoutFragment = { __typename?: 'Payout', id: string, uuid: string, status: PayoutStatus, amount: number, expiresAt: any };
+export type PayoutFragment = { __typename?: 'Payout', id: any, uuid: string, status: PayoutStatus, amount: number, expiresAt: any };
 
-export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number, expiresAt: any, id: string, uuid: string, status: PayoutStatus, payments: Array<(
+export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number, expiresAt: any, id: any, uuid: string, status: PayoutStatus, payments: Array<(
     { __typename?: 'Payment' }
     & PaymentForPayoutRefundFragment
   )> };
 
 export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, requiresUserLockTx: boolean, projectKey?: string | null, feeSummary: { __typename?: 'PayoutFeeSummary', totalAmount: number, currency: FeeCurrency, items: Array<{ __typename?: 'PayoutFeeSummaryItem', feeType: PaymentFeeType, description?: string | null, amount: number, currency: FeeCurrency }> } };
 
-export type ProjectPostFragment = { __typename?: 'Post', id: string, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
+export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
-export type ProjectPostViewFragment = { __typename?: 'Post', id: string, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, content?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
+export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, content?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
     { __typename?: 'ProjectReward' }
     & PostPageProjectRewardFragment
   )>, projectGoals: { __typename?: 'ProjectGoals', inProgress: Array<(
@@ -11487,23 +11487,23 @@ export type ProjectAonGoalForProjectPageFragment = { __typename?: 'ProjectAonGoa
 
 export type ProjectAonGoalForProjectUpdateFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, goalDurationInDays: number };
 
-export type ProjectFragment = { __typename?: 'Project', id: string, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: string | null, balance: number, balanceUsdCent: number, createdAt: any, updatedAt: any, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, contributionsCount?: number | null };
+export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: any, updatedAt: any, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, contributionsCount?: number | null };
 
-export type ProjectNostrKeysFragment = { __typename?: 'Project', id: string, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
+export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
-export type ProjectAvatarFragment = { __typename?: 'Project', id: string, name: string, thumbnailImage?: string | null, title: string };
+export type ProjectAvatarFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string };
 
 export type ProjectLocationFragment = { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null };
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: string, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: string | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: string, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
-  ), owners: Array<{ __typename?: 'Owner', id: string, user: (
+  ), owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectPageCreatorFragment
     ) }>, paymentMethods: (
@@ -11514,13 +11514,13 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: string, name
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: string, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: string | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: string, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
-  ), owners: Array<{ __typename?: 'Owner', id: string, user: (
+  ), owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectPageCreatorFragment
     ) }>, paymentMethods: (
@@ -11531,23 +11531,23 @@ export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: strin
     & ProjectReviewFragment
   )> };
 
-export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: string, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null };
+export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: string, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
 
-export type ProjectMatchingFragment = { __typename?: 'ProjectMatching', id: string, projectId: string, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number };
+export type ProjectMatchingFragment = { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number };
 
 export type ProjectMatchingDashboardFragment = (
-  { __typename?: 'ProjectMatching', ownerUserId: string }
+  { __typename?: 'ProjectMatching', ownerUserId: any }
   & ProjectMatchingFragment
 );
 
-export type ProjectActiveMatchingFragment = { __typename?: 'Project', id: string, activeMatching?: (
+export type ProjectActiveMatchingFragment = { __typename?: 'Project', id: any, activeMatching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingFragment
   ) | null };
 
-export type ProjectDashboardMatchingsFragment = { __typename?: 'Project', id: string, activeMatching?: (
+export type ProjectDashboardMatchingsFragment = { __typename?: 'Project', id: any, activeMatching?: (
     { __typename?: 'ProjectMatching' }
     & ProjectMatchingDashboardFragment
   ) | null, matchings: Array<(
@@ -11555,26 +11555,26 @@ export type ProjectDashboardMatchingsFragment = { __typename?: 'Project', id: st
     & ProjectMatchingDashboardFragment
   )> };
 
-export type ProjectReviewPublicFragment = { __typename?: 'ProjectReview', id: string, reviewedAt?: any | null, status: ProjectReviewStatus, version: number };
+export type ProjectReviewPublicFragment = { __typename?: 'ProjectReview', id: any, reviewedAt?: any | null, status: ProjectReviewStatus, version: number };
 
-export type ProjectReviewFragment = { __typename?: 'ProjectReview', id: string, reviewedAt?: any | null, status: ProjectReviewStatus, rejectionReasons: Array<string>, reviewNotes?: string | null, version: number };
+export type ProjectReviewFragment = { __typename?: 'ProjectReview', id: any, reviewedAt?: any | null, status: ProjectReviewStatus, rejectionReasons: Array<string>, reviewNotes?: string | null, version: number };
 
 export type ProjectStatsForInsightsPageFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number, referrers: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }>, regions: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }> } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', count: number, total: number, totalUsd: number } } | null } | null, prevTimeRange?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', count: number, total: number, totalUsd: number } } | null } | null };
 
 export type ProjectHistoryStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', graph: Array<{ __typename?: 'ProjectContributionsStatsGraphData', statType: ProjectContributionsStatsGraphDataStatType, graphData?: Array<{ __typename?: 'ProjectContributionsStatsGraphDataAmount', value: number, dateTime: any }> | null }> } } | null, projectViews?: { __typename?: 'ProjectViewStats', visitorGraph: Array<{ __typename?: 'PageViewCountGraph', viewCount: number, visitorCount: number, dateTime: any } | null> } | null } | null };
 
-export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantityGraph?: Array<{ __typename?: 'FunderRewardGraphSum', dateTime: any, rewardId: string, rewardName: string, sum: number } | null> | null } | null } | null };
+export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantityGraph?: Array<{ __typename?: 'FunderRewardGraphSum', dateTime: any, rewardId: any, rewardName: string, sum: number } | null> | null } | null } | null };
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributionsGroupedByMethod: Array<{ __typename?: 'ProjectContributionsGroupedByMethodStats', count: number, method: string, total: number, totalUsd: number }> } | null } | null };
 
-export type PaymentRefundFragment = { __typename?: 'PaymentRefund', id: string, amount: number, status: PaymentRefundStatus };
+export type PaymentRefundFragment = { __typename?: 'PaymentRefund', id: any, amount: number, status: PaymentRefundStatus };
 
-export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: string, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
+export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
   ) };
 
-export type PledgeRefundWithPaymentFragment = { __typename?: 'PledgeRefund', id: string, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
+export type PledgeRefundWithPaymentFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
   ), payments: Array<(
@@ -11584,38 +11584,38 @@ export type PledgeRefundWithPaymentFragment = { __typename?: 'PledgeRefund', id:
 
 export type PledgeRefundMetadataFragment = { __typename?: 'PledgeRefundMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: string, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, createdAt: any, shippingConfig?: (
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, createdAt: any, shippingConfig?: (
     { __typename?: 'ShippingConfig' }
     & ShippingConfigFragment
-  ) | null, posts: Array<{ __typename?: 'Post', id: string, title: string, postType?: PostType | null, description: string, createdAt: string }> };
+  ) | null, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
 
-export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: string, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
+export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
 export type ShippingRateFragment = { __typename?: 'ProjectShippingRate', baseRate: number, country: string, incrementRate: number, sameAsDefault?: boolean | null };
 
-export type ShippingConfigFragment = { __typename?: 'ShippingConfig', id?: string | null, globalShipping: boolean, name: string, type: ProjectShippingConfigType, shippingRates?: Array<(
+export type ShippingConfigFragment = { __typename?: 'ShippingConfig', id?: any | null, globalShipping: boolean, name: string, type: ProjectShippingConfigType, shippingRates?: Array<(
     { __typename?: 'ProjectShippingRate' }
     & ShippingRateFragment
   )> | null };
 
 export type ShippingAddressFragment = { __typename?: 'ShippingAddress', id: string, postalCode: string, state?: string | null, fullName: string, country: string, city: string, addressLines: Array<string> };
 
-export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: string, encryptedMnemonic?: string | null, encryptedSeed: string, createdAt: any, userId: string, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
+export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, createdAt: any, userId: any, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: string, imageUrl?: string | null, username: string, bio?: string | null, email?: string | null, isFieldPartner: boolean, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: string, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: string, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } }, accountKeys?: { __typename?: 'UserAccountKeys', rskKeyPair: { __typename?: 'RskKeyPair', address: string } } | null, creatorTrustStats: { __typename?: 'CreatorTrustStats', totalFunding: number, totalFundingUsd: number, backersCount: number, publishedPostsCount: number, joinedYear: number } };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, bio?: string | null, email?: string | null, isFieldPartner: boolean, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } }, accountKeys?: { __typename?: 'UserAccountKeys', rskKeyPair: { __typename?: 'RskKeyPair', address: string } } | null, creatorTrustStats: { __typename?: 'CreatorTrustStats', totalFunding: number, totalFundingUsd: number, backersCount: number, publishedPostsCount: number, joinedYear: number } };
 
-export type UserAvatarFragment = { __typename?: 'User', id: string, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null };
+export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null };
 
-export type ProjectOwnerUserForInvoiceFragment = { __typename?: 'User', id: string, username: string, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', identity?: { __typename?: 'VerificationResult', verifiedAt?: any | null, verified?: boolean | null } | null } } };
+export type ProjectOwnerUserForInvoiceFragment = { __typename?: 'User', id: any, username: string, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', identity?: { __typename?: 'VerificationResult', verifiedAt?: any | null, verified?: boolean | null } | null } } };
 
 export type WalletContributionLimitsFragment = { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null };
 
-export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: string, name?: string | null, feePercentage?: number | null, limits?: { __typename?: 'WalletLimits', contribution?: (
+export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, limits?: { __typename?: 'WalletLimits', contribution?: (
       { __typename?: 'WalletContributionLimits' }
       & WalletContributionLimitsFragment
     ) | null } | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } };
 
-export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: string, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
+export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
 export type ProjectPageWalletCreationDetailsFragment = (
   { __typename?: 'Wallet' }
@@ -11628,28 +11628,28 @@ export type PaymentSwapClaimTxBroadcastMutationVariables = Exact<{
 }>;
 
 
-export type PaymentSwapClaimTxBroadcastMutation = { __typename?: 'Mutation', paymentSwapClaimTxBroadcast: { __typename?: 'PaymentSwapClaimTxBroadcastResponse', id: string, success: boolean, txHash?: string | null } };
+export type PaymentSwapClaimTxBroadcastMutation = { __typename?: 'Mutation', paymentSwapClaimTxBroadcast: { __typename?: 'PaymentSwapClaimTxBroadcastResponse', id: any, success: boolean, txHash?: string | null } };
 
 export type PaymentSwapRefundTxBroadcastMutationVariables = Exact<{
   input: PaymentSwapRefundTxBroadcastInput;
 }>;
 
 
-export type PaymentSwapRefundTxBroadcastMutation = { __typename?: 'Mutation', paymentSwapRefundTxBroadcast: { __typename?: 'PaymentSwapRefundTxBroadcastResponse', id: string, success: boolean, txHash?: string | null } };
+export type PaymentSwapRefundTxBroadcastMutation = { __typename?: 'Mutation', paymentSwapRefundTxBroadcast: { __typename?: 'PaymentSwapRefundTxBroadcastResponse', id: any, success: boolean, txHash?: string | null } };
 
 export type AmbassadorAddMutationVariables = Exact<{
   input: AmbassadorAddInput;
 }>;
 
 
-export type AmbassadorAddMutation = { __typename?: 'Mutation', ambassadorAdd?: { __typename?: 'Ambassador', id: string, payoutRate: number, user: { __typename?: 'User', id: string, username: string } } | null };
+export type AmbassadorAddMutation = { __typename?: 'Mutation', ambassadorAdd?: { __typename?: 'Ambassador', id: any, payoutRate: number, user: { __typename?: 'User', id: any, username: string } } | null };
 
 export type AmbassadorUpdateMutationVariables = Exact<{
   input: AmbassadorUpdateInput;
 }>;
 
 
-export type AmbassadorUpdateMutation = { __typename?: 'Mutation', ambassadorUpdate?: { __typename?: 'Ambassador', id: string, payoutRate: number } | null };
+export type AmbassadorUpdateMutation = { __typename?: 'Mutation', ambassadorUpdate?: { __typename?: 'Ambassador', id: any, payoutRate: number } | null };
 
 export type ContributionCreateMutationVariables = Exact<{
   input: ContributionCreateInput;
@@ -11669,7 +11669,7 @@ export type ContributionEmailUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ContributionEmailUpdateMutation = { __typename?: 'Mutation', contributionEmailUpdate: { __typename?: 'Contribution', id: string, email?: string | null } };
+export type ContributionEmailUpdateMutation = { __typename?: 'Mutation', contributionEmailUpdate: { __typename?: 'Contribution', id: any, email?: string | null } };
 
 export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
   input: ContributionPaymentsAddInput;
@@ -11686,7 +11686,7 @@ export type PaymentSwapClaimTxSetMutationVariables = Exact<{
 }>;
 
 
-export type PaymentSwapClaimTxSetMutation = { __typename?: 'Mutation', paymentSwapClaimTxSet: { __typename?: 'PaymentSwapClaimTxSetResponse', id: string, success: boolean } };
+export type PaymentSwapClaimTxSetMutation = { __typename?: 'Mutation', paymentSwapClaimTxSet: { __typename?: 'PaymentSwapClaimTxSetResponse', id: any, success: boolean } };
 
 export type ProjectGoalOrderingUpdateMutationVariables = Exact<{
   input: ProjectGoalOrderingUpdateInput;
@@ -11766,7 +11766,7 @@ export type PostDeleteMutationVariables = Exact<{
 }>;
 
 
-export type PostDeleteMutation = { __typename?: 'Mutation', postDelete: { __typename?: 'Post', id: string, title: string } };
+export type PostDeleteMutation = { __typename?: 'Mutation', postDelete: { __typename?: 'Post', id: any, title: string } };
 
 export type PostCreateMutationVariables = Exact<{
   input: PostCreateInput;
@@ -11837,7 +11837,7 @@ export type ProjectMatchingDeleteMutationVariables = Exact<{
 }>;
 
 
-export type ProjectMatchingDeleteMutation = { __typename?: 'Mutation', projectMatchingDelete: { __typename?: 'ProjectMatchingDeleteResponse', success: boolean, message?: string | null, matchingId: string } };
+export type ProjectMatchingDeleteMutation = { __typename?: 'Mutation', projectMatchingDelete: { __typename?: 'ProjectMatchingDeleteResponse', success: boolean, message?: string | null, matchingId: any } };
 
 export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
   input: ProjectRewardCurrencyUpdate;
@@ -11874,21 +11874,21 @@ export type ProjectStatusUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ProjectStatusUpdateMutation = { __typename?: 'Mutation', projectStatusUpdate: { __typename?: 'Project', id: string, status?: ProjectStatus | null } };
+export type ProjectStatusUpdateMutation = { __typename?: 'Mutation', projectStatusUpdate: { __typename?: 'Project', id: any, status?: ProjectStatus | null } };
 
 export type ProjectPreLaunchMutationVariables = Exact<{
   input: ProjectPreLaunchMutationInput;
 }>;
 
 
-export type ProjectPreLaunchMutation = { __typename?: 'Mutation', projectPreLaunch: { __typename?: 'Project', id: string, name: string, status?: ProjectStatus | null } };
+export type ProjectPreLaunchMutation = { __typename?: 'Mutation', projectPreLaunch: { __typename?: 'Project', id: any, name: string, status?: ProjectStatus | null } };
 
 export type ProjectPublishMutationVariables = Exact<{
   input: ProjectPublishMutationInput;
 }>;
 
 
-export type ProjectPublishMutation = { __typename?: 'Mutation', projectPublish: { __typename?: 'Project', id: string, status?: ProjectStatus | null } };
+export type ProjectPublishMutation = { __typename?: 'Mutation', projectPublish: { __typename?: 'Project', id: any, status?: ProjectStatus | null } };
 
 export type ProjectDeleteMutationVariables = Exact<{
   input: DeleteProjectInput;
@@ -11916,7 +11916,7 @@ export type ProjectRskEoaSetMutationVariables = Exact<{
 }>;
 
 
-export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: string, rskEoa?: string | null } };
+export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: any, rskEoa?: string | null } };
 
 export type ProjectWalletConfigurationContributionAttemptNotifyMutationVariables = Exact<{
   input: ProjectWalletConfigurationContributionAttemptNotifyInput;
@@ -11940,14 +11940,14 @@ export type ProjectSubscriptionPlanCreateMutationVariables = Exact<{
 }>;
 
 
-export type ProjectSubscriptionPlanCreateMutation = { __typename?: 'Mutation', projectSubscriptionPlanCreate: { __typename?: 'ProjectSubscriptionPlan', id: string, projectId: string, name: string, description?: string | null, image?: string | null, interval: RecurringInterval, amountUsdCent: number, amountBtcSat: number, isHidden: boolean } };
+export type ProjectSubscriptionPlanCreateMutation = { __typename?: 'Mutation', projectSubscriptionPlanCreate: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, description?: string | null, image?: string | null, interval: RecurringInterval, amountUsdCent: number, amountBtcSat: number, isHidden: boolean } };
 
 export type ProjectSubscriptionPlanUpdateMutationVariables = Exact<{
   input: UpdateProjectSubscriptionPlanInput;
 }>;
 
 
-export type ProjectSubscriptionPlanUpdateMutation = { __typename?: 'Mutation', projectSubscriptionPlanUpdate: { __typename?: 'ProjectSubscriptionPlan', id: string, projectId: string, name: string, description?: string | null, image?: string | null, interval: RecurringInterval, amountUsdCent: number, amountBtcSat: number, isHidden: boolean } };
+export type ProjectSubscriptionPlanUpdateMutation = { __typename?: 'Mutation', projectSubscriptionPlanUpdate: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, description?: string | null, image?: string | null, interval: RecurringInterval, amountUsdCent: number, amountBtcSat: number, isHidden: boolean } };
 
 export type ProjectSubscriptionPlanDeleteMutationVariables = Exact<{
   id: Scalars['BigInt']['input'];
@@ -11968,7 +11968,7 @@ export type RecurringContributionCancelMutationVariables = Exact<{
 }>;
 
 
-export type RecurringContributionCancelMutation = { __typename?: 'Mutation', recurringContributionCancel: { __typename?: 'RecurringContribution', id: string, uuid: string, status: RecurringContributionStatus, canceledAt?: any | null } };
+export type RecurringContributionCancelMutation = { __typename?: 'Mutation', recurringContributionCancel: { __typename?: 'RecurringContribution', id: any, uuid: string, status: RecurringContributionStatus, canceledAt?: any | null } };
 
 export type RecurringContributionPortalSessionCreateMutationVariables = Exact<{
   input: RecurringContributionPortalSessionCreateInput;
@@ -12149,33 +12149,33 @@ export type GeyserPromotionsContributionStatsQueryVariables = Exact<{
 }>;
 
 
-export type GeyserPromotionsContributionStatsQuery = { __typename?: 'Query', geyserPromotionsContributionStats: { __typename?: 'GeyserPromotionsContributionStats', contributionsCount: number, contributionsSum: string, contributionsSumUsd: number } };
+export type GeyserPromotionsContributionStatsQuery = { __typename?: 'Query', geyserPromotionsContributionStats: { __typename?: 'GeyserPromotionsContributionStats', contributionsCount: number, contributionsSum: any, contributionsSumUsd: number } };
 
 export type PromotionNetworkContributionStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PromotionNetworkContributionStatsQuery = { __typename?: 'Query', promotionNetworkContributionStats: { __typename?: 'GeyserPromotionsContributionStats', contributionsCount: number, contributionsSum: string, contributionsSumUsd: number } };
+export type PromotionNetworkContributionStatsQuery = { __typename?: 'Query', promotionNetworkContributionStats: { __typename?: 'GeyserPromotionsContributionStats', contributionsCount: number, contributionsSum: any, contributionsSumUsd: number } };
 
 export type UserAffiliatePartnerTermsQueryVariables = Exact<{
   where: UserGetInput;
 }>;
 
 
-export type UserAffiliatePartnerTermsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, affiliatePartnerTerms: { __typename?: 'AffiliatePartnerTerms', contributionReferralPayoutRate: number, projectReferralPayoutRate: number, projectReferralPayoutCapSats: number } } };
+export type UserAffiliatePartnerTermsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, affiliatePartnerTerms: { __typename?: 'AffiliatePartnerTerms', contributionReferralPayoutRate: number, projectReferralPayoutRate: number, projectReferralPayoutCapSats: number } } };
 
 export type ProjectAmbassadorStatsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
 }>;
 
 
-export type ProjectAmbassadorStatsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', stats: { __typename?: 'ProjectAmbassadorsStats', contributionsCount: number, contributionsSum: string, count: number } } } | null };
+export type ProjectAmbassadorStatsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', stats: { __typename?: 'ProjectAmbassadorsStats', contributionsCount: number, contributionsSum: any, count: number } } } | null };
 
 export type ProjectAmbassadorListQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
 }>;
 
 
-export type ProjectAmbassadorListQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', edges: Array<{ __typename?: 'ProjectAmbassadorEdge', node: { __typename?: 'Ambassador', id: string, payoutRate: number, contributionsCount: number, user: { __typename?: 'User', imageUrl?: string | null, username: string, heroId: string, id: string } } }> } } | null };
+export type ProjectAmbassadorListQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', edges: Array<{ __typename?: 'ProjectAmbassadorEdge', node: { __typename?: 'Ambassador', id: any, payoutRate: number, contributionsCount: number, user: { __typename?: 'User', imageUrl?: string | null, username: string, heroId: string, id: any } } }> } } | null };
 
 export type OrderContributionsGetQueryVariables = Exact<{
   input?: InputMaybe<GetContributionsInput>;
@@ -12357,7 +12357,7 @@ export type ProjectGoalQueryVariables = Exact<{
 
 
 export type ProjectGoalQuery = { __typename?: 'Query', projectGoal: (
-    { __typename?: 'ProjectGoal', posts: Array<{ __typename?: 'Post', id: string, title: string, postType?: PostType | null, description: string, createdAt: string }> }
+    { __typename?: 'ProjectGoal', posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> }
     & ProjectGoalsFragment
   ) };
 
@@ -12366,7 +12366,7 @@ export type LaunchPaymentProjectQueryVariables = Exact<{
 }>;
 
 
-export type LaunchPaymentProjectQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: string, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, aonGoal?: { __typename?: 'ProjectAonGoal', contractAddress?: string | null } | null } | null };
+export type LaunchPaymentProjectQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, aonGoal?: { __typename?: 'ProjectAonGoal', contractAddress?: string | null } | null } | null };
 
 export type OrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -12386,14 +12386,14 @@ export type PaymentByOnChainSwapIdQueryVariables = Exact<{
 }>;
 
 
-export type PaymentByOnChainSwapIdQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: string } };
+export type PaymentByOnChainSwapIdQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: any } };
 
 export type PaymentRecoveryByContributionQueryVariables = Exact<{
   input: PaymentRecoveryByContributionInput;
 }>;
 
 
-export type PaymentRecoveryByContributionQuery = { __typename?: 'Query', paymentRecoveryByContribution: { __typename?: 'PaymentRecoveryByContributionResponse', contribution: { __typename?: 'Contribution', id: string, uuid?: string | null, projectId: string, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null }, project: { __typename?: 'Project', id: string, name: string, title: string, fundingStrategy?: ProjectFundingStrategy | null }, payments: Array<{ __typename?: 'PaymentRecoveryPayment', id: string, uuid: string, status: PaymentStatus, paymentType: PaymentType, amount: number, swapId: string, swapMetadata: string }> } };
+export type PaymentRecoveryByContributionQuery = { __typename?: 'Query', paymentRecoveryByContribution: { __typename?: 'PaymentRecoveryByContributionResponse', contribution: { __typename?: 'Contribution', id: any, uuid?: string | null, projectId: any, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null }, project: { __typename?: 'Project', id: any, name: string, title: string, fundingStrategy?: ProjectFundingStrategy | null }, payments: Array<{ __typename?: 'PaymentRecoveryPayment', id: any, uuid: string, status: PaymentStatus, paymentType: PaymentType, amount: number, swapId: string, swapMetadata: string }> } };
 
 export type ProjectPostsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -12401,7 +12401,7 @@ export type ProjectPostsQueryVariables = Exact<{
 }>;
 
 
-export type ProjectPostsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: string, posts: Array<(
+export type ProjectPostsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, posts: Array<(
       { __typename?: 'Post' }
       & ProjectPostFragment
     )> } | null };
@@ -12411,7 +12411,7 @@ export type ProjectUnplublishedPostsQueryVariables = Exact<{
 }>;
 
 
-export type ProjectUnplublishedPostsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: string, posts: Array<(
+export type ProjectUnplublishedPostsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, posts: Array<(
       { __typename?: 'Post' }
       & ProjectPostFragment
     )> } | null };
@@ -12468,14 +12468,14 @@ export type ProjectByNameForNameCheckQueryVariables = Exact<{
 }>;
 
 
-export type ProjectByNameForNameCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: string, name: string } | null };
+export type ProjectByNameForNameCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, name: string } | null };
 
 export type ProjectForStatusCheckQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
 }>;
 
 
-export type ProjectForStatusCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: string, name: string, status?: ProjectStatus | null, launchedAt?: any | null } | null };
+export type ProjectForStatusCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, name: string, status?: ProjectStatus | null, launchedAt?: any | null } | null };
 
 export type ProjectNostrKeysQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -12563,7 +12563,7 @@ export type ProjectReferrersSearchQueryVariables = Exact<{
 }>;
 
 
-export type ProjectReferrersSearchQuery = { __typename?: 'Query', projectReferrersSearch: { __typename?: 'ProjectReferrersSearchResult', fieldPartners: Array<{ __typename?: 'User', id: string, username: string, heroId: string, imageUrl?: string | null, isFieldPartner: boolean }>, others: Array<{ __typename?: 'User', id: string, username: string, heroId: string, imageUrl?: string | null, isFieldPartner: boolean }> } };
+export type ProjectReferrersSearchQuery = { __typename?: 'Query', projectReferrersSearch: { __typename?: 'ProjectReferrersSearchResult', fieldPartners: Array<{ __typename?: 'User', id: any, username: string, heroId: string, imageUrl?: string | null, isFieldPartner: boolean }>, others: Array<{ __typename?: 'User', id: any, username: string, heroId: string, imageUrl?: string | null, isFieldPartner: boolean }> } };
 
 export type ProjectStatsGetInsightQueryVariables = Exact<{
   input: GetProjectStatsInput;
@@ -12608,7 +12608,7 @@ export type ProjectFundingMethodStatsGetQuery = { __typename?: 'Query', projectS
 export type RecurringContributionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RecurringContributionsQuery = { __typename?: 'Query', me?: { __typename?: 'User', recurringContributions: Array<{ __typename?: 'RecurringContribution', id: string, uuid: string, managementNonce?: string | null, kind: RecurringContributionKind, status: RecurringContributionStatus, paymentMethod: RecurringPaymentMethod, amount: number, currency: RecurringContributionCurrency, interval: RecurringInterval, nextBillingAt?: any | null, currentPeriodEndAt?: any | null, pausedAt?: any | null, canceledAt?: any | null, lastChargeFailureMessage?: string | null, project?: { __typename?: 'Project', id: string, name: string, title: string, thumbnailImage?: string | null } | null, projectSubscriptionPlan?: { __typename?: 'ProjectSubscriptionPlan', id: string, projectId: string, name: string, description?: string | null, image?: string | null, interval: RecurringInterval, amountUsdCent: number, amountBtcSat: number, isHidden: boolean } | null }> } | null };
+export type RecurringContributionsQuery = { __typename?: 'Query', me?: { __typename?: 'User', recurringContributions: Array<{ __typename?: 'RecurringContribution', id: any, uuid: string, managementNonce?: string | null, kind: RecurringContributionKind, status: RecurringContributionStatus, paymentMethod: RecurringPaymentMethod, amount: number, currency: RecurringContributionCurrency, interval: RecurringInterval, nextBillingAt?: any | null, currentPeriodEndAt?: any | null, pausedAt?: any | null, canceledAt?: any | null, lastChargeFailureMessage?: string | null, project?: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null } | null, projectSubscriptionPlan?: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, description?: string | null, image?: string | null, interval: RecurringInterval, amountUsdCent: number, amountBtcSat: number, isHidden: boolean } | null }> } | null };
 
 export type PaymentRefundsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -12621,7 +12621,7 @@ export type PaymentRefundsQuery = { __typename?: 'Query', paymentRefundsGet?: { 
 export type PaymentsRefundableQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PaymentsRefundableQuery = { __typename?: 'Query', paymentsRefundableGet: { __typename?: 'RefundablePaymentsGetResponse', refundablePayments: Array<{ __typename?: 'ProjectRefundablePayment', project: { __typename?: 'Project', id: string, name: string }, payments: Array<{ __typename?: 'Payment', id: string, uuid: string, accountingAmountDue: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename: 'FiatPaymentDetails' } | { __typename: 'FiatToLightningSwapPaymentDetails' } | { __typename: 'LightningPaymentDetails' } | { __typename: 'LightningToRskSwapPaymentDetails' } | { __typename: 'OnChainToLightningSwapPaymentDetails', swapMetadata: string } | { __typename: 'OnChainToRskSwapPaymentDetails', swapMetadata: string } | { __typename: 'RskToLightningSwapPaymentDetails' } | { __typename: 'RskToOnChainSwapPaymentDetails' } }> }> } };
+export type PaymentsRefundableQuery = { __typename?: 'Query', paymentsRefundableGet: { __typename?: 'RefundablePaymentsGetResponse', refundablePayments: Array<{ __typename?: 'ProjectRefundablePayment', project: { __typename?: 'Project', id: any, name: string }, payments: Array<{ __typename?: 'Payment', id: any, uuid: string, accountingAmountDue: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename: 'FiatPaymentDetails' } | { __typename: 'FiatToLightningSwapPaymentDetails' } | { __typename: 'LightningPaymentDetails' } | { __typename: 'LightningToRskSwapPaymentDetails' } | { __typename: 'OnChainToLightningSwapPaymentDetails', swapMetadata: string } | { __typename: 'OnChainToRskSwapPaymentDetails', swapMetadata: string } | { __typename: 'RskToLightningSwapPaymentDetails' } | { __typename: 'RskToOnChainSwapPaymentDetails' } }> }> } };
 
 export type PledgeRefundsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -12693,7 +12693,7 @@ export type GetProjectOwnerUserForInvoiceQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectOwnerUserForInvoiceQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', owners: Array<{ __typename?: 'Owner', id: string, user: (
+export type GetProjectOwnerUserForInvoiceQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', owners: Array<{ __typename?: 'Owner', id: any, user: (
         { __typename?: 'User' }
         & ProjectOwnerUserForInvoiceFragment
       ) }> } | null };
@@ -12711,7 +12711,7 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
 export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: string, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: number }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: string, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: number }> } };
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: number }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, balanceSats: number }> } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
