@@ -1,20 +1,12 @@
 import { LiveDot } from '@/shared/components/feedback/LiveDot.tsx'
-import { getIsAonActive } from '@/shared/utils/hooks/useProjectToolKit.ts'
-import { ProjectForLandingPageFragment } from '@/types/index.ts'
-import { isAllOrNothing } from '@/utils/index.ts'
+import { ProjectForLandingPageFragment, ProjectFundingStrategy } from '@/types/index.ts'
 
-export const AllOrNothingIcon = ({
-  project,
-}: {
-  project: Pick<ProjectForLandingPageFragment, 'fundingStrategy' | 'aonGoal'>
-}) => {
-  const isAonActive = getIsAonActive(project)
-
-  if (!isAllOrNothing(project)) {
+export const AllOrNothingIcon = ({ project }: { project: Pick<ProjectForLandingPageFragment, 'fundingSummary'> }) => {
+  if (project.fundingSummary.fundingStrategy !== ProjectFundingStrategy.AllOrNothing) {
     return null
   }
 
-  if (!isAonActive) {
+  if (!project.fundingSummary.isFundingOpen) {
     return null
   }
 

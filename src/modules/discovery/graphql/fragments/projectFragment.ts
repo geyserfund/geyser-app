@@ -26,6 +26,7 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
       status
       endsAt
       isFundingOpen
+      isFundingFailed
     }
     rskEoa
     category

@@ -295,6 +295,8 @@ export const ImpactFundsMainPage = () => {
     : fieldPartnerLeaderboardRows.slice(0, LEADERBOARD_INITIAL_ROW_COUNT)
 
   const getFundAmountDisplay = (fund: ImpactFundListItem) => {
+    if (fund.amountCommitted === null || fund.amountCommitted === undefined) return ''
+
     const amountSats =
       fund.amountCommitted === 0
         ? fund.metrics.awardedTotalSats
@@ -1381,6 +1383,7 @@ const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
         border={0}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
+        loading="lazy"
       />
       <Box position="absolute" bottom={4} left={4} bg="black" px={3} py={2}>
         <Body size="xs" bold color="white">

@@ -6,30 +6,15 @@ import { Link } from 'react-router'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import {
-  OrderByDirection,
-  ProjectsGetWhereInputStatus,
-  ProjectsOrderByField,
-  useProjectsForLandingPageQuery,
-} from '@/types'
+import { useLandingRecoverableGrantProjectsSectionQuery } from '@/types/index.ts'
 
 import type { ProjectDisplayItem } from '../components/ProjectDisplayBody.tsx'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody.tsx'
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
-const RECOVERABLE_GRANT_PROJECTS_TAKE = 3
-
 export const RecoverableGrantProjects = () => {
   const { t } = useTranslation()
-  const { data, error, loading, refetch } = useProjectsForLandingPageQuery({
-    variables: {
-      input: {
-        orderBy: [{ direction: OrderByDirection.Desc, field: ProjectsOrderByField.LaunchedAt }],
-        where: { status: ProjectsGetWhereInputStatus.Active, isRecoverableGrant: true },
-        pagination: { take: RECOVERABLE_GRANT_PROJECTS_TAKE },
-      },
-    },
-  })
+  const { data, error, loading, refetch } = useLandingRecoverableGrantProjectsSectionQuery()
 
   const projects = useMemo<ProjectDisplayItem[]>(
     () =>

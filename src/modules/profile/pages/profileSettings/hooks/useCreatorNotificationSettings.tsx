@@ -39,7 +39,7 @@ export const useCreatorNotificationSettings = (userId: string, projectId?: strin
 
   const { refetch: refetchProjectCreatorNotificationSettings, loading: loadingProjectCreatorNotificationSettings } =
     useProjectNotificationSettingsQuery({
-      variables: { projectId },
+      variables: { projectId: projectId ?? '' },
       skip: !projectId,
       onCompleted(data) {
         if (data?.projectNotificationSettingsGet) {

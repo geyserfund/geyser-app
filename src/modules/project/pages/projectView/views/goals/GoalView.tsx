@@ -35,7 +35,7 @@ export const GoalView = () => {
     skip: !goalId,
     fetchPolicy: 'network-only',
     variables: {
-      input: goalId,
+      input: goalId ?? '',
     },
   })
 

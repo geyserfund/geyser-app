@@ -9,14 +9,10 @@ import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/co
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import {
   LeaderboardPeriod,
-  OrderByDirection,
   ProjectCategory,
-  ProjectFundingStrategy,
-  ProjectsGetWhereInputStatus,
-  ProjectsOrderByField,
   useGetUserIpCountryQuery,
+  useLandingRegionalProjectsSectionQuery,
   useLeaderboardGlobalProjectsQuery,
-  useProjectsForLandingPageQuery,
 } from '@/types/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
@@ -53,8 +49,6 @@ const LANDING_CATEGORY_ORDER = [
 ] as const
 
 const CURATED_PROJECTS_COUNT = 6
-const NO_OF_REGION_PROJECTS_TO_LOAD = 6
-
 const CURATED_CATEGORY_INPUT: Record<Exclude<CategoryKey, 'featured'>, ProjectCategory> = {
   community: ProjectCategory.Community,
   culture: ProjectCategory.Culture,
@@ -273,30 +267,9 @@ export const DefaultView = () => {
   const { data: userIpCountryData, loading: userIpCountryLoading } = useGetUserIpCountryQuery({
     skip: !showBelowTheFold,
   })
-  const { data: regionalProjectsData, loading: regionalProjectsLoading } = useProjectsForLandingPageQuery({
+  const { data: regionalProjectsData, loading: regionalProjectsLoading } = useLandingRegionalProjectsSectionQuery({
     skip: !showBelowTheFold || userIpCountryLoading || !userIpCountryData?.userIpCountry,
-    variables: {
-      input: {
-        where: {
-          fundingStrategy: ProjectFundingStrategy.TakeItAll,
-          countryCode: userIpCountryData?.userIpCountry,
-          status: ProjectsGetWhereInputStatus.Active,
-        },
-        orderBy: [
-          {
-            direction: OrderByDirection.Desc,
-            field: ProjectsOrderByField.LaunchedAt,
-          },
-          {
-            direction: OrderByDirection.Desc,
-            field: ProjectsOrderByField.Balance,
-          },
-        ],
-        pagination: {
-          take: NO_OF_REGION_PROJECTS_TO_LOAD,
-        },
-      },
-    },
+    variables: { countryCode: userIpCountryData?.userIpCountry ?? '' },
   })
 
   return (

@@ -104,7 +104,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
       paymentSwapClaimTxBroadcast({
         variables: {
           input: {
-            paymentId: swapData.paymentId,
+            paymentId: swapData.paymentId ?? '',
             signedTxHex: refundTransactionHex,
           },
         },

@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { PiClockCountdown, PiMapPin } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
@@ -17,20 +18,19 @@ import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
+import { centsToDollars } from '@/shared/utils/formatData/helperFunctions.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
-import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '@/types/generated/graphql.ts'
-import { isAllOrNothing, isInactive, useMobileMode } from '@/utils/index.ts'
+import {
+  ContributionsSummary,
+  ProjectForLandingPageFragment,
+  ProjectFundingStrategy,
+} from '@/types/generated/graphql.ts'
+import { isInactive, useMobileMode } from '@/utils/index.ts'
 
 import { LandingProjectCardProject } from '../graphql/landingPageTypes.ts'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
-
-const AON_FAILED_STATUSES = [
-  ProjectAonGoalStatus.Failed,
-  ProjectAonGoalStatus.Cancelled,
-  ProjectAonGoalStatus.Unclaimed,
-]
+import { getLandingCardFundingState } from './getLandingCardFundingState.ts'
 
 export interface LandingCardBaseProps extends CardLayoutProps {
   isMobile?: boolean
@@ -293,7 +293,7 @@ const CardImage = ({
       <AllOrNothingIcon project={project} />
     </Box>
 
-    {!compact && (countryName || categoryLabel || statusPillLabel || project.activeMatching) && (
+    {!compact && (countryName || categoryLabel || statusPillLabel || project.fundingSummary.matching.activeMatching) && (
       <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
         {countryName && (
           <ImagePill>
@@ -311,7 +311,9 @@ const CardImage = ({
           </ImagePill>
         )}
         {statusPillLabel && <StatusPill label={statusPillLabel} />}
-        {project.activeMatching && <ProjectMatchingPublicBadge matching={project.activeMatching} variant="discovery" />}
+        {project.fundingSummary.matching.activeMatching && (
+          <ProjectMatchingPublicBadge matching={project.fundingSummary.matching.activeMatching} variant="discovery" />
+        )}
       </HStack>
     )}
   </Box>
@@ -336,28 +338,22 @@ export const LandingCardBase = ({
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
-  const { getProjectBalance } = useProjectToolkit(project)
+  const { getUSDAmount } = useBTCConverter()
   const { handleBlockedContribution } = useBlockedProjectContribution(project)
   const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
   const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
-  const isAonProject = isAllOrNothing(project)
   const { fundingSummary } = project
-  const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(fundingSummary?.status as ProjectAonGoalStatus)
+  const isAonProject = fundingSummary.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+  const fundingState = getLandingCardFundingState({ fundingSummary, isAonProject })
 
-  const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
+  const raisedUsd = isAonProject
+    ? getUSDAmount(BigInt(fundingSummary.raisedSats))
+    : centsToDollars(fundingSummary.raisedUsdCent)
+  const contributionAmount = trendingContributionUsd ?? raisedUsd
   const shouldShowContributionAmount = contributionAmount >= MINIMUM_VISIBLE_CONTRIBUTION_AMOUNT_USD
-  const percentage = fundingSummary?.percentageFunded ?? 0
-  const timeLeft = fundingSummary
-    ? aonProjectTimeLeft({
-        endsAt: fundingSummary.endsAt,
-        deployedAt: null,
-        goalDurationInDays: 0,
-        status: fundingSummary.status as ProjectAonGoalStatus,
-      })
-    : null
-  const isAonEndedFunded = isAonProject && !isAonFailed && !timeLeft && percentage >= 100
+  const { isEndedFunded: isAonEndedFunded, isFailed: isAonFailed, percentage, timeLeft } = fundingState
   const hasFire = (hasTrendingContribution && contributionAmount > 100) || contributionAmount > 1000
   const contributionLabel = hasTrendingContribution ? trendingAmountLabel ?? t('this week') : t('raised')
 
@@ -437,11 +433,11 @@ export const LandingCardBase = ({
               {project.title}
             </H3>
 
-            {(statusPillLabel || project.activeMatching) && (
+            {(statusPillLabel || fundingSummary.matching.activeMatching) && (
               <HStack spacing={1} flexWrap="wrap">
                 {statusPillLabel && <StatusPill label={statusPillLabel} />}
-                {project.activeMatching && (
-                  <ProjectMatchingPublicBadge matching={project.activeMatching} variant="discovery" />
+                {fundingSummary.matching.activeMatching && (
+                  <ProjectMatchingPublicBadge matching={fundingSummary.matching.activeMatching} variant="discovery" />
                 )}
               </HStack>
             )}
