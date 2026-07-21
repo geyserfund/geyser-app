@@ -1,0 +1,945 @@
+# Playwright E2E Testing Guidelines
+
+## 📋 Meta-Rule: Living Documentation
+
+**This file evolves based on real project experience.**
+
+- Update rules immediately when mistakes are identified
+- Document what went wrong and how it was fixed
+- Add patterns and anti-patterns as they emerge
+- Keep rules practical and grounded in actual scenarios
+- **Update rules BEFORE continuing with implementation**
+
+---
+
+## 🎯 Step-by-Step Workflow for Writing Tests
+
+Follow this workflow for EVERY test to ensure correctness and avoid wasted iterations.
+
+### Step 1: Investigate Actual App Behavior
+
+**NEVER write tests based on assumptions or old tests. ALWAYS verify what the app actually does.**
+
+#### Required Investigation
+
+Before writing ANY test code, answer these questions by reading the actual codebase:
+
+1. **What component/context handles this feature?**
+   - Find the relevant file (e.g., `src/context/auth.tsx`, `src/components/LoginButton.tsx`)
+   
+2. **What function executes the behavior?**
+   - Read the actual implementation
+   - Don't assume—verify!
+
+3. **What network requests are made?**
+   - REST endpoints? (e.g., `/logout`)
+   - GraphQL queries? (e.g., `Me` query)
+   - None? (local state only)
+
+4. **What state changes occur?**
+   - Local state updates? (e.g., `setUser(defaultUser)`)
+   - Global atoms? (e.g., Jotai atoms)
+   - Server state?
+
+5. **How does the UI respond?**
+   - Direct re-render?
+   - Via `useEffect`?
+   - What triggers the UI update?
+
+#### Example: Investigating Logout
+
+```typescript
+// Found in src/context/auth.tsx:
+const logout = useCallback(() => {
+  setUser({ ...defaultUser })  // Sets user.id = 0
+  setUserAccountKeyPair(undefined)
+  setFollowedProjects([])
+  fetch(`${authServiceEndPoint}/logout`, { credentials: 'include' })
+  // ✅ Calls /logout endpoint (REST)
+  // ❌ Does NOT query GraphQL
+}, [])
+
+// UI updates via useEffect:
+useEffect(() => {
+  if (user.id === 0) {
+    setIsLoggedIn(false)
+  }
+}, [user.id])
+```
+
+**Result**: Logout is local state clear + REST call to `/logout`. NO GraphQL query.
+
+### Step 2: Verify UI Element Rendering
+
+**Check how elements are actually rendered before writing selectors.**
+
+#### Check Component Code
+
+```typescript
+// Example: ProfileNavContent.tsx
+<MenuItem onClick={logout}>
+  <Body size="md">{t('Sign Out')}</Body>
+</MenuItem>
+
+// ✅ MenuItem has role="menuitem", not "button"!
+// ✅ Text is wrapped in t() for i18n
+```
+
+#### CRITICAL: Check Spread Props
+
+**When you see spread props (`{...props}`), ALWAYS investigate their source:**
+
+```typescript
+// Example: PaymentOnchainPrompt.tsx
+<Button {...buttonProps} onClick={handleClick}>
+  {t('Download & Continue')}
+</Button>
+
+// Step 1: Find the source
+const { buttonProps } = useDownloadRefund()
+
+// Step 2: Read the hook/function
+// In useDownloadRefund.ts:
+buttonProps: {
+  as: Link,  // ← Transforms Button into Link!
+  href: fileToDownload?.content,
+  download: fileToDownload?.download,
+}
+
+// Step 3: Use correct selector based on ACTUAL role
+page.getByRole('link', { name: 'Download & Continue' })  // ✅
+// NOT: page.getByRole('button', ...)  // ❌
+```
+
+**Verification Checklist**:
+- [ ] Check for spread props: `{...props}`, `{...buttonProps}`, etc.
+- [ ] Find source: hooks, functions, parent components
+- [ ] Look for `as` prop (Chakra component transformation)
+- [ ] Look for conditional props based on state
+- [ ] Verify actual DOM role with Playwright Inspector: `await page.pause()`
+
+#### Check Conditional Rendering
+
+```typescript
+// Example: ConnectWithNostr.tsx
+if (!window.nostr) return null  // ← Button won't render without window.nostr!
+
+// ✅ Must mock window.nostr BEFORE page.goto()
+```
+
+#### Check for Required Prerequisites
+
+- Window objects: `window.nostr`, `window.webln`
+- Authentication state: `isLoggedIn`, `user.id`
+- Feature flags or environment variables
+
+### Step 3: Identify What Needs Mocking
+
+Based on your investigation:
+
+**Mock These:**
+- External/unstable services (browser extensions, payment processors)
+- Window objects (e.g., `window.nostr`)
+- Endpoints that are hard to test (external auth)
+
+**Don't Mock These:**
+- Your own API (let it run naturally when possible)
+- Local state changes (let them happen)
+- UI updates (verify them instead)
+
+**Example:**
+```typescript
+// Login Flow Investigation Result:
+// - Needs: window.nostr mock (browser extension)
+// - Needs: /auth/nostr endpoint mock (external auth)
+// - Needs: GraphQL Me query mock (app queries user data after auth)
+
+// Logout Flow Investigation Result:
+// - NO GraphQL mock needed! (app doesn't query)
+// - Just wait for /logout endpoint call
+```
+
+### Step 4: Write Actions with Correct Selectors
+
+**Validate every selector against the actual component.**
+
+#### Selector Checklist
+
+- [ ] Found the component in the codebase
+- [ ] Checked what role it renders as (button, menuitem, link, etc.)
+- [ ] Checked the accessible name (button text, aria-label, etc.)
+- [ ] Verified conditional rendering requirements
+
+#### Example: Writing clickSignOut
+
+```typescript
+// 1. Found component: ProfileNavContent.tsx
+// 2. Saw: <MenuItem onClick={logout}><Body>{t('Sign Out')}</Body></MenuItem>
+// 3. Know: MenuItem = role="menuitem", not "button"
+// 4. Know: Text is i18n with t()
+
+// ✅ Correct action:
+export const clickSignOut = async (page: Page) => {
+  await page.getByRole('menuitem', { name: 'Sign Out' }).click()
+}
+```
+
+### Step 5: Write Flows Based on Reality
+
+**Match the actual app behavior, not what you think happens.**
+
+```typescript
+// Based on investigation: logout calls /logout endpoint, not GraphQL
+export const logout = async (page: Page) => {
+  await openUserMenu(page)
+  await clickSignOut(page)
+  
+  // Wait for the ACTUAL endpoint called (not GraphQL!)
+  await page.waitForResponse((r) => r.url().includes('/logout'))
+  
+  await page.waitForTimeout(500)  // Let UI update
+}
+```
+
+### Step 6: Write Assertions That Match UI Behavior
+
+**Verify what actually changes in the UI.**
+
+```typescript
+// Investigation: After logout, isLoggedIn becomes false via useEffect
+// UI shows: Sign In button appears, ProfileAvatar hides
+
+// ✅ Dual-check approach:
+export const expectUserLoggedOut = async (page: Page) => {
+  // Check both conditions to be robust
+  await expect(getSignInButton(page)).toBeVisible()
+  await expect(getUserAvatar(page)).not.toBeVisible()
+}
+```
+
+### Step 7: Set Up Mock Timing Correctly
+
+**Mocks must be set up at the right time to match app flow.**
+
+#### Browser-Level Mocks (Before page.goto)
+
+```typescript
+// Window objects MUST be set before page loads
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.nostr = { /* mock */ }
+  })
+  await page.goto('/')  // Now components can detect window.nostr
+})
+```
+
+#### State-Changing Mocks (During test flow)
+
+```typescript
+// GraphQL Me mock should happen AFTER opening auth popup
+await clickSignIn(page)
+await page.getByText('Connect').waitFor()
+
+// NOW mock the logged-in user (before clicking auth button)
+await mockGraphQLMe(page, loggedInUser)
+
+await selectNostrAuth(page)
+```
+
+### Step 8: Validate with Tests
+
+- Run the test
+- Check screenshots/videos if it fails
+- Verify the test matches the actual app behavior
+- Update rules if you discover new patterns
+
+### Step 9: Check and Fix Linter Errors
+
+**ALWAYS check for linter errors after writing/modifying test files.**
+
+```bash
+# Check specific files you modified
+read_lints(['packages/testing/playwright/domains/funding/flows.ts'])
+
+# Check entire test directory
+read_lints(['packages/testing/playwright'])
+```
+
+#### Lint Error Workflow
+
+1. **After writing ANY test code**, immediately check for linter errors
+2. **Fix ALL errors before moving forward** - Don't accumulate technical debt
+3. **If lint rules conflict with test requirements**:
+   - Document the conflict
+   - Ask user for permission to skip/disable that specific rule
+   - Add `// eslint-disable-next-line rule-name` with explanation if approved
+4. **Common lint issues in tests**:
+   - Unused imports (remove them)
+   - Missing types (add proper TypeScript types)
+   - Formatting issues (let prettier/eslint fix automatically)
+
+#### When Lint Rules Don't Make Sense
+
+If workspace lint rules conflict with valid test patterns:
+
+**DO**:
+- Document the specific rule and why it conflicts
+- Provide example of the conflict
+- Ask user: "Rule X conflicts with pattern Y. Should we disable this rule for tests?"
+- Wait for permission before proceeding
+
+**DON'T**:
+- Silently disable rules
+- Write code that violates rules without asking
+- Accumulate lint errors "to fix later"
+
+#### Example
+
+```typescript
+// ❌ Bad: Leaving unused import
+import { test, expect } from '@playwright/test'
+import { unusedFunction } from './utils'  // Lint error!
+
+// ✅ Good: Remove unused imports immediately
+import { test, expect } from '@playwright/test'
+```
+
+---
+
+## 🚨 When Tests Fail: Debugging Hierarchy
+
+Follow this order to debug failures efficiently:
+
+### 1. Check Screenshot/Video
+- Is the element visible on the page?
+- If NO → Element doesn't exist (go to step 2)
+- If YES → Selector issue (go to step 5)
+
+### 2. Check Component Code
+- Find the component in codebase
+- Look for conditional rendering (`if (!x) return null`)
+- Check required prerequisites
+
+### 3. Check Mock Timing
+- Are browser-level mocks set up before `page.goto()`?
+- Are state-changing mocks set up at the right time?
+
+### 4. Check Prerequisites
+- Window objects present?
+- Authentication state correct?
+- Required props/state available?
+
+### 5. Check Selector (Only After 1-4)
+- Verify the role (button, menuitem, link, etc.)
+- Check accessible name in DevTools
+- Try Playwright Inspector: `await page.pause()`
+
+---
+
+## 💡 Critical Learnings from Real Bugs
+
+### Don't Assume—Verify
+
+**Bug**: Logout test mocked GraphQL response that was never called.  
+**Cause**: Assumed logout works like login (both use GraphQL). Never verified.  
+**Fix**: Investigated `auth.tsx`, found logout only calls `/logout` endpoint.  
+**Lesson**: Similar features may work completely differently. Investigate each independently.
+
+### Check Element Existence Before Selector
+
+**Bug**: Nostr button selector timeout.  
+**Cause**: Assumed selector was wrong. Actually, button wasn't rendered (missing `window.nostr`).  
+**Fix**: Moved `window.nostr` mock before `page.goto()`.  
+**Lesson**: If element isn't in screenshot, don't debug the selector—debug why it doesn't exist.
+
+### Chakra UI Components Have Specific Roles
+
+**Bug**: `getByRole('button', { name: 'Sign Out' })` didn't find MenuItem.  
+**Cause**: Chakra `MenuItem` has `role="menuitem"`, not `role="button"`.  
+**Fix**: Changed to `getByRole('menuitem')`.  
+**Lesson**: Always check actual component to verify its accessibility role.
+
+### Always Check Spread Props Before Assuming Roles
+
+**Bug**: `getByRole('button', { name: 'Download & Continue' })` timeout, but button visible in screenshot.  
+**Cause**: Component has `<Button {...buttonProps}>` where `buttonProps` contains `as: Link`, transforming it into a Link with `role="link"`.  
+**Fix**: Checked `useDownloadRefund` hook, found `as: Link` in spread props, changed selector to `getByRole('link')`.  
+**Lesson**: NEVER assume a component's role based on its JSX tag name alone. ALWAYS check:
+1. Spread props (`{...props}`, `{...buttonProps}`) - they can override EVERYTHING
+2. The hook/function providing those props
+3. Chakra's `as` prop that transforms components
+4. Use Playwright Inspector to verify actual role: `await page.pause()`
+
+**Pattern to Follow**:
+```typescript
+// Step 1: See JSX
+<Button {...buttonProps} onClick={handleClick}>Download</Button>
+
+// Step 2: Find where buttonProps comes from
+const { buttonProps } = useDownloadRefund()
+
+// Step 3: Read the hook/function
+buttonProps: {
+  as: Link,  // ← THIS CHANGES EVERYTHING!
+  href: '...',
+}
+
+// Step 4: Use correct selector
+page.getByRole('link', { name: 'Download' })  // Not 'button'!
+```
+
+**Key Insight**: JSX tag name ≠ DOM role when spread props are involved.
+
+### Always Wait for Navigation
+
+**Bug**: "Download & Continue" button timeout in onchain flow.  
+**Cause**: Clicked "Download & Continue" (triggers navigation), then immediately tried to copy address on next page without waiting for navigation to complete.  
+**Fix**: Added `await page.waitForSelector('#copy-onchain-address-button', { state: 'visible', timeout: 10000 })` after navigation.  
+**Lesson**: SPAs take time to navigate. After clicking navigation-triggering buttons, ALWAYS wait for the target page to load before interacting with elements on it.
+
+**Pattern**:
+```typescript
+// Click button that navigates
+await clickDownloadAndContinue(page)
+
+// Wait for target page element to be visible
+await page.waitForSelector('#target-page-element', { state: 'visible', timeout: 10000 })
+
+// Now safe to interact with target page
+await clickCopyButton(page)
+```
+
+### Never Use `waitForLoadState('networkidle')`
+
+**Anti-Pattern**: Using `await page.waitForLoadState('networkidle')` after navigation.  
+**Why**: `networkidle` waits for network activity to stop, which is unreliable and slow:
+- Modern SPAs have continuous background requests (analytics, polling, websockets)
+- Network activity may never fully stop
+- Causes flaky tests that timeout unnecessarily
+- Adds unnecessary wait time even when it works
+
+**Solution**: 
+- Use `page.goto()` which already waits for `load` event by default
+- Wait for specific elements that indicate the page is ready: `await page.waitForSelector('#element')`
+- Wait for specific network responses: `await page.waitForResponse(...)`
+- Use `waitForURL()` for navigation completion: `await page.waitForURL(/pattern/)`
+
+**Bad Pattern**:
+```typescript
+await page.goto('/some-page')
+await page.waitForLoadState('networkidle')  // ❌ Unreliable and slow
+```
+
+**Good Patterns**:
+```typescript
+// Option 1: Just use goto() - it already waits for load event
+await page.goto('/some-page')
+
+// Option 2: Wait for specific element that indicates page is ready
+await page.goto('/some-page')
+await page.waitForSelector('#main-content', { state: 'visible' })
+
+// Option 3: Wait for specific network response
+await page.goto('/some-page')
+await page.waitForResponse((r) => r.url().includes('/api/data'))
+
+// Option 4: Wait for URL change after navigation
+await page.goto('/some-page')
+await page.waitForURL(/\/some-page/)
+```
+
+### Check Conditional Rendering
+
+**Bug**: Assumed "Download & Continue" button exists for all projects.  
+**Cause**: Didn't check `PaymentOnchainPrompt.tsx` which shows: `if (isAllOrNothing(project)) return <Navigate />`  
+**Fix**: Understood TIA projects show button, AoN projects skip it. Organized tests by project type.  
+**Lesson**: UI elements may be conditionally rendered based on feature flags, user roles, or data properties. Always check component code for `if` statements and ternaries.
+
+### Parse Exact Amounts from Backend
+
+**Bug**: Manually calculated onchain payment amount, missing network fees.  
+**Cause**: Used `ONCHAIN_AMOUNT + tip` calculation instead of parsing the exact amount from BIP21 URI.  
+**Fix**: Parse `amount` parameter from BIP21 URI (`bitcoin:ADDRESS?amount=0.00063000`), convert BTC to sats.  
+**Lesson**: Don't manually calculate amounts that the backend provides. Backend calculations include multiple factors (tips, network fees, exchange rates).
+
+**Bad Pattern**:
+```typescript
+const calculatedAmount = baseAmount + (baseAmount * tipPercent / 100)
+await payOnchain(address, calculatedAmount)  // ❌ Missing network fees!
+```
+
+**Good Pattern**:
+```typescript
+// Backend provides exact amount in BIP21 URI
+const bip21Uri = await clickCopyOnchainAddress(page)
+// Parse: bitcoin:ADDRESS?amount=0.00063000
+const amountMatch = bip21Uri.match(/amount=([0-9.]+)/)
+const amountBtc = parseFloat(amountMatch[1])
+const amountSats = Math.round(amountBtc * 100_000_000)  // Convert BTC to sats
+await payOnchain(address, amountSats)  // ✅ Exact amount with all fees
+```
+
+**Note**: Use string manipulation instead of `parseFloat` to avoid floating-point precision errors:
+```typescript
+const [wholePart, decimalPart = ''] = amountBtcString.split('.')
+const paddedDecimal = decimalPart.padEnd(8, '0').substring(0, 8)
+const amountSats = parseInt(wholePart + paddedDecimal, 10)
+```
+
+**Why**: Backend calculations include multiple factors (tips, network fees, exchange rates). Always use the exact amounts provided by the API/UI.
+
+### Always Verify Authentication-Dependent UI Rendering
+
+**Bug**: Test failed looking for "View contribution status" button during intermediate success.  
+**Cause**: Button conditionally renders based on `isLoggedIn` state. Component code: `if (!isLoggedIn && isPending) return null`. Tests run as guest users.  
+**Fix**: Removed button assertion from intermediate success. Verified pending state through auth-agnostic indicators (processing text, disabled invoice button).  
+**Lesson**: UI elements are often conditionally rendered based on authentication state. Always check component code for `isLoggedIn`, `user`, `isAuthenticated` checks before writing assertions.
+
+**Debugging Checklist**:
+- ✅ Check component code for authentication checks (`isLoggedIn`, `user`, `isAuthenticated`)
+- ✅ Verify what authentication state your test has (guest vs logged-in)
+- ✅ Use assertions that match the test's auth context
+- ✅ Document auth requirements in test JSDoc comments
+
+**Bad Pattern** (assumes UI always renders):
+```typescript
+// Component: if (!isLoggedIn && isPending) return null
+// Test runs as GUEST user
+await expect(page.getByRole('button', { name: 'View status' })).toBeVisible()  // ❌ Fails!
+```
+
+**Good Pattern** (checks auth-agnostic indicators):
+```typescript
+// Component: if (!isLoggedIn && isPending) return null
+// Test runs as GUEST user - button won't render
+
+/** Note: Tests run as GUEST users. Button doesn't render for guests during isPending. */
+await expect(page.getByText('Processing...')).toBeVisible()  // ✅ Works for all users
+await expect(page.getByRole('link', { name: 'Download' })).toBeDisabled()  // ✅ Works for all users
+```
+
+**Why**: Authentication-dependent rendering is common in modern apps. Tests must account for their authentication context to avoid false failures.
+
+### Always Verify Actual HTML Roles (Chakra UI `as` Prop)
+
+**Bug**: Test failed with `getByRole('link', { name: 'Download invoice' })` - element not found.  
+**Cause**: Assumed Chakra UI `<Button>` always has `role="button"`, but when `as="div"` prop is used, it still renders with `role="button"` (not as expected HTML element). During `isPending` state, the component returns `DownloadButtons` (a Button), not wrapped in `PDFDownloadLink`.  
+**Fix**: Changed selector from `getByRole('link')` to `getByRole('button')`.  
+**Lesson**: Chakra UI components with the `as` prop can change the underlying HTML element but preserve the ARIA role. Always verify the actual rendered role by checking the component code.
+
+**Component Code** (`DownloadInvoice.tsx`):
+```typescript
+// During isPending, returns Button component (not PDFDownloadLink):
+if (isPending) {
+  return (
+    <TooltipPopover>
+      <DownloadButtons asIcon={asIcon} isDisabled={true} />  // ← Returns Button
+    </TooltipPopover>
+  )
+}
+
+// DownloadButtons component:
+<Button
+  as="div"           // ← Renders as <div role="button">, NOT <a> or <link>
+  isDisabled={true}
+  ...
+>
+  {t('Download invoice')}
+</Button>
+```
+
+**Debugging Checklist**:
+- ✅ Check component code for conditional rendering based on state (isPending, isLoggedIn, etc.)
+- ✅ Check if Chakra UI components use `as` prop to override default HTML element
+- ✅ Verify the actual HTML role in each state (don't assume component name = HTML role)
+- ✅ Look for wrapper components like `PDFDownloadLink` that may or may not wrap based on state
+
+**Bad Pattern** (assumes component name = HTML role):
+```typescript
+// Component: <Button as="div">Download invoice</Button>
+await expect(page.getByRole('link', { name: 'Download invoice' })).toBeDisabled()  // ❌ Not a link!
+```
+
+**Good Pattern** (verifies actual role):
+```typescript
+// Component: <Button as="div">Download invoice</Button>
+// Actual HTML: <div role="button">Download invoice</div>
+await expect(page.getByRole('button', { name: 'Download invoice' })).toBeDisabled()  // ✅ Correct!
+```
+
+**Why**: Chakra UI's flexibility with the `as` prop means JSX component names don't always match HTML elements or ARIA roles. Always check the component implementation to verify the actual rendered role.
+
+### Don't Assert on Elements That May Not Render
+
+**Bug**: Test failed with `getByRole('button', { name: 'Download invoice' })` - element not found, even with correct role.  
+**Cause**: The Download invoice button depends on async data (`fundingContribution`, `project`) that may not be loaded immediately during intermediate success state. Component returns `null` if `project` is unavailable.  
+**Fix**: Removed Download invoice button assertion. Use only the processing message text as the indicator of intermediate state.  
+**Lesson**: Don't assert on UI elements that depend on async data or may render conditionally. Assert only on elements that are guaranteed to be present in that state.
+
+**Component Dependency** (`DownloadInvoice.tsx`):
+```typescript
+export const DownloadInvoice = ({ project, contributionId, isPending }) => {
+  // ...
+  
+  if (!project) {
+    return null  // ← Returns null if project data not loaded yet!
+  }
+  
+  if (isPending) {
+    return <TooltipPopover><DownloadButtons isDisabled={true} /></TooltipPopover>
+  }
+  // ...
+}
+```
+
+**Timing Issue**:
+- Intermediate success screen loads immediately after transaction
+- `fundingContributionAtom` and `project` may still be loading
+- Components dependent on this data return `null` initially
+
+**Debugging Checklist**:
+- ✅ Check if component has early return conditions (`if (!data) return null`)
+- ✅ Check if component depends on async data (atoms, GraphQL queries, etc.)
+- ✅ Verify element renders reliably in the test environment
+- ✅ Prefer asserting on text content over interactive elements during loading states
+
+**Bad Pattern** (asserts on element that may not render):
+```typescript
+// Component: if (!project) return null
+// During intermediate state, project might not be loaded yet
+await expect(page.getByRole('button', { name: 'Download invoice' })).toBeDisabled()  // ❌ May not exist!
+```
+
+**Good Pattern** (asserts on reliable indicator):
+```typescript
+// Processing message is rendered directly in FundingSuccessUI, doesn't depend on async data
+await expect(page.getByText('Your transaction is being processed')).toBeVisible()  // ✅ Always present!
+```
+
+**Why**: Tests need to be deterministic. Asserting on elements that may or may not render due to async data loading creates flaky tests. Use reliable indicators (text, IDs, elements that don't depend on async data) to verify state.
+
+---
+
+## 📂 Test Organization by Project Type
+
+### Separate Tests for Different Configurations
+
+- **TIA Projects** (Take It All / Open Funding): Tests in `funding/lightning.spec.ts`, `funding/onchain.spec.ts`
+  - Must download refund file before onchain payment
+  - Uses `lndtestproject`
+  
+- **AoN Projects** (All-or-Nothing): Future separate test files
+  - Skips refund download (automatic navigation)
+  - Different success/failure states
+
+### Constants for Project Types
+
+```typescript
+// constants.ts
+export const PROJECT_NAME = 'lndtestproject'
+export const PROJECT_TYPE = 'TIA' as const  // or 'AON'
+```
+
+### Test Suite Naming
+
+```typescript
+test.describe('Lightning Funding Flows - TIA Projects', () => {
+  // Tests specific to TIA project behavior
+})
+```
+
+---
+
+## 🏗️ Architecture
+
+### Domain-Driven Design Structure
+
+```
+packages/testing/playwright/
+├── tests/{domain}/{feature}.spec.ts  # Test specifications
+├── domains/{domain}/
+│   ├── actions.ts     # Atomic user interactions (click, type, select)
+│   ├── flows.ts       # Multi-step business workflows (login, checkout)
+│   ├── assertions.ts  # Verification functions (expectLoggedIn)
+│   ├── mocks.ts       # Mock setup (mockNostr, mockGraphQL)
+│   └── fixtures.ts    # Test fixtures (authenticatedPage)
+└── domains/shared/    # Cross-domain utilities
+```
+
+### File Naming
+
+- **Actions**: `click{Thing}`, `enter{Thing}`, `select{Thing}`
+- **Flows**: `{verb}{BusinessConcept}` (e.g., `loginWithNostr`)
+- **Assertions**: `expect{Condition}` (e.g., `expectUserLoggedIn`)
+- **Mocks**: `mock{Service}` or `setup{Service}Mocks`
+
+---
+
+## 🎨 Common Patterns in This Codebase
+
+### Window Object Dependencies
+
+```typescript
+// ConnectWithNostr.tsx conditionally renders based on window.nostr
+if (!window.nostr) return null
+
+// Solution: Mock BEFORE page.goto
+await page.addInitScript(() => { window.nostr = { ... } })
+await page.goto('/')
+```
+
+### Chakra UI MenuItem
+
+```typescript
+// MenuItems have role="menuitem", not "button"
+<MenuItem onClick={handler}><Body>{t('Text')}</Body></MenuItem>
+
+// ✅ Correct selector:
+await page.getByRole('menuitem', { name: 'Text' })
+```
+
+### Internationalized Text
+
+```typescript
+// All user-facing text uses t() for i18n
+<Button>{t('Sign in')}</Button>
+
+// ✅ Use exact text (translated in test env):
+await page.getByRole('button', { name: 'Sign in' })
+```
+
+### Authentication States
+
+```typescript
+// Login: External auth → GraphQL query
+await mockGraphQLMe(page)  // App queries user data
+await selectNostrAuth(page)
+await page.waitForResponse((r) => r.url().includes('/graphql'))
+
+// Logout: Local state clear → REST call
+await clickSignOut(page)
+await page.waitForResponse((r) => r.url().includes('/logout'))
+// No GraphQL query!
+```
+
+---
+
+## 🔧 Selector Strategy
+
+### Priority Order
+
+1. **`getByRole()`** - Most semantic (button, menuitem, link, heading)
+2. **`getByTestId()`** - Stable (add `data-testid` to components)
+3. **`getByLabel()`** / **`getByPlaceholder()`** - Forms
+4. **CSS selectors** - Last resort only
+
+### Examples
+
+```typescript
+// Buttons
+await page.getByRole('button', { name: 'Sign in' })
+
+// Menu items (Chakra UI)
+await page.getByRole('menuitem', { name: 'Sign Out' })
+
+// Custom components with test IDs
+await page.getByTestId('user-profile-avatar')
+
+// Form inputs
+await page.getByLabel('Email')
+await page.getByPlaceholder('Enter amount')
+```
+
+---
+
+## 🎭 Mocking
+
+### What to Mock
+
+✅ **Mock**: Browser extensions, external auth, unstable services  
+❌ **Don't Mock**: Your own API, local state, UI behavior
+
+### Mock Timing
+
+**Browser-Level Mocks** (before `page.goto()`):
+- Window objects (`window.nostr`)
+- Browser extensions
+- Global configurations
+
+**State-Changing Mocks** (during test flow):
+- API responses that change based on user actions
+- GraphQL queries that return different data
+
+### Techniques
+
+```typescript
+// Window objects
+await page.addInitScript(() => { window.nostr = { ... } })
+
+// Network interception
+await page.route('**/auth/nostr', async (route) => {
+  await route.fulfill({ json: { token: 'test' } })
+})
+
+// GraphQL
+await page.route('**/graphql', async (route) => {
+  const body = route.request().postDataJSON()
+  if (body.operationName === 'Me') {
+    await route.fulfill({ json: { data: { me: mockUser } } })
+  } else {
+    await route.continue()
+  }
+})
+```
+
+---
+
+## 🧪 Test Structure
+
+### Arrange-Act-Assert Pattern
+
+```typescript
+test('should complete donation', async ({ page }) => {
+  // Arrange
+  await page.goto('/project/test-project')
+  await loginWithNostr(page)
+  
+  // Act
+  const invoice = await completeDonation(page, 1000)
+  await payInvoice(invoice)
+  
+  // Assert
+  await expectSuccessScreen(page)
+})
+```
+
+### Test Independence
+
+- Each test is independent
+- Use `beforeEach` for common setup
+- Don't rely on test execution order
+- Clean up test data
+
+---
+
+## 📚 Quick Reference
+
+### Commands
+
+```bash
+yarn test:playwright                    # Run all tests
+yarn test:playwright:ui                 # UI mode (recommended)
+yarn test:playwright:debug              # Debug mode
+yarn test:playwright tests/auth/*.spec.ts  # Specific tests
+```
+
+### Debugging
+
+```typescript
+await page.pause()                      // Playwright Inspector
+await page.screenshot({ path: 'debug.png' })
+page.on('console', msg => console.log(msg.text()))
+```
+
+### Environment
+
+Configure `.env.playwright`:
+- `APP_URL` - Application URL
+- `CONTRIBUTOR_LND_ENDPOINT` - Lightning node
+- Additional Bitcoin/LND configuration as needed
+
+---
+
+## 🎨 Project-Specific Patterns
+
+### Project Creation (Launch Flow)
+
+- **Project Details ≠ Story**: The Project Details step does **not** include the full `description` field. The long description lives in the **Tell your story** step (`LaunchStory`). Tests for Project Details should not try to fill `description` there.
+- **Image uploads require crop confirmation**: `FileUpload` opens `ImageCropperModal`. Tests must click **Save** in the crop modal after setting files, then wait for preview elements (e.g., thumbnail `img[alt="uploaded image"]`, header `img[alt^="Project header image"]`).
+- **Scope menu selections**: The "Create project" link exists in multiple places (nav + profile menu). When selecting from the profile dropdown, scope to `getByRole('menu')` to avoid strict-mode collisions.
+- **Prefer semantic roles over text**: Some screens repeat the same text in navigation and headings (e.g., "Project details"). Use `getByRole('heading', { name: 'Project details' })` instead of `getByText()` to avoid strict-mode violations.
+- **React-select placeholders are text, not input placeholders**: `getByPlaceholder('Select category')` will fail. Click the placeholder text (e.g., `getByText('Select category', { exact: true })`) or target the combobox role.
+- **Add test IDs for unstable selects**: For react-select fields that intercept clicks, add `data-testid` to the FieldContainer and target `getByRole('combobox')` within that container.
+
+### Funding Flow Patterns
+
+**Clipboard Handling:**
+```typescript
+// Grant clipboard permissions
+await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+
+// Click copy button
+await page.locator('#copy-lightning-invoice-button').click()
+
+// Wait for clipboard
+await page.waitForTimeout(500)
+
+// Read clipboard
+const invoice = await page.evaluate(async () => {
+  return await navigator.clipboard.readText()
+})
+```
+
+**Bitcoin Payment Testing:**
+```typescript
+// Lightning: Pay invoice via LND REST API
+await payLightningInvoice(invoice)
+
+// Onchain: Parse BIP21 URI and pay
+const address = bip21Uri.split(':')[1]?.split('?')[0]
+await payOnchain(address, amount)
+
+// Mine block to confirm
+await mineBlock()
+```
+
+**Onchain Success States:**
+- **Processing**: Transaction sent, waiting for confirmations
+  - Shows `#onchain-transaction-processing-card`
+  - Success banner NOT visible yet
+- **Intermediate Success**: Transaction detected (FundingSuccessIntermediate)
+  - Shows `#successful-contribution-banner` with `isPending=true`
+  - Before block confirmation
+- **Final Success**: Transaction confirmed
+  - Shows `#successful-contribution-banner`
+  - After mining block
+
+**Lightning vs Onchain Flow:**
+- **Lightning**: Direct to final success (instant)
+- **Onchain**: Processing → Intermediate → Final (requires mining)
+
+---
+
+## ✅ AI Agent Checklist
+
+### When Creating Test Plans
+
+- [ ] Include "Investigate App Behavior" step
+- [ ] Include "Verify UI Rendering" step
+- [ ] Include "Identify Mocking Needs" step
+- [ ] Ask clarifying questions if uncertain
+- [ ] Don't assume based on old tests
+
+### When Writing Tests
+
+- [ ] Read actual component code
+- [ ] Verify element roles and rendering
+- [ ] Check network calls in implementation
+- [ ] Validate mock timing
+- [ ] Test assertions match reality
+
+### When Debugging Failures
+
+- [ ] Check screenshot first
+- [ ] Verify element exists before fixing selector
+- [ ] Investigate conditional rendering
+- [ ] Check mock timing
+- [ ] Only then try different selectors
+
+### When Tests Pass
+
+- [ ] Update rules with new patterns
+- [ ] Document any new learnings
+- [ ] Ensure code follows architecture
+- [ ] Run linter and fix all errors
+- [ ] Verify no warnings remain
