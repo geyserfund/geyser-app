@@ -288,48 +288,21 @@ function DrawerContents({ application, onRefetch }: DrawerContentsProps) {
       </SimpleGrid>
 
       <DetailGroup title={t('Creator')}>
-        {application.creator ? (
-          <HStack spacing={3} align="center">
-            <UserAvatar
-              id={application.creator.id as unknown as string}
-              user={application.creator as never}
-              height="40px"
-              width="40px"
-            />
-            <VStack align="start" spacing={0} flex={1} minW={0}>
-              <HStack spacing={2}>
-                <Body size="sm" bold>
-                  {application.creator.username}
-                </Body>
-                <IdentityVerifiedBadge isVerified={application.creator.isIdentityVerified} />
-              </HStack>
-              {application.creator.email ? (
-                <HStack spacing={1}>
-                  <Body size="xs" color="neutral1.9">
-                    {application.creator.email}
-                  </Body>
-                  <Tooltip content={t('Copy email')}>
-                    <IconButton
-                      size="xs"
-                      variant="ghost"
-                      colorScheme="neutral1"
-                      aria-label={t('Copy email')}
-                      icon={<Icon as={PiCopyBold} />}
-                      onClick={() => {
-                        copyTextToClipboard(application.creator?.email as string)
-                        success({ title: t('Copied to clipboard') })
-                      }}
-                    />
-                  </Tooltip>
-                </HStack>
-              ) : null}
-            </VStack>
-          </HStack>
-        ) : (
-          <Body size="sm" color="neutral1.9">
-            {t('Creator information unavailable')}
-          </Body>
-        )}
+        <ContactDetails
+          contact={application.creator}
+          unavailableLabel={t('Creator information unavailable')}
+          onCopy={copyTextToClipboard}
+          onCopySuccess={() => success({ title: t('Copied to clipboard') })}
+        />
+      </DetailGroup>
+
+      <DetailGroup title={t('Field Partner')}>
+        <ContactDetails
+          contact={application.fieldPartner}
+          unavailableLabel={t('Field Partner information unavailable')}
+          onCopy={copyTextToClipboard}
+          onCopySuccess={() => success({ title: t('Copied to clipboard') })}
+        />
       </DetailGroup>
 
       {application.project.shortDescription ? (
@@ -350,6 +323,57 @@ function DrawerContents({ application, onRefetch }: DrawerContentsProps) {
 
       <ApplicationNotes application={application} onChange={onRefetch} />
     </VStack>
+  )
+}
+
+type ContactDetailsProps = {
+  contact: DashboardApplication['creator']
+  unavailableLabel: string
+  onCopy: (value: string) => void
+  onCopySuccess: () => void
+}
+
+function ContactDetails({ contact, unavailableLabel, onCopy, onCopySuccess }: ContactDetailsProps) {
+  if (!contact) {
+    return (
+      <Body size="sm" color="neutral1.9">
+        {unavailableLabel}
+      </Body>
+    )
+  }
+
+  return (
+    <HStack spacing={3} align="center">
+      <UserAvatar id={contact.id as unknown as string} user={contact as never} height="40px" width="40px" />
+      <VStack align="start" spacing={0} flex={1} minW={0}>
+        <HStack spacing={2}>
+          <Body size="sm" bold>
+            {contact.username}
+          </Body>
+          <IdentityVerifiedBadge isVerified={contact.isIdentityVerified} />
+        </HStack>
+        {contact.email ? (
+          <HStack spacing={1}>
+            <Body size="xs" color="neutral1.9">
+              {contact.email}
+            </Body>
+            <Tooltip content={t('Copy email')}>
+              <IconButton
+                size="xs"
+                variant="ghost"
+                colorScheme="neutral1"
+                aria-label={t('Copy email')}
+                icon={<Icon as={PiCopyBold} />}
+                onClick={() => {
+                  onCopy(contact.email as string)
+                  onCopySuccess()
+                }}
+              />
+            </Tooltip>
+          </HStack>
+        ) : null}
+      </VStack>
+    </HStack>
   )
 }
 

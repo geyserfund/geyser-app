@@ -152,11 +152,18 @@ export const QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS = gql`
           shortDescription
           description
           country
+          countryCode
           category
           fundingStrategy
           aonGoalAmount
         }
         creator {
+          id
+          username
+          email
+          isIdentityVerified
+        }
+        fieldPartner {
           id
           username
           email

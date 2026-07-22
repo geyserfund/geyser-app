@@ -14,6 +14,13 @@ export function formatEnumLabel(value?: string | null) {
     .join(' ')
 }
 
+export function countryCodeToFlag(countryCode?: string | null) {
+  const normalizedCountryCode = countryCode?.trim().toUpperCase()
+  if (!normalizedCountryCode || !/^[A-Z]{2}$/.test(normalizedCountryCode)) return null
+
+  return String.fromCodePoint(...Array.from(normalizedCountryCode, (character) => 127397 + character.charCodeAt(0)))
+}
+
 export function formatSats(amount?: SatsValue) {
   const sats = toSatsBigInt(amount)
   if (sats === null) return NOT_PROVIDED_PLACEHOLDER

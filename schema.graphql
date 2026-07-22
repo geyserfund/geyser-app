@@ -3932,6 +3932,7 @@ type ImpactFundDashboardApplicationRow {
   notes: [ImpactFundApplicationNote!]!
   project: ImpactFundDashboardProject!
   creator: ImpactFundDashboardCreator
+  fieldPartner: ImpactFundDashboardCreator
   projectPath: String!
 }
 
@@ -3943,6 +3944,7 @@ type ImpactFundDashboardProject {
   shortDescription: String
   description: String
   country: String
+  countryCode: String
   category: ProjectCategory
   fundingStrategy: ProjectFundingStrategy!
   aonGoalAmount: Int
