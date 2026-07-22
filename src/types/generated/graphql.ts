@@ -1454,6 +1454,7 @@ export type ImpactFundDashboardApplicationRow = {
   contributionUuid?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Date']['output'];
   creator?: Maybe<ImpactFundDashboardCreator>;
+  fieldPartner?: Maybe<ImpactFundDashboardCreator>;
   fundingModel: ImpactFundApplicationFundingModel;
   notes: Array<ImpactFundApplicationNote>;
   project: ImpactFundDashboardProject;
@@ -1499,6 +1500,7 @@ export type ImpactFundDashboardProject = {
   aonGoalAmount?: Maybe<Scalars['Int']['output']>;
   category?: Maybe<ProjectCategory>;
   country?: Maybe<Scalars['String']['output']>;
+  countryCode?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   fundingStrategy: ProjectFundingStrategy;
   id: Scalars['BigInt']['output'];
@@ -10989,7 +10991,7 @@ export type ImpactFundDashboardApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
+export type ImpactFundDashboardApplicationsQuery = { __typename?: 'Query', impactFundDashboardApplications: { __typename?: 'ImpactFundDashboardApplicationsResponse', totalCount: number, fundingSummary: Array<{ __typename?: 'ImpactFundFundingSummaryRow', category?: ProjectCategory | null, fundingModel: ImpactFundApplicationFundingModel, applicationsCount: number, awardedTotalSats: number }>, applications: Array<{ __typename?: 'ImpactFundDashboardApplicationRow', applicationId: any, createdAt: any, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, contributionUuid?: string | null, awardedAt?: any | null, projectPath: string, notes: Array<{ __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } }>, project: { __typename?: 'ImpactFundDashboardProject', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, country?: string | null, countryCode?: string | null, category?: ProjectCategory | null, fundingStrategy: ProjectFundingStrategy, aonGoalAmount?: number | null }, creator?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null, fieldPartner?: { __typename?: 'ImpactFundDashboardCreator', id: any, username: string, email?: string | null, isIdentityVerified: boolean } | null }> } };
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
@@ -18560,11 +18562,18 @@ export const ImpactFundDashboardApplicationsDocument = gql`
         shortDescription
         description
         country
+        countryCode
         category
         fundingStrategy
         aonGoalAmount
       }
       creator {
+        id
+        username
+        email
+        isIdentityVerified
+      }
+      fieldPartner {
         id
         username
         email

@@ -17,11 +17,12 @@ export const useImpactFundEligibility = () => {
   })
 
   const fundId = fundData?.impactFund?.id
+  const applicationsQueryOptions =
+    fundId && project.id
+      ? { variables: { input: { impactFundId: fundId, projectId: project.id } } }
+      : { skip: true as const }
 
-  const { data: applicationsData } = useImpactFundApplicationsQuery({
-    skip: !fundId || !project.id,
-    variables: { input: { impactFundId: fundId ?? 0, projectId: project.id } },
-  })
+  const { data: applicationsData } = useImpactFundApplicationsQuery(applicationsQueryOptions)
 
   const hasExistingApplication = (applicationsData?.impactFundApplications?.totalCount ?? 0) > 0
 

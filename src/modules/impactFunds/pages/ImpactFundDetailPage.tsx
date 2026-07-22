@@ -37,7 +37,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
 import {
   PiArrowUpRightBold,
@@ -242,20 +242,20 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const [isLoadingMoreApplications, setIsLoadingMoreApplications] = useState(false)
 
   const impactFund = data?.impactFund
+  const applicationsQueryOptions = impactFund?.id
+    ? {
+        variables: {
+          input: buildFundedApplicationsInput(impactFund.id),
+        },
+      }
+    : { skip: true as const }
 
   const {
     data: applicationsData,
     loading: applicationsLoading,
     error: applicationsError,
     fetchMore: fetchMoreApplications,
-  } = useImpactFundApplicationsQuery({
-    skip: !impactFund?.id,
-    variables: {
-      input: {
-        ...buildFundedApplicationsInput(impactFund?.id ?? 0),
-      },
-    },
-  })
+  } = useImpactFundApplicationsQuery(applicationsQueryOptions)
 
   const fundedApplications = applicationsData?.impactFundApplications?.applications ?? []
   const fundedApplicationsCount = applicationsData?.impactFundApplications?.totalCount ?? 0

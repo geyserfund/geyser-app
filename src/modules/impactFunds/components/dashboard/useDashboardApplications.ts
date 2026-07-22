@@ -50,13 +50,17 @@ function buildInput({
 function matchesSearch(application: DashboardApplication, searchTerm: string): boolean {
   if (!searchTerm) return true
   const lowered = searchTerm.toLowerCase()
-  return (
-    application.project.title.toLowerCase().includes(lowered) ||
-    (application.project.country?.toLowerCase().includes(lowered) ?? false) ||
-    (application.project.shortDescription?.toLowerCase().includes(lowered) ?? false) ||
-    (application.creator?.username?.toLowerCase().includes(lowered) ?? false) ||
-    (application.creator?.email?.toLowerCase().includes(lowered) ?? false)
-  )
+  const searchableValues = [
+    application.project.title,
+    application.project.country,
+    application.project.shortDescription,
+    application.creator?.username,
+    application.creator?.email,
+    application.fieldPartner?.username,
+    application.fieldPartner?.email,
+  ]
+
+  return searchableValues.some((value) => value?.toLowerCase().includes(lowered))
 }
 
 export function useDashboardApplications({
@@ -68,19 +72,23 @@ export function useDashboardApplications({
   search,
 }: UseDashboardApplicationsArgs) {
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const applicationsQueryOptions =
+    impactFundId && canAccessDashboard
+      ? {
+          variables: {
+            input: buildInput({
+              impactFundId,
+              statuses: effectiveStatuses,
+              fundingModels,
+              sort,
+            }),
+          },
+          notifyOnNetworkStatusChange: true,
+        }
+      : { skip: true as const }
 
-  const { data, previousData, loading, error, fetchMore, refetch } = useImpactFundDashboardApplicationsQuery({
-    skip: !impactFundId || !canAccessDashboard,
-    variables: {
-      input: buildInput({
-        impactFundId: impactFundId ?? 0,
-        statuses: effectiveStatuses,
-        fundingModels,
-        sort,
-      }),
-    },
-    notifyOnNetworkStatusChange: true,
-  })
+  const { data, previousData, loading, error, fetchMore, refetch } =
+    useImpactFundDashboardApplicationsQuery(applicationsQueryOptions)
 
   const dashboardApplications = useMemo(
     () => data?.impactFundDashboardApplications || previousData?.impactFundDashboardApplications,

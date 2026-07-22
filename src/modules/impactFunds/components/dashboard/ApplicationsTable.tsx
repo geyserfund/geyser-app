@@ -28,7 +28,7 @@ import {
 import { type DashboardAction, ApplicationActionsMenu } from './ApplicationActionsMenu'
 import { ApplicationStatusTag } from './ApplicationStatusTag'
 import { NOT_PROVIDED_PLACEHOLDER, projectFundingStrategyLabels } from './dashboardConstants'
-import { formatDate, formatEnumLabel, formatSatsCompact, toFiniteNumber } from './dashboardFormatters'
+import { countryCodeToFlag, formatDate, formatSatsCompact, toFiniteNumber } from './dashboardFormatters'
 import { DashboardTooltip as Tooltip } from './DashboardTooltip'
 import { FundingModelTag } from './FundingModelTag'
 import { IdentityVerifiedBadge } from './IdentityVerifiedBadge'
@@ -89,8 +89,8 @@ export function ApplicationsTable({
               {t('Project')}
             </Th>
             <Th {...headerCellSx}>{t('Country')}</Th>
-            <Th {...headerCellSx}>{t('Category')}</Th>
             <Th {...headerCellSx}>{t('Creator')}</Th>
+            <Th {...headerCellSx}>{t('Field Partner')}</Th>
             <SortableHeader
               label="Applied"
               sortValues={{
@@ -155,6 +155,7 @@ function ApplicationRow({ application, onOpenApplication, onAction, isSelected }
   const { formatUsdAmount } = useCurrencyFormatter()
   const handleOpen = () => onOpenApplication(String(application.applicationId))
   const amountAwardedNumber = toFiniteNumber(application.amountAwardedInSats)
+  const countryFlag = countryCodeToFlag(application.project.countryCode)
 
   const aonTarget =
     application.project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
@@ -218,38 +219,24 @@ function ApplicationRow({ application, onOpenApplication, onAction, isSelected }
           </VStack>
         </HStack>
       </Td>
-      <Td maxW="120px">
-        <Body size="sm" noOfLines={1}>
-          {application.project.country || NOT_PROVIDED_PLACEHOLDER}
-        </Body>
-      </Td>
-      <Td maxW="160px">
-        <Body size="sm" noOfLines={1}>
-          {application.project.category ? t(formatEnumLabel(application.project.category)) : NOT_PROVIDED_PLACEHOLDER}
-        </Body>
-      </Td>
-      <Td maxW="200px">
-        {application.creator ? (
-          <VStack align="start" spacing={0} minW={0}>
-            <HStack spacing={1} minW={0}>
-              <Body size="sm" noOfLines={1}>
-                {application.creator.username}
-              </Body>
-              <IdentityVerifiedBadge isVerified={application.creator.isIdentityVerified} />
-            </HStack>
-            {application.creator.email ? (
-              <Tooltip content={application.creator.email}>
-                <Body size="xs" color="neutral1.9" noOfLines={1} maxW="180px">
-                  {application.creator.email}
-                </Body>
-              </Tooltip>
-            ) : null}
-          </VStack>
+      <Td maxW="120px" textAlign="center">
+        {countryFlag && application.project.country ? (
+          <Tooltip content={application.project.country}>
+            <Body size="lg" lineHeight={1} aria-label={application.project.country}>
+              {countryFlag}
+            </Body>
+          </Tooltip>
         ) : (
           <Body size="sm" color="neutral1.9">
-            {t('Unknown')}
+            {NOT_PROVIDED_PLACEHOLDER}
           </Body>
         )}
+      </Td>
+      <Td maxW="200px">
+        <ContactCell contact={application.creator} unavailableLabel={t('Unknown')} />
+      </Td>
+      <Td maxW="200px">
+        <ContactCell contact={application.fieldPartner} unavailableLabel={NOT_PROVIDED_PLACEHOLDER} />
       </Td>
       <Td>
         <Body size="sm">{formatDate(application.createdAt)}</Body>
@@ -289,6 +276,39 @@ function ApplicationRow({ application, onOpenApplication, onAction, isSelected }
         />
       </Td>
     </Tr>
+  )
+}
+
+type ContactCellProps = {
+  contact: DashboardApplication['creator']
+  unavailableLabel: string
+}
+
+function ContactCell({ contact, unavailableLabel }: ContactCellProps) {
+  if (!contact) {
+    return (
+      <Body size="sm" color="neutral1.9">
+        {unavailableLabel}
+      </Body>
+    )
+  }
+
+  return (
+    <VStack align="start" spacing={0} minW={0}>
+      <HStack spacing={1} minW={0}>
+        <Body size="sm" noOfLines={1}>
+          {contact.username}
+        </Body>
+        <IdentityVerifiedBadge isVerified={contact.isIdentityVerified} />
+      </HStack>
+      {contact.email ? (
+        <Tooltip content={contact.email}>
+          <Body size="xs" color="neutral1.9" noOfLines={1} maxW="180px">
+            {contact.email}
+          </Body>
+        </Tooltip>
+      ) : null}
+    </VStack>
   )
 }
 

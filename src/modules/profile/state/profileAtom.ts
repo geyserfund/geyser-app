@@ -4,7 +4,7 @@ import { authUserAtom } from '../../../modules/auth/state'
 import { UserForProfilePageFragment } from '../../../types'
 
 export const defaultUser: UserForProfilePageFragment = {
-  id: '0',
+  id: '',
   bio: '',
   heroId: '',
   username: '',

@@ -129,15 +129,18 @@ export const ProfileSettingsAffiliate = () => {
 
   useUserAccountKeys()
 
-  const { data, loading } = useUserAffiliatePayoutsQuery({
-    skip: !userId,
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: userId ? toInt(userId) : 0,
-      },
-    },
-  })
+  const affiliatePayoutsQueryOptions = userId
+    ? {
+        fetchPolicy: 'cache-and-network' as const,
+        variables: {
+          where: {
+            id: toInt(userId),
+          },
+        },
+      }
+    : { skip: true as const }
+
+  const { data, loading } = useUserAffiliatePayoutsQuery(affiliatePayoutsQueryOptions)
 
   const affiliateData = data?.user
   const affiliatePartnerTerms = affiliateData?.affiliatePartnerTerms
