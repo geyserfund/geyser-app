@@ -72,19 +72,23 @@ export function useDashboardApplications({
   search,
 }: UseDashboardApplicationsArgs) {
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const applicationsQueryOptions =
+    impactFundId && canAccessDashboard
+      ? {
+          variables: {
+            input: buildInput({
+              impactFundId,
+              statuses: effectiveStatuses,
+              fundingModels,
+              sort,
+            }),
+          },
+          notifyOnNetworkStatusChange: true,
+        }
+      : { skip: true as const }
 
-  const { data, previousData, loading, error, fetchMore, refetch } = useImpactFundDashboardApplicationsQuery({
-    skip: !impactFundId || !canAccessDashboard,
-    variables: {
-      input: buildInput({
-        impactFundId: impactFundId ?? 0,
-        statuses: effectiveStatuses,
-        fundingModels,
-        sort,
-      }),
-    },
-    notifyOnNetworkStatusChange: true,
-  })
+  const { data, previousData, loading, error, fetchMore, refetch } =
+    useImpactFundDashboardApplicationsQuery(applicationsQueryOptions)
 
   const dashboardApplications = useMemo(
     () => data?.impactFundDashboardApplications || previousData?.impactFundDashboardApplications,
