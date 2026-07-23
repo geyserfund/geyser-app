@@ -1,3 +1,10 @@
+## [0.48.0](https://github.com/geyserfund/geyser-app/compare/v0.47.1...v0.48.0) (2026-07-23)
+
+
+### Features
+
+* **project:** show LABIF eligibility callout ([4d71657](https://github.com/geyserfund/geyser-app/commit/4d7165709a4192db3eef5819a2c095720eaf642f))
+
 ## [0.47.0](https://github.com/geyserfund/geyser-app/compare/v0.46.0...v0.47.0) (2026-07-22)
 
 ## [0.46.0](https://github.com/geyserfund/geyser-app/compare/v0.45.1...v0.46.0) (2026-07-21)
