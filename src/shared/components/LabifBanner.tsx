@@ -130,7 +130,14 @@ export const LabifBanner = ({ learnMoreTo, applicationTo, committedAmount }: Lab
         >
           {t('Apply for funding')}
         </Button>
-        <Body size="sm" bold color={secondaryText} maxW="180px">
+        <Body
+          size="sm"
+          bold
+          color={secondaryText}
+          order={{ base: 3, md: 'initial' }}
+          w={{ base: 'full', md: 'auto' }}
+          maxW={{ base: 'full', md: '180px' }}
+        >
           {t('Applications open to LATAM projects')}
         </Body>
       </HStack>
