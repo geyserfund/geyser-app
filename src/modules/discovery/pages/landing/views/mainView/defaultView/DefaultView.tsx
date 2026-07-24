@@ -101,7 +101,7 @@ export const DefaultView = () => {
   const [charityProjectIds, setCharityProjectIds] = useState<number[]>([])
   const [charityProjectsLoading, setCharityProjectsLoading] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
-  const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
+  const { donateModalElement } = useImpactFundsDonateModal()
   const { getSatoshisFromUSDCents } = useBTCConverter()
   const { data: impactFundsData } = useImpactFundsQuery()
 
@@ -361,7 +361,7 @@ export const DefaultView = () => {
 
         <RecoverableGrantProjects />
 
-        <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} onDonateClick={() => openDonateModal()} />
+        <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} />
 
         {showBelowTheFold && (
           <>
