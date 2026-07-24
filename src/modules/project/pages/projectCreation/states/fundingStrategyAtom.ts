@@ -3,6 +3,7 @@ import { atom } from 'jotai'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
 export const RecoverableGrantFundingOption = 'RECOVERABLE_GRANT' as const
+export const RECOVERABLE_GRANT_DURATION_IN_DAYS = 14
 
 export type ProjectCreationFundingOption = ProjectFundingStrategy | typeof RecoverableGrantFundingOption
 
@@ -18,6 +19,10 @@ export const getProjectFundingStrategyInput = (option: ProjectCreationFundingOpt
 
 export const getProjectRecoverableGrantInput = (option: ProjectCreationFundingOption) =>
   option === RecoverableGrantFundingOption
+
+/** Returns the fixed Recoverable Grant duration or the selected All-or-Nothing duration. */
+export const getProjectAonGoalDurationInDays = (isRecoverableGrant: boolean, duration: number) =>
+  isRecoverableGrant ? RECOVERABLE_GRANT_DURATION_IN_DAYS : duration
 
 /** Whether the creation funding-goal step should render All-or-Nothing options. */
 export const shouldShowAllOrNothingGoalInCreation = (
