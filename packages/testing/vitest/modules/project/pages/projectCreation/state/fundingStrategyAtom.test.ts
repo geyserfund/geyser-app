@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  getProjectAonGoalDurationInDays,
+  RECOVERABLE_GRANT_DURATION_IN_DAYS,
   RecoverableGrantFundingOption,
   shouldShowAllOrNothingGoalInCreation,
 } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
@@ -41,5 +43,15 @@ describe('shouldShowAllOrNothingGoalInCreation', () => {
         RecoverableGrantFundingOption,
       ),
     ).toBe(false)
+  })
+})
+
+describe('getProjectAonGoalDurationInDays', () => {
+  it('uses the fixed 14-day duration for Recoverable Grants', () => {
+    expect(getProjectAonGoalDurationInDays(true, 30)).toBe(RECOVERABLE_GRANT_DURATION_IN_DAYS)
+  })
+
+  it('preserves the selected duration for other All-or-Nothing projects', () => {
+    expect(getProjectAonGoalDurationInDays(false, 30)).toBe(30)
   })
 })

@@ -30,6 +30,7 @@ import { toInt } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { getProjectAonGoalDurationInDays } from '../../../states/fundingStrategyAtom.ts'
 import type { AllOrNothingGoalFormValues } from '../allOrNothingGoalValidation.ts'
 import {
   allOrNothingGoalFormSchema,
@@ -42,6 +43,7 @@ export const AllOrNothingGoal = () => {
   const usdRate = useAtomValue(usdRateAtom)
 
   const { project } = useProjectAtom()
+  const isRecoverableGrant = Boolean(project.isRecoverableGrant)
 
   const { getSatoshisFromUSDCents, getUSDAmount } = useBTCConverter()
 
@@ -52,7 +54,7 @@ export const AllOrNothingGoal = () => {
     defaultValues: {
       amount: project.aonGoal?.goalAmount || 0,
       amountUSD: project.aonGoal?.goalAmount ? getUSDAmount(project.aonGoal?.goalAmount as Satoshis) : 0,
-      duration: project.aonGoal?.goalDurationInDays || 0,
+      duration: getProjectAonGoalDurationInDays(isRecoverableGrant, project.aonGoal?.goalDurationInDays || 0),
       launchDate: project.launchScheduledAt ? DateTime.fromMillis(project.launchScheduledAt).toJSDate() : undefined,
     },
   })
@@ -83,7 +85,7 @@ export const AllOrNothingGoal = () => {
           aonGoalInSats: data.amount,
           aonGoalUsdQuote: toInt(usdRate),
         },
-        aonGoalDurationInDays: data.duration,
+        aonGoalDurationInDays: getProjectAonGoalDurationInDays(isRecoverableGrant, data.duration),
       },
       launchScheduledAt: data.launchDate ? DateTime.fromJSDate(data.launchDate).toMillis() : undefined,
     })
@@ -148,107 +150,111 @@ export const AllOrNothingGoal = () => {
               onToggle={onToggle}
             />
           </FieldContainer>
-          <FieldContainer
-            title={t('Project duration')}
-            subtitle={
-              <VStack align="flex-start" gap={0}>
-                <Body size="sm">
-                  {t(
-                    'The project duration determines how long your project will be active for. We recommend projects to be 30 days or less. They cannot be longer than {{days}} days.',
-                    { days: AON_GOAL_MAX_DURATION_IN_DAYS },
-                  )}
-                </Body>
-                <Body size="sm">
-                  <Body as="span" bold>
-                    {t('Note')}:
-                  </Body>{' '}
-                  {t('This duration cannot be updated once the project has launched.')}
-                </Body>
-              </VStack>
-            }
-            error={formState.errors.duration?.message}
-          >
-            <InputGroup maxWidth="120px" marginTop={4}>
-              <Input
-                paddingRight={14}
-                size="lg"
-                fontWeight="bold"
-                textAlign="right"
-                placeholder={'0'}
-                type="number"
-                max={AON_GOAL_MAX_DURATION_IN_DAYS}
-                min={AON_GOAL_MIN_DURATION_IN_DAYS}
-                {...register('duration')}
-                isInvalid={Boolean(formState.errors.duration)}
-                onFocus={() => {
-                  clearErrors('duration')
-                }}
-              />
-
-              <InputRightElement h="full" alignItems="center" minWidth="50px" paddingRight={4}>
-                <Body bold>{t('days')}</Body>
-              </InputRightElement>
-            </InputGroup>
-          </FieldContainer>
-          <FieldContainer
-            title={t('Schedule launch (optional)')}
-            subtitle={
-              <VStack align="flex-start" gap={0}>
-                <Body size="sm">
-                  {t(
-                    'Pick a launch date for your project. The project will not be visible until you launch it. You can also edit the launch date later.',
-                  )}
-                </Body>
-                <Body size="sm">
-                  <Body as="span" bold>
-                    {t('Note')}:
-                  </Body>{' '}
-                  {t('The project will not automatically launch, you will still need to launch manually.')}
-                </Body>
-              </VStack>
-            }
-          >
-            <HStack>
-              <ReactDatePicker
-                selected={watch('launchDate')}
-                onChange={(date) =>
-                  setValue('launchDate', date || undefined, { shouldValidate: true, shouldDirty: true })
-                }
-                showTimeSelect
-                dateFormat="MM/dd/yyyy h:mm aa"
-                timeIntervals={15}
-                placeholderText={t('Select date and time')}
-                minDate={DateTime.now().plus({ days: 1 }).toJSDate()}
-                customInput={
-                  <Button
-                    size="xl"
-                    borderRadius="8px"
-                    color="utils.text"
-                    borderColor="neutral1.6"
-                    w="full"
-                    variant="outline"
-                    colorScheme="neutral1"
-                    marginTop={4}
-                  >
-                    {launchDate
-                      ? DateTime.fromJSDate(launchDate).toFormat('MMMM dd, yyyy - h:mm a')
-                      : ' Select date and time'}
-                  </Button>
-                }
-              />
-              {launchDate && (
-                <IconButton
-                  aria-label="clear-launch-date"
-                  variant="outline"
-                  colorScheme="error"
-                  size="xl"
-                  marginTop={4}
-                  icon={<PiX />}
-                  onClick={() => setValue('launchDate', undefined)}
+          {!isRecoverableGrant ? (
+            <FieldContainer
+              title={t('Project duration')}
+              subtitle={
+                <VStack align="flex-start" gap={0}>
+                  <Body size="sm">
+                    {t(
+                      'The project duration determines how long your project will be active for. We recommend projects to be 30 days or less. They cannot be longer than {{days}} days.',
+                      { days: AON_GOAL_MAX_DURATION_IN_DAYS },
+                    )}
+                  </Body>
+                  <Body size="sm">
+                    <Body as="span" bold>
+                      {t('Note')}:
+                    </Body>{' '}
+                    {t('This duration cannot be updated once the project has launched.')}
+                  </Body>
+                </VStack>
+              }
+              error={formState.errors.duration?.message}
+            >
+              <InputGroup maxWidth="120px" marginTop={4}>
+                <Input
+                  paddingRight={14}
+                  size="lg"
+                  fontWeight="bold"
+                  textAlign="right"
+                  placeholder={'0'}
+                  type="number"
+                  max={AON_GOAL_MAX_DURATION_IN_DAYS}
+                  min={AON_GOAL_MIN_DURATION_IN_DAYS}
+                  {...register('duration')}
+                  isInvalid={Boolean(formState.errors.duration)}
+                  onFocus={() => {
+                    clearErrors('duration')
+                  }}
                 />
-              )}
-            </HStack>
-          </FieldContainer>
+
+                <InputRightElement h="full" alignItems="center" minWidth="50px" paddingRight={4}>
+                  <Body bold>{t('days')}</Body>
+                </InputRightElement>
+              </InputGroup>
+            </FieldContainer>
+          ) : null}
+          {!isRecoverableGrant ? (
+            <FieldContainer
+              title={t('Schedule launch (optional)')}
+              subtitle={
+                <VStack align="flex-start" gap={0}>
+                  <Body size="sm">
+                    {t(
+                      'Pick a launch date for your project. The project will not be visible until you launch it. You can also edit the launch date later.',
+                    )}
+                  </Body>
+                  <Body size="sm">
+                    <Body as="span" bold>
+                      {t('Note')}:
+                    </Body>{' '}
+                    {t('The project will not automatically launch, you will still need to launch manually.')}
+                  </Body>
+                </VStack>
+              }
+            >
+              <HStack>
+                <ReactDatePicker
+                  selected={watch('launchDate')}
+                  onChange={(date) =>
+                    setValue('launchDate', date || undefined, { shouldValidate: true, shouldDirty: true })
+                  }
+                  showTimeSelect
+                  dateFormat="MM/dd/yyyy h:mm aa"
+                  timeIntervals={15}
+                  placeholderText={t('Select date and time')}
+                  minDate={DateTime.now().plus({ days: 1 }).toJSDate()}
+                  customInput={
+                    <Button
+                      size="xl"
+                      borderRadius="8px"
+                      color="utils.text"
+                      borderColor="neutral1.6"
+                      w="full"
+                      variant="outline"
+                      colorScheme="neutral1"
+                      marginTop={4}
+                    >
+                      {launchDate
+                        ? DateTime.fromJSDate(launchDate).toFormat('MMMM dd, yyyy - h:mm a')
+                        : ' Select date and time'}
+                    </Button>
+                  }
+                />
+                {launchDate && (
+                  <IconButton
+                    aria-label="clear-launch-date"
+                    variant="outline"
+                    colorScheme="error"
+                    size="xl"
+                    marginTop={4}
+                    icon={<PiX />}
+                    onClick={() => setValue('launchDate', undefined)}
+                  />
+                )}
+              </HStack>
+            </FieldContainer>
+          ) : null}
         </VStack>
       </ProjectCreationPageWrapper>
     </form>

@@ -8,9 +8,7 @@ import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '@/modules/impactFunds/utils/constants.ts'
-import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { LabifBanner } from '@/shared/components/LabifBanner.tsx'
-import { RecoverableGrantPoolCard } from '@/shared/components/RecoverableGrantPoolCard.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getAiSeoPageContent, getPath } from '@/shared/constants'
@@ -369,7 +367,6 @@ export const ImpactFundsMainPage = () => {
           committedAmount={
             latinAmericaImpactFund ? getFundAmountDisplay(latinAmericaImpactFund) : t('120,000,000 sats')
           }
-          onDonateClick={() => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })}
         />
         <ResourcesSection colors={colors} />
         <BookletsSection colors={colors} />
@@ -434,15 +431,17 @@ const PageSection = ({
   children,
   colors,
   py = dimensions.impactLendingSection.paddingY,
+  pt,
   bg,
 }: {
   children: React.ReactNode
   colors: SectionColors
   py?: object
+  pt?: object | number
   bg?: string
 }) => {
   return (
-    <Box w="full" bg={bg || colors.pageBg} py={py}>
+    <Box w="full" bg={bg || colors.pageBg} paddingTop={pt ?? py} paddingBottom={py}>
       <Box w="full" maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto" px={standardPadding}>
         {children}
       </Box>
@@ -1001,28 +1000,26 @@ const SponsorsAndFundsSection = ({
   colors,
   sponsors,
   committedAmount,
-  onDonateClick,
 }: {
   colors: SectionColors
   sponsors: readonly SponsorListItem[]
   committedAmount: string
-  onDonateClick: () => void
 }) => {
   const partnerFundPath = getPath('impactFunds', LATIN_AMERICA_IMPACT_FUND_NAME)
 
   return (
-    <PageSection colors={colors}>
-      <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
+    <PageSection colors={colors} pt={0}>
+      <VStack align="stretch" spacing={dimensions.impactLendingSection.paddingY}>
         <VStack align="stretch" spacing={5}>
           <VStack align="flex-start" spacing={2}>
             <H2
-              size={{ base: '32px', lg: '42px' }}
-              lineHeight={{ base: '38px', lg: '48px' }}
+              size={{ base: '32px', lg: '36px' }}
+              lineHeight={{ base: '38px', lg: '42px' }}
               bold
               color={colors.primaryText}
               sx={{ textWrap: 'balance' }}
             >
-              {t('Active Funds')}
+              {t('Regional Partners')}
             </H2>
           </VStack>
           <VStack align="stretch" spacing={5}>
@@ -1031,13 +1028,12 @@ const SponsorsAndFundsSection = ({
               applicationTo={`${partnerFundPath}#apply`}
               committedAmount={committedAmount || t('200,000,000 sats')}
             />
-            <RecoverableGrantPoolCard onDonateClick={onDonateClick} />
           </VStack>
         </VStack>
         <VStack align="flex-start" spacing={3}>
           <H2
-            size={{ base: '32px', lg: '42px' }}
-            lineHeight={{ base: '38px', lg: '48px' }}
+            size={{ base: '32px', lg: '36px' }}
+            lineHeight={{ base: '38px', lg: '42px' }}
             bold
             color={colors.primaryText}
             sx={{ textWrap: 'balance' }}

@@ -38,6 +38,7 @@ import {
   projectCreationFundingOptionAtom,
   RecoverableGrantFundingOption,
 } from '../states/fundingStrategyAtom.ts'
+import { getProjectCreationDescription } from '../utils/getProjectCreationDescription.ts'
 
 export const LaunchProjectDetails = () => {
   const { t } = useTranslation()
@@ -143,6 +144,7 @@ export const LaunchProjectDetails = () => {
         tagIds: tags,
         fundingStrategy: getProjectFundingStrategyInput(selectedFundingOption),
         isRecoverableGrant: getProjectRecoverableGrantInput(selectedFundingOption),
+        description: getProjectCreationDescription(selectedFundingOption, values.description),
         ...(normalizedReferrerHeroId ? { referrerHeroId: normalizedReferrerHeroId } : {}),
       } as CreateProjectInput
 

@@ -233,15 +233,15 @@ const ProjectHeaderSummary = ({
   return (
     <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
       <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-        {t('Contributors: {{count}}', { count: project.fundersCount ?? 0 })}
+        {t('Contributors: {{value}}', { value: project.fundersCount ?? 0 })}
       </Body>
       <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-        {t('Followers: {{count}}', { count: project.followersCount ?? 0 })}
+        {t('Followers: {{value}}', { value: project.followersCount ?? 0 })}
       </Body>
 
       {subscribers && (
         <Body size="md" medium light sx={{ fontVariantNumeric: 'tabular-nums' }}>
-          {t('{{count}} subscribers', { count: subscribers || 0 })}
+          {t('{{value}} subscribers', { value: subscribers || 0 })}
         </Body>
       )}
     </HStack>

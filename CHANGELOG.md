@@ -1,3 +1,17 @@
+## [0.49.0](https://github.com/geyserfund/geyser-app/compare/v0.48.0...v0.49.0) (2026-07-24)
+
+
+### Features
+
+* **impact-funds:** update fund page content and layout ([8a8323b](https://github.com/geyserfund/geyser-app/commit/8a8323b2e8a418d12669f9baa5b7fe4aac1b0db9))
+* **project-creation:** enforce recoverable grant defaults ([e03d7e9](https://github.com/geyserfund/geyser-app/commit/e03d7e9200c94aa8d930b08980852b442803dc62))
+
+
+### Bug Fixes
+
+* **project:** remove plural suffix from header counts ([3907497](https://github.com/geyserfund/geyser-app/commit/39074970d057a29501e0cceec80d182020761454))
+* **shared:** stack labif actions on mobile ([162cc0f](https://github.com/geyserfund/geyser-app/commit/162cc0f80b3e0ad8532627462d599fed2da25163))
+
 ## [0.48.0](https://github.com/geyserfund/geyser-app/compare/v0.47.1...v0.48.0) (2026-07-23)
 
 
