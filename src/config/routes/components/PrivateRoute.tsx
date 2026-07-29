@@ -52,7 +52,7 @@ const PrivateRoute = ({ children }: IPrivateRoute) => {
     }
   }, [loading, onOpen, onClose, isAnonymous])
 
-  const modalTitle = 'Sign in to Geyser'
+  const modalTitle = 'Log in to Geyser'
 
   const modalDescription = () => {
     if (isEntryCreationRoute) {

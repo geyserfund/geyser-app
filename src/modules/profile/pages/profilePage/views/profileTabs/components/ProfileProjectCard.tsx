@@ -18,6 +18,9 @@ interface ProfileProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   showStatus?: boolean
   showFollow?: boolean
   showStats?: boolean
+  compact?: boolean
+  footer?: React.ReactNode
+  titleAccessory?: React.ReactNode
 }
 
 export const ProfileProjectCard = ({
@@ -25,6 +28,9 @@ export const ProfileProjectCard = ({
   showStatus,
   showFollow,
   showStats,
+  compact,
+  footer,
+  titleAccessory,
   ...rest
 }: ProfileProjectCardProps) => {
   const { t } = useTranslation()
@@ -48,7 +54,13 @@ export const ProfileProjectCard = ({
       overflow="visible"
       {...rest}
     >
-      <Box width="70px" height="70px" overflow={'hidden'} borderRadius="8px">
+      <Box
+        width={compact ? '56px' : '70px'}
+        height={compact ? '56px' : '70px'}
+        flexShrink={0}
+        overflow={'hidden'}
+        borderRadius="8px"
+      >
         <ImageWithReload
           w="100%"
           h="100%"
@@ -58,11 +70,12 @@ export const ProfileProjectCard = ({
         />
       </Box>
 
-      <VStack w={`calc(100% - 80px)`} alignItems="flex-start" spacing={0}>
+      <VStack w={compact ? `calc(100% - 66px)` : `calc(100% - 80px)`} alignItems="flex-start" spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
-          <Body bold isTruncated>
+          <Body bold isTruncated flex={1} minW={0}>
             {project.title}
           </Body>
+          {titleAccessory}
           {showStatus && <ProjectStatusIcon project={project} wallet={wallet} />}
           {showFollow && <FollowButton project={project} />}
         </HStack>
@@ -72,7 +85,7 @@ export const ProfileProjectCard = ({
         {showStats && (
           <HStack w="full" spacing="20px">
             <Body size="sm" light>
-              {t('Contributors')}
+              {t('Contributions')}
               {': '}
               <Body as="span" dark>
                 {commaFormatted(project.balance)}
@@ -81,7 +94,7 @@ export const ProfileProjectCard = ({
             </Body>
 
             <Body size="sm" light>
-              {t('Funded')}
+              {t('Contributors')}
               {': '}
               <Body as="span" dark>
                 {project.fundersCount}
@@ -89,6 +102,7 @@ export const ProfileProjectCard = ({
             </Body>
           </HStack>
         )}
+        {footer}
       </VStack>
     </CardLayout>
   )

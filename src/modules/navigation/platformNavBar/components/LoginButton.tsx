@@ -24,7 +24,7 @@ export const LoginButton = (props: ButtonProps) => {
       onClick={() => loginOnOpen()}
       {...props}
     >
-      {t('Sign in')}
+      {t('Log in')}
     </Button>
   )
 }

@@ -1,4 +1,4 @@
-import { Button, Link, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PiCopy, PiDownloadSimple } from 'react-icons/pi'
@@ -15,6 +15,8 @@ import { useNotification } from '@/utils'
 
 import { HeroCardDisplay } from '../HeroCardDisplay'
 import { ImageComponentForCards } from './ImageComponentForCards'
+
+const omitExternalImages = (node: HTMLElement) => !['IMG', 'IMAGE'].includes(node.tagName)
 
 const useStyles = createUseStyles((theme: AppTheme) => ({
   currentClass: {
@@ -57,10 +59,10 @@ export const MediaCarouselForCards = ({
 
   const [refElement, setRefElement] = useState<HTMLDivElement | null>(null)
 
-  const [downloadUrl, setDownloadUrl] = useState<string>('')
   const [downloadLoading, setDownloadLoading] = useState<boolean>(false)
 
-  const { handleGenerateAndCopy, copying, getObjectUrl } = useCreateAndCopyImage()
+  const { handleGenerateAndCopy, copying, getDataUrl } = useCreateAndCopyImage()
+  const exportOptions = currentIndex === 0 ? { fallbackFilter: omitExternalImages } : undefined
 
   const handleCopy = async () => {
     await handleGenerateAndCopy({
@@ -77,22 +79,31 @@ export const MediaCarouselForCards = ({
           description: 'Please try again',
         })
       },
+      exportOptions,
     })
   }
 
-  useEffect(() => {
-    setDownloadLoading(true)
-    setTimeout(async () => {
-      const url = await getObjectUrl({
-        element: refElement,
-      })
-      if (url) {
-        setDownloadUrl(url)
-      }
+  const handleDownload = async () => {
+    if (!refElement) return
 
+    setDownloadLoading(true)
+    try {
+      const dataUrl = await getDataUrl(refElement, exportOptions)
+      const downloadLink = document.createElement('a')
+      downloadLink.download = 'hero-card.png'
+      downloadLink.href = dataUrl
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      downloadLink.remove()
+    } catch {
+      toast.error({
+        title: 'Failed to download image',
+        description: 'Please try again',
+      })
+    } finally {
       setDownloadLoading(false)
-    }, 1000)
-  }, [refElement])
+    }
+  }
 
   const links = useMemo(() => {
     return [
@@ -134,7 +145,7 @@ export const MediaCarouselForCards = ({
         initialSlide={currentIndex}
         swiperProps={{
           style: { paddingBottom: '40px' },
-          loop: true,
+          loop: links.length > 1,
           pagination: {
             type: 'fraction',
             renderFraction(currentClass, totalClass) {
@@ -171,18 +182,16 @@ export const MediaCarouselForCards = ({
           {t('Copy card')}
         </Button>
         <Button
-          as={Link}
-          download={'hero-card.png'}
-          href={downloadUrl}
           size="lg"
           variant="outline"
           colorScheme="neutral1"
           w="100%"
           rightIcon={<PiDownloadSimple />}
           isLoading={downloadLoading}
-          isDisabled={!downloadUrl}
+          isDisabled={!refElement}
+          onClick={handleDownload}
         >
-          {t('Download')}
+          {t('Download card')}
         </Button>
       </VStack>
     </Modal>

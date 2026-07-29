@@ -1319,6 +1319,21 @@ export type GuardianUsersGetWhereInput = {
   guardianType: GuardianType;
 };
 
+export enum HeroCommunityRole {
+  FieldPartner = 'FIELD_PARTNER'
+}
+
+export enum HeroProjectCategory {
+  Backed = 'BACKED',
+  Built = 'BUILT',
+  Onboarded = 'ONBOARDED'
+}
+
+export enum HeroProjectRelationship {
+  Contributed = 'CONTRIBUTED',
+  Enabled = 'ENABLED'
+}
+
 export type HeroStats = {
   contributionsCount: Scalars['Int']['output'];
   contributionsTotal: Scalars['Int']['output'];
@@ -1543,6 +1558,11 @@ export type ImpactFundGetInput = {
 
 export type ImpactFundGetWhereInput = {
   name: Scalars['String']['input'];
+};
+
+export type ImpactFundLabifCountryEligibility = {
+  __typename?: 'ImpactFundLabifCountryEligibility';
+  isEligible: Scalars['Boolean']['output'];
 };
 
 export type ImpactFundMetrics = {
@@ -4672,6 +4692,7 @@ export type Query = {
   impactFundApplications: ImpactFundApplicationsGetResponse;
   impactFundDashboardApplications: ImpactFundDashboardApplicationsResponse;
   impactFundFieldPartnerLeaderboard: ImpactFundFieldPartnerLeaderboardResponse;
+  impactFundLabifCountryEligibility: ImpactFundLabifCountryEligibility;
   impactFunds: Array<ImpactFund>;
   leaderboardGlobalAmbassadorsGet: Array<GlobalAmbassadorLeaderboardRow>;
   leaderboardGlobalContributorsGet: Array<GlobalContributorLeaderboardRow>;
@@ -4846,6 +4867,11 @@ export type QueryImpactFundDashboardApplicationsArgs = {
 
 export type QueryImpactFundFieldPartnerLeaderboardArgs = {
   input?: InputMaybe<ImpactFundFieldPartnerLeaderboardInput>;
+};
+
+
+export type QueryImpactFundLabifCountryEligibilityArgs = {
+  countryCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -5655,6 +5681,7 @@ export type User = {
   complianceDetails: UserComplianceDetails;
   /** Returns a user's contributions across all projects. */
   contributions: Array<Contribution>;
+  createdAt: Scalars['Date']['output'];
   creatorTrustStats: CreatorTrustStats;
   email?: Maybe<Scalars['String']['output']>;
   emailVerifiedAt?: Maybe<Scalars['Date']['output']>;
@@ -5668,6 +5695,7 @@ export type User = {
   guardianType?: Maybe<GuardianType>;
   hasSocialAccount: Scalars['Boolean']['output'];
   heroId: Scalars['String']['output'];
+  heroProfile: UserHeroProfile;
   heroStats: UserHeroStats;
   id: Scalars['BigInt']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
@@ -5810,11 +5838,63 @@ export type UserGetInput = {
   id?: InputMaybe<Scalars['BigInt']['input']>;
 };
 
+export type UserHeroImpact = {
+  __typename?: 'UserHeroImpact';
+  backed: UserHeroImpactStat;
+  built: UserHeroImpactStat;
+  enabled: UserHeroImpactStat;
+  onboarded: UserHeroImpactStat;
+};
+
+export type UserHeroImpactStat = {
+  __typename?: 'UserHeroImpactStat';
+  amountSats: Scalars['BigInt']['output'];
+  projectsCount: Scalars['Int']['output'];
+};
+
+export type UserHeroProfile = {
+  __typename?: 'UserHeroProfile';
+  impact: UserHeroImpact;
+  projects: UserHeroProjectsResponse;
+  trust: UserHeroTrust;
+};
+
+
+export type UserHeroProfileProjectsArgs = {
+  input: UserHeroProjectsInput;
+};
+
+export type UserHeroProject = {
+  __typename?: 'UserHeroProject';
+  contributedSats: Scalars['BigInt']['output'];
+  enabledSats: Scalars['BigInt']['output'];
+  lastActivityAt: Scalars['Date']['output'];
+  project: Project;
+  relationships: Array<HeroProjectRelationship>;
+};
+
+export type UserHeroProjectsInput = {
+  category: HeroProjectCategory;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+export type UserHeroProjectsResponse = {
+  __typename?: 'UserHeroProjectsResponse';
+  pagination: CursorPaginationResponse;
+  projects: Array<UserHeroProject>;
+};
+
 export type UserHeroStats = {
   __typename?: 'UserHeroStats';
   ambassadorStats: AmbassadorStats;
   contributorStats: ContributorStats;
   creatorStats: CreatorStats;
+};
+
+export type UserHeroTrust = {
+  __typename?: 'UserHeroTrust';
+  communityRole?: Maybe<HeroCommunityRole>;
+  identityVerified: Scalars['Boolean']['output'];
 };
 
 export type UserNotificationSettings = {
@@ -6357,6 +6437,9 @@ export type ResolversTypes = {
   GuardianUsersGetInput: GuardianUsersGetInput;
   GuardianUsersGetResponse: ResolverTypeWrapper<GuardianUsersGetResponse>;
   GuardianUsersGetWhereInput: GuardianUsersGetWhereInput;
+  HeroCommunityRole: HeroCommunityRole;
+  HeroProjectCategory: HeroProjectCategory;
+  HeroProjectRelationship: HeroProjectRelationship;
   HeroStats: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['HeroStats']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   ImpactFund: ResolverTypeWrapper<Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications' | 'viewerApplications'> & { applications: Array<ResolversTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversTypes['Project']>, fundedApplications: Array<ResolversTypes['ImpactFundApplication']>, viewerApplications: Array<ResolversTypes['ImpactFundApplication']> }>;
@@ -6385,6 +6468,7 @@ export type ResolversTypes = {
   ImpactFundFundingSummaryRow: ResolverTypeWrapper<ImpactFundFundingSummaryRow>;
   ImpactFundGetInput: ImpactFundGetInput;
   ImpactFundGetWhereInput: ImpactFundGetWhereInput;
+  ImpactFundLabifCountryEligibility: ResolverTypeWrapper<ImpactFundLabifCountryEligibility>;
   ImpactFundMetrics: ResolverTypeWrapper<ImpactFundMetrics>;
   ImpactFundSponsor: ResolverTypeWrapper<ImpactFundSponsor>;
   ImpactFundSponsorStatus: ImpactFundSponsorStatus;
@@ -6778,7 +6862,14 @@ export type ResolversTypes = {
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntityType: UserEntityType;
   UserGetInput: UserGetInput;
+  UserHeroImpact: ResolverTypeWrapper<UserHeroImpact>;
+  UserHeroImpactStat: ResolverTypeWrapper<UserHeroImpactStat>;
+  UserHeroProfile: ResolverTypeWrapper<UserHeroProfile>;
+  UserHeroProject: ResolverTypeWrapper<Omit<UserHeroProject, 'project'> & { project: ResolversTypes['Project'] }>;
+  UserHeroProjectsInput: UserHeroProjectsInput;
+  UserHeroProjectsResponse: ResolverTypeWrapper<UserHeroProjectsResponse>;
   UserHeroStats: ResolverTypeWrapper<UserHeroStats>;
+  UserHeroTrust: ResolverTypeWrapper<UserHeroTrust>;
   UserNotificationSettings: ResolverTypeWrapper<UserNotificationSettings>;
   UserPostsGetInput: UserPostsGetInput;
   UserPostsGetWhereInput: UserPostsGetWhereInput;
@@ -7001,6 +7092,7 @@ export type ResolversParentTypes = {
   ImpactFundFundingSummaryRow: ImpactFundFundingSummaryRow;
   ImpactFundGetInput: ImpactFundGetInput;
   ImpactFundGetWhereInput: ImpactFundGetWhereInput;
+  ImpactFundLabifCountryEligibility: ImpactFundLabifCountryEligibility;
   ImpactFundMetrics: ImpactFundMetrics;
   ImpactFundSponsor: ImpactFundSponsor;
   Int: Scalars['Int']['output'];
@@ -7321,7 +7413,14 @@ export type ResolversParentTypes = {
   UserEmailIsValidResponse: UserEmailIsValidResponse;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserGetInput: UserGetInput;
+  UserHeroImpact: UserHeroImpact;
+  UserHeroImpactStat: UserHeroImpactStat;
+  UserHeroProfile: UserHeroProfile;
+  UserHeroProject: Omit<UserHeroProject, 'project'> & { project: ResolversParentTypes['Project'] };
+  UserHeroProjectsInput: UserHeroProjectsInput;
+  UserHeroProjectsResponse: UserHeroProjectsResponse;
   UserHeroStats: UserHeroStats;
+  UserHeroTrust: UserHeroTrust;
   UserNotificationSettings: UserNotificationSettings;
   UserPostsGetInput: UserPostsGetInput;
   UserPostsGetWhereInput: UserPostsGetWhereInput;
@@ -8054,6 +8153,7 @@ export type ImpactFundDashboardApplicationRowResolvers<ContextType = any, Parent
   contributionUuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   creator?: Resolver<Maybe<ResolversTypes['ImpactFundDashboardCreator']>, ParentType, ContextType>;
+  fieldPartner?: Resolver<Maybe<ResolversTypes['ImpactFundDashboardCreator']>, ParentType, ContextType>;
   fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
   notes?: Resolver<Array<ResolversTypes['ImpactFundApplicationNote']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['ImpactFundDashboardProject'], ParentType, ContextType>;
@@ -8082,6 +8182,7 @@ export type ImpactFundDashboardProjectResolvers<ContextType = any, ParentType ex
   aonGoalAmount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
   country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  countryCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   fundingStrategy?: Resolver<ResolversTypes['ProjectFundingStrategy'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -8112,6 +8213,11 @@ export type ImpactFundFundingSummaryRowResolvers<ContextType = any, ParentType e
   awardedTotalSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
   fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpactFundLabifCountryEligibilityResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundLabifCountryEligibility'] = ResolversParentTypes['ImpactFundLabifCountryEligibility']> = {
+  isEligible?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9454,6 +9560,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   impactFundApplications?: Resolver<ResolversTypes['ImpactFundApplicationsGetResponse'], ParentType, ContextType, RequireFields<QueryImpactFundApplicationsArgs, 'input'>>;
   impactFundDashboardApplications?: Resolver<ResolversTypes['ImpactFundDashboardApplicationsResponse'], ParentType, ContextType, RequireFields<QueryImpactFundDashboardApplicationsArgs, 'input'>>;
   impactFundFieldPartnerLeaderboard?: Resolver<ResolversTypes['ImpactFundFieldPartnerLeaderboardResponse'], ParentType, ContextType, Partial<QueryImpactFundFieldPartnerLeaderboardArgs>>;
+  impactFundLabifCountryEligibility?: Resolver<ResolversTypes['ImpactFundLabifCountryEligibility'], ParentType, ContextType, Partial<QueryImpactFundLabifCountryEligibilityArgs>>;
   impactFunds?: Resolver<Array<ResolversTypes['ImpactFund']>, ParentType, ContextType, Partial<QueryImpactFundsArgs>>;
   leaderboardGlobalAmbassadorsGet?: Resolver<Array<ResolversTypes['GlobalAmbassadorLeaderboardRow']>, ParentType, ContextType, RequireFields<QueryLeaderboardGlobalAmbassadorsGetArgs, 'input'>>;
   leaderboardGlobalContributorsGet?: Resolver<Array<ResolversTypes['GlobalContributorLeaderboardRow']>, ParentType, ContextType, RequireFields<QueryLeaderboardGlobalContributorsGetArgs, 'input'>>;
@@ -9730,6 +9837,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   complianceDetails?: Resolver<ResolversTypes['UserComplianceDetails'], ParentType, ContextType>;
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType, Partial<UserContributionsArgs>>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   creatorTrustStats?: Resolver<ResolversTypes['CreatorTrustStats'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   emailVerifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -9738,6 +9846,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   guardianType?: Resolver<Maybe<ResolversTypes['GuardianType']>, ParentType, ContextType>;
   hasSocialAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   heroId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  heroProfile?: Resolver<ResolversTypes['UserHeroProfile'], ParentType, ContextType>;
   heroStats?: Resolver<ResolversTypes['UserHeroStats'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -9822,10 +9931,52 @@ export type UserEmailIsValidResponseResolvers<ContextType = any, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserHeroImpactResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroImpact'] = ResolversParentTypes['UserHeroImpact']> = {
+  backed?: Resolver<ResolversTypes['UserHeroImpactStat'], ParentType, ContextType>;
+  built?: Resolver<ResolversTypes['UserHeroImpactStat'], ParentType, ContextType>;
+  enabled?: Resolver<ResolversTypes['UserHeroImpactStat'], ParentType, ContextType>;
+  onboarded?: Resolver<ResolversTypes['UserHeroImpactStat'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserHeroImpactStatResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroImpactStat'] = ResolversParentTypes['UserHeroImpactStat']> = {
+  amountSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserHeroProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroProfile'] = ResolversParentTypes['UserHeroProfile']> = {
+  impact?: Resolver<ResolversTypes['UserHeroImpact'], ParentType, ContextType>;
+  projects?: Resolver<ResolversTypes['UserHeroProjectsResponse'], ParentType, ContextType, RequireFields<UserHeroProfileProjectsArgs, 'input'>>;
+  trust?: Resolver<ResolversTypes['UserHeroTrust'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserHeroProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroProject'] = ResolversParentTypes['UserHeroProject']> = {
+  contributedSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  enabledSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  lastActivityAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  relationships?: Resolver<Array<ResolversTypes['HeroProjectRelationship']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserHeroProjectsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroProjectsResponse'] = ResolversParentTypes['UserHeroProjectsResponse']> = {
+  pagination?: Resolver<ResolversTypes['CursorPaginationResponse'], ParentType, ContextType>;
+  projects?: Resolver<Array<ResolversTypes['UserHeroProject']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserHeroStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroStats'] = ResolversParentTypes['UserHeroStats']> = {
   ambassadorStats?: Resolver<ResolversTypes['AmbassadorStats'], ParentType, ContextType>;
   contributorStats?: Resolver<ResolversTypes['ContributorStats'], ParentType, ContextType>;
   creatorStats?: Resolver<ResolversTypes['CreatorStats'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserHeroTrustResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroTrust'] = ResolversParentTypes['UserHeroTrust']> = {
+  communityRole?: Resolver<Maybe<ResolversTypes['HeroCommunityRole']>, ParentType, ContextType>;
+  identityVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -10055,6 +10206,7 @@ export type Resolvers<ContextType = any> = {
   ImpactFundFieldPartnerLeaderboardResponse?: ImpactFundFieldPartnerLeaderboardResponseResolvers<ContextType>;
   ImpactFundFieldPartnerLeaderboardRow?: ImpactFundFieldPartnerLeaderboardRowResolvers<ContextType>;
   ImpactFundFundingSummaryRow?: ImpactFundFundingSummaryRowResolvers<ContextType>;
+  ImpactFundLabifCountryEligibility?: ImpactFundLabifCountryEligibilityResolvers<ContextType>;
   ImpactFundMetrics?: ImpactFundMetricsResolvers<ContextType>;
   ImpactFundSponsor?: ImpactFundSponsorResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
@@ -10232,7 +10384,13 @@ export type Resolvers<ContextType = any> = {
   UserContributionLimit?: UserContributionLimitResolvers<ContextType>;
   UserContributionLimits?: UserContributionLimitsResolvers<ContextType>;
   UserEmailIsValidResponse?: UserEmailIsValidResponseResolvers<ContextType>;
+  UserHeroImpact?: UserHeroImpactResolvers<ContextType>;
+  UserHeroImpactStat?: UserHeroImpactStatResolvers<ContextType>;
+  UserHeroProfile?: UserHeroProfileResolvers<ContextType>;
+  UserHeroProject?: UserHeroProjectResolvers<ContextType>;
+  UserHeroProjectsResponse?: UserHeroProjectsResponseResolvers<ContextType>;
   UserHeroStats?: UserHeroStatsResolvers<ContextType>;
+  UserHeroTrust?: UserHeroTrustResolvers<ContextType>;
   UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   UserTaxProfile?: UserTaxProfileResolvers<ContextType>;
@@ -11048,7 +11206,7 @@ export type UserBadgeFragment = { __typename?: 'UserBadge', id: any, userId: any
     & BadgeFragment
   ) };
 
-export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, heroId: string, username: string, imageUrl?: string | null, ranking?: any | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
+export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, heroId: string, createdAt: any, username: string, imageUrl?: string | null, ranking?: any | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
@@ -11205,6 +11363,24 @@ export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typenam
         { __typename?: 'Project' }
         & ProjectForProfilePageFragment
       ) | null }> } };
+
+export type UserHeroProfileQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserHeroProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, heroProfile: { __typename?: 'UserHeroProfile', trust: { __typename?: 'UserHeroTrust', identityVerified: boolean, communityRole?: HeroCommunityRole | null }, impact: { __typename?: 'UserHeroImpact', built: { __typename?: 'UserHeroImpactStat', projectsCount: number, amountSats: any }, backed: { __typename?: 'UserHeroImpactStat', projectsCount: number, amountSats: any }, enabled: { __typename?: 'UserHeroImpactStat', projectsCount: number, amountSats: any }, onboarded: { __typename?: 'UserHeroImpactStat', projectsCount: number, amountSats: any } } } } };
+
+export type UserHeroProjectsQueryVariables = Exact<{
+  where: UserGetInput;
+  input: UserHeroProjectsInput;
+}>;
+
+
+export type UserHeroProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, heroProfile: { __typename?: 'UserHeroProfile', projects: { __typename?: 'UserHeroProjectsResponse', projects: Array<{ __typename?: 'UserHeroProject', relationships: Array<HeroProjectRelationship>, contributedSats: any, enabledSats: any, lastActivityAt: any, project: (
+            { __typename?: 'Project' }
+            & ProjectForProfilePageFragment
+          ) }>, pagination: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null } } } } };
 
 export type UserFollowedProjectsQueryVariables = Exact<{
   where: UserGetInput;
@@ -13954,6 +14130,7 @@ export const UserForProfilePageFragmentDoc = gql`
   id
   bio
   heroId
+  createdAt
   username
   imageUrl
   ranking
@@ -19321,6 +19498,131 @@ export type UserProfileProjectsQueryHookResult = ReturnType<typeof useUserProfil
 export type UserProfileProjectsLazyQueryHookResult = ReturnType<typeof useUserProfileProjectsLazyQuery>;
 export type UserProfileProjectsSuspenseQueryHookResult = ReturnType<typeof useUserProfileProjectsSuspenseQuery>;
 export type UserProfileProjectsQueryResult = Apollo.QueryResult<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>;
+export const UserHeroProfileDocument = gql`
+    query UserHeroProfile($where: UserGetInput!) {
+  user(where: $where) {
+    id
+    heroProfile {
+      trust {
+        identityVerified
+        communityRole
+      }
+      impact {
+        built {
+          projectsCount
+          amountSats
+        }
+        backed {
+          projectsCount
+          amountSats
+        }
+        enabled {
+          projectsCount
+          amountSats
+        }
+        onboarded {
+          projectsCount
+          amountSats
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserHeroProfileQuery__
+ *
+ * To run a query within a React component, call `useUserHeroProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserHeroProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserHeroProfileQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserHeroProfileQuery(baseOptions: Apollo.QueryHookOptions<UserHeroProfileQuery, UserHeroProfileQueryVariables> & ({ variables: UserHeroProfileQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserHeroProfileQuery, UserHeroProfileQueryVariables>(UserHeroProfileDocument, options);
+      }
+export function useUserHeroProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserHeroProfileQuery, UserHeroProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserHeroProfileQuery, UserHeroProfileQueryVariables>(UserHeroProfileDocument, options);
+        }
+export function useUserHeroProfileSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserHeroProfileQuery, UserHeroProfileQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserHeroProfileQuery, UserHeroProfileQueryVariables>(UserHeroProfileDocument, options);
+        }
+export type UserHeroProfileQueryHookResult = ReturnType<typeof useUserHeroProfileQuery>;
+export type UserHeroProfileLazyQueryHookResult = ReturnType<typeof useUserHeroProfileLazyQuery>;
+export type UserHeroProfileSuspenseQueryHookResult = ReturnType<typeof useUserHeroProfileSuspenseQuery>;
+export type UserHeroProfileQueryResult = Apollo.QueryResult<UserHeroProfileQuery, UserHeroProfileQueryVariables>;
+export const UserHeroProjectsDocument = gql`
+    query UserHeroProjects($where: UserGetInput!, $input: UserHeroProjectsInput!) {
+  user(where: $where) {
+    id
+    heroProfile {
+      projects(input: $input) {
+        projects {
+          project {
+            ...ProjectForProfilePage
+          }
+          relationships
+          contributedSats
+          enabledSats
+          lastActivityAt
+        }
+        pagination {
+          cursor {
+            id
+          }
+          take
+          count
+        }
+      }
+    }
+  }
+}
+    ${ProjectForProfilePageFragmentDoc}`;
+
+/**
+ * __useUserHeroProjectsQuery__
+ *
+ * To run a query within a React component, call `useUserHeroProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserHeroProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserHeroProjectsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserHeroProjectsQuery(baseOptions: Apollo.QueryHookOptions<UserHeroProjectsQuery, UserHeroProjectsQueryVariables> & ({ variables: UserHeroProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserHeroProjectsQuery, UserHeroProjectsQueryVariables>(UserHeroProjectsDocument, options);
+      }
+export function useUserHeroProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserHeroProjectsQuery, UserHeroProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserHeroProjectsQuery, UserHeroProjectsQueryVariables>(UserHeroProjectsDocument, options);
+        }
+export function useUserHeroProjectsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserHeroProjectsQuery, UserHeroProjectsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserHeroProjectsQuery, UserHeroProjectsQueryVariables>(UserHeroProjectsDocument, options);
+        }
+export type UserHeroProjectsQueryHookResult = ReturnType<typeof useUserHeroProjectsQuery>;
+export type UserHeroProjectsLazyQueryHookResult = ReturnType<typeof useUserHeroProjectsLazyQuery>;
+export type UserHeroProjectsSuspenseQueryHookResult = ReturnType<typeof useUserHeroProjectsSuspenseQuery>;
+export type UserHeroProjectsQueryResult = Apollo.QueryResult<UserHeroProjectsQuery, UserHeroProjectsQueryVariables>;
 export const UserFollowedProjectsDocument = gql`
     query UserFollowedProjects($where: UserGetInput!) {
   user(where: $where) {
