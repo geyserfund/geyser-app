@@ -277,22 +277,10 @@ const PublicLedger = ({ heroProfile }: { heroProfile: { trust: UserHeroTrust; im
     0
 
   return (
-    <>
+    <VStack w="full" spacing={5} alignItems="stretch">
       <ImpactSummary impact={heroProfile.impact} />
-      <Grid
-        templateAreas={{
-          base: '"trust" "projects" "achievements"',
-          lg: '"projects trust" "projects achievements"',
-        }}
-        templateColumns={{ base: '1fr', lg: 'minmax(0, 1fr) 320px' }}
-        gap={5}
-        alignItems="start"
-        flexShrink={0}
-      >
-        <Box gridArea="trust">
-          <TrustCard trust={heroProfile.trust} />
-        </Box>
-        <VStack gridArea="projects" spacing={5} alignItems="stretch" minW={0}>
+      <Stack direction={{ base: 'column', lg: 'row' }} spacing={5} alignItems="start" flexShrink={0}>
+        <VStack order={{ base: 2, lg: 1 }} flex={1} w="full" spacing={5} alignItems="stretch" minW={0}>
           {hasEvidence ? (
             <>
               <HeroProjectSection
@@ -321,11 +309,23 @@ const PublicLedger = ({ heroProfile }: { heroProfile: { trust: UserHeroTrust; im
             </CardLayout>
           )}
         </VStack>
-        <Box gridArea="achievements">
-          <AchievementsCard />
-        </Box>
-      </Grid>
-    </>
+        <Stack
+          order={{ lg: 2 }}
+          display={{ base: 'contents', lg: 'flex' }}
+          direction="column"
+          spacing={5}
+          w={{ lg: '320px' }}
+          flexShrink={0}
+        >
+          <Box order={{ base: 1, lg: 'initial' }} w="full">
+            <TrustCard trust={heroProfile.trust} />
+          </Box>
+          <Box order={{ base: 3, lg: 'initial' }} w="full">
+            <AchievementsCard />
+          </Box>
+        </Stack>
+      </Stack>
+    </VStack>
   )
 }
 
