@@ -1,3 +1,15 @@
+## [0.50.0](https://github.com/geyserfund/geyser-app/compare/v0.49.0...v0.50.0) (2026-07-29)
+
+
+### Features
+
+* **profile:** add unified Hero reputation ledger ([32d7af3](https://github.com/geyserfund/geyser-app/commit/32d7af31cbe980945463761ca004c8ed26d2c12a))
+
+
+### Bug Fixes
+
+* **profile:** restore Hero ledger layout ([10cb11c](https://github.com/geyserfund/geyser-app/commit/10cb11cd8df61e6dae26fad0c255707bfa2642de))
+
 ## [0.49.0](https://github.com/geyserfund/geyser-app/compare/v0.48.0...v0.49.0) (2026-07-24)
 
 
