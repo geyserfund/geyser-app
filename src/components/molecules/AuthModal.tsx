@@ -176,7 +176,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
   const isSignup = modalIntent === AuthFlowIntent.signup
   const modalTitle = isOtpStarted
     ? t('Check your email')
-    : title || (isSignup ? t('Create your Geyser account') : t('Sign in to Geyser'))
+    : title || (isSignup ? t('Create your Geyser account') : t('Log in to Geyser'))
   const modalDescription =
     description ||
     (isSignup
@@ -241,7 +241,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
               size="sm"
               onClick={() => setModalIntent(isSignup ? AuthFlowIntent.login : AuthFlowIntent.signup)}
             >
-              {isSignup ? t('Already have an account? Sign in') : t('New to Geyser? Sign up')}
+              {isSignup ? t('Already have an account? Log in') : t('New to Geyser? Sign up')}
             </Button>
           </>
         )}

@@ -28,6 +28,67 @@ export const QUERY_USER_PROFILE_PROJECTS = gql`
   }
 `
 
+export const QUERY_USER_HERO_PROFILE = gql`
+  query UserHeroProfile($where: UserGetInput!) {
+    user(where: $where) {
+      id
+      heroProfile {
+        trust {
+          identityVerified
+          communityRole
+        }
+        impact {
+          built {
+            projectsCount
+            amountSats
+          }
+          backed {
+            projectsCount
+            amountSats
+          }
+          enabled {
+            projectsCount
+            amountSats
+          }
+          onboarded {
+            projectsCount
+            amountSats
+          }
+        }
+      }
+    }
+  }
+`
+
+export const QUERY_USER_HERO_PROJECTS = gql`
+  ${FRAGMENT_PROJECT_FOR_PROFILE_PAGE}
+  query UserHeroProjects($where: UserGetInput!, $input: UserHeroProjectsInput!) {
+    user(where: $where) {
+      id
+      heroProfile {
+        projects(input: $input) {
+          projects {
+            project {
+              ...ProjectForProfilePage
+            }
+            relationships
+            contributedSats
+            enabledSats
+            lastActivityAt
+          }
+          pagination {
+            cursor {
+              id
+            }
+            take
+            count
+          }
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_USER_FOLLOWED_PROJECTS = gql`
   ${FRAGMENT_PROJECT_FOR_PROFILE_PAGE}
   query UserFollowedProjects($where: UserGetInput!) {

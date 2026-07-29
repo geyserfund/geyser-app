@@ -1,11 +1,13 @@
 import { atom } from 'jotai'
 
-import { UserForProfilePageFragment, UserHeroStats } from '@/types'
+import { UserForProfilePageFragment, UserHeroImpact, UserHeroStats, UserHeroTrust } from '@/types'
 
 type HeroCardAtomType = {
   isOpen: boolean
   user: UserForProfilePageFragment
-  stats: UserHeroStats
+  stats?: UserHeroStats
+  impact?: UserHeroImpact
+  trust?: UserHeroTrust
 }
 
 export const heroCardAtom = atom<HeroCardAtomType | null>(null)

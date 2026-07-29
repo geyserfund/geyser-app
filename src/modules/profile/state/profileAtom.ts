@@ -7,6 +7,7 @@ export const defaultUser: UserForProfilePageFragment = {
   id: '',
   bio: '',
   heroId: '',
+  createdAt: new Date(0).toISOString(),
   username: '',
   imageUrl: '',
   ranking: '0',

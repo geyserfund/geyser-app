@@ -8,6 +8,7 @@ export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
     id
     bio
     heroId
+    createdAt
     username
     imageUrl
     ranking

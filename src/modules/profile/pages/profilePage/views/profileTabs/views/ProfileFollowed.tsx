@@ -22,7 +22,7 @@ export const ProfileFollowed = () => {
         id: userProfile.id,
       },
     },
-    skip: !userProfile.id,
+    skip: !userProfile.id || !isViewingOwnProfile,
 
     onError(error) {
       toast.error({

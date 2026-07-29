@@ -1,15 +1,12 @@
-import { HStack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { PathName } from '@/shared/constants/index.ts'
 
-import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'
 import { useUserProfile } from '../../hooks/useUserProfile'
-import { Account } from './views/account/Account'
-import { ProfileTabs } from './views/profileTabs'
+import { HeroProfileLedger } from './views/heroProfile/HeroProfileLedger'
 
 export const Profile = () => {
   const rewriteUrlToHero = (path: string, userId: string, heroId: string) => {
@@ -19,8 +16,6 @@ export const Profile = () => {
       path.replace(`/${PathName.userProfile}/${userId}`, `/${PathName.heroProfile}/${heroId}`),
     )
   }
-
-  const isMobile = useMobileMode()
 
   const { userId, heroId } = useParams<{ userId: string; heroId: string }>()
   const rewrittenProfileKeyRef = useRef<string | null>(null)
@@ -49,12 +44,9 @@ export const Profile = () => {
   }
 
   return (
-    <>
-      <HStack h="full" w="full" spacing={dimensions.profile.sideNav.gap}>
-        {!isMobile && <Account />}
-        <ProfileTabs />
-      </HStack>
-    </>
+    <Box w="full">
+      <HeroProfileLedger />
+    </Box>
   )
 }
 
