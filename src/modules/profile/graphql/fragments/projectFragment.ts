@@ -13,6 +13,8 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     status
     rejectionReason
     rewardsCount
+    fundingStrategy
+    isRecoverableGrant
     wallets {
       id
       name

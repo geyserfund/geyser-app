@@ -498,6 +498,7 @@ const HeroProjectRow = ({ item, showRelationships }: { item: UserHeroProject; sh
       project={item.project}
       showStats
       compact
+      showProjectType
       titleAccessory={
         showRelationships && item.relationships.length ? (
           <ProjectRelationshipPills item={item} display={{ base: 'none', md: 'flex' }} />
