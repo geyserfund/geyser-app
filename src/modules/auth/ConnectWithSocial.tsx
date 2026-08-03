@@ -89,7 +89,6 @@ export const ConnectWithSocial = ({
           stopPolling()
           setPollAuthStatus(false)
           handleToastError((error as Error).message)
-          onClose?.()
         }
 
         if (statusRes && statusRes.status === 200) {
@@ -103,7 +102,6 @@ export const ConnectWithSocial = ({
 
             setPollAuthStatus(false)
             handleToastError(reason, code)
-            onClose?.()
           }
         }
       }, 1000)

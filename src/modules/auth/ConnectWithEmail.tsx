@@ -78,7 +78,7 @@ export const ConnectWithEmail = ({
 
         if (response?.status === 'ok') {
           setLastAuthMethod(AuthMethod.email)
-          queryCurrentUser()
+          await queryCurrentUser()
           notificationPromptOnOpen()
           onClose?.()
           isOTPStarted?.(false)

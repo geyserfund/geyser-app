@@ -35,7 +35,7 @@ type EmailPromptModalProps = {
 
 /** Prompt users without email to secure account and opt in to updates after login. */
 export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalProps) => {
-  const { logout, user } = useAuthContext()
+  const { isLoggedIn, logout, user } = useAuthContext()
   const toast = useNotification()
 
   const isMandatory = variant === 'mandatory_after_login'
@@ -182,7 +182,7 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
   }
 
   const isOtpStep = Boolean(otpEmail)
-  const shouldShowPrompt = isOtpStep || (isMandatory ? Boolean(user.id && !user.email) : shouldPrompt)
+  const shouldShowPrompt = isOtpStep || (isMandatory ? isLoggedIn && !user.email : shouldPrompt)
 
   const handleMandatoryLogout = () => {
     logout()

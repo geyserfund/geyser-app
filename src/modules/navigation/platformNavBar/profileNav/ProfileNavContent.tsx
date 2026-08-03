@@ -144,7 +144,7 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
             _active={{ color: createProjectButtonColor, borderColor: createProjectButtonColor }}
           />
         </MenuItem>
-        {user.id ? (
+        {isLoggedIn ? (
           <>
             <Divider borderColor="neutral1.6" />
 
