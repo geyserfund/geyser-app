@@ -47,20 +47,6 @@ interface ProjectDisplayProps {
 const NO_OF_ITEMS_TO_SHOW = 3
 const NO_OF_ITEMS_TO_FETCH = 5
 const NO_OF_POSTS_TO_FETCH = 10
-const shuffleProjects = <T,>(projects: T[]) => {
-  const shuffledProjects = [...projects]
-
-  for (let index = shuffledProjects.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1))
-    const currentProject = shuffledProjects[index]
-
-    shuffledProjects[index] = shuffledProjects[randomIndex] as T
-    shuffledProjects[randomIndex] = currentProject as T
-  }
-
-  return shuffledProjects
-}
-
 const isRecentlyLaunched = (launchedAt?: ProjectDisplayItem['launchedAt'] | null) => {
   if (!launchedAt) {
     return false
@@ -69,6 +55,18 @@ const isRecentlyLaunched = (launchedAt?: ProjectDisplayItem['launchedAt'] | null
   const launchDate = DateTime.fromMillis(Number(launchedAt))
 
   return launchDate.isValid && launchDate.hasSame(DateTime.local(), 'month')
+}
+
+const getStatusPillLabel = (project: ProjectDisplayItem, weeklyTrendingProjectIds: Set<string>) => {
+  if (isRecentlyLaunched(project.launchedAt)) {
+    return 'Recently launched'
+  }
+
+  if (weeklyTrendingProjectIds.has(String(project.id))) {
+    return 'Weekly trending'
+  }
+
+  return undefined
 }
 
 export const ProjectsDisplayMostFundedThisWeek = ({
@@ -185,28 +183,25 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return matchingCategory?.projects ?? []
   }, [category, subCategory, trendingGroups, trendingProjectsData?.projectsMostFundedByCategory])
   const projects = useMemo<ProjectDisplayItem[]>(() => {
-    const projectMap = new Map<string, ProjectDisplayItem>()
+    const weeklyTrendingProjectIds = new Set(weeklyTrendingProjects.map((projectRow) => String(projectRow.project.id)))
+    const weeklyTrendingProjectItems: ProjectDisplayItem[] = weeklyTrendingProjects.map((projectRow) => ({
+      ...projectRow.project,
+      contributionSummary: projectRow.contributionsSummary ?? undefined,
+    }))
+    const latestProjectFallbackItems: ProjectDisplayItem[] = latestProjects.filter(
+      (project) => !weeklyTrendingProjectIds.has(String(project.id)),
+    )
 
-    for (const project of latestProjects) {
-      projectMap.set(String(project.id), project)
-    }
+    return [...weeklyTrendingProjectItems, ...latestProjectFallbackItems]
+      .slice(0, NO_OF_ITEMS_TO_SHOW)
+      .map((project) => {
+        const statusPillLabel = getStatusPillLabel(project, weeklyTrendingProjectIds)
 
-    for (const projectRow of weeklyTrendingProjects) {
-      const projectId = String(projectRow.project.id)
-      const existingProject = projectMap.get(projectId)
-
-      projectMap.set(projectId, {
-        ...(existingProject ?? projectRow.project),
-        contributionSummary: projectRow.contributionsSummary ?? existingProject?.contributionSummary,
+        return {
+          ...project,
+          statusPillLabel: statusPillLabel ? t(statusPillLabel) : undefined,
+        }
       })
-    }
-
-    return shuffleProjects(
-      Array.from(projectMap.values()).map((project) => ({
-        ...project,
-        statusPillLabel: isRecentlyLaunched(project.launchedAt) ? t('Recently launched') : t('Weekly trending'),
-      })),
-    ).slice(0, NO_OF_ITEMS_TO_SHOW)
   }, [latestProjects, t, weeklyTrendingProjects])
   const posts = useMemo(
     () => filterPostsByUniqueProjects(postsProp ?? postsQueryData?.posts ?? [], NO_OF_ITEMS_TO_SHOW),
