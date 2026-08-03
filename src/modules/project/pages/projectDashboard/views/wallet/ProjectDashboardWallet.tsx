@@ -72,11 +72,6 @@ export const ProjectDashboardWallet = () => {
 
       return
     }
-
-    if (rskEoa.isCurrent) {
-      setSelectedRecoveryData(null)
-      seedWordsModal.onOpen()
-    }
   }
 
   const handleCloseRecoveryData = () => {

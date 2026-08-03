@@ -10,6 +10,8 @@ import { __production__ } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 
+import { hasAccessibleProjectWalletRecoveryData } from './projectWalletRecovery.ts'
+
 const SATS_PER_RBTC = 10000000000n
 const CURRENT_PROJECT_DERIVATION_PATH_BASE = __production__ ? "m/44'/137'/0'/0" : "m/44'/37310'/0'/0"
 const LEGACY_PROJECT_DERIVATION_PATH_BASE = __production__ ? "m/44'/137'/0'/1" : "m/44'/37310'/0'/1"
@@ -217,7 +219,7 @@ const ProjectRskEoaHistoryRow = ({
           />
         ) : null}
         <WalletDetail label={t('Balance')} value={balance} align={{ base: 'start', md: 'end' }} />
-        {rskEoa.isCurrent || rskEoa.accountKeys?.encryptedMnemonic || rskEoa.accountKeys?.encryptedSeed ? (
+        {hasAccessibleProjectWalletRecoveryData(rskEoa.accountKeys) ? (
           <Button
             size="md"
             variant="outline"
@@ -227,7 +229,11 @@ const ProjectRskEoaHistoryRow = ({
           >
             {t('View Recovery Data')}
           </Button>
-        ) : null}
+        ) : (
+          <Body size="xs" color="neutral1.9" maxW="180px" textAlign={{ base: 'start', md: 'end' }}>
+            {t('Recovery data is unavailable for this wallet or belongs to another key holder.')}
+          </Body>
+        )}
       </HStack>
     </VStack>
   )

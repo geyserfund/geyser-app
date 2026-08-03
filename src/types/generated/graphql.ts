@@ -24,7 +24,7 @@ export type Scalars = {
 
 export type AccountPasswordAffectedProject = {
   __typename?: 'AccountPasswordAffectedProject';
-  balanceSats: Scalars['Int']['output'];
+  balanceSats: Scalars['BigInt']['output'];
   derivationPath?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
@@ -5763,12 +5763,12 @@ export type UserAccountKeysUpdateInput = {
 export type UserAccountPasswordFundsSummary = {
   __typename?: 'UserAccountPasswordFundsSummary';
   affectedTiaProjects: Array<AccountPasswordAffectedProject>;
-  aonUnclaimedFundsSats: Scalars['Int']['output'];
+  aonUnclaimedFundsSats: Scalars['BigInt']['output'];
   legacyTiaProjects: Array<AccountPasswordAffectedProject>;
-  pledgedSats: Scalars['Int']['output'];
-  tiaUnclaimedFundsSats: Scalars['Int']['output'];
-  unclaimedFundsSats: Scalars['Int']['output'];
-  userWalletBalanceSats: Scalars['Int']['output'];
+  pledgedSats: Scalars['BigInt']['output'];
+  tiaUnclaimedFundsSats: Scalars['BigInt']['output'];
+  unclaimedFundsSats: Scalars['BigInt']['output'];
+  userWalletBalanceSats: Scalars['BigInt']['output'];
 };
 
 export type UserBadge = {
@@ -7454,7 +7454,7 @@ export type ResolversParentTypes = {
 };
 
 export type AccountPasswordAffectedProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountPasswordAffectedProject'] = ResolversParentTypes['AccountPasswordAffectedProject']> = {
-  balanceSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  balanceSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   derivationPath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -9881,12 +9881,12 @@ export type UserAccountKeysResolvers<ContextType = any, ParentType extends Resol
 
 export type UserAccountPasswordFundsSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountPasswordFundsSummary'] = ResolversParentTypes['UserAccountPasswordFundsSummary']> = {
   affectedTiaProjects?: Resolver<Array<ResolversTypes['AccountPasswordAffectedProject']>, ParentType, ContextType>;
-  aonUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  aonUnclaimedFundsSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   legacyTiaProjects?: Resolver<Array<ResolversTypes['AccountPasswordAffectedProject']>, ParentType, ContextType>;
-  pledgedSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tiaUnclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  unclaimedFundsSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  userWalletBalanceSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  pledgedSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  tiaUnclaimedFundsSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  unclaimedFundsSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  userWalletBalanceSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -12912,7 +12912,7 @@ export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'Use
 export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: number, userWalletBalanceSats: number, tiaUnclaimedFundsSats: number, aonUnclaimedFundsSats: number, pledgedSats: number, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: number }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: number }> } };
+export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: any, userWalletBalanceSats: any, tiaUnclaimedFundsSats: any, aonUnclaimedFundsSats: any, pledgedSats: any, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: any }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: any }> } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;

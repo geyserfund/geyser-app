@@ -55,7 +55,7 @@ export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragmen
         const projectKeys = generateProjectKeysFromSeedHex(seedHex, project.id, project.derivationPath)
 
         return {
-          projectId: project.id,
+          projectId: String(project.id),
           rskEoa: projectKeys.address,
           rskPublicKey: projectKeys.publicKey,
           derivationPath: projectKeys.derivationPath,
