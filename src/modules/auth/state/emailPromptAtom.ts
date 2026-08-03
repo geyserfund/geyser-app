@@ -14,5 +14,5 @@ export const dontAskAgainAtom = atomWithStorage('dontAskAgain', false)
 export const shouldPromptAtom = atom((get) => {
   const user = get(authUserAtom)
   const dontAskAgain = get(dontAskAgainAtom)
-  return Boolean(user.id && !user.email && !dontAskAgain)
+  return Boolean(user.id !== '0' && !user.email && !dontAskAgain)
 })

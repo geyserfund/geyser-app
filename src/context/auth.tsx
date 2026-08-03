@@ -66,7 +66,7 @@ const defaultContext: AuthContextProps = {
   login() {},
   logout() {},
   isUserAProjectCreator: false,
-  queryCurrentUser() {},
+  async queryCurrentUser() {},
   setUser() {},
   queryFollowedProjects() {},
 }
@@ -87,7 +87,7 @@ type AuthContextProps = {
   login: (me: UserMeFragment) => void
   logout: () => void
   isUserAProjectCreator: boolean
-  queryCurrentUser: () => void
+  queryCurrentUser: () => Promise<void>
   queryFollowedProjects: () => void
   setUser: Dispatch<SetStateAction<UserMeFragment>>
 }
@@ -108,14 +108,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const setUserAccountKeys = useSetAtom(userAccountKeysAtom)
   const setAccountPassword = useSetAtom(accountPasswordAtom)
 
-  const [queryCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
-    fetchPolicy: 'network-only',
-    onCompleted(data) {
-      if (data && data.me) {
-        login(data.me)
-      }
+  const login = useCallback(
+    (me: UserMeFragment) => {
+      setUser(me)
+      setIsLoggedIn(true)
+      setInitialLoad(false)
     },
+    [setUser],
+  )
+
+  const [fetchCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
+    fetchPolicy: 'network-only',
   })
+
+  const queryCurrentUser = useCallback(async () => {
+    const { data } = await fetchCurrentUser()
+
+    if (data?.me) {
+      login(data.me)
+    }
+  }, [fetchCurrentUser, login])
 
   const [queryFollowedProjects] = useMeProjectFollowsLazyQuery({
     fetchPolicy: 'network-only',
@@ -125,12 +137,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     },
   })
-
-  const login = (me: UserMeFragment) => {
-    setUser(me)
-    setIsLoggedIn(true)
-    setInitialLoad(false)
-  }
 
   const logout = useCallback(() => {
     setUser({ ...defaultUser })

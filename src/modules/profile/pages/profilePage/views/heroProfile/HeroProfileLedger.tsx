@@ -58,6 +58,7 @@ import {
 import { getShortAmountLabel, toInt, useMobileMode, useNotification } from '@/utils'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../state'
+import { ConnectAccounts } from '../account/components/ConnectAccounts'
 import { MediaCarouselForCards } from '../account/views/badges/MediaCarouselForCards'
 import { ProfileProjectCard } from '../profileTabs/components/ProfileProjectCard'
 import { ProfileContributions } from '../profileTabs/views/ProfileContributions'
@@ -234,6 +235,7 @@ const IdentityHeader = ({ heroProfile }: { heroProfile: { trust: UserHeroTrust; 
                   {...props}
                 />
               ))}
+              <ConnectAccounts user={userProfile} />
             </HStack>
           </VStack>
         </HStack>

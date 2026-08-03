@@ -1,5 +1,5 @@
 import { Button, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
 import { PiPlus } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
@@ -23,8 +23,8 @@ import {
 } from '../../../../../../../utils'
 import { useViewingOwnProfileAtomValue } from '../../../../../state'
 
+/** Opens the available account-connection options for the profile owner. */
 export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) => {
-  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useModal()
 
@@ -59,8 +59,8 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
   return (
     <>
       {canConnectAccount && (
-        <Button size="sm" onClick={onOpen} variant="surface" colorScheme="neutral1">
-          <PiPlus />
+        <Button size="sm" onClick={onOpen} variant="surface" colorScheme="neutral1" leftIcon={<PiPlus />}>
+          {t('Connect accounts')}
         </Button>
       )}
       <Modal isOpen={isOpen} onClose={onClose} title={t('Connect more accounts')}>
