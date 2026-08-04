@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/react'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import { __production__ } from '../shared/constants/config/env.ts'
@@ -24,6 +24,7 @@ const ServiceWorkerUpdate = createContext<ServiceWorkerUpdateProps>(defaultConte
 const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 5 * 60 * 1000
 
 let defferedPrompt: any
+let refetchIntervalId: ReturnType<typeof setInterval> | null = null
 
 const expectedServiceWorkerErrorMessages = [
   'Failed to register a ServiceWorker',
@@ -47,7 +48,6 @@ const handlePrompt = () => {
 
 export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode }) => {
   const [canInstall, setCanInstall] = useState(false)
-  const refetchIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const { updateServiceWorker } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
@@ -65,11 +65,11 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
           if (resp?.status === 200) await r.update()
         }
 
-        if (refetchIntervalRef.current) {
-          clearInterval(refetchIntervalRef.current)
+        if (refetchIntervalId) {
+          clearInterval(refetchIntervalId)
         }
 
-        refetchIntervalRef.current = setInterval(() => {
+        refetchIntervalId = setInterval(() => {
           if (!(!r.installing && navigator)) return
 
           if ('connection' in navigator && !navigator.onLine) return
@@ -100,9 +100,9 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-      if (refetchIntervalRef.current) {
-        clearInterval(refetchIntervalRef.current)
-        refetchIntervalRef.current = null
+      if (refetchIntervalId) {
+        clearInterval(refetchIntervalId)
+        refetchIntervalId = null
       }
     }
   }, [])
