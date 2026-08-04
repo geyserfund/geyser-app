@@ -24,7 +24,7 @@ export function ImpactFundsTrustNetworkSection({
   sectionSecondaryTextColor,
   cardSurfaceBg,
   sectionCardShadow,
-}: ImpactFundsTrustNetworkSectionProps): JSX.Element {
+}: ImpactFundsTrustNetworkSectionProps): React.ReactNode {
   const bandBg = useColorModeValue('neutral1.2', 'neutral1.4')
   const buttonBg = useColorModeValue('neutral1.3', 'neutral1.5')
   const buttonHoverBg = useColorModeValue('neutral1.4', 'neutral1.6')

@@ -43,11 +43,15 @@ export const AmabassadorList = ({ period, dateTime, ...props }: AmabassadorListP
   const firstElementId = 'first-element-id'
 
   useEffect(() => {
-    setTimeout(() => {
+    const scrollTimer = setTimeout(() => {
       const element = document.getElementById(id)
       element?.scrollTo(0, 0)
       window.scrollTo(0, 0)
     }, 50)
+
+    return () => {
+      clearTimeout(scrollTimer)
+    }
   }, [period])
 
   if (loading) {

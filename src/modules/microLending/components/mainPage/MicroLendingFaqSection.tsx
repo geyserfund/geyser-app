@@ -13,7 +13,6 @@ import { t } from 'i18next'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
 import { type MicroLendingFaqItem } from '../../utils/mainPageContent.ts'
-
 import { MicroLendingSectionHeading } from './MicroLendingSectionHeading.tsx'
 
 /** Expandable FAQ for the micro-loans landing page (bottom of main content). */
@@ -25,7 +24,7 @@ export function MicroLendingFaqSection({
   items: readonly MicroLendingFaqItem[]
   sectionPrimaryTextColor: string
   sectionSecondaryTextColor: string
-}): JSX.Element {
+}): React.ReactNode {
   const borderColor = useColorModeValue('neutral1.6', 'neutral1.5')
 
   return (

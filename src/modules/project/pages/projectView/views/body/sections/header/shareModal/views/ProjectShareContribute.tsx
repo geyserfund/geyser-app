@@ -27,9 +27,13 @@ export const ProjectShareContribute = () => {
   const [generating, setGenerating] = useState(true)
 
   useEffect(() => {
-    setTimeout(() => {
+    const generatingTimer = setTimeout(() => {
       setGenerating(false)
     }, 5000)
+
+    return () => {
+      clearTimeout(generatingTimer)
+    }
   }, [])
 
   const { handleGenerateAndCopy, copying } = useCreateAndCopyImage()

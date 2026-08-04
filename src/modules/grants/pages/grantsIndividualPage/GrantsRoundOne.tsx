@@ -115,7 +115,7 @@ export const GrantsRoundOne = ({
           <Box display="flex" flexDirection={'column'} alignItems="center">
             <Box color={'primary.500'} my={8}>
               <Box>
-                <img src={GrantsHero} />
+                <img src={GrantsHero} alt={t('Geyser grants hero')} />
               </Box>
             </Box>
 
@@ -231,7 +231,7 @@ export const GrantsRoundOne = ({
             alignItems={'center'}
           >
             <Box mr={6} display="flex" alignItems={'center'} gap={4} my={4}>
-              <img src={WalletOfSatoshiUrl} width="195px" />
+              <img src={WalletOfSatoshiUrl} width="195px" alt={t('Wallet of Satoshi logo')} />
             </Box>
           </Box>
         </Box>

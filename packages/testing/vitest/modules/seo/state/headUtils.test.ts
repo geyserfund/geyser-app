@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatHeadTitle, resolveCanonicalUrl } from '../../../../../../../../src/config/headUtils.ts'
+import { formatHeadTitle, resolveCanonicalUrl } from '../../../../../../src/config/headUtils.ts'
 
 describe('head utils', () => {
   it('adds the brand suffix when the title does not include Geyser', () => {

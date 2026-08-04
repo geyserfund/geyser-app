@@ -17,17 +17,21 @@ export const RefundInitiatedPage = () => {
   const navigate = useNavigate()
   const refundedSwapData = useAtomValue(refundedSwapDataAtom)
 
-  useEffect(() => {
-    setTimeout(() => {
-      handleCheckIfRefundTransactionIsThere()
-    }, 100)
-  }, [])
-
   const handleCheckIfRefundTransactionIsThere = useCallback(() => {
     if (!refundedSwapData) {
       navigate(getPath('refund'))
     }
   }, [refundedSwapData, navigate])
+
+  useEffect(() => {
+    const refundCheckTimer = setTimeout(() => {
+      handleCheckIfRefundTransactionIsThere()
+    }, 100)
+
+    return () => {
+      clearTimeout(refundCheckTimer)
+    }
+  }, [handleCheckIfRefundTransactionIsThere])
 
   return (
     <HStack w="full" h="full" justifyContent="center" alignItems="center">

@@ -16,7 +16,7 @@ export function MicroLendingTrustPillarsSection({
   pillars,
   sectionPrimaryTextColor,
   sectionSecondaryTextColor,
-}: MicroLendingTrustPillarsSectionProps): JSX.Element {
+}: MicroLendingTrustPillarsSectionProps): React.ReactNode {
   const iconColor = useColorModeValue('neutral1.12', 'white')
 
   return (

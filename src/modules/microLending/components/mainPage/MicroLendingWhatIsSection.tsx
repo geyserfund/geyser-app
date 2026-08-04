@@ -15,7 +15,7 @@ export function MicroLendingWhatIsSection({
 }: {
   sectionPrimaryTextColor: string
   sectionSecondaryTextColor: string
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <VStack
       id={MICRO_LENDING_WHAT_IS_SECTION_ID}

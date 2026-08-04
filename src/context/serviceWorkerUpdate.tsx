@@ -2,7 +2,7 @@ import { captureException } from '@sentry/react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
-import { __production__ } from '../shared/constants'
+import { __production__ } from '../shared/constants/config/env.ts'
 
 const defaultContext: ServiceWorkerUpdateProps = {
   updateServiceWorker: () =>
@@ -24,6 +24,7 @@ const ServiceWorkerUpdate = createContext<ServiceWorkerUpdateProps>(defaultConte
 const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 5 * 60 * 1000
 
 let defferedPrompt: any
+let refetchIntervalId: ReturnType<typeof setInterval> | null = null
 
 const expectedServiceWorkerErrorMessages = [
   'Failed to register a ServiceWorker',
@@ -38,6 +39,11 @@ const isExpectedServiceWorkerError = (error: unknown): boolean => {
   const message = error instanceof Error ? error.message : String(error)
 
   return expectedServiceWorkerErrorMessages.some((expectedMessage) => message.includes(expectedMessage))
+}
+
+const handlePrompt = () => {
+  defferedPrompt?.prompt()
+  defferedPrompt = null
 }
 
 export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode }) => {
@@ -59,7 +65,11 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
           if (resp?.status === 200) await r.update()
         }
 
-        setInterval(async () => {
+        if (refetchIntervalId) {
+          clearInterval(refetchIntervalId)
+        }
+
+        refetchIntervalId = setInterval(() => {
           if (!(!r.installing && navigator)) return
 
           if ('connection' in navigator && !navigator.onLine) return
@@ -80,16 +90,22 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
   })
 
   useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e: Event) => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault()
       defferedPrompt = e
       setCanInstall(true)
-    })
-  }, [])
+    }
 
-  const handlePrompt = () => {
-    defferedPrompt?.prompt()
-    defferedPrompt = null
-  }
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      if (refetchIntervalId) {
+        clearInterval(refetchIntervalId)
+        refetchIntervalId = null
+      }
+    }
+  }, [])
 
   return (
     <ServiceWorkerUpdate.Provider

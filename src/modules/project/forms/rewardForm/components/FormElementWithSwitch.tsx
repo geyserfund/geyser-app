@@ -29,9 +29,13 @@ export const FormElementWithSwitch = ({
   const [isOpenAfter, setIsOpenAfter] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => {
+    const openTimer = setTimeout(() => {
       setIsOpenAfter(true)
     }, 200)
+
+    return () => {
+      clearTimeout(openTimer)
+    }
   }, [isOpen])
 
   return (

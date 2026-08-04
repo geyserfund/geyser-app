@@ -38,6 +38,7 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
   query UserAccountPasswordFundsSummary {
     userAccountPasswordFundsSummary {
       unclaimedFundsSats
+      userWalletBalanceSats
       tiaUnclaimedFundsSats
       aonUnclaimedFundsSats
       pledgedSats
@@ -47,6 +48,7 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
         title
         status
         rskEoa
+        derivationPath
         balanceSats
       }
       legacyTiaProjects {
@@ -55,6 +57,7 @@ export const QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY = gql`
         title
         status
         rskEoa
+        derivationPath
         balanceSats
       }
     }

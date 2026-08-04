@@ -133,6 +133,8 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
             input: {
               projectId: project.id,
               rskEoa: projectKeys.address,
+              rskPublicKey: projectKeys.publicKey,
+              derivationPath: projectKeys.derivationPath,
             },
           },
         })

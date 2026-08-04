@@ -21,7 +21,7 @@ describe('refundDownloadValidation', () => {
     expect(hasRefundFileEssentials(buildRefundFile({ id: '' }) as any)).toBe(false)
   })
 
-  it('requires both swap files for AON refund downloads', () => {
+  it('treats AON refund downloads as ready when either swap file is present', () => {
     expect(
       isRefundDownloadReady({
         isAllOrNothing: true,
@@ -34,6 +34,14 @@ describe('refundDownloadValidation', () => {
       isRefundDownloadReady({
         isAllOrNothing: true,
         lightningToRskSwapRefundFile: buildRefundFile({ id: 'ln' }) as any,
+        onChainToRskSwapRefundFile: undefined,
+      }),
+    ).toBe(true)
+
+    expect(
+      isRefundDownloadReady({
+        isAllOrNothing: true,
+        lightningToRskSwapRefundFile: undefined,
         onChainToRskSwapRefundFile: undefined,
       }),
     ).toBe(false)

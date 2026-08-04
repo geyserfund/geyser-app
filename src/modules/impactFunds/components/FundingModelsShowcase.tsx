@@ -24,7 +24,7 @@ type VisualAccentChipProps = {
   label: string
 }
 
-function VisualAccentChip({ icon, label }: VisualAccentChipProps): JSX.Element {
+function VisualAccentChip({ icon, label }: VisualAccentChipProps): React.ReactNode {
   return (
     <HStack
       spacing={2}
@@ -43,7 +43,7 @@ function VisualAccentChip({ icon, label }: VisualAccentChipProps): JSX.Element {
   )
 }
 
-function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }): JSX.Element {
+function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }): React.ReactNode {
   switch (item.illustration) {
     case 'direct-grants':
       return (
@@ -154,7 +154,7 @@ function FundingModelCard({
   highlightedSurfaceBg,
   highlightedSurfaceBorderColor,
   noiseOpacity,
-}: Omit<FundingModelsShowcaseProps, 'items'> & { item: ImpactFundFundingModelItem }): JSX.Element {
+}: Omit<FundingModelsShowcaseProps, 'items'> & { item: ImpactFundFundingModelItem }): React.ReactNode {
   return (
     <Box h="full" bg={surfaceBg} borderRadius="xl" overflow="hidden" boxShadow="0 4px 14px rgba(15, 23, 42, 0.05)">
       <Box
@@ -204,7 +204,7 @@ function FundingModelCard({
 }
 
 /** Visual card grid for the Impact Fund funding model explanations used across overview pages. */
-export function FundingModelsShowcase(props: FundingModelsShowcaseProps): JSX.Element {
+export function FundingModelsShowcase(props: FundingModelsShowcaseProps): React.ReactNode {
   const { items } = props
 
   return (
