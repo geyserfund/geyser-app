@@ -1,20 +1,19 @@
 import { Button, HStack, Icon, Link as ChakraLink, Tooltip, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
+import i18n, { t } from 'i18next'
 import type { ReactNode } from 'react'
 import { PiArrowUpRight } from 'react-icons/pi'
 
 import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
+import { getProjectDerivationPathBases } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { __production__ } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 
 import { hasAccessibleProjectWalletRecoveryData } from './projectWalletRecovery.ts'
 
-const SATS_PER_RBTC = 10000000000n
-const CURRENT_PROJECT_DERIVATION_PATH_BASE = __production__ ? "m/44'/137'/0'/0" : "m/44'/37310'/0'/0"
-const LEGACY_PROJECT_DERIVATION_PATH_BASE = __production__ ? "m/44'/137'/0'/1" : "m/44'/37310'/0'/1"
+const WEI_PER_SAT = 10000000000n
+const [CURRENT_PROJECT_DERIVATION_PATH_BASE, LEGACY_PROJECT_DERIVATION_PATH_BASE] = getProjectDerivationPathBases()
 const PROJECT_WALLET_RECOVERY_GUIDE_URL =
   'https://guide.geyser.fund/geyser-docs/product-guides/project-features/recovering-funds-from-a-geyser-project-wallet'
 
@@ -189,10 +188,10 @@ const ProjectRskEoaHistoryRow = ({
   onOpenSeedWords: (rskEoa: ProjectRskEoaHistoryItem) => void
 }) => {
   const { withdrawable, isLoading } = usePrismWithdrawable({ rskAddress: rskEoa.rskAddress })
-  const balanceSats = withdrawable ? Number(withdrawable / SATS_PER_RBTC) : 0
+  const balanceSats = withdrawable ? Number(withdrawable / WEI_PER_SAT) : 0
   const balance = isLoading
     ? t('Checking balance...')
-    : t('{{balance}} sats', { balance: balanceSats.toLocaleString() })
+    : t('{{balance}} sats', { balance: balanceSats.toLocaleString(i18n.language) })
 
   return (
     <VStack align="stretch" spacing={3} borderWidth="1px" borderColor="neutral1.4" borderRadius="8px" p={4} w="full">
@@ -251,13 +250,14 @@ const WalletAddressDetail = ({ address }: { address: string }) => (
       <ChakraLink
         href={getRootstockExplorerAddressUrl(address)}
         isExternal
+        aria-label={t('View on Rootstock explorer')}
         display="inline-flex"
         alignItems="center"
         color="neutral1.10"
         flexShrink={0}
         _hover={{ color: 'neutral1.11' }}
       >
-        <Icon as={PiArrowUpRight} boxSize="14px" aria-label={t('View on Rootstock explorer')} />
+        <Icon as={PiArrowUpRight} boxSize="14px" aria-hidden />
       </ChakraLink>
     </HStack>
   </VStack>
@@ -332,4 +332,4 @@ const getTimestamp = (date?: string | Date | null) => {
   return Number.isNaN(timestamp) ? 0 : timestamp
 }
 
-const formatDate = (date: string | Date) => new Date(date).toLocaleDateString()
+const formatDate = (date: string | Date) => new Date(date).toLocaleDateString(i18n.language)

@@ -2533,7 +2533,6 @@
   "Account password reset": "Account password reset",
   "Reset account password": "Reset account password",
   "Resetting your account password creates a new seed and rotates project wallet addresses where possible.": "Resetting your account password creates a new seed and rotates project wallet addresses where possible.",
-  "Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in ": "Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in ",
   "this guide": "this guide",
   "Only reset your password if you understand that funds tied to the current password may become inaccessible without an old seed/password backup. Pending project payments may also block the reset until they settle.": "Only reset your password if you understand that funds tied to the current password may become inaccessible without an old seed/password backup. Pending project payments may also block the reset until they settle.",
   "Reset password": "Reset password",
@@ -2596,5 +2595,7 @@
   "View on Rootstock explorer": "View on Rootstock explorer",
   "Password reset completed": "Password reset completed",
   "Your account password was recovered successfully. Project wallet addresses tied to the old password may have been rotated, but funds on old addresses are not moved automatically.": "Your account password was recovered successfully. Project wallet addresses tied to the old password may have been rotated, but funds on old addresses are not moved automatically.",
-  "Please return to the project page and retry after any in-progress payments have settled. Historical wallet addresses remain visible in project wallet settings.": "Please return to the project page and retry after any in-progress payments have settled. Historical wallet addresses remain visible in project wallet settings."
+  "Please return to the project page and retry after any in-progress payments have settled. Historical wallet addresses remain visible in project wallet settings.": "Please return to the project page and retry after any in-progress payments have settled. Historical wallet addresses remain visible in project wallet settings.",
+  "Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in <1>this guide</1>.": "Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in <1>this guide</1>.",
+  "Unable to recover the wallet data for this project.": "Unable to recover the wallet data for this project."
 }

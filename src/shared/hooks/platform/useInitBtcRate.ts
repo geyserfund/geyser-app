@@ -43,12 +43,15 @@ export const useInitBtcRate = () => {
   }
 
   useEffect(() => {
+    let isActive = true
     let retries = 0
     let retryTimeout: ReturnType<typeof setTimeout> | undefined
     const maxRetires = 5
 
     const getBitcoinRates = async () => {
       const usdRate = await fetchBitcoinRates({ currency: 'usd' })
+      if (!isActive) return
+
       if (!usdRate) {
         const localValues = getRateFromLocalStorage()
 
@@ -60,6 +63,8 @@ export const useInitBtcRate = () => {
 
         if ((localValues.isOld && retries < maxRetires) || !localValues.usdRate) {
           retryTimeout = setTimeout(() => {
+            if (!isActive) return
+
             retries += 1
             getBitcoinRates()
           }, RETRY_FETCH_BTC_RATE_AFTER_MILIS)
@@ -75,6 +80,7 @@ export const useInitBtcRate = () => {
     getBitcoinRates()
 
     return () => {
+      isActive = false
       if (retryTimeout) {
         clearTimeout(retryTimeout)
       }

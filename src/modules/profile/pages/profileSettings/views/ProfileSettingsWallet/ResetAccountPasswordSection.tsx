@@ -1,17 +1,19 @@
-import { Button, HStack, Link, VStack, useDisclosure } from '@chakra-ui/react'
+import { Button, HStack, Link, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Trans } from 'react-i18next'
 
 import {
   RecoverPasswordForm,
   useRecoverPasswordForm,
 } from '@/modules/project/forms/accountPassword/components/RecoverPasswordForm.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
-import { GuideUrl } from '@/shared/constants/platform/url.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
+import { GuideUrl } from '@/shared/constants/platform/url.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useNotification } from '@/utils/index.ts'
 
+/** Starts the account password recovery flow from profile wallet settings. */
 export const ResetAccountPasswordSection = () => {
   const resetPasswordModal = useDisclosure()
   const toast = useNotification()
@@ -31,16 +33,17 @@ export const ResetAccountPasswordSection = () => {
       <VStack spacing={2} align="flex-start" w="full">
         <H2 size="md">{t('Reset account password')}</H2>
         <Body size="sm" color="neutral1.10" maxW="4xl">
-          {t('Resetting your account password creates a new seed and rotates project wallet addresses where possible.')}
+          {t('Resetting your account password creates a new seed and rotates project wallet addresses where possible.')}{' '}
           <Body as="span" size="sm" bold color="neutral1.10">
-            {' '}
-            {t(
-              'Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in ',
-            )}
-            <Link href={GuideUrl} isExternal textDecoration="underline">
-              {t('this guide')}
-            </Link>
-            {'.'}
+            <Trans i18nKey="Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in <1>this guide</1>.">
+              {
+                'Funds on addresses tied to the old password are not moved automatically and will need to be recovered from an external wallet using your old seed. View how in '
+              }
+              <Link href={GuideUrl} isExternal textDecoration="underline">
+                this guide
+              </Link>
+              {'.'}
+            </Trans>
           </Body>
         </Body>
       </VStack>

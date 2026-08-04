@@ -9,7 +9,7 @@ import * as yup from 'yup'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { UserAccountKeysFragment } from '@/types/index.ts'
+import type { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
 import { useUserAccountPasswordFundsSummary } from '../hooks/useUserAccountPasswordFundsSummary.ts'
@@ -44,16 +44,16 @@ const recoverPasswordSchema = yup.object({
     .oneOf([true], t('You must acknowledge that funds tied to your current password may become inaccessible')),
 })
 
-type FundsSummary = {
-  userWalletBalanceSats: string | number | bigint
-  tiaUnclaimedFundsSats: string | number | bigint
-  aonUnclaimedFundsSats: string | number | bigint
-  pledgedSats: string | number | bigint
-  affectedTiaProjects?: AccountPasswordProjectImpact[]
-  legacyTiaProjects?: AccountPasswordProjectImpact[]
+type FundsSummaryType = {
+  userWalletBalanceSats: string | bigint
+  tiaUnclaimedFundsSats: string | bigint
+  aonUnclaimedFundsSats: string | bigint
+  pledgedSats: string | bigint
+  affectedTiaProjects?: AccountPasswordProjectImpactType[]
+  legacyTiaProjects?: AccountPasswordProjectImpactType[]
 }
 
-const getFundsSummaryItems = (fundsSummary: FundsSummary) => {
+const getFundsSummaryItems = (fundsSummary: FundsSummaryType) => {
   const userWalletBalanceSats = toSatsBigInt(fundsSummary.userWalletBalanceSats)
   const tiaUnclaimedFundsSats = toSatsBigInt(fundsSummary.tiaUnclaimedFundsSats)
   const aonUnclaimedFundsSats = toSatsBigInt(fundsSummary.aonUnclaimedFundsSats)
@@ -95,52 +95,80 @@ const getFundsSummaryItems = (fundsSummary: FundsSummary) => {
   ]
 }
 
-type AccountPasswordProjectImpact = {
+type AccountPasswordProjectImpactType = {
   id: string | bigint
   title: string
-  balanceSats: string | number | bigint
+  balanceSats: string | bigint
 }
 
-function toSatsBigInt(value: string | number | bigint): bigint {
+const toSatsString = (value: unknown): string => {
+  if (typeof value === 'bigint') return value.toString()
+  if (typeof value === 'string' && /^-?\d+$/.test(value)) return value
+  if (typeof value === 'number' && Number.isSafeInteger(value)) return String(value)
+  return '0'
+}
+
+const normalizeFundsSummary = (fundsSummary: {
+  userWalletBalanceSats: unknown
+  tiaUnclaimedFundsSats: unknown
+  aonUnclaimedFundsSats: unknown
+  pledgedSats: unknown
+  affectedTiaProjects: Array<{ id: string | bigint; title: string; balanceSats: unknown }>
+  legacyTiaProjects: Array<{ id: string | bigint; title: string; balanceSats: unknown }>
+}): FundsSummaryType => ({
+  userWalletBalanceSats: toSatsString(fundsSummary.userWalletBalanceSats),
+  tiaUnclaimedFundsSats: toSatsString(fundsSummary.tiaUnclaimedFundsSats),
+  aonUnclaimedFundsSats: toSatsString(fundsSummary.aonUnclaimedFundsSats),
+  pledgedSats: toSatsString(fundsSummary.pledgedSats),
+  affectedTiaProjects: fundsSummary.affectedTiaProjects.map((project) => ({
+    id: project.id,
+    title: project.title,
+    balanceSats: toSatsString(project.balanceSats),
+  })),
+  legacyTiaProjects: fundsSummary.legacyTiaProjects.map((project) => ({
+    id: project.id,
+    title: project.title,
+    balanceSats: toSatsString(project.balanceSats),
+  })),
+})
+
+const toSatsBigInt = (value: string | bigint): bigint => {
   if (typeof value === 'bigint') return value
-  if (typeof value === 'number') return Number.isFinite(value) ? BigInt(Math.trunc(value)) : 0n
   return /^-?\d+$/.test(value) ? BigInt(value) : 0n
 }
 
-function formatSatsBigInt(value: bigint): string {
+const formatSatsBigInt = (value: bigint): string => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-function renderFundsSummary(fundsSummary: FundsSummary) {
-  return (
-    <SimpleGrid w="full" columns={{ base: 1, sm: 2 }} spacing={3}>
-      {getFundsSummaryItems(fundsSummary).map((item) => (
-        <Box
-          key={item.label}
-          borderWidth="1px"
-          borderColor={item.isWarning ? 'warning.6' : 'neutral1.5'}
-          borderRadius="lg"
-          bg={item.isWarning ? 'warning.1' : 'neutral1.1'}
-          p={3}
-        >
-          <VStack align="flex-start" spacing={1}>
-            <Body size="xs" medium color="neutral1.10">
-              {item.label}
-            </Body>
-            <Body size="md" medium color="neutral1.12">
-              {item.value}
-            </Body>
-            <Body size="xs" color="neutral1.10">
-              {item.detail}
-            </Body>
-          </VStack>
-        </Box>
-      ))}
-    </SimpleGrid>
-  )
-}
+const renderFundsSummary = (fundsSummary: FundsSummaryType) => (
+  <SimpleGrid w="full" columns={{ base: 1, sm: 2 }} spacing={3}>
+    {getFundsSummaryItems(fundsSummary).map((item) => (
+      <Box
+        key={item.label}
+        borderWidth="1px"
+        borderColor={item.isWarning ? 'warning.6' : 'neutral1.5'}
+        borderRadius="lg"
+        bg={item.isWarning ? 'warning.1' : 'neutral1.1'}
+        p={3}
+      >
+        <VStack align="flex-start" spacing={1}>
+          <Body size="xs" medium color="neutral1.10">
+            {item.label}
+          </Body>
+          <Body size="md" medium color="neutral1.12">
+            {item.value}
+          </Body>
+          <Body size="xs" color="neutral1.10">
+            {item.detail}
+          </Body>
+        </VStack>
+      </Box>
+    ))}
+  </SimpleGrid>
+)
 
-function renderProjectImpactList(projects: AccountPasswordProjectImpact[], label: string) {
+const renderProjectImpactList = (projects: AccountPasswordProjectImpactType[], label: string) => {
   if (!projects.length) return null
 
   return (
@@ -173,8 +201,10 @@ function renderProjectImpactList(projects: AccountPasswordProjectImpact[], label
 export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswordFormProps) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState(false)
-  const { data, loading, error } = useUserAccountPasswordFundsSummary()
+  const { data, loading, error, refetch } = useUserAccountPasswordFundsSummary()
   const fundsSummary = data?.userAccountPasswordFundsSummary
+    ? normalizeFundsSummary(data.userAccountPasswordFundsSummary)
+    : undefined
 
   return (
     <VStack w="full" gap={6} align="stretch">
@@ -203,11 +233,22 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
 
           {!loading && error && (
             <Box borderWidth="1px" borderColor="warning.6" borderRadius="lg" bg="warning.1" p={4}>
-              <Body size="sm">
-                {t(
-                  'We could not calculate your current TIA project funds, AON unclaimed funds, and pledged amounts. Recovering your password may still make funds and refunds tied to your current account password inaccessible.',
-                )}
-              </Body>
+              <VStack align="stretch" spacing={3}>
+                <Body size="sm">
+                  {t(
+                    'We could not calculate your current TIA project funds, AON unclaimed funds, and pledged amounts. Recovering your password may still make funds and refunds tied to your current account password inaccessible.',
+                  )}
+                </Body>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  colorScheme="primary1"
+                  alignSelf="flex-start"
+                  onClick={() => refetch()}
+                >
+                  {t('Retry')}
+                </Button>
+              </VStack>
             </Box>
           )}
 
@@ -216,10 +257,10 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
               {renderFundsSummary(fundsSummary)}
               <Divider />
               {renderProjectImpactList(
-                fundsSummary.affectedTiaProjects,
+                fundsSummary.affectedTiaProjects ?? [],
                 t('Project funds tied to your current password'),
               )}
-              {renderProjectImpactList(fundsSummary.legacyTiaProjects, t('Legacy project wallets to rotate'))}
+              {renderProjectImpactList(fundsSummary.legacyTiaProjects ?? [], t('Legacy project wallets to rotate'))}
             </VStack>
           )}
         </VStack>

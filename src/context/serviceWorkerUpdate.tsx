@@ -81,6 +81,7 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault()
       defferedPrompt = e
       setCanInstall(true)
     }

@@ -10,6 +10,7 @@ import {
   decryptSeedPayload,
   generateKeysFromPrivateKey,
   generateProjectKeysFromSeedHex,
+  getProjectDerivationPathBases,
   getSeedWords,
   isValidRskPrivateKey,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
@@ -17,11 +18,10 @@ import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/sta
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { __production__ } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { useUserProjectRskEoaBackupQuery } from '@/types/index.ts'
 import type { UserProjectRskEoaBackupQuery } from '@/types/index.ts'
+import { useUserProjectRskEoaBackupQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 const SeedWordsFeedback = () => (
@@ -148,7 +148,9 @@ export const SeedWordsModal = ({
         setPrivateKeyWallet(null)
       } else {
         const seedPayload = await decryptSeedPayload(recoveryAccountKeys.encryptedSeed as string, password)
-        const privateKeyRecovery = deriveProjectPrivateKey(seedPayload.seed, projectWalletsOverride)
+        const projectWallets =
+          projectWalletsOverride || getProjectWalletBackupEntries(backupData, recoveryAccountKeys.id)
+        const privateKeyRecovery = deriveProjectPrivateKey(seedPayload.seed, projectWallets)
         setPrivateKey(privateKeyRecovery.privateKey)
         setPrivateKeyWallet(privateKeyRecovery.wallet)
         setSeedWords([])
@@ -158,9 +160,10 @@ export const SeedWordsModal = ({
       setAccountPassword(password)
       setIsSeedWordsView(true)
     } catch (error) {
-      const errorMessage =
-        error instanceof Error && error.message.startsWith('Unable') ? error.message : 'Invalid password'
-      setPasswordError(t(errorMessage))
+      const isRecoveryDataError = error instanceof Error && error.message.startsWith('Unable')
+      setPasswordError(
+        isRecoveryDataError ? t('Unable to recover the wallet data for this project.') : t('Invalid password'),
+      )
     } finally {
       setIsDecryptingSeed(false)
     }
@@ -463,11 +466,9 @@ const deriveProjectPrivateKey = (seedHex: string, projectWallets?: ProjectWallet
   const rawPrivateKeyRecovery = deriveProjectPrivateKeyFromRawPrivateKey(seedHex, wallet)
   if (rawPrivateKeyRecovery) return rawPrivateKeyRecovery
 
-  const coinType = __production__ ? '137' : '37310'
   const candidatePaths = [
     wallet.derivationPath,
-    `m/44'/${coinType}'/0'/0/${projectId}`,
-    `m/44'/${coinType}'/0'/1/${projectId}`,
+    ...getProjectDerivationPathBases().map((basePath) => `${basePath}/${projectId}`),
   ].filter((path, index, paths): path is string => Boolean(path) && paths.indexOf(path) === index)
 
   for (const derivationPath of candidatePaths) {

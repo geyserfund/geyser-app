@@ -7,13 +7,12 @@ import {
   RecoveryAccountKeys,
   SeedWordsModal,
 } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsWallet/SeedWordsSection.tsx'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { useWithdrawFunds } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/hooks/useWithdrawFunds.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { useProjectRskEoaHistoryQuery } from '@/types/index.ts'
+import { ProjectFundingStrategy, useProjectRskEoaHistoryQuery } from '@/types/index.ts'
 
-import { ProjectFundingStrategy } from '../../../../../../types/index.ts'
 import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { DashboardLayout } from '../../common/index.ts'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
@@ -45,33 +44,29 @@ export const ProjectDashboardWallet = () => {
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
-  const walletProject = walletHistoryData?.projectGet as
-    | (typeof project & {
-        rskEoas?: Parameters<typeof ProjectRskEoaHistory>[0]['rskEoas']
-      })
-    | undefined
+  const walletProject = walletHistoryData?.projectGet
   const currentWallet = walletProject?.rskEoas?.find((rskEoa) => rskEoa.isCurrent)
   const handleOpenRecoveryData = (rskEoa: ProjectRskEoaHistoryItem) => {
-    if (rskEoa.accountKeys?.encryptedMnemonic || rskEoa.accountKeys?.encryptedSeed) {
-      setSelectedRecoveryData({
-        accountKeys: rskEoa.accountKeys,
-        projectWallets: [
-          {
-            projectId: project.id,
-            projectName: project.name,
-            projectTitle: project.title,
-            address: rskEoa.rskAddress,
-            derivationPath: rskEoa.derivationPath,
-            current: rskEoa.isCurrent,
-            createdAt: rskEoa.createdAt?.toString(),
-            replacedAt: rskEoa.replacedAt?.toString(),
-          },
-        ],
-      })
-      seedWordsModal.onOpen()
-
+    if (!rskEoa.accountKeys?.encryptedMnemonic && !rskEoa.accountKeys?.encryptedSeed) {
       return
     }
+
+    setSelectedRecoveryData({
+      accountKeys: rskEoa.accountKeys,
+      projectWallets: [
+        {
+          projectId: project.id,
+          projectName: project.name,
+          projectTitle: project.title,
+          address: rskEoa.rskAddress,
+          derivationPath: rskEoa.derivationPath,
+          current: rskEoa.isCurrent,
+          createdAt: rskEoa.createdAt?.toString(),
+          replacedAt: rskEoa.replacedAt?.toString(),
+        },
+      ],
+    })
+    seedWordsModal.onOpen()
   }
 
   const handleCloseRecoveryData = () => {

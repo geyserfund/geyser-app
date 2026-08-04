@@ -1,5 +1,5 @@
 import { Box, HStack, Text, useColorModeValue, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
 
 const PHRASE_KEYS = ['support each other', 'fund what matters', 'make ideas happen'] as const
 
@@ -48,43 +48,35 @@ type PhraseStripProps = {
 }
 
 /** Phrase-only animated strip, clipped to one line height */
-const PhraseStrip = ({ phrases, color, fontWeight, fontStyle }: PhraseStripProps) => {
-  const { t } = useTranslation()
-
-  return (
-    <Box overflow="hidden" height={`${LINE_HEIGHT}px`}>
-      <Box animation={ANIMATION} willChange="transform" sx={STRIP_SX}>
-        {phrases.map((phrase, i) => (
-          <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
-            <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle} whiteSpace="nowrap">
-              {`${t(phrase)}.`}
-            </Text>
-          </Box>
-        ))}
-      </Box>
+const PhraseStrip = ({ phrases, color, fontWeight, fontStyle }: PhraseStripProps) => (
+  <Box overflow="hidden" height={`${LINE_HEIGHT}px`}>
+    <Box animation={ANIMATION} willChange="transform" sx={STRIP_SX}>
+      {phrases.map((phrase, i) => (
+        <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
+          <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle} whiteSpace="nowrap">
+            {`${t(phrase)}.`}
+          </Text>
+        </Box>
+      ))}
     </Box>
-  )
-}
+  </Box>
+)
 
 type PhraseRowProps = PhraseStripProps & {
   mutedTextVisibility?: 'visible' | 'hidden'
 }
 
-const PhraseRow = ({ phrases, color, fontWeight, fontStyle, mutedTextVisibility }: PhraseRowProps) => {
-  const { t } = useTranslation()
-
-  return (
-    <HStack spacing={2} justifyContent="center" minHeight={`${LINE_HEIGHT}px`} alignItems="center">
-      <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
-        Bitcoiners
-      </Text>
-      <PhraseStrip phrases={phrases} color={color} fontWeight={fontWeight} fontStyle={fontStyle} />
-      <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
-        {t('Join a community of 85,000+ contributors.')}
-      </Text>
-    </HStack>
-  )
-}
+const PhraseRow = ({ phrases, color, fontWeight, fontStyle, mutedTextVisibility }: PhraseRowProps) => (
+  <HStack spacing={2} justifyContent="center" minHeight={`${LINE_HEIGHT}px`} alignItems="center">
+    <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
+      Bitcoiners
+    </Text>
+    <PhraseStrip phrases={phrases} color={color} fontWeight={fontWeight} fontStyle={fontStyle} />
+    <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
+      {t('Join a community of 85,000+ contributors.')}
+    </Text>
+  </HStack>
+)
 
 type MobilePhraseOnlyRowProps = Pick<PhraseStripProps, 'phrases' | 'color' | 'fontStyle'>
 
@@ -99,7 +91,6 @@ const MobilePhraseOnlyRow = ({ phrases, color, fontStyle }: MobilePhraseOnlyRowP
 
 /** Vertically rolling text carousel driven by CSS keyframes for GPU-accelerated smoothness. */
 export const RollingText = () => {
-  const { t } = useTranslation()
   const mutedColor = useColorModeValue('neutral1.9', 'neutral1.7')
 
   const centerPhrases = getStripPhrases(0)

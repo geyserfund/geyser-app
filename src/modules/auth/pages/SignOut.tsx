@@ -22,6 +22,7 @@ export const SignOut = () => {
   const toast = useNotification()
 
   useEffect(() => {
+    let isActive = true
     let logoutTimeout: ReturnType<typeof setTimeout> | undefined
 
     const logout = async () => {
@@ -29,17 +30,23 @@ export const SignOut = () => {
         await fetch(`${authServiceEndPoint}/logout`, {
           credentials: 'include',
         })
+        if (!isActive) return
+
         toast.warning({
           title: "You've been logged out.",
           description: 'Please login again.',
         })
         logoutTimeout = setTimeout(() => {
+          if (!isActive) return
+
           setUser({ ...defaultUser })
           setFollowedProjects([])
           setAccountPassword(null)
           navigate(-1)
         }, 1000)
       } catch {
+        if (!isActive) return
+
         toast.warning({
           title: 'Failed to log out properly.',
           description: 'Please clear your cookies.',
@@ -51,8 +58,8 @@ export const SignOut = () => {
       logout()
     }
 
-    // Navigate back to the previous page
     return () => {
+      isActive = false
       if (logoutTimeout) {
         clearTimeout(logoutTimeout)
       }

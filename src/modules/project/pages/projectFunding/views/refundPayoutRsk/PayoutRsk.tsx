@@ -10,8 +10,8 @@ import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import {
   AccountKeys,
+  generateMatchingProjectKeysFromSeedHex,
   generatePreImageHash,
-  generateProjectKeysFromSeedHex,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
@@ -479,11 +479,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     skip: !isOpen || !project.id || !rskAddress || !isPrismPayout,
     fetchPolicy: 'cache-first',
   })
-  const storedProjectRskEoa = projectRskEoaMetadataData?.projectGet?.rskEoas.find((projectWallet) => {
-    return rskAddress
-      ? projectWallet.rskAddress.toLowerCase() === rskAddress.toLowerCase()
-      : projectWallet.isCurrent
-  })
+  const storedProjectRskEoa = projectRskEoaMetadataData?.projectGet?.rskEoas.find(
+    (projectWallet) => projectWallet.rskAddress.toLowerCase() === rskAddress?.toLowerCase(),
+  )
   const effectiveProjectRskEoaDerivationPath = projectRskEoaDerivationPath ?? storedProjectRskEoa?.derivationPath
 
   useEffect(() => {
@@ -778,7 +776,10 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const keyDerivationOptions = isPrismPayout
     ? {
         deriveKeysFromSeed: (seedHex: string) =>
-          generateProjectKeysFromSeedHex(seedHex, project.id, effectiveProjectRskEoaDerivationPath),
+          generateMatchingProjectKeysFromSeedHex(seedHex, project.id, {
+            derivationPath: effectiveProjectRskEoaDerivationPath,
+            expectedAddress: rskAddress,
+          }),
         storeKeyPair: false,
         requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
       }

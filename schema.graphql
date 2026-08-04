@@ -411,8 +411,8 @@ input ProjectCloseMutationInput {
 input ProjectRskEoaSetInput {
   projectId: BigInt!
   rskEoa: String!
-  rskPublicKey: String
-  derivationPath: String
+  rskPublicKey: String!
+  derivationPath: String!
 }
 
 type ProjectDeleteResponse implements MutationResponse {

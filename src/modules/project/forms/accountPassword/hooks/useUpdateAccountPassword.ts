@@ -4,7 +4,8 @@ import { useSetAtom } from 'jotai'
 
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { QUERY_USER_ACCOUNT_PASSWORD_FUNDS_SUMMARY } from '@/modules/project/graphql/queries/user.ts'
-import { UserAccountKeysFragment, useUserAccountKeysUpdateMutation } from '@/types/index.ts'
+import type { UserAccountKeysFragment } from '@/types/index.ts'
+import { useUserAccountKeysUpdateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import {
@@ -15,12 +16,13 @@ import {
   generateSeedDataForUser,
 } from '../keyGenerationHelper.ts'
 
-type AccountPasswordProjectImpact = {
+type AccountPasswordProjectImpactType = {
   id: string | number | bigint
   title?: string
   derivationPath?: string | null
 }
 
+/** Rotates account and affected project wallet keys after an account password reset. */
 export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragment) => void) => {
   const client = useApolloClient()
   const toast = useNotification()
@@ -105,8 +107,8 @@ const getErrorMessage = (error: unknown) => {
   return t('Please try again.')
 }
 
-const uniqueProjects = (projects: AccountPasswordProjectImpact[]) => {
-  const projectById = new Map<string, AccountPasswordProjectImpact>()
+const uniqueProjects = (projects: AccountPasswordProjectImpactType[]) => {
+  const projectById = new Map<string, AccountPasswordProjectImpactType>()
   projects.forEach((project) => {
     projectById.set(project.id.toString(), project)
   })

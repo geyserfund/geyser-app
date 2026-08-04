@@ -39,9 +39,20 @@ const derivationPathMapRSK = {
   [Network.MAINNET]: "m/44'/137'/0'/0/0",
 }
 
+const projectDerivationPathBasesRSK = {
+  [Network.MAINNET]: ["m/44'/137'/0'/0", "m/44'/137'/0'/1"],
+  [Network.TESTNET]: ["m/44'/37310'/0'/0", "m/44'/37310'/0'/1"],
+} as const
+
 const projectDerivationPathMapRSK = {
-  [Network.TESTNET]: "m/44'/37310'/0'/0",
-  [Network.MAINNET]: "m/44'/137'/0'/0",
+  [Network.TESTNET]: projectDerivationPathBasesRSK[Network.TESTNET][0],
+  [Network.MAINNET]: projectDerivationPathBasesRSK[Network.MAINNET][0],
+}
+
+/** Current and legacy project RSK derivation path bases for the active network. */
+export const getProjectDerivationPathBases = () => {
+  const network = __production__ ? Network.MAINNET : Network.TESTNET
+  return projectDerivationPathBasesRSK[network]
 }
 
 const getEntropy = (bytes = 32) => {
@@ -440,17 +451,35 @@ export const generateProjectKeysFromSeedHex = (
 }
 
 const validateProjectDerivationPath = (derivationPath: string, projectId: number) => {
-  const supportedProjectDerivationPathBases = [
-    "m/44'/137'/0'/0",
-    "m/44'/37310'/0'/0",
-    "m/44'/137'/0'/1",
-    "m/44'/37310'/0'/1",
-  ]
-  const expectedPaths = supportedProjectDerivationPathBases.map((basePath) => `${basePath}/${projectId}`)
+  const expectedPaths = getProjectDerivationPathBases().map((basePath) => `${basePath}/${projectId}`)
 
   if (!expectedPaths.includes(derivationPath)) {
     throw new Error('Invalid project derivation path')
   }
+}
+
+/** Derive project keys, trying stored then current/legacy bases until the expected address matches. */
+export const generateMatchingProjectKeysFromSeedHex = (
+  seedHex: string,
+  projectId: string | number | bigint,
+  options?: {
+    derivationPath?: string | null
+    expectedAddress?: string | null
+  },
+): AccountKeys => {
+  const candidatePaths = [
+    options?.derivationPath,
+    ...getProjectDerivationPathBases().map((basePath) => `${basePath}/${projectId}`),
+  ].filter((path, index, paths): path is string => Boolean(path) && paths.indexOf(path) === index)
+
+  for (const derivationPath of candidatePaths) {
+    const keys = generateProjectKeysFromSeedHex(seedHex, projectId, derivationPath)
+    if (!options?.expectedAddress || keys.address.toLowerCase() === options.expectedAddress.trim().toLowerCase()) {
+      return keys
+    }
+  }
+
+  throw new Error('Unable to derive a private key for this project wallet')
 }
 
 export const generateAccountKeys = (): AccountKeys => {
