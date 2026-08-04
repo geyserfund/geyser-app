@@ -14,7 +14,7 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ProjectFundingStrategy, useProjectRskEoaHistoryQuery } from '@/types/index.ts'
 
 import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
-import { DashboardLayout } from '../../common/index.ts'
+import { DashboardLayout } from '../../common/DashboardLayout.tsx'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
 import { ProjectRskEoaHistory, ProjectRskEoaHistoryItem } from './components/ProjectRskEoaHistory.tsx'
 

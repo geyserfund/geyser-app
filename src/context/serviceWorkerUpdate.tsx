@@ -1,8 +1,8 @@
 import { captureException } from '@sentry/react'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
-import { __production__ } from '../shared/constants'
+import { __production__ } from '../shared/constants/config/env.ts'
 
 const defaultContext: ServiceWorkerUpdateProps = {
   updateServiceWorker: () =>
@@ -40,8 +40,14 @@ const isExpectedServiceWorkerError = (error: unknown): boolean => {
   return expectedServiceWorkerErrorMessages.some((expectedMessage) => message.includes(expectedMessage))
 }
 
+const handlePrompt = () => {
+  defferedPrompt?.prompt()
+  defferedPrompt = null
+}
+
 export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode }) => {
   const [canInstall, setCanInstall] = useState(false)
+  const refetchIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const { updateServiceWorker } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
@@ -59,7 +65,11 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
           if (resp?.status === 200) await r.update()
         }
 
-        setInterval(async () => {
+        if (refetchIntervalRef.current) {
+          clearInterval(refetchIntervalRef.current)
+        }
+
+        refetchIntervalRef.current = setInterval(() => {
           if (!(!r.installing && navigator)) return
 
           if ('connection' in navigator && !navigator.onLine) return
@@ -90,13 +100,12 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      if (refetchIntervalRef.current) {
+        clearInterval(refetchIntervalRef.current)
+        refetchIntervalRef.current = null
+      }
     }
   }, [])
-
-  const handlePrompt = () => {
-    defferedPrompt?.prompt()
-    defferedPrompt = null
-  }
 
   return (
     <ServiceWorkerUpdate.Provider

@@ -11,42 +11,59 @@ const USD_QUOTE_KEY = 'usdQuote'
 
 const A_MINUTE_IN_MILIS = 1000 * 60
 const RETRY_FETCH_BTC_RATE_AFTER_MILIS = 1000 * 5
+const MAX_RETRIES = 5
+
+const getRateFromLocalStorage = () => {
+  const values = getLocalStorageItem(USD_QUOTE_KEY)?.split('::')
+  const usdRate = Number(values?.[0])
+  const timeLineMilis = Number(values?.[1])
+
+  let isOld = true
+
+  if (!usdRate || !timeLineMilis) {
+    return { usdRate: 0, isOld: false }
+  }
+
+  const now = DateTime.local().toMillis()
+
+  if (now - timeLineMilis < A_MINUTE_IN_MILIS) {
+    isOld = false
+  }
+
+  return { usdRate, isOld }
+}
+
+const storeRateToLocalStorage = (usdRate: number) => {
+  const newDate = DateTime.local().toMillis()
+
+  setLocalStorageItem(USD_QUOTE_KEY, `${String(usdRate)}::${newDate}`)
+}
 
 export const useInitBtcRate = () => {
   const setBtcRate = useSetAtom(btcRateAtom)
   const setUsdRate = useSetAtom(usdRateAtom)
 
-  const getRateFromLocalStorage = () => {
-    const values = getLocalStorageItem(USD_QUOTE_KEY)?.split('::')
-    const usdRate = Number(values?.[0])
-    const timeLineMilis = Number(values?.[1])
-
-    let isOld = true
-
-    if (!usdRate || !timeLineMilis) {
-      return { usdRate: 0, isOld: false }
-    }
-
-    const now = DateTime.local().toMillis()
-
-    if (now - timeLineMilis < A_MINUTE_IN_MILIS) {
-      isOld = false
-    }
-
-    return { usdRate, isOld }
-  }
-
-  const storeRateToLocalStorage = (usdRate: number) => {
-    const newDate = DateTime.local().toMillis()
-
-    setLocalStorageItem(USD_QUOTE_KEY, `${String(usdRate)}::${newDate}`)
-  }
-
   useEffect(() => {
     let isActive = true
     let retries = 0
-    let retryTimeout: ReturnType<typeof setTimeout> | undefined
-    const maxRetires = 5
+    const pendingTimeouts = new Set<ReturnType<typeof setTimeout>>()
+
+    const clearPendingTimeouts = () => {
+      pendingTimeouts.forEach((timeoutId) => clearTimeout(timeoutId))
+      pendingTimeouts.clear()
+    }
+
+    const scheduleRetry = () => {
+      const timeoutId = setTimeout(() => {
+        pendingTimeouts.delete(timeoutId)
+        if (!isActive) return
+
+        retries += 1
+        getBitcoinRates()
+      }, RETRY_FETCH_BTC_RATE_AFTER_MILIS)
+
+      pendingTimeouts.add(timeoutId)
+    }
 
     const getBitcoinRates = async () => {
       const usdRate = await fetchBitcoinRates({ currency: 'usd' })
@@ -61,13 +78,8 @@ export const useInitBtcRate = () => {
           setUsdRate(localValues.usdRate)
         }
 
-        if ((localValues.isOld && retries < maxRetires) || !localValues.usdRate) {
-          retryTimeout = setTimeout(() => {
-            if (!isActive) return
-
-            retries += 1
-            getBitcoinRates()
-          }, RETRY_FETCH_BTC_RATE_AFTER_MILIS)
+        if ((localValues.isOld && retries < MAX_RETRIES) || !localValues.usdRate) {
+          scheduleRetry()
         }
       } else {
         const satoshirate = usdRate * BTC_IN_SATOSHI
@@ -81,9 +93,7 @@ export const useInitBtcRate = () => {
 
     return () => {
       isActive = false
-      if (retryTimeout) {
-        clearTimeout(retryTimeout)
-      }
+      clearPendingTimeouts()
     }
   }, [setBtcRate, setUsdRate])
 }

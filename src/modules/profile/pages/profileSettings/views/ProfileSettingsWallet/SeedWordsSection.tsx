@@ -294,7 +294,7 @@ export const SeedWordsModal = ({
           </HStack>
           <SimpleGrid w="full" columns={{ base: 2, md: 3, lg: 2 }} spacing={2}>
             {seedWords.map((word, index) => (
-              <HStack key={`${word}-${index}`} borderWidth="1px" borderColor="neutral1.4" borderRadius="md" p={2}>
+              <HStack key={`seed-word-${index + 1}`} borderWidth="1px" borderColor="neutral1.4" borderRadius="md" p={2}>
                 <Body size="sm" muted>
                   {index + 1}.
                 </Body>
@@ -410,18 +410,21 @@ export const SeedWordsSection = () => {
 const getProjectWalletBackupEntries = (
   backupData?: UserProjectRskEoaBackupQuery,
   accountKeysId?: string | number | bigint,
-): ProjectWalletBackupEntry[] =>
-  (backupData?.user?.ownerOf ?? []).flatMap((owner) => {
+): ProjectWalletBackupEntry[] => {
+  const entries: ProjectWalletBackupEntry[] = []
+  const normalizedAccountKeysId = accountKeysId?.toString()
+
+  for (const owner of backupData?.user?.ownerOf ?? []) {
     const { project } = owner
-    if (!project?.rskEoas?.length) return []
+    if (!project?.rskEoas?.length) continue
 
-    const normalizedAccountKeysId = accountKeysId?.toString()
+    for (const rskEoa of project.rskEoas) {
+      const matchesAccountKeys = normalizedAccountKeysId
+        ? rskEoa.accountKeys?.id?.toString() === normalizedAccountKeysId
+        : rskEoa.isCurrent
+      if (!matchesAccountKeys) continue
 
-    return project.rskEoas
-      .filter((rskEoa) =>
-        normalizedAccountKeysId ? rskEoa.accountKeys?.id?.toString() === normalizedAccountKeysId : rskEoa.isCurrent,
-      )
-      .map((rskEoa) => ({
+      entries.push({
         projectId: project.id,
         projectName: project.name,
         projectTitle: project.title,
@@ -430,8 +433,12 @@ const getProjectWalletBackupEntries = (
         current: rskEoa.isCurrent,
         createdAt: rskEoa.createdAt,
         replacedAt: rskEoa.replacedAt,
-      }))
-  })
+      })
+    }
+  }
+
+  return entries
+}
 
 const decodeHtmlEntities = (value?: string | null) => {
   if (!value) return value

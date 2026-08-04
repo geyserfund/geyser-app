@@ -24,13 +24,29 @@ const KEYFRAMES = {
 
 const ANIMATION_NAME = 'rolling-text'
 
-/** Builds the phrase array for a strip lane, adding a duplicate first item for seamless looping. */
-const getStripPhrases = (offset: number): string[] => {
-  const items = PHRASE_KEYS.map(
-    (_, i) => PHRASE_KEYS[(i + offset + PHRASE_KEYS.length) % PHRASE_KEYS.length] ?? PHRASE_KEYS[0],
-  )
+type StripPhrase = {
+  key: string
+  phrase: string
+}
 
-  return [...items, items[0] ?? PHRASE_KEYS[0]]
+/** Builds the phrase array for a strip lane, adding a duplicate first item for seamless looping. */
+const getStripPhrases = (offset: number): StripPhrase[] => {
+  const items = PHRASE_KEYS.map((_, i) => {
+    const phrase = PHRASE_KEYS[(i + offset + PHRASE_KEYS.length) % PHRASE_KEYS.length] ?? PHRASE_KEYS[0]
+    return {
+      key: `strip-${offset}-item-${i}-${phrase}`,
+      phrase,
+    }
+  })
+  const firstItem = items[0] ?? { key: `strip-${offset}-item-0`, phrase: PHRASE_KEYS[0] }
+
+  return [
+    ...items,
+    {
+      key: `strip-${offset}-loop-${firstItem.phrase}`,
+      phrase: firstItem.phrase,
+    },
+  ]
 }
 
 const FONT_SIZE = { base: 'lg', sm: 'xl', md: '2xl', lg: '3xl' }
@@ -41,7 +57,7 @@ const STRIP_SX = {
 const ANIMATION = `${ANIMATION_NAME} ${TOTAL_SECONDS}s cubic-bezier(0.4, 0, 0.2, 1) infinite`
 
 type PhraseStripProps = {
-  phrases: string[]
+  phrases: StripPhrase[]
   color?: string
   fontWeight?: number
   fontStyle?: string
@@ -51,8 +67,8 @@ type PhraseStripProps = {
 const PhraseStrip = ({ phrases, color, fontWeight, fontStyle }: PhraseStripProps) => (
   <Box overflow="hidden" height={`${LINE_HEIGHT}px`}>
     <Box animation={ANIMATION} willChange="transform" sx={STRIP_SX}>
-      {phrases.map((phrase, i) => (
-        <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
+      {phrases.map(({ key, phrase }) => (
+        <Box key={key} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
           <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle} whiteSpace="nowrap">
             {`${t(phrase)}.`}
           </Text>

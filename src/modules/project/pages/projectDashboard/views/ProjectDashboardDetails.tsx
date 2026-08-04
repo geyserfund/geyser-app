@@ -11,7 +11,7 @@ import { useNotification } from '@/utils'
 
 import { useProjectDetailsForm } from '../../projectCreation/hooks/useProjectDetailsForm'
 import { ProjectCountryCodesThatAreRestricted } from '../../projectCreation/utils/constants'
-import { DashboardLayout } from '../common'
+import { DashboardLayout } from '../common/DashboardLayout.tsx'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
 
 const DashboardSaveButton = (props: ButtonProps) => (
