@@ -141,7 +141,7 @@ const formatSatsBigInt = (value: bigint): string => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-const renderFundsSummary = (fundsSummary: FundsSummaryType) => (
+const FundsSummaryGrid = ({ fundsSummary }: { fundsSummary: FundsSummaryType }) => (
   <SimpleGrid w="full" columns={{ base: 1, sm: 2 }} spacing={3}>
     {getFundsSummaryItems(fundsSummary).map((item) => (
       <Box
@@ -168,7 +168,7 @@ const renderFundsSummary = (fundsSummary: FundsSummaryType) => (
   </SimpleGrid>
 )
 
-const renderProjectImpactList = (projects: AccountPasswordProjectImpactType[], label: string) => {
+const ProjectImpactList = ({ projects, label }: { projects: AccountPasswordProjectImpactType[]; label: string }) => {
   if (!projects.length) return null
 
   return (
@@ -254,13 +254,16 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
 
           {!loading && !error && fundsSummary && (
             <VStack w="full" alignItems="stretch" gap={4}>
-              {renderFundsSummary(fundsSummary)}
+              <FundsSummaryGrid fundsSummary={fundsSummary} />
               <Divider />
-              {renderProjectImpactList(
-                fundsSummary.affectedTiaProjects ?? [],
-                t('Project funds tied to your current password'),
-              )}
-              {renderProjectImpactList(fundsSummary.legacyTiaProjects ?? [], t('Legacy project wallets to rotate'))}
+              <ProjectImpactList
+                projects={fundsSummary.affectedTiaProjects ?? []}
+                label={t('Project funds tied to your current password')}
+              />
+              <ProjectImpactList
+                projects={fundsSummary.legacyTiaProjects ?? []}
+                label={t('Legacy project wallets to rotate')}
+              />
             </VStack>
           )}
         </VStack>
