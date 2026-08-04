@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildCollectionPageJsonLd, getAbsoluteSeoUrl } from '../../../../../../../../src/shared/utils/seo.ts'
+import { buildCollectionPageJsonLd, getAbsoluteSeoUrl } from '../../../../../../src/shared/utils/seo.ts'
 
 describe('collection json-ld builder', () => {
   it('builds collection schema with item list URLs', () => {

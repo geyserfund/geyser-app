@@ -46,16 +46,19 @@ describe('creation fiat step eligibility', () => {
 })
 
 describe('creation fiat step routing', () => {
-  it('resolves the persisted fiat contributions step to the new route', () => {
-    expect(getProjectCreationRoute(ProjectCreationStep.FiatContributions, '123')).toBe(
-      getPath('launchPaymentFiatContributions', '123'),
+  it('resolves identity verification to the account password route', () => {
+    expect(getProjectCreationRoute(ProjectCreationStep.IdentityVerification, '123')).toBe(
+      getPath('launchPaymentAccountPassword', '123'),
     )
   })
 
-  it('advances from identity verification to fiat contributions to launch', () => {
-    expect(getNextProjectCreationStep(ProjectCreationStep.IdentityVerification)).toBe(
-      ProjectCreationStep.FiatContributions,
-    )
-    expect(getNextProjectCreationStep(ProjectCreationStep.FiatContributions)).toBe(ProjectCreationStep.Launch)
+  it('keeps the fiat contributions path available for in-flow navigation', () => {
+    expect(getPath('launchPaymentFiatContributions', '123')).toBe('/launch/123/payment/fiat-contributions')
+  })
+
+  it('advances from identity verification to launch in the persisted step index', () => {
+    // Fiat contributions is a soft UI step (shouldShowCreationFiatStep), not a persisted ProjectCreationStep.
+    expect(getNextProjectCreationStep(ProjectCreationStep.IdentityVerification)).toBe(ProjectCreationStep.Launch)
+    expect(getNextProjectCreationStep(ProjectCreationStep.Launch)).toBeUndefined()
   })
 })
