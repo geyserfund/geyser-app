@@ -2797,7 +2797,15 @@ export enum PaymentCurrency {
   Usdcent = 'USDCENT'
 }
 
-export type PaymentDetails = FiatPaymentDetails | FiatToLightningSwapPaymentDetails | LightningPaymentDetails | LightningToRskSwapPaymentDetails | OnChainToLightningSwapPaymentDetails | OnChainToRskSwapPaymentDetails | RskToLightningSwapPaymentDetails | RskToOnChainSwapPaymentDetails;
+export type PaymentDetails = FiatPaymentDetails | FiatToLightningSwapPaymentDetails | LightningPaymentDetails | LightningToRskSwapPaymentDetails | OnChainToLightningSwapPaymentDetails | OnChainToRskSwapPaymentDetails | RskAonClaimPaymentDetails | RskNativeTransferPaymentDetails | RskToLightningSwapPaymentDetails | RskToOnChainSwapPaymentDetails;
+
+export type RskAonClaimPaymentDetails = {
+  __typename?: 'RskAonClaimPaymentDetails';
+  destinationAddress: Scalars['String']['output'];
+  fromAddress: Scalars['String']['output'];
+  signedTxHex?: Maybe<Scalars['String']['output']>;
+  txId?: Maybe<Scalars['String']['output']>;
+};
 
 export type PaymentFailInput = {
   failureReason?: InputMaybe<Scalars['String']['input']>;
@@ -3098,6 +3106,8 @@ export enum PaymentType {
   LightningToRskSwap = 'LIGHTNING_TO_RSK_SWAP',
   OnChainToLightningSwap = 'ON_CHAIN_TO_LIGHTNING_SWAP',
   OnChainToRskSwap = 'ON_CHAIN_TO_RSK_SWAP',
+  RskAonClaim = 'RSK_AON_CLAIM',
+  RskNativeTransfer = 'RSK_NATIVE_TRANSFER',
   RskToLightningSwap = 'RSK_TO_LIGHTNING_SWAP',
   RskToOnChainSwap = 'RSK_TO_ON_CHAIN_SWAP'
 }
@@ -3183,16 +3193,18 @@ export type PayoutGetResponse = {
 };
 
 export type PayoutInitiateInput = {
-  /** The call data to initiate the payout (AON only). */
-  callDataHex: Scalars['String']['input'];
+  /** The call data to initiate the payout (AON only; optional for native transfers). */
+  callDataHex?: InputMaybe<Scalars['String']['input']>;
   /** Optional: The claim transaction hex (for RSK to on-chain swaps only) */
   claimTxHex?: InputMaybe<Scalars['String']['input']>;
   paymentId: Scalars['BigInt']['input'];
   payoutId: Scalars['BigInt']['input'];
   /** The RSK address of the creator (optional, for storing in payment for later refund if needed) */
   rskAddress?: InputMaybe<Scalars['String']['input']>;
-  /** The signature of the creator for RBTC payment */
-  signature: Scalars['String']['input'];
+  /** The signature of the creator for RBTC payment (required for swap payouts; optional for native transfers) */
+  signature?: InputMaybe<Scalars['String']['input']>;
+  /** Signed native RBTC transfer transaction hex (required for RSK_NATIVE_TRANSFER payouts) */
+  signedTxHex?: InputMaybe<Scalars['String']['input']>;
   /** Optional: The user lock transaction hex (required for Prism payouts) */
   userLockTxHex?: InputMaybe<Scalars['String']['input']>;
 };
@@ -3232,6 +3244,7 @@ export type PayoutPaymentCreateResponse = {
  * defined in pledgeRefund.ts - they are the same for both payout and pledge refund flows.
  */
 export type PayoutPaymentInput = {
+  rskNativeTransfer?: InputMaybe<RskNativeTransferPaymentDetailsInput>;
   rskToLightningSwap?: InputMaybe<RskToLightningSwapPaymentDetailsInput>;
   rskToOnChainSwap?: InputMaybe<RskToOnChainSwapPaymentDetailsInput>;
 };
@@ -5294,6 +5307,18 @@ export type RskKeyPairInput = {
   publicKey: Scalars['String']['input'];
 };
 
+export type RskNativeTransferPaymentDetails = {
+  __typename?: 'RskNativeTransferPaymentDetails';
+  destinationAddress: Scalars['String']['output'];
+  fromAddress: Scalars['String']['output'];
+  signedTxHex?: Maybe<Scalars['String']['output']>;
+  txId?: Maybe<Scalars['String']['output']>;
+};
+
+export type RskNativeTransferPaymentDetailsInput = {
+  destinationAddress: Scalars['String']['input'];
+};
+
 export type RskToLightningSwapPaymentDetails = {
   __typename?: 'RskToLightningSwapPaymentDetails';
   lightningInvoiceId: Scalars['String']['output'];
@@ -6022,11 +6047,12 @@ export type UserWalletWithdrawGetResponse = {
 };
 
 export type UserWalletWithdrawInitiateInput = {
-  callDataHex: Scalars['String']['input'];
+  callDataHex?: InputMaybe<Scalars['String']['input']>;
   claimTxHex?: InputMaybe<Scalars['String']['input']>;
   paymentId: Scalars['BigInt']['input'];
   rskAddress?: InputMaybe<Scalars['String']['input']>;
-  signature: Scalars['String']['input'];
+  signature?: InputMaybe<Scalars['String']['input']>;
+  signedTxHex?: InputMaybe<Scalars['String']['input']>;
   userLockTxHex?: InputMaybe<Scalars['String']['input']>;
   userWalletWithdrawId: Scalars['BigInt']['input'];
 };
@@ -6058,6 +6084,7 @@ export type UserWalletWithdrawPaymentCreateResponse = {
 };
 
 export type UserWalletWithdrawPaymentInput = {
+  rskNativeTransfer?: InputMaybe<RskNativeTransferPaymentDetailsInput>;
   rskToLightningSwap?: InputMaybe<RskToLightningSwapPaymentDetailsInput>;
   rskToOnChainSwap?: InputMaybe<RskToOnChainSwapPaymentDetailsInput>;
 };

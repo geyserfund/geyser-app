@@ -147,7 +147,7 @@ type Query {
   confirmation. CONFIRMED: the claim() transaction was mined and validated. FAILED: the
   most recent attempt failed or reverted; the creator may retry with a new signed transaction.
   """
-  aonClaimStatus(projectId: BigInt!): AonClaimStatus!
+  aonClaimStatus(projectId: BigInt!): AonClaimStatusResponse!
 }
 
 type Mutation {
@@ -356,6 +356,13 @@ enum AonClaimStatus {
   PENDING
   CONFIRMED
   FAILED
+}
+
+type AonClaimStatusResponse {
+  status: AonClaimStatus!
+  txHash: String
+  """Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes."""
+  failureReason: String
 }
 
 input AonClaimAttemptConfirmInput {

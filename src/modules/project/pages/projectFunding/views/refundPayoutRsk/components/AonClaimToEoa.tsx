@@ -185,7 +185,7 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
       return
     }
 
-    if (claimStatusData.aonClaimStatus.txHash) {
+    if (claimStatusData?.aonClaimStatus.txHash) {
       setTxHash(claimStatusData.aonClaimStatus.txHash)
     }
 
@@ -199,7 +199,9 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
 
     if (status === 'FAILED') {
       setClaimPhase('failed')
-      setFailureReason(claimStatusData.aonClaimStatus.failureReason || t('Claim transaction failed. Please try again.'))
+      setFailureReason(
+        claimStatusData?.aonClaimStatus.failureReason || t('Claim transaction failed. Please try again.'),
+      )
     }
   }, [claimStatusData, onCompleted])
 
