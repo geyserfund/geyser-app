@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
 
-import { FeedbackUrl } from '../../../shared/constants'
+import { FeedbackUrl, GeyserTelegramUrl } from '../../../shared/constants'
 
 export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
   return (
@@ -17,14 +17,7 @@ export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
           feedback form
         </Link>
         {' or reach out on '}
-        <Link
-          key="telegram"
-          href="https://t.me/+EZ5otIPhVcxhMmFk"
-          isExternal
-          textDecoration="none"
-          variant="body1"
-          fontWeight="700"
-        >
+        <Link key="telegram" href={GeyserTelegramUrl} isExternal textDecoration="none" variant="body1" fontWeight="700">
           Telegram.
         </Link>
       </Trans>
