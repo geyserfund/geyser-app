@@ -43,7 +43,6 @@ export const FRAGMENT_RSK_NATIVE_TRANSFER_PAYMENT_DETAILS = gql`
   fragment RskNativeTransferPaymentDetails on RskNativeTransferPaymentDetails {
     fromAddress
     destinationAddress
-    signedTxHex
     txId
   }
 `

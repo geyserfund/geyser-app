@@ -1,5 +1,5 @@
 import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Tooltip, VStack } from '@chakra-ui/react'
-import { useMutation, useQuery } from '@apollo/client'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useRef, useState } from 'react'
@@ -21,12 +21,14 @@ import {
   MUTATION_AON_CLAIM_BROADCAST,
   MUTATION_AON_CLAIM_PREPARE,
 } from '@/modules/project/graphql/mutation/aonClaimMutation.ts'
+import { MUTATION_PAYOUT_CANCEL } from '@/modules/project/graphql/mutation/payoutMutation.ts'
 import {
   AonClaimStatusQuery,
   AonClaimStatusQueryVariables,
   AonClaimUiStatus,
   QUERY_AON_CLAIM_STATUS,
 } from '@/modules/project/graphql/query/aonClaimQuery.ts'
+import { QUERY_PAYOUT_ACTIVE } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { createAndSignAonClaimTransaction } from '@/modules/project/pages/projectFunding/utils/createAndSignAonClaimTransaction.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
@@ -35,7 +37,13 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockBlockscoutUrl } from '@/shared/utils/external/mempool.ts'
-import { ProjectAonGoalStatus, ProjectForProfileContributionsFragment } from '@/types/index.ts'
+import {
+  PaymentStatus,
+  PaymentType,
+  PayoutStatus,
+  ProjectAonGoalStatus,
+  ProjectForProfileContributionsFragment,
+} from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { RefundProcessedImageUrl } from '../constant.ts'
@@ -71,22 +79,86 @@ const isGasError = (message: string) => {
   return lower.includes('insufficient rbtc') || lower.includes('network fees') || lower.includes('gas')
 }
 
-/** AON claim-to-EOA: creator signs claim() so funds land in their Geyser Rootstock wallet */
+const isActiveStandardPayoutBlockingClaim = (message: string) => {
+  const lower = message.toLowerCase()
+  return (
+    lower.includes('cancel that unpaid attempt') ||
+    lower.includes('payout payment is already in progress') ||
+    lower.includes('ambiguous active payout')
+  )
+}
+
+const STANDARD_BLOCKING_PAYMENT_TYPES = new Set<PaymentType>([
+  PaymentType.RskNativeTransfer,
+  PaymentType.RskToLightningSwap,
+  PaymentType.RskToOnChainSwap,
+])
+
+type AonClaimToEoaContentProps = {
+  isOpen: boolean
+  onClose: () => void
+  project: ProjectForProfileContributionsFragment
+  onCompleted?: () => void
+}
+
+/** Remounts session state each time the modal opens so close/open never syncs props through effects. */
 export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, project, onCompleted }) => {
+  const [sessionKey, setSessionKey] = useState(0)
+  const [wasOpen, setWasOpen] = useState(isOpen)
+  const [hasOpened, setHasOpened] = useState(isOpen)
+
+  if (isOpen !== wasOpen) {
+    setWasOpen(isOpen)
+    if (isOpen) {
+      setSessionKey((key) => key + 1)
+      setHasOpened(true)
+    }
+  }
+
+  if (!hasOpened) {
+    return null
+  }
+
+  return (
+    <AonClaimToEoaContent
+      key={sessionKey}
+      isOpen={isOpen}
+      onClose={onClose}
+      project={project}
+      onCompleted={onCompleted}
+    />
+  )
+}
+
+const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onClose, project, onCompleted }) => {
   const toast = useNotification()
   const navigate = useNavigate()
   const user = useAtomValue(authUserAtom)
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
+  const aonGoalStatus = project.aonGoal?.status
+  const aonGoalClaimed = aonGoalStatus === ProjectAonGoalStatus.Claimed
+
   const [prepareState, setPrepareState] = useState<ClaimPrepareState>(null)
   const [prepareError, setPrepareError] = useState<string | null>(null)
-  const [isAlreadyClaimed, setIsAlreadyClaimed] = useState(
-    project.aonGoal?.status === ProjectAonGoalStatus.Claimed,
-  )
-  const [claimPhase, setClaimPhase] = useState<ClaimPhase>('idle')
+  const [isAlreadyClaimed, setIsAlreadyClaimed] = useState(aonGoalClaimed)
+  const [claimPhase, setClaimPhase] = useState<ClaimPhase>(aonGoalClaimed ? 'confirmed' : 'preparing')
   const [txHash, setTxHash] = useState('')
   const [failureReason, setFailureReason] = useState<string | null>(null)
+  const [blockingPayoutId, setBlockingPayoutId] = useState<string | null>(null)
+  const [isCancellingBlockingPayout, setIsCancellingBlockingPayout] = useState(false)
+  const [prevAonGoalStatus, setPrevAonGoalStatus] = useState(aonGoalStatus)
+  const [prepareAttempt, setPrepareAttempt] = useState(0)
   const hasPreparedRef = useRef(false)
+  const notifyCompletedRef = useRef(false)
+
+  if (aonGoalStatus !== prevAonGoalStatus) {
+    setPrevAonGoalStatus(aonGoalStatus)
+    if (aonGoalClaimed) {
+      setIsAlreadyClaimed(true)
+      setClaimPhase('confirmed')
+    }
+  }
 
   const [aonClaimPrepare, { loading: prepareLoading }] = useMutation<
     AonClaimPrepareMutation,
@@ -97,7 +169,10 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
     MUTATION_AON_CLAIM_BROADCAST,
   )
 
-  const shouldPollClaimStatus = isOpen && claimPhase === 'submitted'
+  const [payoutCancel] = useMutation(MUTATION_PAYOUT_CANCEL)
+  const [loadActivePayout] = useLazyQuery(QUERY_PAYOUT_ACTIVE)
+
+  const shouldPollClaimStatus = claimPhase === 'submitted'
 
   const { data: claimStatusData, startPolling, stopPolling } = useQuery<
     AonClaimStatusQuery,
@@ -108,22 +183,40 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
     fetchPolicy: 'network-only',
   })
 
-  useEffect(() => {
-    if (!isOpen) {
-      hasPreparedRef.current = false
-      setPrepareState(null)
-      setPrepareError(null)
-      setIsAlreadyClaimed(project.aonGoal?.status === ProjectAonGoalStatus.Claimed)
-      setClaimPhase('idle')
-      setTxHash('')
+  const polledStatus = claimStatusData?.aonClaimStatus?.status as AonClaimUiStatus | undefined
+  const polledTxHash = claimStatusData?.aonClaimStatus?.txHash
+  const polledFailureReason = claimStatusData?.aonClaimStatus?.failureReason
+  const [prevPolledStatus, setPrevPolledStatus] = useState(polledStatus)
+
+  if (polledStatus !== prevPolledStatus) {
+    setPrevPolledStatus(polledStatus)
+
+    if (polledTxHash) {
+      setTxHash(polledTxHash)
+    }
+
+    if (polledStatus === 'CONFIRMED') {
+      setClaimPhase('confirmed')
+      setIsAlreadyClaimed(true)
       setFailureReason(null)
-      stopPolling()
+      notifyCompletedRef.current = true
+    } else if (polledStatus === 'FAILED') {
+      setClaimPhase('failed')
+      setFailureReason(polledFailureReason || t('Claim transaction failed. Please try again.'))
+    }
+  }
+
+  useEffect(() => {
+    if (!notifyCompletedRef.current) {
       return
     }
 
-    if (project.aonGoal?.status === ProjectAonGoalStatus.Claimed) {
-      setIsAlreadyClaimed(true)
-      setClaimPhase('confirmed')
+    notifyCompletedRef.current = false
+    onCompleted?.()
+  })
+
+  useEffect(() => {
+    if (!isOpen || aonGoalClaimed) {
       return
     }
 
@@ -131,12 +224,40 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
       return
     }
 
+    let cancelled = false
     hasPreparedRef.current = true
-    setPrepareError(null)
-    setClaimPhase('preparing')
+
+    const resolveBlockingPayoutId = async () => {
+      try {
+        const { data } = await loadActivePayout({
+          variables: { projectId: project.id },
+          fetchPolicy: 'network-only',
+        })
+        const payout = data?.payoutActive?.payout
+        if (!payout?.id) {
+          return null
+        }
+        if (payout.status !== PayoutStatus.Pending && payout.status !== PayoutStatus.Processing) {
+          return null
+        }
+        const hasBlockingPayment = (payout.payments || []).some(
+          (payment: { paymentType?: PaymentType; status?: PaymentStatus }) =>
+            payment.paymentType != null &&
+            STANDARD_BLOCKING_PAYMENT_TYPES.has(payment.paymentType) &&
+            (payment.status === PaymentStatus.Unpaid || payment.status === PaymentStatus.Pending),
+        )
+        return hasBlockingPayment ? String(payout.id) : null
+      } catch {
+        return null
+      }
+    }
 
     aonClaimPrepare({ variables: { projectId: project.id } })
       .then(({ data }) => {
+        if (cancelled) {
+          return
+        }
+
         const prepared = data?.aonClaimPrepare
         if (!prepared) {
           throw new Error(t('Unable to prepare AON claim. Please try again.'))
@@ -151,7 +272,11 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
         setPrepareState(prepared)
         setClaimPhase('idle')
       })
-      .catch((error: any) => {
+      .catch(async (error: any) => {
+        if (cancelled) {
+          return
+        }
+
         hasPreparedRef.current = false
         const message =
           error?.graphQLErrors?.[0]?.message || error?.message || t('Please wait a moment and try again.')
@@ -162,10 +287,21 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
           return
         }
 
+        if (isActiveStandardPayoutBlockingClaim(message)) {
+          const payoutId = await resolveBlockingPayoutId()
+          if (!cancelled) {
+            setBlockingPayoutId(payoutId)
+          }
+        }
+
         setPrepareError(message)
         setClaimPhase('idle')
       })
-  }, [aonClaimPrepare, isOpen, project.aonGoal?.status, project.id, stopPolling])
+
+    return () => {
+      cancelled = true
+    }
+  }, [aonClaimPrepare, aonGoalClaimed, isOpen, loadActivePayout, prepareAttempt, project.id])
 
   useEffect(() => {
     if (!shouldPollClaimStatus) {
@@ -178,32 +314,6 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
       stopPolling()
     }
   }, [shouldPollClaimStatus, startPolling, stopPolling])
-
-  useEffect(() => {
-    const status = claimStatusData?.aonClaimStatus?.status as AonClaimUiStatus | undefined
-    if (!status) {
-      return
-    }
-
-    if (claimStatusData?.aonClaimStatus.txHash) {
-      setTxHash(claimStatusData.aonClaimStatus.txHash)
-    }
-
-    if (status === 'CONFIRMED') {
-      setClaimPhase('confirmed')
-      setIsAlreadyClaimed(true)
-      setFailureReason(null)
-      onCompleted?.()
-      return
-    }
-
-    if (status === 'FAILED') {
-      setClaimPhase('failed')
-      setFailureReason(
-        claimStatusData?.aonClaimStatus.failureReason || t('Claim transaction failed. Please try again.'),
-      )
-    }
-  }, [claimStatusData, onCompleted])
 
   const goToWalletWithdraw = () => {
     onCompleted?.()
@@ -270,6 +380,24 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
         return
       }
 
+      if (isActiveStandardPayoutBlockingClaim(message)) {
+        try {
+          const { data } = await loadActivePayout({
+            variables: { projectId: project.id },
+            fetchPolicy: 'network-only',
+          })
+          const payout = data?.payoutActive?.payout
+          if (payout?.id) {
+            setBlockingPayoutId(String(payout.id))
+          }
+        } catch {
+          // ignore lookup failure; prepare error UI may still offer cancel later
+        }
+        setPrepareError(message)
+        setClaimPhase('idle')
+        return
+      }
+
       setClaimPhase('failed')
       setFailureReason(
         isGasError(message)
@@ -309,11 +437,50 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
 
   const handleRetry = () => {
     hasPreparedRef.current = false
-    setClaimPhase('idle')
     setFailureReason(null)
     setTxHash('')
     setPrepareState(null)
     setPrepareError(null)
+    setBlockingPayoutId(null)
+    setClaimPhase('preparing')
+    setPrepareAttempt((attempt) => attempt + 1)
+  }
+
+  const handleAbandonBlockingPayout = async () => {
+    if (!blockingPayoutId) {
+      return
+    }
+
+    setIsCancellingBlockingPayout(true)
+    try {
+      const { data } = await payoutCancel({
+        variables: {
+          input: {
+            payoutId: blockingPayoutId,
+            reason: 'Abandoned unpaid standard payout to switch to direct AON claim',
+          },
+        },
+      })
+
+      if (!data?.payoutCancel?.success) {
+        throw new Error(data?.payoutCancel?.message || t('Unable to cancel the unpaid payout attempt.'))
+      }
+
+      toast.success({
+        title: t('Unpaid payout cancelled'),
+        description: t('You can now claim funds directly to your Rootstock wallet.'),
+      })
+      handleRetry()
+    } catch (error: any) {
+      const message =
+        error?.graphQLErrors?.[0]?.message || error?.message || t('Unable to cancel the unpaid payout attempt.')
+      toast.error({
+        title: t('Could not cancel payout'),
+        description: message,
+      })
+    } finally {
+      setIsCancellingBlockingPayout(false)
+    }
   }
 
   const claimableAmount = prepareState?.claimableAmountSats ?? project.aonGoal?.balance ?? 0
@@ -491,7 +658,27 @@ export const AonClaimToEoa: React.FC<AonClaimToEoaProps> = ({ isOpen, onClose, p
               <SkeletonLayout height="80px" width="100%" />
             </VStack>
           ) : prepareError ? (
-            <Feedback variant={FeedBackVariant.ERROR} text={prepareError} />
+            <VStack w="full" spacing={4} alignItems="stretch">
+              <Feedback variant={FeedBackVariant.ERROR} text={prepareError} />
+              {blockingPayoutId ? (
+                <>
+                  <Body size="sm" color="neutral1.11">
+                    {t(
+                      'You have an unpaid payout attempt in progress. Cancel it to claim directly, or wait for it to finish.',
+                    )}
+                  </Body>
+                  <Button
+                    w="full"
+                    size="lg"
+                    colorScheme="primary1"
+                    isLoading={isCancellingBlockingPayout}
+                    onClick={handleAbandonBlockingPayout}
+                  >
+                    {t('Cancel unpaid payout and continue')}
+                  </Button>
+                </>
+              ) : null}
+            </VStack>
           ) : (
             <VStack w="full" spacing={6} alignItems="start">
               <Body size="sm" color="neutral1.11">

@@ -46,3 +46,13 @@ export const MUTATION_PAYOUT_PAYMENT_INITIATE = gql`
     }
   }
 `
+
+/** Abandon a pre-broadcast unpaid payout attempt so the user can switch to direct claim. */
+export const MUTATION_PAYOUT_CANCEL = gql`
+  mutation PayoutCancel($input: PayoutCancelInput!) {
+    payoutCancel(input: $input) {
+      success
+      message
+    }
+  }
+`
