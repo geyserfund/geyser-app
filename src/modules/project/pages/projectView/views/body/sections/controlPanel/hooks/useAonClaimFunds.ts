@@ -1,61 +1,56 @@
-import { useEffect, useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useAtomValue } from 'jotai'
+import { useNavigate } from 'react-router'
 
+import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { PaymentStatus, PayoutStatus, ProjectAonGoalStatus } from '@/types'
+import { getPath } from '@/shared/constants/index.ts'
+import { ProjectAonGoalStatus } from '@/types'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
 
-const AON_CLAIMABLE_STATUSES = [ProjectAonGoalStatus.Successful, ProjectAonGoalStatus.Claimed]
-const AON_ACTIVE_PAYOUT_STATUSES = [PayoutStatus.Pending, PayoutStatus.Processing]
-
+/**
+ * Controls AON claim-to-EOA entry from the control panel.
+ * SUCCESSFUL → show claim modal. CLAIMED → skip claim and send user to wallet withdraw.
+ */
 export const useAonClaimFunds = () => {
   const { project, isProjectOwner } = useProjectAtom()
-  const payoutRskModal = useModal()
+  const aonClaimModal = useModal()
+  const navigate = useNavigate()
+  const user = useAtomValue(authUserAtom)
   const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
-  const apolloClient = useApolloClient()
 
   const isAon = isAllOrNothing(project)
-  const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
-
-  useEffect(() => {
-    if (!isProjectOwner || !isAon || !project?.aonGoal?.status) return
-    if (!AON_CLAIMABLE_STATUSES.includes(project.aonGoal.status)) return
-
-    apolloClient.query({
-      query: QUERY_PAYOUT_LATEST,
-      variables: { projectId: project.id },
-      fetchPolicy: 'network-only',
-    }).then(({ data }) => {
-      const payout = data?.payoutLatest?.payout
-      const latestPayment = [...(payout?.payments ?? [])].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )[0]
-      const isActivePayout = Boolean(payout?.status && AON_ACTIVE_PAYOUT_STATUSES.includes(payout.status))
-      const isRetryablePayout =
-        payout?.status === PayoutStatus.Failed && latestPayment?.status === PaymentStatus.Refunded
-
-      setIsPayoutProcessing(isActivePayout || isRetryablePayout)
-    }).catch(() => {
-      setIsPayoutProcessing(false)
-    })
-  }, [apolloClient, isProjectOwner, isAon, project?.aonGoal?.status, project.id])
-
   const goalReached = project.aonGoal?.status === ProjectAonGoalStatus.Successful
-  const claimedButProcessing = project.aonGoal?.status === ProjectAonGoalStatus.Claimed && isPayoutProcessing
+  const alreadyClaimed = project.aonGoal?.status === ProjectAonGoalStatus.Claimed
 
-  const showClaim = isAon && isProjectOwner && (goalReached || claimedButProcessing)
+  const showClaim = isAon && isProjectOwner && goalReached
+  /** After claim-to-EOA, funds sit on the personal RSK wallet — point creators to withdraw there. */
+  const showClaimedWithdraw = isAon && isProjectOwner && alreadyClaimed
+
+  const openClaimedWithdraw = () => {
+    if (!user?.id) {
+      return
+    }
+
+    navigate(`${getPath('userProfileSettingsWallet', String(user.id))}?action=withdraw`)
+  }
 
   const onCompleted = () => {
     refetchQueriesOnPayoutSuccess()
     queryProject.execute()
-    setIsPayoutProcessing(false)
   }
 
-  return { showClaim, payoutRskModal, onCompleted }
+  return {
+    showClaim,
+    showClaimedWithdraw,
+    /** @deprecated use aonClaimModal — kept for ControlPanel compatibility during rename */
+    payoutRskModal: aonClaimModal,
+    aonClaimModal,
+    openClaimedWithdraw,
+    onCompleted,
+  }
 }

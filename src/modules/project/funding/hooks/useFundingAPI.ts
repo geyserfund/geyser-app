@@ -1137,3 +1137,7 @@ export const satsToWei = (sats: number) => {
 export const satsToWeiBigInt = (sats: number) => {
   return satsToWei(sats)
 }
+
+export const weiToSats = (wei: bigint) => {
+  return Number(wei / 10000000000n)
+}

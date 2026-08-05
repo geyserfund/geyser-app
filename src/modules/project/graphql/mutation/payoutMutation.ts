@@ -34,6 +34,7 @@ export const MUTATION_PAYOUT_PAYMENT_PREPARE = gql`
   }
 `
 
+/** Initiates payout: swap lock/signature or native RBTC signedTxHex */
 export const MUTATION_PAYOUT_PAYMENT_INITIATE = gql`
   ${FRAGMENT_PAYOUT}
   mutation PayoutPaymentInitiate($input: PayoutInitiateInput!) {
@@ -42,6 +43,16 @@ export const MUTATION_PAYOUT_PAYMENT_INITIATE = gql`
         ...Payout
       }
       txHash
+    }
+  }
+`
+
+/** Abandon a pre-broadcast unpaid payout attempt so the user can switch to direct claim. */
+export const MUTATION_PAYOUT_CANCEL = gql`
+  mutation PayoutCancel($input: PayoutCancelInput!) {
+    payoutCancel(input: $input) {
+      success
+      message
     }
   }
 `

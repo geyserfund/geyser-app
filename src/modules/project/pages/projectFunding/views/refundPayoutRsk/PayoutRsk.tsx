@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { PiInfoBold } from 'react-icons/pi'
-import { Address, Hex } from 'viem'
+import { Address, getAddress, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
@@ -13,7 +13,7 @@ import {
   generateMatchingProjectKeysFromSeedHex,
   generatePreImageHash,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
-import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
+import { satsToWei, weiToSats } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -28,6 +28,7 @@ import {
   PayoutProcessingQuery,
   PayoutStatus,
   ProjectForProfileContributionsFragment,
+  RskNativeTransferPaymentDetails,
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
   usePayoutLatestLazyQuery,
@@ -37,10 +38,12 @@ import {
   usePayoutProcessingLazyQuery,
   useProjectRskEoaMetadataQuery,
 } from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
+import { isAllOrNothing, useNotification } from '@/utils/index.ts'
 
 import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
 import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
+import { createAndSignNativeTransferTransaction } from '../../utils/createNativeTransferTransaction.ts'
+import { AonClaimToEoa } from './components/AonClaimToEoa.tsx'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -49,12 +52,15 @@ import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.
 import { PayoutFlowLayout, PayoutProgressStep } from './components/PayoutFlowLayout.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
 import { FeeSection, PayoutSummaryPanel } from './components/PayoutSummaryPanel.tsx'
-import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
+import { RootstockPayoutForm } from './components/RootstockPayoutForm.tsx'
+import { RootstockPayoutProcessed } from './components/RootstockPayoutProcessed.tsx'
 import { createAndSignClaimMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
+import { usePayoutWithRootstockForm } from './hooks/usePayoutWithRootstockForm.ts'
+import { RootstockPayoutFormData } from './hooks/usePayoutWithRootstockForm.ts'
 import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
 
 type PayoutRskProps = {
@@ -171,6 +177,26 @@ const getPayoutProgressSteps = (params: { method: PayoutMethod; stage: PayoutPro
     ]
   }
 
+  if (method === PayoutMethod.Rootstock) {
+    return [
+      {
+        title: t('Choose payout method'),
+        description: t('Choose your payout method and authorize the transfer.'),
+        status: stage === 'setup' ? 'current' : 'complete',
+      },
+      {
+        title: t('Wait for confirmations'),
+        description: t('Rootstock network confirmations are required to complete the transfer.'),
+        status: stage === 'setup' ? 'upcoming' : stage === 'completed' ? 'complete' : 'current',
+      },
+      {
+        title: t('Payout sent'),
+        description: t('Your Rootstock payout has been submitted successfully.'),
+        status: stage === 'completed' ? 'complete' : 'upcoming',
+      },
+    ]
+  }
+
   if (stage === 'completed') {
     return [
       {
@@ -280,11 +306,40 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   payoutAmountOverride,
   onCompleted,
 }) => {
+  // AON first claim: release escrow to creator EOA (not LN/BTC/Rootstock method selection).
+  // TIA / Prism withdraw keeps the existing payout path below (requires rskAddress).
+  if (isAllOrNothing(project) && !rskAddress) {
+    return <AonClaimToEoa isOpen={isOpen} onClose={onClose} project={project} onCompleted={onCompleted} />
+  }
+
+  return (
+    <PayoutRskSwapOrNative
+      isOpen={isOpen}
+      onClose={onClose}
+      project={project}
+      rskAddress={rskAddress}
+      projectRskEoaDerivationPath={projectRskEoaDerivationPath}
+      payoutAmountOverride={payoutAmountOverride}
+      onCompleted={onCompleted}
+    />
+  )
+}
+
+/** Existing TIA/Prism / swap payout flow (Lightning, On-Chain, Rootstock native) */
+const PayoutRskSwapOrNative: React.FC<PayoutRskProps> = ({
+  isOpen,
+  onClose,
+  project,
+  rskAddress,
+  projectRskEoaDerivationPath,
+  payoutAmountOverride,
+  onCompleted,
+}) => {
   const toast = useNotification()
 
   useUserAccountKeys()
 
-  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
+  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Rootstock)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
@@ -294,6 +349,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const [lockTxId, setLockTxId] = useState('')
   const [refundTxId, setRefundTxId] = useState('')
   const [payoutInvoiceId, setPayoutInvoiceId] = useState('')
+  const [nativeTransferTxId, setNativeTransferTxId] = useState('')
+  const [nativeTransferAmountSentSats, setNativeTransferAmountSentSats] = useState<number | undefined>()
+  const [nativeTransferGasDeducted, setNativeTransferGasDeducted] = useState(false)
 
   const hasPreparedPayoutRef = useRef(false)
   const hasDefaultedMethodRef = useRef(false)
@@ -405,10 +463,15 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     : null
   const activeLightningPayment = latestPayment?.paymentType === PaymentType.RskToLightningSwap ? latestPayment : null
   const activeOnChainPayment = latestPayment?.paymentType === PaymentType.RskToOnChainSwap ? latestPayment : null
+  const activeNativeTransferPayment =
+    latestPayment?.paymentType === PaymentType.RskNativeTransfer ? latestPayment : null
   const activeLightningInvoiceId = activeLightningPayment
     ? (activeLightningPayment.paymentDetails as RskToLightningSwapPaymentDetailsFragment).lightningInvoiceId
     : ''
   const activeOnChainPaymentDetails = activeOnChainPayment?.paymentDetails as RskToOnChainSwapPaymentDetails | undefined
+  const activeNativeTransferDetails = activeNativeTransferPayment?.paymentDetails as
+    | RskNativeTransferPaymentDetails
+    | undefined
   const payoutNetworkFeeSummary = preparedPayoutNetworkFeeSummary ?? buildPayoutNetworkFeeSummary(latestPayment)
   const persistedOnChainAddress = activeOnChainPaymentDetails?.onChainAddress || ''
   const isClaimable = activeOnChainPayment?.status === PaymentStatus.Claimable
@@ -420,11 +483,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     activeOnChainPayment && [PaymentStatus.Pending, PaymentStatus.Claimable].includes(activeOnChainPayment.status),
   )
   const shouldRequestBitcoinAddressOnResume = shouldResumeOnChainPayout && !persistedOnChainAddress
-  const shouldShowProcessedScreen = isProcessed || Boolean(activeLightningPayment) || isClaiming
+  const shouldShowProcessedScreen =
+    isProcessed || Boolean(activeLightningPayment) || isClaiming || Boolean(activeNativeTransferPayment)
   const processedMethod = getProcessedMethod({
     isProcessed,
     selectedMethod,
     activeLightningPayment,
+    activeNativeTransferPayment,
   })
   const progressMethod = shouldShowProcessedScreen ? processedMethod : selectedMethod
   const shouldShowFailedRetryState =
@@ -474,6 +539,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   })
   const isPrismPayout = contractType === PayoutContractType.Prism
   const requiresInternalLock = isPrismPayout || isInternalRetryPayout
+  const showRootstockMethod = requiresInternalLock
   const { data: projectRskEoaMetadataData } = useProjectRskEoaMetadataQuery({
     variables: { where: { id: project.id } },
     skip: !isOpen || !project.id || !rskAddress || !isPrismPayout,
@@ -493,10 +559,20 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       return
     }
 
-    setSelectedMethod(totalAmount < DEFAULT_LIGHTNING_PAYOUT_MAX_SATS ? PayoutMethod.Lightning : PayoutMethod.OnChain)
+    setSelectedMethod(showRootstockMethod ? PayoutMethod.Rootstock : PayoutMethod.OnChain)
     hasDefaultedMethodRef.current = true
-  }, [isOpen, latestPayment, shouldResumeOnChainPayout, totalAmount])
+  }, [isOpen, latestPayment, shouldResumeOnChainPayout, totalAmount, showRootstockMethod])
 
+  useEffect(() => {
+    if (!showRootstockMethod && selectedMethod === PayoutMethod.Rootstock) {
+      setSelectedMethod(PayoutMethod.OnChain)
+      return
+    }
+
+    if (showRootstockMethod && (selectedMethod === PayoutMethod.Lightning || selectedMethod === PayoutMethod.OnChain)) {
+      setSelectedMethod(PayoutMethod.Rootstock)
+    }
+  }, [showRootstockMethod, selectedMethod])
   const createPayoutSignature = (params: { lockCallData: Hex; accountKeys: AccountKeys; amount: number }) => {
     const { lockCallData, accountKeys, amount } = params
 
@@ -772,6 +848,94 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
   }
 
+  const handleRootstockSubmit = async (data: RootstockPayoutFormData, accountKeys: AccountKeys) => {
+    setIsSubmitting(true)
+    try {
+      assertInternalLockAccountMatchesProjectWallet({
+        requiresInternalLock,
+        projectRskAddress: rskAddress,
+        accountRskAddress: accountKeys.address,
+      })
+
+      const payoutId = payout?.id
+      const destinationAddress = getAddress(data.rootstockAddress || '')
+
+      const { data: payoutPaymentPrepareResponse } = await payoutPaymentPrepare({
+        variables: {
+          input: {
+            payoutId,
+            payoutPaymentInput: {
+              rskNativeTransfer: {
+                destinationAddress,
+              },
+            },
+          },
+        },
+      })
+
+      if (
+        !payoutPaymentPrepareResponse?.payoutPaymentPrepare ||
+        !payoutPaymentPrepareResponse.payoutPaymentPrepare.payment
+      ) {
+        throw new Error('Failed to create payment')
+      }
+
+      const { payment } = payoutPaymentPrepareResponse.payoutPaymentPrepare
+      setPreparedPayoutNetworkFeeSummary(buildPayoutNetworkFeeSummary(payment))
+
+      // Server reserves gas dust from the live balance; sign that exact sendable amount.
+      const transferAmountSats = payment.accountingAmountDue
+      if (!transferAmountSats || transferAmountSats <= 0) {
+        throw new Error('Prepared payment is missing a valid transfer amount.')
+      }
+
+      const signedTransfer = await createAndSignNativeTransferTransaction({
+        destinationAddress,
+        amount: satsToWei(transferAmountSats),
+        privateKey: `0x${accountKeys.privateKey}`,
+        exactAmount: true,
+      })
+
+      const amountSentSats = weiToSats(signedTransfer.amountWei)
+      setNativeTransferAmountSentSats(amountSentSats)
+      setNativeTransferGasDeducted(signedTransfer.gasDeducted)
+
+      await payoutPaymentInitiate({
+        variables: {
+          input: {
+            payoutId,
+            paymentId: payment.id,
+            signedTxHex: signedTransfer.signedTxHex,
+            rskAddress: rskAddress || accountKeys.address,
+          },
+        },
+        onCompleted(data) {
+          if (data.payoutPaymentInitiate.txHash) {
+            setNativeTransferTxId(data.payoutPaymentInitiate.txHash)
+          }
+        },
+      })
+
+      setIsProcessed(true)
+      toast.success({
+        title: t('Payout initiated successfully'),
+        description: signedTransfer.gasDeducted
+          ? t('Network fees were reserved from your balance. {{amount}} sats will be transferred.', {
+              amount: amountSentSats,
+            })
+          : t('Your Rootstock payout will be confirmed shortly'),
+      })
+    } catch (error) {
+      console.error('Rootstock payout error:', error)
+      toast.error({
+        title: t('Something went wrong'),
+        description: getPayoutErrorDescription(error),
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   // Get form objects from both hooks
   const keyDerivationOptions = isPrismPayout
     ? {
@@ -787,8 +951,20 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
       }
 
+  const rootstockKeyDerivationOptions = isPrismPayout
+    ? {
+        deriveKeysFromSeed: (seedHex: string) =>
+          generateMatchingProjectKeysFromSeedHex(seedHex, project.id, {
+            derivationPath: effectiveProjectRskEoaDerivationPath,
+            expectedAddress: rskAddress,
+          }),
+        storeKeyPair: false,
+      }
+    : undefined
+
   const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions, totalAmount)
   const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, undefined, keyDerivationOptions)
+  const rootstockForm = usePayoutWithRootstockForm(handleRootstockSubmit, undefined, rootstockKeyDerivationOptions)
 
   useEffect(() => {
     if (!isOpen) {
@@ -798,6 +974,16 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     if (activeLightningPayment) {
       setSelectedMethod(PayoutMethod.Lightning)
       setPayoutInvoiceId(activeLightningInvoiceId)
+      return
+    }
+
+    if (activeNativeTransferDetails) {
+      setSelectedMethod(PayoutMethod.Rootstock)
+      setNativeTransferTxId(activeNativeTransferDetails.txId || '')
+      rootstockForm.form.reset({
+        rootstockAddress: activeNativeTransferDetails.destinationAddress || '',
+        accountPassword: '',
+      })
       return
     }
 
@@ -813,10 +999,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     activeLightningPayment,
     activeLightningPayment?.id,
     activeLightningInvoiceId,
+    activeNativeTransferDetails,
+    activeNativeTransferPayment?.id,
     activeOnChainPaymentDetails,
     activeOnChainPayment?.id,
     persistedOnChainAddress,
     bitcoinForm.form,
+    rootstockForm.form,
   ])
 
   const handleClose = () => {
@@ -828,6 +1017,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     setLockTxId('')
     setRefundTxId('')
     setPayoutInvoiceId('')
+    setNativeTransferTxId('')
+    setNativeTransferAmountSentSats(undefined)
+    setNativeTransferGasDeducted(false)
     setRefundAddress(null)
     setIsInternalRetryPayout(false)
     setHasFailedPreviousPayout(false)
@@ -839,7 +1031,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     handleClose()
   }
 
-  const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
+  const enableSubmit =
+    selectedMethod === PayoutMethod.Lightning
+      ? lightningForm.enableSubmit
+      : selectedMethod === PayoutMethod.Rootstock
+      ? rootstockForm.enableSubmit
+      : bitcoinForm.enableSubmit
   const hasPayout = Boolean(payout?.id)
 
   const handleSubmit = () => {
@@ -861,6 +1058,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
     if (selectedMethod === PayoutMethod.Lightning) {
       lightningForm.handleSubmit()
+    } else if (selectedMethod === PayoutMethod.Rootstock) {
+      rootstockForm.handleSubmit()
     } else {
       bitcoinForm.handleSubmit()
     }
@@ -953,13 +1152,27 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           title:
             processedMethod === PayoutMethod.Lightning
               ? t('Payout Processed (Off-Chain)')
+              : processedMethod === PayoutMethod.Rootstock
+              ? t('Payout Processed (Rootstock)')
               : t('Payout Processed (On-Chain)'),
-          description: processedMethod === PayoutMethod.OnChain ? undefined : activeProgressDescription,
+          description:
+            processedMethod === PayoutMethod.OnChain
+              ? undefined
+              : processedMethod === PayoutMethod.Rootstock
+              ? t('Waiting for Rootstock network confirmations.')
+              : activeProgressDescription,
           content:
             processedMethod === PayoutMethod.Lightning ? (
               <LightningPayoutProcessed
                 invoiceId={isProcessed ? payoutInvoiceId : activeLightningInvoiceId}
                 onClose={handleCompleted}
+              />
+            ) : processedMethod === PayoutMethod.Rootstock ? (
+              <RootstockPayoutProcessed
+                onClose={handleCompleted}
+                txId={isProcessed ? nativeTransferTxId : activeNativeTransferDetails?.txId || undefined}
+                amountSentSats={nativeTransferAmountSentSats}
+                gasDeducted={nativeTransferGasDeducted}
               />
             ) : (
               <BitcoinPayoutProcessed onClose={handleCompleted} refundTxId={isProcessed ? refundTxId : undefined} />
@@ -1040,7 +1253,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
                   <PayoutMethodSelection
                     selectedMethod={selectedMethod}
                     setSelectedMethod={setSelectedMethod}
-                    disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
+                    disableLightning
+                    disableOnChain
+                    showRootstock={showRootstockMethod}
                   />
                 )}
 
@@ -1053,6 +1268,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
                   />
                 ) : selectedMethod === PayoutMethod.Lightning ? (
                   <LightningPayoutForm form={lightningForm.form} lightningAddress={lightningForm.lightningAddress} />
+                ) : selectedMethod === PayoutMethod.Rootstock ? (
+                  <RootstockPayoutForm form={rootstockForm.form} satsAmount={totalAmount} />
                 ) : (
                   <BitcoinPayoutForm
                     form={bitcoinForm.form}
@@ -1085,8 +1302,9 @@ function getProcessedMethod(params: {
   isProcessed: boolean
   selectedMethod: PayoutMethod
   activeLightningPayment: unknown
+  activeNativeTransferPayment: unknown
 }): PayoutMethod {
-  const { isProcessed, selectedMethod, activeLightningPayment } = params
+  const { isProcessed, selectedMethod, activeLightningPayment, activeNativeTransferPayment } = params
 
   if (isProcessed) {
     return selectedMethod
@@ -1094,6 +1312,10 @@ function getProcessedMethod(params: {
 
   if (activeLightningPayment) {
     return PayoutMethod.Lightning
+  }
+
+  if (activeNativeTransferPayment) {
+    return PayoutMethod.Rootstock
   }
 
   return PayoutMethod.OnChain

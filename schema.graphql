@@ -140,6 +140,14 @@ type Query {
   payoutActive(projectId: BigInt!): PayoutGetResponse
   payoutProcessing(projectId: BigInt!): PayoutGetResponse
   payoutLatest(projectId: BigInt!): PayoutGetResponse
+
+  """
+  Status of the durable direct AON claim attempt for a project, if any.
+  NOT_STARTED: no attempt has been reserved. PENDING: reserved or broadcast, awaiting
+  confirmation. CONFIRMED: the claim() transaction was mined and validated. FAILED: the
+  most recent attempt failed or reverted; the creator may retry with a new signed transaction.
+  """
+  aonClaimStatus(projectId: BigInt!): AonClaimStatusResponse!
 }
 
 type Mutation {
@@ -307,6 +315,74 @@ type Mutation {
   Only used for retry flows (funds coming from user's RSK address after previous swap was refunded).
   """
   payoutCancel(input: PayoutCancelInput!): PayoutResponse!
+
+  """
+  Prepare an AON claim-to-EOA: returns claimable amount, creator address, and claim(0) calldata.
+  The creator signs client-side; the server does not sign claim.
+  """
+  aonClaimPrepare(projectId: BigInt!): AonClaimPrepareResponse!
+
+  """
+  Broadcast a creator-signed AON claim() transaction. Validates the signed tx targets the
+  project AON contract and calls claim with processingFee 0, then cancels any in-flight
+  PENDING/PROCESSING swap payouts for the project.
+  """
+  aonClaimBroadcast(projectId: BigInt!, signedTxHex: String!): AonClaimBroadcastResponse!
+
+  """
+  Accountant-only: mark a durable AON claim attempt as CONFIRMED after validating the
+  on-chain Claimed() receipt.
+  """
+  aonClaimAttemptConfirm(input: AonClaimAttemptConfirmInput!): AonClaimAttemptMutationResponse!
+
+  """
+  Accountant-only: mark a durable AON claim attempt as FAILED so the project can retry.
+  """
+  aonClaimAttemptFail(input: AonClaimAttemptFailInput!): AonClaimAttemptMutationResponse!
+}
+
+type AonClaimPrepareResponse {
+  contractAddress: String!
+  claimableAmountSats: Int!
+  processingFeeSats: Int!
+  creatorAddress: String!
+  """Encoded claim(processingFee) calldata for the client to include when signing."""
+  claimCalldata: String!
+  simulationOk: Boolean!
+}
+
+enum AonClaimStatus {
+  NOT_STARTED
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+type AonClaimStatusResponse {
+  status: AonClaimStatus!
+  txHash: String
+  """Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes."""
+  failureReason: String
+}
+
+input AonClaimAttemptConfirmInput {
+  projectId: BigInt!
+  txHash: String!
+}
+
+input AonClaimAttemptFailInput {
+  projectId: BigInt!
+  txHash: String!
+  failureReason: String
+}
+
+type AonClaimAttemptMutationResponse {
+  success: Boolean!
+  status: AonClaimStatus!
+}
+
+type AonClaimBroadcastResponse {
+  txHash: String!
 }
 
 type Subscription {
@@ -2364,6 +2440,7 @@ enum PaymentType {
   ON_CHAIN_TO_RSK_SWAP
   RSK_TO_LIGHTNING_SWAP
   RSK_TO_ON_CHAIN_SWAP
+  RSK_NATIVE_TRANSFER
 }
 
 union PaymentDetails =
@@ -2374,6 +2451,7 @@ union PaymentDetails =
   | LightningToRskSwapPaymentDetails
   | RskToOnChainSwapPaymentDetails
   | RskToLightningSwapPaymentDetails
+  | RskNativeTransferPaymentDetails
 
 type LightningPaymentDetails {
   lightningInvoiceId: String!
@@ -2436,6 +2514,13 @@ type RskToOnChainSwapPaymentDetails {
   swapServerLockTxId: String
   swapClaimTxId: String
   swapRefundTxId: String
+}
+
+type RskNativeTransferPaymentDetails {
+  fromAddress: String!
+  destinationAddress: String!
+  signedTxHex: String
+  txId: String
 }
 
 type FiatToLightningSwapPaymentDetails {
@@ -5134,14 +5219,14 @@ input PayoutInitiateInput {
   rskAddress: String
 
   """
-  The signature of the creator for RBTC payment
+  The signature of the creator for RBTC payment (required for swap payouts; optional for native transfers)
   """
-  signature: String!
+  signature: String
 
   """
-  The call data to initiate the payout (AON only).
+  The call data to initiate the payout (AON only; optional for native transfers).
   """
-  callDataHex: String!
+  callDataHex: String
 
   """
   Optional: The user lock transaction hex (required for Prism payouts)
@@ -5152,6 +5237,11 @@ input PayoutInitiateInput {
   Optional: The claim transaction hex (for RSK to on-chain swaps only)
   """
   claimTxHex: String
+
+  """
+  Signed native RBTC transfer transaction hex (required for RSK_NATIVE_TRANSFER payouts)
+  """
+  signedTxHex: String
 }
 
 """
@@ -5161,6 +5251,11 @@ defined in pledgeRefund.ts - they are the same for both payout and pledge refund
 input PayoutPaymentInput {
   rskToLightningSwap: RskToLightningSwapPaymentDetailsInput
   rskToOnChainSwap: RskToOnChainSwapPaymentDetailsInput
+  rskNativeTransfer: RskNativeTransferPaymentDetailsInput
+}
+
+input RskNativeTransferPaymentDetailsInput {
+  destinationAddress: String!
 }
 
 input EIP712SignatureInput {
