@@ -149,7 +149,6 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
   const [isCancellingBlockingPayout, setIsCancellingBlockingPayout] = useState(false)
   const [prevAonGoalStatus, setPrevAonGoalStatus] = useState(aonGoalStatus)
   const [prepareAttempt, setPrepareAttempt] = useState(0)
-  const hasPreparedRef = useRef(false)
   const hasNotifiedCompletedRef = useRef(false)
 
   if (aonGoalStatus !== prevAonGoalStatus) {
@@ -219,12 +218,7 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
       return
     }
 
-    if (hasPreparedRef.current) {
-      return
-    }
-
     let cancelled = false
-    hasPreparedRef.current = true
 
     const resolveBlockingPayoutId = async () => {
       try {
@@ -251,6 +245,8 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
       }
     }
 
+    // Do not gate on a ref: React Strict Mode remounts cancel the first in-flight prepare and
+    // a sticky ref would skip the second run, leaving the modal on skeletons forever.
     aonClaimPrepare({ variables: { projectId: project.id } })
       .then(({ data }) => {
         if (cancelled) {
@@ -276,7 +272,6 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
           return
         }
 
-        hasPreparedRef.current = false
         const message =
           error?.graphQLErrors?.[0]?.message || error?.message || t('Please wait a moment and try again.')
 
@@ -440,7 +435,6 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
   }
 
   const handleRetry = () => {
-    hasPreparedRef.current = false
     setFailureReason(null)
     setTxHash('')
     setPrepareState(null)
