@@ -41,8 +41,10 @@ import { useWithdrawFunds } from './hooks/useWithdrawFunds.ts'
 
 type FinancialActionsProps = {
   showClaim: boolean
+  showClaimedWithdraw: boolean
   showWithdrawableBalance: boolean
   aonPayoutModal: { onOpen: () => void }
+  onOpenClaimedWithdraw: () => void
   payoutRskModal: { onOpen: () => void }
   projectRskEoa: string
   withdrawableSats: number
@@ -77,8 +79,10 @@ const OngoingWithdrawNotice = ({ onContinue }: OngoingWithdrawNoticeProps) => {
 /** Renders the financial action rows (claim / withdraw) for the control panel. */
 const ControlPanelFinancialActions = ({
   showClaim,
+  showClaimedWithdraw,
   showWithdrawableBalance,
   aonPayoutModal,
+  onOpenClaimedWithdraw,
   payoutRskModal,
   projectRskEoa,
   withdrawableSats,
@@ -88,7 +92,7 @@ const ControlPanelFinancialActions = ({
   hasFailedWithdraw,
   showWithdraw,
 }: FinancialActionsProps) => {
-  if (!showClaim && !showWithdrawableBalance) return null
+  if (!showClaim && !showClaimedWithdraw && !showWithdrawableBalance) return null
   return (
     <VStack w="full" spacing={3} align="stretch">
       {showClaim && (
@@ -113,12 +117,44 @@ const ControlPanelFinancialActions = ({
                 {t('Claim funds')}
               </Body>
               <Body size="sm" color="neutral1.11">
-                {t('Your campaign reached its goal')}
+                {t('Claim to your Geyser Rootstock wallet')}
               </Body>
             </VStack>
           </HStack>
           <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={aonPayoutModal.onOpen}>
             {t('Claim')}
+          </Button>
+        </HStack>
+      )}
+
+      {showClaimedWithdraw && (
+        <HStack
+          w="full"
+          justifyContent="space-between"
+          alignItems="center"
+          bg="utils.pbg"
+          border="1px solid"
+          borderColor="neutral1.6"
+          borderRadius="8px"
+          px={4}
+          py={4}
+          spacing={4}
+        >
+          <HStack spacing={3} flex={1} alignItems="center">
+            <Box color="primary1.9" flexShrink={0}>
+              <PiFlagCheckeredDuotone size={28} />
+            </Box>
+            <VStack align="start" spacing={0}>
+              <Body size="md" bold>
+                {t('Funds in your Rootstock wallet')}
+              </Body>
+              <Body size="sm" color="neutral1.11">
+                {t('Your campaign funds are ready to withdraw')}
+              </Body>
+            </VStack>
+          </HStack>
+          <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={onOpenClaimedWithdraw}>
+            {t('Withdraw')}
           </Button>
         </HStack>
       )}
@@ -337,7 +373,13 @@ export const ControlPanel = () => {
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
-  const { showClaim, payoutRskModal: aonPayoutModal, onCompleted: onAonCompleted } = useAonClaimFunds()
+  const {
+    showClaim,
+    showClaimedWithdraw,
+    payoutRskModal: aonPayoutModal,
+    openClaimedWithdraw,
+    onCompleted: onAonCompleted,
+  } = useAonClaimFunds()
 
   /** Get latest review for revisions requested check */
   const latestReview = useMemo(() => {
@@ -517,8 +559,10 @@ export const ControlPanel = () => {
       {/* Financial Actions Section */}
       <ControlPanelFinancialActions
         showClaim={showClaim}
+        showClaimedWithdraw={showClaimedWithdraw}
         showWithdrawableBalance={showWithdrawableBalance}
         aonPayoutModal={aonPayoutModal}
+        onOpenClaimedWithdraw={openClaimedWithdraw}
         payoutRskModal={payoutRskModal}
         projectRskEoa={projectRskEoa}
         withdrawableSats={withdrawableSats}

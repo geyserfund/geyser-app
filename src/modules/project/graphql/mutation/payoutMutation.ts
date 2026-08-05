@@ -34,6 +34,7 @@ export const MUTATION_PAYOUT_PAYMENT_PREPARE = gql`
   }
 `
 
+/** Initiates payout: swap lock/signature or native RBTC signedTxHex */
 export const MUTATION_PAYOUT_PAYMENT_INITIATE = gql`
   ${FRAGMENT_PAYOUT}
   mutation PayoutPaymentInitiate($input: PayoutInitiateInput!) {

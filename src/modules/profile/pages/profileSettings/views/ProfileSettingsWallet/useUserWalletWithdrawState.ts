@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { t } from 'i18next'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
@@ -14,6 +15,7 @@ import {
 const SATS_PER_PRISM_UNIT = 10000000000n
 const MIN_BITCOIN_PAYOUT_SATS_BIGINT = BigInt(MIN_BITCOIN_PAYOUT_SATS)
 const ACTIVE_STATUSES = [UserWalletWithdrawStatus.Pending, UserWalletWithdrawStatus.Processing]
+const WITHDRAW_POLL_INTERVAL_MS = 10_000
 
 type UseUserWalletWithdrawStateParams = {
   rskAddress: string
@@ -22,6 +24,7 @@ type UseUserWalletWithdrawStateParams = {
 
 export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: UseUserWalletWithdrawStateParams) => {
   const { getUSDCentsAmount } = useBTCConverter()
+  const previousActiveStatusRef = useRef<UserWalletWithdrawStatus | null | undefined>(undefined)
 
   const {
     withdrawable,
@@ -33,6 +36,8 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
     data: activeData,
     loading: isActiveLoading,
     refetch: refetchActive,
+    startPolling: startActivePolling,
+    stopPolling: stopActivePolling,
   } = useUserWalletWithdrawActiveQuery({
     fetchPolicy: 'cache-and-network',
     skip: !hasWalletConfigured,
@@ -65,6 +70,44 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
   const canWithdraw = !hasActiveWithdraw && (withdrawableSats >= MIN_BITCOIN_PAYOUT_SATS_BIGINT || hasRetryableWithdraw)
   const isWithdrawStateLoading = isActiveLoading || isLatestLoading
   const withdrawButtonLabel = hasRetryableWithdraw ? t('Retry') : t('Withdraw')
+
+  useEffect(() => {
+    if (!hasWalletConfigured) {
+      stopActivePolling()
+      return
+    }
+
+    if (hasActiveWithdraw) {
+      startActivePolling(WITHDRAW_POLL_INTERVAL_MS)
+    } else {
+      stopActivePolling()
+    }
+
+    return () => {
+      stopActivePolling()
+    }
+  }, [hasActiveWithdraw, hasWalletConfigured, startActivePolling, stopActivePolling])
+
+  useEffect(() => {
+    if (!hasWalletConfigured) {
+      previousActiveStatusRef.current = activeWithdraw?.status
+      return
+    }
+
+    const previousStatus = previousActiveStatusRef.current
+    const nextStatus = activeWithdraw?.status
+    previousActiveStatusRef.current = nextStatus
+
+    const leftActive =
+      previousStatus &&
+      ACTIVE_STATUSES.includes(previousStatus) &&
+      (!nextStatus || !ACTIVE_STATUSES.includes(nextStatus))
+
+    if (leftActive) {
+      refetchWithdrawable().catch(() => undefined)
+      refetchLatest().catch(() => undefined)
+    }
+  }, [activeWithdraw?.status, hasWalletConfigured, refetchLatest, refetchWithdrawable])
 
   const refetchAll = () => Promise.all([refetchWithdrawable(), refetchActive(), refetchLatest()])
 

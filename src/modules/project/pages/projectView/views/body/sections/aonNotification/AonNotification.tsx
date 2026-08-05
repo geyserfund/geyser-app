@@ -1,6 +1,7 @@
 import { useAuthContext } from '@/context/index.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { isAonRefundEligibleStatus } from '@/modules/project/utils/aonRefundEligibility.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -19,16 +20,18 @@ import { FundsReturnedNotification } from './views/FundsReturnedNotification.tsx
 export const AonSuccessfullStatuses = [ProjectAonGoalStatus.Successful, ProjectAonGoalStatus.Claimed]
 
 export const AonNotification = () => {
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
   const { user } = useAuthContext()
 
-  const { refetchQueriesOnPledgeRefund } = useRefetchQueries()
+  const { refetchQueriesOnPledgeRefund, refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
 
   const refundModal = useModal()
+  const aonClaimModal = useModal()
 
   const isAon = isAllOrNothing(project)
   const isAonRefundEligible = isAonRefundEligibleStatus(project.aonGoal?.status)
+  const showOwnerClaim = isAon && isProjectOwner && project.aonGoal?.status === ProjectAonGoalStatus.Successful
 
   const { data, loading } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon || !project.aonGoal,
@@ -71,7 +74,7 @@ export const AonNotification = () => {
     }
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Successful) {
-      return <CampaignSuccessNotification />
+      return <CampaignSuccessNotification onOpen={showOwnerClaim ? aonClaimModal.onOpen : undefined} />
     }
 
     if (
@@ -117,6 +120,16 @@ export const AonNotification = () => {
       {renderNotification()}
       {renderFunderNotification()}
       {renderRefundModal()}
+      {showOwnerClaim && (
+        <PayoutRsk
+          {...aonClaimModal}
+          project={project}
+          onCompleted={() => {
+            refetchQueriesOnPayoutSuccess()
+            queryProject.execute()
+          }}
+        />
+      )}
     </>
   )
 }

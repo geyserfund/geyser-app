@@ -1,6 +1,8 @@
 import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -43,6 +45,7 @@ export const ProfileWalletSettings = () => {
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const configureWalletModal = useDisclosure()
   const userWalletWithdrawModal = useDisclosure()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   useUserAccountKeys()
 
@@ -50,6 +53,26 @@ export const ProfileWalletSettings = () => {
   const rskAddress = userAccountKeys?.rskKeyPair?.address || ''
 
   const withdrawState = useUserWalletWithdrawState({ rskAddress, hasWalletConfigured })
+
+  /** Deep-link from AON claim success: ?action=withdraw opens UserWalletWithdrawRsk */
+  useEffect(() => {
+    const action = searchParams.get('action')
+    if (action !== 'withdraw') {
+      return
+    }
+
+    if (!hasWalletConfigured) {
+      return
+    }
+
+    if (!userWalletWithdrawModal.isOpen) {
+      userWalletWithdrawModal.onOpen()
+    }
+
+    const nextSearchParams = new URLSearchParams(searchParams)
+    nextSearchParams.delete('action')
+    setSearchParams(nextSearchParams, { replace: true })
+  }, [hasWalletConfigured, searchParams, setSearchParams, userWalletWithdrawModal])
 
   return (
     <VStack p={8} spacing={8} overflowY="auto" align="flex-start" w="full">

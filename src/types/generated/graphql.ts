@@ -11635,10 +11635,15 @@ export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment',
 
 export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
 
-export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, fees: Array<(
+export type RskNativeTransferPaymentDetailsFragment = { __typename?: 'RskNativeTransferPaymentDetails', fromAddress: string, destinationAddress: string, signedTxHex?: string | null, txId?: string | null };
+
+export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, accountingAmountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )>, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
+    { __typename?: 'RskNativeTransferPaymentDetails' }
+    & RskNativeTransferPaymentDetailsFragment
+  ) | (
     { __typename?: 'RskToLightningSwapPaymentDetails' }
     & RskToLightningSwapPaymentDetailsFragment
   ) | (
@@ -14239,6 +14244,14 @@ export const RskToLightningSwapPaymentDetailsFragmentDoc = gql`
   lightningInvoiceId
 }
     `;
+export const RskNativeTransferPaymentDetailsFragmentDoc = gql`
+    fragment RskNativeTransferPaymentDetails on RskNativeTransferPaymentDetails {
+  fromAddress
+  destinationAddress
+  signedTxHex
+  txId
+}
+    `;
 export const PaymentForPayoutRefundFragmentDoc = gql`
     fragment PaymentForPayoutRefund on Payment {
   id
@@ -14249,6 +14262,7 @@ export const PaymentForPayoutRefundFragmentDoc = gql`
   status
   linkedEntityUUID
   linkedEntityType
+  accountingAmountDue
   fees {
     ...ContributionFees
   }
@@ -14259,11 +14273,15 @@ export const PaymentForPayoutRefundFragmentDoc = gql`
     ... on RskToLightningSwapPaymentDetails {
       ...RskToLightningSwapPaymentDetails
     }
+    ... on RskNativeTransferPaymentDetails {
+      ...RskNativeTransferPaymentDetails
+    }
   }
 }
     ${ContributionFeesFragmentDoc}
 ${RskToOnChainSwapPaymentDetailsFragmentDoc}
-${RskToLightningSwapPaymentDetailsFragmentDoc}`;
+${RskToLightningSwapPaymentDetailsFragmentDoc}
+${RskNativeTransferPaymentDetailsFragmentDoc}`;
 export const UserWalletWithdrawWithPaymentFragmentDoc = gql`
     fragment UserWalletWithdrawWithPayment on UserWalletWithdraw {
   amount

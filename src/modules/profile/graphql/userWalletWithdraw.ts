@@ -96,6 +96,7 @@ export const MUTATION_USER_WALLET_WITHDRAW_PAYMENT_PREPARE = gql`
   }
 `
 
+/** Initiates withdrawal: swap lock/signature or native RBTC signedTxHex */
 export const MUTATION_USER_WALLET_WITHDRAW_PAYMENT_INITIATE = gql`
   ${FRAGMENT_USER_WALLET_WITHDRAW}
   mutation UserWalletWithdrawPaymentInitiate($input: UserWalletWithdrawInitiateInput!) {
