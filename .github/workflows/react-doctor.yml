@@ -42,6 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # Full history so React Doctor can diff against the PR base and
+          # report only regressions introduced by the branch.
+          fetch-depth: 0
 
       # v2 understands current CLI JSON report schemas; v1 fails with
       # "exited with status 0 before producing a JSON report" against latest CLI.

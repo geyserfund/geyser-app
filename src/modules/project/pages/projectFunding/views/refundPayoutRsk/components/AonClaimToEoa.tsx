@@ -150,7 +150,7 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
   const [prevAonGoalStatus, setPrevAonGoalStatus] = useState(aonGoalStatus)
   const [prepareAttempt, setPrepareAttempt] = useState(0)
   const hasPreparedRef = useRef(false)
-  const notifyCompletedRef = useRef(false)
+  const hasNotifiedCompletedRef = useRef(false)
 
   if (aonGoalStatus !== prevAonGoalStatus) {
     setPrevAonGoalStatus(aonGoalStatus)
@@ -199,7 +199,6 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
       setClaimPhase('confirmed')
       setIsAlreadyClaimed(true)
       setFailureReason(null)
-      notifyCompletedRef.current = true
     } else if (polledStatus === 'FAILED') {
       setClaimPhase('failed')
       setFailureReason(polledFailureReason || t('Claim transaction failed. Please try again.'))
@@ -207,13 +206,13 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
   }
 
   useEffect(() => {
-    if (!notifyCompletedRef.current) {
+    if (polledStatus !== 'CONFIRMED' || hasNotifiedCompletedRef.current) {
       return
     }
 
-    notifyCompletedRef.current = false
+    hasNotifiedCompletedRef.current = true
     onCompleted?.()
-  })
+  }, [onCompleted, polledStatus])
 
   useEffect(() => {
     if (!isOpen || aonGoalClaimed) {
@@ -287,13 +286,18 @@ const AonClaimToEoaContent: React.FC<AonClaimToEoaContentProps> = ({ isOpen, onC
           return
         }
 
+        let blockingPayoutIdFromLookup: string | null = null
         if (isActiveStandardPayoutBlockingClaim(message)) {
-          const payoutId = await resolveBlockingPayoutId()
-          if (!cancelled) {
-            setBlockingPayoutId(payoutId)
-          }
+          blockingPayoutIdFromLookup = await resolveBlockingPayoutId()
         }
 
+        if (cancelled) {
+          return
+        }
+
+        if (blockingPayoutIdFromLookup) {
+          setBlockingPayoutId(blockingPayoutIdFromLookup)
+        }
         setPrepareError(message)
         setClaimPhase('idle')
       })
