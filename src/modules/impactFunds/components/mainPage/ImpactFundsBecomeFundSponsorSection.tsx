@@ -20,7 +20,7 @@ export function ImpactFundsBecomeFundSponsorSection({
   sectionSecondaryTextColor,
   sectionMutedTextColor,
   cardSurfaceBg,
-}: ImpactFundsBecomeFundSponsorSectionProps): JSX.Element {
+}: ImpactFundsBecomeFundSponsorSectionProps): React.ReactNode {
   const borderColor = useColorModeValue('neutral1.4', 'whiteAlpha.200')
 
   return (

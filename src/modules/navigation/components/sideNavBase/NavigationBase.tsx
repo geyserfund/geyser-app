@@ -80,7 +80,7 @@ export const NavigationBase = ({ isSideNavOpen, changeSideNavOpen, navigation, d
         }
       })
 
-      setTimeout(() => {
+      const hideMenuTimer = setTimeout(() => {
         setClassForSideMenu({
           left: {
             bar: classes.barHidden,
@@ -92,6 +92,10 @@ export const NavigationBase = ({ isSideNavOpen, changeSideNavOpen, navigation, d
           },
         })
       }, 200)
+
+      return () => {
+        clearTimeout(hideMenuTimer)
+      }
     }
   }, [isSideNavOpen, classes, isMobile])
 

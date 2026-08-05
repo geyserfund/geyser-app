@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   getProjectPostViewUrl,
   getProjectUrl,
-} from '../../../../../../../../src/modules/project/tools/generateProjectJsonLD.ts'
+} from '../../../../../../src/modules/project/tools/generateProjectJsonLD.ts'
 
 describe('project seo url helpers', () => {
   it('builds canonical project URLs', () => {

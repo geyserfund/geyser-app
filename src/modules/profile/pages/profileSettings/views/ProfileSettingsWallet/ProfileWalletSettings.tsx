@@ -14,6 +14,7 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
 import { RootstockAddressCard } from './RootstockAddressCard.tsx'
+import { ResetAccountPasswordSection } from './ResetAccountPasswordSection.tsx'
 import { SeedWordsSection } from './SeedWordsSection.tsx'
 import { UserWalletWithdrawRsk } from './UserWalletWithdrawRsk.tsx'
 import { useUserWalletWithdrawState } from './useUserWalletWithdrawState.ts'
@@ -58,6 +59,14 @@ export const ProfileWalletSettings = () => {
       {hasWalletConfigured ? (
         <VStack spacing={6} align="flex-start" w="full">
           <RootstockAddressCard address={userAccountKeys?.rskKeyPair?.address} />
+          <VStack spacing={1} align="flex-start" w="full">
+            <Body size="sm" medium>
+              {t('User wallet derivation path')}
+            </Body>
+            <Body size="sm" color="neutral1.10" wordBreak="break-all">
+              {userAccountKeys?.rskKeyPair?.derivationPath || t('Unavailable')}
+            </Body>
+          </VStack>
           <WithdrawableFundsCard
             withdrawableSats={withdrawState.withdrawableSats}
             withdrawableUsd={withdrawState.withdrawableUsd}
@@ -71,6 +80,7 @@ export const ProfileWalletSettings = () => {
             onOpenWithdrawModal={userWalletWithdrawModal.onOpen}
           />
           <SeedWordsSection />
+          <ResetAccountPasswordSection />
         </VStack>
       ) : (
         <ConfigureWalletPrompt onConfigure={configureWalletModal.onOpen} />

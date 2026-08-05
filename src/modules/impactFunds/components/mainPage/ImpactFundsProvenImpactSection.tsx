@@ -12,7 +12,7 @@ type ImpactFundsProvenImpactSectionProps = {
 export function ImpactFundsProvenImpactSection({
   totalDistributedSatsFormatted,
   totalProjectsFundedFormatted,
-}: ImpactFundsProvenImpactSectionProps): JSX.Element {
+}: ImpactFundsProvenImpactSectionProps): React.ReactNode {
   const statColor = useColorModeValue('neutral1.12', 'white')
 
   const stats = [

@@ -55,7 +55,7 @@ export function ImpactFundsFeaturedPartnerFundSection({
   sectionMutedTextColor,
   interactiveCardShadow,
   interactiveCardHoverShadow,
-}: ImpactFundsFeaturedPartnerFundSectionProps): JSX.Element {
+}: ImpactFundsFeaturedPartnerFundSectionProps): React.ReactNode {
   const sponsorRowBorderColor = useColorModeValue('neutral1.3', 'whiteAlpha.200')
   const fundPath = getPath('impactFunds', encodeURIComponent(fundName))
 

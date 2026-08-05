@@ -38,7 +38,7 @@ const waitlistSchema: yup.ObjectSchema<WaitlistFormData> = yup
   .required()
 
 /** Waitlist form with interest toggles; posts to Airtable. */
-export function MicroLendingWaitlistSection(): JSX.Element {
+export function MicroLendingWaitlistSection(): React.ReactNode {
   const toast = useNotification()
   const [submitting, setSubmitting] = useState(false)
 

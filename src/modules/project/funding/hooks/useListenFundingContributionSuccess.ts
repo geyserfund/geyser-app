@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { getPath } from '@/shared/constants'
 import { ContributionStatus } from '@/types/index.ts'
 
+import { fundingRequestErrorAtom } from '../state/errorAtom.ts'
 import { fundingContributionAtom } from '../state/fundingContributionAtom.ts'
 import { launchContributionProjectIdAtom } from '../state/fundingFormAtom.ts'
 import { startPollingAndSubscriptionAtom, stopPollingAndSubscriptionAtom } from '../state/pollingAndSubscriptionAtom.ts'
@@ -29,10 +30,15 @@ export const useListenFundingContributionSuccess = () => {
 
   const { project } = useFundingFormAtom()
 
+  const setFundingRequestError = useSetAtom(fundingRequestErrorAtom)
   const { refetch } = useFundingContributionPolling()
-  const handleComplete = useCallback(() => {
-    void refetch()
-  }, [refetch])
+  const handleComplete = useCallback(async () => {
+    try {
+      await refetch()
+    } catch {
+      setFundingRequestError(true)
+    }
+  }, [refetch, setFundingRequestError])
 
   useFundingContributionSubscription({
     onComplete: handleComplete,
@@ -41,13 +47,21 @@ export const useListenFundingContributionSuccess = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   useEffect(() => {
+    let redirectTimer: ReturnType<typeof setTimeout> | undefined
+
     if (fundingContribution && StatusForSuccess.includes(fundingContribution.status)) {
       if (launchContributionProjectId) {
-        setTimeout(() => {
+        redirectTimer = setTimeout(() => {
           navigate({ pathname: getPath('launchProjectStrategy', `${launchContributionProjectId}`) }, { replace: true })
         }, 2000)
       } else {
         navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
+      }
+    }
+
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer)
       }
     }
   }, [fundingContribution, navigate, project.name, location.search, launchContributionProjectId])

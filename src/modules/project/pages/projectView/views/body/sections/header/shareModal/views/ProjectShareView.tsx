@@ -6,12 +6,12 @@ import { AmbassadorReferralTermsNotice } from '@/components/molecules/Ambassador
 import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { usePostProjectOnNostr } from '@/modules/project/pages/projectView/views/body/sections/header/components/PostOnNostr.tsx'
 import {
   CampaignContent,
   getProjectShareUrlSuffix,
   useProjectShare,
 } from '@/modules/project/pages/projectView/hooks/useProjectShare.ts'
+import { usePostProjectOnNostr } from '@/modules/project/pages/projectView/views/body/sections/header/components/PostOnNostr.tsx'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import {
@@ -74,9 +74,9 @@ export const ProjectShareView = () => {
                 amount: commaFormatted(userAmbassadorStats.contributionsTotal),
               }}
               components={[
-                <Body as="span" bold display="inline" color="amber.11" />,
-                <Body as="span" bold display="inline" color="amber.11" />,
-                <Body as="span" bold display="inline" color="amber.11" />,
+                <Body key="contributions" as="span" bold display="inline" color="amber.11" />,
+                <Body key="amount" as="span" bold display="inline" color="amber.11" />,
+                <Body key="project-count" as="span" bold display="inline" color="amber.11" />,
               ]}
             />
           ) : (
@@ -88,9 +88,9 @@ export const ProjectShareView = () => {
                 count: userAmbassadorStats.projectsCount,
               }}
               components={[
-                <Body as="span" bold display="inline" color="amber.11" />,
-                <Body as="span" bold display="inline" color="amber.11" />,
-                <Body as="span" bold display="inline" color="amber.11" />,
+                <Body key="contributions" as="span" bold display="inline" color="amber.11" />,
+                <Body key="amount" as="span" bold display="inline" color="amber.11" />,
+                <Body key="project-count" as="span" bold display="inline" color="amber.11" />,
               ]}
             />
           )}
@@ -107,8 +107,8 @@ export const ProjectShareView = () => {
               i18nKey="So far, <0>1</0> ambassador has enabled <1>{{amount}}</1> sats in contributions to this project"
               values={{ amount: commaFormatted(satAmount ?? 0) }}
               components={[
-                <Body as="span" bold display="inline" color="amber.11" />,
-                <Body as="span" bold display="inline" color="amber.11" />,
+                <Body key="ambassadors-count" as="span" bold display="inline" color="amber.11" />,
+                <Body key="amount" as="span" bold display="inline" color="amber.11" />,
               ]}
             />
           ) : (
@@ -116,8 +116,8 @@ export const ProjectShareView = () => {
               i18nKey="So far, <0>{{count}}</0> ambassadors have enabled <1>{{amount}}</1> sats in contributions to this project"
               values={{ count: ambassadorsCount, amount: commaFormatted(satAmount ?? 0) }}
               components={[
-                <Body as="span" bold display="inline" color="amber.11" />,
-                <Body as="span" bold display="inline" color="amber.11" />,
+                <Body key="ambassadors-count" as="span" bold display="inline" color="amber.11" />,
+                <Body key="amount" as="span" bold display="inline" color="amber.11" />,
               ]}
             />
           )}

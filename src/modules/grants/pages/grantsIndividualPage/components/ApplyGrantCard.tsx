@@ -37,7 +37,7 @@ export const ApplyGrantCard = ({
       transition="box-shadow ease-out 0.3s"
     >
       <Box width={'100%'}>
-        <img src={image} width={'100%'} />
+        <img src={image} width={'100%'} alt={title} />
       </Box>
       <Box px={4} py={2}>
         <Text fontWeight={'600'} fontSize="14px">

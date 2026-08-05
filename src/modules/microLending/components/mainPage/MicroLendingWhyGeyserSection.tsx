@@ -15,7 +15,7 @@ export function MicroLendingWhyGeyserSection({
 }: {
   sectionPrimaryTextColor: string
   sectionSecondaryTextColor: string
-}): JSX.Element {
+}): React.ReactNode {
   const bandBg = useColorModeValue('neutral1.2', 'neutral1.4')
   const iconColor = useColorModeValue('primary1.10', 'primary1.9')
 

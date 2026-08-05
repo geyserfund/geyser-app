@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  VStack,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Image, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -28,7 +20,7 @@ export const ImpactFundDonationFlowModal = ({
   impactFunds,
   isOpen,
   onClose,
-}: ImpactFundDonationFlowModalProps): JSX.Element => {
+}: ImpactFundDonationFlowModalProps): React.ReactNode => {
   const navigate = useNavigate()
   const [selectedFundId, setSelectedFundId] = useState<string | null>(null)
   const cardBg = useColorModeValue('white', 'neutral1.3')

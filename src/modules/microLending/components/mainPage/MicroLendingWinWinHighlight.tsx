@@ -9,7 +9,7 @@ import { standardPadding } from '@/shared/styles/index.ts'
 import { MICRO_LENDING_HIGHLIGHT_IMAGE_PATH } from '../../utils/constants.ts'
 
 /** Full-bleed Berlin photo with scrim, overlaid headline, and caption between trust pillars and “Why Geyser?”. */
-export function MicroLendingWinWinHighlight(): JSX.Element {
+export function MicroLendingWinWinHighlight(): React.ReactNode {
   const overlayBg = useColorModeValue('blackAlpha.700', 'blackAlpha.800')
 
   const bandMinH = { base: '320px', md: '360px', lg: '380px' } as const

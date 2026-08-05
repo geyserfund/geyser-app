@@ -16,7 +16,7 @@ type ImpactFundsReportsSectionProps = {
 /** Report banner spanning the content column (same horizontal margins as the page). */
 export function ImpactFundsReportsSection({
   sectionPrimaryTextColor,
-}: ImpactFundsReportsSectionProps): JSX.Element {
+}: ImpactFundsReportsSectionProps): React.ReactNode {
   const reportPdfUrl = IMPACT_FUNDS_CIRCULAR_ECONOMIES_REPORT_PDF_URL
   const reportBannerUrl = IMPACT_FUNDS_CIRCULAR_ECONOMIES_REPORT_BANNER_URL
 
