@@ -20,7 +20,7 @@ Historical commits, branches, and locally modified deployments are generally not
 
 Email security reports privately to:
 
-**[hello@geyser.fund](mailto:hello@geyser.fund)**
+**[support@geyser.fund](mailto:support@geyser.fund)**
 
 Use a subject such as:
 

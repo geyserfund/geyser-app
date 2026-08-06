@@ -38,3 +38,11 @@ export const FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS = gql`
     onChainTxId
   }
 `
+
+export const FRAGMENT_RSK_NATIVE_TRANSFER_PAYMENT_DETAILS = gql`
+  fragment RskNativeTransferPaymentDetails on RskNativeTransferPaymentDetails {
+    fromAddress
+    destinationAddress
+    txId
+  }
+`

@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 import {
+  FRAGMENT_RSK_NATIVE_TRANSFER_PAYMENT_DETAILS,
   FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS,
   FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS,
 } from './paymentDetailsFragment.ts'
@@ -118,6 +119,7 @@ export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
 export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
   ${FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_RSK_NATIVE_TRANSFER_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_FEES}
   fragment PaymentForPayoutRefund on Payment {
     id
@@ -128,6 +130,7 @@ export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
     status
     linkedEntityUUID
     linkedEntityType
+    accountingAmountDue
     fees {
       ...ContributionFees
     }
@@ -137,6 +140,9 @@ export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
       }
       ... on RskToLightningSwapPaymentDetails {
         ...RskToLightningSwapPaymentDetails
+      }
+      ... on RskNativeTransferPaymentDetails {
+        ...RskNativeTransferPaymentDetails
       }
     }
   }

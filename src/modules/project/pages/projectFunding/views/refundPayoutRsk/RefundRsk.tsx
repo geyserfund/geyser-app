@@ -896,6 +896,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                     selectedMethod={selectedMethod}
                     setSelectedMethod={setSelectedMethod}
                     disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
+                    showRootstock={false}
                   />
                 )}
 

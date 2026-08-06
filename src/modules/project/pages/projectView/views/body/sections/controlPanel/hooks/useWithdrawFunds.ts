@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
@@ -13,6 +13,14 @@ import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
 
 const ACTIVE_WITHDRAW_PAYOUT_STATUSES = [PayoutStatus.Pending, PayoutStatus.Processing]
+
+/** Creator still needs to act in the withdraw modal (sign, claim, etc.). */
+const RESUMABLE_WITHDRAW_PAYMENT_STATUSES = [
+  PaymentStatus.Unpaid,
+  PaymentStatus.Claimable,
+  PaymentStatus.Claiming,
+]
+
 const LATEST_PAYOUT_POLL_INTERVAL_MS = 10_000
 
 type PayoutLatestQueryResult = {
@@ -27,6 +35,26 @@ type PayoutLatestQueryResult = {
   } | null
 }
 
+const isActivePayoutStatus = (status?: PayoutStatus | null) =>
+  Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status))
+
+/**
+ * "Continue withdraw" only when the creator still has a step to finish.
+ * Broadcast / awaiting-confirmation (payment PENDING) is not resumable — nothing left for them to do.
+ */
+const isResumableWithdraw = (payoutStatus?: PayoutStatus | null, paymentStatus?: PaymentStatus | null) => {
+  if (!isActivePayoutStatus(payoutStatus)) {
+    return false
+  }
+
+  // Payout prepared but no payment yet — finish method selection / prepare.
+  if (!paymentStatus) {
+    return true
+  }
+
+  return RESUMABLE_WITHDRAW_PAYMENT_STATUSES.includes(paymentStatus)
+}
+
 export const useWithdrawFunds = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const payoutRskModal = useModal()
@@ -35,6 +63,7 @@ export const useWithdrawFunds = () => {
   const { getUSDCentsAmount } = useBTCConverter()
   const [hasOngoingWithdraw, setHasOngoingWithdraw] = useState(false)
   const [hasFailedWithdraw, setHasFailedWithdraw] = useState(false)
+  const previousPayoutStatusRef = useRef<PayoutStatus | null | undefined>(undefined)
 
   const projectRskEoa = project?.rskEoa || ''
   const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
@@ -71,6 +100,7 @@ export const useWithdrawFunds = () => {
       )[0],
     [latestPayout?.payments],
   )
+  const isPayoutInFlight = isActivePayoutStatus(latestPayout?.status)
 
   useEffect(() => {
     if (!shouldTrackLatestPayout) {
@@ -80,9 +110,10 @@ export const useWithdrawFunds = () => {
       return
     }
 
-    const status = latestPayout?.status
-    setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
-    setHasFailedWithdraw(Boolean(status === PayoutStatus.Failed && latestPayment?.status === PaymentStatus.Refunded))
+    setHasOngoingWithdraw(isResumableWithdraw(latestPayout?.status, latestPayment?.status))
+    setHasFailedWithdraw(
+      Boolean(latestPayout?.status === PayoutStatus.Failed && latestPayment?.status === PaymentStatus.Refunded),
+    )
   }, [latestPayment?.status, latestPayout?.status, shouldTrackLatestPayout, stopPolling])
 
   useEffect(() => {
@@ -90,7 +121,9 @@ export const useWithdrawFunds = () => {
       return
     }
 
-    const shouldPoll = !latestPayoutData || hasOngoingWithdraw
+    // Keep polling while the payout is in flight (including post-broadcast confirmation),
+    // not only while the "Continue withdraw" CTA is shown.
+    const shouldPoll = !latestPayoutData || isPayoutInFlight
 
     if (shouldPoll) {
       startPolling(LATEST_PAYOUT_POLL_INTERVAL_MS)
@@ -101,7 +134,29 @@ export const useWithdrawFunds = () => {
     return () => {
       stopPolling()
     }
-  }, [hasOngoingWithdraw, latestPayoutData, shouldTrackLatestPayout, startPolling, stopPolling])
+  }, [isPayoutInFlight, latestPayoutData, shouldTrackLatestPayout, startPolling, stopPolling])
+
+  // When confirmations finish (or payout fails), refresh on-chain withdrawable without a full page reload.
+  useEffect(() => {
+    if (!shouldTrackLatestPayout) {
+      previousPayoutStatusRef.current = latestPayout?.status
+      return
+    }
+
+    const previousStatus = previousPayoutStatusRef.current
+    const nextStatus = latestPayout?.status
+    previousPayoutStatusRef.current = nextStatus
+
+    if (
+      previousStatus &&
+      isActivePayoutStatus(previousStatus) &&
+      nextStatus &&
+      !isActivePayoutStatus(nextStatus)
+    ) {
+      refetchWithdrawable().catch(() => undefined)
+      queryProject.execute()
+    }
+  }, [latestPayout?.status, queryProject, refetchWithdrawable, shouldTrackLatestPayout])
 
   const onCompleted = () => {
     setHasOngoingWithdraw(false)
