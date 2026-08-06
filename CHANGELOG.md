@@ -1,3 +1,30 @@
+## [0.51.0](https://github.com/geyserfund/geyser-app/compare/v0.50.4...v0.51.0) (2026-08-06)
+
+
+### Features
+
+* add account password rotation flow ([053f8b9](https://github.com/geyserfund/geyser-app/commit/053f8b992bb0b8bb9dd1afa0de8c93815927d6ec))
+* add native Rootstock withdraw and AON claim-to-EOA ([8396dd8](https://github.com/geyserfund/geyser-app/commit/8396dd89e0acb11257d3303ae019927315c166c8))
+* add private key recovery data ([1f10c44](https://github.com/geyserfund/geyser-app/commit/1f10c447c82391d161a018216a5fbd84c21a43e3))
+* project wallet section + update rotation logic ([ee83845](https://github.com/geyserfund/geyser-app/commit/ee83845e2fe8ff5bf2e6352cc9e36b622fc690cf))
+
+
+### Bug Fixes
+
+* address PR review comments for wallet recovery ([a140ce8](https://github.com/geyserfund/geyser-app/commit/a140ce88787021c9b45354276860111a2650d9f8))
+* align state tests with current creation and SEO paths ([cd68cbf](https://github.com/geyserfund/geyser-app/commit/cd68cbf25d53838e88615ace665042143b78cd6d))
+* apply react doctor fixes ([21cd82a](https://github.com/geyserfund/geyser-app/commit/21cd82a375490ee77ff106b1a0a70a80182d433a))
+* cleanup ([3f8c6b7](https://github.com/geyserfund/geyser-app/commit/3f8c6b71e931b363ede163b298e309d14301d5a4))
+* clear React Doctor error in AonClaimToEoa poll handling ([03c135d](https://github.com/geyserfund/geyser-app/commit/03c135de1c7be22e0baf2e5b59d52bd3861d9834))
+* clear service worker refresh interval without ref churn ([1c2205a](https://github.com/geyserfund/geyser-app/commit/1c2205aa2878f01daa89a542ec8c2de830c8028a))
+* key rotation logic ([a9769e1](https://github.com/geyserfund/geyser-app/commit/a9769e1e3cbe332218f43efb1a220a36fbecb39d))
+* legacy project wallet rotation ([4f1283d](https://github.com/geyserfund/geyser-app/commit/4f1283d5cdccd8406269fbba9d512001d7d194e4))
+* let creators abandon unpaid payouts before AON claim ([fa98f17](https://github.com/geyserfund/geyser-app/commit/fa98f172f29e048a87d342eeebef6cfcb3435b4f))
+* resolve React Doctor blocking effect cleanup findings ([dcb21ab](https://github.com/geyserfund/geyser-app/commit/dcb21abf63cd24e74b7000d42bb531ebd74d717d))
+* stop AON claim modal from sticking on prepare skeletons ([219f0f6](https://github.com/geyserfund/geyser-app/commit/219f0f669d777f9cb4be1b2a6a41c076f087b142))
+* sync Rootstock GraphQL types for pre-push typecheck ([c0be9aa](https://github.com/geyserfund/geyser-app/commit/c0be9aad5f81e069b419bb1b2a201d0bd5770a94))
+* unblock React Doctor CI and avoid render helpers ([4c7e7a3](https://github.com/geyserfund/geyser-app/commit/4c7e7a3c7108537bbc1defe3a8b1aa183b6dbf70))
+
 ## [0.50.0](https://github.com/geyserfund/geyser-app/compare/v0.49.0...v0.50.0) (2026-07-29)
 
 
