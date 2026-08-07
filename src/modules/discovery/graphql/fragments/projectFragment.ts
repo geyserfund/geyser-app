@@ -37,6 +37,15 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
       }
     }
     rskEoa
+    directPaymentDetails {
+      btcAddress
+      lightningAddress
+    }
+    paymentMethods {
+      fiat {
+        stripe
+      }
+    }
     category
     subCategory
     location {

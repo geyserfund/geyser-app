@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { Outlet, useMatch, useNavigate } from 'react-router'
+import { Navigate, Outlet, useMatch, useNavigate } from 'react-router'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
 import { getPath, PathName } from '../../../../../../shared/constants'
@@ -18,6 +19,7 @@ export const ProjectCreateRewards = () => {
 
   const { project } = useProjectAtom()
   const { rewards } = useRewardsAtom()
+  const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.PerksAndProducts,
@@ -49,6 +51,10 @@ export const ProjectCreateRewards = () => {
 
   const backProps = {
     onClick: handleBack,
+  }
+
+  if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured) {
+    return <Navigate to={getPath('launchStory', project.id)} replace />
   }
 
   return (

@@ -22,6 +22,7 @@ import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/Launc
 import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
 import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 
 enum LaunchStep {
   Review = 'review',
@@ -67,7 +68,7 @@ export const Launch = () => {
     },
   })
 
-  const launchFeeWaived = isLaunchFeeWaived(project)
+  const launchFeeWaived = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLaunchFeeWaived(project)
   const projectLaunchStrategy = (project as { launchStrategy?: string | null }).launchStrategy
   const hasPaidLaunchStrategy = Object.values(ProjectLaunchStrategy).includes(
     projectLaunchStrategy as ProjectLaunchStrategy,

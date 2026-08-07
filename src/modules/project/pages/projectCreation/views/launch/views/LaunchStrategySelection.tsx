@@ -2,13 +2,14 @@ import { Button, Collapse, HStack, Link, ListItem, UnorderedList, useDisclosure,
 import { t } from 'i18next'
 import { useState } from 'react'
 
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/sections/GeyserPromotionSection.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
-import { getLaunchPlansData, type LaunchPlanData } from '../constants/launchPlansData.ts'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
+import { type LaunchPlanData, getLaunchPlansData } from '../constants/launchPlansData.ts'
 
 export enum ProjectLaunchStrategy {
   STARTER_LAUNCH = 'STARTER_LAUNCH',
@@ -26,8 +27,11 @@ export const LaunchStrategySelection = ({
   handleBack: () => void
 }) => {
   const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(
-    launchFeeWaived ? ProjectLaunchStrategy.STARTER_LAUNCH : ProjectLaunchStrategy.PRO_LAUNCH,
+    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || launchFeeWaived
+      ? ProjectLaunchStrategy.STARTER_LAUNCH
+      : ProjectLaunchStrategy.PRO_LAUNCH,
   )
+  const plansDisabled = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED
 
   const [basicPlan, visibilityBoostPlan, growthPlan, partnershipPlan] = getLaunchPlansData(t) as [
     LaunchPlanData,
@@ -63,9 +67,10 @@ export const LaunchStrategySelection = ({
           onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
           title={basicPlan.title}
           subtitle={basicPlan.subtitle}
-          price={launchFeeWaived ? t('Paid or Waved') : basicPlan.price}
+          price={launchFeeWaived ? t('Waived') : basicPlan.price}
           priceColor={launchFeeWaived ? 'primary1.9' : undefined}
           points={getCardPoints(basicPlan.points)}
+          isDisabled={plansDisabled}
         />
         <ProjectCreateStrategyCard
           flex={1}
@@ -75,6 +80,8 @@ export const LaunchStrategySelection = ({
           subtitle={visibilityBoostPlan.subtitle}
           price={visibilityBoostPlan.price}
           points={getCardPoints(visibilityBoostPlan.points)}
+          isDisabled={plansDisabled}
+          temporarilyUnavailable={plansDisabled}
         />
         <ProjectCreateStrategyCard
           flex={1}
@@ -86,23 +93,29 @@ export const LaunchStrategySelection = ({
           price={growthPlan.price}
           highlightedText={growthPlan.highlightedText}
           points={getCardPoints(growthPlan.points)}
+          isDisabled={plansDisabled}
+          temporarilyUnavailable={plansDisabled}
         />
         <ProjectCreateStrategyCard
           flex={1}
-          as={Link}
-          href={
-            'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'
-          }
-          isExternal
+          {...(plansDisabled
+            ? {}
+            : {
+                as: Link,
+                href: 'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true',
+                isExternal: true,
+              })}
           title={partnershipPlan.title}
           subtitle={partnershipPlan.subtitle}
           body={partnershipPlan.body}
           price={partnershipPlan.price}
           points={getCardPoints(partnershipPlan.points)}
+          isDisabled={plansDisabled}
+          temporarilyUnavailable={plansDisabled}
         />
       </VStack>
       <VStack w="full" alignItems="flex-start">
-        <GeyserPromotionSection />
+        <GeyserPromotionSection showTemporaryDirectPaymentNotice={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED} />
       </VStack>
     </ProjectCreationPageWrapper>
   )
@@ -116,6 +129,8 @@ type ProjectCreateStrategyCardProps = {
   priceColor?: string
   points?: string[][]
   isSelected?: boolean
+  isDisabled?: boolean
+  temporarilyUnavailable?: boolean
   highlightedText?: string
 } & CardLayoutProps
 
@@ -127,7 +142,10 @@ export const ProjectCreateStrategyCard = ({
   priceColor,
   points,
   isSelected,
+  isDisabled = false,
+  temporarilyUnavailable = false,
   highlightedText,
+  onClick,
   ...props
 }: ProjectCreateStrategyCardProps) => {
   const { isOpen, onToggle } = useDisclosure()
@@ -136,16 +154,22 @@ export const ProjectCreateStrategyCard = ({
   return (
     <CardLayout
       width={isMobile ? 'full' : 'auto'}
-      hover
+      hover={!isDisabled}
       {...props}
+      onClick={isDisabled ? undefined : onClick}
       spacing={2}
       borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
       outline={isSelected ? '2px solid' : 'none'}
       outlineColor={isSelected ? 'primary1.9' : 'transparent'}
-      _hover={{
-        borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
-        cursor: 'pointer',
-      }}
+      opacity={isDisabled ? 0.6 : 1}
+      _hover={
+        isDisabled
+          ? undefined
+          : {
+              borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
+              cursor: 'pointer',
+            }
+      }
       overflow={'visible'}
       padding={4}
       paddingBottom={highlightedText ? 8 : 4}
@@ -153,9 +177,16 @@ export const ProjectCreateStrategyCard = ({
     >
       <HStack w="full" alignItems="flex-start">
         <VStack flex={1} alignItems="flex-start" spacing={0}>
-          <Body size="lg" bold>
-            {title}
-          </Body>
+          <HStack spacing={2}>
+            <Body size="lg" bold>
+              {title}
+            </Body>
+            {temporarilyUnavailable ? (
+              <Body size="md" light color="neutral1.7">
+                {t('Temporarily unavailable')}
+              </Body>
+            ) : null}
+          </HStack>
           <Body size="sm" light medium>
             {subtitle}
           </Body>

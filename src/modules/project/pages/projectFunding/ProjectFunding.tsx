@@ -1,8 +1,9 @@
 import { HStack, Spinner } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useResetFundingFlow } from '@/modules/project/funding/hooks/useResetFundingFlow.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
@@ -20,12 +21,30 @@ export const ProjectFunding = () => {
   const { isImpactFundFundingBootstrapLoading } = useImpactFundFundingBootstrap()
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    if (project.id && isFundingDisabled()) {
-      navigate(getPath('project', project.name))
+    const hasStripePaymentMethod = Boolean(project.paymentMethods?.fiat?.stripe)
+    const hasDirectPaymentDetails = Boolean(
+      project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
+    )
+    const isStripeSelectedFromDirectPayment = new URLSearchParams(location.search).get('direct-payment-stripe') === '1'
+    const shouldOpenDirectPayment =
+      TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasDirectPaymentDetails && !isStripeSelectedFromDirectPayment
+
+    if (
+      project.id &&
+      (isFundingDisabled() ||
+        (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (!hasStripePaymentMethod || shouldOpenDirectPayment)))
+    ) {
+      const projectPath = getPath('project', project.name)
+      navigate(
+        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasDirectPaymentDetails
+          ? `${projectPath}?direct-payment=1`
+          : projectPath,
+      )
     }
-  }, [isFundingDisabled, project, navigate])
+  }, [isFundingDisabled, location.search, navigate, project])
 
   useEffect(() => {
     return () => {

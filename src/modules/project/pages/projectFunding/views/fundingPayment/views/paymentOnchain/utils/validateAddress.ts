@@ -9,3 +9,6 @@ export const validateBitcoinAddress = (address: string) => {
 
   return validate(address, Network.regtest)
 }
+
+/** Direct creator payment details must always be a Bitcoin mainnet address, including local development. */
+export const validateBitcoinMainnetAddress = (address: string) => validate(address, Network.mainnet)

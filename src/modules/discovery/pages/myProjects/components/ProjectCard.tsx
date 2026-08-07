@@ -13,6 +13,7 @@ import {
 import { Link as RouterLink } from 'react-router'
 
 import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
@@ -122,7 +123,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   /** Check if project needs wallet configuration */
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
-  const needsWalletConfig = !effectiveRskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const needsWalletConfig =
+    !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !effectiveRskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
 

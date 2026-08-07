@@ -7,6 +7,7 @@ import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { getPath } from '@/shared/constants'
@@ -58,10 +59,12 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
   const [notifyStripeInterest, notifyStripeInterestOptions] = useProjectStripeInterestNotifyMutation()
   const [isStripeUnavailableDisabled, setIsStripeUnavailableDisabled] = useState(false)
-  const shouldShowStripeButton = hasFiatPaymentMethod && isStripeConnectSupportedForProject(project)
+  const shouldShowStripeButton =
+    hasStripePaymentMethod || (hasFiatPaymentMethod && isStripeConnectSupportedForProject(project))
   const isApplePayVisible = hasFiatPaymentMethod && !hasStripePaymentMethod && getIsApplePayVisible()
   const showOnlyBitcoin = recurringContributionRenewal?.paymentMethod === 'BITCOIN'
   const showOnlyFiat = Boolean(recurringContributionRenewal && recurringContributionRenewal.paymentMethod !== 'BITCOIN')
+  const showOnlyStripe = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasStripePaymentMethod
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
   const stripeButtonBg = '#635BFF'
@@ -100,7 +103,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   }
 
   const handleStripeClick = async () => {
-    if (!hasFiatPaymentMethod) {
+    if (!hasFiatPaymentMethod && !hasStripePaymentMethod) {
       return
     }
 
@@ -157,7 +160,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
 
   return (
     <VStack flexDirection={{ base: 'row', lg: 'column' }} w="full" spacing={3}>
-      {!showOnlyBitcoin && !showOnlyFiat && isApplePayVisible && !disableApplePay && (
+      {!showOnlyStripe && !showOnlyBitcoin && !showOnlyFiat && isApplePayVisible && !disableApplePay && (
         <Button
           id="continue-with-apple-pay"
           size="lg"
@@ -199,7 +202,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           {isMobile ? stripeIcon : t('Continue with Stripe')}
         </Button>
       )}
-      {!showOnlyBitcoin && hasFiatPaymentMethod && !hasStripePaymentMethod && (
+      {!showOnlyStripe && !showOnlyBitcoin && hasFiatPaymentMethod && !hasStripePaymentMethod && (
         <Button
           id="continue-with-credit-card"
           size="lg"
@@ -217,12 +220,12 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           {isMobile ? creditCardIcon : t('Continue with Card or Bank Transfer')}
         </Button>
       )}
-      {showOnlyFiat && !hasFiatPaymentMethod && (
+      {!showOnlyStripe && showOnlyFiat && !hasFiatPaymentMethod && (
         <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="button" isDisabled>
           {t('Fiat renewal unavailable')}
         </Button>
       )}
-      {!showOnlyFiat && (
+      {!showOnlyStripe && !showOnlyFiat && (
         <Button
           id="continue-with-bitcoin"
           size="lg"
@@ -231,12 +234,17 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           colorScheme="primary1"
           onClick={handleBitcoinClick}
           type={useFormSubmit ? 'submit' : 'button'}
+          isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
           data-payment-method={PaymentMethods.lightning}
           rightIcon={isMobile ? undefined : bitcoinIcon}
           aria-label={t('Continue with Bitcoin')}
           sx={PAY_BUTTON_PRESS_STYLES}
         >
-          {isMobile ? bitcoinIcon : t('Continue with Bitcoin')}
+          {isMobile
+            ? bitcoinIcon
+            : TEMPORARY_BOLTZ_CONTINGENCY_ENABLED
+            ? t('Temporarily unavailable')
+            : t('Continue with Bitcoin')}
         </Button>
       )}
     </VStack>

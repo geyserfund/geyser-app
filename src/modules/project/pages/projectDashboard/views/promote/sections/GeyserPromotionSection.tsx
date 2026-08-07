@@ -11,7 +11,11 @@ import { useNotification } from '@/utils/index.ts'
 
 /** GeyserPromotionSection: Displays the Geyser Promotion toggle and stats */
 /** Must be used inside ProjectContextProvider */
-export const GeyserPromotionSection = () => {
+export const GeyserPromotionSection = ({
+  showTemporaryDirectPaymentNotice = false,
+}: {
+  showTemporaryDirectPaymentNotice?: boolean
+}) => {
   const { formatAmount } = useCurrencyFormatter()
 
   const toast = useNotification()
@@ -93,6 +97,7 @@ export const GeyserPromotionSection = () => {
         onToggle={handlePromotionsToggle}
         isLoading={updateProject.loading}
         contributionSummary={shouldShowContributionSummary ? contributionSummary : null}
+        showTemporaryDirectPaymentNotice={showTemporaryDirectPaymentNotice}
       />
     </VStack>
   )

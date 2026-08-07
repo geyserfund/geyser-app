@@ -8,6 +8,7 @@ import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -556,6 +557,31 @@ export const ControlPanel = () => {
         {...resubmitConfirmModal}
       />
 
+      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+        !project.paymentMethods?.fiat?.stripe &&
+        !project.directPaymentDetails?.btcAddress &&
+        !project.directPaymentDetails?.lightningAddress && (
+          <ControlPanelNotification
+            icon={<Icon as={PiWarning} color="warning.9" boxSize="24px" flexShrink={0} />}
+            title={t('Add payment details to keep receiving contributions')}
+            description={t(
+              'Geyser’s payment methods are temporarily unavailable. Add direct payment preferences so your community knows where to send funds. These payment details will be displayed in the contribution flow.',
+            )}
+            actionButton={
+              <Button
+                as={Link}
+                to={getPath('dashboardWallet', project.name)}
+                colorScheme="warning"
+                variant="solid"
+                size="sm"
+              >
+                {t('Add payment details')}
+              </Button>
+            }
+            variant="warning"
+          />
+        )}
+
       {/* Financial Actions Section */}
       <ControlPanelFinancialActions
         showClaim={showClaim}
@@ -628,8 +654,8 @@ export const ControlPanel = () => {
             <Button
               as={Link}
               to={getPath('dashboardWallet', project.name)}
-              variant="soft"
-              colorScheme="neutral1"
+              variant="solid"
+              colorScheme="primary1"
               size="sm"
               flexShrink={0}
             >

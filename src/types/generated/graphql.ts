@@ -3545,6 +3545,17 @@ export type ProfileNotificationSettings = {
   userSettings: UserNotificationSettings;
 };
 
+export type DirectPaymentDetails = {
+  __typename?: 'DirectPaymentDetails';
+  btcAddress?: Maybe<Scalars['String']['output']>;
+  lightningAddress?: Maybe<Scalars['String']['output']>;
+};
+
+export type DirectPaymentDetailsInput = {
+  btcAddress?: InputMaybe<Scalars['String']['input']>;
+  lightningAddress?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Project = {
   __typename?: 'Project';
   activeMatching?: Maybe<ProjectMatching>;
@@ -3560,6 +3571,7 @@ export type Project = {
   contributionsCount?: Maybe<Scalars['Int']['output']>;
   createdAt: Scalars['Date']['output'];
   defaultGoalId?: Maybe<Scalars['BigInt']['output']>;
+  directPaymentDetails?: Maybe<DirectPaymentDetails>;
   /** Description of the project. */
   description?: Maybe<Scalars['String']['output']>;
   entriesCount?: Maybe<Scalars['Int']['output']>;
@@ -5591,6 +5603,7 @@ export type UpdateProjectInput = {
   category?: InputMaybe<ProjectCategory>;
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']['input']>;
+  directPaymentDetails?: InputMaybe<DirectPaymentDetailsInput>;
   /** Description of the project. */
   description?: InputMaybe<Scalars['String']['input']>;
   /** Funding strategy */
@@ -11716,7 +11729,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -11733,7 +11746,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -11752,7 +11765,7 @@ export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, 
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
 
 export type ProjectMatchingFragment = { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number };
 
@@ -15121,6 +15134,10 @@ export const ProjectPageBodyFragmentDoc = gql`
     guardianType
   }
   rskEoa
+  directPaymentDetails {
+    btcAddress
+    lightningAddress
+  }
   lastCreationStep
   launchScheduledAt
   category
@@ -15191,6 +15208,10 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
     guardianType
   }
   rskEoa
+  directPaymentDetails {
+    btcAddress
+    lightningAddress
+  }
   rskEoas {
     id
     rskAddress
@@ -15272,6 +15293,10 @@ export const ProjectUpdateFragmentDoc = gql`
   rewardCurrency
   fundingStrategy
   isRecoverableGrant
+  directPaymentDetails {
+    btcAddress
+    lightningAddress
+  }
   lastCreationStep
   launchScheduledAt
 }

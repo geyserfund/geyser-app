@@ -13,6 +13,7 @@ import {
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { GeyserConfigureWalletGuideUrl } from '@/shared/constants/platform/url.ts'
@@ -48,7 +49,9 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
   const needsProjectKey = !project?.rskEoa
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
-  const shouldShow = Boolean(user?.id && isProjectOwner && isTiaProject && needsProjectKey)
+  const shouldShow = Boolean(
+    !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && user?.id && isProjectOwner && isTiaProject && needsProjectKey,
+  )
 
   const buttonLabel = t('Configure project wallet')
 

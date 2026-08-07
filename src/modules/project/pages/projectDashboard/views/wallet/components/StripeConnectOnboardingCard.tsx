@@ -1,7 +1,18 @@
-import { Button, HStack, Icon, Link, Tag, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Button,
+  HStack,
+  Icon,
+  Link,
+  Tag,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect } from 'react'
-import { PiClock, PiWarningFill } from 'react-icons/pi'
+import { PiCheckCircleFill, PiClock, PiWarningFill } from 'react-icons/pi'
 
 import { DeleteConfirmModal } from '@/components/molecules'
 import { type StripeStatusType, useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
@@ -23,6 +34,9 @@ type StripeConnectOnboardingCardProps = {
   minimalShowTitle?: boolean
   selected?: boolean
   onReadyStateChange?: (isReady: boolean) => void
+  showProcessingFeeNotice?: boolean
+  showCompactTitle?: boolean
+  showCompactStatus?: boolean
 }
 
 const openOnboardingUrl = (url: string) => {
@@ -42,6 +56,9 @@ type StripeCompactContentProps = {
   statusType: StripeStatusType
   compactIntroCopy: string
   isTiaProject: boolean
+  showProcessingFeeNotice: boolean
+  showCompactTitle: boolean
+  showCompactStatus: boolean
   disabledReasonLabel: string | null
   isActionRequired: boolean
   isProcessing: boolean
@@ -130,6 +147,30 @@ function StripeStatusIndicator({ statusType }: { statusType: StripeStatusType })
   return null
 }
 
+function StripeCompactStatus({ statusType }: { statusType: StripeStatusType }) {
+  if (!statusType) return null
+
+  const isEnabled = statusType === 'enabled'
+  const isProcessing = statusType === 'processing'
+  const icon = isEnabled ? PiCheckCircleFill : isProcessing ? PiClock : PiWarningFill
+  const color = isEnabled ? 'primary1.9' : 'orange.9'
+  const background = isEnabled ? 'primary1.2' : 'orange.2'
+  const borderColor = isEnabled ? 'primary1.5' : 'orange.5'
+  const label = isEnabled ? t('Enabled') : isProcessing ? t('Processing') : t('Action Required')
+
+  return (
+    <HStack spacing={2} px={3} h="32px" borderRadius="8px" bg={background} border="1px solid" borderColor={borderColor}>
+      <Icon as={icon} boxSize={4} color={color} />
+      <Body size="xs" light>
+        {t('Stripe status')}
+      </Body>
+      <Body size="xs" medium color={color}>
+        {label}
+      </Body>
+    </HStack>
+  )
+}
+
 function createStripeManageClickHandler({
   projectId,
   returnUrl,
@@ -154,6 +195,9 @@ function StripeCompactContent({
   statusType,
   compactIntroCopy,
   isTiaProject,
+  showProcessingFeeNotice,
+  showCompactTitle,
+  showCompactStatus,
   disabledReasonLabel,
   isActionRequired,
   isProcessing,
@@ -169,24 +213,27 @@ function StripeCompactContent({
 
   return (
     <VStack w="full" alignItems="start" spacing={4}>
-      <HStack w="full" justifyContent="space-between" alignItems="start">
-        <Body size="lg" medium>
-          {t('Accept fiat and recurring contributions')}
-        </Body>
-        <StripeStatusIndicator statusType={statusType} />
-      </HStack>
+      {showCompactTitle && (
+        <HStack w="full" justifyContent="space-between" alignItems="start">
+          <Body size="lg" medium>
+            {t('Accept fiat and recurring contributions')}
+          </Body>
+          <StripeStatusIndicator statusType={statusType} />
+        </HStack>
+      )}
+
+      {isTiaProject && showProcessingFeeNotice && (
+        <Alert status="info" borderRadius="8px" alignItems="flex-start">
+          <AlertIcon />
+          <AlertDescription>
+            <Body size="sm">{t('Contributions are subject to an additional Stripe processing fee.')}</Body>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <Body size="md" light>
         {compactIntroCopy}
       </Body>
-
-      {isTiaProject && (
-        <Body size="md" light>
-          {t(
-            'Contributions are subject to a processing fee of 3.5% + $0.30 per payment. Fees may vary depending on card issuer and location.',
-          )}
-        </Body>
-      )}
 
       {showInlineErrorWithAction ? (
         <HStack
@@ -200,9 +247,10 @@ function StripeCompactContent({
             {disabledReasonLabel}
           </Body>
           <HStack w={{ base: '100%', md: 'auto' }} spacing={3} flexWrap={{ base: 'wrap', md: 'nowrap' }}>
+            {!showCompactTitle && showCompactStatus && <StripeCompactStatus statusType={statusType} />}
             <Button
               size="md"
-              variant="outline"
+              variant="solid"
               colorScheme="primary1"
               onClick={onManageClick}
               isDisabled={!isTiaProject || isBusy}
@@ -247,44 +295,58 @@ function StripeCompactContent({
             </Body>
           )}
 
-          <HStack w="full" justifyContent={{ base: 'stretch', md: 'flex-end' }} spacing={3} flexWrap="wrap">
-            <Button
-              size="md"
-              variant={isReady ? 'solid' : 'outline'}
-              colorScheme="primary1"
-              onClick={onManageClick}
-              isDisabled={!isTiaProject || isBusy}
-              isLoading={isBusy}
-              width={{ base: '100%', md: 'auto' }}
-              minW={{ base: 'unset', md: '240px' }}
+          <HStack
+            w="full"
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={3}
+            flexWrap={{ base: 'wrap', md: 'nowrap' }}
+          >
+            {!showCompactTitle && showCompactStatus && <StripeCompactStatus statusType={statusType} />}
+            <HStack
+              w={{ base: '100%', md: 'auto' }}
+              justifyContent={{ base: 'stretch', md: 'flex-end' }}
+              spacing={3}
+              flexWrap="wrap"
             >
-              {t('Manage Stripe Connect')}
-            </Button>
-            {isProcessing && (
               <Button
                 size="md"
-                variant="outline"
+                variant="solid"
                 colorScheme="primary1"
-                onClick={onResyncClick}
+                onClick={onManageClick}
                 isDisabled={!isTiaProject || isBusy}
                 isLoading={isBusy}
                 width={{ base: '100%', md: 'auto' }}
+                minW={{ base: 'unset', md: '240px' }}
               >
-                {t('Re-sync')}
+                {t('Manage Stripe Connect')}
               </Button>
-            )}
-            {showDisconnect && (
-              <Button
-                size="md"
-                variant="outline"
-                colorScheme="red"
-                onClick={onDisconnectClick}
-                isDisabled={isBusy}
-                width={{ base: '100%', md: 'auto' }}
-              >
-                {t('Disconnect Stripe')}
-              </Button>
-            )}
+              {isProcessing && (
+                <Button
+                  size="md"
+                  variant="outline"
+                  colorScheme="primary1"
+                  onClick={onResyncClick}
+                  isDisabled={!isTiaProject || isBusy}
+                  isLoading={isBusy}
+                  width={{ base: '100%', md: 'auto' }}
+                >
+                  {t('Re-sync')}
+                </Button>
+              )}
+              {showDisconnect && (
+                <Button
+                  size="md"
+                  variant="outline"
+                  colorScheme="red"
+                  onClick={onDisconnectClick}
+                  isDisabled={isBusy}
+                  width={{ base: '100%', md: 'auto' }}
+                >
+                  {t('Disconnect Stripe')}
+                </Button>
+              )}
+            </HStack>
           </HStack>
         </>
       )}
@@ -507,6 +569,9 @@ export const StripeConnectOnboardingCard = ({
   minimalShowTitle = true,
   selected = false,
   onReadyStateChange,
+  showProcessingFeeNotice = true,
+  showCompactTitle = true,
+  showCompactStatus = true,
 }: StripeConnectOnboardingCardProps) => {
   const {
     status,
@@ -537,6 +602,9 @@ export const StripeConnectOnboardingCard = ({
       statusType={statusType}
       compactIntroCopy={compactIntroCopy}
       isTiaProject={isTiaProject}
+      showProcessingFeeNotice={showProcessingFeeNotice}
+      showCompactTitle={showCompactTitle}
+      showCompactStatus={showCompactStatus}
       disabledReasonLabel={disabledReasonLabel}
       isActionRequired={isActionRequired}
       isProcessing={isProcessing}
