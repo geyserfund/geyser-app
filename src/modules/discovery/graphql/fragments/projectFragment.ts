@@ -131,6 +131,15 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     isRecoverableGrant
     launchedAt
     rskEoa
+    directPaymentDetails {
+      btcAddress
+      lightningAddress
+    }
+    paymentMethods {
+      fiat {
+        stripe
+      }
+    }
     subCategory
     location {
       region

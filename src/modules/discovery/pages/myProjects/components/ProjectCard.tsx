@@ -124,9 +124,17 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   /** Check if project needs wallet configuration */
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
   const needsWalletConfig =
-    !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !effectiveRskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+    !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+    !effectiveRskEoa &&
+    project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
+  const shouldShowDirectPaymentNotification = Boolean(
+    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+      !project.paymentMethods?.fiat?.stripe &&
+      !project.directPaymentDetails?.btcAddress &&
+      !project.directPaymentDetails?.lightningAddress,
+  )
 
   /** Get context message or action */
   const renderContextContent = () => {
@@ -326,6 +334,28 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
         {/* Row 3: Context message or action */}
         {!needsWalletConfig && renderContextContent()}
+
+        {shouldShowDirectPaymentNotification && (
+          <ControlPanelNotification
+            icon={<Icon as={PiInfo} color="warning.9" boxSize="24px" flexShrink={0} />}
+            title={t('Add payment details to keep receiving contributions')}
+            description={t(
+              'Geyser’s payment methods are temporarily unavailable. Add direct payment preferences so your community knows where to send funds. These payment details will be displayed in the contribution flow.',
+            )}
+            actionButton={
+              <Button
+                as={RouterLink}
+                to={getPath('dashboardWallet', project.name)}
+                colorScheme="warning"
+                variant="solid"
+                size="sm"
+              >
+                {t('Add payment details')}
+              </Button>
+            }
+            variant="warning"
+          />
+        )}
 
         {shouldShowStripeConnectNotification && (
           <ControlPanelNotification
