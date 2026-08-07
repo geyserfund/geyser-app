@@ -8,7 +8,7 @@ import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { getPath } from '@/shared/constants'
 
-import { isActive } from '../../../../../../../utils'
+import { isActive } from '../../../../../../../utils/validations/project'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 type GoalContributeButtonProps = ButtonProps & {

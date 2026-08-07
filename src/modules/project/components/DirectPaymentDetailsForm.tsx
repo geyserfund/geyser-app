@@ -215,13 +215,15 @@ export const DirectPaymentDetailsForm = ({
         </Alert>
       </VStack>
       <StripeConnectOnboardingCard
-        compact
-        withCard={false}
         projectId={projectId}
         isTiaProject
-        showProcessingFeeNotice={false}
-        showCompactTitle={false}
-        showCompactStatus
+        options={{
+          compact: true,
+          withCard: false,
+          showProcessingFeeNotice: false,
+          showCompactTitle: false,
+          showCompactStatus: true,
+        }}
         onReadyStateChange={setIsStripeReady}
       />
     </VStack>

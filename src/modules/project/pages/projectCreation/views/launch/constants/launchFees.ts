@@ -1,6 +1,6 @@
 import { USDCents } from '@/types/index.ts'
 
-import { ProjectLaunchStrategy } from '../views/LaunchStrategySelection.tsx'
+import { ProjectLaunchStrategy } from '../launchStrategy.ts'
 
 export const LAUNCH_FEE_USD_CENTS: Record<ProjectLaunchStrategy, USDCents> = {
   [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500 as USDCents, // 25 USD

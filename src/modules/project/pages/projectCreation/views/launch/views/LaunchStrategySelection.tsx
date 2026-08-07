@@ -10,12 +10,7 @@ import { useMobileMode } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { type LaunchPlanData, getLaunchPlansData } from '../constants/launchPlansData.ts'
-
-export enum ProjectLaunchStrategy {
-  STARTER_LAUNCH = 'STARTER_LAUNCH',
-  GROWTH_LAUNCH = 'GROWTH_LAUNCH',
-  PRO_LAUNCH = 'PRO_LAUNCH',
-}
+import { ProjectLaunchStrategy } from '../launchStrategy.ts'
 
 export const LaunchStrategySelection = ({
   launchFeeWaived = false,

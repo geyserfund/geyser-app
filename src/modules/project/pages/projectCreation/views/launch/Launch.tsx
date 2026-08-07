@@ -1,8 +1,9 @@
 import { HStack, Spinner } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
-import { useCallback, useState } from 'react'
+import { useCallback, useReducer } from 'react'
 import { useNavigate } from 'react-router'
 
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -15,14 +16,14 @@ import { isLaunchFeeWaived } from '@/utils/index.ts'
 
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { useLaunchContributionCreate } from './hooks/useLaunchContributionCreate.ts'
+import { ProjectLaunchStrategy } from './launchStrategy.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
 import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
 import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/LaunchPaymentMethodSelection.tsx'
 import { LaunchPaymentPassword } from './views/LaunchPaymentPassword.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
-import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { LaunchStrategySelection } from './views/LaunchStrategySelection.tsx'
 
 enum LaunchStep {
   Review = 'review',
@@ -34,18 +35,40 @@ enum LaunchStep {
   Finalize = 'finalize',
 }
 
+type LaunchState = {
+  step: LaunchStep
+  strategy: ProjectLaunchStrategy
+  paymentMethod: LaunchPaymentMethod
+  pendingPasswordMethod: LaunchPaymentMethod | null
+  paymentMethodError: string
+  contributionData?: FundingContributionFragment
+  paymentsData?: FundingContributionPaymentDetailsFragment
+}
+
+const initialLaunchState: LaunchState = {
+  step: LaunchStep.Review,
+  strategy: ProjectLaunchStrategy.STARTER_LAUNCH,
+  paymentMethod: LaunchPaymentMethod.Lightning,
+  pendingPasswordMethod: null,
+  paymentMethodError: '',
+}
+
+const launchReducer = (state: LaunchState, updates: Partial<LaunchState>): LaunchState => ({ ...state, ...updates })
+
 export const Launch = () => {
   const { project, loading: projectLoading } = useProjectAtom()
   const navigate = useNavigate()
 
-  const [step, setStep] = useState<LaunchStep>(LaunchStep.Review)
-  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
-  const [paymentMethod, setPaymentMethod] = useState<LaunchPaymentMethod>(LaunchPaymentMethod.Lightning)
-  const [pendingPasswordMethod, setPendingPasswordMethod] = useState<LaunchPaymentMethod | null>(null)
-  const [paymentMethodError, setPaymentMethodError] = useState('')
-
-  const [contributionData, setContributionData] = useState<FundingContributionFragment>()
-  const [paymentsData, setPaymentsData] = useState<FundingContributionPaymentDetailsFragment>()
+  const [state, updateState] = useReducer(launchReducer, initialLaunchState)
+  const { step, strategy, paymentMethod, pendingPasswordMethod, paymentMethodError, contributionData, paymentsData } =
+    state
+  const setStep = (value: LaunchStep) => updateState({ step: value })
+  const setStrategy = (value: ProjectLaunchStrategy) => updateState({ strategy: value })
+  const setPaymentMethod = (value: LaunchPaymentMethod) => updateState({ paymentMethod: value })
+  const setPendingPasswordMethod = (value: LaunchPaymentMethod | null) => updateState({ pendingPasswordMethod: value })
+  const setPaymentMethodError = (value: string) => updateState({ paymentMethodError: value })
+  const setContributionData = (value?: FundingContributionFragment) => updateState({ contributionData: value })
+  const setPaymentsData = (value?: FundingContributionPaymentDetailsFragment) => updateState({ paymentsData: value })
 
   const {
     createContribution,

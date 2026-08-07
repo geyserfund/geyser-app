@@ -8,7 +8,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
-import { ProjectRewards } from '../../projectView/index.ts'
+import { ProjectRewards } from '../../projectView/views/rewards/ProjectRewards.tsx'
 import { DashboardLayout } from '../common/DashboardLayout.tsx'
 
 export const ProjectDashboardRewards = () => {

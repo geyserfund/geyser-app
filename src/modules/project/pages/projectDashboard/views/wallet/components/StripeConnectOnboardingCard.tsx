@@ -28,15 +28,17 @@ type StripeConnectOnboardingCardProps = {
   isTiaProject: boolean
   projectId?: string | number | bigint
   returnUrl?: string
-  withCard?: boolean
-  compact?: boolean
-  minimal?: boolean
-  minimalShowTitle?: boolean
-  selected?: boolean
   onReadyStateChange?: (isReady: boolean) => void
-  showProcessingFeeNotice?: boolean
-  showCompactTitle?: boolean
-  showCompactStatus?: boolean
+  options?: {
+    withCard?: boolean
+    compact?: boolean
+    minimal?: boolean
+    minimalShowTitle?: boolean
+    selected?: boolean
+    showProcessingFeeNotice?: boolean
+    showCompactTitle?: boolean
+    showCompactStatus?: boolean
+  }
 }
 
 const openOnboardingUrl = (url: string) => {
@@ -55,16 +57,20 @@ type StripeClickHandlerParams = {
 type StripeCompactContentProps = {
   statusType: StripeStatusType
   compactIntroCopy: string
-  isTiaProject: boolean
-  showProcessingFeeNotice: boolean
-  showCompactTitle: boolean
-  showCompactStatus: boolean
+  display: {
+    showProcessingFeeNotice: boolean
+    showCompactTitle: boolean
+    showCompactStatus: boolean
+  }
+  state: {
+    isTiaProject: boolean
+    isActionRequired: boolean
+    isProcessing: boolean
+    isReady: boolean
+    hasAccount: boolean
+    isBusy: boolean
+  }
   disabledReasonLabel: string | null
-  isActionRequired: boolean
-  isProcessing: boolean
-  isReady: boolean
-  hasAccount: boolean
-  isBusy: boolean
   onManageClick: () => void
   onResyncClick: () => void
   onDisconnectClick: () => void
@@ -194,16 +200,9 @@ function createStripeManageClickHandler({
 function StripeCompactContent({
   statusType,
   compactIntroCopy,
-  isTiaProject,
-  showProcessingFeeNotice,
-  showCompactTitle,
-  showCompactStatus,
+  display: { showProcessingFeeNotice, showCompactTitle, showCompactStatus },
+  state: { isTiaProject, isActionRequired, isProcessing, isReady, hasAccount, isBusy },
   disabledReasonLabel,
-  isActionRequired,
-  isProcessing,
-  isReady,
-  hasAccount,
-  isBusy,
   onManageClick,
   onResyncClick,
   onDisconnectClick,
@@ -563,15 +562,17 @@ export const StripeConnectOnboardingCard = ({
   isTiaProject,
   projectId,
   returnUrl,
-  withCard = true,
-  compact = false,
-  minimal = false,
-  minimalShowTitle = true,
-  selected = false,
   onReadyStateChange,
-  showProcessingFeeNotice = true,
-  showCompactTitle = true,
-  showCompactStatus = true,
+  options: {
+    withCard = true,
+    compact = false,
+    minimal = false,
+    minimalShowTitle = true,
+    selected = false,
+    showProcessingFeeNotice = true,
+    showCompactTitle = true,
+    showCompactStatus = true,
+  } = {},
 }: StripeConnectOnboardingCardProps) => {
   const {
     status,
@@ -601,16 +602,9 @@ export const StripeConnectOnboardingCard = ({
     <StripeCompactContent
       statusType={statusType}
       compactIntroCopy={compactIntroCopy}
-      isTiaProject={isTiaProject}
-      showProcessingFeeNotice={showProcessingFeeNotice}
-      showCompactTitle={showCompactTitle}
-      showCompactStatus={showCompactStatus}
+      display={{ showProcessingFeeNotice, showCompactTitle, showCompactStatus }}
+      state={{ isTiaProject, isActionRequired, isProcessing, isReady, hasAccount, isBusy }}
       disabledReasonLabel={disabledReasonLabel}
-      isActionRequired={isActionRequired}
-      isProcessing={isProcessing}
-      isReady={isReady}
-      hasAccount={hasAccount}
-      isBusy={isBusy}
       onManageClick={handleManageClick}
       onResyncClick={handleResyncClick}
       onDisconnectClick={disconnectConfirmModal.onOpen}

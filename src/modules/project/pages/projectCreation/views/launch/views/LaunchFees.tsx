@@ -32,7 +32,7 @@ import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationP
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
 import { LaunchPaymentMethod } from './LaunchPaymentMethodSelection.tsx'
-import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
+import { ProjectLaunchStrategy } from '../launchStrategy.ts'
 
 /** Bitcoin payment screen for the launch fee across Lightning and on-chain payment paths. */
 export const LaunchFees = ({

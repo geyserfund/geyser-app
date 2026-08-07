@@ -100,7 +100,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
               w={{ base: '100%', md: 'auto' }}
               variant={isActive ? 'soft' : 'ghost'}
               colorScheme={isActive ? 'primary1' : 'neutral1'}
-              key={index}
+              key={step.path}
               pointerEvents={isDisabled ? 'none' : 'auto'}
               color={isDisabled ? 'neutral1.8' : 'neutral1.11'}
               justifyContent={{ base: 'flex-start', md: 'center' }}
@@ -112,9 +112,9 @@ const ProjectCreationNavigation = (props: StackProps) => {
       </VStack>
 
       <Stepper index={activeStepIndex} orientation="vertical" gap="0" paddingY={2} size="xs">
-        {steps.map((_, index) => {
+        {steps.map((step, index) => {
           return (
-            <Step key={index} display="flex" alignItems="flex-start">
+            <Step key={step.path} display="flex" alignItems="flex-start">
               <StepIndicator>
                 <StepStatus complete={<StepIcon />} />
               </StepIndicator>

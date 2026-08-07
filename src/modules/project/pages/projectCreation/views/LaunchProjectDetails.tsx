@@ -18,9 +18,9 @@ import type {
 import { ProjectCreationStep } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
-import { useAuthContext } from '../../../../../context'
+import { useAuthContext } from '../../../../../context/auth'
 import { FieldContainer } from '../../../../../shared/components/form/FieldContainer.tsx'
-import { getPath } from '../../../../../shared/constants'
+import { getPath } from '../../../../../shared/constants/config/routerPaths'
 import { useModal } from '../../../../../shared/hooks'
 import { projectCreationReferrerHeroIdAtom } from '../../../../../shared/state/projectReferralAtom.ts'
 import { ProjectForm } from '../../../forms/ProjectForm'
