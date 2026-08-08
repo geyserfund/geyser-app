@@ -76,11 +76,9 @@ export const EnableFiatContributions = ({
         </VStack>
 
         <StripeConnectOnboardingCard
-          compact
-          withCard
-          selected={!isBitcoinMode}
           isTiaProject={isTiaProject}
           projectId={projectId}
+          options={{ compact: true, withCard: true, selected: !isBitcoinMode }}
           onReadyStateChange={setIsStripeReady}
         />
       </VStack>

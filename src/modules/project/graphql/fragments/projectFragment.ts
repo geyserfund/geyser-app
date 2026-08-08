@@ -115,6 +115,10 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
       guardianType
     }
     rskEoa
+    directPaymentDetails {
+      btcAddress
+      lightningAddress
+    }
     lastCreationStep
     launchScheduledAt
     category
@@ -187,6 +191,10 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
       guardianType
     }
     rskEoa
+    directPaymentDetails {
+      btcAddress
+      lightningAddress
+    }
     rskEoas {
       id
       rskAddress
@@ -266,6 +274,10 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     rewardCurrency
     fundingStrategy
     isRecoverableGrant
+    directPaymentDetails {
+      btcAddress
+      lightningAddress
+    }
     lastCreationStep
     launchScheduledAt
   }

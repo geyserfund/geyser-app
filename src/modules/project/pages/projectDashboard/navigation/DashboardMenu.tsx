@@ -5,6 +5,7 @@ import React from 'react'
 import { Link } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { ProjectState } from '@/modules/project/state/projectAtom'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -35,12 +36,15 @@ const DashboardMenuContent = (props: ButtonProps) => {
   const isMobile = useMobileMode()
 
   const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
+  const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
+  const showRewards = !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || stripeConfigured
 
-  const dashboardAnalyticsItems = projectDashboardItems.filter((item) => item.type === DashboardType.analytics)
-  const dashboardGrowthItems = projectDashboardItems.filter((item) => item.type === DashboardType.growth)
-  const dashboardPaymentsItems = projectDashboardItems.filter((item) => item.type === DashboardType.payments)
-  const dashboardSettingsItems = projectDashboardItems.filter((item) => item.type === DashboardType.settings)
-  const dashboardConfigItems = projectDashboardItems.filter((item) => item.type === DashboardType.config)
+  const visibleItems = projectDashboardItems.filter((item) => item.path !== 'dashboardRewards' || showRewards)
+  const dashboardAnalyticsItems = visibleItems.filter((item) => item.type === DashboardType.analytics)
+  const dashboardGrowthItems = visibleItems.filter((item) => item.type === DashboardType.growth)
+  const dashboardPaymentsItems = visibleItems.filter((item) => item.type === DashboardType.payments)
+  const dashboardSettingsItems = visibleItems.filter((item) => item.type === DashboardType.settings)
+  const dashboardConfigItems = visibleItems.filter((item) => item.type === DashboardType.config)
 
   return (
     <>

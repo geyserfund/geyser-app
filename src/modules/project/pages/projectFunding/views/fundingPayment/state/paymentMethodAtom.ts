@@ -12,6 +12,7 @@ import {
   projectFundingPaymentOnchainStartedRoutes,
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
@@ -82,6 +83,10 @@ export const hasStripePaymentMethodAtom = atom((get) => {
 
   if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
     return false
+  }
+
+  if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && project.paymentMethods.fiat.stripe) {
+    return true
   }
 
   if (!isStripeConnectSupportedForProject(project)) {

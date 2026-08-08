@@ -6,8 +6,8 @@ import { useNavigate, useParams } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { PromotionNetworkSettingsCard } from '@/modules/project/components/PromotionNetworkSettingsCard.tsx'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectCreationStep } from '@/types/index.ts'
 import type {
   Country,
   CreateProjectInput,
@@ -15,11 +15,12 @@ import type {
   ProjectSubCategory,
   UpdateProjectInput,
 } from '@/types/index.ts'
+import { ProjectCreationStep } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
-import { useAuthContext } from '../../../../../context'
+import { useAuthContext } from '../../../../../context/auth'
 import { FieldContainer } from '../../../../../shared/components/form/FieldContainer.tsx'
-import { getPath } from '../../../../../shared/constants'
+import { getPath } from '../../../../../shared/constants/config/routerPaths'
 import { useModal } from '../../../../../shared/hooks'
 import { projectCreationReferrerHeroIdAtom } from '../../../../../shared/state/projectReferralAtom.ts'
 import { ProjectForm } from '../../../forms/ProjectForm'
@@ -228,6 +229,7 @@ export const LaunchProjectDetails = () => {
           ) : null}
           <PromotionNetworkSettingsCard
             promotionsEnabled={form.watch('promotionsEnabled')}
+            showTemporaryDirectPaymentNotice={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
             onToggle={(isEnabled) =>
               form.setValue('promotionsEnabled', isEnabled, {
                 shouldDirty: true,

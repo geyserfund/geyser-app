@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
 import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { GoalModal } from '@/modules/project/pages/projectView/components/GoalModal.tsx'
 import { useGoalsModal } from '@/modules/project/pages/projectView/hooks/useGoalsModal.tsx'
 import { RenderGoals } from '@/modules/project/pages/projectView/views/goals/common/RenderGoals.tsx'
@@ -18,10 +19,14 @@ export const OpenFundingGoal = () => {
 
   const { project } = useProjectAtom()
   const { inProgressGoals } = useGoalsAtom()
+  const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingGoal,
-    getPath('launchProjectRewards', project.id),
+    getPath(
+      TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured ? 'launchStory' : 'launchProjectRewards',
+      project.id,
+    ),
   )
 
   const { onGoalModalOpen } = useGoalsModal()

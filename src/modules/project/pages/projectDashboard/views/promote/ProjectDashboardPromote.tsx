@@ -1,6 +1,8 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+
 import { DashboardLayout } from '../../common/DashboardLayout.tsx'
 import { AmbassadorPayoutsSection } from './sections/AmbassadorPayoutSections.tsx'
 import { GetFeaturedSection } from './sections/GetFeaturedSection.tsx'
@@ -18,7 +20,7 @@ export const ProjectDashboardPromote = () => {
         position="relative"
         paddingX={{ base: 0, lg: 6 }}
       >
-        <AmbassadorPayoutsSection />
+        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && <AmbassadorPayoutsSection />}
 
         <GeyserPromotionSection />
 

@@ -346,7 +346,9 @@ type AonClaimPrepareResponse {
   claimableAmountSats: Int!
   processingFeeSats: Int!
   creatorAddress: String!
-  """Encoded claim(processingFee) calldata for the client to include when signing."""
+  """
+  Encoded claim(processingFee) calldata for the client to include when signing.
+  """
   claimCalldata: String!
   simulationOk: Boolean!
 }
@@ -361,7 +363,9 @@ enum AonClaimStatus {
 type AonClaimStatusResponse {
   status: AonClaimStatus!
   txHash: String
-  """Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes."""
+  """
+  Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes.
+  """
   failureReason: String
 }
 
@@ -664,6 +668,7 @@ type Project {
   impactFundRecipient: ProjectImpactFundRecipient
   rskEoa: String
   rskEoas: [ProjectRskEoa!]!
+  directPaymentDetails: DirectPaymentDetails
 
   """
   By default, returns all the posts of a project, both published and unpublished but not deleted.
@@ -1027,6 +1032,17 @@ input UpdateProjectInput {
   Scheduled launch date
   """
   launchScheduledAt: Date
+  directPaymentDetails: DirectPaymentDetailsInput
+}
+
+type DirectPaymentDetails {
+  btcAddress: String
+  lightningAddress: String
+}
+
+input DirectPaymentDetailsInput {
+  btcAddress: String
+  lightningAddress: String
 }
 
 input ProjectAonGoalUpdateInput {

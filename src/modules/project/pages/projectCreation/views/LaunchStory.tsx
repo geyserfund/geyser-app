@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 
 import Loader from '@/components/ui/Loader.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
@@ -19,6 +20,7 @@ export const LaunchStory = () => {
   const navigate = useNavigate()
 
   const { project, loading } = useProjectAtom()
+  const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
 
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Story,
@@ -32,7 +34,12 @@ export const LaunchStory = () => {
       return navigate(-1)
     }
 
-    navigate(getPath('launchProjectRewards', project?.id))
+    navigate(
+      getPath(
+        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured ? 'launchFundingGoal' : 'launchProjectRewards',
+        project?.id,
+      ),
+    )
   }
 
   const onBackCLick = () => {

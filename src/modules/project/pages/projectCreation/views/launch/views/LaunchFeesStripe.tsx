@@ -25,7 +25,7 @@ import { commaFormatted } from '@/utils/index.ts'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
-import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
+import { ProjectLaunchStrategy } from '../launchStrategy.ts'
 
 const stripePromiseByAccount = new Map<string, ReturnType<typeof loadStripe>>()
 

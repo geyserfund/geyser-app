@@ -16,6 +16,7 @@ import {
 import { useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
 
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -47,18 +48,26 @@ export const ProjectCreationNavigationDesktop = () => {
 const ProjectCreationNavigation = (props: StackProps) => {
   const { project } = useProjectAtom()
   const location = useLocation()
+  const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
+  const contingencyDirectPaymentOnly = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured
 
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
       { title: 'Funding Strategy', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
-      { title: 'Products & Perks', path: getPath('launchProjectRewards', project?.id), isDisabled: !project.id },
+      ...(!contingencyDirectPaymentOnly
+        ? [{ title: 'Products & Perks', path: getPath('launchProjectRewards', project?.id), isDisabled: !project.id }]
+        : []),
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
-      { title: 'Wallet', path: getPath('launchPayment', project?.id), isDisabled: !project.id },
+      {
+        title: TEMPORARY_BOLTZ_CONTINGENCY_ENABLED ? 'Payment Settings' : 'Wallet',
+        path: getPath('launchPayment', project?.id),
+        isDisabled: !project.id,
+      },
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
-    [project?.id],
+    [contingencyDirectPaymentOnly, project?.id],
   )
 
   const activeButtonIndex = useMemo(() => {
@@ -72,8 +81,10 @@ const ProjectCreationNavigation = (props: StackProps) => {
   }, [location.pathname, steps])
 
   const activeStepIndex = useMemo(() => {
-    return projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep] || 0
-  }, [project?.lastCreationStep])
+    const stepIndex = projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep] || 0
+
+    return contingencyDirectPaymentOnly && stepIndex > 1 ? stepIndex - 1 : stepIndex
+  }, [contingencyDirectPaymentOnly, project?.lastCreationStep])
 
   return (
     <HStack w="150px" height="350px" alignItems={'stretch'} paddingTop={1} {...props}>
@@ -89,7 +100,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
               w={{ base: '100%', md: 'auto' }}
               variant={isActive ? 'soft' : 'ghost'}
               colorScheme={isActive ? 'primary1' : 'neutral1'}
-              key={index}
+              key={step.path}
               pointerEvents={isDisabled ? 'none' : 'auto'}
               color={isDisabled ? 'neutral1.8' : 'neutral1.11'}
               justifyContent={{ base: 'flex-start', md: 'center' }}
@@ -101,9 +112,9 @@ const ProjectCreationNavigation = (props: StackProps) => {
       </VStack>
 
       <Stepper index={activeStepIndex} orientation="vertical" gap="0" paddingY={2} size="xs">
-        {steps.map((_, index) => {
+        {steps.map((step, index) => {
           return (
-            <Step key={index} display="flex" alignItems="flex-start">
+            <Step key={step.path} display="flex" alignItems="flex-start">
               <StepIndicator>
                 <StepStatus complete={<StepIcon />} />
               </StepIndicator>

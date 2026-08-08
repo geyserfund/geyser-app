@@ -6,6 +6,7 @@ import { PiCheck, PiQuestion } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
@@ -38,7 +39,6 @@ const options: Record<
   },
   [ProjectFundingStrategy.AllOrNothing]: {
     title: t('All-or-Nothing'),
-    badge: t('Beta'),
     body: t('Receive funds only if you reach your goal before the deadline.'),
     recommendedFor: t('Projects that need a minimum amount to start, build, or deliver something.'),
     benefit: t('Builds trust with contributors.'),
@@ -150,8 +150,9 @@ export const LaunchFundingStrategy = () => {
             fundingStrategy={ProjectFundingStrategy.AllOrNothing}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
+            isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
           />
-          {isFieldPartner ? (
+          {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && isFieldPartner ? (
             <OptionButton
               fundingStrategy={RecoverableGrantFundingOption}
               selectedOption={selectedOption}
@@ -203,11 +204,13 @@ const OptionButton = ({
   fundingStrategy,
   selectedOption,
   setSelectedOption,
+  isDisabled = false,
   ...rest
 }: {
   fundingStrategy: ProjectCreationFundingOption
   selectedOption: ProjectCreationFundingOption
   setSelectedOption: (fundingStrategy: ProjectCreationFundingOption) => void
+  isDisabled?: boolean
 } & StackProps) => {
   const { title, body, recommendedFor, benefit, badge } = options[fundingStrategy]
   const isSelected = selectedOption === fundingStrategy
@@ -216,25 +219,29 @@ const OptionButton = ({
     <HStack
       w="full"
       border="1px solid"
-      borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
-      bg={isSelected ? 'primary1.1' : 'utils.pbg'}
-      _hover={{ borderColor: isSelected ? 'primary1.9' : 'neutral1.8' }}
+      borderColor={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.6'}
+      bg={isSelected && !isDisabled ? 'primary1.1' : 'utils.pbg'}
+      opacity={isDisabled ? 0.6 : 1}
+      _hover={{ borderColor: isDisabled ? 'neutral1.6' : isSelected ? 'primary1.9' : 'neutral1.8' }}
       borderRadius="8px"
       px={{ base: 4, md: 5 }}
       py={5}
-      cursor="pointer"
+      cursor={isDisabled ? 'not-allowed' : 'pointer'}
       alignItems="flex-start"
       spacing={4}
-      onClick={() => setSelectedOption(fundingStrategy)}
+      onClick={() => {
+        if (!isDisabled) setSelectedOption(fundingStrategy)
+      }}
       role="button"
       aria-pressed={isSelected}
+      aria-disabled={isDisabled}
       {...rest}
     >
       <Circle
         size="32px"
         border="2px solid"
-        borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
-        bg={isSelected ? 'primary1.9' : 'transparent'}
+        borderColor={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.6'}
+        bg={isSelected && !isDisabled ? 'primary1.9' : 'transparent'}
         flexShrink={0}
         mt={1}
       >
@@ -252,6 +259,11 @@ const OptionButton = ({
                 {badge}
               </Badge>
             ) : null}
+            {isDisabled ? (
+              <Body size="md" light color="neutral1.7">
+                {t('Temporarily unavailable')}
+              </Body>
+            ) : null}
           </HStack>
           <Body>{body}</Body>
         </VStack>
@@ -264,8 +276,13 @@ const OptionButton = ({
         <Divider />
 
         <HStack spacing={3}>
-          <Circle size="24px" border="2px solid" borderColor={isSelected ? 'primary1.9' : 'neutral1.7'} flexShrink={0}>
-            <Icon as={PiCheck} fontSize="14px" color={isSelected ? 'primary1.9' : 'neutral1.7'} />
+          <Circle
+            size="24px"
+            border="2px solid"
+            borderColor={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.7'}
+            flexShrink={0}
+          >
+            <Icon as={PiCheck} fontSize="14px" color={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.7'} />
           </Circle>
           <Body>{benefit}</Body>
         </HStack>

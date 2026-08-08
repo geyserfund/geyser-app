@@ -31,7 +31,7 @@ import { useNotification } from '@/utils/index.ts'
 
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { LaunchPaymentMethod } from '../views/LaunchPaymentMethodSelection.tsx'
-import { ProjectLaunchStrategy } from '../views/LaunchStrategySelection.tsx'
+import { ProjectLaunchStrategy } from '../launchStrategy.ts'
 
 type LaunchPrismAccountKeys = {
   publicKey: string

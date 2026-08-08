@@ -1,19 +1,26 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useParams } from 'react-router'
+import { Navigate, useParams } from 'react-router'
 
 import Loader from '@/components/ui/Loader'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { ProjectRewardForm } from '@/modules/project/forms/rewardForm/ProjectRewardForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { getPath } from '@/shared/constants/index.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 
 export const RewardEdit = () => {
-  const { loading } = useProjectAtom()
+  const { loading, project } = useProjectAtom()
+  const stripeConfigured = Boolean(project.paymentMethods?.fiat?.stripe)
 
   const { rewardUUID } = useParams<{ rewardUUID: string }>()
 
   if (loading) {
     return <Loader />
+  }
+
+  if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured) {
+    return <Navigate to={getPath('dashboardInfo', project.name)} replace />
   }
 
   return (

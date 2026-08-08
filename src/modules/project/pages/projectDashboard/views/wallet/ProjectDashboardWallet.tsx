@@ -7,9 +7,12 @@ import {
   RecoveryAccountKeys,
   SeedWordsModal,
 } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsWallet/SeedWordsSection.tsx'
+import { DirectPaymentDetailsForm } from '@/modules/project/components/DirectPaymentDetailsForm.tsx'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { useWithdrawFunds } from '@/modules/project/pages/projectView/views/body/sections/controlPanel/hooks/useWithdrawFunds.ts'
+import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ProjectFundingStrategy, useProjectRskEoaHistoryQuery } from '@/types/index.ts'
 
@@ -77,27 +80,42 @@ export const ProjectDashboardWallet = () => {
   return (
     <DashboardLayout desktopTitle={t('Payment Settings')}>
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
-        <TiaRskEoaSetupNotice />
+        {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (
+          <DirectPaymentDetailsForm
+            projectId={project.id}
+            directPaymentDetails={project.directPaymentDetails}
+            showStripeConfiguration={isStripeConnectSupportedForProject(project)}
+            stripeConfigurationAfterDirectPayments
+            allowStripeOnly={Boolean(project.paymentMethods?.fiat?.stripe)}
+          />
+        )}
+        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && <TiaRskEoaSetupNotice />}
         <ProjectRskEoaHistory
           projectId={project.id}
           currentRskEoa={walletProject?.rskEoa ?? project.rskEoa}
           rskEoas={walletProject?.rskEoas}
           onOpenSeedWords={handleOpenRecoveryData}
-          withdraw={{
-            showWithdrawableBalance,
-            isBelowMinWithdrawThreshold,
-            hasOngoingWithdraw,
-            showWithdraw,
-            onOpen: payoutRskModal.onOpen,
-          }}
+          withdraw={
+            TEMPORARY_BOLTZ_CONTINGENCY_ENABLED
+              ? undefined
+              : {
+                  showWithdrawableBalance,
+                  isBelowMinWithdrawThreshold,
+                  hasOngoingWithdraw,
+                  showWithdraw,
+                  onOpen: payoutRskModal.onOpen,
+                }
+          }
         />
-        <EnableFiatContributions
-          isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
-          projectId={project.id}
-        />
+        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (
+          <EnableFiatContributions
+            isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
+            projectId={project.id}
+          />
+        )}
       </VStack>
 
-      {showWithdraw && (
+      {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && showWithdraw && (
         <PayoutRsk
           {...payoutRskModal}
           project={project}

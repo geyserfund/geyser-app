@@ -1,4 +1,15 @@
-import { Box, HStack, Icon, IconButton, Switch, Tooltip, VStack } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Box,
+  HStack,
+  Icon,
+  IconButton,
+  Switch,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiInfo } from 'react-icons/pi'
 
@@ -9,6 +20,7 @@ type PromotionNetworkSettingsCardProps = {
   onToggle: (isEnabled: boolean) => void
   isLoading?: boolean
   contributionSummary?: string | null
+  showTemporaryDirectPaymentNotice?: boolean
 }
 
 /** Shared promotion-network settings UI for project creation and dashboard flows. */
@@ -17,13 +29,13 @@ export const PromotionNetworkSettingsCard = ({
   onToggle,
   isLoading = false,
   contributionSummary,
+  showTemporaryDirectPaymentNotice = false,
 }: PromotionNetworkSettingsCardProps) => {
   return (
     <VStack w="full" spacing={4} align="start">
       <Body size="sm" light>
         {t("Let's spread the word about your project.")}
       </Body>
-
       <Box w="full" p={4} borderWidth={1} borderRadius="lg" borderColor="neutral1.6">
         <HStack w="full" justifyContent="space-between" alignItems="center">
           <HStack>
@@ -58,6 +70,16 @@ export const PromotionNetworkSettingsCard = ({
             "When enabled your project becomes eligible to be shared through Geyser's promotion network — including all Geyser Ambassadors who can earn through referrals — and partner digital media companies, bringing more eyes to your project to enable more contributions.",
           )}
         </Body>
+        {showTemporaryDirectPaymentNotice ? (
+          <Alert status="info" borderRadius="8px" mb={4} alignItems="flex-start">
+            <AlertIcon />
+            <AlertDescription>
+              <Body size="sm">
+                {t('Temporary notice: the ambassador network fee does not apply on direct bitcoin payments')}
+              </Body>
+            </AlertDescription>
+          </Alert>
+        ) : null}
         {contributionSummary ? (
           <Box bg="green.100" p={3} borderRadius="md" w="fit-content">
             <Body size="sm" bold color="green.900">
