@@ -1,3 +1,18 @@
+## [0.52.0](https://github.com/geyserfund/geyser-app/compare/v0.51.0...v0.52.0) (2026-08-08)
+
+
+### Features
+
+* add temporary Boltz payment contingency ([3c91044](https://github.com/geyserfund/geyser-app/commit/3c91044521eaa19d4b37a76f7efbe419f9917630))
+
+
+### Bug Fixes
+
+* add contingency translation keys ([6e3815b](https://github.com/geyserfund/geyser-app/commit/6e3815b6b65241c11025dc72cbfa726ab5e6f801))
+* address React Doctor review comments ([c7e6bc8](https://github.com/geyserfund/geyser-app/commit/c7e6bc84dd403504140492abdf40b90401d83ec8))
+* show payment details notice in my projects ([5144b09](https://github.com/geyserfund/geyser-app/commit/5144b09a1b3ac078f5120c7e5ae09cb92c2dc906))
+* show Stripe alongside contingency Bitcoin notice ([b66203c](https://github.com/geyserfund/geyser-app/commit/b66203cb79587e658b7889b5cfd76d9ea712a7d4))
+
 ## [0.51.0](https://github.com/geyserfund/geyser-app/compare/v0.50.4...v0.51.0) (2026-08-06)
 
 
