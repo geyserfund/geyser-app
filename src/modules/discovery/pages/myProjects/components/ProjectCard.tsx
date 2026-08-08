@@ -129,12 +129,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
-  const shouldShowDirectPaymentNotification = Boolean(
-    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
-      !project.paymentMethods?.fiat?.stripe &&
-      !project.directPaymentDetails?.btcAddress &&
-      !project.directPaymentDetails?.lightningAddress,
-  )
+  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED)
 
   /** Get context message or action */
   const renderContextContent = () => {
@@ -338,10 +333,16 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         {shouldShowDirectPaymentNotification && (
           <ControlPanelNotification
             icon={<Icon as={PiInfo} color="warning.9" boxSize="24px" flexShrink={0} />}
-            title={t('Add payment details to keep receiving contributions')}
-            description={t(
-              'Geyser’s payment methods are temporarily unavailable. Add direct payment preferences so your community knows where to send funds. These payment details will be displayed in the contribution flow.',
-            )}
+            title={t('Add payment details to keep receiving contributions in Bitcoin')}
+            description={
+              project.paymentMethods?.fiat?.stripe
+                ? t(
+                    'Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.',
+                  )
+                : t(
+                    'Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.',
+                  )
+            }
             actionButton={
               <Button
                 as={RouterLink}

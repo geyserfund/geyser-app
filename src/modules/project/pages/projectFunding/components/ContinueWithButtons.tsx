@@ -6,8 +6,8 @@ import { AiFillApple } from 'react-icons/ai'
 import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router'
 
-import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
 import { getPath } from '@/shared/constants'
@@ -72,7 +72,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const creditCardIcon = <Icon as={FaCreditCard} color="currentColor" />
   const bitcoinIcon = <Icon as={FaBitcoin} color="currentColor" />
   const applePayIcon = <Icon as={AiFillApple} />
-  const stripeIcon = <Image src="/icons/stripe-s-logo.webp" alt={t('Stripe')} h="15px" objectFit="contain" />
+  const stripeIcon = <Image src="/icons/stripe-logo-white.png" alt={t('Stripe')} h="24px" objectFit="contain" />
 
   const handleCreditCardClick = () => {
     setIntendedPaymentMethod(PaymentMethods.fiatSwap)
@@ -225,7 +225,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           {t('Fiat renewal unavailable')}
         </Button>
       )}
-      {!showOnlyStripe && !showOnlyFiat && (
+      {!showOnlyFiat && (
         <Button
           id="continue-with-bitcoin"
           size="lg"

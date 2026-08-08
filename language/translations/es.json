@@ -2222,5 +2222,8 @@
   ", or become a ": ", or become a ",
   "Geyser Guardian": "Geyser Guardian",
   ".": ".",
-  "Copy address": "Copy address"
+  "Copy address": "Copy address",
+  "Add payment details to keep receiving contributions in Bitcoin": "Add payment details to keep receiving contributions in Bitcoin",
+  "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.",
+  "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you."
 }
