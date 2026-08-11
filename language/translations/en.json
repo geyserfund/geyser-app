@@ -2704,5 +2704,13 @@
   "Copy address": "Copy address",
   "Add payment details to keep receiving contributions in Bitcoin": "Add payment details to keep receiving contributions in Bitcoin",
   "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.",
-  "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you."
+  "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.",
+  "Uses a protected Open Funding goal with Geyser-managed payment methods.": "Uses a protected Open Funding goal with Geyser-managed payment methods.",
+  "Add goal to continue": "Add goal to continue",
+  "Set the Recoverable Grant target. This protected Bitcoin goal can be edited until launch.": "Set the Recoverable Grant target. This protected Bitcoin goal can be edited until launch.",
+  "Set grant target": "Set grant target",
+  "Managed payment methods": "Managed payment methods",
+  "Strike Bitcoin and Lightning": "Strike Bitcoin and Lightning",
+  "At least one managed payment provider must be ready before this project can launch.": "At least one managed payment provider must be ready before this project can launch.",
+  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal."
 }

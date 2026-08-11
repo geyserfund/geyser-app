@@ -2225,5 +2225,13 @@
   "Copy address": "Copy address",
   "Add payment details to keep receiving contributions in Bitcoin": "Add payment details to keep receiving contributions in Bitcoin",
   "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences so your community can continue to support you with Bitcoin.",
-  "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you."
+  "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.": "Geyser’s Bitcoin payment methods are temporarily unavailable. Add direct payment preferences or configure Stripe so your community can continue to support you.",
+  "Uses a protected Open Funding goal with Geyser-managed payment methods.": "Utiliza un objetivo protegido de Financiación Abierta con métodos de pago gestionados por Geyser.",
+  "Add goal to continue": "Añade un objetivo para continuar",
+  "Set the Recoverable Grant target. This protected Bitcoin goal can be edited until launch.": "Establece el objetivo de la Subvención Recuperable. Este objetivo protegido de Bitcoin puede editarse hasta el lanzamiento.",
+  "Set grant target": "Establecer objetivo de la subvención",
+  "Managed payment methods": "Métodos de pago gestionados",
+  "Strike Bitcoin and Lightning": "Strike Bitcoin y Lightning",
+  "At least one managed payment provider must be ready before this project can launch.": "Al menos un proveedor de pagos gestionado debe estar listo antes de lanzar este proyecto.",
+  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Las contribuciones a esta Subvención Recuperable se reciben en cuentas gestionadas por Geyser y se atribuyen a su objetivo protegido."
 }

@@ -8,31 +8,30 @@ import { shouldShowProjectGoals } from '@/modules/project/utils/shouldShowProjec
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
-import { ProjectStatus } from '../../../../../../types'
+import { ProjectStatus } from '../../../../../../types/generated/graphql.ts'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
 import { RewardNotice } from '../../components/RewardNotice.tsx'
-import {
-  ContributionSummary,
-  ControlPanel,
-  Creator,
-  Goals,
-  Header,
-  LeaderboardSummary,
-  Posts,
-  Rewards,
-  Story,
-} from './sections'
 import { AonGoToRefundPage } from './sections/AonGoToRefundPage.tsx'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
+import { ContributionSummary } from './sections/contributionSummary/ContributionSummary.tsx'
+import { ControlPanel } from './sections/controlPanel/ControlPanel.tsx'
+import { Creator } from './sections/Creator.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { FieldPartnerVerificationBanner } from './sections/FieldPartnerVerificationBanner.tsx'
+import { Goals } from './sections/Goals.tsx'
 import {
   type ProjectImpactFundRecipient,
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
+import { Header } from './sections/header/Header.tsx'
+import { LeaderboardSummary } from './sections/leaderboardSummary/LeaderboardSummary.tsx'
 import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
-import { FieldPartnerSection, RecoverableGrantExplainer } from './sections/recoverableGrant'
+import { Posts } from './sections/Posts.tsx'
+import { FieldPartnerSection } from './sections/recoverableGrant/FieldPartnerSection.tsx'
+import { RecoverableGrantExplainer } from './sections/recoverableGrant/RecoverableGrantExplainer.tsx'
+import { Rewards } from './sections/Rewards.tsx'
+import { Story } from './sections/Story.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
@@ -89,11 +88,11 @@ export const ProjectBody = () => {
         {isRecoverableGrant && <RecoverableGrantExplainer />}
 
         <Story />
-        {hasFieldPartner && <FieldPartnerSection />}
 
         {project.rewardsCount && <Rewards />}
         {project.entriesCount && <Posts />}
         {shouldShowProjectGoals(project) && <Goals />}
+        {hasFieldPartner && <FieldPartnerSection />}
         <AonGoToRefundPage />
 
         <SuggestedProjects

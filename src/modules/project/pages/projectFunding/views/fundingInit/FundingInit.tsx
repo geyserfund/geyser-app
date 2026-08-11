@@ -3,6 +3,7 @@ import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -38,9 +39,15 @@ export const FundingInit = () => {
   const queryParams = new URLSearchParams(location.search)
   const mode = queryParams.get('mode')
   const planId = queryParams.get('planId')
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   useEffect(() => {
     if (recurringContributionRenewal) {
+      return
+    }
+
+    if (isManagedRecoverableGrant) {
+      setState('fundingMode', recurringFundingModes.oneTime)
       return
     }
 
@@ -74,6 +81,7 @@ export const FundingInit = () => {
     setIntendedPaymentMethod,
     setState,
     updateSubscription,
+    isManagedRecoverableGrant,
   ])
 
   // useEffect(() => {
@@ -106,7 +114,7 @@ export const FundingInit = () => {
 
         {!recurringContributionRenewal && <GeyserTipInput />}
 
-        {fundingMode === recurringFundingModes.oneTime && (
+        {!isManagedRecoverableGrant && fundingMode === recurringFundingModes.oneTime && (
           <>
             <FundingInitRewards />
           </>

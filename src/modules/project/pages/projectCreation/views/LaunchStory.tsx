@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import Loader from '@/components/ui/Loader.tsx'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
@@ -21,6 +22,7 @@ export const LaunchStory = () => {
 
   const { project, loading } = useProjectAtom()
   const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Story,
@@ -36,7 +38,9 @@ export const LaunchStory = () => {
 
     navigate(
       getPath(
-        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured ? 'launchFundingGoal' : 'launchProjectRewards',
+        isManagedRecoverableGrant || (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured)
+          ? 'launchFundingGoal'
+          : 'launchProjectRewards',
         project?.id,
       ),
     )

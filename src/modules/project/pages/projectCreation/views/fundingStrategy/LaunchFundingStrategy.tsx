@@ -5,8 +5,9 @@ import { useRef, useState } from 'react'
 import { PiCheck, PiQuestion } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { canCreateManagedRecoverableGrant } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
@@ -51,7 +52,7 @@ const options: Record<
     recommendedFor: t(
       'Local businesses and entrepreneurs in circular economy hubs who need working capital, community trust, and a safer path to growth.',
     ),
-    benefit: t('Uses All-or-Nothing mechanics with recoverable grant reporting.'),
+    benefit: t('Uses a protected Open Funding goal with Geyser-managed payment methods.'),
   },
 }
 
@@ -85,12 +86,17 @@ export const LaunchFundingStrategy = () => {
 
   const isNewProject = !params.projectId || params.projectId === 'new'
   const { isRecoverableGrant } = project as { isRecoverableGrant?: boolean }
+  const showRecoverableGrantOption = canCreateManagedRecoverableGrant(isFieldPartner)
 
-  const fundingOptionFromProject = resolveProjectFundingOption({
+  const resolvedFundingOption = resolveProjectFundingOption({
     fundingStrategy: project.fundingStrategy,
     isRecoverableGrant,
     storedFundingOption,
   })
+  const fundingOptionFromProject =
+    isNewProject && !showRecoverableGrantOption && resolvedFundingOption === RecoverableGrantFundingOption
+      ? ProjectFundingStrategy.TakeItAll
+      : resolvedFundingOption
 
   const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(() => fundingOptionFromProject)
   const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
@@ -152,7 +158,7 @@ export const LaunchFundingStrategy = () => {
             setSelectedOption={setSelectedOption}
             isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
           />
-          {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && isFieldPartner ? (
+          {showRecoverableGrantOption ? (
             <OptionButton
               fundingStrategy={RecoverableGrantFundingOption}
               selectedOption={selectedOption}

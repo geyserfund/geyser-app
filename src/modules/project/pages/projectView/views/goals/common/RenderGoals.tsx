@@ -18,25 +18,27 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
 
-import { ProjectGoalFragment, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
+import {
+  ProjectGoalFragment,
+  useProjectGoalOrderingUpdateMutation,
+} from '../../../../../../../types/generated/graphql.ts'
 import { useGoalsAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../../../hooks/useGoalsModal'
 import { useProjectDefaultGoal } from '../../body/hooks/useProjectDefaultGoal'
-import { GoalCompleted, GoalInProgress } from '../components'
+import { GoalCompleted } from '../components/GoalCompleted.tsx'
+import { GoalInProgress } from '../components/GoalInProgress.tsx'
+import { shouldReorderGoals } from './goalOrdering.ts'
 
 type RenderGoalsProps = {
   onNoGoals?: () => void
   creationMode?: boolean
-}
-
-export const shouldReorderGoals = (event: Pick<DragEndEvent, 'active' | 'over'>): boolean => {
-  return Boolean(event.over && event.active.id !== event.over.id)
 }
 
 export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
@@ -44,6 +46,7 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
   const { guardProjectEditAttempt } = useProjectCreationEditGuard()
 
   const { project, loading: projectLoading } = useProjectAtom()
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const { queryInProgressGoals, queryCompletedGoals } = useProjectGoalsAPI(true)
 
@@ -160,7 +163,7 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
         <VStack alignItems="flex-start" spacing={4} width="100%">
           {!creationMode && (
             <Body size="2xl" bold>
-              {t('Goals')}
+              {isManagedRecoverableGrant ? t('Funding Goal') : t('Goals')}
             </Body>
           )}
           <DndContext
@@ -177,6 +180,7 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
                   goal={goal}
                   editMode={isGoalinEditMode || Boolean(creationMode)}
                   handleEditGoalModalOpen={handleEditGoalModalOpen}
+                  disableSorting={isManagedRecoverableGrant}
                   isPriorityGoal={goal.id === priorityGoal?.id}
                 />
               ))}
@@ -208,14 +212,17 @@ const SortableItem = ({
   editMode,
   handleEditGoalModalOpen,
   isPriorityGoal,
+  disableSorting,
 }: {
   goal: ProjectGoalFragment
   editMode: boolean
   handleEditGoalModalOpen: (goal: ProjectGoalFragment) => void
   isPriorityGoal: boolean
+  disableSorting: boolean
 }) => {
   const { listeners, setNodeRef, transform, transition, attributes, isDragging } = useSortable({
     id: goal.id.toString(),
+    disabled: disableSorting,
   })
 
   const style = {
@@ -235,7 +242,7 @@ const SortableItem = ({
         goal={goal}
         isEditing={editMode}
         onOpenGoalModal={handleEditGoalModalOpen}
-        listeners={listeners}
+        listeners={disableSorting ? undefined : listeners}
         isPriorityGoal={isPriorityGoal}
       />
     </Box>

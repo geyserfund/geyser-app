@@ -11,6 +11,7 @@ import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/p
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
@@ -333,6 +334,7 @@ export const ControlPanel = () => {
   const isDraftUrl = location.pathname.includes('/draft')
   const projectNoticeKey = String(project.id)
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const { isFundingDisabled } = useProjectToolkit(project)
   const [promotionsNoticeClosedByProject, setPromotionsNoticeClosedByProject] = useAtom(
@@ -557,7 +559,7 @@ export const ControlPanel = () => {
         {...resubmitConfirmModal}
       />
 
-      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (
+      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isRecoverableGrant && (
         <ControlPanelNotification
           icon={<Icon as={PiWarning} color="warning.9" boxSize="24px" flexShrink={0} />}
           title={t('Add payment details to keep receiving contributions in Bitcoin')}
@@ -587,9 +589,9 @@ export const ControlPanel = () => {
 
       {/* Financial Actions Section */}
       <ControlPanelFinancialActions
-        showClaim={showClaim}
-        showClaimedWithdraw={showClaimedWithdraw}
-        showWithdrawableBalance={showWithdrawableBalance}
+        showClaim={isRecoverableGrant ? false : showClaim}
+        showClaimedWithdraw={isRecoverableGrant ? false : showClaimedWithdraw}
+        showWithdrawableBalance={isRecoverableGrant ? false : showWithdrawableBalance}
         aonPayoutModal={aonPayoutModal}
         onOpenClaimedWithdraw={openClaimedWithdraw}
         payoutRskModal={payoutRskModal}
@@ -637,7 +639,7 @@ export const ControlPanel = () => {
         />
       )}
 
-      {shouldShowStripeConnectNotice && (
+      {shouldShowStripeConnectNotice && !isRecoverableGrant && (
         <ControlPanelNotification
           icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
           title={
@@ -678,7 +680,7 @@ export const ControlPanel = () => {
         />
       )}
 
-      {!isPromotionsModalOpen && !isFundingDisabled() && (
+      {!isRecoverableGrant && !isPromotionsModalOpen && !isFundingDisabled() && (
         <ControlPanelNotification
           icon={
             <Image
@@ -757,7 +759,7 @@ export const ControlPanel = () => {
         <ControlPanelButtons />
       </HStack>
 
-      {showWithdraw && (
+      {showWithdraw && !isRecoverableGrant && (
         <PayoutRsk
           {...payoutRskModal}
           project={project}
@@ -767,7 +769,9 @@ export const ControlPanel = () => {
         />
       )}
 
-      {showClaim && <PayoutRsk {...aonPayoutModal} project={project} onCompleted={onAonCompleted} />}
+      {showClaim && !isRecoverableGrant && (
+        <PayoutRsk {...aonPayoutModal} project={project} onCompleted={onAonCompleted} />
+      )}
     </CardLayout>
   )
 }

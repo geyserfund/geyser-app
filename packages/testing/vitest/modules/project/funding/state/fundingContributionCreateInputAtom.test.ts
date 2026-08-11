@@ -17,6 +17,8 @@ const createProjectState = (params: {
   fundingStrategy: ProjectFundingStrategy
   stripeEnabled: boolean
   projectName: string
+  isRecoverableGrant?: boolean
+  managedStripeReady?: boolean
 }): ProjectState =>
   ({
     id: 1,
@@ -30,11 +32,17 @@ const createProjectState = (params: {
         enabled: true,
         stripe: params.stripeEnabled,
       },
+      managedRecoverableGrant: {
+        stripe: params.managedStripeReady ?? false,
+        strikeLightning: false,
+        strikeOnChain: false,
+      },
     },
     subCategory: null,
     fundingStrategy: params.fundingStrategy,
+    isRecoverableGrant: params.isRecoverableGrant ?? false,
     rskEoa: null,
-  }) as unknown as ProjectState
+  } as unknown as ProjectState)
 
 describe('fiatOnlyPaymentsInputAtom', () => {
   it('returns stripe fiat payload for TIA projects with stripe enabled', () => {
@@ -92,6 +100,29 @@ describe('fiatOnlyPaymentsInputAtom', () => {
     expect(paymentsInput).toEqual({})
   })
 
+  it('uses managed Stripe readiness instead of creator Stripe configuration', () => {
+    const store = createStore()
+    store.set(
+      projectAtom,
+      createProjectState({
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+        stripeEnabled: false,
+        managedStripeReady: true,
+        isRecoverableGrant: true,
+        projectName: 'managed-grant',
+      }),
+    )
+
+    expect(store.get(fiatOnlyPaymentsInputAtom)).toEqual({
+      fiat: {
+        create: true,
+        stripe: {
+          returnUrl: expect.stringContaining('/project/managed-grant/funding/awaiting-success'),
+        },
+      },
+    })
+  })
+
   it('omits self referrer hero ids from the contribution input', () => {
     const store = createStore()
     store.set(
@@ -138,6 +169,48 @@ describe('fiatOnlyPaymentsInputAtom', () => {
     const contributionInput = store.get(formattedFundingInputAtom)
 
     expect(contributionInput.referrerHeroId).toBeUndefined()
+  })
+
+  it('preserves referrer attribution for managed Recoverable Grants', () => {
+    const store = createStore()
+    store.set(
+      projectAtom,
+      createProjectState({
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+        stripeEnabled: false,
+        managedStripeReady: true,
+        isRecoverableGrant: true,
+        projectName: 'managed-grant-referral',
+      }),
+    )
+    store.set(usdRateAtom, 100_000)
+    store.set(referrerHeroIdAtom, 'ambassador-hero')
+    store.set(fundingFormStateAtom, {
+      donationAmount: 1_000,
+      donationAmountUsdCent: 100,
+      shippingCost: 0,
+      email: '',
+      media: '',
+      comment: '',
+      privateComment: '',
+      rewardsByIDAndCount: undefined,
+      rewardCurrency: RewardCurrency.Usdcent,
+      needsShipping: false,
+      shippingDestination: ShippingDestination.National,
+      followProject: false,
+      subscribeToGeyserEmails: false,
+      subscription: {
+        cost: 0,
+        subscriptionId: undefined,
+        currency: undefined,
+        interval: 'MONTHLY',
+        name: '',
+      },
+      geyserTipPercent: 5,
+      guardianBadges: [],
+    })
+
+    expect(store.get(formattedFundingInputAtom).referrerHeroId).toBe('ambassador-hero')
   })
 
   it('includes swap payment inputs when logged out with no account keys', () => {

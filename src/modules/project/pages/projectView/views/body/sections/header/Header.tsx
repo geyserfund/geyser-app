@@ -24,6 +24,7 @@ import { PiArrowsClockwiseBold, PiFlag, PiMapPin } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { ProjectStatusBar } from '@/components/ui'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -34,27 +35,27 @@ import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.
 import { useProjectPageHeaderSummaryQuery } from '@/types'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
-import { Body, H1 } from '../../../../../../../../shared/components/typography'
+import { Body } from '../../../../../../../../shared/components/typography/Body.tsx'
+import { H1 } from '../../../../../../../../shared/components/typography/Heading.tsx'
+import { getPath } from '../../../../../../../../shared/constants/config/routerPaths.ts'
 import {
-  FlashMembershipCountUrl,
-  getPath,
   projectFlashIds,
   projectsWithSubscription,
-} from '../../../../../../../../shared/constants'
+} from '../../../../../../../../shared/constants/platform/subscription.ts'
+import { FlashMembershipCountUrl } from '../../../../../../../../shared/constants/platform/url.ts'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
-import {
-  commaFormatted,
-  isAllOrNothing,
-  removeProjectAmountException,
-  toInt,
-  useMobileMode,
-} from '../../../../../../../../utils'
+import { commaFormatted } from '../../../../../../../../shared/utils/formatData/helperFunctions.ts'
+import { useMobileMode } from '../../../../../../../../utils/info/useMobileMode.ts'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
+import { toInt } from '../../../../../../../../utils/unitConversion/typeConversion.ts'
+import { isAllOrNothing } from '../../../../../../../../utils/validations/project.ts'
+import { removeProjectAmountException } from '../../../../../../../../utils/validations/projectAmountException.ts'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
-import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
+import { FollowButton } from '../../components/FollowButton.tsx'
 import { ProjectLinks } from '../../components/ProjectLinks.tsx'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
+import { ManagedRecoverableGrantBalanceDisplay } from '../contributionSummary/components/ManagedRecoverableGrantBalanceDisplay.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { ProjectShareModal } from './shareModal'
 
@@ -391,10 +392,15 @@ const MobileBalanceInfo = () => {
   const { formatAmount } = useCurrencyFormatter()
   const { project } = useProjectAtom()
   const isAON = isAllOrNothing(project)
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const renderBalanceInfo = () => {
     if (isAON) {
       return <AonProjectBalanceDisplay />
+    }
+
+    if (isManagedRecoverableGrant) {
+      return <ManagedRecoverableGrantBalanceDisplay />
     }
 
     return (

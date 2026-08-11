@@ -4,8 +4,8 @@ import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
+import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
   MUTATION_PROJECT_SUBSCRIPTION_START,
   MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE,
@@ -24,7 +24,7 @@ import {
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
 } from '@/shared/constants/config/env.ts'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/config/routerPaths.ts'
 import {
   ContributionCreateInput,
   ContributionCreateMutation,
@@ -46,18 +46,17 @@ import {
   generatePreImageHash,
   isValidRskPrivateKey,
 } from '../../forms/accountPassword/keyGenerationHelper.ts'
-import { createSwapRecoveryMetadata, generateRecoveryCode } from '../utils/recoveryKey.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import {
   createCallDataForBoltzClaimCall,
   createCallDataForBoltzClaimCallWithCallee,
 } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
 import { createCallDataForPrismDepositFor } from '../../pages/projectFunding/utils/createCallDataForPrismDepositFor.ts'
-import { FundingFlowGraphQLError, fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
+import { type FundingFlowGraphQLError, fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state/errorAtom.ts'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
-  contributionCreatePreImagesAtom,
   anonymousRecoveryCodeAtom,
+  contributionCreatePreImagesAtom,
   fiatOnlyPaymentsInputAtom,
   formattedFundingInputAtom,
   formattedProjectSubscriptionStartInputAtom,
@@ -69,6 +68,7 @@ import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentA
 import { parseLightningToRskSwapAtom, parseOnChainToRskSwapAtom } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { validateFundingInput } from '../utils/helpers'
+import { createSwapRecoveryMetadata, generateRecoveryCode } from '../utils/recoveryKey.ts'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
 import { useStripeEmbeddedTheme } from './useStripeEmbeddedTheme.ts'
@@ -91,7 +91,15 @@ const isRetryableClaimTxSetError = (error: unknown) => {
 }
 
 const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
-  Boolean(payments.fiat || payments.fiatToLightningSwap || payments.lightningToRskSwap || payments.onChainToRskSwap)
+  Boolean(
+    payments.fiat ||
+      payments.fiatToLightningSwap ||
+      payments.lightningToRskSwap ||
+      payments.onChainToRskSwap ||
+      payments.strike ||
+      payments.strikeLightning ||
+      payments.strikeOnChain,
+  )
 
 const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): ContributionPaymentsInput => ({
   ...(paymentsInput?.fiat && {
@@ -134,6 +142,7 @@ const clonePaymentsInput = (paymentsInput?: ContributionPaymentsInput): Contribu
       }),
     },
   }),
+  ...(paymentsInput?.strike && { strike: { ...paymentsInput.strike } }),
 })
 
 type UnifiedFundingResponse = {
@@ -558,6 +567,7 @@ export const useFundingAPI = () => {
         if (mergedPreImages.lightning.preimageHex && mergedPreImages.lightning.preimageHash) {
           requestContext.preImages.lightning = { ...mergedPreImages.lightning }
         }
+
         if (mergedPreImages.onChain.preimageHex && mergedPreImages.onChain.preimageHash) {
           requestContext.preImages.onChain = { ...mergedPreImages.onChain }
         }
@@ -574,6 +584,7 @@ export const useFundingAPI = () => {
           } else if (mergedPreImages.lightning.preimageHash !== lightningToRskSwapInput.preimageHash) {
             requestContext.preImages.lightning = getInitialClaimPreImages().lightning
           }
+
           lightningToRskSwapInput.claimPublicKey = claimPublicKey
           lightningToRskSwapInput.claimAddress = claimAddress
         }
@@ -588,6 +599,7 @@ export const useFundingAPI = () => {
           } else if (mergedPreImages.onChain.preimageHash !== onChainToRskSwapInput.preimageHash) {
             requestContext.preImages.onChain = getInitialClaimPreImages().onChain
           }
+
           onChainToRskSwapInput.claimPublicKey = claimPublicKey
           onChainToRskSwapInput.claimAddress = claimAddress
         }

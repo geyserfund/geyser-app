@@ -4,6 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { KeyboardEvent, useRef } from 'react'
 import { PiHeartFill } from 'react-icons/pi'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { recurringFundingModes, recurringIntervals } from '@/modules/project/recurring/graphql'
@@ -12,9 +13,9 @@ import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography'
 import { darkModeColors, lightModeColors } from '@/shared/styles/colors.ts'
+import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
-import { commaFormatted } from '../../../../../../../utils'
 import {
   hasFiatPaymentMethodAtom,
   hasStripePaymentMethodAtom,
@@ -99,6 +100,7 @@ export const DonationInput = () => {
     : hasStripePaymentMethod
     ? t('Set up automatic monthly payments by credit card, or pay with Bitcoin and receive monthly reminders.')
     : null
+  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replaceAll(',', '')
@@ -138,7 +140,7 @@ export const DonationInput = () => {
         {donationTitle}
       </H1>
 
-      {canUseRecurringFunding && (
+      {canUseRecurringFunding && !managedRecoverableGrant && (
         <VStack alignItems="stretch" spacing={2}>
           <HStack spacing={3} alignItems="stretch">
             <Box

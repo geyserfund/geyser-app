@@ -4,6 +4,7 @@ import { useCallback, useReducer } from 'react'
 import { useNavigate } from 'react-router'
 
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -92,6 +93,7 @@ export const Launch = () => {
   })
 
   const launchFeeWaived = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLaunchFeeWaived(project)
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
   const projectLaunchStrategy = (project as { launchStrategy?: string | null }).launchStrategy
   const hasPaidLaunchStrategy = Object.values(ProjectLaunchStrategy).includes(
     projectLaunchStrategy as ProjectLaunchStrategy,
@@ -99,17 +101,17 @@ export const Launch = () => {
 
   const handleNext = useCallback(() => {
     if (step === LaunchStep.Review) {
-      setStep(hasPaidLaunchStrategy ? LaunchStep.Finalize : LaunchStep.Strategy)
+      setStep(isManagedRecoverableGrant || hasPaidLaunchStrategy ? LaunchStep.Finalize : LaunchStep.Strategy)
     }
 
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
-  }, [hasPaidLaunchStrategy, step])
+  }, [hasPaidLaunchStrategy, isManagedRecoverableGrant, step])
 
   const handleBack = useCallback(() => {
     if (step === LaunchStep.Finalize) {
-      navigate(getPath('launchPayment', project?.id))
+      navigate(getPath(isManagedRecoverableGrant ? 'launchAboutYou' : 'launchPayment', project?.id))
     }
 
     if (step === LaunchStep.FeesBitcoin || step === LaunchStep.FeesStripe) {
@@ -130,7 +132,7 @@ export const Launch = () => {
     if (step === LaunchStep.Strategy) {
       setStep(LaunchStep.Review)
     }
-  }, [step, project?.id, navigate])
+  }, [isManagedRecoverableGrant, navigate, project?.id, step])
 
   const handleNextStrategy = useCallback(
     (selectedStrategy: ProjectLaunchStrategy) => {

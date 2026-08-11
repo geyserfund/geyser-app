@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 
-import { FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
+import { FundingContributionPaymentDetailsFragment, PaymentCurrency } from '@/types/index.ts'
 
 /** Default empty state for funding payment details */
 const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = {
@@ -26,6 +26,27 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
     paymentId: '',
     amountDue: 0,
     fees: [],
+  },
+  strike: {
+    paymentRequest: '',
+    address: '',
+    paymentId: '',
+    amountDue: 0,
+    amountDueCurrency: PaymentCurrency.Btcsat,
+  },
+  strikeLightning: {
+    paymentRequest: '',
+    address: '',
+    paymentId: '',
+    amountDue: 0,
+    amountDueCurrency: PaymentCurrency.Btcsat,
+  },
+  strikeOnChain: {
+    paymentRequest: '',
+    address: '',
+    paymentId: '',
+    amountDue: 0,
+    amountDueCurrency: PaymentCurrency.Btcsat,
   },
 }
 

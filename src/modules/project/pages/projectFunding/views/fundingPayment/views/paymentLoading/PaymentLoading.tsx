@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -34,10 +35,17 @@ export const PaymentLoading = () => {
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [shouldShowRecoveryKey, setShouldShowRecoveryKey] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
+  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
   const hasStripePaymentMethod =
-    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(project?.paymentMethods?.fiat?.stripe)
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+    Boolean(
+      managedRecoverableGrant
+        ? project?.paymentMethods?.managedRecoverableGrant?.stripe
+        : project?.paymentMethods?.fiat?.stripe,
+    )
   const shouldUseProtectedPaymentLoading =
-    isAllOrNothing(project) || (isPrismEnabled && intendedPaymentMethod !== PaymentMethods.fiatSwap)
+    !managedRecoverableGrant &&
+    (isAllOrNothing(project) || (isPrismEnabled && intendedPaymentMethod !== PaymentMethods.fiatSwap))
 
   const handleNext = (contributionId?: string, forceCardRoute?: boolean) => {
     const paymentPath =
@@ -47,6 +55,8 @@ export const PaymentLoading = () => {
           : fiatPaymentMethod === fiatCheckoutMethods.applePay
           ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
           : getPath('fundingPaymentFiatBanxa', project.name)
+        : intendedPaymentMethod === PaymentMethods.onChain
+        ? getPath('fundingPaymentOnchain', project.name)
         : getPath('fundingPaymentLightning', project.name)
 
     const searchParams = new URLSearchParams(location.search)

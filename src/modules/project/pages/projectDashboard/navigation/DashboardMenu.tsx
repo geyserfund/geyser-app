@@ -4,8 +4,9 @@ import { useAtomValue } from 'jotai'
 import React from 'react'
 import { Link } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectState } from '@/modules/project/state/projectAtom'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -37,7 +38,8 @@ const DashboardMenuContent = (props: ButtonProps) => {
 
   const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
   const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
-  const showRewards = !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || stripeConfigured
+  const showRewards =
+    !isManagedRecoverableGrantProject(project) && (!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || stripeConfigured)
 
   const visibleItems = projectDashboardItems.filter((item) => item.path !== 'dashboardRewards' || showRewards)
   const dashboardAnalyticsItems = visibleItems.filter((item) => item.type === DashboardType.analytics)

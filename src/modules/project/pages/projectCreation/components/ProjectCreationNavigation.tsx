@@ -17,6 +17,7 @@ import { useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
 
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -50,24 +51,29 @@ const ProjectCreationNavigation = (props: StackProps) => {
   const location = useLocation()
   const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
   const contingencyDirectPaymentOnly = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
       { title: 'Funding Strategy', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
-      ...(!contingencyDirectPaymentOnly
+      ...(!contingencyDirectPaymentOnly && !isManagedRecoverableGrant
         ? [{ title: 'Products & Perks', path: getPath('launchProjectRewards', project?.id), isDisabled: !project.id }]
         : []),
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
-      {
-        title: TEMPORARY_BOLTZ_CONTINGENCY_ENABLED ? 'Payment Settings' : 'Wallet',
-        path: getPath('launchPayment', project?.id),
-        isDisabled: !project.id,
-      },
+      ...(!isManagedRecoverableGrant
+        ? [
+            {
+              title: TEMPORARY_BOLTZ_CONTINGENCY_ENABLED ? 'Payment Settings' : 'Wallet',
+              path: getPath('launchPayment', project?.id),
+              isDisabled: !project.id,
+            },
+          ]
+        : []),
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
-    [contingencyDirectPaymentOnly, project?.id],
+    [contingencyDirectPaymentOnly, isManagedRecoverableGrant, project?.id],
   )
 
   const activeButtonIndex = useMemo(() => {
@@ -83,8 +89,15 @@ const ProjectCreationNavigation = (props: StackProps) => {
   const activeStepIndex = useMemo(() => {
     const stepIndex = projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep] || 0
 
-    return contingencyDirectPaymentOnly && stepIndex > 1 ? stepIndex - 1 : stepIndex
-  }, [contingencyDirectPaymentOnly, project?.lastCreationStep])
+    const productsStepSkipped = contingencyDirectPaymentOnly || isManagedRecoverableGrant
+    const paymentStepSkipped = isManagedRecoverableGrant
+    const skippedProducts =
+      productsStepSkipped && stepIndex > projectCreationStepIndex[ProjectCreationStep.PerksAndProducts] ? 1 : 0
+    const skippedPayment =
+      paymentStepSkipped && stepIndex > projectCreationStepIndex[ProjectCreationStep.Wallet] ? 1 : 0
+
+    return stepIndex - skippedProducts - skippedPayment
+  }, [contingencyDirectPaymentOnly, isManagedRecoverableGrant, project?.lastCreationStep])
 
   return (
     <HStack w="150px" height="350px" alignItems={'stretch'} paddingTop={1} {...props}>

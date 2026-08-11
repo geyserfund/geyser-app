@@ -9,11 +9,21 @@ export const getActiveFundingPaymentDetails = (
   fundingPaymentDetails: FundingContributionPaymentDetailsFragment,
 ): FundingPaymentDetailsWithAmountDue | undefined => {
   if (paymentMethod === PaymentMethods.onChain) {
-    return fundingPaymentDetails.onChainToRskSwap || undefined
+    return (
+      (fundingPaymentDetails.strikeOnChain?.address ? fundingPaymentDetails.strikeOnChain : undefined) ||
+      (fundingPaymentDetails.strike?.address ? fundingPaymentDetails.strike : undefined) ||
+      fundingPaymentDetails.onChainToRskSwap ||
+      undefined
+    )
   }
 
   if (paymentMethod === PaymentMethods.lightning) {
-    return fundingPaymentDetails.lightningToRskSwap || undefined
+    return (
+      (fundingPaymentDetails.strikeLightning?.paymentRequest ? fundingPaymentDetails.strikeLightning : undefined) ||
+      (fundingPaymentDetails.strike?.paymentRequest ? fundingPaymentDetails.strike : undefined) ||
+      fundingPaymentDetails.lightningToRskSwap ||
+      undefined
+    )
   }
 
   return undefined

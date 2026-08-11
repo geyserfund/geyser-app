@@ -3,16 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
-import { useGoalsModal } from '../../../hooks'
+import { useGoalsModal } from '../../../hooks/useGoalsModal.tsx'
 import { RenderGoals } from '../../goals/common/RenderGoals'
-import { BodySectionLayout } from '../components'
+import { BodySectionLayout } from '../components/BodySectionLayout.tsx'
 
 export const Goals = () => {
   const { t } = useTranslation()
 
-  const { isProjectOwner } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
+  const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
 
@@ -22,7 +24,7 @@ export const Goals = () => {
         <RenderGoals />
         {isProjectOwner && (
           <HStack w="full" justifyContent="end">
-            {isGoalinEditMode && (
+            {isGoalinEditMode && !isRecoverableGrant && (
               <Button
                 size="sm"
                 variant="solid"

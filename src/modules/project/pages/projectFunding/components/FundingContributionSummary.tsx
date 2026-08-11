@@ -61,8 +61,9 @@ export const FundingContributionSummary = ({
   const bitcoinQuote = fundingContribution.bitcoinQuote || fallbackBitcoinQuote
   const { order } = fundingContribution
   const totalSats = amountDueSats || activePaymentDetails?.amountDue || fundingContribution.amount
-  const tipSats = activePaymentDetails?.fees?.reduce(reduceContributorFeesByType(PaymentFeeType.Tip), 0) || 0
-  const networkFeeSats = activePaymentDetails?.fees?.reduce(reduceContributorNetworkFees, 0) || 0
+  const activePaymentFees = activePaymentDetails && 'fees' in activePaymentDetails ? activePaymentDetails.fees : []
+  const tipSats = activePaymentFees.reduce(reduceContributorFeesByType(PaymentFeeType.Tip), 0) || 0
+  const networkFeeSats = activePaymentFees.reduce(reduceContributorNetworkFees, 0) || 0
   const currentGoal =
     fundingContribution.projectGoalId && inProgressGoals.length > 0
       ? inProgressGoals.find((goal) => goal.id === fundingContribution.projectGoalId)

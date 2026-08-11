@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { centsToDollars } from '@/shared/utils/formatData/helperFunctions.ts'
 import type { ProjectForLandingPageFragment, ProjectFundingSummary } from '@/types/index.ts'
-import { ProjectAonGoalStatus, Satoshis } from '@/types/index.ts'
+import { ProjectAonGoalStatus, ProjectFundingStrategy, Satoshis } from '@/types/index.ts'
 
 import { isActive, isAllOrNothing } from '../../../utils/validations/project.ts'
 
@@ -29,7 +29,7 @@ export const useProjectToolkit = (
     'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'
   > & {
     isRecoverableGrant?: boolean | null
-    fundingSummary?: Pick<ProjectFundingSummary, 'isRecoverableGrant'> | null
+    fundingSummary?: Pick<ProjectFundingSummary, 'isFundingOpen'> | null
   },
 ) => {
   const { getUSDCentsAmount } = useBTCConverter()
@@ -73,7 +73,7 @@ export const useProjectToolkit = (
   }
 
   const isRecoverableGrantGoalReached = () => {
-    const isRecoverableGrant = project.fundingSummary?.isRecoverableGrant ?? project.isRecoverableGrant
+    const { isRecoverableGrant } = project
     if (!isRecoverableGrant || !project.aonGoal?.goalAmount) {
       return false
     }
@@ -82,6 +82,14 @@ export const useProjectToolkit = (
   }
 
   const isFundingDisabled = () => {
+    if (
+      project.isRecoverableGrant &&
+      project.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+      project.fundingSummary
+    ) {
+      return !project.fundingSummary.isFundingOpen
+    }
+
     if (isRecoverableGrantGoalReached()) {
       return true
     }

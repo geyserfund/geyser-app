@@ -3,11 +3,12 @@ import { Loader } from '@giphy/react-components'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { ProjectRewardForm } from '@/modules/project/forms/rewardForm/ProjectRewardForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { getPath } from '@/shared/constants/index.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 
 export const RewardCreate = () => {
   const { t } = useTranslation()
@@ -18,7 +19,7 @@ export const RewardCreate = () => {
     return <Loader />
   }
 
-  if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured) {
+  if (isManagedRecoverableGrantProject(project) || (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured)) {
     return <Navigate to={getPath('dashboardInfo', project.name)} replace />
   }
 

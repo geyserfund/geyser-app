@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { canCreateManagedRecoverableGrant } from '../../../../../../../../src/modules/project/domain/managedRecoverableGrant.ts'
 import {
   getProjectAonGoalDurationInDays,
   RECOVERABLE_GRANT_DURATION_IN_DAYS,
@@ -7,6 +8,16 @@ import {
   shouldShowAllOrNothingGoalInCreation,
 } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
 import { ProjectFundingStrategy } from '../../../../../../../../src/types/index.ts'
+
+describe('canCreateManagedRecoverableGrant', () => {
+  it('allows Field Partners', () => {
+    expect(canCreateManagedRecoverableGrant(true)).toBe(true)
+  })
+
+  it('does not expose managed Recoverable Grants to other creators', () => {
+    expect(canCreateManagedRecoverableGrant(false)).toBe(false)
+  })
+})
 
 describe('shouldShowAllOrNothingGoalInCreation', () => {
   it('shows AON goal UI for recoverable grant projects', () => {

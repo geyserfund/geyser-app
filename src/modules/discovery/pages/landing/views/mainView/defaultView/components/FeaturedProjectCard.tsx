@@ -1,13 +1,14 @@
 import { VStack } from '@chakra-ui/react'
 import { useNavigate } from 'react-router'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { AonProgressData } from '@/shared/molecules/project/AonProgressData.tsx'
 import { isAllOrNothing } from '@/utils/index.ts'
 
-import { getPathWithGeyserPromotionsHero } from '../../../../../../../../shared/constants/index.ts'
-import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../../types/index.ts'
+import { getPathWithGeyserPromotionsHero } from '../../../../../../../../shared/constants/config/routerPaths.ts'
+import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../../types/generated/graphql.ts'
 import { FeatureAirtableData } from '../sections/Featured.tsx'
 import { FeaturedCardLayout, FeaturedCardSkeleton } from './FeaturedCardLayout.tsx'
 import { MiniProjectCard } from './MiniProjectCard.tsx'
@@ -56,6 +57,8 @@ export const FeaturedProjectCard = ({
   }
 
   const isAON = isAllOrNothing(project)
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const isGoalCampaign = isAON || isManagedRecoverableGrant
 
   return (
     <>
@@ -69,9 +72,9 @@ export const FeaturedProjectCard = ({
         onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
         {...rest}
       >
-        {isAON && project.aonGoal && (
+        {isGoalCampaign && (
           <VStack w="full" alignItems="start" spacing={1}>
-            <AonProgressBar project={project} />
+            <AonProgressBar project={isAON ? project : { fundingSummary: project.fundingSummary }} />
             <AonProgressData project={project} />
           </VStack>
         )}

@@ -10,6 +10,7 @@ import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/index.ts'
 import { SocialConfig } from '@/modules/auth/SocialConfig.tsx'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -42,13 +43,21 @@ export const LaunchAboutYou = () => {
   }, [user.bio])
 
   const { project, loading } = useProjectAtom()
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
 
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.AboutYou,
-    getPath('launchPayment', project.id),
+    getPath(isManagedRecoverableGrant ? 'launchFinalize' : 'launchPayment', project.id),
   )
+
+  const continueAfterAboutYou = () =>
+    updateProjectWithLastCreationStep(
+      undefined,
+      undefined,
+      isManagedRecoverableGrant ? ProjectCreationStep.Launch : undefined,
+    )
 
   const onLeave = () => {
     if (!project) {
@@ -67,7 +76,7 @@ export const LaunchAboutYou = () => {
     const currentBio = user.bio || ''
 
     if (currentBio === normalizedBio) {
-      updateProjectWithLastCreationStep()
+      continueAfterAboutYou()
       return
     }
 
@@ -80,7 +89,7 @@ export const LaunchAboutYou = () => {
       },
       onCompleted() {
         queryCurrentUser()
-        updateProjectWithLastCreationStep()
+        continueAfterAboutYou()
       },
       onError(error) {
         toast.error({

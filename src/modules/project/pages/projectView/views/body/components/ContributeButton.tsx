@@ -26,6 +26,7 @@ import { PiCopy, PiHandHeartBold, PiLink } from 'react-icons/pi'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { QRCodeComponent } from '@/modules/project/pages/projectFunding/views/fundingPayment/components/QRCodeComponent.tsx'
@@ -75,6 +76,12 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   const hasDirectPaymentDetails = Boolean(
     project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
   )
+  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedRecoverableGrant
+  const managedPaymentMethods = project?.paymentMethods?.managedRecoverableGrant
+  const hasManagedPaymentMethod = Boolean(
+    managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,
+  )
   const hasStripePaymentMethod = Boolean(project?.paymentMethods?.fiat?.stripe)
   const bitcoinAddress = project?.directPaymentDetails?.btcAddress ?? ''
   const lightningAddress = project?.directPaymentDetails?.lightningAddress ?? ''
@@ -111,11 +118,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   )
 
   useEffect(() => {
-    if (
-      !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED ||
-      !hasDirectPaymentDetails ||
-      searchParams.get('direct-payment') !== '1'
-    ) {
+    if (!usesTemporaryDirectPayments || !hasDirectPaymentDetails || searchParams.get('direct-payment') !== '1') {
       return
     }
 
@@ -123,14 +126,14 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     const nextSearchParams = new URLSearchParams(searchParams)
     nextSearchParams.delete('direct-payment')
     setSearchParams(nextSearchParams, { replace: true })
-  }, [directPaymentModal, hasDirectPaymentDetails, searchParams, setSearchParams])
+  }, [directPaymentModal, hasDirectPaymentDetails, searchParams, setSearchParams, usesTemporaryDirectPayments])
 
   if (!project) {
     return null
   }
 
   const handleWidgetClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasDirectPaymentDetails) {
+    if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
       event.preventDefault()
       directPaymentModal.onOpen()
       return
@@ -144,7 +147,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   }
 
   const handleInlineClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasDirectPaymentDetails) {
+    if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
       event.preventDefault()
       directPaymentModal.onOpen()
       return
@@ -175,8 +178,11 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     size: 'lg',
     variant: 'solid',
     colorScheme: 'primary1',
-    isDisabled:
-      TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !hasStripePaymentMethod ? !hasDirectPaymentDetails : isFundingDisabled(),
+    isDisabled: managedRecoverableGrant
+      ? !hasManagedPaymentMethod || isFundingDisabled()
+      : usesTemporaryDirectPayments && !hasStripePaymentMethod
+      ? !hasDirectPaymentDetails
+      : isFundingDisabled(),
     position: 'relative',
     sx: {
       transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
@@ -196,7 +202,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
         />
       )}
 
-      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasDirectPaymentDetails && (
+      {usesTemporaryDirectPayments && hasDirectPaymentDetails && (
         <DirectPaymentModal
           isOpen={directPaymentModal.isOpen}
           onClose={directPaymentModal.onClose}
@@ -214,7 +220,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
         />
       )}
       {isWidget ? (
-        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !hasStripePaymentMethod && !hasDirectPaymentDetails ? (
+        usesTemporaryDirectPayments && !hasStripePaymentMethod && !hasDirectPaymentDetails ? (
           <Tooltip label={t('Funding is unavailable at the moment, until the creator adds payment details.')}>
             <span tabIndex={0} style={{ display: 'block', width: '100%' }}>
               <Button
@@ -243,7 +249,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
             {t('Contribute')}
           </Button>
         )
-      ) : TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !hasStripePaymentMethod && !hasDirectPaymentDetails ? (
+      ) : usesTemporaryDirectPayments && !hasStripePaymentMethod && !hasDirectPaymentDetails ? (
         <Tooltip label={t('Funding is unavailable at the moment, until the creator adds payment details.')}>
           <span tabIndex={0} style={{ display: 'block', width: '100%' }}>
             <Button {...sharedButtonProps} {...rest} data-testid="contribute-button" onClick={handleInlineClick}>

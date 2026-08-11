@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router'
 import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { DirectPaymentDetailsForm } from '@/modules/project/components/DirectPaymentDetailsForm.tsx'
+import { ManagedRecoverableGrantPaymentStatus } from '@/modules/project/components/ManagedRecoverableGrantPaymentStatus.tsx'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
@@ -16,7 +18,38 @@ import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationP
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 
 export const LaunchPaymentEmail = () => {
+  const { project } = useProjectAtom()
+
+  if (isManagedRecoverableGrantProject(project)) return <ManagedRecoverableGrantPaymentReadiness />
   return TEMPORARY_BOLTZ_CONTINGENCY_ENABLED ? <TemporaryLaunchPaymentEmail /> : <LegacyLaunchPaymentEmail />
+}
+
+const ManagedRecoverableGrantPaymentReadiness = () => {
+  const { project } = useProjectAtom()
+  const navigate = useNavigate()
+  const readiness = project.paymentMethods?.managedRecoverableGrant
+  const stripeReady = Boolean(readiness?.stripe)
+  const strikeReady = Boolean(readiness?.strikeLightning || readiness?.strikeOnChain)
+  const hasReadyProvider = stripeReady || strikeReady
+  const { updateProjectWithLastCreationStep, loading } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.Wallet,
+    getPath('launchFinalize', project.id),
+  )
+
+  return (
+    <ProjectCreationPageWrapper
+      title={t('Managed payment methods')}
+      continueButtonProps={{
+        label: t('Continue'),
+        onClick: () => updateProjectWithLastCreationStep(),
+        isDisabled: !hasReadyProvider,
+        isLoading: loading,
+      }}
+      backButtonProps={{ onClick: () => navigate(getPath('launchAboutYou', project.id)) }}
+    >
+      <ManagedRecoverableGrantPaymentStatus readiness={readiness} />
+    </ProjectCreationPageWrapper>
+  )
 }
 
 const TemporaryLaunchPaymentEmail = () => {

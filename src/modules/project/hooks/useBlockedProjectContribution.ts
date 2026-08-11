@@ -2,6 +2,7 @@ import { t } from 'i18next'
 import type { MouseEvent } from 'react'
 import { useCallback, useRef } from 'react'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import {
   Project,
@@ -11,6 +12,7 @@ import {
 import { useNotification } from '@/utils/index.ts'
 
 type ProjectContributionGate = Pick<Project, 'id' | 'rskEoa' | 'fundingStrategy'> & {
+  isRecoverableGrant?: boolean | null
   paymentMethods?: {
     fiat?: {
       stripe?: unknown
@@ -32,9 +34,11 @@ export const useBlockedProjectContribution = (project?: ProjectContributionGate 
   const hasDirectPaymentDetails = Boolean(
     project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
   )
+  const managedRecoverableGrant = Boolean(project && isManagedRecoverableGrantProject(project))
   const isContributionBlocked = Boolean(
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
       !project?.rskEoa &&
+      !managedRecoverableGrant &&
       !(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (hasStripePaymentMethod || hasDirectPaymentDetails)),
   )
 

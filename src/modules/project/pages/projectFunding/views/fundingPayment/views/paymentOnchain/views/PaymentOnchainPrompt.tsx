@@ -1,9 +1,11 @@
 import { Button, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 import { PiWarning } from 'react-icons/pi'
 import { Navigate, useLocation, useNavigate } from 'react-router'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
@@ -28,9 +30,13 @@ export const PaymentOnchainPrompt = () => {
 
   const isPrismTia = isPrismEnabled(project)
   const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
+  const shouldSkipRefundPrompt = isRskSwapFlow || isManagedRecoverableGrantProject(project)
 
-  if (isRskSwapFlow) {
-    setOnchainRefundDownloadAtom(true)
+  useEffect(() => {
+    if (shouldSkipRefundPrompt) setOnchainRefundDownloadAtom(true)
+  }, [setOnchainRefundDownloadAtom, shouldSkipRefundPrompt])
+
+  if (shouldSkipRefundPrompt) {
     return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} replace />
   }
 

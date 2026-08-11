@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
-import { isAllOrNothing, useMobileMode } from '@/utils'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 
-import { getPath } from '../../../../../../../../../shared/constants'
-import { ProjectStatus } from '../../../../../../../../../types'
+import { getPath } from '../../../../../../../../../shared/constants/config/routerPaths.ts'
+import { ProjectStatus } from '../../../../../../../../../types/generated/graphql.ts'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
-import { useGoalsModal } from '../../../../../hooks'
+import { useWriteUpdateModal } from '../../../../../hooks/useWriteUpdateModal.ts'
 import { ControlPanelImages } from '../constant.ts'
 import { ControlPanelButton } from './ControlPanelButton.tsx'
 import { PromoteProjectMenu } from './PromoteProjectMenu.tsx'
@@ -13,11 +13,9 @@ import { PromoteProjectMenu } from './PromoteProjectMenu.tsx'
 export const ControlPanelButtons = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
-  const isMobile = useMobileMode()
+  const { openWriteUpdateModal } = useWriteUpdateModal()
 
-  const isAon = isAllOrNothing(project)
-
-  const { onGoalModalOpen } = useGoalsModal()
+  const isRecoverableGrant = isRecoverableGrantProject(project)
 
   if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
     return null
@@ -25,22 +23,22 @@ export const ControlPanelButtons = () => {
   return (
     <>
       <ControlPanelButton
-        emoji={ControlPanelImages.product}
-        label={t('Sell a product')}
-        mobileLabel={t('Product')}
-        to={getPath('projectRewardCreate', project?.name)}
+        emoji={ControlPanelImages.update}
+        label={t('Write an update')}
+        mobileLabel={t('Update')}
+        onClick={() => openWriteUpdateModal()}
       />
 
-      {!isAon && (
+      {!isRecoverableGrant && (
         <ControlPanelButton
-          emoji={ControlPanelImages.goal}
-          label={isMobile ? t('Goal') : t('Add a Goal')}
-          mobileLabel={t('Goal')}
-          onClick={() => onGoalModalOpen()}
+          emoji={ControlPanelImages.product}
+          label={t('Sell a product')}
+          mobileLabel={t('Product')}
+          to={getPath('projectRewardCreate', project?.name)}
         />
       )}
 
-      <PromoteProjectMenu projectName={project?.name} />
+      {!isRecoverableGrant && <PromoteProjectMenu projectName={project?.name} />}
     </>
   )
 }
