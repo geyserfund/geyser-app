@@ -143,6 +143,13 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     paymentMethods {
       ...ProjectPaymentMethods
     }
+    fundingSummary {
+      raisedSats
+      goalSats
+      percentageFunded
+      endsAt
+      isFundingOpen
+    }
     reviews {
       ...ProjectReviewPublic
     }
@@ -227,6 +234,13 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     }
     paymentMethods {
       ...ProjectPaymentMethods
+    }
+    fundingSummary {
+      raisedSats
+      goalSats
+      percentageFunded
+      endsAt
+      isFundingOpen
     }
     reviews {
       ...ProjectReview

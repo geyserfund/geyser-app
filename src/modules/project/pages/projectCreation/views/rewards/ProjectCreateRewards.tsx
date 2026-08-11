@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, useMatch, useNavigate } from 'react-router'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectCreationStep } from '@/types/index.ts'
@@ -53,7 +54,7 @@ export const ProjectCreateRewards = () => {
     onClick: handleBack,
   }
 
-  if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured) {
+  if (isManagedRecoverableGrantProject(project) || (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured)) {
     return <Navigate to={getPath('launchStory', project.id)} replace />
   }
 

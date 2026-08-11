@@ -55,11 +55,22 @@ export const FRAGMENT_CONTRIBUTION_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
   }
 `
 
+export const FRAGMENT_CONTRIBUTION_STRIKE_PAYMENT_DETAILS = gql`
+  fragment ContributionStrikePaymentDetails on ContributionStrikePaymentDetails {
+    paymentRequest
+    address
+    paymentId
+    amountDue
+    amountDueCurrency
+  }
+`
+
 export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
   ${FRAGMENT_CONTRIBUTION_FIAT_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_FIAT_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_CONTRIBUTION_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_STRIKE_PAYMENT_DETAILS}
   fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
     fiat {
       ...ContributionFiatPaymentDetails
@@ -72,6 +83,15 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
     }
     onChainToRskSwap {
       ...ContributionOnChainToRskSwapPaymentDetails
+    }
+    strike {
+      ...ContributionStrikePaymentDetails
+    }
+    strikeLightning {
+      ...ContributionStrikePaymentDetails
+    }
+    strikeOnChain {
+      ...ContributionStrikePaymentDetails
     }
   }
 `

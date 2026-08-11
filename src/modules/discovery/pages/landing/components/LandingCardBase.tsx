@@ -79,7 +79,7 @@ const StatusPill = ({ label }: { label: string }) => (
   </HStack>
 )
 
-/** AON campaign status line (time left, percentage funded, failed). */
+/** Goal-campaign status line (time left, percentage funded, failed). */
 const AonStatusDisplay = ({
   percentage,
   timeLeft,
@@ -168,92 +168,101 @@ const ContributionAmount = ({
   </HStack>
 )
 
-/** Bottom section: status/amount + progress bar (AON) + Contribute CTA. */
-const CardFooter = ({
+const FooterContributeButton = ({
+  onContribute,
+  isDisabled,
+}: {
+  onContribute: (e: React.MouseEvent<HTMLButtonElement>) => void
+  isDisabled: boolean
+}) => (
+  <Box
+    flexShrink={0}
+    opacity={isDisabled ? 0 : { base: 1, md: 0 }}
+    _groupHover={{ opacity: isDisabled ? 0 : 1 }}
+    transition="opacity 0.2s ease"
+  >
+    <Button
+      variant="solid"
+      colorScheme="primary1"
+      size="lg"
+      height="44px"
+      onClick={onContribute}
+      isDisabled={isDisabled}
+    >
+      {t('Contribute')}
+    </Button>
+  </Box>
+)
+
+/** Bottom section for goal campaigns. */
+const GoalCampaignFooter = ({
   project,
-  isAonProject,
-  isAonFailed,
-  isAonEndedFunded,
+  status,
   percentage,
   timeLeft,
-  formattedAmount,
-  shouldShowContributionAmount,
-  hasFire,
-  contributionLabel,
   onContribute,
   isDisabled,
 }: {
   project: ProjectForLandingPageFragment | LandingProjectCardProject
-  isAonProject: boolean
-  isAonFailed: boolean
-  isAonEndedFunded: boolean
+  status: { isAonFailed: boolean; isAonEndedFunded: boolean }
   percentage: number
   timeLeft: ReturnType<typeof aonProjectTimeLeft>
-  formattedAmount: string
-  shouldShowContributionAmount: boolean
-  hasFire: boolean
-  contributionLabel: string
   onContribute: (e: React.MouseEvent<HTMLButtonElement>) => void
   isDisabled: boolean
 }) => {
-  const contributeButton = (
-    <Box
-      flexShrink={0}
-      opacity={isDisabled ? 0 : { base: 1, md: 0 }}
-      _groupHover={{ opacity: isDisabled ? 0 : 1 }}
-      transition="opacity 0.2s ease"
-    >
-      <Button
-        variant="solid"
-        colorScheme="primary1"
-        size="lg"
-        height="44px"
-        onClick={onContribute}
-        isDisabled={isDisabled}
-      >
-        {t('Contribute')}
-      </Button>
-    </Box>
-  )
-
-  if (isAonProject) {
-    if (isAonEndedFunded) {
-      return (
-        <HStack width="100%" alignItems="center" spacing={3} marginTop="auto">
-          <AonStatusDisplay
-            percentage={percentage}
-            timeLeft={timeLeft}
-            isFailed={isAonFailed}
-            isEndedFunded={isAonEndedFunded}
-          />
-        </HStack>
-      )
-    }
-
+  if (status.isAonEndedFunded) {
     return (
       <HStack width="100%" alignItems="center" spacing={3} marginTop="auto">
-        <VStack flex={1} spacing={1} alignItems="start" justifyContent="center">
-          <AonStatusDisplay
-            percentage={percentage}
-            timeLeft={timeLeft}
-            isFailed={isAonFailed}
-            isEndedFunded={isAonEndedFunded}
-          />
-          <AonProgressBar project={project} percentage={percentage} height="8px" />
-        </VStack>
-        {contributeButton}
+        <AonStatusDisplay
+          percentage={percentage}
+          timeLeft={timeLeft}
+          isFailed={status.isAonFailed}
+          isEndedFunded={status.isAonEndedFunded}
+        />
       </HStack>
     )
   }
 
   return (
+    <HStack width="100%" alignItems="center" spacing={3} marginTop="auto">
+      <VStack flex={1} spacing={1} alignItems="start" justifyContent="center">
+        <AonStatusDisplay
+          percentage={percentage}
+          timeLeft={timeLeft}
+          isFailed={status.isAonFailed}
+          isEndedFunded={status.isAonEndedFunded}
+        />
+        <AonProgressBar project={project} percentage={percentage} height="8px" />
+      </VStack>
+      <FooterContributeButton onContribute={onContribute} isDisabled={isDisabled} />
+    </HStack>
+  )
+}
+
+/** Bottom section for Open Funding campaigns. */
+const OpenFundingFooter = ({
+  formattedAmount,
+  showContributionAmount,
+  hasFire,
+  contributionLabel,
+  onContribute,
+  isDisabled,
+}: {
+  formattedAmount: string
+  showContributionAmount: boolean
+  hasFire: boolean
+  contributionLabel: string
+  onContribute: (e: React.MouseEvent<HTMLButtonElement>) => void
+  isDisabled: boolean
+}) => {
+  return (
     <HStack width="100%" justifyContent="space-between" alignItems="center" marginTop="auto">
-      {shouldShowContributionAmount ? (
+      {showContributionAmount ? (
         <ContributionAmount amount={formattedAmount} hasFire={hasFire} label={contributionLabel} />
       ) : (
         <Box flex={1} />
       )}
-      {contributeButton}
+      <FooterContributeButton onContribute={onContribute} isDisabled={isDisabled} />
     </HStack>
   )
 }
@@ -293,29 +302,30 @@ const CardImage = ({
       <AllOrNothingIcon project={project} />
     </Box>
 
-    {!compact && (countryName || categoryLabel || statusPillLabel || project.fundingSummary.matching.activeMatching) && (
-      <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
-        {countryName && (
-          <ImagePill>
-            <Icon as={PiMapPin} boxSize={3} color="neutral1.11" />
-            <Body size="xs" medium isTruncated maxWidth="120px">
-              {countryName}
-            </Body>
-          </ImagePill>
-        )}
-        {categoryLabel && (
-          <ImagePill>
-            <Body size="xs" medium isTruncated maxWidth="120px">
-              {categoryLabel}
-            </Body>
-          </ImagePill>
-        )}
-        {statusPillLabel && <StatusPill label={statusPillLabel} />}
-        {project.fundingSummary.matching.activeMatching && (
-          <ProjectMatchingPublicBadge matching={project.fundingSummary.matching.activeMatching} variant="discovery" />
-        )}
-      </HStack>
-    )}
+    {!compact &&
+      (countryName || categoryLabel || statusPillLabel || project.fundingSummary.matching.activeMatching) && (
+        <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
+          {countryName && (
+            <ImagePill>
+              <Icon as={PiMapPin} boxSize={3} color="neutral1.11" />
+              <Body size="xs" medium isTruncated maxWidth="120px">
+                {countryName}
+              </Body>
+            </ImagePill>
+          )}
+          {categoryLabel && (
+            <ImagePill>
+              <Body size="xs" medium isTruncated maxWidth="120px">
+                {categoryLabel}
+              </Body>
+            </ImagePill>
+          )}
+          {statusPillLabel && <StatusPill label={statusPillLabel} />}
+          {project.fundingSummary.matching.activeMatching && (
+            <ProjectMatchingPublicBadge matching={project.fundingSummary.matching.activeMatching} variant="discovery" />
+          )}
+        </HStack>
+      )}
   </Box>
 )
 
@@ -346,9 +356,12 @@ export const LandingCardBase = ({
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const { fundingSummary } = project
   const isAonProject = fundingSummary.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+  const isManagedRecoverableGrant =
+    fundingSummary.isRecoverableGrant && fundingSummary.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isGoalCampaign = isAonProject || isManagedRecoverableGrant
   const fundingState = getLandingCardFundingState({ fundingSummary, isAonProject })
 
-  const raisedUsd = isAonProject
+  const raisedUsd = isGoalCampaign
     ? getUSDAmount(BigInt(fundingSummary.raisedSats))
     : centsToDollars(fundingSummary.raisedUsdCent)
   const contributionAmount = trendingContributionUsd ?? raisedUsd
@@ -522,16 +535,19 @@ export const LandingCardBase = ({
               size="xs"
             />
           ) : null
-        ) : (
-          <CardFooter
+        ) : isGoalCampaign ? (
+          <GoalCampaignFooter
             project={project}
-            isAonProject={isAonProject}
-            isAonFailed={isAonFailed}
-            isAonEndedFunded={isAonEndedFunded}
+            status={{ isAonFailed, isAonEndedFunded }}
             percentage={percentage}
             timeLeft={timeLeft}
+            onContribute={handleContribute}
+            isDisabled={!fundingSummary?.isFundingOpen}
+          />
+        ) : (
+          <OpenFundingFooter
             formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
-            shouldShowContributionAmount={shouldShowContributionAmount}
+            showContributionAmount={shouldShowContributionAmount}
             hasFire={hasFire}
             contributionLabel={contributionLabel}
             onContribute={handleContribute}

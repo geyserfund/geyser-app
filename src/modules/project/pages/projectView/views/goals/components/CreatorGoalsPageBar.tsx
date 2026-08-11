@@ -5,9 +5,10 @@ import { PiNotePencil, PiPlus } from 'react-icons/pi'
 
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
-import { useGoalsModal } from '../../../hooks'
+import { useGoalsModal } from '../../../hooks/useGoalsModal.tsx'
 
 export const CreatorGoalPageTopBar = () => {
   const { isProjectOwner } = useProjectAtom()
@@ -38,6 +39,8 @@ export const CreatorGoalPageBottomBar = () => {
 export const CreateGoalButtons = () => {
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
   const { inProgressGoals } = useGoalsAtom()
+  const { project } = useProjectAtom()
+  const isRecoverableGrant = isRecoverableGrantProject(project)
 
   useEffect(() => {
     return () => {
@@ -58,16 +61,18 @@ export const CreateGoalButtons = () => {
       >
         {!isGoalinEditMode ? t('Edit') : t('Finish editing')}
       </Button>
-      <Button
-        flex={1}
-        size="lg"
-        variant="solid"
-        colorScheme="primary1"
-        leftIcon={<PiPlus />}
-        onClick={() => onGoalModalOpen()}
-      >
-        {t('Add goal')}
-      </Button>
+      {!isRecoverableGrant && (
+        <Button
+          flex={1}
+          size="lg"
+          variant="solid"
+          colorScheme="primary1"
+          leftIcon={<PiPlus />}
+          onClick={() => onGoalModalOpen()}
+        >
+          {t('Add goal')}
+        </Button>
+      )}
     </>
   )
 }

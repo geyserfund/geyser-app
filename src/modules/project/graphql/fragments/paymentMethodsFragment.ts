@@ -6,5 +6,10 @@ export const FRAGMENT_PROJECT_PAYMENT_METHODS = gql`
       enabled
       stripe
     }
+    managedRecoverableGrant {
+      stripe
+      strikeLightning
+      strikeOnChain
+    }
   }
 `

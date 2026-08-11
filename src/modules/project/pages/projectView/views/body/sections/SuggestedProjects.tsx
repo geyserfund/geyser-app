@@ -9,7 +9,6 @@ import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath, getPathWithGeyserPromotionsHero } from '@/shared/constants/index.ts'
 import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import {
-  ProjectForLandingPageFragment,
   ProjectsMostFundedByCategoryRange,
   ProjectSubCategory,
   useProjectsMostFundedByCategoryQuery,
@@ -45,7 +44,7 @@ export const SuggestedProjects = ({ subCategory, projectId, id, ...rest }: Sugge
     return null
   }
 
-  const suggestedProjects = getRandomProjects(projects)
+  const suggestedProjects = projects.slice(0, NO_OF_PROJECTS_TO_SHOW)
 
   return (
     <VStack w="full" paddingTop={16} paddingBottom={16} {...rest}>
@@ -88,27 +87,4 @@ export const SuggestedProjects = ({ subCategory, projectId, id, ...rest }: Sugge
       </VStack>
     </VStack>
   )
-}
-
-const getRandomProjects = (allProjects: ProjectForLandingPageFragment[]): ProjectForLandingPageFragment[] => {
-  // Return empty array if allProjects is undefined or null
-  if (!allProjects) return []
-
-  // Clone the array to avoid modifying the original
-  const projectsCopy = [...allProjects]
-  // Create array for random selection
-  const randomProjects: ProjectForLandingPageFragment[] = []
-
-  // Get up to 3 random projects (or fewer if less than 3 exist)
-  const selectionCount = Math.min(NO_OF_PROJECTS_TO_SHOW, projectsCopy.length)
-
-  for (let i = 0; i < selectionCount; i++) {
-    // Get random index from remaining projects
-    const randomIndex = Math.floor(Math.random() * projectsCopy.length)
-    // Add to random selection and remove from copy to avoid duplicates
-    randomProjects.push(projectsCopy[randomIndex] as ProjectForLandingPageFragment)
-    projectsCopy.splice(randomIndex, 1)
-  }
-
-  return randomProjects
 }

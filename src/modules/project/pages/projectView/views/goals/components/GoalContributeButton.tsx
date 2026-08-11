@@ -3,6 +3,7 @@ import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
@@ -40,6 +41,12 @@ export const GoalContributeButton = ({
   const hasDirectPaymentDetails = Boolean(
     project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
   )
+  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedRecoverableGrant
+  const managedPaymentMethods = project.paymentMethods?.managedRecoverableGrant
+  const hasManagedPaymentMethod = Boolean(
+    managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,
+  )
   const hasStripePaymentMethod = Boolean(project.paymentMethods?.fiat?.stripe)
 
   const handleContributeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -52,7 +59,7 @@ export const GoalContributeButton = ({
       setSelectedGoalId(projectGoalId)
     }
 
-    if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasDirectPaymentDetails) {
+    if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
       navigate(`${getPath('project', project.name)}?direct-payment=1`)
       return
     }
@@ -71,7 +78,11 @@ export const GoalContributeButton = ({
       display={{ base: displayOnMobile ? 'flex' : 'none', lg: 'flex' }}
       onClick={handleContributeClick}
       isDisabled={
-        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !hasStripePaymentMethod ? !hasDirectPaymentDetails : isFundingDisabled
+        managedRecoverableGrant
+          ? !hasManagedPaymentMethod || isFundingDisabled
+          : usesTemporaryDirectPayments && !hasStripePaymentMethod
+          ? !hasDirectPaymentDetails
+          : isFundingDisabled
       }
       {...props}
     >
@@ -85,7 +96,11 @@ export const GoalContributeButton = ({
       width={{ base: '100%', lg: '192px' }}
       onClick={handleContributeClick}
       isDisabled={
-        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !hasStripePaymentMethod ? !hasDirectPaymentDetails : isFundingDisabled
+        managedRecoverableGrant
+          ? !hasManagedPaymentMethod || isFundingDisabled
+          : usesTemporaryDirectPayments && !hasStripePaymentMethod
+          ? !hasDirectPaymentDetails
+          : isFundingDisabled
       }
       {...props}
     >
@@ -93,7 +108,7 @@ export const GoalContributeButton = ({
     </Button>
   )
 
-  return TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !hasStripePaymentMethod && !hasDirectPaymentDetails ? (
+  return usesTemporaryDirectPayments && !hasStripePaymentMethod && !hasDirectPaymentDetails ? (
     <Tooltip label={t('Funding is unavailable at the moment, until the creator adds payment details.')}>
       <span tabIndex={0} style={{ display: 'block', width: '100%' }}>
         {button}

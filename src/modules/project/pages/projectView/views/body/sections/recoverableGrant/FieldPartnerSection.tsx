@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { GridItem, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Button, GridItem, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
@@ -9,12 +9,12 @@ import { Tooltip } from '@/components/ui/Tooltip.tsx'
 import { LandingProjectCard } from '@/modules/discovery/pages/landing/components/LandingProjectCard.tsx'
 import { QUERY_FIELD_PARTNER_PROJECTS } from '@/modules/project/graphql/queries/fieldPartnerProjectsQuery.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { Body } from '@/shared/components/typography'
+import { Body, H3 } from '@/shared/components/typography'
 import { getPath, getPathWithGeyserPromotionsHero } from '@/shared/constants'
 import { ProjectForLandingPageFragment, ProjectStatus } from '@/types/index.ts'
 
 import { useProjectAtom } from '../../../../../../hooks/useProjectAtom'
-import { BodySectionLayout } from '../../components'
+import { BodySectionLayout } from '../../components/BodySectionLayout.tsx'
 
 type FieldPartnerUser = {
   id: string
@@ -76,10 +76,9 @@ export const FieldPartnerSection = () => {
     return [...new Map(projects.map((project) => [project.id, project])).values()]
   }, [linkedProjectsData?.projectsGet.projects, ownedProjectsData?.projectsGet.projects])
 
-  const relatedProjects = useMemo(
-    () => getRandomProjects(facilitatedProjects.filter((facilitatedProject) => facilitatedProject.id !== project.id)),
-    [facilitatedProjects, project.id],
-  )
+  const relatedProjects = facilitatedProjects
+    .filter((facilitatedProject) => facilitatedProject.id !== project.id)
+    .slice(0, RELATED_PROJECTS_TO_SHOW)
 
   if (!fieldPartner) {
     return null
@@ -134,12 +133,19 @@ export const FieldPartnerSection = () => {
 
       {relatedProjects.length > 0 && (
         <VStack w="full" spacing={4} alignItems="start">
-          <Body size="2xl">
-            {t('Also facilitated by')}{' '}
-            <Body as="span" size="2xl" bold>
-              {fieldPartnerName}
-            </Body>
-          </Body>
+          <HStack w="full" justifyContent="space-between" alignItems="flex-start">
+            <H3 size="xl" bold>
+              {t('Also facilitated by')}{' '}
+              <Body as="span" size="xl" bold color="primary1.9">
+                {fieldPartnerName}
+              </Body>
+            </H3>
+            {fieldPartnerProfilePath && (
+              <Button as={Link} to={fieldPartnerProfilePath} variant="outline" size="md" colorScheme="neutral1">
+                {t('See all')}
+              </Button>
+            )}
+          </HStack>
 
           <SimpleGrid w="full" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 4, lg: 5 }}>
             {relatedProjects.map((relatedProject) => (
@@ -155,21 +161,4 @@ export const FieldPartnerSection = () => {
       )}
     </>
   )
-}
-
-const getRandomProjects = (projects: ProjectForLandingPageFragment[]) => {
-  const projectsCopy = [...projects]
-  const randomProjects: ProjectForLandingPageFragment[] = []
-  const selectionCount = Math.min(RELATED_PROJECTS_TO_SHOW, projectsCopy.length)
-
-  for (let i = 0; i < selectionCount; i++) {
-    const randomIndex = Math.floor(Math.random() * projectsCopy.length)
-    const project = projectsCopy[randomIndex]
-    if (project) {
-      randomProjects.push(project)
-      projectsCopy.splice(randomIndex, 1)
-    }
-  }
-
-  return randomProjects
 }

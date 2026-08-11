@@ -21,7 +21,7 @@ import { useNotification } from '@/utils'
 import { useAuthContext } from '../../../../../context/auth'
 import { FieldContainer } from '../../../../../shared/components/form/FieldContainer.tsx'
 import { getPath } from '../../../../../shared/constants/config/routerPaths'
-import { useModal } from '../../../../../shared/hooks'
+import { useModal } from '../../../../../shared/hooks/useModal.ts'
 import { projectCreationReferrerHeroIdAtom } from '../../../../../shared/state/projectReferralAtom.ts'
 import { ProjectForm } from '../../../forms/ProjectForm'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectDashboard/common/ProjectUnsavedModal'
@@ -227,17 +227,19 @@ export const LaunchProjectDetails = () => {
               />
             </FieldContainer>
           ) : null}
-          <PromotionNetworkSettingsCard
-            promotionsEnabled={form.watch('promotionsEnabled')}
-            showTemporaryDirectPaymentNotice={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
-            onToggle={(isEnabled) =>
-              form.setValue('promotionsEnabled', isEnabled, {
-                shouldDirty: true,
-                shouldTouch: true,
-                shouldValidate: true,
-              })
-            }
-          />
+          {!isRecoverableGrant ? (
+            <PromotionNetworkSettingsCard
+              promotionsEnabled={form.watch('promotionsEnabled')}
+              showTemporaryDirectPaymentNotice={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
+              onToggle={(isEnabled) =>
+                form.setValue('promotionsEnabled', isEnabled, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                  shouldValidate: true,
+                })
+              }
+            />
+          ) : null}
         </VStack>
       </ProjectCreationPageWrapper>
 

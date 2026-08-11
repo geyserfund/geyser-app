@@ -1,4 +1,6 @@
-import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { DateTime } from 'luxon'
+
+import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import type { ProjectFundingSummary } from '@/types/generated/graphql.ts'
 import { ProjectAonGoalStatus } from '@/types/generated/graphql.ts'
 
@@ -11,12 +13,11 @@ export const getLandingCardFundingState = ({
   isAonProject: boolean
 }) => {
   const percentage = fundingSummary.percentageFunded ?? 0
-  const timeLeft = aonProjectTimeLeft({
-    endsAt: fundingSummary.endsAt,
-    deployedAt: null,
-    goalDurationInDays: 0,
-    status: fundingSummary.status as ProjectAonGoalStatus,
-  })
+  const endsAt = fundingSummary.endsAt ? DateTime.fromMillis(Number(fundingSummary.endsAt)) : null
+  const timeLeft =
+    !endsAt || (isAonProject && fundingSummary.status === ProjectAonGoalStatus.Claimed)
+      ? null
+      : getTimeLeft(isAonProject ? endsAt.minus({ minutes: 10 }) : endsAt)
   const isFailed = isAonProject && fundingSummary.isFundingFailed
 
   return {

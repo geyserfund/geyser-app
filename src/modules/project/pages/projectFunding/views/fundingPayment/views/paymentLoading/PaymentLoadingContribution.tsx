@@ -78,7 +78,10 @@ export const PaymentLoadingContribution = ({
           if (onComplete) {
             onComplete(contributionId, Boolean(payments.fiat?.stripeClientSecret))
           } else {
-            let paymentPath = getPath('fundingPaymentLightning', project.name)
+            let paymentPath =
+              intendedPaymentMethod === PaymentMethods.onChain
+                ? getPath('fundingPaymentOnchain', project.name)
+                : getPath('fundingPaymentLightning', project.name)
 
             if (payments.fiat?.stripeClientSecret) {
               paymentPath = getPath('fundingPaymentFiatStripe', project.name)

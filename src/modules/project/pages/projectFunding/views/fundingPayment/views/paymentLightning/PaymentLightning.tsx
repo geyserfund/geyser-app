@@ -27,8 +27,13 @@ import { useTransactionStatusUpdate } from '../paymentOnchain/hooks/useTransacti
 export const PaymentLightning = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
-  const paymentRequest = fundingPaymentDetails.lightningToRskSwap?.paymentRequest
-  const amountDue = fundingPaymentDetails.lightningToRskSwap?.amountDue
+  const legacyManagedPayment = fundingPaymentDetails.strike?.paymentRequest ? fundingPaymentDetails.strike : undefined
+  const managedPayment = fundingPaymentDetails.strikeLightning?.paymentRequest
+    ? fundingPaymentDetails.strikeLightning
+    : legacyManagedPayment
+  const isManaged = Boolean(managedPayment)
+  const paymentRequest = managedPayment?.paymentRequest || fundingPaymentDetails.lightningToRskSwap?.paymentRequest
+  const amountDue = managedPayment?.amountDue || fundingPaymentDetails.lightningToRskSwap?.amountDue
 
   if (!paymentRequest || !amountDue || amountDue <= 0) {
     return null
@@ -39,6 +44,7 @@ export const PaymentLightning = () => {
       paymentRequest={paymentRequest}
       amountDueSats={amountDue}
       bitcoinQuote={fundingContribution.bitcoinQuote}
+      isManaged={isManaged}
     />
   )
 }
@@ -47,10 +53,12 @@ export const PaymentLightningContent = ({
   paymentRequest,
   amountDueSats,
   bitcoinQuote,
+  isManaged = false,
 }: {
   paymentRequest: string
   amountDueSats: number
   bitcoinQuote?: BitcoinQuote | null
+  isManaged?: boolean
 }) => {
   useListenFundingContributionSuccess()
 
@@ -117,7 +125,7 @@ export const PaymentLightningContent = ({
           {t('Copy invoice')}
         </Button>
       </VStack>
-      <PaymentLightningRskSwapStatusListener />
+      {!isManaged && <PaymentLightningRskSwapStatusListener />}
     </VStack>
   )
 }

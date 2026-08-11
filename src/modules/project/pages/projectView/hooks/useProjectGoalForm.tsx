@@ -4,17 +4,26 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
+import {
+  MANAGED_RECOVERABLE_GRANT_GOAL_TITLE,
+  MANAGED_RECOVERABLE_GRANT_MAX_TARGET_SATS,
+} from '@/modules/project/domain/managedRecoverableGrant.ts'
 
-import { ProjectGoalCreateInput, ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../types'
-import { dollarsToCents, useNotification } from '../../../../../utils'
+import { dollarsToCents } from '../../../../../shared/utils/formatData/helperFunctions.ts'
+import {
+  ProjectGoalCreateInput,
+  ProjectGoalCurrency,
+  ProjectGoalFragment,
+} from '../../../../../types/generated/graphql.ts'
+import { useNotification } from '../../../../../utils/tools/Notification.tsx'
 
 type FormValues = ProjectGoalCreateInput
 
 const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
 const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
-const MAX_GOAL_TARGET_AMOUNT = 2000000000
+const MAX_GOAL_TARGET_AMOUNT = 2_147_483_647
 
-const goalFormSchema = (amountContributed: number) =>
+const goalFormSchema = (amountContributed: number, maxTargetAmount: number) =>
   yup
     .object({
       title: yup.string().required('Title is required').max(50, 'Title must be at most 50 characters long'),
@@ -27,10 +36,7 @@ const goalFormSchema = (amountContributed: number) =>
           amountContributed,
           'The Goal amount is lower than your funded amount. Please choose a Goal amount that is higher than the current Goal’s funded amount.',
         )
-        .max(
-          MAX_GOAL_TARGET_AMOUNT,
-          'The target amount cannot exceed 2,000,000,000 USD or 2,000,000,000 Sats. Come on!',
-        )
+        .max(maxTargetAmount, `The target amount cannot exceed ${maxTargetAmount.toLocaleString()}.`)
         .test(
           'currency-based-minimum',
           'Target amount does not meet the minimum requirement of 10$ USD or 10,000 Sats if the currency is denominated in Bitcoin',
@@ -56,21 +62,33 @@ type UseProjectGoalFormProps = {
   projectId: string
   onClose: () => void
   onGoalCreated?: () => void
+  managedRecoverableGrant?: boolean
 }
 
-export const useProjectGoalForm = ({ goal, projectId, onClose, onGoalCreated }: UseProjectGoalFormProps) => {
+export const useProjectGoalForm = ({
+  goal,
+  projectId,
+  onClose,
+  onGoalCreated,
+  managedRecoverableGrant = false,
+}: UseProjectGoalFormProps) => {
   const toast = useNotification()
 
   let isBTC = goal?.currency === ProjectGoalCurrency.Btcsat
   const amountContributed = isBTC ? goal?.amountContributed || 0 : (goal?.amountContributed || 0) / 100
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(goalFormSchema(amountContributed)) as any,
+    resolver: yupResolver(
+      goalFormSchema(
+        amountContributed,
+        managedRecoverableGrant ? MANAGED_RECOVERABLE_GRANT_MAX_TARGET_SATS : MAX_GOAL_TARGET_AMOUNT,
+      ),
+    ) as any,
     defaultValues: {
-      title: '',
+      title: managedRecoverableGrant ? MANAGED_RECOVERABLE_GRANT_GOAL_TITLE : '',
       description: '',
       targetAmount: 0,
-      currency: ProjectGoalCurrency.Usdcent,
+      currency: managedRecoverableGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent,
       projectId,
       emojiUnifiedCode: '',
     },
@@ -95,15 +113,15 @@ export const useProjectGoalForm = ({ goal, projectId, onClose, onGoalCreated }: 
       })
     } else {
       reset({
-        title: '',
+        title: managedRecoverableGrant ? MANAGED_RECOVERABLE_GRANT_GOAL_TITLE : '',
         description: '',
         targetAmount: 0,
-        currency: ProjectGoalCurrency.Usdcent,
+        currency: managedRecoverableGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent,
         projectId,
         emojiUnifiedCode: '',
       })
     }
-  }, [goal, reset, projectId, isBTC])
+  }, [goal, reset, projectId, isBTC, managedRecoverableGrant])
 
   const onSubmit = (formData: FormValues) => {
     try {

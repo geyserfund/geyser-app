@@ -22,6 +22,7 @@ import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
+import { isManagedRecoverableGrantProject } from '../domain/managedRecoverableGrant.ts'
 import { useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom.ts'
 import { shouldShowProjectGoals } from '../utils/shouldShowProjectGoals.ts'
 import { BackToProjectRow } from './components/BackToProjectRow.tsx'
@@ -39,6 +40,7 @@ export const ProjectNavigation = () => {
   const { loading: userLoading } = useAuthContext()
   const { isProjectOwner, loading, project } = useProjectAtom()
   const { activeRewards, hasRewards, initialRewardsLoading } = useRewardsAtom()
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
 
@@ -55,7 +57,7 @@ export const ProjectNavigation = () => {
       },
     ] as AnimatedNavBarItem[]
 
-    if (hasRewards) {
+    if (hasRewards && !isManagedRecoverableGrant) {
       const buyProductLabel =
         !initialRewardsLoading && activeRewards.length > 0
           ? t('Buy product ({{count}})', { count: activeRewards.length })
@@ -110,6 +112,7 @@ export const ProjectNavigation = () => {
     activeRewards.length,
     hasRewards,
     initialRewardsLoading,
+    isManagedRecoverableGrant,
     isProjectOwner,
     isDraftUrl,
     navigate,

@@ -125,6 +125,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
   const needsWalletConfig =
     !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+    !isRecoverableGrant &&
     !effectiveRskEoa &&
     project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
@@ -194,7 +195,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     }
 
     // Active TIA project - always show withdrawable balance, even when it is 0
-    if (isActive && project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !needsWalletConfig) {
+    if (
+      isActive &&
+      project.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+      !isRecoverableGrant &&
+      !needsWalletConfig
+    ) {
       return (
         <VStack align="start" spacing={1}>
           <Body size="sm" color="neutral1.11">
@@ -232,7 +238,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     }
 
     // Show withdraw button for active projects with funds
-    const canWithdraw = isActive && (withdrawalStatus === 'ready' || withdrawalStatus === 'below_threshold')
+    const canWithdraw =
+      !isRecoverableGrant && isActive && (withdrawalStatus === 'ready' || withdrawalStatus === 'below_threshold')
     const isWithdrawDisabled = withdrawalStatus === 'below_threshold'
 
     return (
@@ -330,7 +337,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         {/* Row 3: Context message or action */}
         {!needsWalletConfig && renderContextContent()}
 
-        {shouldShowDirectPaymentNotification && (
+        {shouldShowDirectPaymentNotification && !isRecoverableGrant && (
           <ControlPanelNotification
             icon={<Icon as={PiInfo} color="warning.9" boxSize="24px" flexShrink={0} />}
             title={t('Add payment details to keep receiving contributions in Bitcoin')}
@@ -358,7 +365,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           />
         )}
 
-        {shouldShowStripeConnectNotification && (
+        {shouldShowStripeConnectNotification && !isRecoverableGrant && (
           <ControlPanelNotification
             icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
             title={

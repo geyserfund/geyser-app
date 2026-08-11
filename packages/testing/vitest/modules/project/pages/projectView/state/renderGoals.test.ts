@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { shouldReorderGoals } from '@/modules/project/pages/projectView/views/goals/common/RenderGoals.tsx'
+import { shouldReorderGoals } from '@/modules/project/pages/projectView/views/goals/common/goalOrdering.ts'
 
 describe('shouldReorderGoals', () => {
   it('returns false when drag end has no target', () => {

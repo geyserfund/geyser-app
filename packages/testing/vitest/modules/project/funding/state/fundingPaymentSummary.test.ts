@@ -8,6 +8,8 @@ import { PaymentMethods } from '@/modules/project/pages/projectFunding/views/fun
 import { FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
 
 const fundingPaymentDetails = {
+  strikeLightning: { paymentRequest: '', paymentId: '', amountDue: 0 },
+  strikeOnChain: { address: '', paymentId: '', amountDue: 0 },
   onChainToRskSwap: {
     address: 'bcrt1-onchain',
     amountDue: 136_564,
@@ -42,6 +44,28 @@ describe('FundingPaymentSummary amount source', () => {
     )
     expect(getActiveFundingPaymentDetails(PaymentMethods.onChain, fundingPaymentDetails)).toBe(
       fundingPaymentDetails.onChainToRskSwap,
+    )
+  })
+
+  it('selects the corresponding Strike rail when both payment rows are returned', () => {
+    const strikePaymentDetails = {
+      strikeLightning: {
+        paymentRequest: 'lnbc-strike',
+        paymentId: '3',
+        amountDue: 25_000,
+      },
+      strikeOnChain: {
+        address: 'bc1q-strike',
+        paymentId: '4',
+        amountDue: 25_000,
+      },
+    } as FundingContributionPaymentDetailsFragment
+
+    expect(getActiveFundingPaymentDetails(PaymentMethods.lightning, strikePaymentDetails)).toBe(
+      strikePaymentDetails.strikeLightning,
+    )
+    expect(getActiveFundingPaymentDetails(PaymentMethods.onChain, strikePaymentDetails)).toBe(
+      strikePaymentDetails.strikeOnChain,
     )
   })
 })

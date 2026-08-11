@@ -5,15 +5,15 @@ import { PiInfo } from 'react-icons/pi'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft, getFormattedAonGoalUserFacingDeadline } from '@/shared/utils/project/getAonData.ts'
 import { ProjectAonGoalStatus } from '@/types/index.ts'
 
-import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
-import { RecoverableGrantTooltipLabel } from '../../recoverableGrant'
+import { RecoverableGrantTooltipLabel } from '../../recoverableGrant/RecoverableGrantExplainer.tsx'
+import { GoalCampaignBalanceDisplay } from './GoalCampaignBalanceDisplay.tsx'
 
 const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus.Cancelled]
 
@@ -21,7 +21,7 @@ export const AonProjectBalanceDisplay = () => {
   const { project, projectAonGoalLoading, projectAonGoalError } = useProjectAtom()
   const { queryProject } = useProjectAPI()
 
-  const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
+  const { formatAmount } = useCurrencyFormatter()
 
   const { isFundingDisabled, getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
 
@@ -38,11 +38,6 @@ export const AonProjectBalanceDisplay = () => {
   const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const failedStatus = project.aonGoal?.status && aonGoalFailedStatuses.includes(project.aonGoal.status)
-  const fillGradient = failedStatus
-    ? 'linear-gradient(90deg, #b9e8fa 0%, #c4d2e2 25%, #d4e6ef 55%, #a1b8ca 100%)'
-    : 'linear-gradient(90deg,#00E4FF 0%,#00F5D4 45%,#4ADE80 100%)'
-  const glowColor = failedStatus ? '#a1b8ca' : '#00E4FF'
-
   if (!project.aonGoal && (projectAonGoalLoading || projectAonGoalError)) {
     return (
       <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>
@@ -85,84 +80,30 @@ export const AonProjectBalanceDisplay = () => {
   }
 
   return (
-    <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>
-      <LiveProgressAqua
-        value={percent}
-        height={22}
-        radius={16}
-        label={
-          isRecoverableGrant ? (
-            <HStack spacing={1}>
-              <span>{t('Recoverable Grant')}</span>
-              <Tooltip label={<RecoverableGrantTooltipLabel />} hasArrow placement="top">
-                <span aria-label={t('Recoverable grant information')}>
-                  <PiInfo />
-                </span>
-              </Tooltip>
-            </HStack>
-          ) : (
-            t('All-or-Nothing (Beta)')
-          )
-        }
-        fillGradient={fillGradient}
-        glowColor={glowColor}
-        flowSpeedSec={15}
-        waveIntensity={0.5}
-        bubbleCount={Math.floor(1.2 * percent)}
-        bubbleSpeed={0.2}
-        bubbleSize={[2, 7]}
-        sparkleCount={50}
-        sparkleDurationMs={950}
-        removeLiveDot={fundingDisabled}
-      />
-
-      <HStack w="full" justifyContent="space-between">
-        <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
-          <Body size="2xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
-            {formatAmount(balance ?? 0, 'BTCSAT')}
-          </Body>
-
-          <Body size="md" light display="inline">
-            <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {formatAmount(balanceUsdCent ?? 0, 'USDCENT')}
-            </Body>
-            {` ${t('raised')} `}
-          </Body>
-          <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
-            <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {project.fundersCount ?? 0}
-            </Body>
-            <Body size="md" light display="inline">
-              {t('backers')}
-            </Body>
-          </VStack>
-        </VStack>
-        <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
-          <Body size="lg" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
-            {formatAmount(goalAmount ?? 0, 'BTCSAT')}
-          </Body>
-
-          <Body size="md" light display="inline">
-            <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {formatUsdAmount(goalAmount ?? 0)}
-            </Body>
-            {` ${t('goal')} `}
-          </Body>
-
-          {timeLeft && (
-            <Tooltip label={deadlineLabel ? t('Deadline: {{deadline}}', { deadline: deadlineLabel }) : undefined}>
-              <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
-                <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
-                  {timeLeft.value}
-                </Body>
-                <Body size="md" light display="inline">
-                  {timeLeft.label}
-                </Body>
-              </VStack>
+    <GoalCampaignBalanceDisplay
+      label={
+        isRecoverableGrant ? (
+          <HStack spacing={1}>
+            <span>{t('Recoverable Grant')}</span>
+            <Tooltip label={<RecoverableGrantTooltipLabel />} hasArrow placement="top">
+              <span aria-label={t('Recoverable grant information')}>
+                <PiInfo />
+              </span>
             </Tooltip>
-          )}
-        </VStack>
-      </HStack>
-    </VStack>
+          </HStack>
+        ) : (
+          t('All-or-Nothing (Beta)')
+        )
+      }
+      raisedSats={balance ?? 0}
+      raisedUsdCent={balanceUsdCent}
+      goalSats={goalAmount ?? 0}
+      fundersCount={project.fundersCount ?? 0}
+      percentageFunded={percent}
+      timeLeft={timeLeft}
+      deadlineLabel={deadlineLabel}
+      isFundingOpen={!fundingDisabled}
+      failed={Boolean(failedStatus)}
+    />
   )
 }

@@ -1,14 +1,26 @@
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
-import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { aonProjectTimeLeft, getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import type { ProjectForLandingPageFragment } from '@/types/index.ts'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 export const AonProgressData = ({ project }: { project: ProjectForLandingPageFragment }) => {
   const { getAonGoalPercentage } = useProjectToolkit(project)
-  const percentage = getAonGoalPercentage()
-  const timeLeft = aonProjectTimeLeft(project.aonGoal)
+  const isAonProject = project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const percentage = isManagedRecoverableGrant ? project.fundingSummary.percentageFunded ?? 0 : getAonGoalPercentage()
+  const managedEndsAt = project.fundingSummary.endsAt
+    ? DateTime.fromMillis(Number(project.fundingSummary.endsAt))
+    : null
+  const timeLeft = isAonProject
+    ? aonProjectTimeLeft(project.aonGoal)
+    : managedEndsAt
+    ? getTimeLeft(managedEndsAt)
+    : null
   return (
     <Body
       size="sm"

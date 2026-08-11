@@ -208,6 +208,37 @@ export enum AnalyticsGroupByInterval {
   Year = 'year'
 }
 
+export type AonClaimBroadcastResponse = {
+  __typename?: 'AonClaimBroadcastResponse';
+  txHash: Scalars['String']['output'];
+};
+
+export type AonClaimPrepareResponse = {
+  __typename?: 'AonClaimPrepareResponse';
+  /** Encoded claim(processingFee) calldata for the client to include when signing. */
+  claimCalldata: Scalars['String']['output'];
+  claimableAmountSats: Scalars['Int']['output'];
+  contractAddress: Scalars['String']['output'];
+  creatorAddress: Scalars['String']['output'];
+  processingFeeSats: Scalars['Int']['output'];
+  simulationOk: Scalars['Boolean']['output'];
+};
+
+export enum AonClaimStatus {
+  Confirmed = 'CONFIRMED',
+  Failed = 'FAILED',
+  NotStarted = 'NOT_STARTED',
+  Pending = 'PENDING'
+}
+
+export type AonClaimStatusResponse = {
+  __typename?: 'AonClaimStatusResponse';
+  /** Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes. */
+  failureReason?: Maybe<Scalars['String']['output']>;
+  status: AonClaimStatus;
+  txHash?: Maybe<Scalars['String']['output']>;
+};
+
 export enum AuthFlowIntent {
   Login = 'LOGIN',
   Signup = 'SIGNUP'
@@ -524,6 +555,9 @@ export type ContributionPaymentsDetails = {
   lightningToRskSwap?: Maybe<ContributionLightningToRskSwapPaymentDetails>;
   onChainSwap?: Maybe<ContributionOnChainSwapPaymentDetails>;
   onChainToRskSwap?: Maybe<ContributionOnChainToRskSwapPaymentDetails>;
+  strike?: Maybe<ContributionStrikePaymentDetails>;
+  strikeLightning?: Maybe<ContributionStrikePaymentDetails>;
+  strikeOnChain?: Maybe<ContributionStrikePaymentDetails>;
 };
 
 export type ContributionPaymentsInput = {
@@ -533,6 +567,7 @@ export type ContributionPaymentsInput = {
   lightningToRskSwap?: InputMaybe<ContributionLightningToRskSwapPaymentDetailsInput>;
   onChainSwap?: InputMaybe<ContributionOnChainSwapPaymentDetailsInput>;
   onChainToRskSwap?: InputMaybe<ContributionOnChainToRskSwapPaymentDetailsInput>;
+  strike?: InputMaybe<ContributionStrikePaymentDetailsInput>;
 };
 
 export enum ContributionStatus {
@@ -549,6 +584,20 @@ export type ContributionStatusUpdatedInput = {
 export type ContributionStatusUpdatedSubscriptionResponse = {
   __typename?: 'ContributionStatusUpdatedSubscriptionResponse';
   contribution: Contribution;
+};
+
+export type ContributionStrikePaymentDetails = {
+  __typename?: 'ContributionStrikePaymentDetails';
+  address?: Maybe<Scalars['String']['output']>;
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
+  paymentId: Scalars['BigInt']['output'];
+  paymentRequest?: Maybe<Scalars['String']['output']>;
+};
+
+export type ContributionStrikePaymentDetailsInput = {
+  create?: InputMaybe<Scalars['Boolean']['input']>;
+  rail: StrikePaymentRail;
 };
 
 export type ContributionSwapRecoveryInput = {
@@ -777,6 +826,17 @@ export type DeleteUserResponse = MutationResponse & {
   __typename?: 'DeleteUserResponse';
   message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
+};
+
+export type DirectPaymentDetails = {
+  __typename?: 'DirectPaymentDetails';
+  btcAddress?: Maybe<Scalars['String']['output']>;
+  lightningAddress?: Maybe<Scalars['String']['output']>;
+};
+
+export type DirectPaymentDetailsInput = {
+  btcAddress?: InputMaybe<Scalars['String']['input']>;
+  lightningAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum DistributionSystem {
@@ -1712,6 +1772,13 @@ export enum MfaAction {
   UserEmailVerification = 'USER_EMAIL_VERIFICATION'
 }
 
+export type ManagedRecoverableGrantPaymentMethods = {
+  __typename?: 'ManagedRecoverableGrantPaymentMethods';
+  strikeLightning: Scalars['Boolean']['output'];
+  strikeOnChain: Scalars['Boolean']['output'];
+  stripe: Scalars['Boolean']['output'];
+};
+
 export type Milestone = {
   __typename?: 'Milestone';
   amount: Scalars['Int']['output'];
@@ -1726,6 +1793,17 @@ export type Mutation = {
   _?: Maybe<Scalars['Boolean']['output']>;
   ambassadorAdd?: Maybe<Ambassador>;
   ambassadorUpdate?: Maybe<Ambassador>;
+  /**
+   * Broadcast a creator-signed AON claim() transaction. Validates the signed tx targets the
+   * project AON contract and calls claim with processingFee 0, then persists a project Payout +
+   * RSK_AON_CLAIM Payment before broadcast.
+   */
+  aonClaimBroadcast: AonClaimBroadcastResponse;
+  /**
+   * Prepare an AON claim-to-EOA: returns claimable amount, creator address, and claim(0) calldata.
+   * The creator signs client-side; the server does not sign claim.
+   */
+  aonClaimPrepare: AonClaimPrepareResponse;
   claimBadge: UserBadge;
   contributionCreate: ContributionMutationResponse;
   contributionEmailUpdate: Contribution;
@@ -1883,6 +1961,17 @@ export type MutationAmbassadorAddArgs = {
 
 export type MutationAmbassadorUpdateArgs = {
   input: AmbassadorUpdateInput;
+};
+
+
+export type MutationAonClaimBroadcastArgs = {
+  projectId: Scalars['BigInt']['input'];
+  signedTxHex: Scalars['String']['input'];
+};
+
+
+export type MutationAonClaimPrepareArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -2797,15 +2886,7 @@ export enum PaymentCurrency {
   Usdcent = 'USDCENT'
 }
 
-export type PaymentDetails = FiatPaymentDetails | FiatToLightningSwapPaymentDetails | LightningPaymentDetails | LightningToRskSwapPaymentDetails | OnChainToLightningSwapPaymentDetails | OnChainToRskSwapPaymentDetails | RskAonClaimPaymentDetails | RskNativeTransferPaymentDetails | RskToLightningSwapPaymentDetails | RskToOnChainSwapPaymentDetails;
-
-export type RskAonClaimPaymentDetails = {
-  __typename?: 'RskAonClaimPaymentDetails';
-  destinationAddress: Scalars['String']['output'];
-  fromAddress: Scalars['String']['output'];
-  signedTxHex?: Maybe<Scalars['String']['output']>;
-  txId?: Maybe<Scalars['String']['output']>;
-};
+export type PaymentDetails = FiatPaymentDetails | FiatToLightningSwapPaymentDetails | LightningPaymentDetails | LightningToRskSwapPaymentDetails | OnChainToLightningSwapPaymentDetails | OnChainToRskSwapPaymentDetails | RskAonClaimPaymentDetails | RskNativeTransferPaymentDetails | RskToLightningSwapPaymentDetails | RskToOnChainSwapPaymentDetails | StrikePaymentDetails;
 
 export type PaymentFailInput = {
   failureReason?: InputMaybe<Scalars['String']['input']>;
@@ -2906,6 +2987,7 @@ export type PaymentMethods = {
   __typename?: 'PaymentMethods';
   bitcoin: BitcoinPaymentMethods;
   fiat: FiatPaymentMethods;
+  managedRecoverableGrant: ManagedRecoverableGrantPaymentMethods;
 };
 
 export type PaymentPendInput = {
@@ -3104,6 +3186,7 @@ export enum PaymentType {
   Lightning = 'LIGHTNING',
   LightningPodcastKeysend = 'LIGHTNING_PODCAST_KEYSEND',
   LightningToRskSwap = 'LIGHTNING_TO_RSK_SWAP',
+  OnChain = 'ON_CHAIN',
   OnChainToLightningSwap = 'ON_CHAIN_TO_LIGHTNING_SWAP',
   OnChainToRskSwap = 'ON_CHAIN_TO_RSK_SWAP',
   RskAonClaim = 'RSK_AON_CLAIM',
@@ -3205,7 +3288,7 @@ export type PayoutInitiateInput = {
   signature?: InputMaybe<Scalars['String']['input']>;
   /** Signed native RBTC transfer transaction hex (required for RSK_NATIVE_TRANSFER payouts) */
   signedTxHex?: InputMaybe<Scalars['String']['input']>;
-  /** Optional: The user lock transaction hex (required for Prism payouts) */
+  /** Optional: The user lock transaction hex (required for Prism swap payouts) */
   userLockTxHex?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -3545,17 +3628,6 @@ export type ProfileNotificationSettings = {
   userSettings: UserNotificationSettings;
 };
 
-export type DirectPaymentDetails = {
-  __typename?: 'DirectPaymentDetails';
-  btcAddress?: Maybe<Scalars['String']['output']>;
-  lightningAddress?: Maybe<Scalars['String']['output']>;
-};
-
-export type DirectPaymentDetailsInput = {
-  btcAddress?: InputMaybe<Scalars['String']['input']>;
-  lightningAddress?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type Project = {
   __typename?: 'Project';
   activeMatching?: Maybe<ProjectMatching>;
@@ -3571,9 +3643,9 @@ export type Project = {
   contributionsCount?: Maybe<Scalars['Int']['output']>;
   createdAt: Scalars['Date']['output'];
   defaultGoalId?: Maybe<Scalars['BigInt']['output']>;
-  directPaymentDetails?: Maybe<DirectPaymentDetails>;
   /** Description of the project. */
   description?: Maybe<Scalars['String']['output']>;
+  directPaymentDetails?: Maybe<DirectPaymentDetails>;
   entriesCount?: Maybe<Scalars['Int']['output']>;
   feedbackSuggestion?: Maybe<ProjectFeedbackSuggestion>;
   fieldPartner?: Maybe<User>;
@@ -3734,7 +3806,19 @@ export enum ProjectAonGoalStatus {
 }
 
 export type ProjectAonGoalStatusUpdateInput = {
+  /** Block hash containing the Claimed log (reorg safety). */
+  blockHash?: InputMaybe<Scalars['String']['input']>;
+  /** Block number containing the Claimed log. */
+  blockNumber?: InputMaybe<Scalars['BigInt']['input']>;
+  /** Rootstock chain ID for confirmed Claimed event identity (required for mark-claimed). */
+  chainId?: InputMaybe<Scalars['Int']['input']>;
   contractAddress: Scalars['String']['input'];
+  /** Decoded creatorAmount from Claimed, in wei. */
+  creatorAmountWei?: InputMaybe<Scalars['String']['input']>;
+  /** Log index of the confirmed Claimed event (required for mark-claimed). */
+  logIndex?: InputMaybe<Scalars['Int']['input']>;
+  /** Transaction hash of the confirmed Claimed log (required for mark-claimed). */
+  transactionHash?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ProjectAonGoalStatusUpdateResponse = MutationResponse & {
@@ -4696,6 +4780,13 @@ export type Query = {
   activitiesCountGroupedByProject: Array<ProjectActivitiesCount>;
   /** Returns all activities. */
   activitiesGet: ActivitiesGetResponse;
+  /**
+   * Status of the durable direct AON claim payout/payment for a project, if any.
+   * NOT_STARTED: no claim payout/payment. PENDING: claim payout/payment in flight.
+   * CONFIRMED: claim payout completed / payment paid. FAILED: latest claim payment failed;
+   * the creator may retry with a new signed transaction.
+   */
+  aonClaimStatus: AonClaimStatusResponse;
   badges: Array<Badge>;
   contribution: Contribution;
   contributionsGet?: Maybe<ContributionsGetResponse>;
@@ -4807,6 +4898,11 @@ export type QueryActivitiesCountGroupedByProjectArgs = {
 
 export type QueryActivitiesGetArgs = {
   input?: InputMaybe<GetActivitiesInput>;
+};
+
+
+export type QueryAonClaimStatusArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -5306,6 +5402,18 @@ export enum RewardCurrency {
   Usdcent = 'USDCENT'
 }
 
+export type RskAonClaimPaymentDetails = {
+  __typename?: 'RskAonClaimPaymentDetails';
+  destinationAddress: Scalars['String']['output'];
+  fromAddress: Scalars['String']['output'];
+  /**
+   * Raw signed transaction bytes. Only returned to the accountant recovery API
+   * (paymentsInProgressGet); null for all other callers.
+   */
+  signedTxHex?: Maybe<Scalars['String']['output']>;
+  txId?: Maybe<Scalars['String']['output']>;
+};
+
 export type RskKeyPair = {
   __typename?: 'RskKeyPair';
   address: Scalars['String']['output'];
@@ -5323,6 +5431,10 @@ export type RskNativeTransferPaymentDetails = {
   __typename?: 'RskNativeTransferPaymentDetails';
   destinationAddress: Scalars['String']['output'];
   fromAddress: Scalars['String']['output'];
+  /**
+   * Raw signed transaction bytes. Only returned to the accountant recovery API
+   * (paymentsInProgressGet); null for all other callers.
+   */
   signedTxHex?: Maybe<Scalars['String']['output']>;
   txId?: Maybe<Scalars['String']['output']>;
 };
@@ -5474,6 +5586,23 @@ export type StatsInterface = {
   totalUsd: Scalars['Float']['output'];
 };
 
+export type StrikePaymentDetails = {
+  __typename?: 'StrikePaymentDetails';
+  lightningInvoiceId?: Maybe<Scalars['String']['output']>;
+  lightningPaymentRequest?: Maybe<Scalars['String']['output']>;
+  lightningPaymentRequestExpiresAt?: Maybe<Scalars['Date']['output']>;
+  method: Scalars['String']['output'];
+  onChainAddress?: Maybe<Scalars['String']['output']>;
+  onChainTransactionId?: Maybe<Scalars['String']['output']>;
+  strikeReceiveId?: Maybe<Scalars['String']['output']>;
+  strikeReceiveRequestId: Scalars['String']['output'];
+};
+
+export enum StrikePaymentRail {
+  Lightning = 'LIGHTNING',
+  OnChain = 'ON_CHAIN'
+}
+
 export type StripeCheckoutSessionInput = {
   returnUrl: Scalars['String']['input'];
 };
@@ -5603,9 +5732,9 @@ export type UpdateProjectInput = {
   category?: InputMaybe<ProjectCategory>;
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']['input']>;
-  directPaymentDetails?: InputMaybe<DirectPaymentDetailsInput>;
   /** Description of the project. */
   description?: InputMaybe<Scalars['String']['input']>;
+  directPaymentDetails?: InputMaybe<DirectPaymentDetailsInput>;
   /** Funding strategy */
   fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
   /** Project header images. */
@@ -6060,11 +6189,14 @@ export type UserWalletWithdrawGetResponse = {
 };
 
 export type UserWalletWithdrawInitiateInput = {
+  /** Required for swap withdrawals; optional for native transfers. */
   callDataHex?: InputMaybe<Scalars['String']['input']>;
   claimTxHex?: InputMaybe<Scalars['String']['input']>;
   paymentId: Scalars['BigInt']['input'];
   rskAddress?: InputMaybe<Scalars['String']['input']>;
+  /** Required for swap withdrawals; optional for native transfers. */
   signature?: InputMaybe<Scalars['String']['input']>;
+  /** Signed native RBTC transfer transaction hex (required for RSK_NATIVE_TRANSFER withdrawals) */
   signedTxHex?: InputMaybe<Scalars['String']['input']>;
   userLockTxHex?: InputMaybe<Scalars['String']['input']>;
   userWalletWithdrawId: Scalars['BigInt']['input'];
@@ -6284,7 +6416,7 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
   ActivityResource: ( Omit<Contribution, 'bitcoinQuote' | 'matching' | 'payments' | 'sourceResource'> & { bitcoinQuote?: Maybe<_RefType['BitcoinQuote']>, matching?: Maybe<_RefType['ProjectMatching']>, payments: Array<_RefType['Payment']>, sourceResource?: Maybe<_RefType['SourceResource']> } ) | ( Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'activeMatching' | 'ambassadors' | 'contributions' | 'fieldPartner' | 'followers' | 'fundingSummary' | 'grantApplications' | 'matchings' | 'owners' | 'sponsors' | 'wallets'> & { activeMatching?: Maybe<_RefType['ProjectMatching']>, ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, fieldPartner?: Maybe<_RefType['User']>, followers: Array<_RefType['User']>, fundingSummary: _RefType['ProjectFundingSummary'], grantApplications: Array<_RefType['GrantApplicant']>, matchings: Array<_RefType['ProjectMatching']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } ) | ( ProjectGoal ) | ( Omit<ProjectReward, 'project'> & { project: _RefType['Project'] } );
   ConnectionDetails: ( LightningAddressConnectionDetails ) | ( NwcConnectionDetailsPrivate );
   Grant: ( Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, boardMembers: Array<_RefType['GrantBoardMember']>, sponsors: Array<_RefType['Sponsor']> } ) | ( Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, sponsors: Array<_RefType['Sponsor']> } );
-  PaymentDetails: ( FiatPaymentDetails ) | ( FiatToLightningSwapPaymentDetails ) | ( LightningPaymentDetails ) | ( LightningToRskSwapPaymentDetails ) | ( OnChainToLightningSwapPaymentDetails ) | ( OnChainToRskSwapPaymentDetails ) | ( RskToLightningSwapPaymentDetails ) | ( RskToOnChainSwapPaymentDetails );
+  PaymentDetails: ( FiatPaymentDetails ) | ( FiatToLightningSwapPaymentDetails ) | ( LightningPaymentDetails ) | ( LightningToRskSwapPaymentDetails ) | ( OnChainToLightningSwapPaymentDetails ) | ( OnChainToRskSwapPaymentDetails ) | ( RskAonClaimPaymentDetails ) | ( RskNativeTransferPaymentDetails ) | ( RskToLightningSwapPaymentDetails ) | ( RskToOnChainSwapPaymentDetails ) | ( StrikePaymentDetails );
   SourceResource: ( Omit<Activity, 'project' | 'resource'> & { project: _RefType['Project'], resource: _RefType['ActivityResource'] } ) | ( Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'activeMatching' | 'ambassadors' | 'contributions' | 'fieldPartner' | 'followers' | 'fundingSummary' | 'grantApplications' | 'matchings' | 'owners' | 'sponsors' | 'wallets'> & { activeMatching?: Maybe<_RefType['ProjectMatching']>, ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, fieldPartner?: Maybe<_RefType['User']>, followers: Array<_RefType['User']>, fundingSummary: _RefType['ProjectFundingSummary'], grantApplications: Array<_RefType['GrantApplicant']>, matchings: Array<_RefType['ProjectMatching']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } );
 };
 
@@ -6323,6 +6455,10 @@ export type ResolversTypes = {
   AmountCurrency: AmountCurrency;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   AnalyticsGroupByInterval: AnalyticsGroupByInterval;
+  AonClaimBroadcastResponse: ResolverTypeWrapper<AonClaimBroadcastResponse>;
+  AonClaimPrepareResponse: ResolverTypeWrapper<AonClaimPrepareResponse>;
+  AonClaimStatus: AonClaimStatus;
+  AonClaimStatusResponse: ResolverTypeWrapper<AonClaimStatusResponse>;
   AuthFlowIntent: AuthFlowIntent;
   Badge: ResolverTypeWrapper<Badge>;
   BadgeClaimInput: BadgeClaimInput;
@@ -6367,6 +6503,8 @@ export type ResolversTypes = {
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
+  ContributionStrikePaymentDetails: ResolverTypeWrapper<ContributionStrikePaymentDetails>;
+  ContributionStrikePaymentDetailsInput: ContributionStrikePaymentDetailsInput;
   ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: ResolverTypeWrapper<Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversTypes['Contribution']> }>;
   ContributionsSummary: ResolverTypeWrapper<ContributionsSummary>;
@@ -6396,6 +6534,8 @@ export type ResolversTypes = {
   DeleteProjectInput: DeleteProjectInput;
   DeleteProjectRewardInput: DeleteProjectRewardInput;
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>;
+  DirectPaymentDetails: ResolverTypeWrapper<DirectPaymentDetails>;
+  DirectPaymentDetailsInput: DirectPaymentDetailsInput;
   DistributionSystem: DistributionSystem;
   EIP712SignatureInput: Eip712SignatureInput;
   EmailSendOptionsInput: EmailSendOptionsInput;
@@ -6532,6 +6672,7 @@ export type ResolversTypes = {
   LightningToRskSwapPaymentDetails: ResolverTypeWrapper<LightningToRskSwapPaymentDetails>;
   Location: ResolverTypeWrapper<Location>;
   MFAAction: MfaAction;
+  ManagedRecoverableGrantPaymentMethods: ResolverTypeWrapper<ManagedRecoverableGrantPaymentMethods>;
   Milestone: ResolverTypeWrapper<Milestone>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>;
@@ -6842,8 +6983,11 @@ export type ResolversTypes = {
   RejectionReason: RejectionReason;
   ResourceInput: ResourceInput;
   RewardCurrency: RewardCurrency;
+  RskAonClaimPaymentDetails: ResolverTypeWrapper<RskAonClaimPaymentDetails>;
   RskKeyPair: ResolverTypeWrapper<RskKeyPair>;
   RskKeyPairInput: RskKeyPairInput;
+  RskNativeTransferPaymentDetails: ResolverTypeWrapper<RskNativeTransferPaymentDetails>;
+  RskNativeTransferPaymentDetailsInput: RskNativeTransferPaymentDetailsInput;
   RskToLightningSwapPaymentDetails: ResolverTypeWrapper<RskToLightningSwapPaymentDetails>;
   RskToLightningSwapPaymentDetailsBoltzInput: RskToLightningSwapPaymentDetailsBoltzInput;
   RskToLightningSwapPaymentDetailsInput: RskToLightningSwapPaymentDetailsInput;
@@ -6862,6 +7006,8 @@ export type ResolversTypes = {
   Sponsor: ResolverTypeWrapper<Omit<Sponsor, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
   SponsorStatus: SponsorStatus;
   StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>;
+  StrikePaymentDetails: ResolverTypeWrapper<StrikePaymentDetails>;
+  StrikePaymentRail: StrikePaymentRail;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   StripeConnectOnboardingPayload: ResolverTypeWrapper<StripeConnectOnboardingPayload>;
@@ -6970,6 +7116,9 @@ export type ResolversParentTypes = {
   AmbassadorStats: AmbassadorStats;
   AmbassadorUpdateInput: AmbassadorUpdateInput;
   AmountSummary: AmountSummary;
+  AonClaimBroadcastResponse: AonClaimBroadcastResponse;
+  AonClaimPrepareResponse: AonClaimPrepareResponse;
+  AonClaimStatusResponse: AonClaimStatusResponse;
   Badge: Badge;
   BadgeClaimInput: BadgeClaimInput;
   BadgesGetInput: BadgesGetInput;
@@ -7011,6 +7160,8 @@ export type ResolversParentTypes = {
   ContributionPaymentsInput: ContributionPaymentsInput;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
+  ContributionStrikePaymentDetails: ContributionStrikePaymentDetails;
+  ContributionStrikePaymentDetailsInput: ContributionStrikePaymentDetailsInput;
   ContributionSwapRecoveryInput: ContributionSwapRecoveryInput;
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
   ContributionsSummary: ContributionsSummary;
@@ -7037,6 +7188,8 @@ export type ResolversParentTypes = {
   DeleteProjectInput: DeleteProjectInput;
   DeleteProjectRewardInput: DeleteProjectRewardInput;
   DeleteUserResponse: DeleteUserResponse;
+  DirectPaymentDetails: DirectPaymentDetails;
+  DirectPaymentDetailsInput: DirectPaymentDetailsInput;
   EIP712SignatureInput: Eip712SignatureInput;
   EmailSendOptionsInput: EmailSendOptionsInput;
   EmailVerifyInput: EmailVerifyInput;
@@ -7149,6 +7302,7 @@ export type ResolversParentTypes = {
   LightningPaymentMethods: LightningPaymentMethods;
   LightningToRskSwapPaymentDetails: LightningToRskSwapPaymentDetails;
   Location: Location;
+  ManagedRecoverableGrantPaymentMethods: ManagedRecoverableGrantPaymentMethods;
   Milestone: Milestone;
   Mutation: {};
   MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse'];
@@ -7400,8 +7554,11 @@ export type ResolversParentTypes = {
   RecurringDonationCreateInput: RecurringDonationCreateInput;
   RefundablePaymentsGetResponse: Omit<RefundablePaymentsGetResponse, 'refundablePayments'> & { refundablePayments: Array<ResolversParentTypes['ProjectRefundablePayment']> };
   ResourceInput: ResourceInput;
+  RskAonClaimPaymentDetails: RskAonClaimPaymentDetails;
   RskKeyPair: RskKeyPair;
   RskKeyPairInput: RskKeyPairInput;
+  RskNativeTransferPaymentDetails: RskNativeTransferPaymentDetails;
+  RskNativeTransferPaymentDetailsInput: RskNativeTransferPaymentDetailsInput;
   RskToLightningSwapPaymentDetails: RskToLightningSwapPaymentDetails;
   RskToLightningSwapPaymentDetailsBoltzInput: RskToLightningSwapPaymentDetailsBoltzInput;
   RskToLightningSwapPaymentDetailsInput: RskToLightningSwapPaymentDetailsInput;
@@ -7417,6 +7574,7 @@ export type ResolversParentTypes = {
   SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource'];
   Sponsor: Omit<Sponsor, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface'];
+  StrikePaymentDetails: StrikePaymentDetails;
   String: Scalars['String']['output'];
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   StripeConnectOnboardingPayload: StripeConnectOnboardingPayload;
@@ -7612,6 +7770,28 @@ export type AmountSummaryResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AonClaimBroadcastResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AonClaimBroadcastResponse'] = ResolversParentTypes['AonClaimBroadcastResponse']> = {
+  txHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AonClaimPrepareResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AonClaimPrepareResponse'] = ResolversParentTypes['AonClaimPrepareResponse']> = {
+  claimCalldata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  claimableAmountSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  creatorAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  processingFeeSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  simulationOk?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AonClaimStatusResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AonClaimStatusResponse'] = ResolversParentTypes['AonClaimStatusResponse']> = {
+  failureReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['AonClaimStatus'], ParentType, ContextType>;
+  txHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type BadgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Badge'] = ResolversParentTypes['Badge']> = {
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -7794,11 +7974,23 @@ export type ContributionPaymentsDetailsResolvers<ContextType = any, ParentType e
   lightningToRskSwap?: Resolver<Maybe<ResolversTypes['ContributionLightningToRskSwapPaymentDetails']>, ParentType, ContextType>;
   onChainSwap?: Resolver<Maybe<ResolversTypes['ContributionOnChainSwapPaymentDetails']>, ParentType, ContextType>;
   onChainToRskSwap?: Resolver<Maybe<ResolversTypes['ContributionOnChainToRskSwapPaymentDetails']>, ParentType, ContextType>;
+  strike?: Resolver<Maybe<ResolversTypes['ContributionStrikePaymentDetails']>, ParentType, ContextType>;
+  strikeLightning?: Resolver<Maybe<ResolversTypes['ContributionStrikePaymentDetails']>, ParentType, ContextType>;
+  strikeOnChain?: Resolver<Maybe<ResolversTypes['ContributionStrikePaymentDetails']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ContributionStatusUpdatedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionStatusUpdatedSubscriptionResponse'] = ResolversParentTypes['ContributionStatusUpdatedSubscriptionResponse']> = {
   contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ContributionStrikePaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionStrikePaymentDetails'] = ResolversParentTypes['ContributionStrikePaymentDetails']> = {
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7898,6 +8090,12 @@ export type DatetimeRangeResolvers<ContextType = any, ParentType extends Resolve
 export type DeleteUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteUserResponse'] = ResolversParentTypes['DeleteUserResponse']> = {
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DirectPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['DirectPaymentDetails'] = ResolversParentTypes['DirectPaymentDetails']> = {
+  btcAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lightningAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8328,6 +8526,13 @@ export type LocationResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ManagedRecoverableGrantPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ManagedRecoverableGrantPaymentMethods'] = ResolversParentTypes['ManagedRecoverableGrantPaymentMethods']> = {
+  strikeLightning?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  strikeOnChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  stripe?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MilestoneResolvers<ContextType = any, ParentType extends ResolversParentTypes['Milestone'] = ResolversParentTypes['Milestone']> = {
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -8341,6 +8546,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   ambassadorAdd?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorAddArgs, 'input'>>;
   ambassadorUpdate?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorUpdateArgs, 'input'>>;
+  aonClaimBroadcast?: Resolver<ResolversTypes['AonClaimBroadcastResponse'], ParentType, ContextType, RequireFields<MutationAonClaimBroadcastArgs, 'projectId' | 'signedTxHex'>>;
+  aonClaimPrepare?: Resolver<ResolversTypes['AonClaimPrepareResponse'], ParentType, ContextType, RequireFields<MutationAonClaimPrepareArgs, 'projectId'>>;
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   contributionCreate?: Resolver<ResolversTypes['ContributionMutationResponse'], ParentType, ContextType, RequireFields<MutationContributionCreateArgs, 'input'>>;
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
@@ -8667,7 +8874,7 @@ export type PaymentConfirmResponseResolvers<ContextType = any, ParentType extend
 };
 
 export type PaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentDetails'] = ResolversParentTypes['PaymentDetails']> = {
-  __resolveType: TypeResolveFn<'FiatPaymentDetails' | 'FiatToLightningSwapPaymentDetails' | 'LightningPaymentDetails' | 'LightningToRskSwapPaymentDetails' | 'OnChainToLightningSwapPaymentDetails' | 'OnChainToRskSwapPaymentDetails' | 'RskToLightningSwapPaymentDetails' | 'RskToOnChainSwapPaymentDetails', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'FiatPaymentDetails' | 'FiatToLightningSwapPaymentDetails' | 'LightningPaymentDetails' | 'LightningToRskSwapPaymentDetails' | 'OnChainToLightningSwapPaymentDetails' | 'OnChainToRskSwapPaymentDetails' | 'RskAonClaimPaymentDetails' | 'RskNativeTransferPaymentDetails' | 'RskToLightningSwapPaymentDetails' | 'RskToOnChainSwapPaymentDetails' | 'StrikePaymentDetails', ParentType, ContextType>;
 };
 
 export type PaymentFailResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentFailResponse'] = ResolversParentTypes['PaymentFailResponse']> = {
@@ -8706,6 +8913,7 @@ export type PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType = any
 export type PaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentMethods'] = ResolversParentTypes['PaymentMethods']> = {
   bitcoin?: Resolver<ResolversTypes['BitcoinPaymentMethods'], ParentType, ContextType>;
   fiat?: Resolver<ResolversTypes['FiatPaymentMethods'], ParentType, ContextType>;
+  managedRecoverableGrant?: Resolver<ResolversTypes['ManagedRecoverableGrantPaymentMethods'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9003,6 +9211,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  directPaymentDetails?: Resolver<Maybe<ResolversTypes['DirectPaymentDetails']>, ParentType, ContextType>;
   entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   feedbackSuggestion?: Resolver<Maybe<ResolversTypes['ProjectFeedbackSuggestion']>, ParentType, ContextType>;
   fieldPartner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -9580,6 +9789,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   acelerandoVipMyPosition?: Resolver<Maybe<ResolversTypes['AcelerandoVipMyPositionResponse']>, ParentType, ContextType>;
   activitiesCountGroupedByProject?: Resolver<Array<ResolversTypes['ProjectActivitiesCount']>, ParentType, ContextType, RequireFields<QueryActivitiesCountGroupedByProjectArgs, 'input'>>;
   activitiesGet?: Resolver<ResolversTypes['ActivitiesGetResponse'], ParentType, ContextType, Partial<QueryActivitiesGetArgs>>;
+  aonClaimStatus?: Resolver<ResolversTypes['AonClaimStatusResponse'], ParentType, ContextType, RequireFields<QueryAonClaimStatusArgs, 'projectId'>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
   contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<QueryContributionArgs>>;
   contributionsGet?: Resolver<Maybe<ResolversTypes['ContributionsGetResponse']>, ParentType, ContextType, Partial<QueryContributionsGetArgs>>;
@@ -9732,10 +9942,26 @@ export type RefundablePaymentsGetResponseResolvers<ContextType = any, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type RskAonClaimPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskAonClaimPaymentDetails'] = ResolversParentTypes['RskAonClaimPaymentDetails']> = {
+  destinationAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fromAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signedTxHex?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  txId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type RskKeyPairResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskKeyPair'] = ResolversParentTypes['RskKeyPair']> = {
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   derivationPath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RskNativeTransferPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskNativeTransferPaymentDetails'] = ResolversParentTypes['RskNativeTransferPaymentDetails']> = {
+  destinationAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fromAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signedTxHex?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  txId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9811,6 +10037,18 @@ export type StatsInterfaceResolvers<ContextType = any, ParentType extends Resolv
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+};
+
+export type StrikePaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['StrikePaymentDetails'] = ResolversParentTypes['StrikePaymentDetails']> = {
+  lightningInvoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lightningPaymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lightningPaymentRequestExpiresAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  method?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  onChainAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  onChainTransactionId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  strikeReceiveId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  strikeReceiveRequestId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type StripeConnectOnboardingPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['StripeConnectOnboardingPayload'] = ResolversParentTypes['StripeConnectOnboardingPayload']> = {
@@ -10174,6 +10412,9 @@ export type Resolvers<ContextType = any> = {
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmbassadorStats?: AmbassadorStatsResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
+  AonClaimBroadcastResponse?: AonClaimBroadcastResponseResolvers<ContextType>;
+  AonClaimPrepareResponse?: AonClaimPrepareResponseResolvers<ContextType>;
+  AonClaimStatusResponse?: AonClaimStatusResponseResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   BitcoinPaymentMethods?: BitcoinPaymentMethodsResolvers<ContextType>;
@@ -10193,6 +10434,7 @@ export type Resolvers<ContextType = any> = {
   ContributionPaymentsAddResponse?: ContributionPaymentsAddResponseResolvers<ContextType>;
   ContributionPaymentsDetails?: ContributionPaymentsDetailsResolvers<ContextType>;
   ContributionStatusUpdatedSubscriptionResponse?: ContributionStatusUpdatedSubscriptionResponseResolvers<ContextType>;
+  ContributionStrikePaymentDetails?: ContributionStrikePaymentDetailsResolvers<ContextType>;
   ContributionsGetResponse?: ContributionsGetResponseResolvers<ContextType>;
   ContributionsSummary?: ContributionsSummaryResolvers<ContextType>;
   ContributorContributionsSummary?: ContributorContributionsSummaryResolvers<ContextType>;
@@ -10207,6 +10449,7 @@ export type Resolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
   DatetimeRange?: DatetimeRangeResolvers<ContextType>;
   DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>;
+  DirectPaymentDetails?: DirectPaymentDetailsResolvers<ContextType>;
   ExternalAccount?: ExternalAccountResolvers<ContextType>;
   FiatPaymentDetails?: FiatPaymentDetailsResolvers<ContextType>;
   FiatPaymentMethods?: FiatPaymentMethodsResolvers<ContextType>;
@@ -10256,6 +10499,7 @@ export type Resolvers<ContextType = any> = {
   LightningPaymentMethods?: LightningPaymentMethodsResolvers<ContextType>;
   LightningToRskSwapPaymentDetails?: LightningToRskSwapPaymentDetailsResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
+  ManagedRecoverableGrantPaymentMethods?: ManagedRecoverableGrantPaymentMethodsResolvers<ContextType>;
   Milestone?: MilestoneResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationResponse?: MutationResponseResolvers<ContextType>;
@@ -10399,7 +10643,9 @@ export type Resolvers<ContextType = any> = {
   RecurringContributionPortalSession?: RecurringContributionPortalSessionResolvers<ContextType>;
   RecurringContributionSupport?: RecurringContributionSupportResolvers<ContextType>;
   RefundablePaymentsGetResponse?: RefundablePaymentsGetResponseResolvers<ContextType>;
+  RskAonClaimPaymentDetails?: RskAonClaimPaymentDetailsResolvers<ContextType>;
   RskKeyPair?: RskKeyPairResolvers<ContextType>;
+  RskNativeTransferPaymentDetails?: RskNativeTransferPaymentDetailsResolvers<ContextType>;
   RskToLightningSwapPaymentDetails?: RskToLightningSwapPaymentDetailsResolvers<ContextType>;
   RskToOnChainSwapPaymentDetails?: RskToOnChainSwapPaymentDetailsResolvers<ContextType>;
   ShippingAddress?: ShippingAddressResolvers<ContextType>;
@@ -10408,6 +10654,7 @@ export type Resolvers<ContextType = any> = {
   SourceResource?: SourceResourceResolvers<ContextType>;
   Sponsor?: SponsorResolvers<ContextType>;
   StatsInterface?: StatsInterfaceResolvers<ContextType>;
+  StrikePaymentDetails?: StrikePaymentDetailsResolvers<ContextType>;
   StripeConnectOnboardingPayload?: StripeConnectOnboardingPayloadResolvers<ContextType>;
   StripeConnectStatus?: StripeConnectStatusResolvers<ContextType>;
   StripeInterestNotifyResponse?: StripeInterestNotifyResponseResolvers<ContextType>;
@@ -10664,7 +10911,7 @@ export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postTyp
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isRecoverableGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
         { __typename?: 'ProjectMatching' }
         & ProjectMatchingFragment
-      ) | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
+      ) | null } }, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, paymentMethods: { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, activeMatching?: (
@@ -10674,7 +10921,7 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, n
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, paymentMethods?: { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } } | null, subCategory?: ProjectSubCategory | null, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, paymentMethods: { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } }, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }>, reviews: Array<(
@@ -11639,6 +11886,8 @@ export type RskToLightningSwapPaymentDetailsFragment = { __typename?: 'RskToLigh
 
 export type RskToOnChainSwapPaymentDetailsFragment = { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, swapPreimageHash: string, onChainAddress?: string | null, onChainTxId?: string | null };
 
+export type RskNativeTransferPaymentDetailsFragment = { __typename?: 'RskNativeTransferPaymentDetails', fromAddress: string, destinationAddress: string, txId?: string | null };
+
 export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null, description?: string | null };
 
 export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string, stripeAccountId: string };
@@ -11655,6 +11904,8 @@ export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 
     & ContributionFeesFragment
   )> };
 
+export type ContributionStrikePaymentDetailsFragment = { __typename?: 'ContributionStrikePaymentDetails', paymentRequest?: string | null, address?: string | null, paymentId: any, amountDue: number, amountDueCurrency: PaymentCurrency };
+
 export type FundingContributionPaymentDetailsFragment = { __typename?: 'ContributionPaymentsDetails', fiat?: (
     { __typename?: 'ContributionFiatPaymentDetails' }
     & ContributionFiatPaymentDetailsFragment
@@ -11667,20 +11918,27 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
   ) | null, onChainToRskSwap?: (
     { __typename?: 'ContributionOnChainToRskSwapPaymentDetails' }
     & ContributionOnChainToRskSwapPaymentDetailsFragment
+  ) | null, strike?: (
+    { __typename?: 'ContributionStrikePaymentDetails' }
+    & ContributionStrikePaymentDetailsFragment
+  ) | null, strikeLightning?: (
+    { __typename?: 'ContributionStrikePaymentDetails' }
+    & ContributionStrikePaymentDetailsFragment
+  ) | null, strikeOnChain?: (
+    { __typename?: 'ContributionStrikePaymentDetails' }
+    & ContributionStrikePaymentDetailsFragment
   ) | null };
 
 export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus };
 
-export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapId: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } };
+export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapId: string } | { __typename?: 'RskAonClaimPaymentDetails' } | { __typename?: 'RskNativeTransferPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } | { __typename?: 'StrikePaymentDetails' } };
 
 export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
-
-export type RskNativeTransferPaymentDetailsFragment = { __typename?: 'RskNativeTransferPaymentDetails', fromAddress: string, destinationAddress: string, signedTxHex?: string | null, txId?: string | null };
 
 export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, linkedEntityUUID: string, linkedEntityType: PaymentLinkedEntityType, accountingAmountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
-  )>, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
+  )>, paymentDetails: { __typename?: 'FiatPaymentDetails' } | { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskAonClaimPaymentDetails' } | (
     { __typename?: 'RskNativeTransferPaymentDetails' }
     & RskNativeTransferPaymentDetailsFragment
   ) | (
@@ -11689,9 +11947,9 @@ export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, 
   ) | (
     { __typename?: 'RskToOnChainSwapPaymentDetails' }
     & RskToOnChainSwapPaymentDetailsFragment
-  ) };
+  ) | { __typename?: 'StrikePaymentDetails' } };
 
-export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', enabled: boolean, stripe: boolean } };
+export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', enabled: boolean, stripe: boolean }, managedRecoverableGrant: { __typename?: 'ManagedRecoverableGrantPaymentMethods', stripe: boolean, strikeLightning: boolean, strikeOnChain: boolean } };
 
 export type PayoutFragment = { __typename?: 'Payout', id: any, uuid: string, status: PayoutStatus, amount: number, expiresAt: any };
 
@@ -11729,7 +11987,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -11741,12 +11999,12 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     ) }>, paymentMethods: (
     { __typename?: 'PaymentMethods' }
     & ProjectPaymentMethodsFragment
-  ), reviews: Array<(
+  ), fundingSummary: { __typename?: 'ProjectFundingSummary', raisedSats: any, goalSats?: any | null, percentageFunded?: number | null, endsAt?: any | null, isFundingOpen: boolean }, reviews: Array<(
     { __typename?: 'ProjectReview' }
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -11758,14 +12016,14 @@ export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, 
     ) }>, paymentMethods: (
     { __typename?: 'PaymentMethods' }
     & ProjectPaymentMethodsFragment
-  ), reviews: Array<(
+  ), fundingSummary: { __typename?: 'ProjectFundingSummary', raisedSats: any, goalSats?: any | null, percentageFunded?: number | null, endsAt?: any | null, isFundingOpen: boolean }, reviews: Array<(
     { __typename?: 'ProjectReview' }
     & ProjectReviewFragment
   )> };
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null };
 
 export type ProjectMatchingFragment = { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number };
 
@@ -11883,6 +12141,21 @@ export type AmbassadorUpdateMutationVariables = Exact<{
 
 export type AmbassadorUpdateMutation = { __typename?: 'Mutation', ambassadorUpdate?: { __typename?: 'Ambassador', id: any, payoutRate: number } | null };
 
+export type AonClaimPrepareMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type AonClaimPrepareMutation = { __typename?: 'Mutation', aonClaimPrepare: { __typename?: 'AonClaimPrepareResponse', contractAddress: string, claimableAmountSats: number, processingFeeSats: number, creatorAddress: string, claimCalldata: string, simulationOk: boolean } };
+
+export type AonClaimBroadcastMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+  signedTxHex: Scalars['String']['input'];
+}>;
+
+
+export type AonClaimBroadcastMutation = { __typename?: 'Mutation', aonClaimBroadcast: { __typename?: 'AonClaimBroadcastResponse', txHash: string } };
+
 export type ContributionCreateMutationVariables = Exact<{
   input: ContributionCreateInput;
 }>;
@@ -11992,6 +12265,13 @@ export type PayoutPaymentInitiateMutation = { __typename?: 'Mutation', payoutPay
       { __typename?: 'Payout' }
       & PayoutFragment
     ) } };
+
+export type PayoutCancelMutationVariables = Exact<{
+  input: PayoutCancelInput;
+}>;
+
+
+export type PayoutCancelMutation = { __typename?: 'Mutation', payoutCancel: { __typename?: 'PayoutResponse', success: boolean, message?: string | null } };
 
 export type PostDeleteMutationVariables = Exact<{
   postDeleteId: Scalars['BigInt']['input'];
@@ -12867,7 +13147,7 @@ export type PaymentRefundsQuery = { __typename?: 'Query', paymentRefundsGet?: { 
 export type PaymentsRefundableQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PaymentsRefundableQuery = { __typename?: 'Query', paymentsRefundableGet: { __typename?: 'RefundablePaymentsGetResponse', refundablePayments: Array<{ __typename?: 'ProjectRefundablePayment', project: { __typename?: 'Project', id: any, name: string }, payments: Array<{ __typename?: 'Payment', id: any, uuid: string, accountingAmountDue: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename: 'FiatPaymentDetails' } | { __typename: 'FiatToLightningSwapPaymentDetails' } | { __typename: 'LightningPaymentDetails' } | { __typename: 'LightningToRskSwapPaymentDetails' } | { __typename: 'OnChainToLightningSwapPaymentDetails', swapMetadata: string } | { __typename: 'OnChainToRskSwapPaymentDetails', swapMetadata: string } | { __typename: 'RskToLightningSwapPaymentDetails' } | { __typename: 'RskToOnChainSwapPaymentDetails' } }> }> } };
+export type PaymentsRefundableQuery = { __typename?: 'Query', paymentsRefundableGet: { __typename?: 'RefundablePaymentsGetResponse', refundablePayments: Array<{ __typename?: 'ProjectRefundablePayment', project: { __typename?: 'Project', id: any, name: string }, payments: Array<{ __typename?: 'Payment', id: any, uuid: string, accountingAmountDue: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename: 'FiatPaymentDetails' } | { __typename: 'FiatToLightningSwapPaymentDetails' } | { __typename: 'LightningPaymentDetails' } | { __typename: 'LightningToRskSwapPaymentDetails' } | { __typename: 'OnChainToLightningSwapPaymentDetails', swapMetadata: string } | { __typename: 'OnChainToRskSwapPaymentDetails', swapMetadata: string } | { __typename: 'RskAonClaimPaymentDetails' } | { __typename: 'RskNativeTransferPaymentDetails' } | { __typename: 'RskToLightningSwapPaymentDetails' } | { __typename: 'RskToOnChainSwapPaymentDetails' } | { __typename: 'StrikePaymentDetails' } }> }> } };
 
 export type PledgeRefundsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -12958,6 +13238,13 @@ export type UserAccountPasswordFundsSummaryQueryVariables = Exact<{ [key: string
 
 
 export type UserAccountPasswordFundsSummaryQuery = { __typename?: 'Query', userAccountPasswordFundsSummary: { __typename?: 'UserAccountPasswordFundsSummary', unclaimedFundsSats: any, userWalletBalanceSats: any, tiaUnclaimedFundsSats: any, aonUnclaimedFundsSats: any, pledgedSats: any, affectedTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: any }>, legacyTiaProjects: Array<{ __typename?: 'AccountPasswordAffectedProject', id: any, name: string, title: string, status: ProjectStatus, rskEoa: string, derivationPath?: string | null, balanceSats: any }> } };
+
+export type AonClaimStatusQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type AonClaimStatusQuery = { __typename?: 'Query', aonClaimStatus: { __typename?: 'AonClaimStatusResponse', status: AonClaimStatus, txHash?: string | null, failureReason?: string | null } };
 
 export type PayoutGetQueryVariables = Exact<{
   input: PayoutGetInput;
@@ -13528,6 +13815,15 @@ export const ProjectForLandingPageFragmentDoc = gql`
     }
   }
   rskEoa
+  directPaymentDetails {
+    btcAddress
+    lightningAddress
+  }
+  paymentMethods {
+    fiat {
+      stripe
+    }
+  }
   category
   subCategory
   location {
@@ -14297,7 +14593,6 @@ export const RskNativeTransferPaymentDetailsFragmentDoc = gql`
     fragment RskNativeTransferPaymentDetails on RskNativeTransferPaymentDetails {
   fromAddress
   destinationAddress
-  signedTxHex
   txId
 }
     `;
@@ -14823,6 +15118,15 @@ export const ContributionOnChainToRskSwapPaymentDetailsFragmentDoc = gql`
   }
 }
     ${ContributionFeesFragmentDoc}`;
+export const ContributionStrikePaymentDetailsFragmentDoc = gql`
+    fragment ContributionStrikePaymentDetails on ContributionStrikePaymentDetails {
+  paymentRequest
+  address
+  paymentId
+  amountDue
+  amountDueCurrency
+}
+    `;
 export const FundingContributionPaymentDetailsFragmentDoc = gql`
     fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
   fiat {
@@ -14837,11 +15141,21 @@ export const FundingContributionPaymentDetailsFragmentDoc = gql`
   onChainToRskSwap {
     ...ContributionOnChainToRskSwapPaymentDetails
   }
+  strike {
+    ...ContributionStrikePaymentDetails
+  }
+  strikeLightning {
+    ...ContributionStrikePaymentDetails
+  }
+  strikeOnChain {
+    ...ContributionStrikePaymentDetails
+  }
 }
     ${ContributionFiatPaymentDetailsFragmentDoc}
 ${ContributionFiatSwapPaymentDetailsFragmentDoc}
 ${ContributionLightningToRskSwapPaymentDetailsFragmentDoc}
-${ContributionOnChainToRskSwapPaymentDetailsFragmentDoc}`;
+${ContributionOnChainToRskSwapPaymentDetailsFragmentDoc}
+${ContributionStrikePaymentDetailsFragmentDoc}`;
 export const PaymentSubscriptionFragmentDoc = gql`
     fragment PaymentSubscription on Payment {
   id
@@ -15097,6 +15411,11 @@ export const ProjectPaymentMethodsFragmentDoc = gql`
     enabled
     stripe
   }
+  managedRecoverableGrant {
+    stripe
+    strikeLightning
+    strikeOnChain
+  }
 }
     `;
 export const ProjectReviewPublicFragmentDoc = gql`
@@ -15170,6 +15489,13 @@ export const ProjectPageBodyFragmentDoc = gql`
   }
   paymentMethods {
     ...ProjectPaymentMethods
+  }
+  fundingSummary {
+    raisedSats
+    goalSats
+    percentageFunded
+    endsAt
+    isFundingOpen
   }
   reviews {
     ...ProjectReviewPublic
@@ -15253,6 +15579,13 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   }
   paymentMethods {
     ...ProjectPaymentMethods
+  }
+  fundingSummary {
+    raisedSats
+    goalSats
+    percentageFunded
+    endsAt
+    isFundingOpen
   }
   reviews {
     ...ProjectReview
@@ -20378,6 +20711,78 @@ export function useAmbassadorUpdateMutation(baseOptions?: Apollo.MutationHookOpt
 export type AmbassadorUpdateMutationHookResult = ReturnType<typeof useAmbassadorUpdateMutation>;
 export type AmbassadorUpdateMutationResult = Apollo.MutationResult<AmbassadorUpdateMutation>;
 export type AmbassadorUpdateMutationOptions = Apollo.BaseMutationOptions<AmbassadorUpdateMutation, AmbassadorUpdateMutationVariables>;
+export const AonClaimPrepareDocument = gql`
+    mutation AonClaimPrepare($projectId: BigInt!) {
+  aonClaimPrepare(projectId: $projectId) {
+    contractAddress
+    claimableAmountSats
+    processingFeeSats
+    creatorAddress
+    claimCalldata
+    simulationOk
+  }
+}
+    `;
+export type AonClaimPrepareMutationFn = Apollo.MutationFunction<AonClaimPrepareMutation, AonClaimPrepareMutationVariables>;
+
+/**
+ * __useAonClaimPrepareMutation__
+ *
+ * To run a mutation, you first call `useAonClaimPrepareMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAonClaimPrepareMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [aonClaimPrepareMutation, { data, loading, error }] = useAonClaimPrepareMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useAonClaimPrepareMutation(baseOptions?: Apollo.MutationHookOptions<AonClaimPrepareMutation, AonClaimPrepareMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AonClaimPrepareMutation, AonClaimPrepareMutationVariables>(AonClaimPrepareDocument, options);
+      }
+export type AonClaimPrepareMutationHookResult = ReturnType<typeof useAonClaimPrepareMutation>;
+export type AonClaimPrepareMutationResult = Apollo.MutationResult<AonClaimPrepareMutation>;
+export type AonClaimPrepareMutationOptions = Apollo.BaseMutationOptions<AonClaimPrepareMutation, AonClaimPrepareMutationVariables>;
+export const AonClaimBroadcastDocument = gql`
+    mutation AonClaimBroadcast($projectId: BigInt!, $signedTxHex: String!) {
+  aonClaimBroadcast(projectId: $projectId, signedTxHex: $signedTxHex) {
+    txHash
+  }
+}
+    `;
+export type AonClaimBroadcastMutationFn = Apollo.MutationFunction<AonClaimBroadcastMutation, AonClaimBroadcastMutationVariables>;
+
+/**
+ * __useAonClaimBroadcastMutation__
+ *
+ * To run a mutation, you first call `useAonClaimBroadcastMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAonClaimBroadcastMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [aonClaimBroadcastMutation, { data, loading, error }] = useAonClaimBroadcastMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      signedTxHex: // value for 'signedTxHex'
+ *   },
+ * });
+ */
+export function useAonClaimBroadcastMutation(baseOptions?: Apollo.MutationHookOptions<AonClaimBroadcastMutation, AonClaimBroadcastMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AonClaimBroadcastMutation, AonClaimBroadcastMutationVariables>(AonClaimBroadcastDocument, options);
+      }
+export type AonClaimBroadcastMutationHookResult = ReturnType<typeof useAonClaimBroadcastMutation>;
+export type AonClaimBroadcastMutationResult = Apollo.MutationResult<AonClaimBroadcastMutation>;
+export type AonClaimBroadcastMutationOptions = Apollo.BaseMutationOptions<AonClaimBroadcastMutation, AonClaimBroadcastMutationVariables>;
 export const ContributionCreateDocument = gql`
     mutation ContributionCreate($input: ContributionCreateInput!) {
   contributionCreate(input: $input) {
@@ -20772,6 +21177,40 @@ export function usePayoutPaymentInitiateMutation(baseOptions?: Apollo.MutationHo
 export type PayoutPaymentInitiateMutationHookResult = ReturnType<typeof usePayoutPaymentInitiateMutation>;
 export type PayoutPaymentInitiateMutationResult = Apollo.MutationResult<PayoutPaymentInitiateMutation>;
 export type PayoutPaymentInitiateMutationOptions = Apollo.BaseMutationOptions<PayoutPaymentInitiateMutation, PayoutPaymentInitiateMutationVariables>;
+export const PayoutCancelDocument = gql`
+    mutation PayoutCancel($input: PayoutCancelInput!) {
+  payoutCancel(input: $input) {
+    success
+    message
+  }
+}
+    `;
+export type PayoutCancelMutationFn = Apollo.MutationFunction<PayoutCancelMutation, PayoutCancelMutationVariables>;
+
+/**
+ * __usePayoutCancelMutation__
+ *
+ * To run a mutation, you first call `usePayoutCancelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutCancelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payoutCancelMutation, { data, loading, error }] = usePayoutCancelMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePayoutCancelMutation(baseOptions?: Apollo.MutationHookOptions<PayoutCancelMutation, PayoutCancelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutCancelMutation, PayoutCancelMutationVariables>(PayoutCancelDocument, options);
+      }
+export type PayoutCancelMutationHookResult = ReturnType<typeof usePayoutCancelMutation>;
+export type PayoutCancelMutationResult = Apollo.MutationResult<PayoutCancelMutation>;
+export type PayoutCancelMutationOptions = Apollo.BaseMutationOptions<PayoutCancelMutation, PayoutCancelMutationVariables>;
 export const PostDeleteDocument = gql`
     mutation PostDelete($postDeleteId: BigInt!) {
   postDelete(id: $postDeleteId) {
@@ -25160,6 +25599,48 @@ export type UserAccountPasswordFundsSummaryQueryHookResult = ReturnType<typeof u
 export type UserAccountPasswordFundsSummaryLazyQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummaryLazyQuery>;
 export type UserAccountPasswordFundsSummarySuspenseQueryHookResult = ReturnType<typeof useUserAccountPasswordFundsSummarySuspenseQuery>;
 export type UserAccountPasswordFundsSummaryQueryResult = Apollo.QueryResult<UserAccountPasswordFundsSummaryQuery, UserAccountPasswordFundsSummaryQueryVariables>;
+export const AonClaimStatusDocument = gql`
+    query AonClaimStatus($projectId: BigInt!) {
+  aonClaimStatus(projectId: $projectId) {
+    status
+    txHash
+    failureReason
+  }
+}
+    `;
+
+/**
+ * __useAonClaimStatusQuery__
+ *
+ * To run a query within a React component, call `useAonClaimStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAonClaimStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAonClaimStatusQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useAonClaimStatusQuery(baseOptions: Apollo.QueryHookOptions<AonClaimStatusQuery, AonClaimStatusQueryVariables> & ({ variables: AonClaimStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AonClaimStatusQuery, AonClaimStatusQueryVariables>(AonClaimStatusDocument, options);
+      }
+export function useAonClaimStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AonClaimStatusQuery, AonClaimStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AonClaimStatusQuery, AonClaimStatusQueryVariables>(AonClaimStatusDocument, options);
+        }
+export function useAonClaimStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AonClaimStatusQuery, AonClaimStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AonClaimStatusQuery, AonClaimStatusQueryVariables>(AonClaimStatusDocument, options);
+        }
+export type AonClaimStatusQueryHookResult = ReturnType<typeof useAonClaimStatusQuery>;
+export type AonClaimStatusLazyQueryHookResult = ReturnType<typeof useAonClaimStatusLazyQuery>;
+export type AonClaimStatusSuspenseQueryHookResult = ReturnType<typeof useAonClaimStatusSuspenseQuery>;
+export type AonClaimStatusQueryResult = Apollo.QueryResult<AonClaimStatusQuery, AonClaimStatusQueryVariables>;
 export const PayoutGetDocument = gql`
     query PayoutGet($input: PayoutGetInput!) {
   payoutGet(input: $input) {

@@ -15,7 +15,7 @@ export type ProjectCreationFundingContext = {
 export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(ProjectFundingStrategy.TakeItAll)
 
 export const getProjectFundingStrategyInput = (option: ProjectCreationFundingOption) =>
-  option === RecoverableGrantFundingOption ? ProjectFundingStrategy.AllOrNothing : option
+  option === RecoverableGrantFundingOption ? ProjectFundingStrategy.TakeItAll : option
 
 export const getProjectRecoverableGrantInput = (option: ProjectCreationFundingOption) =>
   option === RecoverableGrantFundingOption
@@ -33,9 +33,7 @@ export const shouldShowAllOrNothingGoalInCreation = (
     return true
   }
 
-  if (project.isRecoverableGrant) {
-    return true
-  }
+  if (project.isRecoverableGrant) return false
 
   if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
     return false

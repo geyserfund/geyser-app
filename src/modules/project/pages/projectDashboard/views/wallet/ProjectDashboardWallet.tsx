@@ -8,6 +8,8 @@ import {
   SeedWordsModal,
 } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsWallet/SeedWordsSection.tsx'
 import { DirectPaymentDetailsForm } from '@/modules/project/components/DirectPaymentDetailsForm.tsx'
+import { ManagedRecoverableGrantPaymentStatus } from '@/modules/project/components/ManagedRecoverableGrantPaymentStatus.tsx'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
@@ -22,6 +24,25 @@ import { EnableFiatContributions } from './components/EnableFiatContributions.ts
 import { ProjectRskEoaHistory, ProjectRskEoaHistoryItem } from './components/ProjectRskEoaHistory.tsx'
 
 export const ProjectDashboardWallet = () => {
+  const { project } = useProjectAtom()
+
+  return isManagedRecoverableGrantProject(project) ? <ManagedRecoverableGrantPayments /> : <CreatorManagedPayments />
+}
+
+const ManagedRecoverableGrantPayments = () => {
+  const { t } = useTranslation()
+  const { project } = useProjectAtom()
+
+  return (
+    <DashboardLayout desktopTitle={t('Payment Settings')}>
+      <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
+        <ManagedRecoverableGrantPaymentStatus readiness={project.paymentMethods?.managedRecoverableGrant} />
+      </VStack>
+    </DashboardLayout>
+  )
+}
+
+const CreatorManagedPayments = () => {
   const { t } = useTranslation()
 
   const { project } = useProjectAtom()

@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useNavigate } from 'react-router'
 
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
@@ -30,6 +31,7 @@ interface ReviewStatusInfo {
 
 export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   const { project } = useProjectAtom()
+  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
   const navigate = useNavigate()
   const toast = useNotification()
   const submitReviewConfirmModal = useModal()
@@ -254,7 +256,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   const continueButtonProps = getButtonConfig()
 
   const backButtonProps = {
-    onClick: () => navigate(getPath('launchPayment', project.id)),
+    onClick: () => navigate(getPath(isManagedRecoverableGrant ? 'launchAboutYou' : 'launchPayment', project.id)),
   }
 
   return (

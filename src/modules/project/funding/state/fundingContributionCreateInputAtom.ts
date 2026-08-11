@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import {
   ProjectSubscriptionStartMutationVariables,
   RecurringContributionRenewalCreateMutationVariables,
@@ -23,6 +24,7 @@ import {
   ProjectRewardFragment,
   QuoteCurrency,
   ShippingAddress,
+  StrikePaymentRail,
   UserMeFragment,
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
@@ -151,6 +153,11 @@ const buildContributionCreateInput = ({
 
   if (fundingMode !== recurringFundingModes.oneTime && input.orderInput) {
     input.orderInput.items = []
+  }
+
+  if (isManagedRecoverableGrantProject(fundingProject)) {
+    input.orderInput = undefined
+    if (input.metadataInput) input.metadataInput.guardianBadges = undefined
   }
 
   return input
@@ -329,7 +336,11 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
     return {}
   }
 
-  if (!fundingProject.paymentMethods?.fiat?.stripe) {
+  const stripeReady = isManagedRecoverableGrantProject(fundingProject)
+    ? fundingProject.paymentMethods?.managedRecoverableGrant?.stripe
+    : fundingProject.paymentMethods?.fiat?.stripe
+
+  if (!stripeReady) {
     return {}
   }
 
@@ -396,6 +407,30 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const lightningBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
   const onChainBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
   const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
+  const managedRecoverableGrant = isManagedRecoverableGrantProject(fundingProject)
+
+  if (managedRecoverableGrant) {
+    if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
+      if (fundingProject.paymentMethods?.managedRecoverableGrant?.stripe) {
+        paymentsInput.fiat = {
+          create: true,
+          stripe: { returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject.name)}` },
+        }
+      }
+    } else if (
+      intendedPaymentMethod === PaymentMethods.lightning &&
+      fundingProject.paymentMethods?.managedRecoverableGrant?.strikeLightning
+    ) {
+      paymentsInput.strike = { create: true, rail: StrikePaymentRail.Lightning }
+    } else if (
+      intendedPaymentMethod === PaymentMethods.onChain &&
+      fundingProject.paymentMethods?.managedRecoverableGrant?.strikeOnChain
+    ) {
+      paymentsInput.strike = { create: true, rail: StrikePaymentRail.OnChain }
+    }
+
+    return paymentsInput
+  }
 
   const supportsPrismSwaps =
     fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||

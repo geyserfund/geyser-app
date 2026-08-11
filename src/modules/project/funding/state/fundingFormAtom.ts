@@ -52,6 +52,7 @@ export type FundingProject = Pick<
   | 'paymentMethods'
   | 'subCategory'
   | 'fundingStrategy'
+  | 'isRecoverableGrant'
   | 'rskEoa'
   | 'activeMatching'
 >
@@ -645,7 +646,13 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
     }
   }
 
-  if (!fundingPaymentDetails.onChainToRskSwap?.address) {
+  if (
+    !(
+      fundingPaymentDetails.strikeOnChain?.address ||
+      fundingPaymentDetails.strike?.address ||
+      fundingPaymentDetails.onChainToRskSwap?.address
+    )
+  ) {
     return `Something went wrong with the onChain payment, please try using Lightning or try again`
   }
 

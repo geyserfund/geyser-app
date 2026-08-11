@@ -1,15 +1,16 @@
 import { captureException } from '@sentry/react'
+import { useApolloClient } from '@apollo/client'
 import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useRef } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { getPath } from '../../../shared/constants'
 import {
   type UniqueProjectQueryInput,
+  ProjectPageBodyDocument,
   useCreateProjectMutation,
   useProjectActiveMatchingGetLazyQuery,
   useProjectAonGoalLazyQuery,
-  useProjectPageBodyLazyQuery,
   useProjectPublishMutation,
   useProjectStatusUpdateMutation,
   useUpdateProjectMutation,
@@ -54,13 +55,10 @@ export const isExpectedProjectLookupError = (error: unknown): boolean => {
  */
 export const useProjectAPI = (props?: UseInitProjectProps) => {
   const navigate = useNavigate()
+  const client = useApolloClient()
 
-  const location = useLocation()
   const params = useParams<{ projectName: string }>()
   const { projectName: projectNameParam } = params
-
-  const launchModalShouldOpen = location.search.includes('launch')
-  const draftModalShouldOpen = location.search.includes('draft')
 
   const setProject = useSetAtom(projectAtom)
   const setProjectLoading = useSetAtom(projectLoadingAtom)
@@ -70,11 +68,11 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
 
   const { load, projectId, projectName } = props || {}
 
-  const [queryProject, queryProjectOptions] = useProjectPageBodyLazyQuery()
   const [queryProjectAonGoal] = useProjectAonGoalLazyQuery()
   const [queryProjectActiveMatching] = useProjectActiveMatchingGetLazyQuery()
   const aonGoalRequestIdRef = useRef(0)
   const activeMatchingRequestIdRef = useRef(0)
+  const initialProjectLoadKeyRef = useRef<string | null>(null)
 
   const queryProjectAonGoalMethod = useCallback(
     (where: UniqueProjectQueryInput) => {
@@ -126,25 +124,18 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
   )
 
   const queryProjectMethod = useCallback(() => {
-    queryProject({
-      variables: {
-        where: { name: projectName || projectNameParam, id: projectId },
-      },
-      fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-and-network',
-      onError(error) {
-        setProjectLoading(false)
-        if (!isExpectedProjectLookupError(error)) {
-          captureException(error, {
-            tags: {
-              'not-found': 'projectGet',
-              'error.on': 'query error',
-            },
-          })
-        }
-
-        navigate(getPath('projectNotFound'))
-      },
-      onCompleted(data) {
+    return client
+      .query({
+        query: ProjectPageBodyDocument,
+        variables: {
+          where: { name: projectName || projectNameParam, id: projectId },
+        },
+        // This is an imperative refresh, rather than a component-owned
+        // observable query. It therefore cannot re-run when related project
+        // data is written to the cache.
+        fetchPolicy: 'network-only',
+      })
+      .then(({ data }) => {
         setProjectLoading(false)
 
         if (!data?.projectGet) {
@@ -191,11 +182,23 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
             })
           },
         })
-      },
-    })
+      })
+      .catch((error) => {
+        setProjectLoading(false)
+        if (!isExpectedProjectLookupError(error)) {
+          captureException(error, {
+            tags: {
+              'not-found': 'projectGet',
+              'error.on': 'query error',
+            },
+          })
+        }
+
+        navigate(getPath('projectNotFound'))
+      })
   }, [
+    client,
     partialUpdateProject,
-    queryProject,
     queryProjectActiveMatching,
     queryProjectAonGoalMethod,
     projectName,
@@ -204,8 +207,6 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     setProjectAonGoalLoading,
     setProjectLoading,
     navigate,
-    launchModalShouldOpen,
-    draftModalShouldOpen,
     setProject,
     projectNameParam,
   ])
@@ -246,15 +247,27 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
   })
 
   useEffect(() => {
-    if (load && (projectId || projectName)) {
-      queryProjectMethod()
+    if (!load || (!projectId && !projectName)) {
+      initialProjectLoadKeyRef.current = null
+      return
     }
+
+    const projectLoadKey = `${projectId ?? ''}:${projectName ?? ''}`
+
+    // Apollo can replace the lazy-query execute function as its result changes.
+    // This effect is for the initial route load only, so avoid turning those
+    // identity changes into an unbounded sequence of page queries.
+    if (initialProjectLoadKeyRef.current === projectLoadKey) {
+      return
+    }
+
+    initialProjectLoadKeyRef.current = projectLoadKey
+    queryProjectMethod()
   }, [load, projectId, projectName, queryProjectMethod])
 
   return {
     queryProject: {
       execute: queryProjectMethod,
-      ...queryProjectOptions,
     },
     createProject: {
       execute: createProject,
