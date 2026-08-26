@@ -40,11 +40,11 @@ export default defineConfig(({ command, mode }) => {
   // Apply production/development defines only when not running tests (heuristically)
   // Vitest integration might set command differently, but often not 'serve' or 'build'
   if (command === 'serve' || command === 'build') {
-    define['process.env'] = env
+    define['process.env.APP_URL'] = JSON.stringify(env.APP_URL)
     define.__APP_ENV__ = env.APP_ENV
     console.log(`
       ==================================================================================================
-      "Geyser - App" command: ${command}, mode: ${mode}. Applying define config.
+      "Geyser - App" command: ${command}, mode: ${mode}. Applying client-safe define config.
       ==================================================================================================
       `)
   } else {
@@ -58,9 +58,9 @@ export default defineConfig(({ command, mode }) => {
   }
 
   const pwaOptionsMode = env.APP_ENV === 'development' ? 'development' : 'production'
-  const sentryAuthToken = process.env.VITE_APP_SENTRY_AUTH_TOKEN || env.VITE_APP_SENTRY_AUTH_TOKEN
-  const sentryOrg = process.env.VITE_APP_SENTRY_ORG || env.VITE_APP_SENTRY_ORG
-  const sentryUrl = process.env.VITE_APP_SENTRY_URL || env.VITE_APP_SENTRY_URL
+  const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN || env.SENTRY_AUTH_TOKEN
+  const sentryOrg = process.env.SENTRY_ORG || env.SENTRY_ORG
+  const sentryUrl = process.env.SENTRY_URL || env.SENTRY_URL
   const hasSentrySourceMapConfig = command === 'build' && Boolean(sentryAuthToken && sentryOrg)
   const plugins: PluginOption[] = [
     VitePWA({ ...pwaOptions, mode: pwaOptionsMode }),
@@ -96,7 +96,7 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     server,
-    // Use the conditionally populated define object
+    // Expose only explicitly public client values to browser code.
     define,
     test: {
       globals: true,
