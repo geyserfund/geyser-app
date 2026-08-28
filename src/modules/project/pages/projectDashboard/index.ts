@@ -12,7 +12,6 @@ import { ProjectDashboardMemberships } from './views/ProjectDashboardMemberships
 import { ProjectDashboardNotifications } from './views/ProjectDashboardNotifications.tsx'
 import { ProjectDashboardRewards } from './views/ProjectDashboardRewards.tsx'
 import { ProjectDashboardStory } from './views/ProjectDashboardStory.tsx'
-import { ProjectDashboardPromote } from './views/promote/ProjectDashboardPromote.tsx'
 import { RewardCreate } from './views/rewards/RewardCreate.tsx'
 import { RewardEdit } from './views/rewards/RewardEdit.tsx'
 import { ProjectDashboardSales } from './views/sales/ProjectDashboardSales.tsx'
@@ -34,7 +33,6 @@ export {
   ProjectDashboardMobileLayout,
   ProjectDashboardNostr,
   ProjectDashboardNotifications,
-  ProjectDashboardPromote,
   ProjectDashboardRewards,
   ProjectDashboardSales,
   ProjectDashboardSettings,

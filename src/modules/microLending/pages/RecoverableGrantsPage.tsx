@@ -285,28 +285,12 @@ export const RecoverableGrantsPage = () => {
               </InfoCard>
               <VStack align="stretch" spacing={5} justify="center">
                 <HStack spacing={5} align="stretch">
-                  <Box
-                    bg={colors.darkSurfaceBg}
-                    color="white"
-                    borderRadius={radius.card}
-                    borderWidth="1px"
-                    borderColor={colors.line}
-                    p={5}
-                    minW="155px"
-                  >
-                    <Eyebrow colors={colors} color={colors.gold}>
-                      Platform fee
-                    </Eyebrow>
-                    <H3 size="32px" bold>
-                      {t('5%')}
-                    </H3>
-                  </Box>
                   <Box bg={colors.pale} borderRadius={radius.card} borderWidth="1px" borderColor={colors.line} p={5}>
                     <Eyebrow colors={colors} color={colors.muted}>
                       Local allocation
                     </Eyebrow>
                     <H3 size="32px" bold>
-                      {t('95%')}
+                      {t('100%')}
                     </H3>
                   </Box>
                 </HStack>

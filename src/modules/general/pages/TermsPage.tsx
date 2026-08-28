@@ -15,7 +15,6 @@ import { standardPadding } from '@/shared/styles/index.ts'
 const EFFECTIVE_DATE = 'March 27, 2026'
 
 type TermsContent = {
-  ambassadorEarningsItems: readonly string[]
   contentLicenseItems: readonly string[]
   creatorRemedies: readonly string[]
   feeItems: readonly string[]
@@ -92,30 +91,12 @@ const getTermsContent = (t: TFunction): TermsContent => ({
     ),
   ],
   feeItems: [
-    t('We will charge a 5% fee from any contribution made to a project that uses a lightning address.'),
-    t(
-      'We will apply a +5% fee from any project that enlists into our Promotions Network, a portion of which goes automatically to the promoter.',
-    ),
     t(
       'Fees may also be charged in the event that the contribution is made via on-chain transaction to a project using a lightning address. Such fees may vary and will depend on the current fees in the Bitcoin main network and fees of third party services relating to on-chain payments to a lightning address.',
     ),
     t(
       "You're responsible for paying any additional fees or taxes associated with your bitcoin activity, such as on-chain fees or lightning routing fees.",
     ),
-  ],
-  ambassadorEarningsItems: [
-    t('Ambassador Earnings is an optional program and may be modified, paused, or discontinued by Geyser at any time.'),
-    t('Participation in the program constitutes acceptance of these terms.'),
-    t('Geyser does not guarantee any level of earnings or continued availability of rewards.'),
-    t('Projects may opt in or out of Ambassador Earnings at any time, which may affect eligibility for rewards.'),
-    t(
-      'Users must not engage in self-referrals, fraudulent activity, spam, misrepresentation of projects, false claims, promises of financial returns, or any behavior intended to manipulate the system or mislead contributors.',
-    ),
-    t(
-      'Geyser reserves the right to withhold or revoke rewards in cases of suspected abuse or violation of these terms.',
-    ),
-    t('Users are responsible for complying with applicable laws and regulations in their jurisdiction.'),
-    t('Geyser is not liable for any losses, damages, or disputes arising from participation in the program.'),
   ],
   contentLicenseItems: [
     t(
@@ -213,7 +194,6 @@ const TermsList = ({ items, ordered = false }: { items: readonly ReactNode[]; or
 export const TermsPage = () => {
   const { t } = useTranslation()
   const {
-    ambassadorEarningsItems,
     contentLicenseItems,
     creatorRemedies,
     feeItems,
@@ -423,10 +403,6 @@ export const TermsPage = () => {
             )}
           </TermsParagraph>
           <TermsList items={feeItems} />
-        </TermsSection>
-
-        <TermsSection title={t('Ambassador Earnings - Terms & Conditions')}>
-          <TermsList items={ambassadorEarningsItems} />
         </TermsSection>
 
         <TermsSection title={t('User Responsibility for Tax Compliance')}>

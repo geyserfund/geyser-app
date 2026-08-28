@@ -9,7 +9,7 @@ import { ProjectShareModal } from '../shareModal'
 export const ShareProjectButton = () => {
   const { t } = useTranslation()
 
-  const { project, isProjectOwner } = useProjectAtom()
+  const { project } = useProjectAtom()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -25,7 +25,7 @@ export const ShareProjectButton = () => {
           '&:active:not(:disabled)': { transform: 'scale(0.96)' },
         }}
       >
-        {isProjectOwner ? t('Share') : t('Share & Earn')}
+        {t('Share')}
       </Button>
       <ProjectShareModal isOpen={isOpen} onClose={onClose} projectId={project.id} title={project.title} />
     </>

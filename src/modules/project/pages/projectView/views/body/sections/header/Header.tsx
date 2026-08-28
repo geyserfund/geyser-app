@@ -153,8 +153,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, isProjectOwner, .
 const HeaderActions = ({ isProjectOwner }: { isProjectOwner: boolean }) => {
   const { project } = useProjectAtom()
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
-  const shareLabel = isRecoverableGrant ? t('Share') : t('Share & Earn')
+  const shareLabel = t('Share')
 
   if (isProjectOwner) {
     return <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} flexShrink={0} />

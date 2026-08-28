@@ -64,10 +64,6 @@ const formatFeeAmount = (amount: number, currency: string) => {
 
 const FeeBreakdownRows = ({ items }: { items: FeeBreakdownItem[] }) => {
   const feeTypeLabels: Record<string, string> = {
-    AMBASSADOR: t('Ambassador fee'),
-    PARTNER: t('Partner fee'),
-    PLATFORM: t('Platform fee'),
-    PROMOTION: t('Promotion fee'),
   }
 
   return (

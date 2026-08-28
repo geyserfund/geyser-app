@@ -5,7 +5,6 @@ import type { IconType } from 'react-icons'
 import {
   PiArrowUpRight,
   PiClockCountdown,
-  PiCoins,
   PiHandCoins,
   PiHouse,
   PiNewspaper,
@@ -56,12 +55,6 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
       label: 'Impact funds',
       path: getPath('discoveryImpactFunds'),
       icon: PiTrophy,
-      badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
-    },
-    {
-      label: 'Earn',
-      path: getPath('ambassadorProgram'),
-      icon: PiCoins,
       badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
     },
     { label: 'News', path: getPath('discoveryNews'), icon: PiNewspaper },

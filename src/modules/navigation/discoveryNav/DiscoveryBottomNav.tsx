@@ -16,7 +16,6 @@ import { BottomNavBarContainer } from '../components/bottomNav'
 export enum BottomNavItemKey {
   donate = 'donate',
   fundraise = 'fundraise',
-  earn = 'earn',
   news = 'news',
 }
 
@@ -57,12 +56,6 @@ export const DiscoveryBottomNav = () => {
       isActive:
         matchesRoute(location.pathname, getPath('discoveryCreator')) ||
         matchesRoute(location.pathname, getPath('launchStart')),
-    },
-    {
-      label: t('Earn'),
-      key: BottomNavItemKey.earn,
-      path: getPath('ambassadorProgram'),
-      isActive: matchesRoute(location.pathname, getPath('ambassadorProgram')),
     },
     {
       label: t('News'),

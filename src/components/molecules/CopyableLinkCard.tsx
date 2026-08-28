@@ -2,7 +2,6 @@ import { Box, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCopy } from 'react-icons/pi'
 
-import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { Body } from '@/shared/components/typography'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 
@@ -10,15 +9,13 @@ type CopyableLinkCardProps = {
   label: string
   linkValue: string
   colorScheme?: 'primary1' | 'amber'
-  showAmbassadorTerms?: boolean
 }
 
-/** Clickable link card that mirrors the Ambassador Earnings page copy interaction. */
+/** Clickable share-link card. */
 export const CopyableLinkCard = ({
   label,
   linkValue,
   colorScheme = 'primary1',
-  showAmbassadorTerms = false,
 }: CopyableLinkCardProps) => {
   const { onCopy, hasCopied } = useCopyToClipboard(linkValue)
   const isAmber = colorScheme === 'amber'
@@ -96,8 +93,6 @@ export const CopyableLinkCard = ({
           <Icon as={PiCopy} boxSize={5} color={hasCopied ? activeBadgeTextColor : badgeTextColor} />
         </HStack>
       </HStack>
-
-      {showAmbassadorTerms ? <AmbassadorReferralTermsNotice /> : null}
     </VStack>
   )
 }
