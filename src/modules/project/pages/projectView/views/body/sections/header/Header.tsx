@@ -57,7 +57,7 @@ import { ProjectLinks } from '../../components/ProjectLinks.tsx'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { ManagedRecoverableGrantBalanceDisplay } from '../contributionSummary/components/ManagedRecoverableGrantBalanceDisplay.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
-import { ProjectShareModal } from './shareModal'
+import { ProjectShareModal } from './shareModal/ProjectShareModal.tsx'
 
 const REPORT_PROJECT_AIRTABLE_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagpNDtO12bhTK6hQ/form'
 

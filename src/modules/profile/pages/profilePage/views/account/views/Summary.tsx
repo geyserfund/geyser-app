@@ -8,11 +8,11 @@ import { PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { Body } from '@/shared/components/typography'
 
-import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import type { HeroStats } from '../../../../../../../types'
-import { useUserHeroStatsQuery } from '../../../../../../../types'
-import { getShortAmountLabel } from '../../../../../../../utils'
-import { useUserProfileAtom } from '../../../../../state'
+import { SkeletonLayout } from '../../../../../../../shared/components/layouts/SkeletonLayout.tsx'
+import type { HeroStats } from '../../../../../../../types/generated/graphql.ts'
+import { useUserHeroStatsQuery } from '../../../../../../../types/generated/graphql.ts'
+import { getShortAmountLabel } from '../../../../../../../shared/utils/formatData/helperFunctions.ts'
+import { useUserProfileAtom } from '../../../../../state/profileAtom.ts'
 import { FieldPartnerSummary } from './FieldPartnerSummary'
 
 export const Summary = () => {

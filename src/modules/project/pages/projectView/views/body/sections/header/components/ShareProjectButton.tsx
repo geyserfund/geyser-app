@@ -4,7 +4,7 @@ import { PiShareFat } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
-import { ProjectShareModal } from '../shareModal'
+import { ProjectShareModal } from '../shareModal/ProjectShareModal.tsx'
 
 export const ShareProjectButton = () => {
   const { t } = useTranslation()

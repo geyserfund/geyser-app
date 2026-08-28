@@ -9,9 +9,9 @@ import {
 } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/config/routerPaths.ts'
 
-import { BottomNavBarContainer } from '../components/bottomNav'
+import { BottomNavBarContainer } from '../components/bottomNav/BottomNavContainer.tsx'
 
 export enum BottomNavItemKey {
   donate = 'donate',
