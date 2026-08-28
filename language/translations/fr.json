@@ -1767,5 +1767,12 @@
   "Managed payment methods": "Moyens de paiement gérés",
   "Strike Bitcoin and Lightning": "Strike Bitcoin et Lightning",
   "At least one managed payment provider must be ready before this project can launch.": "Au moins un prestataire de paiement géré doit être prêt avant le lancement de ce projet.",
-  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Les contributions à cette subvention récupérable sont reçues sur des comptes gérés par Geyser et attribuées à son objectif protégé."
+  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Les contributions à cette subvention récupérable sont reçues sur des comptes gérés par Geyser et attribuées à son objectif protégé.",
+  "100%": "100%",
+  "Configure your wallet for payments and refunds.": "Configurez votre portefeuille pour les paiements et les remboursements.",
+  "Configure your internal Geyser wallet to handle payments and refunds.": "Configurez votre portefeuille interne Geyser pour gérer les paiements et les remboursements.",
+  "Share this project": "Partagez ce projet",
+  "Help this project reach more supporters by sharing it with your network. ": "Aidez ce projet à atteindre plus de supporters en le partageant avec votre réseau.",
+  "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.": "Aucune contribution n'a encore été activée par le partage. Partagez le projet pour l'aider à atteindre plus de supporters.",
+  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Les personnes qui parlent des projets Geyser en partageant aident à connecter les projets avec des supporters."
 }
