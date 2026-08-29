@@ -2,7 +2,6 @@ import { Button, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiArrowsClockwiseBold } from 'react-icons/pi'
 
-import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -14,12 +13,7 @@ import {
 import { usePostProjectOnNostr } from '@/modules/project/pages/projectView/views/body/sections/header/components/PostOnNostr.tsx'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
-import {
-  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-  formatEffectiveAffiliatePayoutRate,
-  GEYSER_PROMOTION_FEE_RATE,
-} from '@/shared/utils/affiliatePayout.ts'
-import { useProjectAmbassadorStatsQuery, useUserAffiliatePartnerTermsQuery, useUserHeroStatsQuery } from '@/types'
+import { useProjectAmbassadorStatsQuery, useUserHeroStatsQuery } from '@/types'
 import { commaFormatted } from '@/utils'
 
 export const ProjectShareView = () => {
@@ -30,10 +24,6 @@ export const ProjectShareView = () => {
   const { canPostProjectOnNostr, isPostingProjectOnNostr, postProjectOnNostr } = usePostProjectOnNostr()
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
-  const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
-    skip: !user?.id,
-    variables: { where: { id: user?.id } },
-  })
   const { data: userHeroStatsData } = useUserHeroStatsQuery({
     skip: !user?.id,
     variables: { where: { id: user?.id } },
@@ -51,12 +41,6 @@ export const ProjectShareView = () => {
         clickedFrom: CampaignContent.projectShareModal,
       })}`
     : getShareProjectUrl({ clickedFrom: CampaignContent.projectShareModal })
-  const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
-    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
-      DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-    GEYSER_PROMOTION_FEE_RATE,
-  )
-
   const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
   const satAmount = data?.projectGet?.ambassadors?.stats?.contributionsSum
   const userAmbassadorStats = userHeroStatsData?.user?.heroStats.ambassadorStats
@@ -151,9 +135,7 @@ export const ProjectShareView = () => {
     return (
       <VStack spacing={3} alignItems="stretch">
         <Body zIndex={1} color={lightModeColors.neutral1[12]} size="md" regular textAlign="left">
-          {t('Earn {{rate}} of each contribution you enable by sharing your ambassador link.', {
-            rate: effectiveContributionPayout,
-          })}
+          {t('Share this project with your network to help it reach more supporters.')}
         </Body>
         {renderSharingStats()}
       </VStack>
@@ -166,7 +148,7 @@ export const ProjectShareView = () => {
         {renderAmbassadorCopy()}
       </VStack>
       <CopyableLinkCard
-        label={isProjectOwner ? t('Share link') : t('Ambassador link')}
+        label={t('Share link')}
         linkValue={isProjectOwner ? projectShareLink : heroLink}
         colorScheme="amber"
       />
@@ -182,7 +164,6 @@ export const ProjectShareView = () => {
           {t('Re-share on Nostr')}
         </Button>
       ) : null}
-      {!isProjectOwner ? <AmbassadorReferralTermsNotice /> : null}
     </VStack>
   )
 }

@@ -16,10 +16,8 @@ import { t } from 'i18next'
 import { PiArrowUpRight, PiX } from 'react-icons/pi'
 import { Link } from 'react-router'
 
-import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { getPath } from '@/shared/constants/index.ts'
 
 import { ControlPanelImages } from '../constant.ts'
 import { ControlPanelButton } from './ControlPanelButton.tsx'
@@ -165,24 +163,14 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
 }
 
 interface PromoteOptionsProps {
-  projectName: string
+  projectName?: string
   onClose?: () => void
   hideAffiliateOptions?: boolean
 }
 
-export const PromoteOptions = ({ projectName, onClose, hideAffiliateOptions = false }: PromoteOptionsProps) => {
+export const PromoteOptions = ({ onClose }: PromoteOptionsProps) => {
   return (
     <>
-      {!hideAffiliateOptions && (
-        <PromoteOptionCard
-          emoji="🔗"
-          title={t('Add affiliates')}
-          description={t('Reward others to share your project and bring contributors')}
-          isNew
-          to={getPath('dashboardPromote', projectName)}
-          onClose={onClose}
-        />
-      )}
       <PromoteOptionCard
         emoji="🧠"
         title={t('Best practices / tips')}
@@ -190,15 +178,6 @@ export const PromoteOptions = ({ projectName, onClose, hideAffiliateOptions = fa
         href={BEST_PRACTICES_URL}
         isExternal
       />
-      {!hideAffiliateOptions && (
-        <PromoteOptionCard
-          emoji="📢"
-          title={t('Geyser Ambassador Network')}
-          description={t('Get visibility on the Geyser landing page, emails, and much more')}
-          to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
-          onClose={onClose}
-        />
-      )}
     </>
   )
 }

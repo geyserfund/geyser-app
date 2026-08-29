@@ -1067,16 +1067,6 @@ const PayoutRskSwapOrNative: React.FC<PayoutRskProps> = ({
 
   const feeSections: FeeSection[] = []
 
-  if (payoutMetadata?.feeSummary?.totalAmount) {
-    feeSections.push({
-      key: 'platform',
-      label: t('Platform fees'),
-      tooltip: t('These fees were already deducted at the time of contribution.'),
-      summary: payoutMetadata.feeSummary,
-      deductsFromNet: false,
-    })
-  }
-
   if (payoutNetworkFeeSummary?.totalAmount) {
     feeSections.push({
       key: 'network',

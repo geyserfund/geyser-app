@@ -6,7 +6,6 @@ import { useEffect, useMemo } from 'react'
 import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiInfo, PiWarning } from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
 
-import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
@@ -20,7 +19,6 @@ import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
-import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import {
   ProjectFundingStrategy,
   ProjectReviewStatus,
@@ -32,7 +30,7 @@ import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { usePostsAtom, useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
 import { useWriteUpdateModal } from '../../../../hooks/useWriteUpdateModal.ts'
-import { promotionsNoticeClosedByProjectAtom, stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
+import { stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
 import { ProjectReviewFeedbackModal } from './components/ProjectReviewFeedbackModal.tsx'
@@ -332,15 +330,9 @@ export const ControlPanel = () => {
   const resubmitConfirmModal = useModal()
   const toast = useNotification()
   const isDraftUrl = location.pathname.includes('/draft')
-  const projectNoticeKey = String(project.id)
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const isRecoverableGrant = isRecoverableGrantProject(project)
 
-  const { isFundingDisabled } = useProjectToolkit(project)
-  const [promotionsNoticeClosedByProject, setPromotionsNoticeClosedByProject] = useAtom(
-    promotionsNoticeClosedByProjectAtom,
-  )
-  const isPromotionsModalOpen = Boolean(promotionsNoticeClosedByProject[projectNoticeKey])
   const [stripeConnectNoticeClosedByProject, setStripeConnectNoticeClosedByProject] = useAtom(
     stripeConnectNoticeClosedByProjectAtom,
   )
@@ -675,43 +667,6 @@ export const ControlPanel = () => {
                     ...current,
                     [stripeConnectNoticeKey]: true,
                   }))
-          }
-          variant="info"
-        />
-      )}
-
-      {!isRecoverableGrant && !isPromotionsModalOpen && !isFundingDisabled() && (
-        <ControlPanelNotification
-          icon={
-            <Image
-              src={'https://storage.googleapis.com/geyser-projects-media/utils/microphone.png'}
-              alt={t('Amplify image')}
-              width="48px"
-              height="48px"
-              flexShrink={0}
-            />
-          }
-          title={t('Amplify your reach')}
-          description={t(
-            'Get more eyes on your project by getting it featured on the landing page or in our newsletter.',
-          )}
-          actionButton={
-            <Button
-              as={Link}
-              to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
-              variant="soft"
-              colorScheme="neutral1"
-              size="sm"
-              flexShrink={0}
-            >
-              {t('View promotion plans')}
-            </Button>
-          }
-          onClose={() =>
-            setPromotionsNoticeClosedByProject((current) => ({
-              ...current,
-              [projectNoticeKey]: true,
-            }))
           }
           variant="info"
         />

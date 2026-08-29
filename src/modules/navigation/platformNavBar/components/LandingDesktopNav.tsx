@@ -104,22 +104,6 @@ export const LandingDesktopNav = ({ transparentMode = false }: { transparentMode
 
         <Button
           as={Link}
-          to={getPath('ambassadorProgram')}
-          variant="ghost"
-          size={navButtonSize}
-          color={buttonColor}
-          borderRadius={navButtonRadius}
-          fontSize={navButtonFontSize}
-          fontWeight={600}
-          paddingX={navButtonPaddingX}
-          _hover={{ backgroundColor: buttonHoverBackground }}
-          _active={{ backgroundColor: buttonActiveBackground }}
-        >
-          {t('Earn')}
-        </Button>
-
-        <Button
-          as={Link}
           to={getPath('discoveryNews')}
           variant="ghost"
           size={navButtonSize}

@@ -13,25 +13,3 @@ export const QUERY_PROJECT_AMBASSADOR_STATS = gql`
     }
   }
 `
-
-export const QUERY_PROJECT_AMBASSADOR_LIST = gql`
-  query ProjectAmbassadorList($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      ambassadors {
-        edges {
-          node {
-            id
-            payoutRate
-            contributionsCount
-            user {
-              imageUrl
-              username
-              heroId
-              id
-            }
-          }
-        }
-      }
-    }
-  }
-`

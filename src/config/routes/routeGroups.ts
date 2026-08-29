@@ -54,7 +54,6 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
   getPath('dashboardNotifications', PathName.projectName),
-  getPath('dashboardPromote', PathName.projectName),
   getPath('dashboardMatching', PathName.projectName),
   getPath('dashboardRewards', PathName.projectName),
   getPath('dashboardFundingGoal', PathName.projectName),
@@ -267,7 +266,6 @@ export const platformNavBarShadowRoutes = [
   getPath('discoveryRecoverableGrants'),
   getPath('discoveryRecoverableGrantsAfribitCaseStudy'),
   getPath('discoveryNews'),
-  getPath('ambassadorProgram'),
 ]
 
 export const profileSettingsRoutes = [
@@ -277,7 +275,6 @@ export const profileSettingsRoutes = [
   getPath('userProfileSettingsSubscriptions', PathName.userId),
   getPath('userProfileSettingsVerifications', PathName.userId),
   getPath('userProfileSettingsWallet', PathName.userId),
-  getPath('userProfileSettingsAffiliate', PathName.userId),
 ]
 
 export const heroProfileSettingsRoutes = [
@@ -288,7 +285,7 @@ export const heroProfileSettingsRoutes = [
 
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
 export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
-export const ambassadorProgramRoutes = [getPath('ambassadorProgram')]
+export const ambassadorProgramRoutes: string[] = []
 
 export const guardiansRoutes = [
   getPath('guardians'),

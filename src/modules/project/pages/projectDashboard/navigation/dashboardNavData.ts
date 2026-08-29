@@ -9,7 +9,6 @@ import {
   PiHandbag,
   PiIdentificationCard,
   PiInvoice,
-  PiMegaphone,
   PiPlanet,
   PiPlugs,
   PiProjectorScreenChart,
@@ -59,12 +58,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardRewards',
     type: DashboardType.config,
     icon: PiHandbag,
-  },
-  {
-    label: 'Promote',
-    path: 'dashboardPromote',
-    type: DashboardType.growth,
-    icon: PiMegaphone,
   },
   {
     label: 'Matching',

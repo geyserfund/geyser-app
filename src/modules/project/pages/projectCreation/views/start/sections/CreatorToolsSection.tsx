@@ -8,7 +8,6 @@ import {
   PiPackage,
   PiShoppingBag,
   PiTarget,
-  PiUsersThree,
 } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -60,14 +59,6 @@ export const CreatorToolsSection = () => {
         benefit: t('Build trust through consistency'),
         accentColor: 'blue.8',
         size: 'medium' as ToolSize,
-      },
-      {
-        icon: PiUsersThree,
-        title: t('Affiliates'),
-        description: t('Incentivize others to share your project through distribution loops'),
-        benefit: t('Expand reach through community advocates'),
-        accentColor: 'amber.9',
-        size: 'small' as ToolSize,
       },
       {
         icon: PiCreditCard,

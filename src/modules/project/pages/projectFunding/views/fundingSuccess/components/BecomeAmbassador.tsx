@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiArrowClockwiseBold, PiCopy, PiShareFat } from 'react-icons/pi'
 
-import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
@@ -14,16 +13,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors, standardPadding } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
-import {
-  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-  formatEffectiveAffiliatePayoutRate,
-  GEYSER_PROMOTION_FEE_RATE,
-} from '@/shared/utils/affiliatePayout.ts'
-import {
-  useProjectAmbassadorStatsQuery,
-  usePublishNostrEventMutation,
-  useUserAffiliatePartnerTermsQuery,
-} from '@/types'
+import { useProjectAmbassadorStatsQuery, usePublishNostrEventMutation } from '@/types'
 import { commaFormatted, useNotification } from '@/utils'
 
 import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
@@ -171,7 +161,6 @@ const ShareProjectCard = ({ heroLink, heroId, twitterShareText, handleCopy }: Li
 type AmbassadorCardProps = LinkActionsSectionProps & {
   ambassadorsCount?: number
   totalSats?: number
-  effectiveContributionPayout: string
 }
 
 /** Ambassador section for logged in users */
@@ -182,7 +171,6 @@ const AmbassadorCard = ({
   handleCopy,
   ambassadorsCount,
   totalSats,
-  effectiveContributionPayout,
 }: AmbassadorCardProps) => {
   const { t } = useTranslation()
 
@@ -200,14 +188,11 @@ const AmbassadorCard = ({
     >
       <HStack w="full" justifyContent="start">
         <H2 bold color="black">
-          {t('Become an ambassador')}
+          {t('Share this project')}
         </H2>
       </HStack>
       <Body color="black">
-        {t('Become an Ambassador for this project by spreading the word using your ambassador link.')}{' '}
-        {t('You will earn {{rate}} of each contribution you enable.', {
-          rate: effectiveContributionPayout,
-        })}{' '}
+        {t('Help this project reach more supporters by sharing it with your network. ')}
         {t('So far, {{count}} ambassadors have enabled {{amount}} sats in contributions to this project.', {
           count: ambassadorsCount || 0,
           amount: commaFormatted(totalSats || 0),
@@ -220,7 +205,6 @@ const AmbassadorCard = ({
         twitterShareText={twitterShareText}
         handleCopy={handleCopy}
       />
-      <AmbassadorReferralTermsNotice />
     </VStack>
   )
 }
@@ -232,10 +216,6 @@ export const BecomeAnAmbassador = () => {
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
 
   const user = loggedInUser || fundingInputAfterRequest?.user
-  const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
-    skip: !user?.id,
-    variables: { where: { id: user?.id } },
-  })
   const heroId = user?.heroId
   const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `?hero=${heroId}` : ''}`
 
@@ -246,12 +226,6 @@ export const BecomeAnAmbassador = () => {
   const { onCopy } = useClipboard(heroLink)
   const toast = useNotification()
   const { getShareProjectUrl } = useProjectShare()
-  const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
-    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
-      DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-    GEYSER_PROMOTION_FEE_RATE,
-  )
-
   const projectShareUrl = heroId ? heroLink : getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
 
@@ -279,7 +253,6 @@ export const BecomeAnAmbassador = () => {
       {...sharedProps}
       ambassadorsCount={ambassadorsCount}
       totalSats={totalSats}
-      effectiveContributionPayout={effectiveContributionPayout}
     />
   ) : (
     <ShareProjectCard {...sharedProps} />
