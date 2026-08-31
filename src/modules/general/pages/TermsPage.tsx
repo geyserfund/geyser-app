@@ -193,14 +193,8 @@ const TermsList = ({ items, ordered = false }: { items: readonly ReactNode[]; or
 /** Displays Geyser's Terms and Conditions as a long-form legal page. */
 export const TermsPage = () => {
   const { t } = useTranslation()
-  const {
-    contentLicenseItems,
-    creatorRemedies,
-    feeItems,
-    ourRightsItems,
-    prohibitedSiteActions,
-    systemActions,
-  } = useMemo(() => getTermsContent(t), [t])
+  const { contentLicenseItems, creatorRemedies, feeItems, ourRightsItems, prohibitedSiteActions, systemActions } =
+    useMemo(() => getTermsContent(t), [t])
 
   return (
     <>
@@ -502,20 +496,7 @@ export const TermsPage = () => {
           </TermsParagraph>
           <TermsParagraph>
             {t(
-              "You can delete your profile or project directly in the project or profile settings. If you have any issues you can reach out to the team at hello@geyser.fund. Once we delete it, we may retain certain information as required by law or as necessary for our legitimate business purposes. All provisions of this agreement survive termination of an account, including our rights regarding any content you've already submitted to the Site. (For instance, if you've launched a project, deleting your account will not automatically remove the project from the Site.) You can contact us at hello@geyser.fund for additional information or to request project page deletion (this is not available in all circumstances). Additionally, since Geyser is built on Nostr, any data that is deleted on Geyser may still exist on other Nostr Relays. More on this in the next section.",
-            )}
-          </TermsParagraph>
-        </TermsSection>
-
-        <TermsSection title={t('Propagation of information over relays')}>
-          <TermsParagraph>
-            {t(
-              'Geyser stores project and user data on a Nostr Relay and propagates information to other Nostr Relays in order for data to be accessible across Nostr clients.',
-            )}
-          </TermsParagraph>
-          <TermsParagraph>
-            {t(
-              'This means that your project and profile information will be broadcast to other Nostr Relays. You can check which Relays data is being broadcast to by checking your project settings.',
+              "You can delete your profile or project directly in the project or profile settings. If you have any issues you can reach out to the team at hello@geyser.fund. Once we delete it, we may retain certain information as required by law or as necessary for our legitimate business purposes. All provisions of this agreement survive termination of an account, including our rights regarding any content you've already submitted to the Site. (For instance, if you've launched a project, deleting your account will not automatically remove the project from the Site.) You can contact us at hello@geyser.fund for additional information or to request project page deletion (this is not available in all circumstances).",
             )}
           </TermsParagraph>
         </TermsSection>

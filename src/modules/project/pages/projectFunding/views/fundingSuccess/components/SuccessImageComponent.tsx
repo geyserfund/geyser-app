@@ -11,6 +11,7 @@ import {
   ContributionSuccessIllustrationUrl,
 } from '@/shared/constants/index.ts'
 
+import { BecomeAnAmbassador } from './BecomeAmbassador.tsx'
 import { ContributionStatusSection } from './ContributionStatusSection.tsx'
 import { SubscribeToGeyser } from './SubscribeToGeyser.tsx'
 
@@ -19,6 +20,7 @@ export const SuccessImageComponent = ({ isPending }: { isPending: boolean }) => 
     <VStack w="full" alignItems="start" spacing={12}>
       <SuccessfulContributionBanner isPending={isPending} />
       <SubscribeToGeyser />
+      <BecomeAnAmbassador />
     </VStack>
   )
 }

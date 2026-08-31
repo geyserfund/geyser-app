@@ -13,8 +13,8 @@ import {
   decryptSeed,
   generateKeysFromSeedHex,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
-import { Limits, LNAddressEvaluationState } from '@/modules/project/pages/projectCreation/hooks/useWalletForm.tsx'
 import { useDebounce } from '@/shared/hooks'
+import { Limits, LNAddressEvaluationState } from '@/shared/types/wallet'
 import { useLightningAddressVerifyLazyQuery } from '@/types/index.ts'
 import { commaFormatted, validateEmail } from '@/utils/index.ts'
 import { useNotification } from '@/utils/index.ts'

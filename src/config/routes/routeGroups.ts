@@ -51,7 +51,6 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardDetails', PathName.projectName),
   getPath('dashboardWallet', PathName.projectName),
   getPath('dashboardLimitsVerification', PathName.projectName),
-  getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
   getPath('dashboardNotifications', PathName.projectName),
   getPath('dashboardMatching', PathName.projectName),

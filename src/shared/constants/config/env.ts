@@ -32,10 +32,6 @@ if (!import.meta.env.VITE_APP_GIPHY_API_KEY) {
   console.warn('Missing GIPHY API key from environment variables')
 }
 
-if (!import.meta.env.VITE_APP_GEYSER_NOSTR_PUBKEY) {
-  console.warn('Missing VITE_APP_GEYSER_NOSTR_PUBKEY API key from environment variables')
-}
-
 if (!import.meta.env.VITE_APP_BOLTZ_SWAP_DOMAIN) {
   console.warn('Missing VITE_APP_BOLTZ_SWAP_DOMAIN from environment variables')
 }
@@ -70,7 +66,6 @@ if (!import.meta.env.VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
 
 export const {
   VITE_APP_GIPHY_API_KEY,
-  VITE_APP_GEYSER_NOSTR_PUBKEY,
   VITE_APP_AIR_TABLE_KEY,
   VITE_APP_LNG_PORT,
   VITE_APP_STRIPE_API_KEY,

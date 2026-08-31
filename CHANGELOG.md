@@ -1,3 +1,16 @@
+## [0.55.0](https://github.com/geyserfund/geyser-app/compare/v0.54.0...v0.55.0) (2026-08-31)
+
+### Features
+
+* restore non-Nostr sharing and ambassador attribution after funding
+* restore generic achievement cards and carousel behavior
+
+### Bug Fixes
+
+* synchronize GraphQL artifacts with the retired Nostr and NWC server contract
+* simplify wallet configuration to the supported Lightning Address flow
+* remove stale Nostr routes, secrets, theme branches, and legal disclosures
+
 ## [0.54.0](https://github.com/geyserfund/geyser-app/compare/v0.53.0...v0.54.0) (2026-08-31)
 
 ### Features

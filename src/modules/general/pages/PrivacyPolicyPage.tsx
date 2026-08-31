@@ -38,7 +38,6 @@ const getPrivacyPolicyContent = (t: TFunction): PrivacyPolicyContent => ({
     t('Improve, personalize, and expand our website'),
     t('Understand and analyze how you use our website'),
     t('Develop new products, services, features, and functionality'),
-    t('Broadcast your data to external relays'),
     t(
       'Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes',
     ),
@@ -201,14 +200,6 @@ export const PrivacyPolicyPage = () => {
           <PrivacyPolicyParagraph>
             {t(
               "No sensitive or personally identifiable information is collected within the scope of it. The data is used fot the purposes of analyzing trends, website administration, tracking users' movement on the website, and gathering demographic information.",
-            )}
-          </PrivacyPolicyParagraph>
-        </PrivacyPolicySection>
-
-        <PrivacyPolicySection title={t('Propagation of data over relays')}>
-          <PrivacyPolicyParagraph>
-            {t(
-              'Geyser stores project and user data on a Nostr Relay and propagates information to other Nostr Relays in order for data to be accessible across clients. This means that your information will be broadcast to other Nostr Relays. The relays to which your data will be broadcast to are visible in your project settings.',
             )}
           </PrivacyPolicyParagraph>
         </PrivacyPolicySection>

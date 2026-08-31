@@ -2,12 +2,11 @@ import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useAuthContext } from '@/context'
-import { ConnectionOption, LNAddressEvaluationState } from '@/modules/project/pages/projectCreation/hooks/useWalletForm'
 import { useDebounce } from '@/shared/hooks'
+import { LightingWalletForm, Limits, LNAddressEvaluationState } from '@/shared/types/wallet'
 import {
   CreateWalletInput,
   LightningAddressContributionLimits,
-  Maybe,
   UpdateWalletInput,
   useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
@@ -20,26 +19,12 @@ import {
 } from '@/types'
 import { toInt, useNotification, validateEmail } from '@/utils'
 
-export type LightingWalletForm = {
-  error: string | null
-  state: LNAddressEvaluationState
-  value: string
-  setValue: (lightningAddress: string) => void
-  evaluating: boolean
-  validate: () => void
-}
-
-export type Limits = {
-  max?: Maybe<number>
-  min?: Maybe<number>
-}
+export type { LightingWalletForm, Limits }
 
 export type UserWalletForm = {
   handleConfirm: () => void
   lightningAddress: LightingWalletForm
   isFormDirty: () => boolean
-  connectionOption: ConnectionOption
-  setConnectionOption: (connectionOption: ConnectionOption) => void
   createWalletInput: CreateWalletInput | null
   isLightningAddressInValid: boolean
   limits: Limits
@@ -59,7 +44,6 @@ export const useUserWalletForm = (): UserWalletForm => {
     LNAddressEvaluationState.IDLE,
   )
 
-  const [connectionOption, setConnectionOption] = useState<ConnectionOption>(ConnectionOption.LIGHTNING_ADDRESS)
   const [limits, setLimits] = useState<
     LightningAddressContributionLimits | WalletOffChainContributionLimits | WalletOnChainContributionLimits
   >({})
@@ -78,7 +62,6 @@ export const useUserWalletForm = (): UserWalletForm => {
         setExistingWallet(userWallet)
         // Set wallet connection details based on type
         if (userWallet.connectionDetails?.__typename === 'LightningAddressConnectionDetails') {
-          setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
           setLightningAddressFormValue(userWallet.connectionDetails.lightningAddress || '')
           setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
         }
@@ -177,22 +160,18 @@ export const useUserWalletForm = (): UserWalletForm => {
       resourceType: WalletResourceType.User,
     }
 
-    if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
-      if (!lightningAddressFormValue) {
-        return null
-      }
-
-      return {
-        lightningAddressConnectionDetailsInput: {
-          lightningAddress: lightningAddressFormValue,
-        },
-        resourceInput,
-        feePercentage: DEFAULT_LIGHTNING_FEE_PERCENTAGE,
-      }
+    if (!lightningAddressFormValue) {
+      return null
     }
 
-    return null
-  }, [user, connectionOption, lightningAddressFormValue])
+    return {
+      lightningAddressConnectionDetailsInput: {
+        lightningAddress: lightningAddressFormValue,
+      },
+      resourceInput,
+      feePercentage: DEFAULT_LIGHTNING_FEE_PERCENTAGE,
+    }
+  }, [user, lightningAddressFormValue])
 
   const handleSubmit = useCallback(
     async (input: CreateWalletInput | null) => {
@@ -227,11 +206,7 @@ export const useUserWalletForm = (): UserWalletForm => {
   )
 
   const handleConfirm = useCallback(async () => {
-    if (
-      connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
-      lightningAddressFormValue &&
-      lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED
-    ) {
+    if (lightningAddressFormValue && lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED) {
       const response = await evaluateLightningAddress({
         variables: { lightningAddress: lightningAddressFormValue },
       })
@@ -255,7 +230,6 @@ export const useUserWalletForm = (): UserWalletForm => {
     toast,
     lightningAddressFormValue,
     lnAddressEvaluationState,
-    connectionOption,
     evaluateLightningAddress,
   ])
 
@@ -284,31 +258,27 @@ export const useUserWalletForm = (): UserWalletForm => {
     const userWallet = userData?.user?.wallet
 
     if (userWallet) {
-      if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
-        if (userWallet.connectionDetails?.__typename === 'LightningAddressConnectionDetails') {
-          return userWallet.connectionDetails.lightningAddress !== lightningAddressFormValue
-        }
-
-        return Boolean(lightningAddressFormValue)
+      if (userWallet.connectionDetails?.__typename === 'LightningAddressConnectionDetails') {
+        return userWallet.connectionDetails.lightningAddress !== lightningAddressFormValue
       }
 
+      return Boolean(lightningAddressFormValue)
     }
 
     return Boolean(lightningAddressFormValue)
-  }, [userData, connectionOption, lightningAddressFormValue])
+  }, [userData, lightningAddressFormValue])
 
   const isLightningAddressInValid = useMemo(() => {
     if (
-      connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
-      ((lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED &&
+      (lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED &&
         lnAddressEvaluationState !== LNAddressEvaluationState.IDLE) ||
-        Boolean(lightningAddressFormError))
+      Boolean(lightningAddressFormError)
     ) {
       return true
     }
 
     return false
-  }, [connectionOption, lnAddressEvaluationState, lightningAddressFormError])
+  }, [lnAddressEvaluationState, lightningAddressFormError])
 
   return {
     handleConfirm,
@@ -322,8 +292,6 @@ export const useUserWalletForm = (): UserWalletForm => {
     },
     limits,
     isFormDirty,
-    connectionOption,
-    setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
     loading,

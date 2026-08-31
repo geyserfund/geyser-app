@@ -131,7 +131,6 @@ export enum PathName {
   dashboardNotifications = 'notifications',
   dashboardSettings = 'settings',
   dashboardStatus = 'status',
-  dashboardNostr = 'nostr',
   dashboardPromote = 'promotions',
   dashboardMatching = 'matching',
   dashboardRewards = 'rewards',
@@ -345,8 +344,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardLimitsVerification: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardLimitsVerification}`,
-  dashboardNostr: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
   dashboardNotifications: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNotifications}`,
   dashboardSettings: (projectName: string) =>
