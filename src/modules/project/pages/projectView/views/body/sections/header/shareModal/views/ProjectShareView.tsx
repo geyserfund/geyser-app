@@ -1,6 +1,5 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { PiArrowsClockwiseBold } from 'react-icons/pi'
 
 import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { useAuthContext } from '@/context'
@@ -10,7 +9,6 @@ import {
   getProjectShareUrlSuffix,
   useProjectShare,
 } from '@/modules/project/pages/projectView/hooks/useProjectShare.ts'
-import { usePostProjectOnNostr } from '@/modules/project/pages/projectView/views/body/sections/header/components/PostOnNostr.tsx'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { useProjectAmbassadorStatsQuery, useUserHeroStatsQuery } from '@/types'
@@ -21,7 +19,6 @@ export const ProjectShareView = () => {
   const { user, isLoggedIn } = useAuthContext()
   const { project, isProjectOwner } = useProjectAtom()
   const { getShareProjectUrl } = useProjectShare()
-  const { canPostProjectOnNostr, isPostingProjectOnNostr, postProjectOnNostr } = usePostProjectOnNostr()
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
   const { data: userHeroStatsData } = useUserHeroStatsQuery({
@@ -152,18 +149,6 @@ export const ProjectShareView = () => {
         linkValue={isProjectOwner ? projectShareLink : heroLink}
         colorScheme="amber"
       />
-      {canPostProjectOnNostr ? (
-        <Button
-          width="full"
-          variant="soft"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowsClockwiseBold />}
-          isLoading={isPostingProjectOnNostr}
-          onClick={postProjectOnNostr}
-        >
-          {t('Re-share on Nostr')}
-        </Button>
-      ) : null}
     </VStack>
   )
 }

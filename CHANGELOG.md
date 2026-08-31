@@ -1,3 +1,15 @@
+## [0.54.0](https://github.com/geyserfund/geyser-app/compare/v0.53.0...v0.54.0) (2026-08-31)
+
+### Features
+
+* retire legacy Nostr project, repost, badge, and wallet-connect UI
+* preserve Nostr authentication and Lightning Address wallet flows
+
+### Bug Fixes
+
+* stop project and activity GraphQL queries from requesting retired project keys
+* prevent inactive legacy wallet records from exposing connection details
+
 ## [0.52.0](https://github.com/geyserfund/geyser-app/compare/v0.51.0...v0.52.0) (2026-08-08)
 
 

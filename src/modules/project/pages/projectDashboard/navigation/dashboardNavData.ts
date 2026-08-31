@@ -10,7 +10,6 @@ import {
   PiIdentificationCard,
   PiInvoice,
   PiPlanet,
-  PiPlugs,
   PiProjectorScreenChart,
 } from 'react-icons/pi'
 
@@ -98,12 +97,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
   },
   // ------------------------------------------------------------ //
 
-  {
-    label: 'Nostr',
-    path: 'dashboardNostr',
-    type: DashboardType.settings,
-    icon: PiPlugs,
-  },
   {
     label: 'Notifications',
     path: 'dashboardNotifications',

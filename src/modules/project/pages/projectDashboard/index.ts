@@ -2,7 +2,6 @@ import { ProjectDashboardLayout } from './layouts/ProjectDashboardLayout.tsx'
 import { ProjectDashboardMobileLayout } from './layouts/ProjectDashboardMobileLayout.tsx'
 import { ProjectDashboardAccounting } from './views/accounting/ProjectDashboardAccounting.tsx'
 import { ProjectDashboardAnalytics } from './views/analytics/ProjectDashboardAnalytics.tsx'
-import { ProjectDashboardNostr } from './views/nostr/ProjectDashboardNostr.tsx'
 import { PostCreateEdit } from './views/posts/PostCreateEdit.tsx'
 import { ProjectDashboardDetails } from './views/ProjectDashboardDetails.tsx'
 import { ProjectDashboardGoals } from './views/ProjectDashboardGoals.tsx'
@@ -31,7 +30,6 @@ export {
   ProjectDashboardMatching,
   ProjectDashboardMemberships,
   ProjectDashboardMobileLayout,
-  ProjectDashboardNostr,
   ProjectDashboardNotifications,
   ProjectDashboardRewards,
   ProjectDashboardSales,

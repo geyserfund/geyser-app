@@ -7,9 +7,6 @@ export const FRAGMENT_USER_WALLET_CONNECTION_DETAILS = gql`
       ... on LightningAddressConnectionDetails {
         lightningAddress
       }
-      ... on NWCConnectionDetailsPrivate {
-        nwcUrl
-      }
     }
   }
 `

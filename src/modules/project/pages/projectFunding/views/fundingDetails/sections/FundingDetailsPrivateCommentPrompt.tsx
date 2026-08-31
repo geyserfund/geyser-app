@@ -9,8 +9,7 @@ import { Body, H1 } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { PrivateCommentPrompt } from '@/types'
 
-const privateCommentPromptMap: Record<PrivateCommentPrompt, string> = {
-  [PrivateCommentPrompt.NostrNpub]: t('Provide your Nostr public address (npub)'),
+const privateCommentPromptMap: Partial<Record<PrivateCommentPrompt, string>> = {
   [PrivateCommentPrompt.LightningAddress]: t('Provide your Lightning Address for a full or partial refund'),
   [PrivateCommentPrompt.ProjectRewardSpecs]: t('Add your product specifications (eg. T-shirt size)'),
 }
@@ -28,7 +27,7 @@ export const FundingDetailsPrivateCommentPrompt = () => {
   const selectedRewards = rewards.filter((reward) => rewardsByIDAndCount && rewardsByIDAndCount[reward.id])
 
   const mergedPrivateCommentPrompts = Array.from(
-    new Set(selectedRewards.flatMap((reward) => reward.privateCommentPrompts || [])),
+    new Set(selectedRewards.flatMap((reward) => reward.privateCommentPrompts || []).filter((prompt) => prompt !== PrivateCommentPrompt.NostrNpub)),
   )
   return (
     <CardLayout width="100%" mobileDense>

@@ -588,13 +588,6 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
-                path: getPath('dashboardNostr', PathName.projectName),
-                async lazy() {
-                  const projectDashboardPages = await loadProjectDashboardPages()
-                  return { Component: projectDashboardPages.ProjectDashboardNostr }
-                },
-              },
-              {
                 path: getPath('dashboardNotifications', PathName.projectName),
                 async lazy() {
                   const projectDashboardPages = await loadProjectDashboardPages()

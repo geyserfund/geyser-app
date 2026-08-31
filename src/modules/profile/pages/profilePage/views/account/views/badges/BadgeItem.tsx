@@ -3,20 +3,15 @@ import { Image, VStack } from '@chakra-ui/react'
 // import { useState } from 'react'
 // import { useTranslation } from 'react-i18next'
 // import { ButtonComponent } from '../../../../../../../../components/ui'
-import { ClaimABadgeProps } from '../../../../../../../../shared/hooks/useNostrBadges'
 import { UserBadge } from '../../../../../../../../types'
 
 interface BadgeItemProps {
   userBadge: UserBadge
-  isClaimed?: boolean
-  isEdit?: boolean
-  claimABadge: (_: ClaimABadgeProps) => void
   handleClick: (badge: UserBadge) => void
 }
 
 export const BadgeItem = ({
   userBadge,
-  // isClaimed, isEdit, claimABadge,
   handleClick,
 }: BadgeItemProps) => {
   // const { t } = useTranslation()

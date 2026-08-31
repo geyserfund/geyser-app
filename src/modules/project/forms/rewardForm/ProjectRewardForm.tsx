@@ -349,14 +349,6 @@ export const ProjectRewardForm = ({
               onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
             />
             <ControlledSwitchInput
-              label={t('Ask contributors for Nostr public address (npub)')}
-              name="privateCommentPrompts"
-              control={control}
-              switchPosition="left"
-              isChecked={utils.isPromptChecked(PrivateCommentPrompt.NostrNpub)}
-              onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
-            />
-            <ControlledSwitchInput
               label={t('Ask contributors for a lighting address in case of partial or full refund')}
               name="privateCommentPrompts"
               control={control}

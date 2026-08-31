@@ -1,21 +1,17 @@
-import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Wrap, WrapItem } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
+import { useUserProfileAtom } from '@/modules/profile/state'
 import { userBadgesAtom } from '@/modules/profile/state/badgesAtom.ts'
-import { Body } from '@/shared/components/typography'
 import { toInt, useNotification } from '@/utils'
 
-import { ExternalAccountType } from '../../../../../../../../modules/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { useUserBadgesQuery } from '../../../../../../../../types'
-import { NostrBadges } from './NostrBadges'
+import { BadgeItem } from './BadgeItem'
 
 export const BadgesBody = () => {
   const { t } = useTranslation()
-
-  const isEdit = useViewingOwnProfileAtomValue()
 
   const { toast } = useNotification()
 
@@ -37,24 +33,15 @@ export const BadgesBody = () => {
     },
   })
 
-  const nostrId =
-    userProfile.externalAccounts.find((account) => account?.accountType === ExternalAccountType.nostr)?.externalId || ''
-
-  const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
-
   if (userBadgeLoading) {
     return <BadgesBodySkeleton />
   }
 
   return (
     <>
-      {isEdit && hasBadgeNoNostrForOwn && (
-        <VStack background="neutral1.3" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
-          <Body light>{t('Login with Nostr to claim the badges you earned!')}</Body>
-        </VStack>
-      )}
-
-      <NostrBadges nostrId={nostrId} userBadges={userBadges} isEdit={isEdit} />
+      <Wrap w="full" spacingX={2} spacingY={4} justify="start" paddingBottom="20px">
+        {userBadges.map((userBadge) => <WrapItem key={userBadge.id}><BadgeItem userBadge={userBadge} handleClick={() => {}} /></WrapItem>)}
+      </Wrap>
     </>
   )
 }

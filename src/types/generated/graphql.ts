@@ -13994,14 +13994,6 @@ export const ActivityFeedFragmentFragmentDoc = gql`
     title
     name
     thumbnailImage
-    keys {
-      nostrKeys {
-        publicKey {
-          hex
-          npub
-        }
-      }
-    }
   }
   resource {
     ... on Project {
@@ -15478,9 +15470,6 @@ export const ProjectPageBodyFragmentDoc = gql`
     id
     label
   }
-  keys {
-    ...ProjectKeys
-  }
   owners {
     id
     user {
@@ -15502,7 +15491,6 @@ export const ProjectPageBodyFragmentDoc = gql`
   }
 }
     ${ProjectLocationFragmentDoc}
-${ProjectKeysFragmentDoc}
 ${ProjectPageCreatorFragmentDoc}
 ${ProjectPaymentMethodsFragmentDoc}
 ${ProjectReviewPublicFragmentDoc}`;
@@ -15568,9 +15556,6 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
     id
     label
   }
-  keys {
-    ...ProjectKeys
-  }
   owners {
     id
     user {
@@ -15592,7 +15577,6 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   }
 }
     ${ProjectLocationFragmentDoc}
-${ProjectKeysFragmentDoc}
 ${ProjectPageCreatorFragmentDoc}
 ${ProjectPaymentMethodsFragmentDoc}
 ${ProjectReviewFragmentDoc}`;
