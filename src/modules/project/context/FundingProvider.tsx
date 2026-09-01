@@ -5,7 +5,6 @@ import { useLocation } from 'react-router'
 
 import { useProjectActiveMatchingGetLazyQuery } from '../../../types'
 import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
-import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
 import { useProjectSubscriptionsAPI } from '../API/useProjectSubscriptionsAPI'
 import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'
 import { FundingProject } from '../funding/state/fundingFormAtom'
@@ -33,8 +32,6 @@ export const FundingProvider = ({ children, project }: FundingProviderProps) => 
 
 /** Used if the project context is available */
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
-  /** Initialize rewards if they have not been initialized yet */
-  useProjectRewardsAPI(true)
   useProjectSubscriptionsAPI(true)
   useProjectGoalsAPI(true)
 

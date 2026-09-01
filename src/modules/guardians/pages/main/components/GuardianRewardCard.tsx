@@ -23,27 +23,26 @@ export const GuardianRewardCard = ({
 }) => {
   const navigate = useNavigate()
 
-  const { name, cost, maxClaimable, sold, uuid } = reward
+  const { name, cost, maxClaimable, sold } = reward
   const available = maxClaimable ? maxClaimable - sold : 0
   const totalSupply = maxClaimable || 0
-
-  const handleBuy = () => {
-    navigate(getPath('projectFunding', GUARDIANS_PROJECT_NAME), {
-      state: { rewardUUID: uuid },
-    })
-  }
 
   const isCard = rewardMap?.type === GuardianRewardType.Card
   const isBadge = rewardMap?.type === GuardianRewardType.Badge
   const itemsModal = useModal()
 
-  const buyButton = () => {
-    return (
-      <Button size="lg" width="full" maxWidth="200px" bg="black" color="white" onClick={handleBuy}>
-        {t('Buy')}
-      </Button>
-    )
-  }
+  const badgeContributionButton = isBadge ? (
+    <Button
+      size="lg"
+      width="full"
+      maxWidth="200px"
+      bg="black"
+      color="white"
+      onClick={() => navigate(getPath('fundingGuardians', GUARDIANS_PROJECT_NAME))}
+    >
+      {t('Support with a badge')}
+    </Button>
+  ) : null
 
   return (
     <>
@@ -104,7 +103,7 @@ export const GuardianRewardCard = ({
             {t('Price')}: ${commaFormatted(centsToDollars(cost))}
           </Body>
         </VStack>
-        {buyButton()}
+        {badgeContributionButton}
       </VStack>
       {itemsModal.isOpen && (
         <MediaCarouselForGuardianRewards
@@ -114,7 +113,7 @@ export const GuardianRewardCard = ({
             name: reward.name || '',
             description: reward.description || '',
           }}
-          bottomContent={buyButton()}
+          bottomContent={badgeContributionButton}
         />
       )}
     </>

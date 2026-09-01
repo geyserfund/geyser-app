@@ -19,7 +19,6 @@ import {
   ProjectFundingStrategy,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
-  ProjectShippingConfigType,
   RewardCurrency,
   ShippingDestination,
 } from '@/types'
@@ -39,14 +38,12 @@ import { walletAtom } from '../../state/walletAtom'
 import { fundingInputAfterRequestAtom } from './fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsAtom } from './fundingPaymentAtom.ts'
 import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
-import { shippingAddressAtom, shippingCountryAtom } from './shippingAddressAtom.ts'
 
 export type FundingProject = Pick<
   ProjectState,
   | 'id'
   | 'name'
   | 'status'
-  | 'rewardCurrency'
   | 'title'
   | 'owners'
   | 'paymentMethods'
@@ -55,6 +52,7 @@ export type FundingProject = Pick<
   | 'isRecoverableGrant'
   | 'rskEoa'
   | 'activeMatching'
+  | 'rewardCurrency'
 >
 
 export enum FundingUserInfoError {
@@ -63,12 +61,11 @@ export enum FundingUserInfoError {
   SHIPPING_ADDRESS = 'shippingAddress',
 }
 
-export const DEFAULT_COUNTRY_CODE = 'DEFAULT'
-
 export const DEFAULT_GEYSER_TIP_PERCENT = 5
 
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment
+  /** @deprecated Reward selection is no longer part of the funding flow. */
   rewards: ProjectRewardFragment[]
   subscriptions?: ProjectSubscriptionPlan[]
 }
@@ -78,14 +75,19 @@ export type FundFormType = {
   recurringInterval: RecurringInterval
   donationAmount: number
   donationAmountUsdCent: number
+  /** @deprecated Kept only for compatibility with historical funding state. */
   shippingCost: number
   email: string
   media: string
   comment: string
   privateComment?: string
+  /** @deprecated Reward purchases are disabled. */
   rewardsByIDAndCount?: { [key: string]: number } | undefined
+  /** @deprecated Reward purchases are disabled. */
   rewardCurrency: RewardCurrency
+  /** @deprecated Reward purchases are disabled. */
   needsShipping: boolean
+  /** @deprecated Reward purchases are disabled. */
   shippingDestination: ShippingDestination
   followProject: boolean
   subscribeToGeyserEmails: boolean
@@ -108,11 +110,14 @@ const initialState: FundFormType = {
   shippingCost: 0,
   comment: '',
   privateComment: '',
+  rewardsByIDAndCount: undefined,
+  rewardCurrency: RewardCurrency.Usdcent,
+  needsShipping: false,
+  shippingDestination: ShippingDestination.National,
   email: '',
   media: '',
   followProject: false,
   subscribeToGeyserEmails: false,
-  rewardsByIDAndCount: undefined,
   subscription: {
     subscriptionId: undefined,
     interval: recurringIntervals.monthly,
@@ -120,9 +125,6 @@ const initialState: FundFormType = {
     amountUsdCent: 0,
     amountBtcSat: 0,
   },
-  rewardCurrency: RewardCurrency.Usdcent,
-  needsShipping: false,
-  shippingDestination: ShippingDestination.National,
   geyserTipPercent: DEFAULT_GEYSER_TIP_PERCENT,
   guardianBadges: [],
 }
@@ -139,96 +141,6 @@ export const fundingFormErrorAtom = atom<{ [key in keyof FundFormType]: string }
 export const fundingFormWarningAtom = atom<{ [key in keyof FundFormType]: string }>(
   {} as { [key in keyof FundFormType]: string },
 )
-
-/** Derived atom for calculating rewards costs in both units */
-export const rewardsCostAtoms = atom((get) => {
-  const { rewardsByIDAndCount, fundingMode } = get(fundingFormStateAtom)
-  const { rewards, rewardCurrency } = get(fundingProjectAtom)
-  const bitcoinQuote = get(bitcoinQuoteAtom)
-
-  let totalCostInSatoshi = 0
-  let totalCostInUsdCent = 0
-  let baseCostTotal = 0 // Accumulates cost in the project's reward currency
-
-  if (fundingMode !== recurringFundingModes.oneTime) {
-    return { sats: 0, usdCents: 0, base: 0 }
-  }
-
-  if (rewards && rewardsByIDAndCount) {
-    Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
-      // Find reward by comparing string representations of IDs
-      const reward = rewards.find((r) => r.id.toString() === rewardID)
-      const count = rewardsByIDAndCount[rewardID]
-
-      if (reward && count && count > 0) {
-        const currentRewardTotalCost = reward.cost * count
-        baseCostTotal += currentRewardTotalCost // Accumulate base cost
-
-        if (rewardCurrency === RewardCurrency.Btcsat) {
-          totalCostInSatoshi += currentRewardTotalCost
-          totalCostInUsdCent += convertAmount.satsToUsdCents({ sats: currentRewardTotalCost, bitcoinQuote })
-        } else {
-          // Usdcent
-          totalCostInUsdCent += currentRewardTotalCost
-          totalCostInSatoshi += convertAmount.usdCentsToSats({ usdCents: currentRewardTotalCost, bitcoinQuote })
-        }
-      }
-    })
-  }
-
-  return { sats: totalCostInSatoshi, usdCents: totalCostInUsdCent, base: baseCostTotal }
-})
-
-export const shippingCostAtom = atom((get) => {
-  const { rewardsByIDAndCount, fundingMode } = get(fundingFormStateAtom)
-  const { rewards } = get(fundingProjectAtom)
-  const shippingAddress = get(shippingAddressAtom)
-  const shippingCountry = get(shippingCountryAtom)
-  const bitcoinQuote = get(bitcoinQuoteAtom)
-
-  const response = { sats: 0, usdCents: 0 }
-
-  if (fundingMode !== recurringFundingModes.oneTime) {
-    return response
-  }
-
-  if (rewards && rewardsByIDAndCount) {
-    Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
-      // Find reward by comparing string representations of IDs
-      const reward = rewards.find((r) => r.id.toString() === rewardID)
-      const count = rewardsByIDAndCount[rewardID]
-      const country = shippingCountry || shippingAddress?.country || DEFAULT_COUNTRY_CODE
-
-      if (!reward || !count || !(count > 0) || !reward.hasShipping) return
-
-      const { shippingConfig } = reward
-      if (!shippingConfig) return
-
-      const { shippingRates } = shippingConfig
-      if (!shippingRates) return
-
-      const defaultRate = shippingRates.find((rate) => rate.country === DEFAULT_COUNTRY_CODE)
-      if (!defaultRate) return
-
-      const countryRate = shippingRates.find((rate) => rate.country === country) || defaultRate
-
-      const { baseRate, incrementRate } = countryRate.sameAsDefault ? defaultRate : countryRate
-
-      if (shippingConfig.type === ProjectShippingConfigType.Flat) {
-        response.usdCents += baseRate
-      } else if (shippingConfig.type === ProjectShippingConfigType.PerUnit) {
-        response.usdCents += baseRate * count
-      } else if (shippingConfig.type === ProjectShippingConfigType.Incremental) {
-        response.usdCents += baseRate + incrementRate * (count - 1)
-      }
-    })
-  }
-
-  response.sats =
-    response.usdCents > 0 ? convertAmount.usdCentsToSats({ usdCents: response.usdCents, bitcoinQuote }) : 0
-
-  return response
-})
 
 /**
  * Derived atom for the costs associated with selected subscriptions.
@@ -265,17 +177,13 @@ export const subscriptionCostAtoms = atom((get): { sats: number; usdCents: numbe
 export const tipAtoms = atom((get) => {
   const renewalContext = get(recurringContributionRenewalAtom)
   const { donationAmount, geyserTipPercent, fundingMode } = get(fundingFormStateAtom)
-  const rewardsCosts = get(rewardsCostAtoms) // Use derived rewards cost
-  const shippingCosts = get(shippingCostAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
 
   if (renewalContext || fundingMode === recurringFundingModes.membership) {
     return { sats: 0, usdCents: 0 }
   }
 
-  // Calculate tip based on satoshi value of donation + rewards
-  const tipBaseSats = donationAmount + rewardsCosts.sats + shippingCosts.sats
-  const tipSats = geyserTipPercent > 0 ? Math.round((tipBaseSats * geyserTipPercent) / 100) : 0
+  const tipSats = geyserTipPercent > 0 ? Math.round((donationAmount * geyserTipPercent) / 100) : 0
   const tipUsdCent = tipSats > 0 ? convertAmount.satsToUsdCents({ sats: tipSats, bitcoinQuote }) : 0
 
   return { sats: tipSats, usdCents: tipUsdCent }
@@ -340,27 +248,16 @@ export const guardianBadgesCostAtoms = atom((get) => {
 
 /**
  * Derived atom for the total amount in Satoshis.
- * Sums donation, rewards, subscription, shipping, and tip.
- * Assumes shippingCost in base state is USD cents.
+ * Sums donation, subscription, tip, network fees, and guardian badges.
  */
 export const totalAmountSatsAtom = atom((get) => {
   const { donationAmount } = get(fundingFormStateAtom)
-  const rewardsCosts = get(rewardsCostAtoms)
-  const shippingCosts = get(shippingCostAtom)
   const subscriptionCosts = get(subscriptionCostAtoms)
   const tip = get(tipAtoms)
   const networkFee = get(networkFeeAtom)
   const guardianBadgesCosts = get(guardianBadgesCostAtoms)
 
-  // Sum all components
-  const total =
-    donationAmount +
-    rewardsCosts.sats +
-    subscriptionCosts.sats +
-    shippingCosts.sats +
-    tip.sats +
-    networkFee.sats +
-    guardianBadgesCosts.sats
+  const total = donationAmount + subscriptionCosts.sats + tip.sats + networkFee.sats + guardianBadgesCosts.sats
   return total
 })
 
@@ -402,6 +299,44 @@ export const fundingProjectAtom = atom<FundingProjectState>((get) => {
   return { ...project, wallet, rewards, subscriptions }
 })
 
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const rewardsCostAtoms = atom(() => ({ sats: 0, usdCents: 0, base: 0 }))
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const shippingCostAtom = atom(() => ({ sats: 0, usdCents: 0 }))
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const fundingFormHasRewardsAtom = atom(false)
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const fundingFormShippingAvailabilityAtom = atom<string[] | undefined>(undefined)
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const cannotCompleteShippingForThisOrderAtom = atom(false)
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom(false)
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const resetFundingFormRewardsAtom = atom(null, (_, set) => {
+  set(fundingFormStateAtom, (current) => ({
+    ...current,
+    rewardsByIDAndCount: {},
+    needsShipping: false,
+    shippingCost: 0,
+  }))
+})
+
+/** @deprecated Reward purchases are disabled; retained for historical state consumers. */
+export const updateFundingFormRewardAtom = atom(null, (_, set, { id, count }: { id: number; count: number }) => {
+  set(fundingFormStateAtom, (current) => ({
+    ...current,
+    rewardsByIDAndCount: count > 0 ? { [id]: count } : {},
+    needsShipping: false,
+    shippingCost: 0,
+  }))
+})
+
 /**
  * Set funding form based on a HTML input event
  * @param {Object} event - The event object to set
@@ -413,8 +348,7 @@ export const setFundFormTargetAtom = atom(null, (get, set, event: any) => {
 
 /**
  * Set funding form based on a name and value.
- * Now only updates the specific field and syncs donation amounts.
- * Totals are handled by derived atoms.
+ * Updates the specific field and synchronizes the two donation amount units.
  */
 export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormType, value: any) => {
   const currentState = get(fundingFormStateAtom)
@@ -427,10 +361,7 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
     if (nextMode === recurringFundingModes.membership) {
       newState = {
         ...newState,
-        rewardsByIDAndCount: {},
-        needsShipping: false,
         guardianBadges: [],
-        shippingCost: 0,
         donationAmount: 0,
         donationAmountUsdCent: 0,
       }
@@ -461,53 +392,8 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
     const sats = convertAmount.usdCentsToSats({ usdCents: usdCent, bitcoinQuote })
     newState = { ...newState, donationAmount: sats }
   }
-  // No longer calculates totals here
 
   set(fundingFormStateAtom, newState)
-})
-
-/* Boolean to check if the funding form has rewards */
-export const fundingFormHasRewardsAtom = atom((get) => {
-  const fundingFormState = get(fundingFormStateAtom)
-  if (fundingFormState.fundingMode !== recurringFundingModes.oneTime) {
-    return false
-  }
-
-  return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
-})
-
-export const fundingFormShippingAvailabilityAtom = atom((get) => {
-  const { rewardsByIDAndCount } = get(fundingFormStateAtom)
-  const { rewards } = get(fundingProjectAtom)
-
-  let shippingAvailability: string[] | undefined
-
-  if (!rewardsByIDAndCount) return shippingAvailability
-
-  Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
-    const reward = rewards.find((r) => r.id.toString() === rewardID)
-    if (reward?.hasShipping && !reward.shippingConfig?.globalShipping) {
-      const shippingCountries = reward.shippingConfig?.shippingRates
-        ?.filter((rate) => rate.country !== DEFAULT_COUNTRY_CODE)
-        .map((rate) => rate.country)
-
-      if (!shippingAvailability) {
-        shippingAvailability = shippingCountries
-      } else {
-        shippingAvailability = shippingAvailability.filter((country) => shippingCountries?.includes(country))
-      }
-    }
-  })
-
-  return shippingAvailability
-})
-
-export const cannotCompleteShippingForThisOrderAtom = atom((get) => {
-  const shippingAvailability = get(fundingFormShippingAvailabilityAtom)
-
-  if (shippingAvailability && shippingAvailability.length === 0) return true
-
-  return false
 })
 
 /** Boolean to check if the funding form has a subscription */
@@ -517,72 +403,6 @@ export const fundingFormHasSubscriptionAtom = atom((get) => {
     fundingFormState.fundingMode === recurringFundingModes.membership &&
     Boolean(fundingFormState.subscription?.subscriptionId)
   )
-})
-
-/* Boolean to check if the funding form has rewards that require a private comment */
-export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => {
-  const fundingFormState = get(fundingFormStateAtom)
-  const { rewards } = get(fundingProjectAtom)
-  const selectedRewards =
-    rewards?.filter(
-      (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
-    ) || []
-
-  return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
-})
-
-/** Reset funding form rewards to its initial value (simplified) */
-export const resetFundingFormRewardsAtom = atom(null, (get, set) => {
-  set(fundingFormStateAtom, (current) => ({
-    ...current,
-    rewardsByIDAndCount: {}, // Reset selections
-    needsShipping: false, // Reset shipping flag
-    // Remove fields that are now calculated by derived atoms or will be
-    // rewardsCost: 0,
-    // rewardsCostInSatoshi: 0,
-    // rewardsCostInUsdCent: 0,
-    // subscriptionId: undefined,
-    // subscriptionCost: 0,
-    // totalAmount: current.donationAmount, // Totals are now derived
-  }))
-})
-
-/**
- * Update rewards in the funding flow.
- * Now only updates rewardsByIDAndCount and needsShipping.
- * Costs and totals are handled by derived atoms.
- */
-export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: { id: number; count: number }) => {
-  const { rewards } = get(fundingProjectAtom)
-
-  set(fundingFormStateAtom, (current) => {
-    const newRewardsCountInfo = { ...current.rewardsByIDAndCount }
-
-    if (count !== 0) {
-      newRewardsCountInfo[id.toString()] = count
-    } else if (count === 0) {
-      delete newRewardsCountInfo[id.toString()]
-    }
-
-    // Only calculate needsShipping based on selected rewards
-    let needsShipping = false
-    if (rewards) {
-      Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
-        // Find reward by comparing string representations of IDs
-        const reward = rewards.find((r) => r.id.toString() === rewardID)
-        if (reward?.hasShipping) {
-          needsShipping = true
-        }
-      })
-    }
-
-    console.log('newRewardsCountInfo', newRewardsCountInfo)
-    return {
-      ...current,
-      rewardsByIDAndCount: newRewardsCountInfo,
-      needsShipping, // Update shipping status
-    }
-  })
 })
 
 /**
@@ -605,8 +425,6 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
       fundingMode: recurringFundingModes.membership,
       donationAmount: 0,
       donationAmountUsdCent: 0,
-      rewardsByIDAndCount: {},
-      needsShipping: false,
       guardianBadges: [],
       subscription: {
         subscriptionId: selectedSubscription ? toInt(selectedSubscription.id) : undefined,
@@ -699,7 +517,6 @@ export const isFundingInputAmountValidAtom = atom((get) => {
   const fundingProjectState = get(fundingProjectAtom)
   const totalAmount: number = get(totalAmountSatsAtom)
   const { donationAmountUsdCent, fundingMode, subscription } = get(fundingFormStateAtom)
-  const rewardsCosts = get(rewardsCostAtoms)
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
   const isException = isProjectAnException(fundingProjectState.name)
@@ -726,7 +543,7 @@ export const isFundingInputAmountValidAtom = atom((get) => {
   if (
     fundingMode === recurringFundingModes.oneTime &&
     fundingProjectState.fundingStrategy === ProjectFundingStrategy.AllOrNothing &&
-    donationAmountUsdCent + rewardsCosts.usdCents < MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT
+    donationAmountUsdCent < MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT
   ) {
     return {
       title: t('Amount less than $10.'),
@@ -774,20 +591,7 @@ export const isFundingUserInfoValidAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
   const renewalContext = get(recurringContributionRenewalAtom)
 
-  const hasSelectedRewards = get(fundingFormHasRewardsAtom)
-
   const hasSubscription = get(fundingFormHasSubscriptionAtom)
-
-  const hasRewardsThatRequirePrivateComment = get(fundingFormHasRewardsThatRequirePrivateCommentAtom)
-
-  if (hasSelectedRewards && !formState.email) {
-    return {
-      title: t('Email is required when purchasing a product.'),
-      description: t('Please enter an email.'),
-      error: FundingUserInfoError.EMAIL,
-      valid: false,
-    }
-  }
 
   if (
     !renewalContext &&
@@ -812,7 +616,6 @@ export const isFundingUserInfoValidAtom = atom((get) => {
   }
 
   const requiresEmailValidation =
-    hasSelectedRewards ||
     hasSubscription ||
     formState.fundingMode === recurringFundingModes.recurringDonation ||
     formState.followProject ||
@@ -823,15 +626,6 @@ export const isFundingUserInfoValidAtom = atom((get) => {
       title: t('A valid email is required.'),
       description: t('Please enter a valid email.'),
       error: FundingUserInfoError.EMAIL,
-      valid: false,
-    }
-  }
-
-  if (hasRewardsThatRequirePrivateComment && !formState.privateComment) {
-    return {
-      title: t('Private message is required.'),
-      description: t('Please enter a private message.'),
-      error: FundingUserInfoError.PRIVATE_COMMENT,
       valid: false,
     }
   }

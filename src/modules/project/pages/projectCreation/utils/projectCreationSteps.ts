@@ -5,12 +5,12 @@ export const projectCreationStepIndex = {
   [ProjectCreationStep.FundingType]: 0,
   [ProjectCreationStep.FundingGoal]: 1,
   [ProjectCreationStep.PerksAndProducts]: 2,
-  [ProjectCreationStep.Story]: 3,
-  [ProjectCreationStep.AboutYou]: 4,
-  [ProjectCreationStep.Wallet]: 5,
-  [ProjectCreationStep.TaxId]: 5,
-  [ProjectCreationStep.IdentityVerification]: 5,
-  [ProjectCreationStep.Launch]: 6,
+  [ProjectCreationStep.Story]: 2,
+  [ProjectCreationStep.AboutYou]: 3,
+  [ProjectCreationStep.Wallet]: 4,
+  [ProjectCreationStep.TaxId]: 4,
+  [ProjectCreationStep.IdentityVerification]: 4,
+  [ProjectCreationStep.Launch]: 5,
 } as const
 
 /** Returns the next persisted creation step for the wallet flow and overall project creation flow. */

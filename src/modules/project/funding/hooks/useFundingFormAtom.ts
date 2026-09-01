@@ -5,7 +5,6 @@ import {
   canUseRecurringFundingAtom,
   fundingFiatSwapAmountWarningAtom,
   fundingFormErrorAtom,
-  fundingFormHasRewardsAtom,
   fundingFormStateAtom,
   fundingFormWarningAtom,
   fundingModeAtom,
@@ -18,8 +17,6 @@ import {
   isOneTimeFundingModeAtom,
   isRecurringDonationModeAtom,
   resetFundingFormAtom,
-  resetFundingFormRewardsAtom,
-  rewardsCostAtoms,
   setErrorStateAtom,
   setFundFormStateAtom,
   setFundFormTargetAtom,
@@ -28,7 +25,6 @@ import {
   tipAtoms,
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
-  updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
 } from '../state/fundingFormAtom'
 
@@ -37,7 +33,6 @@ export const useFundingFormAtom = () => {
 
   const project = useAtomValue(fundingProjectAtom)
 
-  const hasSelectedRewards = useAtomValue(fundingFormHasRewardsAtom)
   const fundingMode = useAtomValue(fundingModeAtom)
   const isOneTimeFundingMode = useAtomValue(isOneTimeFundingModeAtom)
   const isRecurringDonationMode = useAtomValue(isRecurringDonationModeAtom)
@@ -56,7 +51,6 @@ export const useFundingFormAtom = () => {
 
   const fundingFormWarning = useAtomValue(fundingFormWarningAtom)
 
-  const rewardsCosts = useAtomValue(rewardsCostAtoms)
   const subscriptionCosts = useAtomValue(subscriptionCostAtoms)
   const tip = useAtomValue(tipAtoms)
   const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
@@ -70,10 +64,6 @@ export const useFundingFormAtom = () => {
   const setTarget = useSetAtom(setFundFormTargetAtom)
 
   const setState = useSetAtom(setFundFormStateAtom)
-
-  const resetRewards = useSetAtom(resetFundingFormRewardsAtom)
-
-  const updateReward = useSetAtom(updateFundingFormRewardAtom)
 
   const updateSubscription = useSetAtom(updateFundingFormSubscriptionAtom)
 
@@ -90,12 +80,10 @@ export const useFundingFormAtom = () => {
     formState,
     fundingMode,
     project,
-    hasSelectedRewards,
     isOneTimeFundingMode,
     isRecurringDonationMode,
     isMembershipFundingMode,
     canUseRecurringFunding,
-    rewardsCosts,
     subscriptionCosts,
     tip,
     guardianBadgesCosts,
@@ -111,10 +99,8 @@ export const useFundingFormAtom = () => {
     setWarningstate,
     setTarget,
     setState,
-    updateReward,
     updateSubscription,
     resetForm,
-    resetRewards,
     setGeyserTipPercent,
   }
 }

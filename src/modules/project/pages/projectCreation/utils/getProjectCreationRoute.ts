@@ -11,7 +11,7 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.FundingGoal:
       return getPath('launchFundingGoal', projectId)
     case ProjectCreationStep.PerksAndProducts:
-      return getPath('launchProjectRewards', projectId)
+      return getPath('launchStory', projectId)
     case ProjectCreationStep.Story:
       return getPath('launchStory', projectId)
     case ProjectCreationStep.AboutYou:

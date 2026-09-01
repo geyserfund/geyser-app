@@ -386,7 +386,6 @@ export type ContributionCreateInput = {
   /** The percentage of the donation that will be tipped to Geyser, between 0 and 100. */
   geyserTipPercentage?: InputMaybe<Scalars['Float']['input']>;
   metadataInput?: InputMaybe<ContributionMetadataInput>;
-  orderInput?: InputMaybe<OrderContributionInput>;
   /** Optional payment instructions. If omitted or if no payment methods are requested, no payments will be created. */
   paymentsInput?: InputMaybe<ContributionPaymentsInput>;
   projectGoalId?: InputMaybe<Scalars['BigInt']['input']>;
@@ -488,6 +487,8 @@ export type ContributionMetadataInput = {
   guardianBadges?: InputMaybe<Array<GuardianType>>;
   media?: InputMaybe<Scalars['String']['input']>;
   privateComment?: InputMaybe<Scalars['String']['input']>;
+  /** @deprecated Newsletter subscriptions are handled by the frontend Beehiiv integration. */
+  subscribeToGeyserEmails?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ContributionMutationResponse = {
@@ -675,8 +676,6 @@ export type CreateProjectInput = {
   referrerHeroId?: InputMaybe<Scalars['String']['input']>;
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>;
-  /** The currency used to price rewards for the project. Currently only USDCENT supported. */
-  rewardCurrency?: InputMaybe<RewardCurrency>;
   shortDescription: Scalars['String']['input'];
   /** Project sub-category */
   subCategory: ProjectSubCategory;
@@ -686,35 +685,6 @@ export type CreateProjectInput = {
   /** Public title of the project. */
   title: Scalars['String']['input'];
   type?: InputMaybe<ProjectType>;
-};
-
-export type CreateProjectRewardInput = {
-  category?: InputMaybe<Scalars['String']['input']>;
-  confirmationMessage?: InputMaybe<Scalars['String']['input']>;
-  /** Cost of the reward, currently only in USD cents */
-  cost: Scalars['Int']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>;
-  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>;
-  hasShipping: Scalars['Boolean']['input'];
-  images: Array<Scalars['String']['input']>;
-  isAddon?: InputMaybe<Scalars['Boolean']['input']>;
-  isHidden?: InputMaybe<Scalars['Boolean']['input']>;
-  maxClaimable?: InputMaybe<Scalars['Int']['input']>;
-  name: Scalars['String']['input'];
-  preOrder?: InputMaybe<Scalars['Boolean']['input']>;
-  privateCommentPrompts: Array<PrivateCommentPrompt>;
-  projectId: Scalars['BigInt']['input'];
-  shippingConfigId?: InputMaybe<Scalars['BigInt']['input']>;
-  shortDescription?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateProjectShippingConfigInput = {
-  globalShipping: Scalars['Boolean']['input'];
-  name: Scalars['String']['input'];
-  projectId: Scalars['BigInt']['input'];
-  shippingRates: Array<UpdateProjectShippingFeeRateInput>;
-  type: ProjectShippingConfigType;
 };
 
 export type CreateProjectSubscriptionPlanInput = {
@@ -816,10 +786,6 @@ export type DatetimeRange = {
 
 export type DeleteProjectInput = {
   projectId: Scalars['BigInt']['input'];
-};
-
-export type DeleteProjectRewardInput = {
-  projectRewardId: Scalars['BigInt']['input'];
 };
 
 export type DeleteUserResponse = MutationResponse & {
@@ -1822,7 +1788,6 @@ export type Mutation = {
   newsletterPreferencesUpdate: NewsletterPreferences;
   newsletterStatusUpdate: NewsletterPreferences;
   newsletterSubscribe: NewsletterPreferences;
-  orderStatusUpdate?: Maybe<Order>;
   paymentCancel: PaymentCancelResponse;
   paymentConfirm: PaymentConfirmResponse;
   paymentFail: PaymentFailResponse;
@@ -1901,14 +1866,7 @@ export type Mutation = {
   projectPutInReview: Project;
   projectReviewRequest: ProjectReview;
   projectReviewSubmit: ProjectReview;
-  projectRewardCreate: ProjectReward;
-  projectRewardCurrencyUpdate: Array<ProjectReward>;
-  /** Soft deletes the reward. */
-  projectRewardDelete: Scalars['Boolean']['output'];
-  projectRewardUpdate: ProjectReward;
   projectRskEoaSet: Project;
-  projectShippingConfigCreate: ShippingConfig;
-  projectShippingConfigUpdate: ShippingConfig;
   projectStatusUpdate: Project;
   projectStripeInterestNotify: StripeInterestNotifyResponse;
   projectSubscriptionPlanCreate: ProjectSubscriptionPlan;
@@ -2059,11 +2017,6 @@ export type MutationNewsletterStatusUpdateArgs = {
 
 export type MutationNewsletterSubscribeArgs = {
   beehiivNewsletterInput: BeehiivNewsletterSubscribeInput;
-};
-
-
-export type MutationOrderStatusUpdateArgs = {
-  input: OrderStatusUpdateInput;
 };
 
 
@@ -2332,38 +2285,8 @@ export type MutationProjectReviewSubmitArgs = {
 };
 
 
-export type MutationProjectRewardCreateArgs = {
-  input: CreateProjectRewardInput;
-};
-
-
-export type MutationProjectRewardCurrencyUpdateArgs = {
-  input: ProjectRewardCurrencyUpdate;
-};
-
-
-export type MutationProjectRewardDeleteArgs = {
-  input: DeleteProjectRewardInput;
-};
-
-
-export type MutationProjectRewardUpdateArgs = {
-  input: UpdateProjectRewardInput;
-};
-
-
 export type MutationProjectRskEoaSetArgs = {
   input: ProjectRskEoaSetInput;
-};
-
-
-export type MutationProjectShippingConfigCreateArgs = {
-  input: CreateProjectShippingConfigInput;
-};
-
-
-export type MutationProjectShippingConfigUpdateArgs = {
-  input: UpdateProjectShippingConfigInput;
 };
 
 
@@ -2694,11 +2617,6 @@ export type Order = {
   user?: Maybe<User>;
 };
 
-export type OrderBitcoinQuoteInput = {
-  quote: Scalars['Float']['input'];
-  quoteCurrency: QuoteCurrency;
-};
-
 export enum OrderByDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -2709,38 +2627,11 @@ export enum OrderByOptions {
   Desc = 'desc'
 }
 
-export type OrderContributionInput = {
-  /**
-   * Quote used client-side to compute the order total. That quote will be used unless the slippage exceeds
-   * a pre-defined threshold.
-   */
-  bitcoinQuote?: InputMaybe<OrderBitcoinQuoteInput>;
-  items: Array<OrderItemInput>;
-  shippingAddressId?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type OrderItem = {
   __typename?: 'OrderItem';
   item: ProjectReward;
   quantity: Scalars['Int']['output'];
   unitPriceInSats: Scalars['Int']['output'];
-};
-
-export type OrderItemInput = {
-  itemId: Scalars['BigInt']['input'];
-  itemType: OrderItemType;
-  /** Number of times a reward was selected. */
-  quantity: Scalars['Int']['input'];
-};
-
-export enum OrderItemType {
-  ProjectReward = 'PROJECT_REWARD',
-  ProjectSubscriptionPlan = 'PROJECT_SUBSCRIPTION_PLAN'
-}
-
-export type OrderStatusUpdateInput = {
-  orderId?: InputMaybe<Scalars['BigInt']['input']>;
-  status?: InputMaybe<UpdatableOrderStatus>;
 };
 
 export type OrdersGetInput = {
@@ -4393,16 +4284,6 @@ export type ProjectRewardCatalogRow = {
   projectReward: ProjectReward;
 };
 
-export type ProjectRewardCurrencyUpdate = {
-  projectId: Scalars['BigInt']['input'];
-  rewardCurrency: RewardCurrency;
-};
-
-export type ProjectRewardCurrencyUpdateRewardsInput = {
-  cost: Scalars['Int']['input'];
-  rewardId: Scalars['BigInt']['input'];
-};
-
 export type ProjectRewardMostSoldGetRow = {
   __typename?: 'ProjectRewardMostSoldGetRow';
   count: Scalars['Int']['output'];
@@ -5719,12 +5600,6 @@ export type UniqueProjectQueryInput = {
   nostrPublicKey?: InputMaybe<Scalars['String']['input']>;
 };
 
-export enum UpdatableOrderStatus {
-  Confirmed = 'CONFIRMED',
-  Delivered = 'DELIVERED',
-  Shipped = 'SHIPPED'
-}
-
 export type UpdateProjectInput = {
   /** AON goal update inputs */
   aonGoal?: InputMaybe<ProjectAonGoalUpdateInput>;
@@ -5752,8 +5627,6 @@ export type UpdateProjectInput = {
   promotionsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>;
-  /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
-  rewardCurrency?: InputMaybe<RewardCurrency>;
   /** A short description of the project. */
   shortDescription?: InputMaybe<Scalars['String']['input']>;
   /** Project sub-category */
@@ -5765,42 +5638,6 @@ export type UpdateProjectInput = {
   /** Public title of the project. */
   title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<ProjectType>;
-};
-
-export type UpdateProjectRewardInput = {
-  category?: InputMaybe<Scalars['String']['input']>;
-  confirmationMessage?: InputMaybe<Scalars['String']['input']>;
-  /** Cost of the reward, priced in USD cents */
-  cost?: InputMaybe<Scalars['Int']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>;
-  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>;
-  hasShipping?: InputMaybe<Scalars['Boolean']['input']>;
-  images?: InputMaybe<Array<Scalars['String']['input']>>;
-  isAddon?: InputMaybe<Scalars['Boolean']['input']>;
-  isHidden?: InputMaybe<Scalars['Boolean']['input']>;
-  maxClaimable?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  preOrder?: InputMaybe<Scalars['Boolean']['input']>;
-  privateCommentPrompts?: InputMaybe<Array<PrivateCommentPrompt>>;
-  projectRewardId: Scalars['BigInt']['input'];
-  shippingConfigId?: InputMaybe<Scalars['BigInt']['input']>;
-  shortDescription?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateProjectShippingConfigInput = {
-  globalShipping: Scalars['Boolean']['input'];
-  id: Scalars['BigInt']['input'];
-  name: Scalars['String']['input'];
-  shippingRates: Array<UpdateProjectShippingFeeRateInput>;
-  type: ProjectShippingConfigType;
-};
-
-export type UpdateProjectShippingFeeRateInput = {
-  baseRate: Scalars['Int']['input'];
-  country: Scalars['String']['input'];
-  incrementRate: Scalars['Int']['input'];
-  sameAsDefault: Scalars['Boolean']['input'];
 };
 
 export type UpdateProjectSubscriptionPlanInput = {
@@ -6514,8 +6351,6 @@ export type ResolversTypes = {
   ContributorStats: ResolverTypeWrapper<ContributorStats>;
   Country: ResolverTypeWrapper<Country>;
   CreateProjectInput: CreateProjectInput;
-  CreateProjectRewardInput: CreateProjectRewardInput;
-  CreateProjectShippingConfigInput: CreateProjectShippingConfigInput;
   CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
   CreateWalletInput: CreateWalletInput;
   CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>;
@@ -6532,7 +6367,6 @@ export type ResolversTypes = {
   DateRangeInput: DateRangeInput;
   DatetimeRange: ResolverTypeWrapper<DatetimeRange>;
   DeleteProjectInput: DeleteProjectInput;
-  DeleteProjectRewardInput: DeleteProjectRewardInput;
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>;
   DirectPaymentDetails: ResolverTypeWrapper<DirectPaymentDetails>;
   DirectPaymentDetailsInput: DirectPaymentDetailsInput;
@@ -6697,14 +6531,9 @@ export type ResolversTypes = {
   OnChainToLightningSwapPaymentDetails: ResolverTypeWrapper<OnChainToLightningSwapPaymentDetails>;
   OnChainToRskSwapPaymentDetails: ResolverTypeWrapper<OnChainToRskSwapPaymentDetails>;
   Order: ResolverTypeWrapper<Omit<Order, 'contribution' | 'project' | 'user'> & { contribution: ResolversTypes['Contribution'], project: ResolversTypes['Project'], user?: Maybe<ResolversTypes['User']> }>;
-  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
   OrderByDirection: OrderByDirection;
   OrderByOptions: OrderByOptions;
-  OrderContributionInput: OrderContributionInput;
   OrderItem: ResolverTypeWrapper<OrderItem>;
-  OrderItemInput: OrderItemInput;
-  OrderItemType: OrderItemType;
-  OrderStatusUpdateInput: OrderStatusUpdateInput;
   OrdersGetInput: OrdersGetInput;
   OrdersGetOrderByField: OrdersGetOrderByField;
   OrdersGetOrderByInput: OrdersGetOrderByInput;
@@ -6913,8 +6742,6 @@ export type ResolversTypes = {
   ProjectReviewSubmitInput: ProjectReviewSubmitInput;
   ProjectReward: ResolverTypeWrapper<Omit<ProjectReward, 'project'> & { project: ResolversTypes['Project'] }>;
   ProjectRewardCatalogRow: ResolverTypeWrapper<ProjectRewardCatalogRow>;
-  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
-  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
   ProjectRewardMostSoldGetRow: ResolverTypeWrapper<ProjectRewardMostSoldGetRow>;
   ProjectRewardTrendingMonthlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingMonthlyGetRow>;
   ProjectRewardTrendingQuarterlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingQuarterlyGetRow>;
@@ -7025,11 +6852,7 @@ export type ResolversTypes = {
   TwoFAInput: TwoFaInput;
   UniqueOrderInput: UniqueOrderInput;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
-  UpdatableOrderStatus: UpdatableOrderStatus;
   UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectRewardInput: UpdateProjectRewardInput;
-  UpdateProjectShippingConfigInput: UpdateProjectShippingConfigInput;
-  UpdateProjectShippingFeeRateInput: UpdateProjectShippingFeeRateInput;
   UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
@@ -7169,8 +6992,6 @@ export type ResolversParentTypes = {
   ContributorStats: ContributorStats;
   Country: Country;
   CreateProjectInput: CreateProjectInput;
-  CreateProjectRewardInput: CreateProjectRewardInput;
-  CreateProjectShippingConfigInput: CreateProjectShippingConfigInput;
   CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
   CreateWalletInput: CreateWalletInput;
   CreatorNotificationSettings: CreatorNotificationSettings;
@@ -7186,7 +7007,6 @@ export type ResolversParentTypes = {
   DateRangeInput: DateRangeInput;
   DatetimeRange: DatetimeRange;
   DeleteProjectInput: DeleteProjectInput;
-  DeleteProjectRewardInput: DeleteProjectRewardInput;
   DeleteUserResponse: DeleteUserResponse;
   DirectPaymentDetails: DirectPaymentDetails;
   DirectPaymentDetailsInput: DirectPaymentDetailsInput;
@@ -7326,11 +7146,7 @@ export type ResolversParentTypes = {
   OnChainToLightningSwapPaymentDetails: OnChainToLightningSwapPaymentDetails;
   OnChainToRskSwapPaymentDetails: OnChainToRskSwapPaymentDetails;
   Order: Omit<Order, 'contribution' | 'project' | 'user'> & { contribution: ResolversParentTypes['Contribution'], project: ResolversParentTypes['Project'], user?: Maybe<ResolversParentTypes['User']> };
-  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
-  OrderContributionInput: OrderContributionInput;
   OrderItem: OrderItem;
-  OrderItemInput: OrderItemInput;
-  OrderStatusUpdateInput: OrderStatusUpdateInput;
   OrdersGetInput: OrdersGetInput;
   OrdersGetOrderByInput: OrdersGetOrderByInput;
   OrdersGetResponse: OrdersGetResponse;
@@ -7505,8 +7321,6 @@ export type ResolversParentTypes = {
   ProjectReviewSubmitInput: ProjectReviewSubmitInput;
   ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] };
   ProjectRewardCatalogRow: ProjectRewardCatalogRow;
-  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
-  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
   ProjectRewardMostSoldGetRow: ProjectRewardMostSoldGetRow;
   ProjectRewardTrendingMonthlyGetRow: ProjectRewardTrendingMonthlyGetRow;
   ProjectRewardTrendingQuarterlyGetRow: ProjectRewardTrendingQuarterlyGetRow;
@@ -7592,9 +7406,6 @@ export type ResolversParentTypes = {
   UniqueOrderInput: UniqueOrderInput;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectRewardInput: UpdateProjectRewardInput;
-  UpdateProjectShippingConfigInput: UpdateProjectShippingConfigInput;
-  UpdateProjectShippingFeeRateInput: UpdateProjectShippingFeeRateInput;
   UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
@@ -8565,7 +8376,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   newsletterPreferencesUpdate?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterPreferencesUpdateArgs, 'input'>>;
   newsletterStatusUpdate?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterStatusUpdateArgs, 'input'>>;
   newsletterSubscribe?: Resolver<ResolversTypes['NewsletterPreferences'], ParentType, ContextType, RequireFields<MutationNewsletterSubscribeArgs, 'beehiivNewsletterInput'>>;
-  orderStatusUpdate?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationOrderStatusUpdateArgs, 'input'>>;
   paymentCancel?: Resolver<ResolversTypes['PaymentCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentCancelArgs, 'input'>>;
   paymentConfirm?: Resolver<ResolversTypes['PaymentConfirmResponse'], ParentType, ContextType, RequireFields<MutationPaymentConfirmArgs, 'input'>>;
   paymentFail?: Resolver<ResolversTypes['PaymentFailResponse'], ParentType, ContextType, RequireFields<MutationPaymentFailArgs, 'input'>>;
@@ -8619,13 +8429,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectPutInReview?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPutInReviewArgs, 'input'>>;
   projectReviewRequest?: Resolver<ResolversTypes['ProjectReview'], ParentType, ContextType, RequireFields<MutationProjectReviewRequestArgs, 'input'>>;
   projectReviewSubmit?: Resolver<ResolversTypes['ProjectReview'], ParentType, ContextType, RequireFields<MutationProjectReviewSubmitArgs, 'input'>>;
-  projectRewardCreate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardCreateArgs, 'input'>>;
-  projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
-  projectRewardDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectRewardDeleteArgs, 'input'>>;
-  projectRewardUpdate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardUpdateArgs, 'input'>>;
   projectRskEoaSet?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectRskEoaSetArgs, 'input'>>;
-  projectShippingConfigCreate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigCreateArgs, 'input'>>;
-  projectShippingConfigUpdate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigUpdateArgs, 'input'>>;
   projectStatusUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectStatusUpdateArgs, 'input'>>;
   projectStripeInterestNotify?: Resolver<ResolversTypes['StripeInterestNotifyResponse'], ParentType, ContextType, RequireFields<MutationProjectStripeInterestNotifyArgs, 'projectId'>>;
   projectSubscriptionPlanCreate?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanCreateArgs, 'input'>>;
@@ -10765,13 +10569,6 @@ export type GrantApplyMutationVariables = Exact<{
 
 export type GrantApplyMutation = { __typename?: 'Mutation', grantApply: { __typename?: 'GrantApplicant', status: GrantApplicantStatus } };
 
-export type OrderStatusUpdateMutationVariables = Exact<{
-  input: OrderStatusUpdateInput;
-}>;
-
-
-export type OrderStatusUpdateMutation = { __typename?: 'Mutation', orderStatusUpdate?: { __typename?: 'Order', status: string, id: any, shippedAt?: any | null, deliveredAt?: any | null } | null };
-
 export type UnlinkExternalAccountMutationVariables = Exact<{
   id: Scalars['BigInt']['input'];
 }>;
@@ -12351,16 +12148,6 @@ export type ProjectMatchingDeleteMutationVariables = Exact<{
 
 export type ProjectMatchingDeleteMutation = { __typename?: 'Mutation', projectMatchingDelete: { __typename?: 'ProjectMatchingDeleteResponse', success: boolean, message?: string | null, matchingId: any } };
 
-export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
-  input: ProjectRewardCurrencyUpdate;
-}>;
-
-
-export type ProjectRewardCurrencyUpdateMutation = { __typename?: 'Mutation', projectRewardCurrencyUpdate: Array<(
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardFragment
-  )> };
-
 export type CreateProjectMutationVariables = Exact<{
   input: CreateProjectInput;
 }>;
@@ -12524,63 +12311,6 @@ export type PledgeRefundInitiateMutation = { __typename?: 'Mutation', pledgeRefu
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
     ) } };
-
-export type RewardUpdateMutationVariables = Exact<{
-  input: UpdateProjectRewardInput;
-}>;
-
-
-export type RewardUpdateMutation = { __typename?: 'Mutation', projectRewardUpdate: (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardFragment
-  ) };
-
-export type RewardDeleteMutationVariables = Exact<{
-  input: DeleteProjectRewardInput;
-}>;
-
-
-export type RewardDeleteMutation = { __typename?: 'Mutation', projectRewardDelete: boolean };
-
-export type ProjectRewardCreateMutationVariables = Exact<{
-  input: CreateProjectRewardInput;
-}>;
-
-
-export type ProjectRewardCreateMutation = { __typename?: 'Mutation', projectRewardCreate: (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardFragment
-  ) };
-
-export type ProjectShippingConfigCreateMutationVariables = Exact<{
-  input: CreateProjectShippingConfigInput;
-}>;
-
-
-export type ProjectShippingConfigCreateMutation = { __typename?: 'Mutation', projectShippingConfigCreate: (
-    { __typename?: 'ShippingConfig' }
-    & ShippingConfigFragment
-  ) };
-
-export type ProjectShippingConfigUpdateMutationVariables = Exact<{
-  input: UpdateProjectShippingConfigInput;
-}>;
-
-
-export type ProjectShippingConfigUpdateMutation = { __typename?: 'Mutation', projectShippingConfigUpdate: (
-    { __typename?: 'ShippingConfig' }
-    & ShippingConfigFragment
-  ) };
-
-export type ShippingAddressCreateMutationVariables = Exact<{
-  input: ShippingAddressCreateInput;
-}>;
-
-
-export type ShippingAddressCreateMutation = { __typename?: 'Mutation', shippingAddressCreate: (
-    { __typename?: 'ShippingAddress' }
-    & ShippingAddressFragment
-  ) };
 
 export type CreateStripeConnectAccountMutationVariables = Exact<{
   projectId: Scalars['BigInt']['input'];
@@ -16109,42 +15839,6 @@ export function useGrantApplyMutation(baseOptions?: Apollo.MutationHookOptions<G
 export type GrantApplyMutationHookResult = ReturnType<typeof useGrantApplyMutation>;
 export type GrantApplyMutationResult = Apollo.MutationResult<GrantApplyMutation>;
 export type GrantApplyMutationOptions = Apollo.BaseMutationOptions<GrantApplyMutation, GrantApplyMutationVariables>;
-export const OrderStatusUpdateDocument = gql`
-    mutation OrderStatusUpdate($input: OrderStatusUpdateInput!) {
-  orderStatusUpdate(input: $input) {
-    status
-    id
-    shippedAt
-    deliveredAt
-  }
-}
-    `;
-export type OrderStatusUpdateMutationFn = Apollo.MutationFunction<OrderStatusUpdateMutation, OrderStatusUpdateMutationVariables>;
-
-/**
- * __useOrderStatusUpdateMutation__
- *
- * To run a mutation, you first call `useOrderStatusUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useOrderStatusUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [orderStatusUpdateMutation, { data, loading, error }] = useOrderStatusUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useOrderStatusUpdateMutation(baseOptions?: Apollo.MutationHookOptions<OrderStatusUpdateMutation, OrderStatusUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<OrderStatusUpdateMutation, OrderStatusUpdateMutationVariables>(OrderStatusUpdateDocument, options);
-      }
-export type OrderStatusUpdateMutationHookResult = ReturnType<typeof useOrderStatusUpdateMutation>;
-export type OrderStatusUpdateMutationResult = Apollo.MutationResult<OrderStatusUpdateMutation>;
-export type OrderStatusUpdateMutationOptions = Apollo.BaseMutationOptions<OrderStatusUpdateMutation, OrderStatusUpdateMutationVariables>;
 export const UnlinkExternalAccountDocument = gql`
     mutation UnlinkExternalAccount($id: BigInt!) {
   unlinkExternalAccount(id: $id) {
@@ -21511,39 +21205,6 @@ export function useProjectMatchingDeleteMutation(baseOptions?: Apollo.MutationHo
 export type ProjectMatchingDeleteMutationHookResult = ReturnType<typeof useProjectMatchingDeleteMutation>;
 export type ProjectMatchingDeleteMutationResult = Apollo.MutationResult<ProjectMatchingDeleteMutation>;
 export type ProjectMatchingDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectMatchingDeleteMutation, ProjectMatchingDeleteMutationVariables>;
-export const ProjectRewardCurrencyUpdateDocument = gql`
-    mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
-  projectRewardCurrencyUpdate(input: $input) {
-    ...ProjectReward
-  }
-}
-    ${ProjectRewardFragmentDoc}`;
-export type ProjectRewardCurrencyUpdateMutationFn = Apollo.MutationFunction<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>;
-
-/**
- * __useProjectRewardCurrencyUpdateMutation__
- *
- * To run a mutation, you first call `useProjectRewardCurrencyUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardCurrencyUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectRewardCurrencyUpdateMutation, { data, loading, error }] = useProjectRewardCurrencyUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectRewardCurrencyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>(ProjectRewardCurrencyUpdateDocument, options);
-      }
-export type ProjectRewardCurrencyUpdateMutationHookResult = ReturnType<typeof useProjectRewardCurrencyUpdateMutation>;
-export type ProjectRewardCurrencyUpdateMutationResult = Apollo.MutationResult<ProjectRewardCurrencyUpdateMutation>;
-export type ProjectRewardCurrencyUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>;
 export const CreateProjectDocument = gql`
     mutation CreateProject($input: CreateProjectInput!) {
   createProject(input: $input) {
@@ -22248,202 +21909,6 @@ export function usePledgeRefundInitiateMutation(baseOptions?: Apollo.MutationHoo
 export type PledgeRefundInitiateMutationHookResult = ReturnType<typeof usePledgeRefundInitiateMutation>;
 export type PledgeRefundInitiateMutationResult = Apollo.MutationResult<PledgeRefundInitiateMutation>;
 export type PledgeRefundInitiateMutationOptions = Apollo.BaseMutationOptions<PledgeRefundInitiateMutation, PledgeRefundInitiateMutationVariables>;
-export const RewardUpdateDocument = gql`
-    mutation RewardUpdate($input: UpdateProjectRewardInput!) {
-  projectRewardUpdate(input: $input) {
-    ...ProjectReward
-  }
-}
-    ${ProjectRewardFragmentDoc}`;
-export type RewardUpdateMutationFn = Apollo.MutationFunction<RewardUpdateMutation, RewardUpdateMutationVariables>;
-
-/**
- * __useRewardUpdateMutation__
- *
- * To run a mutation, you first call `useRewardUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRewardUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [rewardUpdateMutation, { data, loading, error }] = useRewardUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useRewardUpdateMutation(baseOptions?: Apollo.MutationHookOptions<RewardUpdateMutation, RewardUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RewardUpdateMutation, RewardUpdateMutationVariables>(RewardUpdateDocument, options);
-      }
-export type RewardUpdateMutationHookResult = ReturnType<typeof useRewardUpdateMutation>;
-export type RewardUpdateMutationResult = Apollo.MutationResult<RewardUpdateMutation>;
-export type RewardUpdateMutationOptions = Apollo.BaseMutationOptions<RewardUpdateMutation, RewardUpdateMutationVariables>;
-export const RewardDeleteDocument = gql`
-    mutation RewardDelete($input: DeleteProjectRewardInput!) {
-  projectRewardDelete(input: $input)
-}
-    `;
-export type RewardDeleteMutationFn = Apollo.MutationFunction<RewardDeleteMutation, RewardDeleteMutationVariables>;
-
-/**
- * __useRewardDeleteMutation__
- *
- * To run a mutation, you first call `useRewardDeleteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRewardDeleteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [rewardDeleteMutation, { data, loading, error }] = useRewardDeleteMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useRewardDeleteMutation(baseOptions?: Apollo.MutationHookOptions<RewardDeleteMutation, RewardDeleteMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RewardDeleteMutation, RewardDeleteMutationVariables>(RewardDeleteDocument, options);
-      }
-export type RewardDeleteMutationHookResult = ReturnType<typeof useRewardDeleteMutation>;
-export type RewardDeleteMutationResult = Apollo.MutationResult<RewardDeleteMutation>;
-export type RewardDeleteMutationOptions = Apollo.BaseMutationOptions<RewardDeleteMutation, RewardDeleteMutationVariables>;
-export const ProjectRewardCreateDocument = gql`
-    mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
-  projectRewardCreate(input: $input) {
-    ...ProjectReward
-  }
-}
-    ${ProjectRewardFragmentDoc}`;
-export type ProjectRewardCreateMutationFn = Apollo.MutationFunction<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
-
-/**
- * __useProjectRewardCreateMutation__
- *
- * To run a mutation, you first call `useProjectRewardCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectRewardCreateMutation, { data, loading, error }] = useProjectRewardCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectRewardCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>(ProjectRewardCreateDocument, options);
-      }
-export type ProjectRewardCreateMutationHookResult = ReturnType<typeof useProjectRewardCreateMutation>;
-export type ProjectRewardCreateMutationResult = Apollo.MutationResult<ProjectRewardCreateMutation>;
-export type ProjectRewardCreateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
-export const ProjectShippingConfigCreateDocument = gql`
-    mutation ProjectShippingConfigCreate($input: CreateProjectShippingConfigInput!) {
-  projectShippingConfigCreate(input: $input) {
-    ...ShippingConfig
-  }
-}
-    ${ShippingConfigFragmentDoc}`;
-export type ProjectShippingConfigCreateMutationFn = Apollo.MutationFunction<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>;
-
-/**
- * __useProjectShippingConfigCreateMutation__
- *
- * To run a mutation, you first call `useProjectShippingConfigCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectShippingConfigCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectShippingConfigCreateMutation, { data, loading, error }] = useProjectShippingConfigCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectShippingConfigCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>(ProjectShippingConfigCreateDocument, options);
-      }
-export type ProjectShippingConfigCreateMutationHookResult = ReturnType<typeof useProjectShippingConfigCreateMutation>;
-export type ProjectShippingConfigCreateMutationResult = Apollo.MutationResult<ProjectShippingConfigCreateMutation>;
-export type ProjectShippingConfigCreateMutationOptions = Apollo.BaseMutationOptions<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>;
-export const ProjectShippingConfigUpdateDocument = gql`
-    mutation ProjectShippingConfigUpdate($input: UpdateProjectShippingConfigInput!) {
-  projectShippingConfigUpdate(input: $input) {
-    ...ShippingConfig
-  }
-}
-    ${ShippingConfigFragmentDoc}`;
-export type ProjectShippingConfigUpdateMutationFn = Apollo.MutationFunction<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>;
-
-/**
- * __useProjectShippingConfigUpdateMutation__
- *
- * To run a mutation, you first call `useProjectShippingConfigUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectShippingConfigUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectShippingConfigUpdateMutation, { data, loading, error }] = useProjectShippingConfigUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectShippingConfigUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>(ProjectShippingConfigUpdateDocument, options);
-      }
-export type ProjectShippingConfigUpdateMutationHookResult = ReturnType<typeof useProjectShippingConfigUpdateMutation>;
-export type ProjectShippingConfigUpdateMutationResult = Apollo.MutationResult<ProjectShippingConfigUpdateMutation>;
-export type ProjectShippingConfigUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>;
-export const ShippingAddressCreateDocument = gql`
-    mutation ShippingAddressCreate($input: ShippingAddressCreateInput!) {
-  shippingAddressCreate(input: $input) {
-    ...ShippingAddress
-  }
-}
-    ${ShippingAddressFragmentDoc}`;
-export type ShippingAddressCreateMutationFn = Apollo.MutationFunction<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>;
-
-/**
- * __useShippingAddressCreateMutation__
- *
- * To run a mutation, you first call `useShippingAddressCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useShippingAddressCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [shippingAddressCreateMutation, { data, loading, error }] = useShippingAddressCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useShippingAddressCreateMutation(baseOptions?: Apollo.MutationHookOptions<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>(ShippingAddressCreateDocument, options);
-      }
-export type ShippingAddressCreateMutationHookResult = ReturnType<typeof useShippingAddressCreateMutation>;
-export type ShippingAddressCreateMutationResult = Apollo.MutationResult<ShippingAddressCreateMutation>;
-export type ShippingAddressCreateMutationOptions = Apollo.BaseMutationOptions<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>;
 export const CreateStripeConnectAccountDocument = gql`
     mutation CreateStripeConnectAccount($projectId: BigInt!, $returnUrl: String) {
   createStripeConnectAccount(projectId: $projectId, returnUrl: $returnUrl) {

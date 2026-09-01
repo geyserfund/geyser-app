@@ -17,41 +17,20 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
   const { project } = useProjectAtom()
   const { toast } = useNotification()
 
-  const {
-    isLoading,
-    isLoadingMore,
-    noMoreItems,
-    rewards,
-    rewardsCount,
-    updateOrderStatus,
-    fetchNext,
-    orderBy,
-    setOrderBy,
-  } = useRewardByStatus({
-    status,
-    projectId: project?.id,
-    getRewardQueryProps: {
-      onError(error) {
-        toast({
-          title: t('Error fetching products'),
-          status: 'error',
-          description: `${error}`,
-        })
+  const { isLoading, isLoadingMore, noMoreItems, rewards, rewardsCount, fetchNext, orderBy, setOrderBy } =
+    useRewardByStatus({
+      status,
+      projectId: project?.id,
+      getRewardQueryProps: {
+        onError(error) {
+          toast({
+            title: t('Error fetching products'),
+            status: 'error',
+            description: `${error}`,
+          })
+        },
       },
-    },
-    statusUpdateMutationProps: {
-      onCompleted() {
-        toast({ title: t('Order status updated'), status: 'success' })
-      },
-      onError(error) {
-        toast({
-          title: t('Error updating order status'),
-          status: 'error',
-          description: `${error}`,
-        })
-      },
-    },
-  })
+    })
 
   if (isLoading || !rewards) {
     return <RewardByStatusSkeleton />
@@ -66,13 +45,7 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
         <Body muted>{rewardsCount ? `(${rewardsCount})` : ''}</Body>
       </HStack>
       {rewards.length > 0 ? (
-        <RewardTable
-          status={status}
-          data={rewards}
-          updateOrderStatus={updateOrderStatus}
-          orderBy={orderBy}
-          setOrderBy={setOrderBy}
-        />
+        <RewardTable status={status} data={rewards} orderBy={orderBy} setOrderBy={setOrderBy} />
       ) : (
         <HStack w="full" px={standardPadding}>
           <Body size="xs">{t('No items with this status.')}</Body>

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { GoalModal } from '@/modules/project/pages/projectView/components/GoalModal.tsx'
@@ -25,15 +24,11 @@ export const OpenFundingGoal = () => {
 
   const { project } = useProjectAtom()
   const { inProgressGoals } = useGoalsAtom()
-  const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
   const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingGoal,
-    getPath(
-      TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !stripeConfigured ? 'launchStory' : 'launchProjectRewards',
-      project.id,
-    ),
+    getPath('launchStory', project.id),
   )
 
   const { onGoalModalOpen } = useGoalsModal()

@@ -8,7 +8,7 @@ import { getPath } from '@/shared/constants'
 
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
 import { RewardCardSkeleton } from '../../rewards/components/RewardCard.tsx'
-import { RewardCardWithBuy } from '../../rewards/components/RewardCardWithBuy.tsx'
+import { RewardCard } from '../../rewards/components/RewardCard.tsx'
 import { BodySectionLayout } from '../components'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
@@ -49,7 +49,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     <BodySectionLayout ref={ref} title={t('Products')}>
       <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
         {rewardsToRender.map((reward) => {
-          return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
+          return <RewardCard key={reward.id} width="100%" reward={reward} />
         })}
       </SimpleGrid>
       {hasMoreRewards && (

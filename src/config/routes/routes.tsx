@@ -125,50 +125,6 @@ export const platformRoutes: RouteObject[] = [
               return { Component: LaunchFundingGoal }
             },
           },
-          // {
-          //   path: getPath('launchProjectRewards', PathName.projectId),
-          //   async lazy() {
-          //     const LaunchProducts = await loadProjectCreationPages().then((m) => m.LaunchProducts)
-          //     return { Component: LaunchProducts }
-          //   },
-          // },
-          {
-            path: getPath('launchProjectRewards', PathName.projectId),
-            async lazy() {
-              const ProjectCreateRewards = await loadProjectCreationPages().then((m) => m.ProjectCreateRewards)
-              return { Component: ProjectCreateRewards }
-            },
-            children: [
-              {
-                index: true,
-                async lazy() {
-                  const ProjectCreateRewardMain = await loadProjectCreationPages().then(
-                    (m) => m.ProjectCreateRewardMain,
-                  )
-                  return { Component: ProjectCreateRewardMain }
-                },
-              },
-              {
-                path: getPath('launchProjectRewardsCreate', PathName.projectId),
-                async lazy() {
-                  const ProjectCreationCreateReward = await loadProjectCreationPages().then(
-                    (m) => m.ProjectCreationCreateReward,
-                  )
-                  return { Component: ProjectCreationCreateReward }
-                },
-              },
-              {
-                path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
-                async lazy() {
-                  const ProjectCreationEditReward = await loadProjectCreationPages().then(
-                    (m) => m.ProjectCreationEditReward,
-                  )
-                  return { Component: ProjectCreationEditReward }
-                },
-              },
-            ],
-          },
-
           {
             path: getPath('launchStory', PathName.projectId),
             async lazy() {
@@ -494,24 +450,6 @@ export const platformRoutes: RouteObject[] = [
               const projectDashboardPages = await loadProjectDashboardPages()
               return {
                 element: renderPrivateRoute(projectDashboardPages.PostCreateEdit),
-              }
-            },
-          },
-          {
-            path: getPath('projectRewardCreate', PathName.projectName),
-            async lazy() {
-              const projectDashboardPages = await loadProjectDashboardPages()
-              return {
-                element: renderPrivateRoute(projectDashboardPages.RewardCreate),
-              }
-            },
-          },
-          {
-            path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardUUID),
-            async lazy() {
-              const projectDashboardPages = await loadProjectDashboardPages()
-              return {
-                element: renderPrivateRoute(projectDashboardPages.RewardEdit),
               }
             },
           },

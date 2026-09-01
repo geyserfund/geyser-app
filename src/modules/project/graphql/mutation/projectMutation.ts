@@ -1,16 +1,6 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_PAGE_BODY_CREATOR, FRAGMENT_PROJECT_UPDATE } from '../fragments/projectFragment.ts'
-import { FRAGMENT_PROJECT_REWARD } from '../fragments/rewardsFragment.ts'
-
-export const MUTATION_UPDATE_PROJECT_CURRENCY = gql`
-  ${FRAGMENT_PROJECT_REWARD}
-  mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
-    projectRewardCurrencyUpdate(input: $input) {
-      ...ProjectReward
-    }
-  }
-`
 
 export const MUTATION_CREATE_PROJECT = gql`
   ${FRAGMENT_PROJECT_PAGE_BODY_CREATOR}

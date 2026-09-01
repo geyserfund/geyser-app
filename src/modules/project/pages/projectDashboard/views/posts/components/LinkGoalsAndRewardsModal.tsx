@@ -280,12 +280,8 @@ const GoalItem = ({ goal }: { goal: ProjectGoalsFragment }) => {
 
 const NoGoalsAndRewards = ({ projectName }: { projectName: string }) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { onGoalModalOpen } = useGoalsModal()
-
-  const handleCreateReward = () => {
-    navigate(getPath('projectRewardCreate', projectName))
-  }
+  const navigate = useNavigate()
 
   const handleCreateGoal = () => {
     navigate(getPath('projectGoals', projectName))
@@ -299,9 +295,6 @@ const NoGoalsAndRewards = ({ projectName }: { projectName: string }) => {
       </Body>
 
       <HStack w="full" paddingX={standardPadding}>
-        <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateReward}>
-          {t('Create a product')}
-        </Button>
         <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateGoal}>
           {t('Create a goal')}
         </Button>

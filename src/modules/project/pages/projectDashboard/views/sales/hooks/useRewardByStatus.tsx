@@ -1,5 +1,5 @@
-import { MutationHookOptions, QueryHookOptions } from '@apollo/client'
-import { useAtom, useSetAtom } from 'jotai'
+import { QueryHookOptions } from '@apollo/client'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
@@ -14,13 +14,9 @@ import {
   OrdersGetQuery,
   OrdersGetStatus,
   OrdersGetWhereInput,
-  OrderStatusUpdateInput,
-  OrderStatusUpdateMutation,
-  UpdatableOrderStatus,
   useOrdersGetQuery,
-  useOrderStatusUpdateMutation,
 } from '../../../../../../../types'
-import { rewardsCountAtom, rewardsFamily, rewardStatusUpdateAtom } from '../state/rewardsAtom'
+import { rewardsCountAtom, rewardsFamily } from '../state/rewardsAtom'
 
 interface UseRewardByStatusProps {
   status: OrdersGetStatus
@@ -31,27 +27,14 @@ interface UseRewardByStatusProps {
       input: OrdersGetInput
     }>
   >
-  statusUpdateMutationProps: MutationHookOptions<
-    OrderStatusUpdateMutation,
-    Exact<{
-      input: OrderStatusUpdateInput
-    }>
-  >
 }
 
 const MAXIMUM_REWARD_ITEMS = 6
 
-export const useRewardByStatus = ({
-  status,
-  projectId,
-  getRewardQueryProps,
-  statusUpdateMutationProps,
-}: UseRewardByStatusProps) => {
+export const useRewardByStatus = ({ status, projectId, getRewardQueryProps }: UseRewardByStatusProps) => {
   const [rewardsCount, setRewardsCount] = useAtom(rewardsCountAtom)
 
   const [rewards, setRewards] = useAtom(rewardsFamily({ status }))
-
-  const updateStatus = useSetAtom(rewardStatusUpdateAtom)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -119,29 +102,6 @@ export const useRewardByStatus = ({
     setData: setRewards,
   })
 
-  const [orderStatusUpdate] = useOrderStatusUpdateMutation({
-    ...statusUpdateMutationProps,
-    onCompleted(data) {
-      if (data.orderStatusUpdate?.id === undefined) return
-
-      updateStatus({ status, update: data.orderStatusUpdate })
-
-      if (statusUpdateMutationProps.onCompleted) statusUpdateMutationProps.onCompleted(data)
-    },
-  })
-
-  const updateOrderStatus = (orderId: string, newStatus: UpdatableOrderStatus) => {
-    if (`${newStatus}` === `${status}`) return
-    orderStatusUpdate({
-      variables: {
-        input: {
-          orderId,
-          status: newStatus,
-        },
-      },
-    })
-  }
-
   return {
     isLoading,
     isLoadingMore,
@@ -149,7 +109,6 @@ export const useRewardByStatus = ({
     fetchNext,
     rewards,
     rewardsCount: rewardsCount[status],
-    updateOrderStatus,
     orderBy,
     setOrderBy,
   }

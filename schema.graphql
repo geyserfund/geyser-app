@@ -162,7 +162,6 @@ type Mutation {
   projectStatusUpdate(input: ProjectStatusUpdate!): Project!
   projectPublish(input: ProjectPublishMutationInput!): Project!
   projectPreLaunch(input: ProjectPreLaunchMutationInput!): Project!
-  projectRewardCurrencyUpdate(input: ProjectRewardCurrencyUpdate!): [ProjectReward!]!
   projectRskEoaSet(input: ProjectRskEoaSetInput!): Project!
   projectPutInReview(input: ProjectPutInReviewMutationInput!): Project!
   projectClose(input: ProjectCloseMutationInput!): Project!
@@ -193,14 +192,6 @@ type Mutation {
   paymentSwapClaimTxBroadcast(input: PaymentSwapClaimTxBroadcastInput!): PaymentSwapClaimTxBroadcastResponse!
   paymentSwapRefundTxSet(input: PaymentSwapRefundTxSetInput!): PaymentSwapRefundTxSetResponse!
   paymentSwapRefundTxBroadcast(input: PaymentSwapRefundTxBroadcastInput!): PaymentSwapRefundTxBroadcastResponse!
-  projectRewardCreate(input: CreateProjectRewardInput!): ProjectReward!
-  projectRewardUpdate(input: UpdateProjectRewardInput!): ProjectReward!
-
-  """
-  Soft deletes the reward.
-  """
-  projectRewardDelete(input: DeleteProjectRewardInput!): Boolean!
-
   """
   Only returns ProjectGoals that are in progress
   """
@@ -252,7 +243,6 @@ type Mutation {
   a request made by the client.
   """
   sendOTPByEmail(input: SendOtpByEmailInput!): OTPResponse!
-  orderStatusUpdate(input: OrderStatusUpdateInput!): Order
   userNotificationConfigurationValueUpdate(userNotificationConfigurationId: BigInt!, value: String!): Boolean
   creatorNotificationConfigurationValueUpdate(creatorNotificationConfigurationId: BigInt!, value: String!): Boolean
   publishNostrEvent(event: String!): Boolean
@@ -271,8 +261,6 @@ type Mutation {
   refreshStripeConnectOnboardingLink(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
   disconnectStripeConnect(projectId: BigInt!): StripeConnectStatus!
   projectStripeInterestNotify(projectId: BigInt!): StripeInterestNotifyResponse!
-  projectShippingConfigCreate(input: CreateProjectShippingConfigInput!): ShippingConfig!
-  projectShippingConfigUpdate(input: UpdateProjectShippingConfigInput!): ShippingConfig!
   shippingAddressCreate(input: ShippingAddressCreateInput!): ShippingAddress!
   pledgeRefundRequest(input: PledgeRefundRequestInput!): PledgeRefundRequestResponse!
 
@@ -503,16 +491,6 @@ type ProjectDeleteResponse implements MutationResponse {
 input ProjectCountriesGetInput {
   category: ProjectCategory
   subCategory: ProjectSubCategory
-}
-
-input ProjectRewardCurrencyUpdate {
-  projectId: BigInt!
-  rewardCurrency: RewardCurrency!
-}
-
-input ProjectRewardCurrencyUpdateRewardsInput {
-  rewardId: BigInt!
-  cost: Int!
 }
 
 input DeleteProjectInput {
@@ -887,11 +865,6 @@ input CreateProjectInput {
   type: ProjectType
 
   """
-  The currency used to price rewards for the project. Currently only USDCENT supported.
-  """
-  rewardCurrency: RewardCurrency
-
-  """
   Project ISO3166 country code
   """
   countryCode: String
@@ -967,11 +940,6 @@ input UpdateProjectInput {
   """
   shortDescription: String
   type: ProjectType
-
-  """
-  The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum.
-  """
-  rewardCurrency: RewardCurrency
 
   """
   Project ISO3166 country code
@@ -2756,58 +2724,6 @@ input GetProjectRewardsWhereInput {
 input GetProjectRewardWhereInput {
   id: BigInt
   uuid: String
-}
-
-input CreateProjectRewardInput {
-  projectId: BigInt!
-  name: String!
-  description: String
-  shortDescription: String
-
-  """
-  Cost of the reward, currently only in USD cents
-  """
-  cost: Int!
-  images: [String!]!
-  hasShipping: Boolean!
-  estimatedDeliveryInWeeks: Int
-  estimatedAvailabilityDate: Date
-  maxClaimable: Int
-  category: String
-  isAddon: Boolean
-  isHidden: Boolean
-  preOrder: Boolean
-  privateCommentPrompts: [PrivateCommentPrompt!]!
-  confirmationMessage: String
-  shippingConfigId: BigInt
-}
-
-input UpdateProjectRewardInput {
-  projectRewardId: BigInt!
-  name: String
-  description: String
-  shortDescription: String
-
-  """
-  Cost of the reward, priced in USD cents
-  """
-  cost: Int
-  images: [String!]
-  hasShipping: Boolean
-  maxClaimable: Int
-  category: String
-  isAddon: Boolean
-  isHidden: Boolean
-  preOrder: Boolean
-  estimatedAvailabilityDate: Date
-  estimatedDeliveryInWeeks: Int
-  privateCommentPrompts: [PrivateCommentPrompt!]
-  confirmationMessage: String
-  shippingConfigId: BigInt
-}
-
-input DeleteProjectRewardInput {
-  projectRewardId: BigInt!
 }
 
 input ProjectsMostFundedByTagInput {

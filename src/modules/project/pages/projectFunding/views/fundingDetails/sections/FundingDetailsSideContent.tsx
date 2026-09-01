@@ -2,7 +2,6 @@ import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { FormEvent, useRef } from 'react'
-import { UseFormReturn } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
@@ -20,7 +19,7 @@ import { useNotification } from '@/utils'
 import { ContinueWithButtons } from '../../../components/ContinueWithButtons.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
-import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
+import { NonProfitSummary, TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
 import {
   fiatCheckoutMethods,
   fiatPaymentMethodAtom,
@@ -29,32 +28,24 @@ import {
   intendedPaymentMethodAtom,
   PaymentMethods,
 } from '../../fundingPayment/state/paymentMethodAtom.ts'
-import { ShippingHandleSubmitType } from '../hooks/useShippingAddressForm.tsx'
-import { ShippingAddressFormData } from './FundingDetailsShippingAddress.tsx'
-
-type FundingDetailsSummaryProps = {
-  handleSubmit: ShippingHandleSubmitType
-  addressForm: UseFormReturn<ShippingAddressFormData, any, undefined>
-}
-
 type SelectedPaymentOption = {
   intendedPaymentMethod?: PaymentMethods
   fiatPaymentMethod?: typeof fiatCheckoutMethods.creditCard | typeof fiatCheckoutMethods.applePay
 }
 
-export const FundingDetailsBottomContent = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
-  return <FundingDetailsSummary handleSubmit={handleSubmit} addressForm={addressForm} />
+export const FundingDetailsBottomContent = () => {
+  return <FundingDetailsSummary />
 }
 
-export const FundingDetailsSideContent = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
+export const FundingDetailsSideContent = () => {
   return (
     <CardLayout w="full" h="full" padding={0}>
-      <FundingDetailsSummary handleSubmit={handleSubmit} addressForm={addressForm} />
+      <FundingDetailsSummary />
     </CardLayout>
   )
 }
 
-export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
+export const FundingDetailsSummary = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const toast = useNotification()
@@ -95,19 +86,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
     e.preventDefault()
     e.stopPropagation()
 
-    if (formState.needsShipping) {
-      handleSubmit(
-        e,
-        () => {
-          handleCheckoutButtonPressed(e as FormEvent<HTMLDivElement>)
-        },
-        () => {
-          toast.warning({ title: t('Invalid shipping address') })
-        },
-      )
-    } else {
-      handleCheckoutButtonPressed(e as FormEvent<HTMLDivElement>)
-    }
+    handleCheckoutButtonPressed(e as FormEvent<HTMLDivElement>)
   }
 
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLDivElement>) => {
@@ -192,7 +171,6 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
       <FundingCheckoutWrapper>
         <VStack w="full" alignItems="flex-start">
           <NonProfitSummary disableMobile={true} />
-          <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
           {hasRecurringSelection && (
             <Body size="sm" light>

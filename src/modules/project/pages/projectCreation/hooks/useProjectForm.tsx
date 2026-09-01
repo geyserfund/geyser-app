@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { noUrlRegex, validUrl } from '@/utils/index.ts'
 
 import { ProjectValidations } from '../../../../../shared/constants'
-import { ProjectPageBodyFragment, ProjectType, RewardCurrency } from '../../../../../types'
+import { ProjectPageBodyFragment, ProjectType } from '../../../../../types'
 import { ProjectCountryCodesThatAreRestricted } from '../utils/constants.ts'
 
 export type ProjectCreationVariables = {
@@ -16,7 +16,6 @@ export type ProjectCreationVariables = {
   thumbnailImage?: string
   shortDescription: string
   description: string
-  rewardCurrency?: RewardCurrency | null
   type?: ProjectType
   category: string
   subCategory: string

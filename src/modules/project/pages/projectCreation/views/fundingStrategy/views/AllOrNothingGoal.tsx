@@ -64,7 +64,7 @@ export const AllOrNothingGoal = () => {
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingGoal,
-    getPath('launchProjectRewards', project.id),
+    getPath('launchStory', project.id),
   )
 
   const continueProps = {

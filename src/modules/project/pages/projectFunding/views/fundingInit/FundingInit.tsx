@@ -19,14 +19,13 @@ import {
   intendedPaymentMethodAtom,
 } from '../fundingPayment/state/paymentMethodAtom.ts'
 import { DonationInput } from './sections/DonationInput'
-import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
 import { GeyserTipInput } from './sections/GeyserTipInput.tsx'
 
 /** FundingInit is the first page of funding flow, consisting of donation input and rewards selection or subscription selection */
 export const FundingInit = () => {
   const { loading, project } = useProjectAtom()
-  const { fundingMode, setState, updateSubscription } = useFundingFormAtom()
+  const { setState, updateSubscription } = useFundingFormAtom()
   const recurringContributionRenewal = useAtomValue(recurringContributionRenewalAtom)
   const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
@@ -113,12 +112,6 @@ export const FundingInit = () => {
         <DonationInput />
 
         {!recurringContributionRenewal && <GeyserTipInput />}
-
-        {!isManagedRecoverableGrant && fundingMode === recurringFundingModes.oneTime && (
-          <>
-            <FundingInitRewards />
-          </>
-        )}
       </>
     </FundingLayout>
   )

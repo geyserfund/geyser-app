@@ -9,10 +9,7 @@ export const validateFundingInput = (input: ContributionCreateInput) => {
   let isValid = false
   let error = 'cannot initiate funding without amount'
 
-  if (
-    (input.donationAmount && toInt(input.donationAmount) > 0) ||
-    (input.orderInput && input.orderInput.items && input.orderInput.items.length > 0)
-  ) {
+  if (input.donationAmount && toInt(input.donationAmount) > 0) {
     isValid = true
     error = ''
   }
