@@ -65,7 +65,7 @@ export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
       onClose={onClose}
       size={'xl'}
       isCentered
-      title={t('Share & Earn')}
+      title={t('Share')}
       bodyProps={{
         as: VStack,
         gap: 3,

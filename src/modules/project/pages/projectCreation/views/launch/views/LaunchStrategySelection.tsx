@@ -3,7 +3,6 @@ import { t } from 'i18next'
 import { useState } from 'react'
 
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
-import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/sections/GeyserPromotionSection.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
@@ -108,9 +107,6 @@ export const LaunchStrategySelection = ({
           isDisabled={plansDisabled}
           temporarilyUnavailable={plansDisabled}
         />
-      </VStack>
-      <VStack w="full" alignItems="flex-start">
-        <GeyserPromotionSection showTemporaryDirectPaymentNotice={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED} />
       </VStack>
     </ProjectCreationPageWrapper>
   )

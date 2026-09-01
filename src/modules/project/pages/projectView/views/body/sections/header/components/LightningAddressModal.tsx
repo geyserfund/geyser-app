@@ -8,14 +8,12 @@ import { useModal } from '@/shared/hooks'
 
 import { Body } from '../../../../../../../../../shared/components/typography'
 import { LightningAddress } from './LightningAddress'
-import { NpubDisplay } from './NpubDisplay'
 
 interface LightningAddressModalProps extends ButtonProps {
   name: string
-  npub?: string
 }
 
-export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressModalProps) => {
+export const LightningAddressModal = ({ name, ...rest }: LightningAddressModalProps) => {
   const { t } = useTranslation()
 
   const lightningAddressModal = useModal()
@@ -43,20 +41,13 @@ export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressM
       <Modal
         size="lg"
         {...lightningAddressModal}
-        title={t('Lightning address & NPUB')}
+        title={t('Lightning address')}
         bodyProps={{ as: VStack, gap: 6 }}
       >
         <VStack w="full" spacing={3}>
           <VStack w="full" alignItems={'start'} spacing={0}>
             <Body>{t('A Lightning Address is an email-like identifier for receiving Bitcoin.')}</Body>
             <UnorderedList>
-              <ListItem>
-                <Body>
-                  {t(
-                    'Add this Lightning Address to your Nostr profile for this project to get “zapped” (tipped) directly by other users',
-                  )}
-                </Body>
-              </ListItem>
               <ListItem>
                 <Body>
                   {t('Share your Geyser Lightning address with anyone, and they can fund you through it instantly.')}
@@ -66,17 +57,6 @@ export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressM
           </VStack>
           <LightningAddress flex={1} name={name} />
         </VStack>
-        {npub && (
-          <VStack w="full" spacing={3}>
-            <Body>
-              {t(
-                "Nostr npub is your project's unique identifier on the censorship-resistant, decentralized Nostr social network.",
-              )}
-            </Body>
-
-            <NpubDisplay npub={npub} />
-          </VStack>
-        )}
       </Modal>
     </>
   )

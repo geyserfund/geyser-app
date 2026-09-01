@@ -27,9 +27,13 @@ import { loadWidgetModule } from '@/modules/widget/loader.ts'
 
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
-import { ExternalAuthSuccess, FailedAuth } from '../../modules/auth'
-import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../modules/general/fallback'
-import { __production__, getPath, PathName } from '../../shared/constants'
+import { ExternalAuthSuccess } from '../../modules/auth/ExternalAuthSuccess.tsx'
+import { FailedAuth } from '../../modules/auth/FailedAuth.tsx'
+import { NotAuthorized } from '../../modules/general/fallback/NotAuthorized.tsx'
+import { NotFoundPage } from '../../modules/general/fallback/NotFoundPage.tsx'
+import { NotFoundProject } from '../../modules/general/fallback/NotFoundProject.tsx'
+import { __production__ } from '../../shared/constants/config/env.ts'
+import { getPath, PathName } from '../../shared/constants/config/routerPaths.ts'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
@@ -279,10 +283,7 @@ export const platformRoutes: RouteObject[] = [
           },
           {
             path: getPath('userProfileSettingsAffiliate', PathName.userId),
-            async lazy() {
-              const ProfileSettingsAffiliate = await loadProfileSettingsModule().then((m) => m.ProfileSettingsAffiliate)
-              return { Component: ProfileSettingsAffiliate }
-            },
+            element: <Navigate to={getPath('discoveryLanding')} replace />,
           },
         ],
       },
@@ -525,13 +526,6 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
-                path: getPath('dashboardNostr', PathName.projectName),
-                async lazy() {
-                  const projectDashboardPages = await loadProjectDashboardPages()
-                  return { Component: projectDashboardPages.ProjectDashboardNostr }
-                },
-              },
-              {
                 path: getPath('dashboardNotifications', PathName.projectName),
                 async lazy() {
                   const projectDashboardPages = await loadProjectDashboardPages()
@@ -547,10 +541,7 @@ export const platformRoutes: RouteObject[] = [
               },
               {
                 path: getPath('dashboardPromote', PathName.projectName),
-                async lazy() {
-                  const projectDashboardPages = await loadProjectDashboardPages()
-                  return { Component: projectDashboardPages.ProjectDashboardPromote }
-                },
+                element: <Navigate to=".." relative="path" replace />,
               },
               {
                 path: getPath('dashboardMatching', PathName.projectName),
@@ -1346,12 +1337,7 @@ export const platformRoutes: RouteObject[] = [
 
   {
     path: getPath('ambassadorProgram'),
-    async lazy() {
-      const AmbassadorProgramPage = await import('@/modules/general/pages/AmbassadorProgramPage.tsx').then(
-        (m) => m.AmbassadorProgramPage,
-      )
-      return { Component: AmbassadorProgramPage }
-    },
+    element: <Navigate to={getPath('discoveryLanding')} replace />,
   },
 
   {

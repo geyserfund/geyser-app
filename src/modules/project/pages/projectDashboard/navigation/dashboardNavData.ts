@@ -9,9 +9,7 @@ import {
   PiHandbag,
   PiIdentificationCard,
   PiInvoice,
-  PiMegaphone,
   PiPlanet,
-  PiPlugs,
   PiProjectorScreenChart,
 } from 'react-icons/pi'
 
@@ -61,12 +59,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiHandbag,
   },
   {
-    label: 'Promote',
-    path: 'dashboardPromote',
-    type: DashboardType.growth,
-    icon: PiMegaphone,
-  },
-  {
     label: 'Matching',
     path: 'dashboardMatching',
     type: DashboardType.growth,
@@ -105,12 +97,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
   },
   // ------------------------------------------------------------ //
 
-  {
-    label: 'Nostr',
-    path: 'dashboardNostr',
-    type: DashboardType.settings,
-    icon: PiPlugs,
-  },
   {
     label: 'Notifications',
     path: 'dashboardNotifications',

@@ -32,7 +32,7 @@ const ConfigureWalletPrompt = ({ onConfigure }: { onConfigure: () => void }) => 
         flexDirection={{ base: 'column', md: 'row' }}
         spacing={3}
       >
-        <Body size="sm">{t('Configure your wallet so you can receive affiliate payouts.')}</Body>
+        <Body size="sm">{t('Configure your wallet for payments and refunds.')}</Body>
         <Button size="sm" colorScheme="blue" variant="soft" flexShrink={0} onClick={onConfigure}>
           {t('Configure your user wallet')}
         </Button>
@@ -77,7 +77,7 @@ export const ProfileWalletSettings = () => {
   return (
     <VStack p={8} spacing={8} overflowY="auto" align="flex-start" w="full">
       <H2>{t('User wallet')}</H2>
-      <Body>{t('Configure your internal Geyser wallet to receive affiliate payouts and handle refunds.')}</Body>
+      <Body>{t('Configure your internal Geyser wallet to handle payments and refunds.')}</Body>
 
       {hasWalletConfigured ? (
         <VStack spacing={6} align="flex-start" w="full">

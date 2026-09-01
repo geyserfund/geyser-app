@@ -1,11 +1,9 @@
 import { Button, HStack, IconButton, Link, useClipboard, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { PiArrowClockwiseBold, PiCopy, PiShareFat } from 'react-icons/pi'
+import { PiCopy, PiShareFat } from 'react-icons/pi'
 
-import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { useAuthContext } from '@/context'
-import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages/projectView/hooks'
@@ -14,19 +12,8 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors, standardPadding } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
-import {
-  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-  formatEffectiveAffiliatePayoutRate,
-  GEYSER_PROMOTION_FEE_RATE,
-} from '@/shared/utils/affiliatePayout.ts'
-import {
-  useProjectAmbassadorStatsQuery,
-  usePublishNostrEventMutation,
-  useUserAffiliatePartnerTermsQuery,
-} from '@/types'
+import { useProjectAmbassadorStatsQuery } from '@/types'
 import { commaFormatted, useNotification } from '@/utils'
-
-import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
 
 type LinkActionsSectionProps = {
   heroLink: string
@@ -35,39 +22,18 @@ type LinkActionsSectionProps = {
   handleCopy: () => void
 }
 
+const getHeroLink = (projectName?: string, heroId?: string) => {
+  const heroSuffix = heroId ? `?hero=${heroId}` : ''
+  return `${window.location.origin || 'https://geyser.fund'}/project/${projectName ?? ''}${heroSuffix}`
+}
+
+const getTwitterShareText = (projectTitle: string | undefined, projectShareUrl: string) => {
+  return `I just contributed to ${projectTitle ?? ''} on Geyser! Check it out: ${projectShareUrl}`
+}
+
 /** Shared link display and action buttons component */
 const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: LinkActionsSectionProps) => {
   const { t } = useTranslation()
-  const toast = useNotification()
-
-  const { createPostEvent, isPosting } = useNostrPostForFundingSuccess()
-  const [publishNostrEvent, { loading: isPublishingNostrEvent }] = usePublishNostrEventMutation()
-
-  const { project } = useProjectAtom()
-
-  const { totalSats } = useFundingFormAtom()
-
-  const handleNostrPost = async () => {
-    const event = await createPostEvent(project.name, project.keys.nostrKeys.publicKey.hex, totalSats)
-
-    if (event) {
-      await publishNostrEvent({
-        variables: { event: JSON.stringify(event) },
-        onCompleted() {
-          toast.success({
-            title: t('Post successful'),
-            description: t('Your Nostr post has been published'),
-          })
-        },
-        onError(error) {
-          toast.error({
-            title: t('Post failed'),
-            description: error.message,
-          })
-        },
-      })
-    }
-  }
 
   return (
     <>
@@ -95,26 +61,6 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
       </HStack>
 
       <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
-        {window.nostr && (
-          <Button
-            size="lg"
-            variant="solid"
-            bg="whiteAlpha.800"
-            color={lightModeColors.neutral1[11]}
-            border="1px solid"
-            borderColor={lightModeColors.neutral1[7]}
-            borderRadius={8}
-            rightIcon={<PiArrowClockwiseBold />}
-            w="full"
-            isLoading={isPublishingNostrEvent || isPosting}
-            onClick={handleNostrPost}
-            _hover={{
-              bg: 'whiteAlpha.900',
-            }}
-          >
-            {t('Post on Nostr')}
-          </Button>
-        )}
         <Button
           size="lg"
           variant="solid"
@@ -128,9 +74,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           isExternal
           href={generateTwitterShareUrl(twitterShareText)}
           w="full"
-          _hover={{
-            bg: 'whiteAlpha.900',
-          }}
+          _hover={{ bg: 'whiteAlpha.900' }}
         >
           {t('Share on X')}
         </Button>
@@ -150,20 +94,17 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
   )
 }
 
-/** Share project component for non-logged in users */
-const ShareProjectCard = ({ heroLink, heroId, twitterShareText, handleCopy }: LinkActionsSectionProps) => {
+type ShareProjectCardProps = LinkActionsSectionProps
+
+/** Share project component for non-logged-in users */
+const ShareProjectCard = (props: ShareProjectCardProps) => {
   const { t } = useTranslation()
 
   return (
-    <CardLayout w={'full'}>
+    <CardLayout w="full">
       <H2 bold>{t('Share Project')}</H2>
       <Body>{t('Spread the word to help this project become a success.')}</Body>
-      <LinkActionsSection
-        heroLink={heroLink}
-        heroId={heroId}
-        twitterShareText={twitterShareText}
-        handleCopy={handleCopy}
-      />
+      <LinkActionsSection {...props} />
     </CardLayout>
   )
 }
@@ -171,19 +112,10 @@ const ShareProjectCard = ({ heroLink, heroId, twitterShareText, handleCopy }: Li
 type AmbassadorCardProps = LinkActionsSectionProps & {
   ambassadorsCount?: number
   totalSats?: number
-  effectiveContributionPayout: string
 }
 
-/** Ambassador section for logged in users */
-const AmbassadorCard = ({
-  heroLink,
-  heroId,
-  twitterShareText,
-  handleCopy,
-  ambassadorsCount,
-  totalSats,
-  effectiveContributionPayout,
-}: AmbassadorCardProps) => {
+/** Ambassador section for logged-in users */
+const AmbassadorCard = ({ ambassadorsCount, totalSats, ...props }: AmbassadorCardProps) => {
   const { t } = useTranslation()
 
   return (
@@ -200,27 +132,17 @@ const AmbassadorCard = ({
     >
       <HStack w="full" justifyContent="start">
         <H2 bold color="black">
-          {t('Become an ambassador')}
+          {t('Share this project')}
         </H2>
       </HStack>
       <Body color="black">
-        {t('Become an Ambassador for this project by spreading the word using your ambassador link.')}{' '}
-        {t('You will earn {{rate}} of each contribution you enable.', {
-          rate: effectiveContributionPayout,
-        })}{' '}
+        {t('Help this project reach more supporters by sharing it with your network. ')}
         {t('So far, {{count}} ambassadors have enabled {{amount}} sats in contributions to this project.', {
           count: ambassadorsCount || 0,
           amount: commaFormatted(totalSats || 0),
         })}
       </Body>
-
-      <LinkActionsSection
-        heroLink={heroLink}
-        heroId={heroId}
-        twitterShareText={twitterShareText}
-        handleCopy={handleCopy}
-      />
-      <AmbassadorReferralTermsNotice />
+      <LinkActionsSection {...props} />
     </VStack>
   )
 }
@@ -230,30 +152,24 @@ export const BecomeAnAmbassador = () => {
   const { project } = useProjectAtom()
   const { user: loggedInUser, isLoggedIn } = useAuthContext()
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
-
-  const user = loggedInUser || fundingInputAfterRequest?.user
-  const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
-    skip: !user?.id,
-    variables: { where: { id: user?.id } },
-  })
-  const heroId = user?.heroId
-  const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `?hero=${heroId}` : ''}`
-
-  const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
-  const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
-  const totalSats = data?.projectGet?.ambassadors?.stats?.contributionsSum
-
-  const { onCopy } = useClipboard(heroLink)
   const toast = useNotification()
   const { getShareProjectUrl } = useProjectShare()
-  const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
-    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
-      DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-    GEYSER_PROMOTION_FEE_RATE,
-  )
 
+  const user = loggedInUser || fundingInputAfterRequest?.user
+  const heroId = user?.heroId
+  const heroLink = getHeroLink(project?.name, heroId)
   const projectShareUrl = heroId ? heroLink : getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
-  const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
+  const twitterShareText = getTwitterShareText(project?.title, projectShareUrl)
+
+  const { data } = useProjectAmbassadorStatsQuery({
+    skip: !project?.id,
+    variables: { where: { id: project?.id } },
+  })
+  const { onCopy } = useClipboard(heroLink)
+
+  if (!project) {
+    return null
+  }
 
   const handleCopy = () => {
     onCopy()
@@ -263,24 +179,17 @@ export const BecomeAnAmbassador = () => {
     })
   }
 
-  if (!project) {
-    return null
-  }
-
   const sharedProps = {
     heroLink,
     heroId,
     twitterShareText,
     handleCopy,
   }
+  const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
+  const totalSats = data?.projectGet?.ambassadors?.stats?.contributionsSum
 
   return isLoggedIn ? (
-    <AmbassadorCard
-      {...sharedProps}
-      ambassadorsCount={ambassadorsCount}
-      totalSats={totalSats}
-      effectiveContributionPayout={effectiveContributionPayout}
-    />
+    <AmbassadorCard {...sharedProps} ambassadorsCount={ambassadorsCount} totalSats={totalSats} />
   ) : (
     <ShareProjectCard {...sharedProps} />
   )

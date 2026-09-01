@@ -27,23 +27,6 @@ export const FRAGMENT_PROJECT = gql`
   }
 `
 
-export const FRAGMENT_PROJECT_NOSTR_KEYS = gql`
-  fragment ProjectNostrKeys on Project {
-    id
-    name
-    keys {
-      nostrKeys {
-        privateKey {
-          nsec
-        }
-        publicKey {
-          npub
-        }
-      }
-    }
-  }
-`
-
 export const FRAGMENT_PROJECT_AVATAR = gql`
   fragment ProjectAvatar on Project {
     id
@@ -63,21 +46,9 @@ export const FRAGMENT_PROJECT_LOCATION = gql`
   }
 `
 
-export const FRAGMENT_PROJECT_KEYS = gql`
-  fragment ProjectKeys on ProjectKeys {
-    nostrKeys {
-      publicKey {
-        hex
-        npub
-      }
-    }
-  }
-`
-
 export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_PAGE_CREATOR}
   ${FRAGMENT_PROJECT_LOCATION}
-  ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
   ${FRAGMENT_PROJECT_REVIEW_PUBLIC}
   fragment ProjectPageBody on Project {
@@ -131,9 +102,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
       id
       label
     }
-    keys {
-      ...ProjectKeys
-    }
     owners {
       id
       user {
@@ -159,7 +127,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
 export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
   ${FRAGMENT_PROJECT_PAGE_CREATOR}
   ${FRAGMENT_PROJECT_LOCATION}
-  ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
   ${FRAGMENT_PROJECT_REVIEW}
   fragment ProjectPageBodyCreator on Project {
@@ -222,9 +189,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     tags {
       id
       label
-    }
-    keys {
-      ...ProjectKeys
     }
     owners {
       id

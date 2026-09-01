@@ -14,57 +14,34 @@ export const BadgesFAQ = () => {
       <Text variant="h3">FAQ</Text>
       <Accordion allowMultiple>
         <AccordionItem>
-          <AccordionButton>{t('What is Nostr')}</AccordionButton>
-          <AccordionPanel>
-            <Trans
-              i18nKey={
-                "Nostr stands for 'Notes and Other Stuff Transmitted by Relays'. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out <1>nostr.how</1> for more info"
-              }
-            >
-              {
-                "Nostr stands for 'Notes and Other Stuff Transmitted by Relays'. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out "
-              }
-              <Link href="https://nostr.how">nostr.how</Link> for more info.
-            </Trans>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem>
-          <AccordionButton>{t('What are Nostr Badges')}</AccordionButton>
+          <AccordionButton>{t('What are Geyser badges')}</AccordionButton>
           <AccordionPanel>
             {t(
-              'Nostr badges are a new event on Nostr that allows users to send and receive digital assets with an image, title and description. They are NIP-58 on Nostr',
+              'Geyser badges are digital recognitions with an image, title, and description that celebrate meaningful contributions and achievements.',
             )}{' '}
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>{t('How to redeem my Nostr badge')}</AccordionButton>
+          <AccordionButton>{t('How do I earn a Geyser badge?')}</AccordionButton>
           <AccordionPanel>
-            {t(
-              'You can claim your Geyser badges very easily on your Geyser profile. Login with Nostr, go to profile and click &apos;claim&apos;.',
-            )}
+            {t('Badges are awarded automatically when you reach the associated milestone or recognition criteria.')}
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
           <AccordionButton>{t('Where can I see my Geyser badges?')}</AccordionButton>
           <AccordionPanel>
-            {t(
-              'You can access your Geyser badges on any Nostr platform that showcases Nostr badges such as badges.page and Amethist.',
-            )}{' '}
+            {t('You can see your Geyser badges on your profile and in the achievements section.')}{' '}
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>{t('Who can edit and update Nostr Badges?')}</AccordionButton>
-          <AccordionPanel>
-            {t(
-              'The issuer of the badges can edit information pertaining to the badges, but not revoke the badge at any point. Therefore Geyser can make edits to the badges if this is ever needed',
-            )}
-          </AccordionPanel>
+          <AccordionButton>{t('Who can edit and update Geyser badges?')}</AccordionButton>
+          <AccordionPanel>{t('Geyser manages badge information and may update it when needed.')}</AccordionPanel>
         </AccordionItem>
         <AccordionItem>
           <AccordionButton>{t('Will there be more badges?')}</AccordionButton>
           <AccordionPanel>
             {t(
-              'Yes! We intend to create more badges when we feel like there is a particular reason to recognize hard work or important achievements. But don&apos;t worry, we will not &apos;flood the system with badges&apos;.',
+              'Yes! We intend to create more badges when there is a particular reason to recognize hard work or important achievements.',
             )}
           </AccordionPanel>
         </AccordionItem>

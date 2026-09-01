@@ -2712,5 +2712,12 @@
   "Managed payment methods": "Managed payment methods",
   "Strike Bitcoin and Lightning": "Strike Bitcoin and Lightning",
   "At least one managed payment provider must be ready before this project can launch.": "At least one managed payment provider must be ready before this project can launch.",
-  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal."
+  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.",
+  "100%": "100%",
+  "Configure your wallet for payments and refunds.": "Configure your wallet for payments and refunds.",
+  "Configure your internal Geyser wallet to handle payments and refunds.": "Configure your internal Geyser wallet to handle payments and refunds.",
+  "Share this project": "Share this project",
+  "Help this project reach more supporters by sharing it with your network. ": "Help this project reach more supporters by sharing it with your network. ",
+  "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.": "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.",
+  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters."
 }

@@ -9,14 +9,13 @@ import {
 } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/config/routerPaths.ts'
 
-import { BottomNavBarContainer } from '../components/bottomNav'
+import { BottomNavBarContainer } from '../components/bottomNav/BottomNavContainer.tsx'
 
 export enum BottomNavItemKey {
   donate = 'donate',
   fundraise = 'fundraise',
-  earn = 'earn',
   news = 'news',
 }
 
@@ -57,12 +56,6 @@ export const DiscoveryBottomNav = () => {
       isActive:
         matchesRoute(location.pathname, getPath('discoveryCreator')) ||
         matchesRoute(location.pathname, getPath('launchStart')),
-    },
-    {
-      label: t('Earn'),
-      key: BottomNavItemKey.earn,
-      path: getPath('ambassadorProgram'),
-      isActive: matchesRoute(location.pathname, getPath('ambassadorProgram')),
     },
     {
       label: t('News'),

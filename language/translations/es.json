@@ -1411,7 +1411,7 @@
   "Pick a launch date for your project. The countdown will start from that date and time. The project will be visible but not fundable yet. You can chose to keep it private until its launch. You can also edit the launch date later.": "Elige una fecha de lanzamiento para tu proyecto. La cuenta regresiva comenzará a partir de esa fecha y hora. El proyecto será visible pero aún no se podrá financiar. Puedes elegir mantenerlo privado hasta su lanzamiento. También puedes editar la fecha de lanzamiento más tarde.",
   "The project will not automatically launch, you will still need to launch manually.": "El proyecto no se lanzará automáticamente, aún tendrás que lanzarlo manualmente.",
   "Select date and time": "Seleccionar fecha y hora",
-  "Please try again later.": "Por favor, inténtalo de nuevo más tarde.",
+  "Please try again later.": "Inténtalo de nuevo más tarde.",
   "Funding Goals": "Objetivos de financiación",
   "Set one goal or more to help your contributors understand how you plan to use the funds. If you create multiple goals, contributions will go towards the default goal. You can re-order the goals to set a different default goal at any time.": "Establece uno o más objetivos para ayudar a tus contribuyentes a entender cómo planeas utilizar los fondos. Si creas varios objetivos, las contribuciones se destinarán al objetivo predeterminado. Puedes reordenar los objetivos para establecer un objetivo predeterminado diferente en cualquier momento.",
   "Create a goal": "Crear un objetivo",
@@ -2189,7 +2189,6 @@
   "Unable to verify this Lightning Address. Please try again.": "Unable to verify this Lightning Address. Please try again.",
   "Payment details saved": "Payment details saved",
   "Failed to save payment details": "Failed to save payment details",
-  "Please try again later.": "Inténtalo de nuevo más tarde.",
   "Configure Stripe": "Configure Stripe",
   "Recommended": "Recommended",
   "Contributions are subject to an additional Stripe processing fee.": "Contributions are subject to an additional Stripe processing fee.",
@@ -2233,5 +2232,12 @@
   "Managed payment methods": "Métodos de pago gestionados",
   "Strike Bitcoin and Lightning": "Strike Bitcoin y Lightning",
   "At least one managed payment provider must be ready before this project can launch.": "Al menos un proveedor de pagos gestionado debe estar listo antes de lanzar este proyecto.",
-  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Las contribuciones a esta Subvención Recuperable se reciben en cuentas gestionadas por Geyser y se atribuyen a su objetivo protegido."
+  "Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.": "Las contribuciones a esta Subvención Recuperable se reciben en cuentas gestionadas por Geyser y se atribuyen a su objetivo protegido.",
+  "100%": "100%",
+  "Configure your wallet for payments and refunds.": "Configura tu billetera para pagos y reembolsos.",
+  "Configure your internal Geyser wallet to handle payments and refunds.": "Configura tu billetera interna de Geyser para manejar pagos y reembolsos.",
+  "Share this project": "Comparte este proyecto",
+  "Help this project reach more supporters by sharing it with your network. ": "Ayuda a que este proyecto llegue a más patrocinadores compartiéndolo con tu red.",
+  "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.": "No se han habilitado contribuciones a través de compartir aún. Comparte el proyecto para ayudarlo a llegar a más patrocinadores.",
+  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Las personas que difunden la palabra sobre los proyectos de Geyser al compartir ayudan a conectar los proyectos con los patrocinadores."
 }

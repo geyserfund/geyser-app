@@ -6,10 +6,10 @@ import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { PiQuestion } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
-import { LNAddressEvaluationState } from '@/modules/project/pages/projectCreation/hooks/useWalletForm.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { lightModeColors } from '@/shared/styles'
+import { LNAddressEvaluationState } from '@/shared/types/wallet'
 
 import { LightningAddressValidation, LightningPayoutFormData } from '../hooks/usePayoutWithLightningForm.ts'
 

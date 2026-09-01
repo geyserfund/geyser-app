@@ -2,7 +2,7 @@ import { LightningAddressConnectionDetails, Maybe, User, Wallet } from '../../ty
 
 export const getUserLightningAddress = (user?: User) => {
   const connectionDetails = (
-    user?.wallet?.connectionDetails.__typename === 'LightningAddressConnectionDetails'
+    user?.wallet?.connectionDetails?.__typename === 'LightningAddressConnectionDetails'
       ? user.wallet?.connectionDetails
       : {}
   ) as LightningAddressConnectionDetails

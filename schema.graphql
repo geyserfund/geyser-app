@@ -51,6 +51,7 @@ type Query {
   acelerandoVipLeaderboard: AcelerandoVipLeaderboardResponse!
   acelerandoVipMyPosition: AcelerandoVipMyPositionResponse
   payment(input: PaymentGetInput!): Payment!
+  paymentRecoveryByContribution(input: PaymentRecoveryByContributionInput!): PaymentRecoveryByContributionResponse!
   paymentsGet(input: PaymentsGetInput): PaymentsGetResponse!
 
   """
@@ -84,10 +85,6 @@ type Query {
   post(id: BigInt!): Post
   postEmailSegmentSizeGet(input: PostEmailSegmentSizeGetInput!): Int!
   getWallet(id: BigInt!): Wallet!
-
-  """
-  Returns the public key of the Lightning node linked to a project, if there is one.
-  """
   getProjectPubkey(projectId: BigInt!): String @deprecated
   lightningAddressVerify(lightningAddress: String): LightningAddressVerifyResponse!
 
@@ -107,6 +104,10 @@ type Query {
   impactFundDashboardApplications(
     input: ImpactFundDashboardApplicationsInput!
   ): ImpactFundDashboardApplicationsResponse!
+  impactFundFieldPartnerLeaderboard(
+    input: ImpactFundFieldPartnerLeaderboardInput
+  ): ImpactFundFieldPartnerLeaderboardResponse!
+  impactFundLabifCountryEligibility(countryCode: String): ImpactFundLabifCountryEligibility!
   badges: [Badge!]!
   userBadge(userBadgeId: BigInt!): UserBadge
   userBadges(input: BadgesGetInput!): [UserBadge!]!
@@ -115,6 +116,7 @@ type Query {
   guardianUsersGet(input: GuardianUsersGetInput!): GuardianUsersGetResponse
   userNotificationSettingsGet(userId: BigInt!): ProfileNotificationSettings!
   projectNotificationSettingsGet(projectId: BigInt!): CreatorNotificationSettings!
+  newsletterPreferencesGet(userId: BigInt!): NewsletterPreferences!
   paymentInvoiceSanctionCheckStatusGet(
     input: PaymentInvoiceSanctionCheckStatusGetInput!
   ): PaymentInvoiceSanctionCheckStatusResponse!
@@ -124,13 +126,8 @@ type Query {
   projectRewardsTrendingQuarterlyGet: [ProjectRewardTrendingQuarterlyGetRow!]!
   projectRewardsMostSoldGet(input: GetProjectRewardsMostSoldInput!): [ProjectRewardMostSoldGetRow!]!
   projectRewardsCatalogGet(input: GetProjectRewardsCatalogInput!): ProjectRewardsCatalogGetResponse!
-  userSubscription(id: BigInt!): UserSubscription
-  userSubscriptions(input: UserSubscriptionsInput!): [UserSubscription!]!
-  projectSubscriptionPlan(id: BigInt!): ProjectSubscriptionPlan
-  projectSubscriptionPlans(input: ProjectSubscriptionPlansInput!): [ProjectSubscriptionPlan!]!
+  recurringContributionRenewalContext(managementNonce: String!): RecurringContribution!
   projectStripeConnectStatus(projectId: BigInt!): StripeConnectStatus!
-  geyserPromotionsContributionStats(input: GeyserPromotionsContributionStatsInput!): GeyserPromotionsContributionStats!
-  promotionNetworkContributionStats: GeyserPromotionsContributionStats!
   projectShippingConfigsGet(input: ProjectShippingConfigsGetInput!): [ShippingConfig!]!
   shippingAddressesGet(input: ShippingAddressesGetInput!): [ShippingAddress!]!
   pledgeRefundGet(input: PledgeRefundGetInput!): PledgeRefundGetResponse
@@ -140,12 +137,14 @@ type Query {
   payoutActive(projectId: BigInt!): PayoutGetResponse
   payoutProcessing(projectId: BigInt!): PayoutGetResponse
   payoutLatest(projectId: BigInt!): PayoutGetResponse
+  userWalletWithdrawActive: UserWalletWithdrawGetResponse
+  userWalletWithdrawLatest: UserWalletWithdrawGetResponse
 
   """
-  Status of the durable direct AON claim attempt for a project, if any.
-  NOT_STARTED: no attempt has been reserved. PENDING: reserved or broadcast, awaiting
-  confirmation. CONFIRMED: the claim() transaction was mined and validated. FAILED: the
-  most recent attempt failed or reverted; the creator may retry with a new signed transaction.
+  Status of the durable direct AON claim payout/payment for a project, if any.
+  NOT_STARTED: no claim payout/payment. PENDING: claim payout/payment in flight.
+  CONFIRMED: claim payout completed / payment paid. FAILED: latest claim payment failed;
+  the creator may retry with a new signed transaction.
   """
   aonClaimStatus(projectId: BigInt!): AonClaimStatusResponse!
 }
@@ -163,6 +162,9 @@ type Mutation {
   projectPublish(input: ProjectPublishMutationInput!): Project!
   projectPreLaunch(input: ProjectPreLaunchMutationInput!): Project!
   projectRskEoaSet(input: ProjectRskEoaSetInput!): Project!
+  projectWalletConfigurationContributionAttemptNotify(
+    input: ProjectWalletConfigurationContributionAttemptNotifyInput!
+  ): ProjectWalletConfigurationContributionAttemptNotifyResponse!
   projectPutInReview(input: ProjectPutInReviewMutationInput!): Project!
   projectClose(input: ProjectCloseMutationInput!): Project!
   updateUser(input: UpdateUserInput!): User!
@@ -214,12 +216,14 @@ type Mutation {
   Mark an AON goal as claimed (Accountant only)
   """
   projectAonGoalMarkClaimed(input: ProjectAonGoalStatusUpdateInput!): ProjectAonGoalStatusUpdateResponse!
+  projectMatchingCreate(input: ProjectMatchingCreateInput!): ProjectMatching!
+  projectMatchingUpdate(input: ProjectMatchingUpdateInput!): ProjectMatching!
+  projectMatchingDelete(input: ProjectMatchingDeleteInput!): ProjectMatchingDeleteResponse!
   postCreate(input: PostCreateInput!): Post!
   postUpdate(input: PostUpdateInput!): Post!
   postPublish(input: PostPublishInput!): Post!
   postDelete(id: BigInt!): Post!
   postSendByEmail(input: PostSendByEmailInput!): PostSendByEmailResponse!
-  postRepostOnNostr(input: PostRepostOnNostrInput!): PostRepostOnNostrResponse!
 
   """
   This operation is currently not supported.
@@ -235,7 +239,6 @@ type Mutation {
   impactFundApplicationFundingSet(input: ImpactFundApplicationFundingSetInput!): ImpactFundApplication!
   impactFundApplicationNoteCreate(input: ImpactFundApplicationNoteCreateInput!): ImpactFundApplicationNote!
   impactFundApplicationNoteUpdate(input: ImpactFundApplicationNoteUpdateInput!): ImpactFundApplicationNote!
-  userBadgeAward(userBadgeId: BigInt!): UserBadge!
   claimBadge(input: BadgeClaimInput!): UserBadge!
 
   """
@@ -245,15 +248,22 @@ type Mutation {
   sendOTPByEmail(input: SendOtpByEmailInput!): OTPResponse!
   userNotificationConfigurationValueUpdate(userNotificationConfigurationId: BigInt!, value: String!): Boolean
   creatorNotificationConfigurationValueUpdate(creatorNotificationConfigurationId: BigInt!, value: String!): Boolean
-  publishNostrEvent(event: String!): Boolean
+  newsletterSubscribe(beehiivNewsletterInput: BeehiivNewsletterSubscribeInput!): NewsletterPreferences!
+  newsletterPreferencesUpdate(input: NewsletterPreferencesUpdateInput!): NewsletterPreferences!
+  newsletterStatusUpdate(input: NewsletterStatusUpdateInput!): NewsletterPreferences!
   userVerificationTokenGenerate(input: UserVerificationTokenGenerateInput!): UserVerificationTokenGenerateResponse!
   userTaxProfileUpdate(input: UserTaxProfileUpdateInput!): UserTaxProfile!
   projectReviewRequest(input: ProjectReviewRequestInput!): ProjectReview!
   projectReviewSubmit(input: ProjectReviewSubmitInput!): ProjectReview!
-  ambassadorAdd(input: AmbassadorAddInput!): Ambassador
-  ambassadorUpdate(input: AmbassadorUpdateInput!): Ambassador
-  userSubscriptionUpdate(input: UpdateUserSubscriptionInput!): UserSubscription!
-  userSubscriptionCancel(id: BigInt!): UserSubscription!
+  recurringDonationCreate(input: RecurringDonationCreateInput!): RecurringContributionCheckoutResponse!
+  projectSubscriptionStart(input: ProjectSubscriptionStartInput!): RecurringContributionCheckoutResponse!
+  recurringContributionCancel(input: RecurringContributionCancelInput!): RecurringContribution!
+  recurringContributionPortalSessionCreate(
+    input: RecurringContributionPortalSessionCreateInput!
+  ): RecurringContributionPortalSession!
+  recurringContributionRenewalCreate(
+    input: RecurringContributionRenewalCreateInput!
+  ): RecurringContributionCheckoutResponse!
   projectSubscriptionPlanCreate(input: CreateProjectSubscriptionPlanInput!): ProjectSubscriptionPlan!
   projectSubscriptionPlanUpdate(input: UpdateProjectSubscriptionPlanInput!): ProjectSubscriptionPlan!
   projectSubscriptionPlanDelete(id: BigInt!): Boolean!
@@ -303,6 +313,11 @@ type Mutation {
   Only used for retry flows (funds coming from user's RSK address after previous swap was refunded).
   """
   payoutCancel(input: PayoutCancelInput!): PayoutResponse!
+  userWalletWithdrawPrepare: UserWalletWithdrawRequestResponse!
+  userWalletWithdrawPaymentPrepare(
+    input: UserWalletWithdrawPaymentCreateInput!
+  ): UserWalletWithdrawPaymentCreateResponse!
+  userWalletWithdrawPaymentInitiate(input: UserWalletWithdrawInitiateInput!): UserWalletWithdrawInitiateResponse!
 
   """
   Prepare an AON claim-to-EOA: returns claimable amount, creator address, and claim(0) calldata.
@@ -312,69 +327,10 @@ type Mutation {
 
   """
   Broadcast a creator-signed AON claim() transaction. Validates the signed tx targets the
-  project AON contract and calls claim with processingFee 0, then cancels any in-flight
-  PENDING/PROCESSING swap payouts for the project.
+  project AON contract and calls claim with processingFee 0, then persists a project Payout +
+  RSK_AON_CLAIM Payment before broadcast.
   """
   aonClaimBroadcast(projectId: BigInt!, signedTxHex: String!): AonClaimBroadcastResponse!
-
-  """
-  Accountant-only: mark a durable AON claim attempt as CONFIRMED after validating the
-  on-chain Claimed() receipt.
-  """
-  aonClaimAttemptConfirm(input: AonClaimAttemptConfirmInput!): AonClaimAttemptMutationResponse!
-
-  """
-  Accountant-only: mark a durable AON claim attempt as FAILED so the project can retry.
-  """
-  aonClaimAttemptFail(input: AonClaimAttemptFailInput!): AonClaimAttemptMutationResponse!
-}
-
-type AonClaimPrepareResponse {
-  contractAddress: String!
-  claimableAmountSats: Int!
-  processingFeeSats: Int!
-  creatorAddress: String!
-  """
-  Encoded claim(processingFee) calldata for the client to include when signing.
-  """
-  claimCalldata: String!
-  simulationOk: Boolean!
-}
-
-enum AonClaimStatus {
-  NOT_STARTED
-  PENDING
-  CONFIRMED
-  FAILED
-}
-
-type AonClaimStatusResponse {
-  status: AonClaimStatus!
-  txHash: String
-  """
-  Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes.
-  """
-  failureReason: String
-}
-
-input AonClaimAttemptConfirmInput {
-  projectId: BigInt!
-  txHash: String!
-}
-
-input AonClaimAttemptFailInput {
-  projectId: BigInt!
-  txHash: String!
-  failureReason: String
-}
-
-type AonClaimAttemptMutationResponse {
-  success: Boolean!
-  status: AonClaimStatus!
-}
-
-type AonClaimBroadcastResponse {
-  txHash: String!
 }
 
 type Subscription {
@@ -479,8 +435,17 @@ input ProjectCloseMutationInput {
 input ProjectRskEoaSetInput {
   projectId: BigInt!
   rskEoa: String!
-  rskPublicKey: String!
-  derivationPath: String!
+  rskPublicKey: String
+  derivationPath: String
+}
+
+input ProjectWalletConfigurationContributionAttemptNotifyInput {
+  projectId: BigInt!
+}
+
+type ProjectWalletConfigurationContributionAttemptNotifyResponse implements MutationResponse {
+  success: Boolean!
+  message: String
 }
 
 type ProjectDeleteResponse implements MutationResponse {
@@ -597,7 +562,6 @@ type Project {
   contributions: [Contribution!]!
   contributionsCount: Int
   location: Location
-  keys: ProjectKeys!
 
   """
   Wallets linked to a Project.
@@ -638,15 +602,18 @@ type Project {
   Funding strategy
   """
   fundingStrategy: ProjectFundingStrategy
-  fundingSummary: ProjectFundingSummary!
   isRecoverableGrant: Boolean!
   fieldPartner: User
   launchStrategy: String
+  feedbackSuggestion: ProjectFeedbackSuggestion
+  fundingSummary: ProjectFundingSummary!
   aonGoal: ProjectAonGoal
   impactFundRecipient: ProjectImpactFundRecipient
   rskEoa: String
   rskEoas: [ProjectRskEoa!]!
   directPaymentDetails: DirectPaymentDetails
+  activeMatching: ProjectMatching
+  matchings: [ProjectMatching!]!
 
   """
   By default, returns all the posts of a project, both published and unpublished but not deleted.
@@ -656,17 +623,9 @@ type Project {
   posts(input: ProjectPostsGetInput): [Post!]!
   reviews: [ProjectReview!]!
   ambassadors: ProjectAmbassadorsConnection!
+  subscriptionPlans: [ProjectSubscriptionPlan!]!
+  recurringContributionSupport: RecurringContributionSupport!
   paymentMethods: PaymentMethods!
-}
-
-type ProjectFundingSummary {
-  raisedSats: BigInt!
-  goalSats: BigInt
-  percentageFunded: Int
-  status: String!
-  endsAt: Date
-  isFundingOpen: Boolean!
-  isFundingFailed: Boolean!
 }
 
 type ProjectRskEoa {
@@ -680,6 +639,24 @@ type ProjectRskEoa {
   replacedAt: Date
 }
 
+type ProjectFeedbackSuggestion {
+  launchStrategy: String!
+  status: ProjectFeedbackSuggestionStatus!
+  summary: String
+  mainIssue: String
+  feedbackPoints: [String!]!
+  emailSubject: String
+  emailBodyText: String
+  generatedAt: Date
+  failureReason: String
+}
+
+enum ProjectFeedbackSuggestionStatus {
+  PENDING
+  READY
+  FAILED
+}
+
 type ProjectImpactFundRecipient {
   applicationId: BigInt!
   impactFundId: BigInt!
@@ -690,6 +667,30 @@ type ProjectImpactFundRecipient {
   awardedAt: Date
 }
 
+type ProjectFundingSummary {
+  fundingStrategy: ProjectFundingStrategy!
+  isRecoverableGrant: Boolean!
+  raisedSats: BigInt!
+  raisedUsdCent: Int!
+  goalSats: BigInt
+  percentageFunded: Int
+  status: String!
+  endsAt: Date
+  isFundingOpen: Boolean!
+  isFundingFailed: Boolean!
+  matching: ProjectMatchingFundingSummary!
+  goals: ProjectGoalFundingSummary!
+}
+
+type ProjectMatchingFundingSummary {
+  activeMatching: ProjectMatching
+}
+
+type ProjectGoalFundingSummary {
+  completed: [ProjectGoal!]!
+  inProgress: [ProjectGoal!]!
+}
+
 type ProjectAonGoal {
   balance: Int
   goalAmount: Int!
@@ -697,9 +698,9 @@ type ProjectAonGoal {
   status: ProjectAonGoalStatus
   contractAddress: String
   contractCreationTxId: String
+  hasCompletedPayout: Boolean!
   deployedAt: Date
   endsAt: Date
-  hasCompletedPayout: Boolean!
   createdAt: Date!
   updatedAt: Date!
 }
@@ -736,6 +737,7 @@ type User {
   id: BigInt!
   username: String!
   heroId: String!
+  createdAt: Date!
   imageUrl: String
   bio: String
   location: String
@@ -770,10 +772,8 @@ type User {
   guardianType: GuardianType
   ranking: BigInt @deprecated(reason: "Use heroStats.rank instead")
   taxProfile: UserTaxProfile
-  affiliatePartnerTerms: AffiliatePartnerTerms!
-  affiliatePartnerPayoutSummary: AffiliatePartnerPayoutSummary!
-  affiliatePartnerPayouts: [AffiliatePartnerPayout!]!
   isFieldPartner: Boolean!
+  heroProfile: UserHeroProfile!
   accountKeys: UserAccountKeys
 
   """
@@ -788,6 +788,7 @@ type User {
   """
   posts(input: UserPostsGetInput): [Post!]!
   complianceDetails: UserComplianceDetails!
+  recurringContributions: [RecurringContribution!]!
 }
 
 type ProjectsSummary {
@@ -805,25 +806,6 @@ type ProjectsSummary {
   Total of satoshis raised by projects on the platform.
   """
   fundedTotal: BigInt
-}
-
-type ProjectKeys {
-  nostrKeys: NostrKeys!
-}
-
-type NostrKeys {
-  publicKey: NostrPublicKey!
-  privateKey: NostrPrivateKey
-}
-
-type NostrPublicKey {
-  hex: String!
-  npub: String!
-}
-
-type NostrPrivateKey {
-  hex: String!
-  nsec: String!
 }
 
 type ProjectsResponse {
@@ -901,15 +883,6 @@ input CreateProjectInput {
   referrerHeroId: String
   fundingStrategy: ProjectFundingStrategy
   isRecoverableGrant: Boolean
-}
-
-type ProjectReferrersSearchResult {
-  fieldPartners: [User!]!
-  others: [User!]!
-}
-
-input ProjectReferrersSearchInput {
-  heroId: String
 }
 
 input UpdateProjectInput {
@@ -1030,11 +1003,6 @@ input UniqueProjectQueryInput {
   Unique name for the project. Used for the project URL and lightning address.
   """
   name: String
-
-  """
-  Project's Nostr Public Key in HEX format
-  """
-  nostrPublicKey: String
 }
 
 input ProjectsGetQueryInput {
@@ -1057,6 +1025,7 @@ input ProjectsGetWhereInput {
   Unique name for the project. Used for the project URL and lightning address.
   """
   name: String
+
   """
   Unique names for projects. Used to batch project lookups by project URL names.
   """
@@ -1076,6 +1045,7 @@ input ProjectsGetWhereInput {
   isRecoverableGrant: Boolean
   aonGoalReached: Boolean
   ownerId: BigInt
+  hasFeedbackSuggestion: Boolean
 }
 
 input ProjectsOrderByInput {
@@ -1218,7 +1188,6 @@ type UserAccountPasswordFundsSummary {
   pledgedSats: BigInt!
   affectedTiaProjects: [AccountPasswordAffectedProject!]!
   legacyTiaProjects: [AccountPasswordAffectedProject!]!
-  pendingTiaProjects: [AccountPasswordAffectedProject!]!
 }
 
 type AccountPasswordAffectedProject {
@@ -1231,36 +1200,9 @@ type AccountPasswordAffectedProject {
   balanceSats: BigInt!
 }
 
-type AffiliatePartnerTerms {
-  contributionReferralPayoutRate: Float!
-  projectReferralPayoutRate: Float!
-  projectReferralPayoutCapSats: Int!
-}
-
-type AffiliatePartnerPayoutSummary {
-  totalEarned: Int!
-  totalPending: Int!
-}
-
-type AffiliatePartnerPayout {
-  id: BigInt!
-  uuid: String!
-  amount: Int!
-  status: AffiliatePayoutStatus!
-  source: AffiliatePartnerPayoutSource!
-  project: Project
-  createdAt: Date!
-  paidAt: Date
-}
-
-enum AffiliatePayoutStatus {
-  PENDING
-  PAID
-}
-
-enum AffiliatePartnerPayoutSource {
-  CONTRIBUTION_REFERRAL
-  PROJECT_REFERRAL
+type ProjectReferrersSearchResult {
+  fieldPartners: [User!]!
+  others: [User!]!
 }
 
 type CreatorTrustStats {
@@ -1397,6 +1339,10 @@ input UserGetInput {
   heroId: String
 }
 
+input ProjectReferrersSearchInput {
+  heroId: String
+}
+
 input EmailVerifyInput {
   otpVerificationToken: String!
   otp: Int!
@@ -1409,6 +1355,62 @@ enum GuardianType {
   WARRIOR
 }
 
+type UserHeroProfile {
+  trust: UserHeroTrust!
+  impact: UserHeroImpact!
+  projects(input: UserHeroProjectsInput!): UserHeroProjectsResponse!
+}
+
+type UserHeroTrust {
+  identityVerified: Boolean!
+  communityRole: HeroCommunityRole
+}
+
+enum HeroCommunityRole {
+  FIELD_PARTNER
+}
+
+type UserHeroImpact {
+  built: UserHeroImpactStat!
+  backed: UserHeroImpactStat!
+  enabled: UserHeroImpactStat!
+  onboarded: UserHeroImpactStat!
+}
+
+type UserHeroImpactStat {
+  projectsCount: Int!
+  amountSats: BigInt!
+}
+
+enum HeroProjectCategory {
+  BUILT
+  BACKED
+  ONBOARDED
+}
+
+enum HeroProjectRelationship {
+  CONTRIBUTED
+  ENABLED
+}
+
+input UserHeroProjectsInput {
+  category: HeroProjectCategory!
+  pagination: PaginationInput
+}
+
+type UserHeroProject {
+  project: Project!
+  relationships: [HeroProjectRelationship!]!
+  contributedSats: BigInt!
+  enabledSats: BigInt!
+  lastActivityAt: Date!
+}
+
+type UserHeroProjectsResponse {
+  projects: [UserHeroProject!]!
+  pagination: CursorPaginationResponse!
+}
+
 input UserAccountKeysUpdateInput {
   encryptedSeed: String!
   encryptedMnemonic: String!
@@ -1416,16 +1418,16 @@ input UserAccountKeysUpdateInput {
   projectRskEoas: [ProjectRskEoaRotationInput!]
 }
 
+input RskKeyPairInput {
+  publicKey: String!
+  address: String!
+  derivationPath: String!
+}
+
 input ProjectRskEoaRotationInput {
   projectId: BigInt!
   rskEoa: String!
   rskPublicKey: String!
-  derivationPath: String!
-}
-
-input RskKeyPairInput {
-  publicKey: String!
-  address: String!
   derivationPath: String!
 }
 
@@ -1619,7 +1621,11 @@ type Contribution {
   projectGoalId: BigInt
   isSubscription: Boolean!
   payments: [Payment!]!
+  matching: ProjectMatching
+  matchedAmountSats: Int!
+  matchedAmountUsdCent: Int!
   creatorTaxProfile: UserTaxProfile
+  recurringContribution: RecurringContribution
 }
 
 type Swap {
@@ -1647,12 +1653,23 @@ type ContributionPaymentsDetails {
   lightning: ContributionLightningPaymentDetails
   lightningToRskSwap: ContributionLightningToRskSwapPaymentDetails
   onChainToRskSwap: ContributionOnChainToRskSwapPaymentDetails
+  strike: ContributionStrikePaymentDetails
+  strikeLightning: ContributionStrikePaymentDetails
+  strikeOnChain: ContributionStrikePaymentDetails
 }
 
 type ContributionFiatPaymentDetails {
   stripeClientSecret: String!
   stripeAccountId: String!
   fees: [PaymentFee!]!
+  paymentId: BigInt!
+  amountDue: Int!
+  amountDueCurrency: PaymentCurrency!
+}
+
+type ContributionStrikePaymentDetails {
+  paymentRequest: String
+  address: String
   paymentId: BigInt!
   amountDue: Int!
   amountDueCurrency: PaymentCurrency!
@@ -1753,6 +1770,7 @@ input ContributionPaymentsInput {
   lightning: ContributionLightningPaymentDetailsInput
   lightningToRskSwap: ContributionLightningToRskSwapPaymentDetailsInput
   onChainToRskSwap: ContributionOnChainToRskSwapPaymentDetailsInput
+  strike: ContributionStrikePaymentDetailsInput
 }
 
 input ContributionPaymentsAddInput {
@@ -1763,6 +1781,16 @@ input ContributionPaymentsAddInput {
 input ContributionFiatPaymentDetailsInput {
   create: Boolean
   stripe: ContributionFiatPaymentDetailsStripeInput!
+}
+
+enum StrikePaymentRail {
+  LIGHTNING
+  ON_CHAIN
+}
+
+input ContributionStrikePaymentDetailsInput {
+  create: Boolean
+  rail: StrikePaymentRail!
 }
 
 input ContributionFiatToLightningSwapPaymentDetailsInput {
@@ -1784,6 +1812,7 @@ input ContributionLightningToRskSwapPaymentDetailsBoltzInput {
   claimPublicKey: String!
   claimAddress: String!
   preimageHash: String!
+  recovery: ContributionSwapRecoveryInput
 }
 
 input ContributionOnChainToRskSwapPaymentDetailsInput {
@@ -1795,10 +1824,18 @@ input ContributionOnChainToRskSwapPaymentDetailsBoltzInput {
   claimPublicKey: String!
   claimAddress: String!
   preimageHash: String!
+  recovery: ContributionSwapRecoveryInput
+}
+
+input ContributionSwapRecoveryInput {
+  encryptedPrivateKey: String!
+  encryptionVersion: String!
+  encryptionAlgorithm: String!
+  contributorRskAddress: String!
+  contributorRskPublicKey: String!
 }
 
 input ContributionLightningPaymentDetailsInput {
-  zapRequest: String
   create: Boolean
 }
 
@@ -1823,7 +1860,6 @@ input ContributionMetadataInput {
   media: String
   privateComment: String
   followProject: Boolean
-  subscribeToGeyserEmails: Boolean
   guardianBadges: [GuardianType!]
 }
 
@@ -1909,9 +1945,13 @@ input GetContributionsOrderByInput {
 }
 
 input SubscriptionPaymentConfirmationInput {
-  userSubscriptionUuid: String!
+  userSubscriptionUuid: String
+  recurringContributionUuid: String
   stripeSubscriptionId: String
+  stripeCustomerId: String
   stripeAccountId: String
+  currentPeriodStartAt: Date
+  currentPeriodEndAt: Date
 }
 
 input PodcastKeysendContributionCreateInput {
@@ -2267,6 +2307,26 @@ input PaymentGetInput {
   invoiceId: String
 }
 
+input PaymentRecoveryByContributionInput {
+  contributionUuid: String!
+}
+
+type PaymentRecoveryByContributionResponse {
+  contribution: Contribution!
+  project: Project!
+  payments: [PaymentRecoveryPayment!]!
+}
+
+type PaymentRecoveryPayment {
+  id: BigInt!
+  uuid: String!
+  status: PaymentStatus!
+  paymentType: PaymentType!
+  amount: Int!
+  swapId: String!
+  swapMetadata: String!
+}
+
 input PaymentPendInput {
   amount: Int!
   amountCurrency: AmountCurrency!
@@ -2328,6 +2388,7 @@ input PaymentsGetInput {
 
 input PaymentsGetWhereInput {
   status: PaymentStatus
+  paymentType: [PaymentType!]
   projectId: BigInt
   linkedEntityUUID: String
 }
@@ -2362,7 +2423,7 @@ type Payment {
   updatedAt: Date!
   paidAt: Date
   canceledAt: Date
-  projectId: BigInt!
+  projectId: BigInt
   linkedEntityUUID: String!
   linkedEntityType: PaymentLinkedEntityType!
   baseAccountingAmount: Int!
@@ -2416,6 +2477,7 @@ enum FeeCurrency {
 
 enum PaymentType {
   LIGHTNING
+  ON_CHAIN
   LIGHTNING_PODCAST_KEYSEND
   ON_CHAIN_TO_LIGHTNING_SWAP
   FIAT_TO_LIGHTNING_SWAP
@@ -2425,22 +2487,46 @@ enum PaymentType {
   RSK_TO_LIGHTNING_SWAP
   RSK_TO_ON_CHAIN_SWAP
   RSK_NATIVE_TRANSFER
+  RSK_AON_CLAIM
 }
 
 union PaymentDetails =
     LightningPaymentDetails
   | OnChainToLightningSwapPaymentDetails
+  | FiatPaymentDetails
   | FiatToLightningSwapPaymentDetails
   | OnChainToRskSwapPaymentDetails
   | LightningToRskSwapPaymentDetails
   | RskToOnChainSwapPaymentDetails
   | RskToLightningSwapPaymentDetails
   | RskNativeTransferPaymentDetails
+  | RskAonClaimPaymentDetails
+  | StrikePaymentDetails
 
 type LightningPaymentDetails {
   lightningInvoiceId: String!
   lightningInvoiceStatus: LightningInvoiceStatus!
-  zapRequest: String
+}
+
+type FiatPaymentDetails {
+  method: String!
+  stripePaymentIntentId: String
+  stripeCheckoutSessionId: String
+  stripeInvoiceId: String
+  stripeSubscriptionId: String
+  stripeChargeId: String
+  stripeAccountId: String
+}
+
+type StrikePaymentDetails {
+  method: String!
+  strikeReceiveRequestId: String!
+  strikeReceiveId: String
+  lightningInvoiceId: String
+  lightningPaymentRequest: String
+  lightningPaymentRequestExpiresAt: Date
+  onChainAddress: String
+  onChainTransactionId: String
 }
 
 type OnChainToLightningSwapPaymentDetails {
@@ -2503,6 +2589,23 @@ type RskToOnChainSwapPaymentDetails {
 type RskNativeTransferPaymentDetails {
   fromAddress: String!
   destinationAddress: String!
+
+  """
+  Raw signed transaction bytes. Only returned to the accountant recovery API
+  (paymentsInProgressGet); null for all other callers.
+  """
+  signedTxHex: String
+  txId: String
+}
+
+type RskAonClaimPaymentDetails {
+  fromAddress: String!
+  destinationAddress: String!
+
+  """
+  Raw signed transaction bytes. Only returned to the accountant recovery API
+  (paymentsInProgressGet); null for all other callers.
+  """
   signedTxHex: String
   txId: String
 }
@@ -2540,6 +2643,7 @@ enum PaymentLinkedEntityType {
   AFFILIATE_PARTNER_PAYOUT
   PLEDGE_REFUND
   PAYOUT
+  USER_WALLET_WITHDRAW
 }
 
 type SignedUploadUrl {
@@ -3033,6 +3137,36 @@ enum ProjectGoalStatusInCreate {
 
 input ProjectAonGoalStatusUpdateInput {
   contractAddress: String!
+
+  """
+  Rootstock chain ID for confirmed Claimed event identity (required for mark-claimed).
+  """
+  chainId: Int
+
+  """
+  Transaction hash of the confirmed Claimed log (required for mark-claimed).
+  """
+  transactionHash: String
+
+  """
+  Log index of the confirmed Claimed event (required for mark-claimed).
+  """
+  logIndex: Int
+
+  """
+  Block number containing the Claimed log.
+  """
+  blockNumber: BigInt
+
+  """
+  Block hash containing the Claimed log (reorg safety).
+  """
+  blockHash: String
+
+  """
+  Decoded creatorAmount from Claimed, in wei.
+  """
+  creatorAmountWei: String
 }
 
 type ProjectAonGoalStatusUpdateResponse implements MutationResponse {
@@ -3054,12 +3188,63 @@ enum ProjectAonGoalStatus {
   UNCLAIMED
 }
 
-type PostPublishedSubscriptionResponse {
-  post: Post!
+type ProjectMatching {
+  id: BigInt!
+  projectId: BigInt!
+  ownerUserId: BigInt!
+  sponsorName: String!
+  sponsorUrl: String
+  referenceCurrency: ProjectMatchingCurrency!
+  matchingType: ProjectMatchingType!
+  maxCapAmount: Int!
+  status: ProjectMatchingStatus!
+  startDate: Date!
+  totalMatchedAmount: Int!
+  totalMatchedAmountSats: Int!
+  totalMatchedAmountUsdCent: Int!
+  remainingCapAmount: Int!
 }
 
-type PostRepostOnNostrResponse {
+type ProjectMatchingDeleteResponse implements MutationResponse {
   success: Boolean!
+  message: String
+  matchingId: BigInt!
+}
+
+input ProjectMatchingCreateInput {
+  projectId: BigInt!
+  sponsorName: String!
+  sponsorUrl: String
+  referenceCurrency: ProjectMatchingCurrency!
+  maxCapAmount: Int!
+}
+
+input ProjectMatchingUpdateInput {
+  matchingId: BigInt!
+  maxCapAmount: Int!
+}
+
+input ProjectMatchingDeleteInput {
+  matchingId: BigInt!
+}
+
+enum ProjectMatchingStatus {
+  ACTIVE
+  COMPLETED
+  DELETED
+}
+
+enum ProjectMatchingType {
+  ONE_TO_ONE
+}
+
+enum ProjectMatchingCurrency {
+  BTCSAT
+  USDCENT
+}
+
+type PostPublishedSubscriptionResponse {
+  post: Post!
 }
 
 type Post {
@@ -3126,11 +3311,6 @@ type Post {
   Date when the Post was sent by email.
   """
   sentByEmailAt: Date
-}
-
-input PostRepostOnNostrInput {
-  postId: BigInt!
-  event: String!
 }
 
 input PostCreateInput {
@@ -3271,9 +3451,7 @@ input CreateWalletInput {
   name: String
   feePercentage: Float!
   resourceInput: WalletResourceInput!
-  lndConnectionDetailsInput: LndConnectionDetailsCreateInput
   lightningAddressConnectionDetailsInput: LightningAddressConnectionDetailsCreateInput
-  nwcConnectionDetailsInput: NWCConnectionDetailsCreateInput
 }
 
 input WalletResourceInput {
@@ -3285,9 +3463,7 @@ input UpdateWalletInput {
   id: BigInt!
   name: String
   feePercentage: Float
-  lndConnectionDetailsInput: LndConnectionDetailsUpdateInput
   lightningAddressConnectionDetailsInput: LightningAddressConnectionDetailsUpdateInput
-  nwcConnectionDetailsInput: NWCConnectionDetailsUpdateInput
   twoFAInput: TwoFAInput
 }
 
@@ -3305,149 +3481,8 @@ input LightningAddressConnectionDetailsUpdateInput {
   lightningAddress: String!
 }
 
-input NWCConnectionDetailsCreateInput {
-  nwcUrl: String!
-}
-
-input NWCConnectionDetailsUpdateInput {
-  nwcUrl: String!
-}
-
-input LndConnectionDetailsUpdateInput {
-  """
-  Invoice macaroon for authenticating gRPC calls to the LND node.
-  """
-  macaroon: String
-
-  """
-  TLS certificate for the LND node (optional for Voltage nodes).
-  """
-  tlsCertificate: String
-
-  """
-  Hostname where the gRPC calls should be made.
-  """
-  hostname: String
-
-  """
-  Port where the gRPC calls should be made.
-  """
-  grpcPort: Int
-
-  """
-  Public key of the LND node.
-  """
-  pubkey: String
-
-  """
-  Type of the LND node.
-  """
-  lndNodeType: LndNodeType
-}
-
-input LndConnectionDetailsCreateInput {
-  """
-  Invoice macaroon for authenticating gRPC calls to the LND node.
-  """
-  macaroon: String!
-
-  """
-  TLS certificate for the LND node (optional for Voltage nodes).
-  """
-  tlsCertificate: String
-
-  """
-  Hostname where the gRPC calls should be made.
-  """
-  hostname: String!
-
-  """
-  Port where the gRPC calls should be made.
-  """
-  grpcPort: Int!
-  lndNodeType: LndNodeType!
-
-  """
-  Public key of the LND node.
-  """
-  pubkey: String
-}
-
-interface LndConnectionDetails {
-  """
-  Invoice macaroon for authenticating gRPC calls to the LND node.
-  """
-  macaroon: String!
-
-  """
-  TLS certificate for the LND node (optional for Voltage nodes).
-  """
-  tlsCertificate: String
-
-  """
-  Hostname where the gRPC calls should be made.
-  """
-  hostname: String!
-
-  """
-  Port where the gRPC calls should be made.
-  """
-  grpcPort: Int!
-  lndNodeType: LndNodeType!
-}
-
 type LightningAddressConnectionDetails {
   lightningAddress: String!
-}
-
-"""
-Public node details visible by anyone.
-"""
-type LndConnectionDetailsPublic {
-  pubkey: String
-}
-
-"""
-Private node details that can only be queried by the wallet owner.
-"""
-type LndConnectionDetailsPrivate {
-  """
-  Invoice macaroon for authenticating gRPC calls to the LND node.
-  """
-  macaroon: String!
-
-  """
-  TLS certificate for the LND node (optional for Voltage nodes).
-  """
-  tlsCertificate: String
-
-  """
-  Hostname where the gRPC calls should be made.
-  """
-  hostname: String!
-
-  """
-  Port where the gRPC calls should be made.
-  """
-  grpcPort: Int!
-
-  """
-  Type of the LND node used.
-  """
-  lndNodeType: LndNodeType!
-
-  """
-  Public key of the LND node.
-  """
-  pubkey: String
-}
-
-type NWCConnectionDetailsPrivate {
-  nwcUrl: String
-}
-
-type NWCConnectionDetailsPublic {
-  nwcUrl: String
 }
 
 type LightningAddressVerifyResponse {
@@ -3468,7 +3503,7 @@ type Wallet {
   Wallet name
   """
   name: String
-  connectionDetails: ConnectionDetails!
+  connectionDetails: ConnectionDetails
   state: WalletState!
 
   """
@@ -3503,17 +3538,7 @@ type WalletOffChainContributionLimits {
   max: Int
 }
 
-union ConnectionDetails =
-    LndConnectionDetailsPrivate
-  | LndConnectionDetailsPublic
-  | LightningAddressConnectionDetails
-  | NWCConnectionDetailsPrivate
-
-enum LndNodeType {
-  voltage
-  geyser
-  custom
-}
+union ConnectionDetails = LightningAddressConnectionDetails
 
 type WalletState {
   """
@@ -3885,6 +3910,10 @@ input ImpactFundDashboardApplicationsInput {
   pagination: PaginationInput
 }
 
+input ImpactFundFieldPartnerLeaderboardInput {
+  limit: Int
+}
+
 input ImpactFundApplicationUpdateInput {
   applicationId: BigInt!
   status: ImpactFundApplicationStatus
@@ -3919,6 +3948,23 @@ type ImpactFundDashboardApplicationsResponse {
   totalCount: Int!
 }
 
+type ImpactFundFieldPartnerLeaderboardResponse {
+  rows: [ImpactFundFieldPartnerLeaderboardRow!]!
+}
+
+type ImpactFundLabifCountryEligibility {
+  isEligible: Boolean!
+}
+
+type ImpactFundFieldPartnerLeaderboardRow {
+  rank: Int!
+  fieldPartnerId: BigInt!
+  fieldPartner: String!
+  country: String!
+  projectsLaunched: Int!
+  enabledContributionSats: Int!
+}
+
 type ImpactFund {
   id: BigInt!
   name: String!
@@ -3937,6 +3983,7 @@ type ImpactFund {
   archivedSponsors: [ImpactFundSponsor!]!
   applications: [ImpactFundApplication!]!
   fundedApplications: [ImpactFundApplication!]!
+  viewerApplications: [ImpactFundApplication!]!
   metrics: ImpactFundMetrics!
   canAccessDashboard: Boolean!
 }
@@ -4020,11 +4067,11 @@ type ImpactFundFundingSummaryRow {
   category: ProjectCategory
   fundingModel: ImpactFundApplicationFundingModel!
   applicationsCount: Int!
-  awardedTotalSats: BigInt!
+  awardedTotalSats: Int!
 }
 
 type ImpactFundMetrics {
-  awardedTotalSats: BigInt!
+  awardedTotalSats: Int!
   projectsFundedCount: Int!
 }
 
@@ -4128,11 +4175,6 @@ type Badge {
   thumb: String!
 }
 
-enum AuthFlowIntent {
-  LOGIN
-  SIGNUP
-}
-
 enum UserBadgeStatus {
   PENDING
   ACCEPTED
@@ -4142,6 +4184,11 @@ input SendOtpByEmailInput {
   email: String
   action: MFAAction!
   authFlowIntent: AuthFlowIntent
+}
+
+enum AuthFlowIntent {
+  LOGIN
+  SIGNUP
 }
 
 type OTPResponse {
@@ -4262,6 +4309,33 @@ enum OrdersGetOrderByField {
   confirmedAt
   deliveredAt
   shippedAt
+}
+
+type NewsletterPreferences {
+  email: String!
+  status: String
+  newsletterMonthly: Boolean!
+  productUpdates: Boolean!
+  projectSpotlights: Boolean!
+}
+
+input BeehiivNewsletterSubscribeInput {
+  email: String!
+  newsletterMonthly: Boolean = true
+  productUpdates: Boolean = true
+  projectSpotlights: Boolean = true
+}
+
+input NewsletterPreferencesUpdateInput {
+  userId: BigInt!
+  newsletterMonthly: Boolean
+  productUpdates: Boolean
+  projectSpotlights: Boolean
+}
+
+input NewsletterStatusUpdateInput {
+  userId: BigInt!
+  isActive: Boolean!
 }
 
 type ProfileNotificationSettings {
@@ -4425,9 +4499,28 @@ type ProjectReview {
   version: Int!
   rejectionReasons: [String!]!
   reviewNotes: String
+  complianceSuggestion: ProjectReviewComplianceSuggestion
   reviewedAt: Date
   createdAt: Date!
   updatedAt: Date!
+}
+
+type ProjectReviewComplianceSuggestion {
+  status: ProjectReviewComplianceSuggestionStatus!
+  recommendedStatus: ProjectReviewStatus
+  noteToCreator: String
+  reasons: [String!]!
+  feedback: [String!]!
+  model: String
+  termsUrl: String!
+  generatedAt: Date
+  failureReason: String
+}
+
+enum ProjectReviewComplianceSuggestionStatus {
+  PENDING
+  READY
+  FAILED
 }
 
 enum ProjectReviewStatus {
@@ -4446,6 +4539,7 @@ input ProjectReviewSubmitInput {
   status: ProjectReviewStatusInput!
   rejectionReasons: [RejectionReason!]
   reviewNotes: String
+  waveFee: Boolean
 }
 
 enum ProjectReviewStatusInput {
@@ -4465,26 +4559,9 @@ enum RejectionReason {
   WALLET_SANCTION_CHECK_FAILED
 }
 
-input AmbassadorAddInput {
-  heroId: String!
-  projectId: BigInt!
-  payoutRate: Float!
-}
-
-input AmbassadorUpdateInput {
-  userId: BigInt!
-  projectId: BigInt!
-
-  """
-  The payout rate for the ambassador, value between 0 and 99.
-  """
-  payoutRate: Float!
-}
-
 type Ambassador {
   id: BigInt!
   user: User!
-  payoutRate: Float!
   contributionsCount: Int!
   contributionsSum: BigInt!
 }
@@ -4627,15 +4704,45 @@ type ProjectRewardsGroupedByRewardIdStatsProjectReward {
   images: String
 }
 
-type UserSubscription {
+type RecurringContributionCheckoutResponse {
+  recurringContribution: RecurringContribution!
+  contribution: Contribution!
+  payments: ContributionPaymentsDetails!
+}
+
+type RecurringContributionPortalSession {
+  url: String!
+}
+
+type RecurringContribution {
   id: BigInt!
-  projectSubscriptionPlan: ProjectSubscriptionPlan!
-  status: UserSubscriptionStatus!
-  startDate: Date!
-  nextBillingDate: Date!
+  uuid: String!
+  projectId: BigInt!
+  userId: BigInt
+  kind: RecurringContributionKind!
+  status: RecurringContributionStatus!
+  paymentMethod: RecurringPaymentMethod!
+  amount: Int!
+  currency: RecurringContributionCurrency!
+  interval: RecurringInterval!
+  projectSubscriptionPlanId: BigInt
+  currentPeriodStartAt: Date
+  currentPeriodEndAt: Date
+  nextBillingAt: Date
+  billingCycleCount: Int!
+  pausedAt: Date
+  pauseReason: RecurringPauseReason
   canceledAt: Date
+  stripeCustomerId: String
+  stripeSubscriptionId: String
+  stripeAccountId: String
+  managementNonce: String
+  lastChargeFailedAt: Date
+  lastChargeFailureMessage: String
   createdAt: Date!
   updatedAt: Date!
+  projectSubscriptionPlan: ProjectSubscriptionPlan
+  project: Project
 }
 
 type ProjectSubscriptionPlan {
@@ -4643,78 +4750,122 @@ type ProjectSubscriptionPlan {
   projectId: BigInt!
   name: String!
   description: String
-  cost: Int!
-  currency: SubscriptionCurrencyType!
-  interval: UserSubscriptionInterval!
+  image: String
+  amountUsdCent: Int!
+  amountBtcSat: Int!
+  interval: RecurringInterval!
+  isHidden: Boolean!
   createdAt: Date!
   updatedAt: Date!
 }
 
-enum UserSubscriptionStatus {
+type RecurringContributionSupport {
+  enabled: Boolean!
+  stripe: Boolean!
+  bitcoin: Boolean!
+  reason: String
+}
+
+enum RecurringContributionKind {
+  DONATION
+  SUBSCRIPTION
+}
+
+enum RecurringContributionStatus {
+  PENDING
   ACTIVE
   PAUSED
   CANCELED
 }
 
-enum UserSubscriptionInterval {
-  WEEKLY
+enum RecurringPaymentMethod {
+  STRIPE
+  BANXA
+  BITCOIN
+}
+
+enum RecurringInterval {
   MONTHLY
-  QUARTERLY
   YEARLY
 }
 
-enum SubscriptionCurrencyType {
+enum RecurringContributionCurrency {
   USDCENT
+  BTCSAT
 }
 
-input CreateUserSubscriptionInput {
-  userId: BigInt!
+enum RecurringPauseReason {
+  USER_CANCELED
+  PAYMENT_OVERDUE
+}
+
+input RecurringDonationCreateInput {
+  projectId: BigInt!
+  paymentMethod: RecurringPaymentMethod!
+  interval: RecurringInterval!
+  amount: Int!
+  geyserTipPercentage: Float
+  anonymous: Boolean!
+  paymentsInput: ContributionPaymentsInput!
+  metadataInput: ContributionMetadataInput
+}
+
+input ProjectSubscriptionStartInput {
   projectSubscriptionPlanId: BigInt!
+  paymentMethod: RecurringPaymentMethod!
+  anonymous: Boolean!
+  paymentsInput: ContributionPaymentsInput!
+  metadataInput: ContributionMetadataInput
 }
 
-input UpdateUserSubscriptionInput {
+input RecurringContributionCancelInput {
   id: BigInt!
-  status: UserSubscriptionStatus
+}
+
+input RecurringContributionPortalSessionCreateInput {
+  id: BigInt!
+  returnUrl: String!
+}
+
+input RecurringContributionRenewalCreateInput {
+  id: BigInt
+  managementNonce: String
+  anonymous: Boolean!
+  paymentsInput: ContributionPaymentsInput!
 }
 
 input CreateProjectSubscriptionPlanInput {
   projectId: BigInt!
   name: String!
   description: String
-  amount: Int!
-  currency: SubscriptionCurrencyType!
-  intervalType: UserSubscriptionInterval!
+  image: String
+  amountUsdCent: Int!
+  amountBtcSat: Int!
+  interval: RecurringInterval!
+  isHidden: Boolean
 }
 
 input UpdateProjectSubscriptionPlanInput {
   id: BigInt!
   name: String
   description: String
-  amount: Int
-  currency: SubscriptionCurrencyType
-  intervalType: UserSubscriptionInterval
+  image: String
+  amountUsdCent: Int
+  amountBtcSat: Int
+  interval: RecurringInterval
   isHidden: Boolean
-}
-
-input ProjectSubscriptionPlansInput {
-  where: ProjectSubscriptionPlansWhereInput!
-}
-
-input ProjectSubscriptionPlansWhereInput {
-  projectId: BigInt!
-}
-
-input UserSubscriptionsInput {
-  where: UserSubscriptionsWhereInput!
-}
-
-input UserSubscriptionsWhereInput {
-  userId: BigInt!
 }
 
 type PaymentMethods {
   fiat: FiatPaymentMethods!
   bitcoin: BitcoinPaymentMethods!
+  managedRecoverableGrant: ManagedRecoverableGrantPaymentMethods!
+}
+
+type ManagedRecoverableGrantPaymentMethods {
+  stripe: Boolean!
+  strikeLightning: Boolean!
+  strikeOnChain: Boolean!
 }
 
 type FiatPaymentMethods {
@@ -4754,20 +4905,6 @@ type StripeConnectOnboardingPayload {
 
 type StripeInterestNotifyResponse {
   success: Boolean!
-}
-
-input GeyserPromotionsContributionStatsWhereInput {
-  projectId: BigInt!
-}
-
-input GeyserPromotionsContributionStatsInput {
-  where: GeyserPromotionsContributionStatsWhereInput!
-}
-
-type GeyserPromotionsContributionStats {
-  contributionsCount: Int!
-  contributionsSum: BigInt!
-  contributionsSumUsd: Float!
 }
 
 type ShippingConfig {
@@ -5161,7 +5298,7 @@ input PayoutInitiateInput {
   callDataHex: String
 
   """
-  Optional: The user lock transaction hex (required for Prism payouts)
+  Optional: The user lock transaction hex (required for Prism swap payouts)
   """
   userLockTxHex: String
 
@@ -5205,74 +5342,116 @@ enum PayoutStatus {
   CANCELLED
 }
 
-extend type Mutation {
-  projectMatchingCreate(input: ProjectMatchingCreateInput!): ProjectMatching!
-  projectMatchingUpdate(input: ProjectMatchingUpdateInput!): ProjectMatching!
-  projectMatchingDelete(input: ProjectMatchingDeleteInput!): ProjectMatchingDeleteResponse!
+type UserWalletWithdrawGetResponse {
+  userWalletWithdraw: UserWalletWithdraw!
+  userWalletWithdrawMetadata: UserWalletWithdrawMetadata!
 }
 
-extend type Project {
-  activeMatching: ProjectMatching
-  matchings: [ProjectMatching!]!
+type UserWalletWithdrawRequestResponse {
+  userWalletWithdraw: UserWalletWithdraw!
+  userWalletWithdrawMetadata: UserWalletWithdrawMetadata!
 }
 
-extend type Contribution {
-  matching: ProjectMatching
-  matchedAmountSats: Int!
-  matchedAmountUsdCent: Int!
+type UserWalletWithdrawMetadata {
+  nonce: Int!
+  contractType: PayoutContractType!
+  swapContractAddress: String!
+  requiresUserLockTx: Boolean!
 }
 
-type ProjectMatching {
+type UserWalletWithdrawInitiateResponse {
+  userWalletWithdraw: UserWalletWithdraw!
+  txHash: String!
+}
+
+type UserWalletWithdrawPaymentCreateResponse {
+  userWalletWithdraw: UserWalletWithdraw!
+  payment: Payment!
+  swap: String
+}
+
+type UserWalletWithdraw {
   id: BigInt!
-  projectId: BigInt!
-  ownerUserId: BigInt!
-  sponsorName: String!
-  sponsorUrl: String
-  referenceCurrency: ProjectMatchingCurrency!
-  matchingType: ProjectMatchingType!
-  maxCapAmount: Int!
-  status: ProjectMatchingStatus!
-  startDate: Date!
-  totalMatchedAmount: Int!
-  totalMatchedAmountSats: Int!
-  totalMatchedAmountUsdCent: Int!
-  remainingCapAmount: Int!
+  uuid: String!
+  status: UserWalletWithdrawStatus!
+  amount: Int!
+  expiresAt: Date!
+  payments: [Payment!]!
 }
 
-type ProjectMatchingDeleteResponse implements MutationResponse {
-  success: Boolean!
-  message: String
-  matchingId: BigInt!
+input UserWalletWithdrawPaymentCreateInput {
+  userWalletWithdrawId: BigInt!
+  userWalletWithdrawPaymentInput: UserWalletWithdrawPaymentInput!
 }
 
-input ProjectMatchingCreateInput {
-  projectId: BigInt!
-  sponsorName: String!
-  sponsorUrl: String
-  referenceCurrency: ProjectMatchingCurrency!
-  maxCapAmount: Int!
+input UserWalletWithdrawInitiateInput {
+  userWalletWithdrawId: BigInt!
+  paymentId: BigInt!
+  rskAddress: String
+
+  """
+  Required for swap withdrawals; optional for native transfers.
+  """
+  signature: String
+
+  """
+  Required for swap withdrawals; optional for native transfers.
+  """
+  callDataHex: String
+  userLockTxHex: String
+  claimTxHex: String
+
+  """
+  Signed native RBTC transfer transaction hex (required for RSK_NATIVE_TRANSFER withdrawals)
+  """
+  signedTxHex: String
 }
 
-input ProjectMatchingUpdateInput {
-  matchingId: BigInt!
-  maxCapAmount: Int!
+input UserWalletWithdrawPaymentInput {
+  rskToLightningSwap: RskToLightningSwapPaymentDetailsInput
+  rskToOnChainSwap: RskToOnChainSwapPaymentDetailsInput
+  rskNativeTransfer: RskNativeTransferPaymentDetailsInput
 }
 
-input ProjectMatchingDeleteInput {
-  matchingId: BigInt!
-}
-
-enum ProjectMatchingStatus {
-  ACTIVE
+enum UserWalletWithdrawStatus {
+  PENDING
+  PROCESSING
   COMPLETED
-  DELETED
+  FAILED
+  EXPIRED
+  CANCELLED
 }
 
-enum ProjectMatchingType {
-  ONE_TO_ONE
+enum AonClaimStatus {
+  NOT_STARTED
+  PENDING
+  CONFIRMED
+  FAILED
 }
 
-enum ProjectMatchingCurrency {
-  BTCSAT
-  USDCENT
+type AonClaimStatusResponse {
+  status: AonClaimStatus!
+  txHash: String
+
+  """
+  Safe, user-facing failure reason when status is FAILED. Never includes signed tx bytes.
+  """
+  failureReason: String
+}
+
+type AonClaimPrepareResponse {
+  contractAddress: String!
+  claimableAmountSats: Int!
+  processingFeeSats: Int!
+  creatorAddress: String!
+
+  """
+  Encoded claim(processingFee) calldata for the client to include when signing.
+  """
+  claimCalldata: String!
+  simulationOk: Boolean!
+}
+
+type AonClaimBroadcastResponse {
+  txHash: String!
 }

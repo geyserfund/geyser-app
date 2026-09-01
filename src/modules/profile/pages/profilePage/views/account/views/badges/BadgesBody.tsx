@@ -1,26 +1,26 @@
-import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Image, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
+import { useUserProfileAtom } from '@/modules/profile/state'
 import { userBadgesAtom } from '@/modules/profile/state/badgesAtom.ts'
-import { Body } from '@/shared/components/typography'
+import { GenericHeroCardUrl } from '@/shared/constants'
+import { useModal } from '@/shared/hooks'
 import { toInt, useNotification } from '@/utils'
 
-import { ExternalAccountType } from '../../../../../../../../modules/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { useUserBadgesQuery } from '../../../../../../../../types'
-import { NostrBadges } from './NostrBadges'
+import { BadgeItem } from './BadgeItem'
+import { MediaCarouselForCards } from './MediaCarouselForCards'
 
 export const BadgesBody = () => {
   const { t } = useTranslation()
-
-  const isEdit = useViewingOwnProfileAtomValue()
 
   const { toast } = useNotification()
 
   const { userProfile } = useUserProfileAtom()
   const [userBadges, setUserBadges] = useAtom(userBadgesAtom)
+  const itemsModal = useModal<{ currentIndex: number }>()
 
   const { loading: userBadgeLoading } = useUserBadgesQuery({
     skip: !userProfile.id,
@@ -37,24 +37,45 @@ export const BadgesBody = () => {
     },
   })
 
-  const nostrId =
-    userProfile.externalAccounts.find((account) => account?.accountType === ExternalAccountType.nostr)?.externalId || ''
-
-  const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
-
   if (userBadgeLoading) {
     return <BadgesBodySkeleton />
   }
 
+  const totalBadgeLinks = userBadges.map((userBadge) => userBadge.badge.image)
+  const handleClick = (badge: (typeof userBadges)[number]) => {
+    const currentIndex = userBadges.findIndex((userBadge) => userBadge.id === badge.id) + 1
+    itemsModal.onOpen({ currentIndex })
+  }
+
   return (
     <>
-      {isEdit && hasBadgeNoNostrForOwn && (
-        <VStack background="neutral1.3" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
-          <Body light>{t('Login with Nostr to claim the badges you earned!')}</Body>
-        </VStack>
+      <Wrap w="full" spacingX={2} spacingY={4} justify="start" paddingBottom="20px">
+        <WrapItem>
+          <VStack
+            overflow="hidden"
+            w="full"
+            onClick={() => itemsModal.onOpen({ currentIndex: 0 })}
+            _hover={{ cursor: 'pointer' }}
+          >
+            <Image width="auto" maxWidth="110px" src={GenericHeroCardUrl} alt={t('Generic hero card image')} />
+          </VStack>
+        </WrapItem>
+        {userBadges.map((userBadge) => (
+          <WrapItem key={userBadge.id}>
+            <BadgeItem userBadge={userBadge} handleClick={handleClick} />
+          </WrapItem>
+        ))}
+      </Wrap>
+      {itemsModal.isOpen && (
+        <MediaCarouselForCards
+          title={t('Geyser Cards')}
+          description={t('Geyser Cards celebrate your achievements across the Bitcoin landscape. ')}
+          imageLinkList={totalBadgeLinks}
+          size="md"
+          bodyProps={{ as: VStack, gap: 4 }}
+          {...itemsModal}
+        />
       )}
-
-      <NostrBadges nostrId={nostrId} userBadges={userBadges} isEdit={isEdit} />
     </>
   )
 }

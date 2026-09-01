@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import { FRAGMENT_PROJECT_GRANT_APPLICANT } from '../fragments/grantFragment'
 import {
   FRAGMENT_PROJECT_HEADER_SUMMARY,
-  FRAGMENT_PROJECT_NOSTR_KEYS,
   FRAGMENT_PROJECT_PAGE_BODY,
   FRAGMENT_PROJECT_PAGE_BODY_CREATOR,
 } from '../fragments/projectFragment'
@@ -26,15 +25,6 @@ export const QUERY_PROJECT_FOR_STATUS_CHECK = gql`
       name
       status
       launchedAt
-    }
-  }
-`
-
-export const QUERY_PROJECT_NOSTR_KEYS = gql`
-  ${FRAGMENT_PROJECT_NOSTR_KEYS}
-  query ProjectNostrKeys($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      ...ProjectNostrKeys
     }
   }
 `

@@ -11,7 +11,6 @@ import { useThemeDetector } from '../utils/hooks'
 
 export type AppTheme = typeof theme & {
   colors: typeof lightModeColors
-  isNostrColor: boolean
   colorMode: ColorMode
 }
 

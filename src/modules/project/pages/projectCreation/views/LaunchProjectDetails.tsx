@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
-import { PromotionNetworkSettingsCard } from '@/modules/project/components/PromotionNetworkSettingsCard.tsx'
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import type {
   Country,
@@ -226,19 +224,6 @@ export const LaunchProjectDetails = () => {
                 placeholder="Referral Hero ID"
               />
             </FieldContainer>
-          ) : null}
-          {!isRecoverableGrant ? (
-            <PromotionNetworkSettingsCard
-              promotionsEnabled={form.watch('promotionsEnabled')}
-              showTemporaryDirectPaymentNotice={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
-              onToggle={(isEnabled) =>
-                form.setValue('promotionsEnabled', isEnabled, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                  shouldValidate: true,
-                })
-              }
-            />
           ) : null}
         </VStack>
       </ProjectCreationPageWrapper>

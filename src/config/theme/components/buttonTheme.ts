@@ -1,6 +1,6 @@
 import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
-import { darkModeColors, fonts, lightModeColors } from '../../../shared/styles'
+import { fonts, lightModeColors } from '../../../shared/styles'
 
 const darkStyleColorSchemes = ['primary1', 'warning', 'amber', 'orange']
 
@@ -224,15 +224,15 @@ export const buttonTheme: ComponentStyleConfig = {
     primary: ({ theme }: StyleFunctionProps) => ({
       backgroundColor: theme.colors.primary[400],
       border: 'none',
-      color: theme.isNostrColor ? lightModeColors.neutral[0] : lightModeColors.neutral[900],
+      color: lightModeColors.neutral[900],
       _hover: {
         backgroundColor: {
           base: theme.colors.primary[400],
-          lg: theme.isNostrColor ? darkModeColors.neutral[200] : lightModeColors.neutral[200],
+          lg: lightModeColors.neutral[200],
         },
       },
       _active: {
-        backgroundColor: theme.isNostrColor ? darkModeColors.neutral[300] : lightModeColors.neutral[300],
+        backgroundColor: lightModeColors.neutral[300],
       },
     }),
     primaryLink: ({ theme }: StyleFunctionProps) => ({
@@ -271,9 +271,7 @@ export const buttonTheme: ComponentStyleConfig = {
       },
     }),
     primaryGradient: ({ theme }: StyleFunctionProps) => ({
-      background: theme.isNostrColor
-        ? `linear-gradient(270deg, #B486FA 0%, #C54BFF 35.42%, #D162FF 100%)`
-        : `linear-gradient(270deg, #6BE7CE 0%, #20ECC7 35.42%, #00F388 100%)`,
+      background: `linear-gradient(270deg, #6BE7CE 0%, #20ECC7 35.42%, #00F388 100%)`,
       border: 'none',
       color: lightModeColors.neutral[900],
       _hover: {

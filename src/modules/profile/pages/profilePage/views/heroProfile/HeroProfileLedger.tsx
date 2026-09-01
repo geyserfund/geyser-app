@@ -31,7 +31,6 @@ import {
 } from 'react-icons/pi'
 import { Link } from 'react-router'
 
-import { ExternalAccountType } from '@/modules/auth'
 import { guardianRewardsMap } from '@/modules/guardians/utils/constants'
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { guardianColors, ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
@@ -559,9 +558,6 @@ const TrustCard = ({ trust }: { trust: UserHeroTrust }) => (
 
 const AchievementsCard = () => {
   const { userProfile } = useUserProfileAtom()
-  const isOwner = useViewingOwnProfileAtomValue()
-  const nostrId =
-    userProfile.externalAccounts.find((account) => account.accountType === ExternalAccountType.nostr)?.externalId || ''
   const { data, loading } = useUserBadgesQuery({
     variables: { input: { where: { userId: toInt(userProfile.id) } } },
     skip: !userProfile.id,
@@ -614,11 +610,6 @@ const AchievementsCard = () => {
       ))}
       {!hasAchievements ? (
         <EmptyReputationState text="No achievements yet. Milestones and badges will appear here." />
-      ) : null}
-      {isOwner && badges.length > 0 && !nostrId ? (
-        <Body size="xs" color="neutral1.10">
-          Connect Nostr in Profile Settings to claim your badges.
-        </Body>
       ) : null}
       <Button as={Link} to={getPath('badges')} variant="link" rightIcon={<PiArrowRight />} alignSelf="start">
         Learn more

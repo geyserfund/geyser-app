@@ -45,9 +45,7 @@ export const BadgesPage = () => {
             {t('Geyser badges')}
           </Text>
           <Text variant="body1">
-            {t(
-              'To recognize active users, Geyser issues and awards users with Nostr badges, which can more fully recognize their actions.',
-            )}
+            {t('To recognize active users, Geyser issues and awards badges that celebrate their achievements.')}
           </Text>
         </Container>
         {badges &&
