@@ -1,9 +1,9 @@
 import * as ecc from '@bitcoinerlab/secp256k1'
 import { ECPairFactory } from 'ecpair'
 
-import { ContributionCreateInput } from '@/types/index.ts'
+import { ContributionCreateInput } from '@/types/generated/graphql.ts'
 
-import { toInt } from '../../../../utils'
+import { toInt } from '../../../../utils/unitConversion/typeConversion'
 
 export const validateFundingInput = (input: ContributionCreateInput) => {
   let isValid = false

@@ -3,7 +3,6 @@ import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
-
 import {
   Exact,
   OrderByDirection,
@@ -15,7 +14,8 @@ import {
   OrdersGetStatus,
   OrdersGetWhereInput,
   useOrdersGetQuery,
-} from '../../../../../../../types'
+} from '@/types/generated/graphql'
+
 import { rewardsCountAtom, rewardsFamily } from '../state/rewardsAtom'
 
 interface UseRewardByStatusProps {

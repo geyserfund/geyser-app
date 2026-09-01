@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
-import { getPath } from '@/shared/constants'
+import { getPath } from '@/shared/constants/config/routerPaths'
 
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
 import { RewardCardSkeleton } from '../../rewards/components/RewardCard.tsx'
 import { RewardCard } from '../../rewards/components/RewardCard.tsx'
-import { BodySectionLayout } from '../components'
+import { BodySectionLayout } from '../components/BodySectionLayout'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()

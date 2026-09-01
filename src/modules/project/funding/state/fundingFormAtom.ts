@@ -61,6 +61,13 @@ export enum FundingUserInfoError {
   SHIPPING_ADDRESS = 'shippingAddress',
 }
 
+export enum FundingUserInfoValidationState {
+  RECURRING_EMAIL_REQUIRED = 'recurringEmailRequired',
+  SUBSCRIPTION_EMAIL_REQUIRED = 'subscriptionEmailRequired',
+  INVALID_EMAIL = 'invalidEmail',
+  VALID = 'valid',
+}
+
 export const DEFAULT_GEYSER_TIP_PERCENT = 5
 
 export type FundingProjectState = FundingProject & {
@@ -586,8 +593,8 @@ export const isFundingInputAmountValidAtom = atom((get) => {
   return { title: '', description: '', valid: true }
 })
 
-/** Check if the funding user info is valid */
-export const isFundingUserInfoValidAtom = atom((get) => {
+/** Check if the funding user info is valid without allocating a new result object on every form update. */
+export const fundingUserInfoValidationStateAtom = atom((get): FundingUserInfoValidationState => {
   const formState = get(fundingFormStateAtom)
   const renewalContext = get(recurringContributionRenewalAtom)
 
@@ -598,21 +605,11 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     (hasSubscription || formState.fundingMode === recurringFundingModes.recurringDonation) &&
     !formState.email
   ) {
-    return {
-      title: t('Email is required for recurring payments.'),
-      description: t('Please enter an email.'),
-      error: FundingUserInfoError.EMAIL,
-      valid: false,
-    }
+    return FundingUserInfoValidationState.RECURRING_EMAIL_REQUIRED
   }
 
   if ((formState.followProject || formState.subscribeToGeyserEmails) && !formState.email) {
-    return {
-      title: t('Email is required when subscribing to updates.'),
-      description: t('Please enter an email.'),
-      error: FundingUserInfoError.EMAIL,
-      valid: false,
-    }
+    return FundingUserInfoValidationState.SUBSCRIPTION_EMAIL_REQUIRED
   }
 
   const requiresEmailValidation =
@@ -622,15 +619,10 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     formState.subscribeToGeyserEmails
 
   if (!renewalContext && requiresEmailValidation && !validateEmail(formState.email)) {
-    return {
-      title: t('A valid email is required.'),
-      description: t('Please enter a valid email.'),
-      error: FundingUserInfoError.EMAIL,
-      valid: false,
-    }
+    return FundingUserInfoValidationState.INVALID_EMAIL
   }
 
-  return { title: '', description: '', error: '', valid: true }
+  return FundingUserInfoValidationState.VALID
 })
 
 export const fundingModeAtom = atom((get) => get(fundingFormStateAtom).fundingMode)

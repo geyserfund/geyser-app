@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
-import { DashboardLayout } from '../../common'
+import { DashboardLayout } from '../../common/DashboardLayout'
 import { ProjectDeleteUpdate } from './views/ProjectDeleteUpdate'
 import { ProjectEmailUpdate } from './views/ProjectEmailUpdate'
 import { ProjectStatusUpdate } from './views/ProjectStatusUpdate'

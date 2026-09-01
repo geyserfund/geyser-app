@@ -3,21 +3,24 @@ import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getRewardShippingStatusBackgroundColor } from '@/helpers'
-import { Body } from '@/shared/components/typography'
-
-import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../components/ui'
-import { RewardStatusOptions } from '../../../../../../../shared/constants'
+import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
+import { getRewardShippingStatusBackgroundColor } from '@/helpers/getProjectShippingStatusBackgroundColor'
+import { Body } from '@/shared/components/typography/Body'
+import { RewardStatusOptions } from '@/shared/constants/platform/rewardShipping'
+import { LinkableAvatar } from '@/shared/molecules/LinkableAvatar'
 import {
   OrderByDirection,
   OrderFragment,
   OrdersGetOrderByField,
   OrdersGetOrderByInput,
   OrdersGetStatus,
-} from '../../../../../../../types'
-import { useCustomTheme } from '../../../../../../../utils'
-import { getUSD, TableData, TableWithAccordion } from '../../../common'
-import { AccordionListItem, OrderItems } from '../../../components'
+} from '@/types/generated/graphql'
+import { useCustomTheme } from '@/utils/tools/ColorModeSwitcher'
+
+import { getUSD } from '../../../common/helpers'
+import { TableData, TableWithAccordion } from '../../../common/TableWithAccordion'
+import { AccordionListItem } from '../../../components/AccordionListItem'
+import { OrderItems } from '../../../components/OrderItems'
 
 export const RewardTable = ({
   status,

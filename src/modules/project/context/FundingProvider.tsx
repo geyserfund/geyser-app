@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import React, { PropsWithChildren, useEffect } from 'react'
 import { useLocation } from 'react-router'
 
-import { useProjectActiveMatchingGetLazyQuery } from '../../../types'
+import { useProjectActiveMatchingGetLazyQuery } from '../../../types/generated/graphql'
 import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
 import { useProjectSubscriptionsAPI } from '../API/useProjectSubscriptionsAPI'
 import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'

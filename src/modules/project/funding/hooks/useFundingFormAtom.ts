@@ -1,5 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   canUseRecurringFundingAtom,
@@ -10,9 +11,11 @@ import {
   fundingModeAtom,
   fundingOnchainAmountWarningAtom,
   fundingProjectAtom,
+  FundingUserInfoError,
+  FundingUserInfoValidationState,
+  fundingUserInfoValidationStateAtom,
   guardianBadgesCostAtoms,
   isFundingInputAmountValidAtom,
-  isFundingUserInfoValidAtom,
   isMembershipFundingModeAtom,
   isOneTimeFundingModeAtom,
   isRecurringDonationModeAtom,
@@ -29,6 +32,8 @@ import {
 } from '../state/fundingFormAtom'
 
 export const useFundingFormAtom = () => {
+  const { t } = useTranslation()
+
   const formState = useAtomValue(fundingFormStateAtom)
 
   const project = useAtomValue(fundingProjectAtom)
@@ -45,7 +50,36 @@ export const useFundingFormAtom = () => {
 
   const isFundingInputAmountValid = useAtomValue(isFundingInputAmountValidAtom)
 
-  const isFundingUserInfoValid = useAtomValue(isFundingUserInfoValidAtom)
+  const fundingUserInfoValidationState = useAtomValue(fundingUserInfoValidationStateAtom)
+
+  const isFundingUserInfoValid = useMemo(() => {
+    switch (fundingUserInfoValidationState) {
+      case FundingUserInfoValidationState.RECURRING_EMAIL_REQUIRED:
+        return {
+          title: t('Email is required for recurring payments.'),
+          description: t('Please enter an email.'),
+          error: FundingUserInfoError.EMAIL,
+          valid: false,
+        }
+      case FundingUserInfoValidationState.SUBSCRIPTION_EMAIL_REQUIRED:
+        return {
+          title: t('Email is required when subscribing to updates.'),
+          description: t('Please enter an email.'),
+          error: FundingUserInfoError.EMAIL,
+          valid: false,
+        }
+      case FundingUserInfoValidationState.INVALID_EMAIL:
+        return {
+          title: t('A valid email is required.'),
+          description: t('Please enter a valid email.'),
+          error: FundingUserInfoError.EMAIL,
+          valid: false,
+        }
+      case FundingUserInfoValidationState.VALID:
+      default:
+        return { title: '', description: '', error: '', valid: true }
+    }
+  }, [fundingUserInfoValidationState, t])
 
   const fundingFormError = useAtomValue(fundingFormErrorAtom)
 

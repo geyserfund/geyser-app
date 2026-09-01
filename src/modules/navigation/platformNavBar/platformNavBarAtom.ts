@@ -16,7 +16,7 @@ import {
   projectStoryCreatorRoutes,
   routeMatchForAtom,
 } from '../../../config/routes/routeGroups'
-import { getPath, PathName } from '../../../shared/constants'
+import { getPath, PathName } from '../../../shared/constants/config/routerPaths'
 import { profileSideNavAtom } from './profileNav/profileSideNavAtom'
 
 const routesForProjectPage = atom(routeMatchForAtom(projectRoutes))

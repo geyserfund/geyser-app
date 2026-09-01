@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { noUrlRegex, validUrl } from '@/utils/index.ts'
+import { noUrlRegex, validUrl } from '@/utils/validations/regex.ts'
 
-import { ProjectValidations } from '../../../../../shared/constants'
-import { ProjectPageBodyFragment, ProjectType } from '../../../../../types'
+import { ProjectValidations } from '../../../../../shared/constants/validations/project'
+import { ProjectPageBodyFragment, ProjectType } from '../../../../../types/generated/graphql'
 import { ProjectCountryCodesThatAreRestricted } from '../utils/constants.ts'
 
 export type ProjectCreationVariables = {
