@@ -1,13 +1,10 @@
 import { HStack, StackProps, VStack } from '@chakra-ui/react'
-import { useAtomValue } from 'jotai'
 import React, { PropsWithChildren } from 'react'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
-import { cannotCompleteShippingForThisOrderAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { LegalEntityType } from '@/types/generated/graphql.ts'
 
-import { CannotCompleteShippingForThisOrder } from '../views/fundingInit/components/CannotCompleteShippingForThisOrder.tsx'
 import { CompleteVerificationToIncreaseFunding } from '../views/fundingInit/components/CompleteVerificationToIncreaseFunding.tsx'
 import { MAX_DONATION_AMOUNT } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 
@@ -15,13 +12,12 @@ export const FundingSummaryWrapper: React.FC<PropsWithChildren<StackProps>> = ({
   const { user } = useAuthContext()
 
   const { project, formState } = useFundingFormAtom()
-  const cannotCompleteShippingForThisOrder = useAtomValue(cannotCompleteShippingForThisOrderAtom)
 
   const isFundingAmountTooHigh = formState.donationAmountUsdCent > MAX_DONATION_AMOUNT
 
   const showCompleteVerification = isFundingAmountTooHigh && !user.complianceDetails.verifiedDetails?.identity?.verified
 
-  const isDisabled = cannotCompleteShippingForThisOrder || showCompleteVerification
+  const isDisabled = showCompleteVerification
 
   const ownerTaxProfile = project.owners[0]?.user.taxProfile
   const isNonProfit = ownerTaxProfile?.legalEntityType === LegalEntityType.NonProfit && ownerTaxProfile?.verified
@@ -40,8 +36,7 @@ export const FundingSummaryWrapper: React.FC<PropsWithChildren<StackProps>> = ({
       {children}
       {isDisabled && (
         <VStack w="full" alignItems="flex-start">
-          {showCompleteVerification && !cannotCompleteShippingForThisOrder && <CompleteVerificationToIncreaseFunding />}
-          {cannotCompleteShippingForThisOrder && <CannotCompleteShippingForThisOrder />}
+          {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
         </VStack>
       )}
     </VStack>

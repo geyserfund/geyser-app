@@ -1,7 +1,5 @@
 import { atom } from 'jotai'
 
-import { toInt } from '@/utils'
-
 import { ProjectRewardFragment } from '../../../types'
 import { isProjectOwnerAtom } from './projectAtom'
 
@@ -30,38 +28,6 @@ export const hasRewardsAtom = atom((get) => {
   const isProjectOwner = get(isProjectOwnerAtom)
   return activeRewards.length > 0 || (isProjectOwner && hiddenRewards.length > 0)
 })
-/** add or update a reward */
-export const addUpdateRewardsAtom = atom(null, (get, set, currentReward: ProjectRewardFragment) => {
-  const allRewards = get(rewardsAtom)
-  const isExist = allRewards.some((reward) => toInt(reward.id) === toInt(currentReward.id))
-
-  if (isExist) {
-    set(rewardsAtom, (rewards) => {
-      return rewards.map((reward) => {
-        if (toInt(reward.id) === toInt(currentReward.id)) {
-          return currentReward
-        }
-
-        return reward
-      })
-    })
-  } else {
-    set(rewardsAtom, (rewards) => {
-      return [currentReward, ...rewards]
-    })
-  }
-})
-
-/** delete a reward */
-export const deleteRewardAtom = atom(null, (get, set, rewardId: string) => {
-  const allRewards = get(rewardsAtom)
-
-  set(
-    rewardsAtom,
-    allRewards.filter((reward) => reward.id !== rewardId),
-  )
-})
-
 /** Initial rewards load, set to false by default */
 export const initialRewardsLoadAtom = atom(false)
 

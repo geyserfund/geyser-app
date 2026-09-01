@@ -2239,5 +2239,12 @@
   "Share this project": "Comparte este proyecto",
   "Help this project reach more supporters by sharing it with your network. ": "Ayuda a que este proyecto llegue a más patrocinadores compartiéndolo con tu red.",
   "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.": "No se han habilitado contribuciones a través de compartir aún. Comparte el proyecto para ayudarlo a llegar a más patrocinadores.",
-  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Las personas que difunden la palabra sobre los proyectos de Geyser al compartir ayudan a conectar los proyectos con los patrocinadores."
+  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Las personas que difunden la palabra sobre los proyectos de Geyser al compartir ayudan a conectar los proyectos con los patrocinadores.",
+  "Support with a badge": "Apoya con una insignia",
+  "Email is required for recurring payments.": "Se requiere un correo electrónico para los pagos recurrentes.",
+  "Email is required when subscribing to updates.": "Se requiere un correo electrónico al suscribirse a las actualizaciones.",
+  "A valid email is required.": "Se requiere un correo electrónico válido.",
+  "Please enter a valid email.": "Introduce un correo electrónico válido.",
+  "Products ({{count}})": "Productos ({{count}})",
+  "Explore this campaign’s products": "Explora los productos de esta campaña"
 }

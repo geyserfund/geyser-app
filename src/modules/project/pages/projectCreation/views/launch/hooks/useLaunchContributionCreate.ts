@@ -23,15 +23,14 @@ import {
   FundingContributionFragment,
   FundingContributionPaymentDetailsFragment,
   FundingResourceType,
-  QuoteCurrency,
   useContributionCreateMutation,
   useLaunchPaymentProjectQuery,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
-import { LaunchPaymentMethod } from '../views/LaunchPaymentMethodSelection.tsx'
 import { ProjectLaunchStrategy } from '../launchStrategy.ts'
+import { LaunchPaymentMethod } from '../views/LaunchPaymentMethodSelection.tsx'
 
 type LaunchPrismAccountKeys = {
   publicKey: string
@@ -257,13 +256,6 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
             launchStrategy: strategy,
           }),
           followProject: true,
-        },
-        orderInput: {
-          bitcoinQuote: {
-            quote: usdRate,
-            quoteCurrency: QuoteCurrency.Usd,
-          },
-          items: [],
         },
         sourceResourceInput: {
           resourceId: project.id.toString(),

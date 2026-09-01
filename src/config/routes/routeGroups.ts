@@ -31,9 +31,6 @@ export const privateCreatorProjectCreationRoutes = [
   getPath('launch'),
   getPath('launchProject', PathName.projectId),
   getPath('launchProjectDetails', PathName.projectId),
-  getPath('launchProjectRewards', PathName.projectId),
-  getPath('launchProjectRewardsCreate', PathName.projectId),
-  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
   getPath('launchProjectFunding', PathName.projectId),
   getPath('launchFundingStrategy', PathName.projectId),
   getPath('launchFundingGoal', PathName.projectId),
@@ -77,11 +74,6 @@ export const projectRoutes = [
   ...projectBaseRoutes,
   getPath('projectPostView', PathName.projectName, PathName.postId),
   getPath('projectRewardView', PathName.projectName, PathName.rewardUUID),
-]
-
-export const projectRewardCreatorRoutes = [
-  getPath('projectRewardCreate', PathName.projectName),
-  getPath('projectRewardEdit', PathName.projectName, PathName.rewardUUID),
 ]
 
 export const projectPostCreatorRoutes = [
@@ -166,7 +158,6 @@ export const ProjectPageRoutesWithNavBarForMobile = [
 
 export const projectCreatorRoutes = [
   ...projectDashboardRoutes,
-  ...projectRewardCreatorRoutes,
   ...projectPostCreatorRoutes,
   ...projectStoryCreatorRoutes,
 ]

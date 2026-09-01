@@ -51,7 +51,6 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const {
     project,
     formState: { followProject, subscribeToGeyserEmails, email },
-    hasSelectedRewards,
     isRecurringDonationMode,
     isMembershipFundingMode,
     setTarget,
@@ -80,7 +79,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const [emailValidationState, setEmailValidationState] = useState(EMAIL_VALIDATION_STATE.IDLE)
 
   const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
-  const requiresEmailForCurrentFlow = hasSelectedRewards || isRecurringDonationMode || isMembershipFundingMode
+  const requiresEmailForCurrentFlow = isRecurringDonationMode || isMembershipFundingMode
   const shouldShowGuestFollowOption = !isLoggedIn && (isRecurringDonationMode || isMembershipFundingMode)
 
   const isEmailValidated = emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED

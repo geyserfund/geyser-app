@@ -1,25 +1,25 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   canUseRecurringFundingAtom,
   fundingFiatSwapAmountWarningAtom,
   fundingFormErrorAtom,
-  fundingFormHasRewardsAtom,
   fundingFormStateAtom,
   fundingFormWarningAtom,
   fundingModeAtom,
   fundingOnchainAmountWarningAtom,
   fundingProjectAtom,
+  FundingUserInfoError,
+  FundingUserInfoValidationState,
+  fundingUserInfoValidationStateAtom,
   guardianBadgesCostAtoms,
   isFundingInputAmountValidAtom,
-  isFundingUserInfoValidAtom,
   isMembershipFundingModeAtom,
   isOneTimeFundingModeAtom,
   isRecurringDonationModeAtom,
   resetFundingFormAtom,
-  resetFundingFormRewardsAtom,
-  rewardsCostAtoms,
   setErrorStateAtom,
   setFundFormStateAtom,
   setFundFormTargetAtom,
@@ -28,16 +28,16 @@ import {
   tipAtoms,
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
-  updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
 } from '../state/fundingFormAtom'
 
 export const useFundingFormAtom = () => {
+  const { t } = useTranslation()
+
   const formState = useAtomValue(fundingFormStateAtom)
 
   const project = useAtomValue(fundingProjectAtom)
 
-  const hasSelectedRewards = useAtomValue(fundingFormHasRewardsAtom)
   const fundingMode = useAtomValue(fundingModeAtom)
   const isOneTimeFundingMode = useAtomValue(isOneTimeFundingModeAtom)
   const isRecurringDonationMode = useAtomValue(isRecurringDonationModeAtom)
@@ -50,13 +50,41 @@ export const useFundingFormAtom = () => {
 
   const isFundingInputAmountValid = useAtomValue(isFundingInputAmountValidAtom)
 
-  const isFundingUserInfoValid = useAtomValue(isFundingUserInfoValidAtom)
+  const fundingUserInfoValidationState = useAtomValue(fundingUserInfoValidationStateAtom)
+
+  const isFundingUserInfoValid = useMemo(() => {
+    switch (fundingUserInfoValidationState) {
+      case FundingUserInfoValidationState.RECURRING_EMAIL_REQUIRED:
+        return {
+          title: t('Email is required for recurring payments.'),
+          description: t('Please enter an email.'),
+          error: FundingUserInfoError.EMAIL,
+          valid: false,
+        }
+      case FundingUserInfoValidationState.SUBSCRIPTION_EMAIL_REQUIRED:
+        return {
+          title: t('Email is required when subscribing to updates.'),
+          description: t('Please enter an email.'),
+          error: FundingUserInfoError.EMAIL,
+          valid: false,
+        }
+      case FundingUserInfoValidationState.INVALID_EMAIL:
+        return {
+          title: t('A valid email is required.'),
+          description: t('Please enter a valid email.'),
+          error: FundingUserInfoError.EMAIL,
+          valid: false,
+        }
+      case FundingUserInfoValidationState.VALID:
+      default:
+        return { title: '', description: '', error: '', valid: true }
+    }
+  }, [fundingUserInfoValidationState, t])
 
   const fundingFormError = useAtomValue(fundingFormErrorAtom)
 
   const fundingFormWarning = useAtomValue(fundingFormWarningAtom)
 
-  const rewardsCosts = useAtomValue(rewardsCostAtoms)
   const subscriptionCosts = useAtomValue(subscriptionCostAtoms)
   const tip = useAtomValue(tipAtoms)
   const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
@@ -70,10 +98,6 @@ export const useFundingFormAtom = () => {
   const setTarget = useSetAtom(setFundFormTargetAtom)
 
   const setState = useSetAtom(setFundFormStateAtom)
-
-  const resetRewards = useSetAtom(resetFundingFormRewardsAtom)
-
-  const updateReward = useSetAtom(updateFundingFormRewardAtom)
 
   const updateSubscription = useSetAtom(updateFundingFormSubscriptionAtom)
 
@@ -90,12 +114,10 @@ export const useFundingFormAtom = () => {
     formState,
     fundingMode,
     project,
-    hasSelectedRewards,
     isOneTimeFundingMode,
     isRecurringDonationMode,
     isMembershipFundingMode,
     canUseRecurringFunding,
-    rewardsCosts,
     subscriptionCosts,
     tip,
     guardianBadgesCosts,
@@ -111,10 +133,8 @@ export const useFundingFormAtom = () => {
     setWarningstate,
     setTarget,
     setState,
-    updateReward,
     updateSubscription,
     resetForm,
-    resetRewards,
     setGeyserTipPercent,
   }
 }

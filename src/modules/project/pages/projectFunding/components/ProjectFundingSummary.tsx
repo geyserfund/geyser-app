@@ -10,14 +10,11 @@ import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
   guardianBadgesCostAtoms,
   networkFeeAtom,
-  rewardsCostAtoms,
-  shippingCostAtom,
   tipAtoms,
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
 } from '@/modules/project/funding/state/fundingFormAtom.ts'
-import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
-import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useGoalsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getProjectMatchingAmountBreakdown } from '@/modules/project/matching/utils/projectMatching.ts'
 import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
@@ -25,11 +22,11 @@ import { Body, H2 } from '@/shared/components/typography'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom.ts'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import { ProjectMatchingCurrency } from '@/types'
-import { commaFormatted, toInt } from '@/utils'
+import { commaFormatted } from '@/utils'
 
-import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
+import { NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
-import type { FundingSummaryContentData, FundingSummaryProductItem } from './FundingSummaryContent.tsx'
+import type { FundingSummaryContentData } from './FundingSummaryContent.tsx'
 import { FundingSummaryContent } from './FundingSummaryContent.tsx'
 
 type ProjectFundingSummaryProps = {
@@ -47,13 +44,9 @@ export const ProjectFundingSummary = ({
   const { t } = useTranslation()
 
   const bitcoinQuote = useAtomValue(bitcoinQuoteAtom)
-  const { rewards } = useRewardsAtom()
   const { inProgressGoals } = useGoalsAtom()
   const projectGoalId = useAtomValue(selectedGoalIdAtom)
 
-  const rewardsCosts = useAtomValue(rewardsCostAtoms)
-  const shippingCosts = useAtomValue(shippingCostAtom)
-  const shippingCountry = useAtomValue(shippingCountryAtom)
   const tip = useAtomValue(tipAtoms)
   const networkFee = useAtomValue(networkFeeAtom)
   const totalSats = useAtomValue(totalAmountSatsAtom)
@@ -61,7 +54,7 @@ export const ProjectFundingSummary = ({
   const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
   const referrerHeroId = useAtomValue(referrerHeroIdAtom)
 
-  const { formState, hasSelectedRewards, isRecurringDonationMode, project } = useFundingFormAtom()
+  const { formState, isRecurringDonationMode, project } = useFundingFormAtom()
   const matchingPreview = useProjectMatchingPreview()
 
   const currentGoal =
@@ -70,28 +63,6 @@ export const ProjectFundingSummary = ({
         ? inProgressGoals.find((goal) => goal.id === projectGoalId)
         : inProgressGoals[0]
       : undefined
-
-  const productItems: FundingSummaryProductItem[] = rewards.reduce<FundingSummaryProductItem[]>((items, reward) => {
-    const count = formState.rewardsByIDAndCount ? formState.rewardsByIDAndCount[reward.id] : 0
-
-    if (!count) {
-      return items
-    }
-
-    return [
-      ...items,
-      {
-        image: reward.images[0],
-        key: reward.id,
-        label: `${reward.name} (x${count})`,
-      },
-    ]
-  }, [])
-
-  const numberOfRewardsSelected =
-    hasSelectedRewards && formState.rewardsByIDAndCount
-      ? Object.entries(formState.rewardsByIDAndCount).reduce((total, [, count]) => total + toInt(count), 0)
-      : 0
 
   const matchingAmountBreakdown = formState.fundingMode
     ? getProjectMatchingAmountBreakdown({
@@ -155,12 +126,9 @@ export const ProjectFundingSummary = ({
         : undefined,
     membership,
     networkFee,
-    productItems,
-    productsCost: rewardsCosts,
+    productItems: [],
     referenceCode,
     referrerHeroId,
-    shippingCost: shippingCosts,
-    showShippingEstimateTooltip: !shippingCountry,
     tip:
       tip.sats > 0
         ? {
@@ -192,9 +160,7 @@ export const ProjectFundingSummary = ({
     <FundingSummaryContent
       data={summaryData}
       disableCollapse={disableCollapse}
-      hasDetails={
-        disableCollapse ? false : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || totalUsdCent >= 10
-      }
+      hasDetails={disableCollapse ? false : formState.donationAmount > 0 || totalUsdCent >= 10}
       mobileHeaderContent={
         <VStack w="full" alignItems="start" display={{ base: 'flex', lg: 'none' }} spacing={3} marginBottom={3}>
           <H2 size="xl" bold sx={{ textWrap: 'balance' }}>
@@ -202,7 +168,6 @@ export const ProjectFundingSummary = ({
           </H2>
 
           <NonProfitSummary disableDesktop={true} />
-          <LaunchpadSummary disableDesktop={true} />
           <TAndCs disableDesktop={true} />
         </VStack>
       }

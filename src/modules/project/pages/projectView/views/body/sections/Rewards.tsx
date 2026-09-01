@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
-import { getPath } from '@/shared/constants'
+import { getPath } from '@/shared/constants/config/routerPaths'
 
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
 import { RewardCardSkeleton } from '../../rewards/components/RewardCard.tsx'
-import { RewardCardWithBuy } from '../../rewards/components/RewardCardWithBuy.tsx'
-import { BodySectionLayout } from '../components'
+import { RewardCard } from '../../rewards/components/RewardCard.tsx'
+import { BodySectionLayout } from '../components/BodySectionLayout'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
@@ -49,7 +49,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     <BodySectionLayout ref={ref} title={t('Products')}>
       <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
         {rewardsToRender.map((reward) => {
-          return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
+          return <RewardCard key={reward.id} width="100%" reward={reward} />
         })}
       </SimpleGrid>
       {hasMoreRewards && (

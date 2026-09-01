@@ -2719,5 +2719,12 @@
   "Share this project": "Share this project",
   "Help this project reach more supporters by sharing it with your network. ": "Help this project reach more supporters by sharing it with your network. ",
   "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.": "No contributions have been enabled through sharing yet. Share the project to help it reach more supporters.",
-  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters."
+  "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.": "Individuals who spread the word about Geyser projects by sharing help connect projects with supporters.",
+  "Support with a badge": "Support with a badge",
+  "Email is required for recurring payments.": "Email is required for recurring payments.",
+  "Email is required when subscribing to updates.": "Email is required when subscribing to updates.",
+  "A valid email is required.": "A valid email is required.",
+  "Please enter a valid email.": "Please enter a valid email.",
+  "Products ({{count}})": "Products ({{count}})",
+  "Explore this campaign’s products": "Explore this campaign’s products"
 }

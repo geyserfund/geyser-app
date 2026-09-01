@@ -10,14 +10,15 @@ import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
-import { Modal, SkeletonLayout } from '@/shared/components/layouts'
-import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
-import { useModal } from '@/shared/hooks'
+import { Modal } from '@/shared/components/layouts/Modal'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
+import { Body } from '@/shared/components/typography/Body'
+import { getPath } from '@/shared/constants/config/routerPaths'
+import { useModal } from '@/shared/hooks/useModal'
 import { standardPadding } from '@/shared/styles'
-import { ProjectGoalsFragment, ProjectRewardFragment } from '@/types'
+import { ProjectGoalsFragment, ProjectRewardFragment } from '@/types/generated/graphql'
 
-import { useGoalsModal } from '../../../../projectView/hooks'
+import { useGoalsModal } from '../../../../projectView/hooks/useGoalsModal'
 import { PostFormType } from '../hooks/usePostForm.tsx'
 
 type Props = {
@@ -158,7 +159,7 @@ const Rewards = ({
       if (!aSelected && bSelected) return 1
       return 0
     })
-  }, [])
+  }, [projectRewardUUIDs, rewards])
 
   return (
     <VStack w="full" alignItems="flex-start">
@@ -238,7 +239,7 @@ const Goals = ({
       if (!aSelected && bSelected) return 1
       return 0
     })
-  }, [])
+  }, [completedGoals, inProgressGoals, projectGoalIds])
 
   return (
     <VStack w="full" alignItems="flex-start">
@@ -280,12 +281,8 @@ const GoalItem = ({ goal }: { goal: ProjectGoalsFragment }) => {
 
 const NoGoalsAndRewards = ({ projectName }: { projectName: string }) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { onGoalModalOpen } = useGoalsModal()
-
-  const handleCreateReward = () => {
-    navigate(getPath('projectRewardCreate', projectName))
-  }
+  const navigate = useNavigate()
 
   const handleCreateGoal = () => {
     navigate(getPath('projectGoals', projectName))
@@ -299,9 +296,6 @@ const NoGoalsAndRewards = ({ projectName }: { projectName: string }) => {
       </Body>
 
       <HStack w="full" paddingX={standardPadding}>
-        <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateReward}>
-          {t('Create a product')}
-        </Button>
         <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateGoal}>
           {t('Create a goal')}
         </Button>

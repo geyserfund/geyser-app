@@ -13,7 +13,7 @@ import { getPath, NoRewardsSoldUrl } from '@/shared/constants'
 import { AonNotice } from './components/AonNotice.tsx'
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar.tsx'
 import { RewardCardSkeleton } from './components/RewardCard.tsx'
-import { RewardCardWithBuy } from './components/RewardCardWithBuy.tsx'
+import { RewardCard } from './components/RewardCard.tsx'
 
 export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { loading: userLoading } = useAuthContext()
@@ -70,7 +70,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
           </H1>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={10}>
             {sortedActiveRewards.map((reward) => {
-              return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
+              return <RewardCard key={reward.id} width="100%" reward={reward} />
             })}
           </SimpleGrid>
         </VStack>
@@ -82,7 +82,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
           </Body>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'}>
             {hiddenRewards.map((reward) => {
-              return <RewardCardWithBuy hidden key={reward.id} width="100%" reward={reward} />
+              return <RewardCard hidden key={reward.id} width="100%" reward={reward} />
             })}
           </SimpleGrid>
         </VStack>

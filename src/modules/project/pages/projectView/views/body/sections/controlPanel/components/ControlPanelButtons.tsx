@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 
 import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
 
-import { getPath } from '../../../../../../../../../shared/constants/config/routerPaths.ts'
 import { ProjectStatus } from '../../../../../../../../../types/generated/graphql.ts'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
 import { useWriteUpdateModal } from '../../../../../hooks/useWriteUpdateModal.ts'
@@ -28,15 +27,6 @@ export const ControlPanelButtons = () => {
         mobileLabel={t('Update')}
         onClick={() => openWriteUpdateModal()}
       />
-
-      {!isRecoverableGrant && (
-        <ControlPanelButton
-          emoji={ControlPanelImages.product}
-          label={t('Sell a product')}
-          mobileLabel={t('Product')}
-          to={getPath('projectRewardCreate', project?.name)}
-        />
-      )}
 
       {!isRecoverableGrant && <PromoteProjectMenu projectName={project?.name} />}
     </>

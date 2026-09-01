@@ -8,7 +8,6 @@ import { initialProjectDetailsLoadAtom, projectAtom, projectLoadingAtom } from '
 import { initialProjectGrantApplicationsLoadAtom } from '@/modules/project/state/projectAtom.ts'
 import { projectFormErrorAtom } from '@/modules/project/state/projectFormAtom.ts'
 import { formProjectAtom } from '@/modules/project/state/projectFormAtom.ts'
-import { initialRewardsLoadAtom, rewardsAtom } from '@/modules/project/state/rewardsAtom.ts'
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '@/modules/project/state/walletAtom.ts'
 import { toInt } from '@/utils'
 
@@ -21,8 +20,6 @@ const listOfAtoms = [
   projectLoadingAtom,
   initialProjectDetailsLoadAtom,
   initialProjectGrantApplicationsLoadAtom,
-  rewardsAtom,
-  initialRewardsLoadAtom,
   walletAtom,
   walletConnectionDetailsAtom,
   walletLoadingAtom,

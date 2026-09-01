@@ -12,12 +12,11 @@ import {
   projectDashboardRoutes,
   projectFundingRoutes,
   projectPostCreatorRoutes,
-  projectRewardCreatorRoutes,
   projectRoutes,
   projectStoryCreatorRoutes,
   routeMatchForAtom,
 } from '../../../config/routes/routeGroups'
-import { getPath, PathName } from '../../../shared/constants'
+import { getPath, PathName } from '../../../shared/constants/config/routerPaths'
 import { profileSideNavAtom } from './profileNav/profileSideNavAtom'
 
 const routesForProjectPage = atom(routeMatchForAtom(projectRoutes))
@@ -27,7 +26,6 @@ export const isProjectRoutesAtom = atom(
     ...projectRoutes,
     ...projectDashboardRoutes,
     ...projectPostCreatorRoutes,
-    ...projectRewardCreatorRoutes,
     ...projectStoryCreatorRoutes,
     ...projectFundingRoutes,
   ]),

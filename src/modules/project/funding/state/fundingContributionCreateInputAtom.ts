@@ -6,24 +6,17 @@ import {
   ProjectSubscriptionStartMutationVariables,
   RecurringContributionRenewalCreateMutationVariables,
   RecurringDonationCreateMutationVariables,
-  recurringFundingModes,
   recurringIntervals,
   recurringPaymentMethods,
 } from '@/modules/project/recurring/graphql'
 import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import {
   ContributionCreateInput,
   ContributionPaymentsInput,
   FundingResourceType,
-  OrderItemInput,
-  OrderItemType,
   ProjectFundingStrategy,
-  ProjectRewardFragment,
-  QuoteCurrency,
-  ShippingAddress,
   StrikePaymentRail,
   UserMeFragment,
 } from '@/types/generated/graphql'
@@ -35,55 +28,37 @@ import {
   PaymentMethods,
 } from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
 import { sourceResourceAtom } from '../../pages/projectView/state/sourceActivityAtom.ts'
-import {
-  fundingProjectAtom,
-  guardianBadgesCostAtoms,
-  rewardsCostAtoms,
-  shippingCostAtom,
-  tipAtoms,
-} from './fundingFormAtom'
-import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
+import { fundingProjectAtom, guardianBadgesCostAtoms, tipAtoms } from './fundingFormAtom'
+import { fundingFormStateAtom } from './fundingFormAtom'
 import type { FundFormType, FundingProjectState } from './fundingFormAtom.ts'
 import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
-import { shippingAddressAtom } from './shippingAddressAtom.ts'
 
 type BuildContributionCreateInputArgs = {
   formState: FundFormType
   fundingProject: FundingProjectState
-  shippingAddress?: Omit<ShippingAddress, 'id'> & { id?: ShippingAddress['id'] }
-  hasSelectedRewards: boolean
   user?: UserMeFragment | null
-  usdRate: number
   projectGoalId?: string | null
   sourceResource: { resourceId?: string | number; resourceType?: FundingResourceType }
   referrerHeroId?: string | null
-  rewardsCosts: { sats: number; usdCents: number; base: number }
   geyserTip: { sats: number }
   guardianBadgesCosts: { sats: number }
-  shippingCosts: { sats: number; usdCents: number }
   paymentsInput: ContributionPaymentsInput
 }
 
 const buildContributionCreateInput = ({
   formState,
   fundingProject,
-  shippingAddress,
-  hasSelectedRewards,
   user,
-  usdRate,
   projectGoalId,
   sourceResource,
   referrerHeroId,
-  rewardsCosts,
   geyserTip,
   guardianBadgesCosts,
-  shippingCosts,
   paymentsInput,
 }: BuildContributionCreateInputArgs): ContributionCreateInput => {
   const {
     donationAmount,
-    rewardsByIDAndCount,
     email,
     comment,
     media,
@@ -92,31 +67,16 @@ const buildContributionCreateInput = ({
     subscribeToGeyserEmails,
     geyserTipPercent,
     guardianBadges,
-    fundingMode,
   } = formState
 
   const anonymous = !user || !user.id
 
-  const orderItemInputs: OrderItemInput[] = []
-  if (hasSelectedRewards && rewardsByIDAndCount) {
-    Object.keys(rewardsByIDAndCount).map((key) => {
-      const rewardQuantity = rewardsByIDAndCount[key as keyof ProjectRewardFragment]
-      if (rewardQuantity && rewardQuantity > 0) {
-        orderItemInputs.push({
-          itemId: toInt(key),
-          itemType: OrderItemType.ProjectReward,
-          quantity: rewardQuantity,
-        })
-      }
-    })
-  }
-
-  const geyserTotalTipAmount = guardianBadgesCosts.sats ? geyserTip.sats + guardianBadgesCosts.sats : geyserTip.sats
-  const geyserTipPercentage = guardianBadgesCosts.sats
-    ? (geyserTotalTipAmount * 100) / (donationAmount + rewardsCosts.sats + shippingCosts.sats)
-    : geyserTipPercent > 0
-    ? geyserTipPercent
-    : undefined
+  const geyserTipPercentage =
+    guardianBadgesCosts.sats > 0 && donationAmount > 0
+      ? ((geyserTip.sats + guardianBadgesCosts.sats) * 100) / donationAmount
+      : geyserTipPercent > 0
+      ? geyserTipPercent
+      : undefined
   const sanitizedReferrerHeroId = user?.heroId && referrerHeroId === user.heroId ? undefined : referrerHeroId
 
   const input: ContributionCreateInput = {
@@ -136,14 +96,6 @@ const buildContributionCreateInput = ({
       ...(subscribeToGeyserEmails && { subscribeToGeyserEmails }),
       ...(guardianBadges.length > 0 && { guardianBadges }),
     },
-    orderInput: {
-      bitcoinQuote: {
-        quote: usdRate,
-        quoteCurrency: QuoteCurrency.Usd,
-      },
-      shippingAddressId: shippingAddress?.id,
-      items: orderItemInputs,
-    },
     sourceResourceInput: {
       resourceId: sourceResource.resourceId ? `${sourceResource.resourceId}` : `${fundingProject?.id}`,
       resourceType: sourceResource.resourceType || FundingResourceType.Project,
@@ -151,12 +103,7 @@ const buildContributionCreateInput = ({
     paymentsInput,
   }
 
-  if (fundingMode !== recurringFundingModes.oneTime && input.orderInput) {
-    input.orderInput.items = []
-  }
-
   if (isManagedRecoverableGrantProject(fundingProject)) {
-    input.orderInput = undefined
     if (input.metadataInput) input.metadataInput.guardianBadges = undefined
   }
 
@@ -167,34 +114,24 @@ const buildContributionCreateInput = ({
 export const formattedFundingInputAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
   const fundingProject = get(fundingProjectAtom)
-  const shippingAddress = get(shippingAddressAtom)
-  const hasSelectedRewards = get(fundingFormHasRewardsAtom)
   const user = get(authUserAtom)
-  const usdRate = get(usdRateAtom)
   const projectGoalId = get(selectedGoalIdAtom)
   const sourceResource = get(sourceResourceAtom)
   const referrerHeroId = get(referrerHeroIdAtom)
-  const rewardsCosts = get(rewardsCostAtoms)
   const geyserTip = get(tipAtoms)
   const guardianBadgesCosts = get(guardianBadgesCostAtoms)
-  const shippingCosts = get(shippingCostAtom)
 
   const paymentsInput = get(paymentsInputAtom)
 
   return buildContributionCreateInput({
     formState,
     fundingProject,
-    shippingAddress,
-    hasSelectedRewards: hasSelectedRewards || false,
     user,
-    usdRate,
     projectGoalId,
     sourceResource,
     referrerHeroId,
-    rewardsCosts,
     geyserTip,
     guardianBadgesCosts,
-    shippingCosts,
     paymentsInput,
   })
 })

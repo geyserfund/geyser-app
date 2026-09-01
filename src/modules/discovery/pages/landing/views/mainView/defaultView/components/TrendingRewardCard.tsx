@@ -1,7 +1,6 @@
-import { Badge, Box, Button, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { useNavigate } from 'react-router'
 
 import { guardianRewardUUIDs } from '@/modules/guardians/utils/characterAssets'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -30,17 +29,8 @@ type TrendingRewardCardProps = {
 
 export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCardProps) => {
   const { formatSatsAmount, formatUsdAmount, formatAmount } = useCurrencyFormatter(true)
-  const navigate = useNavigate()
   const isAonProject =
     'fundingStrategy' in reward.project && reward.project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-
-  const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    navigate(getPath('projectFunding', reward.project.name), {
-      state: { rewardUUID: reward.uuid },
-    })
-  }
 
   const guardian = useMemo(() => {
     const guardian = Object.keys(guardianRewardUUIDs).find(
@@ -69,9 +59,6 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
           <Body size="sm" light>
             {reward.shortDescription}
           </Body>
-          <Button variant="solid" colorScheme="primary1" size="md" width="100%" onClick={handleBuy}>
-            {t('Buy')}
-          </Button>
         </VStack>
       }
       {...rest}

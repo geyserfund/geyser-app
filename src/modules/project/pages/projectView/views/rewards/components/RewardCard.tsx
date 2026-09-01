@@ -1,6 +1,5 @@
-import { Badge, Box, Button, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { MouseEvent } from 'react'
 import { Link } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -12,19 +11,14 @@ import { getPath } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { ProjectRewardFragment, RewardCurrency } from '@/types'
 
 import { ProjectRewardShippingEstimate } from '../../../../../forms/shippingConfigForm/ProjectRewardShippingEstimate'
-import { RewardEditMenu } from './RewardEditMenu'
 
 export type RewardCardProps = {
   reward: ProjectRewardFragment
   hidden?: boolean
-  buyReward?: () => void
-  count?: number
   noLink?: boolean
-  isLaunch?: boolean
 } & CardLayoutProps
 
 /** Helper component for displaying the reward price */
@@ -66,22 +60,10 @@ const RewardPriceDisplay = ({
   )
 }
 
-export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count = 0, ...rest }: RewardCardProps) => {
-  const { project, isProjectOwner } = useProjectAtom()
-
-  const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
+export const RewardCard = ({ reward, hidden, noLink, ...rest }: RewardCardProps) => {
+  const { project } = useProjectAtom()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
-  const { isFundingDisabled } = useProjectToolkit(project)
-
-  const onBuyClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e?.stopPropagation()
-    e.preventDefault()
-
-    if (buyReward) {
-      buyReward()
-    }
-  }
 
   const linkProps = noLink ? {} : { as: Link, to: getPath('projectRewardView', project?.name, reward.uuid) }
 
@@ -149,7 +131,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
               <Body size="sm" medium muted>
                 {t('Available')}:{' '}
                 <Box as="span" color="utils.text" fontWeight={700}>
-                  {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                  {reward.maxClaimable - reward.sold > 0 ? reward.maxClaimable - reward.sold : 0}
                 </Box>
               </Body>
             )}
@@ -186,22 +168,6 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
             formatUsdAmount={formatUsdAmount}
             formatSatsAmount={formatSatsAmount}
           />
-
-          {!isProjectOwner ? (
-            buyReward && (
-              <Button
-                variant="solid"
-                colorScheme="primary1"
-                minWidth="80px"
-                onClick={onBuyClick}
-                isDisabled={!isRewardAvailable || isFundingDisabled()}
-              >
-                {t('Buy')}
-              </Button>
-            )
-          ) : (
-            <RewardEditMenu reward={reward} isLaunch={isLaunch} zIndex={2} />
-          )}
         </HStack>
       </VStack>
     </CardLayout>

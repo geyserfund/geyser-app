@@ -8,3 +8,4 @@
 | [0004](0004-managed-open-funding-recoverable-grants.md) | Accepted | Present managed Open-Funding Recoverable Grants |
 | [0005](0005-keep-build-secrets-out-of-browser-bundles.md) | Accepted | Keep build secrets out of browser bundles |
 | [0006](0006-retire-nostr-project-integrations.md) | Accepted | Retire Nostr project integrations while retaining authentication |
+| [0007](0007-retire-reward-writes-and-purchases.md) | Accepted | Retire reward writes and purchases while preserving historical reads |

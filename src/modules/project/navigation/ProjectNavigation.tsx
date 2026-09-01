@@ -58,12 +58,12 @@ export const ProjectNavigation = () => {
     ] as AnimatedNavBarItem[]
 
     if (hasRewards && !isManagedRecoverableGrant) {
-      const buyProductLabel =
+      const productsLabel =
         !initialRewardsLoading && activeRewards.length > 0
-          ? t('Buy product ({{count}})', { count: activeRewards.length })
-          : t('Buy product')
+          ? t('Products ({{count}})', { count: activeRewards.length })
+          : t('Products')
       buttonList.push({
-        name: buyProductLabel,
+        name: productsLabel,
         path: PathName.projectRewards,
         icon: PiBag,
         activeIcon: PiBagBold,

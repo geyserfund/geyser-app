@@ -1,3 +1,14 @@
+## [0.56.0](https://github.com/geyserfund/geyser-app/compare/v0.55.0...v0.56.0) (2026-09-01)
+
+
+### Performance Improvements
+
+* resolve React Doctor warnings ([ecfc5c8](https://github.com/geyserfund/geyser-app/commit/ecfc5c8971968cb26d7c9484aff1987ca2e3eceb))
+
+### Refactors
+
+* retire reward creation, editing, deletion, and purchasing flows ([b337654](https://github.com/geyserfund/geyser-app/commit/b33765407))
+
 ## [0.55.0](https://github.com/geyserfund/geyser-app/compare/v0.54.0...v0.55.0) (2026-08-31)
 
 ### Features

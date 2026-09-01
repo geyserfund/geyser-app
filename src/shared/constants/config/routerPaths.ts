@@ -85,9 +85,6 @@ export enum PathName {
   launchFundingStrategy = 'strategy',
   launchFundingGoal = 'goal',
   launchStory = 'story',
-  launchProjectRewards = 'rewards',
-  launchProjectRewardsNew = 'rewards/new',
-  launchProjectRewardsEdit = 'rewards/edit',
   launchProjectStrategy = 'strategy',
   launchAboutYou = 'about-you',
   launchPayment = 'payment',
@@ -312,11 +309,6 @@ const pathsMap = {
   projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
   projectStoryEdit: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectStoryEdit}`,
 
-  /** Project Rewards internal routes */
-
-  projectRewardCreate: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}/create`,
-  projectRewardEdit: (projectName: string, rewardUUID: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectRewards}/edit/${rewardUUID}`,
   projectRewardView: (projectName: string, rewardUUID: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectRewards}/view/${rewardUUID}`,
 
@@ -449,12 +441,6 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingStrategy}`,
   launchFundingGoal: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingGoal}`,
-  launchProjectRewards: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
-  launchProjectRewardsCreate: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
-  launchProjectRewardsEdit: (projectID: string, rewardUUID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardUUID}`,
   launchStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchStory}`,
   launchAboutYou: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchAboutYou}`,
 

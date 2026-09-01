@@ -1,36 +1,35 @@
-import { VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getRewardShippingStatusBackgroundColor } from '@/helpers'
-import { Body } from '@/shared/components/typography'
-
-import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../components/ui'
-import { RewardStatusOptions } from '../../../../../../../shared/constants'
+import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
+import { getRewardShippingStatusBackgroundColor } from '@/helpers/getProjectShippingStatusBackgroundColor'
+import { Body } from '@/shared/components/typography/Body'
+import { RewardStatusOptions } from '@/shared/constants/platform/rewardShipping'
+import { LinkableAvatar } from '@/shared/molecules/LinkableAvatar'
 import {
   OrderByDirection,
   OrderFragment,
   OrdersGetOrderByField,
   OrdersGetOrderByInput,
   OrdersGetStatus,
-  UpdatableOrderStatus,
-} from '../../../../../../../types'
-import { useCustomTheme } from '../../../../../../../utils'
-import { getUSD, TableData, TableWithAccordion } from '../../../common'
-import { AccordionListItem, OrderItems } from '../../../components'
-import { ShippingStatusSelect } from './ShippingStatusSelect'
+} from '@/types/generated/graphql'
+import { useCustomTheme } from '@/utils/tools/ColorModeSwitcher'
+
+import { getUSD } from '../../../common/helpers'
+import { TableData, TableWithAccordion } from '../../../common/TableWithAccordion'
+import { AccordionListItem } from '../../../components/AccordionListItem'
+import { OrderItems } from '../../../components/OrderItems'
 
 export const RewardTable = ({
   status,
   data,
-  updateOrderStatus,
   orderBy,
   setOrderBy,
 }: {
   status: OrdersGetStatus
   data: OrderFragment[]
-  updateOrderStatus: (orderId: string, status: UpdatableOrderStatus) => void
   orderBy: OrdersGetOrderByInput[]
   setOrderBy: Dispatch<SetStateAction<OrdersGetOrderByInput[]>>
 }) => {
@@ -60,22 +59,9 @@ export const RewardTable = ({
           )
 
           return (
-            <>
-              <ShippingStatusSelect<any, false>
-                isSearchable={false}
-                backgroundColor={backgroundColor}
-                hoverBgColor={hoverBgColor}
-                options={RewardStatusOptions}
-                value={RewardStatusOptions.find((val) => val.value === order.status)}
-                defaultValue={RewardStatusOptions.find((val) => val.value === order.status)}
-                onChange={(option) => {
-                  if (option) {
-                    updateOrderStatus(order.id, option.value as UpdatableOrderStatus)
-                  }
-                }}
-                menuPortalTarget={document.body}
-              />
-            </>
+            <Box backgroundColor={backgroundColor} color={hoverBgColor} borderRadius="md" px={2} py={1}>
+              {t(RewardStatusOptions.find((val) => val.value === order.status)?.label || order.status)}
+            </Box>
           )
         },
         isMobile: true,
@@ -235,7 +221,7 @@ export const RewardTable = ({
         },
       },
     ],
-    [t, updateOrderStatus, orderBy, setOrderBy, sortField, colors],
+    [t, orderBy, setOrderBy, sortField, colors],
   )
 
   return <TableWithAccordion<OrderFragment> items={data} schema={tableData} />
