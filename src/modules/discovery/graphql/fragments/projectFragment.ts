@@ -21,7 +21,7 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     fundingStrategy
     fundingSummary {
       fundingStrategy
-      isRecoverableGrant
+      isCircularGrant
       raisedSats
       raisedUsdCent
       goalSats
@@ -128,7 +128,7 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     balanceUsdCent
     lastCreationStep
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     launchedAt
     rskEoa
     directPaymentDetails {

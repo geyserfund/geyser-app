@@ -8,10 +8,10 @@ import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPa
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { ProjectFundingStrategy } from '@/types/index.ts'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 
 import { useRefetchQueries } from '../aonNotification/hooks/useRefetchQueries.ts'
-import { usePrismWithdrawable } from './usePrismWithdrawable.ts'
+import { useRootstockBalance } from './useRootstockBalance.ts'
 
 export const TiaPayoutNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -20,15 +20,15 @@ export const TiaPayoutNotification = () => {
   const { queryProject } = useProjectAPI()
 
   const projectRskEoa = project?.rskEoa || ''
-  const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
-  const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
+  const { balance, isLoading, refetch: refetchBalance } = useRootstockBalance({ rskAddress: projectRskEoa })
+  const withdrawableSats = balance ? Number(balance / 10000000000n) : 0
   const hasMinimumNotice = withdrawableSats > 0 && withdrawableSats < MIN_BITCOIN_PAYOUT_SATS
 
-  if (!project || !isProjectOwner || project.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
+  if (!project || !isProjectOwner || !isLegacyTiaProject(project)) {
     return null
   }
 
-  const hasWithdrawable = withdrawable !== null && withdrawable > 0n
+  const hasWithdrawable = balance !== null && balance > 0n
 
   if (!projectRskEoa || isLoading || !hasWithdrawable) {
     return null
@@ -85,7 +85,7 @@ export const TiaPayoutNotification = () => {
         onCompleted={() => {
           refetchQueriesOnPayoutSuccess()
           queryProject.execute()
-          refetchWithdrawable().catch(() => undefined)
+          refetchBalance().catch(() => undefined)
         }}
       />
     </>

@@ -10,7 +10,7 @@ type ManagedPaymentReadiness = {
   strikeOnChain?: boolean | null
 }
 
-export const ManagedRecoverableGrantPaymentStatus = ({ readiness }: { readiness?: ManagedPaymentReadiness | null }) => {
+export const ManagedCircularGrantPaymentStatus = ({ readiness }: { readiness?: ManagedPaymentReadiness | null }) => {
   const { t } = useTranslation()
   const stripeReady = Boolean(readiness?.stripe)
   const strikeReady = Boolean(readiness?.strikeLightning || readiness?.strikeOnChain)
@@ -19,7 +19,7 @@ export const ManagedRecoverableGrantPaymentStatus = ({ readiness }: { readiness?
     <VStack w="full" align="stretch" spacing={5}>
       <Body>
         {t(
-          'Contributions to this Recoverable Grant are received in Geyser-managed accounts and attributed to its protected goal.',
+          'Contributions to this Circular Grant are received in Geyser-managed accounts and attributed to its protected goal.',
         )}
       </Body>
       <ProviderStatus label={t('Stripe')} isReady={stripeReady} />

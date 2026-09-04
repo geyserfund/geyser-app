@@ -7,7 +7,6 @@ import { ContributionStatus } from '@/types/index.ts'
 
 import { fundingRequestErrorAtom } from '../state/errorAtom.ts'
 import { fundingContributionAtom } from '../state/fundingContributionAtom.ts'
-import { launchContributionProjectIdAtom } from '../state/fundingFormAtom.ts'
 import { startPollingAndSubscriptionAtom, stopPollingAndSubscriptionAtom } from '../state/pollingAndSubscriptionAtom.ts'
 import { useFundingContributionPolling } from './useFundingContributionPolling.ts'
 import { useFundingContributionSubscription } from './useFundingContributionSubscription.ts'
@@ -25,8 +24,6 @@ export const useListenFundingContributionSuccess = () => {
 
   const stopPollingAndSubscription = useSetAtom(stopPollingAndSubscriptionAtom)
   const startPollingAndSubscription = useSetAtom(startPollingAndSubscriptionAtom)
-
-  const launchContributionProjectId = useAtomValue(launchContributionProjectIdAtom)
 
   const { project } = useFundingFormAtom()
 
@@ -47,24 +44,10 @@ export const useListenFundingContributionSuccess = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   useEffect(() => {
-    let redirectTimer: ReturnType<typeof setTimeout> | undefined
-
     if (fundingContribution && StatusForSuccess.includes(fundingContribution.status)) {
-      if (launchContributionProjectId) {
-        redirectTimer = setTimeout(() => {
-          navigate({ pathname: getPath('launchProjectStrategy', `${launchContributionProjectId}`) }, { replace: true })
-        }, 2000)
-      } else {
-        navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
-      }
+      navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
     }
-
-    return () => {
-      if (redirectTimer) {
-        clearTimeout(redirectTimer)
-      }
-    }
-  }, [fundingContribution, navigate, project.name, location.search, launchContributionProjectId])
+  }, [fundingContribution, navigate, project.name, location.search])
 
   useEffect(() => {
     startPollingAndSubscription()

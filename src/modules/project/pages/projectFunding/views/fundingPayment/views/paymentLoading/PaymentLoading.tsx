@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -29,23 +29,21 @@ export const PaymentLoading = () => {
   const navigate = useNavigate()
 
   const { user, loading: authLoading } = useAuthContext()
-  const { project, loading: projectLoading, isPrismEnabled } = useProjectAtom()
+  const { project, loading: projectLoading } = useProjectAtom()
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
   const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [shouldShowRecoveryKey, setShouldShowRecoveryKey] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
-  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const managedCircularGrant = isManagedCircularGrantProject(project)
   const hasStripePaymentMethod =
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
     Boolean(
-      managedRecoverableGrant
-        ? project?.paymentMethods?.managedRecoverableGrant?.stripe
+      managedCircularGrant
+        ? project?.paymentMethods?.managedCircularGrant?.stripe
         : project?.paymentMethods?.fiat?.stripe,
     )
-  const shouldUseProtectedPaymentLoading =
-    !managedRecoverableGrant &&
-    (isAllOrNothing(project) || (isPrismEnabled && intendedPaymentMethod !== PaymentMethods.fiatSwap))
+  const shouldUseProtectedPaymentLoading = !managedCircularGrant && isAllOrNothing(project)
 
   const handleNext = (contributionId?: string, forceCardRoute?: boolean) => {
     const paymentPath =
@@ -91,11 +89,7 @@ export const PaymentLoading = () => {
 
     if (!user?.id && shouldShowRecoveryKey) {
       return (
-        <PaymentRecoveryKey
-          contributionId={currentContributionId}
-          isPrismContribution={isPrismEnabled}
-          onComplete={handleNext}
-        />
+        <PaymentRecoveryKey contributionId={currentContributionId} onComplete={handleNext} />
       )
     }
 

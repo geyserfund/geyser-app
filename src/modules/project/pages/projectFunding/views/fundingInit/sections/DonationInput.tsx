@@ -4,7 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { KeyboardEvent, useRef } from 'react'
 import { PiHeartFill } from 'react-icons/pi'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { recurringFundingModes, recurringIntervals } from '@/modules/project/recurring/graphql'
@@ -100,7 +100,7 @@ export const DonationInput = () => {
     : hasStripePaymentMethod
     ? t('Set up automatic monthly payments by credit card, or pay with Bitcoin and receive monthly reminders.')
     : null
-  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const managedCircularGrant = isManagedCircularGrantProject(project)
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replaceAll(',', '')
@@ -140,7 +140,7 @@ export const DonationInput = () => {
         {donationTitle}
       </H1>
 
-      {canUseRecurringFunding && !managedRecoverableGrant && (
+      {canUseRecurringFunding && !managedCircularGrant && (
         <VStack alignItems="stretch" spacing={2}>
           <HStack spacing={3} alignItems="stretch">
             <Box

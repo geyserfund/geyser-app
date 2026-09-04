@@ -19,11 +19,11 @@ export const REGION_OPTIONS = [
 
 export type ImpactFundDonateRegionId = (typeof REGION_OPTIONS)[number]['id']
 
-export const RECOVERABLE_GRANTS_CATEGORY_ID = 'recoverable-grants' as const
+export const CIRCULAR_GRANTS_CATEGORY_ID = 'circular-grants' as const
 export const WORKSHOPS_OPERATIONS_CATEGORY_ID = 'workshops-operations' as const
 
 export const CATEGORY_OPTIONS = [
-  { id: RECOVERABLE_GRANTS_CATEGORY_ID, labelKey: 'Grow Recoverable Grants' as const },
+  { id: CIRCULAR_GRANTS_CATEGORY_ID, labelKey: 'Grow Circular Grants' as const },
   { id: WORKSHOPS_OPERATIONS_CATEGORY_ID, labelKey: 'Support Field Partners' as const },
 ] as const
 

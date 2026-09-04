@@ -28,7 +28,7 @@
 - Harden real-auth flow to avoid brittle response-order waits and click interception.
 - Shift real-auth success criteria to outcome-based checks (logged-in UI state).
 - Serialize/limit auth-sensitive suite execution paths for stability.
-- Update project-creation navigation assumptions to current launch-start behavior and labels.
+- Validate the managed Circular Grant-only project-creation navigation and labels.
 - Tighten project-creation step waits and selectors where brittle.
 - Add live-backend availability checks for real-auth/funding/project-creation suites, and skip those suites when backend/auth services are returning transport or 5xx/404 outage signals.
 
@@ -48,7 +48,8 @@
 ## Test Plan
 - Required pass scope:
   - `packages/testing/playwright/tests/funding/*.spec.ts`
-  - `packages/testing/playwright/tests/projectCreation/aon.spec.ts`
+  - `packages/testing/playwright/tests/projectCreation/managedCircularGrant.spec.ts`
+  - existing configured AON funding/claim coverage (no AON project creation)
   - auth specs (`login-logout.spec.ts`, `real-auth.spec.ts`) on Chromium
 - Reliability target:
   - three consecutive green Chromium runs for funding + project creation before expansion.

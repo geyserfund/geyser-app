@@ -5,9 +5,9 @@ import * as yup from 'yup'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import {
-  MANAGED_RECOVERABLE_GRANT_GOAL_TITLE,
-  MANAGED_RECOVERABLE_GRANT_MAX_TARGET_SATS,
-} from '@/modules/project/domain/managedRecoverableGrant.ts'
+  MANAGED_CIRCULAR_GRANT_GOAL_TITLE,
+  MANAGED_CIRCULAR_GRANT_MAX_TARGET_SATS,
+} from '@/modules/project/domain/managedCircularGrant.ts'
 
 import { dollarsToCents } from '../../../../../shared/utils/formatData/helperFunctions.ts'
 import {
@@ -62,7 +62,7 @@ type UseProjectGoalFormProps = {
   projectId: string
   onClose: () => void
   onGoalCreated?: () => void
-  managedRecoverableGrant?: boolean
+  managedCircularGrant?: boolean
 }
 
 export const useProjectGoalForm = ({
@@ -70,7 +70,7 @@ export const useProjectGoalForm = ({
   projectId,
   onClose,
   onGoalCreated,
-  managedRecoverableGrant = false,
+  managedCircularGrant = false,
 }: UseProjectGoalFormProps) => {
   const toast = useNotification()
 
@@ -81,14 +81,14 @@ export const useProjectGoalForm = ({
     resolver: yupResolver(
       goalFormSchema(
         amountContributed,
-        managedRecoverableGrant ? MANAGED_RECOVERABLE_GRANT_MAX_TARGET_SATS : MAX_GOAL_TARGET_AMOUNT,
+        managedCircularGrant ? MANAGED_CIRCULAR_GRANT_MAX_TARGET_SATS : MAX_GOAL_TARGET_AMOUNT,
       ),
     ) as any,
     defaultValues: {
-      title: managedRecoverableGrant ? MANAGED_RECOVERABLE_GRANT_GOAL_TITLE : '',
+      title: managedCircularGrant ? MANAGED_CIRCULAR_GRANT_GOAL_TITLE : '',
       description: '',
       targetAmount: 0,
-      currency: managedRecoverableGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent,
+      currency: managedCircularGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent,
       projectId,
       emojiUnifiedCode: '',
     },
@@ -113,15 +113,15 @@ export const useProjectGoalForm = ({
       })
     } else {
       reset({
-        title: managedRecoverableGrant ? MANAGED_RECOVERABLE_GRANT_GOAL_TITLE : '',
+        title: managedCircularGrant ? MANAGED_CIRCULAR_GRANT_GOAL_TITLE : '',
         description: '',
         targetAmount: 0,
-        currency: managedRecoverableGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent,
+        currency: managedCircularGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent,
         projectId,
         emojiUnifiedCode: '',
       })
     }
-  }, [goal, reset, projectId, isBTC, managedRecoverableGrant])
+  }, [goal, reset, projectId, isBTC, managedCircularGrant])
 
   const onSubmit = (formData: FormValues) => {
     try {

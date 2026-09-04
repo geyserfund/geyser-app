@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
 
 import { ProjectStatus } from '../../../../../../../../../types/generated/graphql.ts'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
@@ -14,7 +14,7 @@ export const ControlPanelButtons = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { openWriteUpdateModal } = useWriteUpdateModal()
 
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isCircularGrant = isCircularGrantProject(project)
 
   if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
     return null
@@ -28,7 +28,7 @@ export const ControlPanelButtons = () => {
         onClick={() => openWriteUpdateModal()}
       />
 
-      {!isRecoverableGrant && <PromoteProjectMenu projectName={project?.name} />}
+      {!isCircularGrant && <PromoteProjectMenu projectName={project?.name} />}
     </>
   )
 }

@@ -18,9 +18,9 @@ import { PiCaretRightBold } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
-import { RecoverableGrantProjects } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/RecoverableGrantProjects.tsx'
+import { CircularGrantProjects } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/CircularGrantProjects.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
-import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
+import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -30,7 +30,7 @@ import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks
 import { VideoPlayer } from '@/shared/molecules/VideoPlayer.tsx'
 import { standardPadding } from '@/shared/styles/index.ts'
 
-type RecoverableGrantsColors = {
+type CircularGrantsColors = {
   pageBg: string
   ink: string
   muted: string
@@ -52,7 +52,8 @@ const radius = {
   button: 'innerCard',
 }
 
-const RECOVERABLE_GRANTS_HERO_IMAGE_URL =
+// The externally managed storage object keeps its historical name for continuity.
+const CIRCULAR_GRANTS_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-hero.png'
 const AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL = 'https://youtu.be/pU1KxP0ddng'
 const FIELD_PARTNER_BOOKLET_URL =
@@ -112,9 +113,9 @@ const faqItems: readonly FaqItem[] = [
       'Capital return is supported through community agreements, field-partner follow-up, and chama accountability rather than legal debt collection.',
   },
   {
-    question: 'Who can start a recoverable grants program?',
+    question: 'Who can start a circular grants program?',
     answer:
-      'Recoverable grants are currently available to Geyser field partners operating trusted local circular economy hubs.',
+      'Circular grants are currently available to Geyser field partners operating trusted local circular economy hubs.',
   },
   {
     question: 'Where can I learn more about becoming a Field Partner?',
@@ -128,10 +129,10 @@ const faqItems: readonly FaqItem[] = [
   },
 ] as const
 
-export const RecoverableGrantsPage = () => {
+export const CircularGrantsPage = () => {
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
-  const onDonateClick = () => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })
-  const colors: RecoverableGrantsColors = {
+  const onDonateClick = () => openDonateModal({ defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID] })
+  const colors: CircularGrantsColors = {
     pageBg: useColorModeValue('white', 'utils.pbg'),
     ink: useColorModeValue('#17120C', 'neutral1.12'),
     muted: useColorModeValue('#5F6268', 'neutral1.10'),
@@ -151,12 +152,12 @@ export const RecoverableGrantsPage = () => {
       {donateModalElement}
 
       <Head
-        title={t('Recoverable Grants')}
+        title={t('Circular Grants')}
         description={t(
-          'Reusable capital for trusted local economies through debt-free recoverable grant capital and local field-partner validation.',
+          'Reusable capital for trusted local economies through debt-free circular grant capital and local field-partner validation.',
         )}
-        image={RECOVERABLE_GRANTS_HERO_IMAGE_URL}
-        url={`https://geyser.fund${getPath('discoveryRecoverableGrants')}`}
+        image={CIRCULAR_GRANTS_HERO_IMAGE_URL}
+        url={`https://geyser.fund${getPath('discoveryCircularGrants')}`}
       />
 
       <Box w="full" bg={colors.pageBg} color={colors.ink}>
@@ -170,19 +171,19 @@ export const RecoverableGrantsPage = () => {
           <HeroSection colors={colors} onDonateClick={onDonateClick} />
 
           <PageSection>
-            <RecoverableGrantProjects />
+            <CircularGrantProjects />
           </PageSection>
 
           <PageSection>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 5, lg: 6 }}>
               <InfoCard
                 colors={colors}
-                eyebrow="01 What are recoverable grants"
+                eyebrow="01 What are circular grants"
                 title="Debt-free capital that comes back to the community"
               >
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'Recoverable grants fund local entrepreneurs with debt-free recoverable grant capital and no debt obligation. When capital returns through community agreements, it can be deployed again in the same circular economy.',
+                    'Circular grants fund local entrepreneurs with debt-free circular grant capital and no debt obligation. When capital returns through community agreements, it can be deployed again in the same circular economy.',
                   )}
                 </Body>
                 <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3} pt={2}>
@@ -201,7 +202,7 @@ export const RecoverableGrantsPage = () => {
                 </SimpleGrid>
               </InfoCard>
 
-              <InfoCard colors={colors} eyebrow="02 Why recoverable grants" title="Why this model matters">
+              <InfoCard colors={colors} eyebrow="02 Why circular grants" title="Why this model matters">
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
                     'It reduces dependence on predatory informal debt, opens fairer access to capital, and lets trusted local partners decide who is ready.',
@@ -249,7 +250,7 @@ export const RecoverableGrantsPage = () => {
             </H2>
             <Body color={colors.muted} maxW="690px" lineHeight="27px" mt={3}>
               {t(
-                "In Kibera, recoverable grants are already being piloted through Afribit's trusted local network, participant validation, and capital return follow-up.",
+                "In Kibera, circular grants are already being piloted through Afribit's trusted local network, participant validation, and capital return follow-up.",
               )}
             </Body>
             <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} templateColumns={{ lg: '1.35fr 1fr' }} mt={6}>
@@ -258,7 +259,7 @@ export const RecoverableGrantsPage = () => {
                 <InfoCard colors={colors} eyebrow="Pilot scope" title="2 cohorts 15 people each 6 projects" compact />
                 <Button
                   as={RouterLink}
-                  to={getPath('discoveryRecoverableGrantsAfribitCaseStudy')}
+                  to={getPath('discoveryCircularGrantsAfribitCaseStudy')}
                   h="54px"
                   borderRadius={radius.button}
                   bg={colors.darkSurfaceBg}
@@ -279,7 +280,7 @@ export const RecoverableGrantsPage = () => {
               <InfoCard colors={colors} eyebrow="05 Transparency" title="How the pilot stays visible and accountable">
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'Recoverable grants are still being refined in the open. We share how capital is allocated, what Geyser covers operationally, and what we are learning as the pilot grows.',
+                    'Circular grants are still being refined in the open. We share how capital is allocated, what Geyser covers operationally, and what we are learning as the pilot grows.',
                   )}
                 </Body>
               </InfoCard>
@@ -399,7 +400,7 @@ export const RecoverableGrantsPage = () => {
                     bold
                     color={colors.ink}
                   >
-                    {t('Launch your own Recoverable Grant pilot in your local community')}
+                    {t('Launch your own Circular Grant pilot in your local community')}
                   </H2>
                   <Body
                     size={{ base: 'md', lg: '20px' }}
@@ -407,7 +408,7 @@ export const RecoverableGrantsPage = () => {
                     color={colors.muted}
                   >
                     {t(
-                      'Help local circular economy hubs launch recoverable grants, reach more entrepreneurs, and turn recycled capital into visible local impact.',
+                      'Help local circular economy hubs launch circular grants, reach more entrepreneurs, and turn recycled capital into visible local impact.',
                     )}
                   </Body>
                 </VStack>
@@ -509,7 +510,7 @@ export const RecoverableGrantsPage = () => {
   )
 }
 
-const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
+const Breadcrumb = ({ colors }: { colors: CircularGrantsColors }) => (
   <HStack spacing={2} color={colors.muted}>
     <Body
       as={RouterLink}
@@ -525,7 +526,7 @@ const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
     <PiCaretRightBold size={11} />
     <Body
       as={RouterLink}
-      to={getPath('discoveryRecoverableGrants')}
+      to={getPath('discoveryCircularGrants')}
       size="xs"
       bold
       letterSpacing="0.18em"
@@ -533,12 +534,12 @@ const Breadcrumb = ({ colors }: { colors: RecoverableGrantsColors }) => (
       color={colors.ink}
       aria-current="page"
     >
-      {t('Recoverable Grants')}
+      {t('Circular Grants')}
     </Body>
   </HStack>
 )
 
-const HeroSection = ({ colors, onDonateClick }: { colors: RecoverableGrantsColors; onDonateClick: () => void }) => (
+const HeroSection = ({ colors, onDonateClick }: { colors: CircularGrantsColors; onDonateClick: () => void }) => (
   <Box
     w="100vw"
     maxW="100vw"
@@ -554,7 +555,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: RecoverableGrantsColor
     <Box
       position="absolute"
       inset={0}
-      backgroundImage={`url('${RECOVERABLE_GRANTS_HERO_IMAGE_URL}')`}
+      backgroundImage={`url('${CIRCULAR_GRANTS_HERO_IMAGE_URL}')`}
       backgroundPosition={{ base: 'center', lg: '64% 42%' }}
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
@@ -580,7 +581,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: RecoverableGrantsColor
         </H1>
         <Body size={{ base: 'md', lg: 'lg' }} color="whiteAlpha.900" lineHeight={{ base: '26px', lg: '28px' }}>
           {t(
-            'Recoverable grants bring debt-free recoverable grant capital to local entrepreneurs through trusted field partners and reusable capital return loops.',
+            'Circular grants bring debt-free circular grant capital to local entrepreneurs through trusted field partners and reusable capital return loops.',
           )}
         </Body>
         <HStack spacing={3} flexWrap="wrap" pt="8px">
@@ -638,7 +639,7 @@ const Eyebrow = ({
   color,
 }: {
   children: React.ReactNode
-  colors: RecoverableGrantsColors
+  colors: CircularGrantsColors
   color?: string
 }) => (
   <Body size="xs" bold color={color ?? colors.gold} letterSpacing="0.18em" textTransform="uppercase">
@@ -653,7 +654,7 @@ const InfoCard = ({
   children,
   compact,
 }: {
-  colors: RecoverableGrantsColors
+  colors: CircularGrantsColors
   eyebrow: string
   title: string
   children?: React.ReactNode
@@ -680,7 +681,7 @@ const InfoCard = ({
   </VStack>
 )
 
-const FlowStep = ({ colors, step }: { colors: RecoverableGrantsColors; step: FlowStepItem }) => {
+const FlowStep = ({ colors, step }: { colors: CircularGrantsColors; step: FlowStepItem }) => {
   const bg = step.isDark ? colors.darkSurfaceBg : step.isGold ? colors.gold : colors.surfaceBg
   const color = step.isDark ? 'white' : step.isGold ? colors.onAmberText : colors.ink
 
@@ -714,7 +715,7 @@ const FlowStep = ({ colors, step }: { colors: RecoverableGrantsColors; step: Flo
   )
 }
 
-const CaseStudyCard = ({ colors }: { colors: RecoverableGrantsColors }) => (
+const CaseStudyCard = ({ colors }: { colors: CircularGrantsColors }) => (
   <Box
     bg={colors.darkSurfaceBg}
     color="white"
@@ -728,7 +729,7 @@ const CaseStudyCard = ({ colors }: { colors: RecoverableGrantsColors }) => (
         {t('Pilot snapshot')}
       </Eyebrow>
       <H3 size={{ base: '28px', lg: '34px' }} lineHeight={{ base: '34px', lg: '40px' }} bold color="white">
-        {t('Afribit Kibera recoverable grant cohort')}
+        {t('Afribit Kibera circular grant cohort')}
       </H3>
       <Box overflow="hidden" borderRadius={radius.card}>
         <VideoPlayer url={AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL} />

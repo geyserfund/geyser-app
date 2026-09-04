@@ -25,9 +25,9 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
       to: getPath('discoveryCampaigns'),
     },
     {
-      title: t('Recoverable Grants'),
+      title: t('Circular Grants'),
       description: t('Reusable capital for trusted local economies.'),
-      to: getPath('discoveryRecoverableGrants'),
+      to: getPath('discoveryCircularGrants'),
       badge: { label: t('new'), tone: 'new' },
     },
   ]

@@ -69,7 +69,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     launchedAt
     preLaunchedAt
     preLaunchExpiresAt
-    paidLaunch
     goalsCount
     rewardsCount
     entriesCount
@@ -77,7 +76,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     followersCount
     rejectionReason
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     fieldPartner {
       id
       username
@@ -147,8 +146,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     launchedAt
     preLaunchedAt
     preLaunchExpiresAt
-    paidLaunch
-    launchStrategy
     goalsCount
     rewardsCount
     entriesCount
@@ -156,7 +153,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     followersCount
     rejectionReason
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     fieldPartner {
       id
       username
@@ -251,7 +248,7 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     subCategory
     rewardCurrency
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     directPaymentDetails {
       btcAddress
       lightningAddress

@@ -18,7 +18,7 @@ const LANDING_LAYOUT_PATTERNS = [
   { path: `${getPath('discoveryAllOrNothing')}/*`, end: false },
   { path: `${getPath('discoveryCampaigns')}/*`, end: false },
   { path: `${getPath('discoveryFundraisers')}/*`, end: false },
-  { path: `${getPath('discoveryRecoverableGrantProjects')}/*`, end: false },
+  { path: `${getPath('discoveryCircularGrantProjects')}/*`, end: false },
   { path: `${getPath('discoveryProducts')}/*`, end: false },
 ] as const
 
@@ -34,14 +34,14 @@ export const Discovery = () => {
   const isImpactFundsWorkshopsRoute =
     matchPath({ path: getPath('discoveryImpactFundsWorkshops'), end: true }, pathname) !== null
   const isMicroLendingMainRoute = matchPath({ path: getPath('discoveryMicroLending'), end: true }, pathname) !== null
-  const isRecoverableGrantsRoute =
-    matchPath({ path: `${getPath('discoveryRecoverableGrants')}/*`, end: false }, pathname) !== null
+  const isCircularGrantsRoute =
+    matchPath({ path: `${getPath('discoveryCircularGrants')}/*`, end: false }, pathname) !== null
   const usesFullWidthLayout =
     usesLandingLayout ||
     isImpactFundsMainRoute ||
     isImpactFundsWorkshopsRoute ||
     isMicroLendingMainRoute ||
-    isRecoverableGrantsRoute ||
+    isCircularGrantsRoute ||
     isCreatorRoute
 
   useEffect(() => {

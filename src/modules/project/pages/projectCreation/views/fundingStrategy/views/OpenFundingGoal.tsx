@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { GoalModal } from '@/modules/project/pages/projectView/components/GoalModal.tsx'
 import { useGoalsModal } from '@/modules/project/pages/projectView/hooks/useGoalsModal.tsx'
@@ -24,7 +24,7 @@ export const OpenFundingGoal = () => {
 
   const { project } = useProjectAtom()
   const { inProgressGoals } = useGoalsAtom()
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingGoal,
@@ -33,8 +33,8 @@ export const OpenFundingGoal = () => {
 
   const { onGoalModalOpen } = useGoalsModal()
 
-  if (isManagedRecoverableGrant) {
-    return <ManagedRecoverableGrantGoal />
+  if (isManagedCircularGrant) {
+    return <ManagedCircularGrantGoal />
   }
 
   const continueProps = {
@@ -74,7 +74,7 @@ export const OpenFundingGoal = () => {
   )
 }
 
-const ManagedRecoverableGrantGoal = () => {
+const ManagedCircularGrantGoal = () => {
   const navigate = useNavigate()
   const { project } = useProjectAtom()
   const { inProgressGoals } = useGoalsAtom()
@@ -89,7 +89,7 @@ const ManagedRecoverableGrantGoal = () => {
   const { handleSubmit, loading, errors, enableSubmit, setValue, watch } = useProjectGoalForm({
     goal,
     projectId: project.id,
-    managedRecoverableGrant: true,
+    managedCircularGrant: true,
     onClose: updateProjectWithLastCreationStep,
   })
   const amount = watch('targetAmount') || 0
@@ -130,7 +130,7 @@ const ManagedRecoverableGrantGoal = () => {
         <VStack w="full" h="full" align="flex-start" spacing={8}>
           <Body size="sm">
             {t(
-              'Set the Recoverable Grant goal amount. This goal amount cannot be edited after the project has launched.',
+              'Set the Circular Grant goal amount. This goal amount cannot be edited after the project has launched.',
             )}
           </Body>
           <FieldContainer title={t('Goal amount')} error={errors.targetAmount?.message}>

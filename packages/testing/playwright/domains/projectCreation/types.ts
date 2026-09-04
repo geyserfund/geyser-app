@@ -16,22 +16,3 @@ export type ProjectDetailsOptions = {
   links?: string[]
   tags?: number[]
 }
-
-/** Options for setting AON funding goal */
-export type AONGoalOptions = {
-  amountSats: number
-  duration: number // Days (1-60)
-  launchDate?: Date // Optional scheduled launch date
-}
-
-/** Options for creating a complete AON project */
-export type CreateAONProjectOptions = {
-  projectDetails: ProjectDetailsOptions
-  goal: AONGoalOptions
-}
-
-/** Result of project creation */
-export type CreatedProject = {
-  projectId: string
-  projectName: string
-}

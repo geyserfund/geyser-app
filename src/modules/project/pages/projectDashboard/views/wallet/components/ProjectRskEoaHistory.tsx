@@ -5,7 +5,7 @@ import { PiArrowUpRight } from 'react-icons/pi'
 
 import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
 import { getProjectDerivationPathBases } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
-import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
+import { useRootstockBalance } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/useRootstockBalance.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
@@ -187,7 +187,7 @@ const ProjectRskEoaHistoryRow = ({
   rskEoa: ProjectRskEoaHistoryItem
   onOpenSeedWords: (rskEoa: ProjectRskEoaHistoryItem) => void
 }) => {
-  const { withdrawable, isLoading } = usePrismWithdrawable({ rskAddress: rskEoa.rskAddress })
+  const { balance: withdrawable, isLoading } = useRootstockBalance({ rskAddress: rskEoa.rskAddress })
   const balanceSats = withdrawable ? Number(withdrawable / WEI_PER_SAT) : 0
   const balance = isLoading
     ? t('Checking balance...')

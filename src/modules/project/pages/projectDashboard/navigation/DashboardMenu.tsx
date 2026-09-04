@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import React from 'react'
 import { Link } from 'react-router'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectState } from '@/modules/project/state/projectAtom'
@@ -39,7 +39,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
   const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
   const stripeConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
   const showRewards =
-    !isManagedRecoverableGrantProject(project) && (!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || stripeConfigured)
+    !isManagedCircularGrantProject(project) && (!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || stripeConfigured)
 
   const visibleItems = projectDashboardItems.filter((item) => item.path !== 'dashboardRewards' || showRewards)
   const dashboardAnalyticsItems = visibleItems.filter((item) => item.type === DashboardType.analytics)

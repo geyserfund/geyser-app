@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
 import { getProjectCreationDescription } from '../../../../../../../../src/modules/project/pages/projectCreation/utils/getProjectCreationDescription.ts'
-import { RecoverableGrantFundingOption } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
+import { CircularGrantFundingOption } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
 import { ProjectFundingStrategy } from '../../../../../../../../src/types/index.ts'
 import { ProjectValidations } from '../../../../../../../../src/shared/constants/validations/project.ts'
 
 describe('getProjectCreationDescription', () => {
-  it('returns the complete Recoverable Grant Story template', () => {
-    const description = getProjectCreationDescription(RecoverableGrantFundingOption, '')
+  it('returns the complete Circular Grant Story template', () => {
+    const description = getProjectCreationDescription(CircularGrantFundingOption, '')
 
     expect(description).toContain('[Business name] is a [type of business]')
     expect(description).toContain('## What we offer')
@@ -29,7 +29,7 @@ describe('getProjectCreationDescription', () => {
   )
 
   it('returns a template that satisfies Story length validation', () => {
-    const description = getProjectCreationDescription(RecoverableGrantFundingOption, '')
+    const description = getProjectCreationDescription(CircularGrantFundingOption, '')
 
     expect(description.length).toBeGreaterThanOrEqual(ProjectValidations.description.minLength)
     expect(description.length).toBeLessThanOrEqual(ProjectValidations.description.maxLength)

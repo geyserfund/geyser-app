@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
-type RecoverableGrantPoolCardProps = {
+type CircularGrantPoolCardProps = {
   onDonateClick: () => void
   outerBg?: string
   outerText?: string
@@ -14,15 +14,15 @@ type RecoverableGrantPoolCardProps = {
   metricMutedText?: string
 }
 
-/** Shared Recoverable Grant Pool card used by active-funds surfaces. */
-export const RecoverableGrantPoolCard = ({
+/** Shared Circular Grant Pool card used by active-funds surfaces. */
+export const CircularGrantPoolCard = ({
   onDonateClick,
   outerBg: outerBgProp,
   outerText: outerTextProp,
   metricBg: metricBgProp,
   metricText: metricTextProp,
   metricMutedText: metricMutedTextProp,
-}: RecoverableGrantPoolCardProps): JSX.Element => {
+}: CircularGrantPoolCardProps): JSX.Element => {
   const defaultOuterBg = useColorModeValue('amber.9', 'amber.9')
   const defaultOuterText = useColorModeValue('neutral1.12', 'neutral1.1')
   const defaultMetricBg = useColorModeValue('neutral1.12', 'neutral1.2')
@@ -47,7 +47,7 @@ export const RecoverableGrantPoolCard = ({
     >
       <VStack align="flex-start" spacing={3} maxW="760px" display={{ base: 'contents', md: 'flex' }}>
         <Body size={{ base: '26px', lg: '33px' }} lineHeight={{ base: '32px', lg: '39px' }} bold color="inherit">
-          {t('Recoverable Grant Pool')}
+          {t('Circular Grant Pool')}
         </Body>
         <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '28px' }} color="inherit">
           {t(
@@ -63,7 +63,7 @@ export const RecoverableGrantPoolCard = ({
         >
           <Button
             as={Link}
-            to={getPath('discoveryRecoverableGrants')}
+            to={getPath('discoveryCircularGrants')}
             h="48px"
             borderRadius="innerCard"
             variant="outline"

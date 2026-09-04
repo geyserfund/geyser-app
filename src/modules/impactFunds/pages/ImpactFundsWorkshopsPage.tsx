@@ -137,7 +137,7 @@ export const ImpactFundsWorkshopsPage = () => {
               {t('Help credible local initiatives create campaigns, tell their story, and prepare to raise funds.')}
             </StepCard>
             <StepCard colors={colors} number="03" title="Earn as they grow" isDark>
-              {t('Get 10% of fundraisers you onboard, plus a 85k launch fee for eligible workshops.')}
+              {t('Get 10% of fundraisers you onboard, plus support for eligible workshops.')}
             </StepCard>
           </SimpleGrid>
         </PageSection>

@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
-import { RECOVERABLE_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
+import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -58,7 +58,7 @@ const cohortGroups: readonly CohortGroup[] = [
   {
     eyebrow: '5 people',
     title: 'Afribit alumni',
-    description: 'Previous recoverable grant participants benchmark expectations and capital return behavior.',
+    description: 'Previous circular grant participants benchmark expectations and capital return behavior.',
   },
   {
     eyebrow: '5 people',
@@ -69,7 +69,7 @@ const cohortGroups: readonly CohortGroup[] = [
     eyebrow: '5 people',
     title: 'First-time participants',
     description:
-      'Clean-slate participants help clarify what fair recoverable grant support needs to feel understandable and safe.',
+      'Clean-slate participants help clarify what fair circular grant support needs to feel understandable and safe.',
     dark: true,
   },
 ] as const
@@ -86,7 +86,7 @@ type ModelCard = {
 const modelCards: readonly ModelCard[] = [
   {
     title: 'Geyser provides capital',
-    description: 'Impact Fund capital backs selected local businesses as recoverable grants.',
+    description: 'Impact Fund capital backs selected local businesses as circular grants.',
     borderAccent: 'ink',
   },
   {
@@ -112,7 +112,7 @@ const portfolioProjects = [
     project: 'Krezzy Kicks',
     projectName: 'krezzykickscollectionkibera',
     purpose: 'Inventory and merchant activation',
-    status: "Pilot business identified in Afribit's recoverable grant model with BTC Map listing.",
+    status: "Pilot business identified in Afribit's circular grant model with BTC Map listing.",
   },
   {
     project: 'Threewest Collections',
@@ -166,7 +166,7 @@ const getModelCardBorderColor = (colors: AfribitCaseStudyColors, accent: ModelCa
 
 export const AfribitCaseStudyPage = () => {
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
-  const onDonateClick = () => openDonateModal({ defaultCategoryIds: [RECOVERABLE_GRANTS_CATEGORY_ID] })
+  const onDonateClick = () => openDonateModal({ defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID] })
   const colors: AfribitCaseStudyColors = {
     pageBg: useColorModeValue('white', 'utils.pbg'),
     ink: useColorModeValue('#17120C', 'neutral1.12'),
@@ -188,10 +188,10 @@ export const AfribitCaseStudyPage = () => {
       <Head
         title={t('Afribit Case Study')}
         description={t(
-          'How Geyser and Afribit are partnering to fund Kibera entrepreneurs with debt-free recoverable grant capital.',
+          'How Geyser and Afribit are partnering to fund Kibera entrepreneurs with debt-free circular grant capital.',
         )}
         image={AFRIBIT_CASE_STUDY_HERO_IMAGE_URL}
-        url={`https://geyser.fund${getPath('discoveryRecoverableGrantsAfribitCaseStudy')}`}
+        url={`https://geyser.fund${getPath('discoveryCircularGrantsAfribitCaseStudy')}`}
       />
 
       <Box w="full" bg={colors.pageBg} color={colors.ink}>
@@ -214,11 +214,11 @@ export const AfribitCaseStudyPage = () => {
                   {t('What this case study is')}
                 </Eyebrow>
                 <H2 size={{ base: '32px', lg: '44px' }} lineHeight={{ base: '38px', lg: '50px' }} bold>
-                  {t('Afribit turns local knowledge into safer recoverable capital.')}
+                  {t('Afribit turns local knowledge into safer circular capital.')}
                 </H2>
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'The pilot tests how Geyser-backed recoverable grants can support small Kibera businesses without interest, while Afribit validates participants through cohort sessions, community agreements, and monthly reporting.',
+                    'The pilot tests how Geyser-backed circular grants can support small Kibera businesses without interest, while Afribit validates participants through cohort sessions, community agreements, and monthly reporting.',
                   )}
                 </Body>
                 <HStack spacing={2} flexWrap="wrap">
@@ -268,7 +268,7 @@ export const AfribitCaseStudyPage = () => {
                 </VStack>
                 <Body lineHeight="27px">
                   {t(
-                    'Each pilot cohort brings together 15 people and divides them into three feedback groups. The aim is to validate need, surface risk, set capital return commitments, and turn businesses into Geyser-listed recoverable grant projects.',
+                    'Each pilot cohort brings together 15 people and divides them into three feedback groups. The aim is to validate need, surface risk, set capital return commitments, and turn businesses into Geyser-listed circular grant projects.',
                   )}
                 </Body>
               </SimpleGrid>
@@ -307,14 +307,14 @@ export const AfribitCaseStudyPage = () => {
             >
               <VStack align="flex-start" spacing={4}>
                 <Eyebrow colors={colors} color={colors.muted}>
-                  {t('Recoverable grants')}
+                  {t('Circular grants')}
                 </Eyebrow>
                 <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold>
                   {t('0% interest capital, without the debt burden.')}
                 </H2>
                 <Body color={colors.muted} lineHeight="27px">
                   {t(
-                    'A recoverable grant acts like patient working capital. If the business succeeds, funds return to the system and can support the next entrepreneur. If it struggles, the model is designed around trust, reporting, and support rather than extractive interest.',
+                    'A circular grant acts like patient working capital. If the business succeeds, funds return to the system and can support the next entrepreneur. If it struggles, the model is designed around trust, reporting, and support rather than extractive interest.',
                   )}
                 </Body>
               </VStack>
@@ -367,7 +367,7 @@ export const AfribitCaseStudyPage = () => {
                     {t('The chama portfolio')}
                   </Eyebrow>
                   <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold color="white">
-                    {t('Six Geyser projects backed as recoverable grants.')}
+                    {t('Six Geyser projects backed as circular grants.')}
                   </H2>
                 </VStack>
                 <Body color="whiteAlpha.850" lineHeight="27px">
@@ -399,7 +399,7 @@ export const AfribitCaseStudyPage = () => {
                   mt={3}
                   color={colors.onGoldText}
                 >
-                  {t('Fund more Impact Fund recoverable grants.')}
+                  {t('Fund more Impact Fund circular grants.')}
                 </H2>
                 <Body lineHeight="27px" mt={4} maxW="720px" color={colors.onGoldText}>
                   {t(
@@ -474,14 +474,14 @@ const Breadcrumb = ({ colors }: { colors: AfribitCaseStudyColors }) => (
     <PiCaretRightBold size={11} />
     <Body
       as={Link}
-      to={getPath('discoveryRecoverableGrants')}
+      to={getPath('discoveryCircularGrants')}
       size="xs"
       bold
       letterSpacing="0.18em"
       textTransform="uppercase"
       _hover={{ color: colors.ink }}
     >
-      {t('Recoverable Grant')}
+      {t('Circular Grant')}
     </Body>
     <PiCaretRightBold size={11} />
     <Body size="xs" bold letterSpacing="0.18em" textTransform="uppercase" color={colors.ink} aria-current="page">
@@ -538,7 +538,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: AfribitCaseStudyColors
         </H1>
         <Body color="whiteAlpha.900" lineHeight="27px" maxW="620px">
           {t(
-            'Afribit brings local trust, participant validation, and monthly monitoring. Geyser brings debt-free recoverable grant capital that can return and fund the next business.',
+            'Afribit brings local trust, participant validation, and monthly monitoring. Geyser brings debt-free circular grant capital that can return and fund the next business.',
           )}
         </Body>
         <HStack spacing={3} flexWrap="wrap" pt={2}>

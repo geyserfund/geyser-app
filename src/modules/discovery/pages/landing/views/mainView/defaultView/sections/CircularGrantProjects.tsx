@@ -6,26 +6,26 @@ import { Link } from 'react-router'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { useLandingRecoverableGrantProjectsSectionQuery } from '@/types/index.ts'
+import { useLandingCircularGrantProjectsSectionQuery } from '@/types/index.ts'
 
 import type { ProjectDisplayItem } from '../components/ProjectDisplayBody.tsx'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody.tsx'
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
-export const RecoverableGrantProjects = () => {
+export const CircularGrantProjects = () => {
   const { t } = useTranslation()
-  const { data, error, loading, refetch } = useLandingRecoverableGrantProjectsSectionQuery()
+  const { data, error, loading, refetch } = useLandingCircularGrantProjectsSectionQuery()
 
   const projects = useMemo<ProjectDisplayItem[]>(
     () =>
       (data?.projectsGet.projects ?? []).map((project) => ({
         ...project,
-        statusPillLabel: t('Recoverable Grant'),
+        statusPillLabel: t('Circular Grant'),
       })),
     [data?.projectsGet.projects, t],
   )
 
-  const title = t('Recoverable grant projects')
+  const title = t('Circular grant projects')
 
   if (loading) {
     return <ProjectDisplayBodySkeleton />
@@ -53,7 +53,7 @@ export const RecoverableGrantProjects = () => {
       title={title}
       description={t('Support projects using debt-free capital that can return and fund the next local entrepreneur.')}
       projects={projects}
-      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryRecoverableGrantProjects')} />}
+      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />}
     />
   )
 }

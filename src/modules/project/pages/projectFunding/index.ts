@@ -3,7 +3,6 @@ import { FundingDetails } from './views/fundingDetails/FundingDetails'
 import { FundingGuardians } from './views/fundingGuardians/FundingGuardians'
 import { FundingInit } from './views/fundingInit/FundingInit'
 import { Funding } from './views/fundingPayment/Funding'
-import { FundingLaunchPayment } from './views/fundingPayment/FundingLaunchPayment.tsx'
 import { Payment } from './views/fundingPayment/Payment'
 import { Subscription } from './views/fundingPayment/Subscription'
 import { PaymentCreditCard } from './views/fundingPayment/views/paymentCreditCard/PaymentCreditCard.tsx'
@@ -34,7 +33,6 @@ export {
   FundingDetails,
   FundingGuardians,
   FundingInit,
-  FundingLaunchPayment,
   FundingSuccess,
   FundingSuccessIntermediate,
   Payment,

@@ -6,12 +6,12 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
-import { RECOVERABLE_GRANT_EXPLAINER_TEXT } from './recoverableGrantConstants.ts'
+import { CIRCULAR_GRANT_EXPLAINER_TEXT } from './circularGrantConstants.ts'
 
 const IMPACT_FUND_PATH = getPath('impactFunds')
 
-export const RecoverableGrantExplainer = () => {
-  const recoverableGrantIconSrc = useColorModeValue('/icons/recoverable-grant.png', '/icons/recoverable-grant-dark.png')
+export const CircularGrantExplainer = () => {
+  const circularGrantIconSrc = useColorModeValue('/icons/circular-grant.png', '/icons/circular-grant-dark.png')
 
   return (
     <CardLayout
@@ -25,7 +25,7 @@ export const RecoverableGrantExplainer = () => {
       backgroundColor="primary1.1"
     >
       <Center boxSize={{ base: '44px', lg: '52px' }} flexShrink={0}>
-        <Image src={recoverableGrantIconSrc} alt="" boxSize={{ base: '38px', lg: '46px' }} />
+        <Image src={circularGrantIconSrc} alt="" boxSize={{ base: '38px', lg: '46px' }} />
       </Center>
       <VStack alignItems="start" spacing={0}>
         <Body size="sm">
@@ -33,25 +33,25 @@ export const RecoverableGrantExplainer = () => {
             {t('Same sats, more impact.')}
           </Body>{' '}
           {t(
-            'This project is a recoverable grant. The recipient may return the funds fully or in part through community agreements. Returned funds are sent to the',
+            'This project is a circular grant. The recipient may return the funds fully or in part through community agreements. Returned funds are sent to the',
           )}{' '}
           <ChakraLink as={Link} to={IMPACT_FUND_PATH} textDecoration="underline">
             {t('Geyser Impact Fund')}
           </ChakraLink>{' '}
-          {t('to be distributed to another recoverable grant in the future, maximizing the impact of every satoshi.')}
+          {t('to be distributed to another circular grant in the future, maximizing the impact of every satoshi.')}
         </Body>
       </VStack>
     </CardLayout>
   )
 }
 
-export const RecoverableGrantTooltipLabel = () => (
+export const CircularGrantTooltipLabel = () => (
   <HStack alignItems="start" spacing={2} maxW="320px">
     <Body size="sm" color="neutral1.1">
       <Body as="span" size="sm" bold color="neutral1.1">
         {t('Same sats, more impact.')}
       </Body>{' '}
-      {RECOVERABLE_GRANT_EXPLAINER_TEXT}
+      {CIRCULAR_GRANT_EXPLAINER_TEXT}
     </Body>
   </HStack>
 )

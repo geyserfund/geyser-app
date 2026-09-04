@@ -4,25 +4,16 @@ import { join } from 'path'
 
 /** Default test project values */
 export const DEFAULT_PROJECT_DETAILS = {
-  title: 'Test AON Project',
-  name: `test-aon-project-${Date.now()}`, // Unique name using timestamp
-  shortDescription: 'This is a test project created by Playwright E2E tests for All-or-Nothing funding strategy.',
+  title: 'Test Circular Grant Project',
+  name: `test-circular-grant-project-${Date.now()}`, // Unique name using timestamp
+  shortDescription: 'This is a test project created by Playwright E2E tests for managed Circular Grants.',
   description:
-    'This is a comprehensive test project description that meets the minimum length requirement of 210 characters. It describes the purpose of this test project which is to validate the AON project creation flow in our E2E test suite. This project will be used to test various funding scenarios and ensure the platform works correctly.',
+    'This is a comprehensive test project description that meets the minimum length requirement of 210 characters. It describes the purpose of this test project which is to validate the managed Circular Grant creation flow in our E2E test suite. This project will be used to test various funding scenarios and ensure the platform works correctly.',
   category: 'Tool',
   subCategory: 'App',
   location: 'United States', // Country name as shown in UI
   links: [] as string[],
   tags: [] as number[],
-} as const
-
-/** Minimum AON goal amount in satoshis (includes 5% Geyser fees) */
-export const MIN_AON_GOAL_AMOUNT = 210000
-
-/** Default AON goal values */
-export const DEFAULT_AON_GOAL = {
-  amountSats: 500000, // 500k sats
-  duration: 30, // 30 days
 } as const
 
 /** Valid category/subcategory combinations for testing */
@@ -54,10 +45,5 @@ export const PROJECT_VALIDATIONS = {
   },
   shortDescription: {
     maxLength: 160,
-  },
-  goal: {
-    minAmount: MIN_AON_GOAL_AMOUNT,
-    minDuration: 1,
-    maxDuration: 60,
   },
 } as const

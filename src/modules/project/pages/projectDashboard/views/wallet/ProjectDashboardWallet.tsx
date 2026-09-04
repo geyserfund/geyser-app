@@ -8,8 +8,8 @@ import {
   SeedWordsModal,
 } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsWallet/SeedWordsSection.tsx'
 import { DirectPaymentDetailsForm } from '@/modules/project/components/DirectPaymentDetailsForm.tsx'
-import { ManagedRecoverableGrantPaymentStatus } from '@/modules/project/components/ManagedRecoverableGrantPaymentStatus.tsx'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { ManagedCircularGrantPaymentStatus } from '@/modules/project/components/ManagedCircularGrantPaymentStatus.tsx'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
@@ -26,17 +26,17 @@ import { ProjectRskEoaHistory, ProjectRskEoaHistoryItem } from './components/Pro
 export const ProjectDashboardWallet = () => {
   const { project } = useProjectAtom()
 
-  return isManagedRecoverableGrantProject(project) ? <ManagedRecoverableGrantPayments /> : <CreatorManagedPayments />
+  return isManagedCircularGrantProject(project) ? <ManagedCircularGrantPayments /> : <CreatorManagedPayments />
 }
 
-const ManagedRecoverableGrantPayments = () => {
+const ManagedCircularGrantPayments = () => {
   const { t } = useTranslation()
   const { project } = useProjectAtom()
 
   return (
     <DashboardLayout desktopTitle={t('Payment Settings')}>
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
-        <ManagedRecoverableGrantPaymentStatus readiness={project.paymentMethods?.managedRecoverableGrant} />
+        <ManagedCircularGrantPaymentStatus readiness={project.paymentMethods?.managedCircularGrant} />
       </VStack>
     </DashboardLayout>
   )

@@ -2,8 +2,9 @@ import { useMemo } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
-import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
-import { ProjectForMyProjectsFragment, ProjectFundingStrategy, Satoshis } from '@/types'
+import { useRootstockBalance } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/useRootstockBalance.ts'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
+import { ProjectForMyProjectsFragment, Satoshis } from '@/types'
 
 export type WithdrawalStatusType = 'no_funds' | 'below_threshold' | 'ready' | 'unavailable'
 
@@ -24,11 +25,11 @@ export const useProjectWithdrawalStatus = ({
   const { getUSDCentsAmount } = useBTCConverter()
 
   const projectRskEoa = project?.rskEoa || ''
-  const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isTiaProject = isLegacyTiaProject(project)
 
-  const { withdrawable, isLoading } = usePrismWithdrawable({ rskAddress: projectRskEoa })
+  const { balance, isLoading } = useRootstockBalance({ rskAddress: projectRskEoa })
 
-  const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
+  const withdrawableSats = balance ? Number(balance / 10000000000n) : 0
   const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats as Satoshis)
   const withdrawableUsd = withdrawableUsdCents / 100
 
@@ -37,7 +38,7 @@ export const useProjectWithdrawalStatus = ({
       return 'unavailable'
     }
 
-    if (withdrawable === null || withdrawable === 0n) {
+    if (balance === null || balance === 0n) {
       return 'no_funds'
     }
 
@@ -46,7 +47,7 @@ export const useProjectWithdrawalStatus = ({
     }
 
     return 'ready'
-  }, [isTiaProject, projectRskEoa, withdrawable, withdrawableSats])
+  }, [balance, isTiaProject, projectRskEoa, withdrawableSats])
 
   return {
     status,

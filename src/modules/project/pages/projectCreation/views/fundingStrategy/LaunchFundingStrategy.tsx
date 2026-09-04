@@ -1,12 +1,10 @@
-import { Badge, Circle, Divider, HStack, Icon, StackProps, VStack } from '@chakra-ui/react'
+import { Circle, Divider, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtom } from 'jotai'
-import { useRef, useState } from 'react'
-import { PiCheck, PiQuestion } from 'react-icons/pi'
+import { useSetAtom } from 'jotai'
+import { PiCheck } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
-import { canCreateManagedRecoverableGrant } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { canCreateManagedCircularGrant } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
@@ -15,67 +13,12 @@ import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPageWrapper.tsx'
 import { useCurrentUserIsFieldPartner } from '../../hooks/useCurrentUserIsFieldPartner.ts'
 import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
-import {
-  getProjectFundingStrategyInput,
-  ProjectCreationFundingOption,
-  projectCreationFundingOptionAtom,
-  RecoverableGrantFundingOption,
-} from '../../states/fundingStrategyAtom.ts'
-
-const options: Record<
-  ProjectCreationFundingOption,
-  {
-    title: string
-    body: string
-    recommendedFor: string
-    benefit: string
-    badge?: string
-  }
-> = {
-  [ProjectFundingStrategy.TakeItAll]: {
-    title: t('Open Funding'),
-    body: t('Receive contributions as they come in.'),
-    recommendedFor: t('Ongoing projects, donations, communities, and creators who want flexibility.'),
-    benefit: t('Funds are available immediately.'),
-  },
-  [ProjectFundingStrategy.AllOrNothing]: {
-    title: t('All-or-Nothing'),
-    body: t('Receive funds only if you reach your goal before the deadline.'),
-    recommendedFor: t('Projects that need a minimum amount to start, build, or deliver something.'),
-    benefit: t('Builds trust with contributors.'),
-  },
-  [RecoverableGrantFundingOption]: {
-    title: t('Recoverable Grant'),
-    body: t(
-      '0% interest grants that are repaid over time, then reused to fund the next local project without creating a debt burden.',
-    ),
-    recommendedFor: t(
-      'Local businesses and entrepreneurs in circular economy hubs who need working capital, community trust, and a safer path to growth.',
-    ),
-    benefit: t('Uses a protected Open Funding goal with Geyser-managed payment methods.'),
-  },
-}
-
-const resolveProjectFundingOption = ({
-  fundingStrategy,
-  isRecoverableGrant,
-  storedFundingOption,
-}: {
-  fundingStrategy?: ProjectFundingStrategy | null
-  isRecoverableGrant?: boolean
-  storedFundingOption: ProjectCreationFundingOption | null
-}): ProjectCreationFundingOption => {
-  if (isRecoverableGrant) {
-    return RecoverableGrantFundingOption
-  }
-
-  return fundingStrategy || storedFundingOption || ProjectFundingStrategy.TakeItAll
-}
+import { CircularGrantFundingOption, projectCreationFundingOptionAtom } from '../../states/fundingStrategyAtom.ts'
 
 export const LaunchFundingStrategy = () => {
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
-  const [storedFundingOption, setStoredFundingOption] = useAtom(projectCreationFundingOptionAtom)
+  const setStoredFundingOption = useSetAtom(projectCreationFundingOptionAtom)
   const { isFieldPartner } = useCurrentUserIsFieldPartner()
 
   const { project } = useProjectAtom()
@@ -85,50 +28,30 @@ export const LaunchFundingStrategy = () => {
   )
 
   const isNewProject = !params.projectId || params.projectId === 'new'
-  const { isRecoverableGrant } = project as { isRecoverableGrant?: boolean }
-  const showRecoverableGrantOption = canCreateManagedRecoverableGrant(isFieldPartner)
-
-  const resolvedFundingOption = resolveProjectFundingOption({
-    fundingStrategy: project.fundingStrategy,
-    isRecoverableGrant,
-    storedFundingOption,
-  })
-  const fundingOptionFromProject =
-    isNewProject && !showRecoverableGrantOption && resolvedFundingOption === RecoverableGrantFundingOption
-      ? ProjectFundingStrategy.TakeItAll
-      : resolvedFundingOption
-
-  const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(() => fundingOptionFromProject)
-  const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
-
-  if (fundingOptionFromProject !== prevFundingOptionFromProjectRef.current) {
-    prevFundingOptionFromProjectRef.current = fundingOptionFromProject
-    setSelectedOption(fundingOptionFromProject)
-  }
+  const showCircularGrantOption = canCreateManagedCircularGrant(isFieldPartner)
 
   const continueProps = {
     onClick() {
-      setStoredFundingOption(selectedOption)
+      setStoredFundingOption(CircularGrantFundingOption)
 
       if (isNewProject) {
         navigate(getPath('launchProjectDetails', 'new'))
         return
       }
 
-      const selectedFundingStrategy = getProjectFundingStrategyInput(selectedOption)
-      if (project.fundingStrategy === selectedFundingStrategy) {
+      if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
         updateProjectWithLastCreationStep(undefined, undefined, ProjectCreationStep.ProjectDetails)
       } else {
         updateProjectWithLastCreationStep(
           {
-            fundingStrategy: selectedFundingStrategy,
+            fundingStrategy: ProjectFundingStrategy.TakeItAll,
           },
           undefined,
           ProjectCreationStep.ProjectDetails,
         )
       }
     },
-    isDisabled: false,
+    isDisabled: isNewProject && !showCircularGrantOption,
   }
 
   const backButtonProps = {
@@ -139,160 +62,70 @@ export const LaunchFundingStrategy = () => {
 
   return (
     <ProjectCreationPageWrapper
-      title={t('Funding Strategy')}
+      title={t('You are creating a Circular Grant')}
       continueButtonProps={continueProps}
       backButtonProps={backButtonProps}
     >
       <VStack w="full" h="full" align="flex-start" spacing={5}>
-        <Body size="lg">{t('Choose how you want to receive contributions.')}</Body>
+        <CircularGrantExplainer />
 
-        <VStack w="full" alignItems="stretch" spacing={4}>
-          <OptionButton
-            fundingStrategy={ProjectFundingStrategy.TakeItAll}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-          <OptionButton
-            fundingStrategy={ProjectFundingStrategy.AllOrNothing}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
-          />
-          {showRecoverableGrantOption ? (
-            <OptionButton
-              fundingStrategy={RecoverableGrantFundingOption}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-            />
-          ) : null}
-        </VStack>
-
-        <HelpCard isFieldPartner={isFieldPartner} />
+        {!showCircularGrantOption && isNewProject ? (
+          <Body size="md" light color="neutral1.7">
+            {t('Only Field Partners can create Circular Grant projects.')}
+          </Body>
+        ) : null}
       </VStack>
     </ProjectCreationPageWrapper>
   )
 }
 
-const HelpCard = ({ isFieldPartner }: { isFieldPartner: boolean }) => {
+const CircularGrantExplainer = () => {
   return (
-    <HStack
+    <VStack
       w="full"
-      alignItems="flex-start"
+      align="stretch"
       spacing={4}
       border="1px solid"
-      borderColor="neutral1.4"
-      borderRadius="8px"
-      px={{ base: 4, md: 6 }}
-      py={5}
-    >
-      <Circle size="40px" bg="neutral1.3" flexShrink={0}>
-        <Icon as={PiQuestion} color="neutral1.9" fontSize="22px" />
-      </Circle>
-      <VStack alignItems="flex-start" spacing={1}>
-        <Body bold size="lg">
-          {t('Not sure which one to choose?')}
-        </Body>
-        <Body>
-          {isFieldPartner
-            ? t(
-                'Choose Open Funding if you want maximum flexibility. Choose All-or-Nothing if your project depends on hitting a clear target. Choose Recoverable Grant for Field Partner-led grant projects.',
-              )
-            : t(
-                'Choose Open Funding if you want maximum flexibility. Choose All-or-Nothing if your project depends on hitting a clear target.',
-              )}
-        </Body>
-      </VStack>
-    </HStack>
-  )
-}
-
-const OptionButton = ({
-  fundingStrategy,
-  selectedOption,
-  setSelectedOption,
-  isDisabled = false,
-  ...rest
-}: {
-  fundingStrategy: ProjectCreationFundingOption
-  selectedOption: ProjectCreationFundingOption
-  setSelectedOption: (fundingStrategy: ProjectCreationFundingOption) => void
-  isDisabled?: boolean
-} & StackProps) => {
-  const { title, body, recommendedFor, benefit, badge } = options[fundingStrategy]
-  const isSelected = selectedOption === fundingStrategy
-
-  return (
-    <HStack
-      w="full"
-      border="1px solid"
-      borderColor={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.6'}
-      bg={isSelected && !isDisabled ? 'primary1.1' : 'utils.pbg'}
-      opacity={isDisabled ? 0.6 : 1}
-      _hover={{ borderColor: isDisabled ? 'neutral1.6' : isSelected ? 'primary1.9' : 'neutral1.8' }}
+      borderColor="primary1.9"
+      bg="primary1.1"
       borderRadius="8px"
       px={{ base: 4, md: 5 }}
       py={5}
-      cursor={isDisabled ? 'not-allowed' : 'pointer'}
-      alignItems="flex-start"
-      spacing={4}
-      onClick={() => {
-        if (!isDisabled) setSelectedOption(fundingStrategy)
-      }}
-      role="button"
-      aria-pressed={isSelected}
-      aria-disabled={isDisabled}
-      {...rest}
     >
-      <Circle
-        size="32px"
-        border="2px solid"
-        borderColor={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.6'}
-        bg={isSelected && !isDisabled ? 'primary1.9' : 'transparent'}
-        flexShrink={0}
-        mt={1}
-      >
-        {isSelected ? <Circle size="12px" bg="utils.pbg" /> : null}
-      </Circle>
+      <HStack alignItems="flex-start" spacing={4}>
+        <Circle size="32px" bg="primary1.9" flexShrink={0} mt={1}>
+          <Icon as={PiCheck} fontSize="18px" color="utils.pbg" />
+        </Circle>
 
-      <VStack w="full" alignItems="stretch" spacing={4}>
-        <VStack alignItems="flex-start" spacing={1}>
-          <HStack spacing={3} alignItems="center" flexWrap="wrap">
-            <H2 size="xl" bold>
-              {title}
-            </H2>
-            {badge ? (
-              <Badge colorScheme="primary1" borderRadius="full" px={3} py={1} textTransform="none">
-                {badge}
-              </Badge>
-            ) : null}
-            {isDisabled ? (
-              <Body size="md" light color="neutral1.7">
-                {t('Temporarily unavailable')}
-              </Body>
-            ) : null}
-          </HStack>
-          <Body>{body}</Body>
+        <VStack w="full" alignItems="flex-start" spacing={1}>
+          <H2 size="xl" bold>
+            {t('Circular Grant')}
+          </H2>
+          <Body>
+            {t(
+              'Circular Grants provide 0% interest working capital that is repaid over time and reused to fund the next local project.',
+            )}
+          </Body>
         </VStack>
+      </HStack>
 
-        <VStack alignItems="flex-start" spacing={1}>
-          <Body bold>{t('Best for')}</Body>
-          <Body>{recommendedFor}</Body>
-        </VStack>
-
-        <Divider />
-
-        <HStack spacing={3}>
-          <Circle
-            size="24px"
-            border="2px solid"
-            borderColor={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.7'}
-            flexShrink={0}
-          >
-            <Icon as={PiCheck} fontSize="14px" color={isSelected && !isDisabled ? 'primary1.9' : 'neutral1.7'} />
-          </Circle>
-          <Body>{benefit}</Body>
-        </HStack>
+      <VStack alignItems="flex-start" spacing={1} pl={{ base: 0, md: '48px' }}>
+        <Body bold>{t('Best for')}</Body>
+        <Body>
+          {t(
+            'Local businesses and entrepreneurs in circular economy hubs who need working capital, community trust, and a safer path to growth.',
+          )}
+        </Body>
       </VStack>
-    </HStack>
+
+      <Divider />
+
+      <HStack spacing={3}>
+        <Circle size="24px" border="2px solid" borderColor="primary1.9" flexShrink={0}>
+          <Icon as={PiCheck} fontSize="14px" color="primary1.9" />
+        </Circle>
+        <Body>{t('Repayments help fund the next local project without creating a debt burden.')}</Body>
+      </HStack>
+    </VStack>
   )
 }
