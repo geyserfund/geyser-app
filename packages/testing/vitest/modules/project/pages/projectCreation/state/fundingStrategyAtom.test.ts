@@ -4,7 +4,6 @@ import { canCreateManagedRecoverableGrant } from '../../../../../../../../src/mo
 import {
   getProjectAonGoalDurationInDays,
   RECOVERABLE_GRANT_DURATION_IN_DAYS,
-  RecoverableGrantFundingOption,
   shouldShowAllOrNothingGoalInCreation,
 } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
 import { ProjectFundingStrategy } from '../../../../../../../../src/types/index.ts'
@@ -20,39 +19,30 @@ describe('canCreateManagedRecoverableGrant', () => {
 })
 
 describe('shouldShowAllOrNothingGoalInCreation', () => {
-  it('shows AON goal UI for recoverable grant projects', () => {
+  it('shows AON goal UI for legacy AON projects', () => {
     expect(
-      shouldShowAllOrNothingGoalInCreation(
-        {
-          fundingStrategy: ProjectFundingStrategy.AllOrNothing,
-          isRecoverableGrant: true,
-        },
-        ProjectFundingStrategy.TakeItAll,
-      ),
+      shouldShowAllOrNothingGoalInCreation({
+        fundingStrategy: ProjectFundingStrategy.AllOrNothing,
+        isRecoverableGrant: false,
+      }),
     ).toBe(true)
   })
 
-  it('shows AON goal UI while project data is loading after selecting recoverable grant', () => {
+  it('shows the managed Open Funding goal while project data is loading', () => {
     expect(
-      shouldShowAllOrNothingGoalInCreation(
-        {
-          fundingStrategy: undefined,
-          isRecoverableGrant: undefined,
-        },
-        RecoverableGrantFundingOption,
-      ),
-    ).toBe(true)
+      shouldShowAllOrNothingGoalInCreation({
+        fundingStrategy: undefined,
+        isRecoverableGrant: undefined,
+      }),
+    ).toBe(false)
   })
 
   it('shows open funding UI for take-it-all projects even if atom is stale', () => {
     expect(
-      shouldShowAllOrNothingGoalInCreation(
-        {
-          fundingStrategy: ProjectFundingStrategy.TakeItAll,
-          isRecoverableGrant: false,
-        },
-        RecoverableGrantFundingOption,
-      ),
+      shouldShowAllOrNothingGoalInCreation({
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+        isRecoverableGrant: false,
+      }),
     ).toBe(false)
   })
 })

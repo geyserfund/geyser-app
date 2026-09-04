@@ -17,6 +17,7 @@ import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -50,7 +51,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isDraft = isProjectPendingLaunch(project) && !isPreLaunchReview
   const isInactive = project.status === ProjectStatus.Inactive
   const isActive = project.status === ProjectStatus.Active
-  const isTiaProject = project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isTiaProject = isLegacyTiaProject(project)
   const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
@@ -130,7 +131,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
-  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED)
+  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isRecoverableGrant)
 
   /** Get context message or action */
   const renderContextContent = () => {

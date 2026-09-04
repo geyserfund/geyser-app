@@ -1,5 +1,7 @@
 # Playwright E2E Run Report - 2026-04-27
 
+> Historical report. The Prism TIA and AON-creation suites referenced below were retired by the Prism deprecation work; use the current managed Recoverable Grant creation and existing-project AON funding suites instead.
+
 ## Commands Run
 
 1. `yarn workspace @geyser-app/testing test:playwright:chromium`
@@ -98,4 +100,3 @@ The failure screenshot shows the creator project page with a successful AON camp
 
 - HTML report: `packages/testing/playwright/playwright-report/index.html`
 - Test results: `packages/testing/playwright/test-results/`
-

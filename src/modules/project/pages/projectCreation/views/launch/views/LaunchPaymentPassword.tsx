@@ -8,7 +8,7 @@ import type { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 
-/** Password step for Prism-backed launch-fee payments when the cached account password is unavailable. */
+/** Password step for launch-fee payments when the cached account password is unavailable. */
 export const LaunchPaymentPassword = ({
   onComplete,
   onBack,

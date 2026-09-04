@@ -6,6 +6,7 @@ export const QUERY_LAUNCH_PAYMENT_PROJECT = gql`
     projectGet(where: $where) {
       id
       fundingStrategy
+      isRecoverableGrant
       rskEoa
       aonGoal {
         contractAddress

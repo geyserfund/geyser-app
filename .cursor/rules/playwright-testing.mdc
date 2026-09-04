@@ -624,20 +624,16 @@ await expect(page.getByText('Your transaction is being processed')).toBeVisible(
 
 ### Separate Tests for Different Configurations
 
-- **TIA Projects** (Take It All / Open Funding): Tests in `funding/lightning.spec.ts`, `funding/onchain.spec.ts`
-  - Must download refund file before onchain payment
-  - Uses `lndtestproject`
-  
-- **AoN Projects** (All-or-Nothing): Future separate test files
-  - Skips refund download (automatic navigation)
-  - Different success/failure states
+- **Managed Recoverable Grants**: Creation coverage is in `projectCreation/managedRecoverableGrant.spec.ts`. New projects must expose only this option.
+- **Legacy AON Projects**: Funding and creator-claim coverage uses existing configured AON projects; the creation flow no longer creates AON projects.
+- **Legacy ordinary TIA Projects**: Retained only for historical/read compatibility and must not be used as active funding-test fixtures.
 
 ### Constants for Project Types
 
 ```typescript
 // constants.ts
-export const PROJECT_NAME = 'lndtestproject'
-export const PROJECT_TYPE = 'TIA' as const  // or 'AON'
+export const PROJECT_NAME = 'configured-project'
+export const PROJECT_TYPE = 'AON' as const // existing legacy project only
 ```
 
 ### Test Suite Naming

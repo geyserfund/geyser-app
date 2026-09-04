@@ -82,12 +82,14 @@ export const useProjectToolkit = (
   }
 
   const isFundingDisabled = () => {
-    if (
-      project.isRecoverableGrant &&
-      project.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-      project.fundingSummary
-    ) {
+    if (project.fundingSummary) {
       return !project.fundingSummary.isFundingOpen
+    }
+
+    // Keep the client fail-closed while older project payloads are still being
+    // served without the canonical funding summary.
+    if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.isRecoverableGrant) {
+      return true
     }
 
     if (isRecoverableGrantGoalReached()) {

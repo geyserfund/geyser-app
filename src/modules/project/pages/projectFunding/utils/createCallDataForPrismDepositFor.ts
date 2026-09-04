@@ -14,6 +14,7 @@ const PRISM_DEPOSIT_FOR_ABI = [
   },
 ] as const
 
+/** Legacy-only call data for paid-launch contributions to the Geyser launch project. */
 export const createCallDataForPrismDepositFor = (params: {
   payer: Address
   receivers: Address[]

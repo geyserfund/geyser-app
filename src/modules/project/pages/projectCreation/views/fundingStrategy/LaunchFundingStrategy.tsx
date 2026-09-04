@@ -5,7 +5,6 @@ import { useRef, useState } from 'react'
 import { PiCheck, PiQuestion } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { canCreateManagedRecoverableGrant } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body, H2 } from '@/shared/components/typography'
@@ -65,6 +64,10 @@ const resolveProjectFundingOption = ({
   isRecoverableGrant?: boolean
   storedFundingOption: ProjectCreationFundingOption | null
 }): ProjectCreationFundingOption => {
+  if (fundingStrategy === undefined && isRecoverableGrant === undefined && storedFundingOption === null) {
+    return RecoverableGrantFundingOption
+  }
+
   if (isRecoverableGrant) {
     return RecoverableGrantFundingOption
   }
@@ -93,10 +96,7 @@ export const LaunchFundingStrategy = () => {
     isRecoverableGrant,
     storedFundingOption,
   })
-  const fundingOptionFromProject =
-    isNewProject && !showRecoverableGrantOption && resolvedFundingOption === RecoverableGrantFundingOption
-      ? ProjectFundingStrategy.TakeItAll
-      : resolvedFundingOption
+  const fundingOptionFromProject = isNewProject ? RecoverableGrantFundingOption : resolvedFundingOption
 
   const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(() => fundingOptionFromProject)
   const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
@@ -128,7 +128,7 @@ export const LaunchFundingStrategy = () => {
         )
       }
     },
-    isDisabled: false,
+    isDisabled: isNewProject && !showRecoverableGrantOption,
   }
 
   const backButtonProps = {
@@ -147,24 +147,20 @@ export const LaunchFundingStrategy = () => {
         <Body size="lg">{t('Choose how you want to receive contributions.')}</Body>
 
         <VStack w="full" alignItems="stretch" spacing={4}>
-          <OptionButton
-            fundingStrategy={ProjectFundingStrategy.TakeItAll}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-          <OptionButton
-            fundingStrategy={ProjectFundingStrategy.AllOrNothing}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED}
-          />
-          {showRecoverableGrantOption ? (
+          {isNewProject ? (
             <OptionButton
               fundingStrategy={RecoverableGrantFundingOption}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
+              isDisabled={!showRecoverableGrantOption}
             />
-          ) : null}
+          ) : (
+            <OptionButton
+              fundingStrategy={fundingOptionFromProject}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+            />
+          )}
         </VStack>
 
         <HelpCard isFieldPartner={isFieldPartner} />
@@ -195,11 +191,9 @@ const HelpCard = ({ isFieldPartner }: { isFieldPartner: boolean }) => {
         <Body>
           {isFieldPartner
             ? t(
-                'Choose Open Funding if you want maximum flexibility. Choose All-or-Nothing if your project depends on hitting a clear target. Choose Recoverable Grant for Field Partner-led grant projects.',
+                'Create a Recoverable Grant to provide working capital for a local project through Geyser-managed payment methods.',
               )
-            : t(
-                'Choose Open Funding if you want maximum flexibility. Choose All-or-Nothing if your project depends on hitting a clear target.',
-              )}
+            : t('Only Field Partners can create Recoverable Grant projects.')}
         </Body>
       </VStack>
     </HStack>

@@ -24,6 +24,9 @@ export const ENV = {
   PROJECT_REVIEW_SUBMIT_JWT: config.projectCreation.reviewSubmitJwt,
   PROJECT_CREATION_ACCOUNT_PASSWORD: config.projectCreation.accountPassword,
   GEYSER_LAUNCH_PROJECT_ID: config.projectCreation.launchPaymentProjectId,
+  AON_PROJECT_NAME: config.projectCreation.aonProjectName,
+  AON_PROJECT_GOAL_AMOUNT_SATS: config.projectCreation.aonProjectGoalAmountSats,
+  FUNDING_PROJECT_NAME: config.funding.projectName,
 } as const
 
 /** Test user credentials for Nostr authentication */
@@ -31,7 +34,8 @@ export const TEST_NOSTR_USER = {
   pubkey: '217ac0828c448c1e68c2e781df89884bcae16a1e79fe6df267863155ab789c02',
   npub: 'npub1y9avpq5vgjxpu6xzu7qalzvgf09wz6s708lxmun8scc4t2mcnspqrmt40y',
   nsec: 'nsec1smf92mawwjfluyj8neww9xllwyeq88dhu70zuvdyc54mq9hg286ql40vtq',
-  signature: '5d097183ae4b599a83f6f78249bc35be58c6d58ce35d0c4ca165a41f980902378437711c288d9f3410741009b8459e65e824f927ca8f8072247de93144fa51fd',
+  signature:
+    '5d097183ae4b599a83f6f78249bc35be58c6d58ce35d0c4ca165a41f980902378437711c288d9f3410741009b8459e65e824f927ca8f8072247de93144fa51fd',
   eventId: 'd0d5289d90e8ffd7ebff068ffd93e1a84b69f1b890a3055d5039b353e73ca46f',
 } as const
 

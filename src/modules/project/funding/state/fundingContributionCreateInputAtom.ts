@@ -273,9 +273,7 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
     return {}
   }
 
-  const stripeReady = isManagedRecoverableGrantProject(fundingProject)
-    ? fundingProject.paymentMethods?.managedRecoverableGrant?.stripe
-    : fundingProject.paymentMethods?.fiat?.stripe
+  const stripeReady = fundingProject.paymentMethods?.managedRecoverableGrant?.stripe
 
   if (!stripeReady) {
     return {}
@@ -343,7 +341,6 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const claimAddress = userAccountKeys?.rskKeyPair?.address
   const lightningBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
   const onChainBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
-  const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
   const managedRecoverableGrant = isManagedRecoverableGrantProject(fundingProject)
 
   if (managedRecoverableGrant) {
@@ -369,24 +366,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     return paymentsInput
   }
 
-  const supportsPrismSwaps =
-    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||
-    fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-
-  if (
-    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-    intendedPaymentMethod === PaymentMethods.fiatSwap &&
-    stripeEnabled
-  ) {
-    paymentsInput.fiat = {
-      create: true,
-      stripe: {
-        returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
-      },
-    }
-  }
-
-  if (supportsPrismSwaps) {
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
     paymentsInput.lightningToRskSwap = lightningBoltzSwapInput
     paymentsInput.onChainToRskSwap = onChainBoltzSwapInput
   }

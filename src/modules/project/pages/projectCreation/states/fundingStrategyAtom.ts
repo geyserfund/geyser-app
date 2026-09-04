@@ -12,7 +12,7 @@ export type ProjectCreationFundingContext = {
   isRecoverableGrant?: boolean | null
 }
 
-export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(ProjectFundingStrategy.TakeItAll)
+export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(RecoverableGrantFundingOption)
 
 export const getProjectFundingStrategyInput = (option: ProjectCreationFundingOption) =>
   option === RecoverableGrantFundingOption ? ProjectFundingStrategy.TakeItAll : option
@@ -24,23 +24,6 @@ export const getProjectRecoverableGrantInput = (option: ProjectCreationFundingOp
 export const getProjectAonGoalDurationInDays = (isRecoverableGrant: boolean, duration: number) =>
   isRecoverableGrant ? RECOVERABLE_GRANT_DURATION_IN_DAYS : duration
 
-/** Whether the creation funding-goal step should render All-or-Nothing options. */
-export const shouldShowAllOrNothingGoalInCreation = (
-  project: ProjectCreationFundingContext,
-  selectedFundingOption: ProjectCreationFundingOption,
-) => {
-  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return true
-  }
-
-  if (project.isRecoverableGrant) return false
-
-  if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
-    return false
-  }
-
-  return (
-    selectedFundingOption === ProjectFundingStrategy.AllOrNothing ||
-    selectedFundingOption === RecoverableGrantFundingOption
-  )
-}
+/** Whether an existing legacy AON project should render its goal editor. */
+export const shouldShowAllOrNothingGoalInCreation = (project: ProjectCreationFundingContext) =>
+  project.isRecoverableGrant !== true && project.fundingStrategy === ProjectFundingStrategy.AllOrNothing

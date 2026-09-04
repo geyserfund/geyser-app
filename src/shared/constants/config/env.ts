@@ -56,6 +56,7 @@ if (!import.meta.env.VITE_APP_ROOTSTOCK_RPC_URL) {
   console.warn('Missing VITE_APP_ROOTSTOCK_RPC_URL from environment variables')
 }
 
+// Required only by the legacy paid-launch compatibility path.
 if (!import.meta.env.VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS) {
   console.warn('Missing VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS from environment variables')
 }

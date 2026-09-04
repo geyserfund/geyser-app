@@ -12238,7 +12238,7 @@ export type LaunchPaymentProjectQueryVariables = Exact<{
 }>;
 
 
-export type LaunchPaymentProjectQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, aonGoal?: { __typename?: 'ProjectAonGoal', contractAddress?: string | null } | null } | null };
+export type LaunchPaymentProjectQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, aonGoal?: { __typename?: 'ProjectAonGoal', contractAddress?: string | null } | null } | null };
 
 export type OrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -22362,6 +22362,7 @@ export const LaunchPaymentProjectDocument = gql`
   projectGet(where: $where) {
     id
     fundingStrategy
+    isRecoverableGrant
     rskEoa
     aonGoal {
       contractAddress

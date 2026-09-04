@@ -7,9 +7,8 @@ import { CreatorToolsSection } from './sections/CreatorToolsSection.tsx'
 import { FAQSection } from './sections/FAQSection.tsx'
 import { FinalCTASection } from './sections/FinalCTASection.tsx'
 import { FundamentalsSection } from './sections/FundamentalsSection.tsx'
-import { FundraiserTypeSection } from './sections/FundraiserTypeSection.tsx'
 import { HeroSection } from './sections/HeroSection.tsx'
-import { LaunchPlansSection } from './sections/LaunchPlansSection.tsx'
+import { LaunchChecklistSection } from './sections/LaunchChecklistSection.tsx'
 import { MomentumSection } from './sections/MomentumSection.tsx'
 import { ResourcesSection } from './sections/ResourcesSection.tsx'
 import { TrustPayoutSection } from './sections/TrustPayoutSection.tsx'
@@ -22,8 +21,7 @@ export const LaunchStart = () => {
       <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 28, lg: 20 }}>
         <HeroSection />
         <FundamentalsSection />
-        <FundraiserTypeSection />
-        <LaunchPlansSection />
+        <LaunchChecklistSection />
         <TrustPayoutSection />
         <CreatorToolsSection />
         <MomentumSection />

@@ -3,18 +3,18 @@ import type { Address } from 'viem'
 
 import { rootstockPublicClient } from '@/modules/project/pages/projectFunding/utils/viemClient.ts'
 
-type UsePrismWithdrawableParams = {
+type UseRootstockBalanceParams = {
   rskAddress?: string
 }
 
-export const usePrismWithdrawable = ({ rskAddress }: UsePrismWithdrawableParams) => {
-  const [withdrawable, setWithdrawable] = useState<bigint | null>(null)
+export const useRootstockBalance = ({ rskAddress }: UseRootstockBalanceParams) => {
+  const [balance, setBalance] = useState<bigint | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
   const refetch = useCallback(async () => {
     if (!rskAddress) {
-      setWithdrawable(null)
+      setBalance(null)
       return null
     }
 
@@ -22,14 +22,12 @@ export const usePrismWithdrawable = ({ rskAddress }: UsePrismWithdrawableParams)
     setError(null)
 
     try {
-      const value = await rootstockPublicClient.getBalance({
-        address: rskAddress as Address,
-      })
-      setWithdrawable(value as bigint)
-      return value as bigint
+      const value = await rootstockPublicClient.getBalance({ address: rskAddress as Address })
+      setBalance(value)
+      return value
     } catch (err) {
       setError(err as Error)
-      setWithdrawable(null)
+      setBalance(null)
       return null
     } finally {
       setIsLoading(false)
@@ -40,5 +38,5 @@ export const usePrismWithdrawable = ({ rskAddress }: UsePrismWithdrawableParams)
     void refetch()
   }, [refetch])
 
-  return { withdrawable, isLoading, error, refetch }
+  return { balance, isLoading, error, refetch }
 }

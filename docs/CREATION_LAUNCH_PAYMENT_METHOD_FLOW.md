@@ -82,7 +82,7 @@ If project already has `paidLaunch=true`, flow continues directly to finalize.
 2. Update frontend env: `VITE_APP_GEYSER_LAUNCH_PROJECT_ID=<id>`.
 3. Update backend env: `GEYSER_LAUNCH_PROJECT_ID=<id>` (or include in `GEYSER_LAUNCH_PROJECT_IDS`).
 4. Restart frontend/backend with updated env.
-5. Run Playwright full-launch smoke (`tests/projectCreation/aon.spec.ts`) and verify launch-fee payment settles and publish succeeds.
+5. Run the managed Recoverable Grant creation smoke (`tests/projectCreation/managedRecoverableGrant.spec.ts`) and verify only the managed grant path is offered.
 
 ## Shared Launch Fee Amounts
 - `src/modules/project/pages/projectCreation/views/launch/constants/launchFees.ts`

@@ -20,6 +20,7 @@ import {
   recurringFundingModes,
 } from '@/modules/project/recurring/graphql'
 import {
+  GEYSER_LAUNCH_PROJECT_ID,
   ORIGIN,
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
@@ -822,7 +823,9 @@ export const useFundingAPI = () => {
 }
 
 type ClaimTargetProject = {
+  id: string | number
   fundingStrategy?: ProjectFundingStrategy | null
+  isRecoverableGrant?: boolean | null
   rskEoa?: string | null
   aonGoal?: {
     contractAddress?: string | null
@@ -847,39 +850,39 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
 
   const getGeyserFeesAmount = (fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']) => {
     return fees.reduce((acc, fee) => {
-      if (!fee.feeType) return acc
-      if (!geyserFeeTypes.has(fee.feeType)) return acc
+      if (!fee.feeType || !geyserFeeTypes.has(fee.feeType)) return acc
       return acc + fee.feeAmount
     }, 0)
   }
 
   const getValidatedClaimTargetProject = () => {
-    if (!project?.fundingStrategy) {
-      throw new Error('Missing project funding strategy for claim generation')
-    }
+    const isLegacyLaunchFeeProject =
+      project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+      project.isRecoverableGrant !== true &&
+      String(project.id) === String(GEYSER_LAUNCH_PROJECT_ID)
 
-    if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-      const aonContractAddress = project.aonGoal?.contractAddress
-
-      if (!aonContractAddress) {
-        throw new Error('Missing AON contract address for claim generation')
-      }
-
+    if (isLegacyLaunchFeeProject) {
+      if (!project?.rskEoa) throw new Error('Missing launch project RSK EOA for claim generation')
       return {
         fundingStrategy: project.fundingStrategy,
-        aonContractAddress,
-        rskEoa: project.rskEoa ?? null,
+        aonContractAddress: null,
+        rskEoa: project.rskEoa,
+        isLegacyLaunchFeeProject: true,
       }
     }
 
-    if (!project.rskEoa) {
-      throw new Error('Missing project RSK EOA for claim generation')
+    if (project?.fundingStrategy !== ProjectFundingStrategy.AllOrNothing) {
+      throw new Error('Rootstock swap claims are only supported for All-or-Nothing projects')
     }
+
+    const aonContractAddress = project.aonGoal?.contractAddress
+    if (!aonContractAddress) throw new Error('Missing AON contract address for claim generation')
 
     return {
       fundingStrategy: project.fundingStrategy,
-      aonContractAddress: null,
-      rskEoa: project.rskEoa,
+      aonContractAddress,
+      rskEoa: null,
+      isLegacyLaunchFeeProject: false,
     }
   }
 
@@ -903,27 +906,19 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
       preimage,
       privateKey,
     } = params
-
-    console.log('VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS', VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS)
-    console.log('VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS', VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS)
-
     if (!VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS || !VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
-      throw new Error('Missing Prism contract or Geyser operational address configuration')
+      throw new Error('Missing legacy paid-launch Rootstock configuration')
     }
 
     const creatorAmountSats = claimAmountSats - geyserFeesAmount
-    if (creatorAmountSats < 0) {
-      throw new Error('Prism split amount is negative for creator')
-    }
-
-    if (creatorAmountSats + geyserFeesAmount !== claimAmountSats) {
-      throw new Error('Prism split amounts do not sum to claim amount')
+    if (creatorAmountSats < 0 || creatorAmountSats + geyserFeesAmount !== claimAmountSats) {
+      throw new Error('Invalid legacy paid-launch Prism split amounts')
     }
 
     const depositCallData = createCallDataForPrismDepositFor({
       payer: contributorAddress as `0x${string}`,
       receivers: [projectRskEoa as `0x${string}`, VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`],
-      amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
+      amounts: [satsToWei(creatorAmountSats), satsToWei(geyserFeesAmount)],
     })
 
     return createCallDataForBoltzClaimCallWithCallee({
@@ -932,7 +927,7 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
       refundAddress,
       timelock,
       privateKey,
-      callee: VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS as string,
+      callee: VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
       callData: depositCallData,
     })
   }
@@ -1043,34 +1038,28 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
     }
 
     const claimTargetProject = getValidatedClaimTargetProject()
-    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const projectRskEoa = claimTargetProject.rskEoa || ''
-    const geyserFeesAmount = getGeyserFeesAmount(fees)
-
-    let claimTxCallDataHex = ''
-    if (!isAonProject && projectRskEoa) {
-      claimTxCallDataHex = buildPrismClaimTxCallData({
-        claimAmountSats,
-        geyserFeesAmount,
-        contributorAddress,
-        projectRskEoa,
-        refundAddress: swap.refundAddress,
-        timelock: swap.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    } else {
-      claimTxCallDataHex = buildAonClaimTxCallData({
-        claimAmountSats,
-        fees,
-        contributorAddress,
-        aonContractAddress: claimTargetProject.aonContractAddress || '',
-        refundAddress: swap.refundAddress,
-        timelock: swap.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    }
+    const privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || ''
+    const claimTxCallDataHex = claimTargetProject.isLegacyLaunchFeeProject
+      ? buildPrismClaimTxCallData({
+          claimAmountSats,
+          geyserFeesAmount: getGeyserFeesAmount(fees),
+          contributorAddress,
+          projectRskEoa: claimTargetProject.rskEoa || '',
+          refundAddress: swap.refundAddress,
+          timelock: swap.timeoutBlockHeight,
+          preimage: preImages.preimageHex,
+          privateKey,
+        })
+      : buildAonClaimTxCallData({
+          claimAmountSats,
+          fees,
+          contributorAddress,
+          aonContractAddress: claimTargetProject.aonContractAddress || '',
+          refundAddress: swap.refundAddress,
+          timelock: swap.timeoutBlockHeight,
+          preimage: preImages.preimageHex,
+          privateKey,
+        })
 
     await setPaymentSwapClaimTx({
       paymentId: payment.paymentId,
@@ -1097,34 +1086,28 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
     }
 
     const claimTargetProject = getValidatedClaimTargetProject()
-    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const projectRskEoa = claimTargetProject.rskEoa || ''
-    const geyserFeesAmount = getGeyserFeesAmount(fees)
-
-    let claimTxCallDataHex = ''
-    if (!isAonProject && projectRskEoa) {
-      claimTxCallDataHex = buildPrismClaimTxCallData({
-        claimAmountSats,
-        geyserFeesAmount,
-        contributorAddress,
-        projectRskEoa,
-        refundAddress: swap.claimDetails.refundAddress,
-        timelock: swap.claimDetails.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    } else {
-      claimTxCallDataHex = buildAonClaimTxCallData({
-        claimAmountSats,
-        fees,
-        contributorAddress,
-        aonContractAddress: claimTargetProject.aonContractAddress || '',
-        refundAddress: swap.claimDetails.refundAddress,
-        timelock: swap.claimDetails.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    }
+    const privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || ''
+    const claimTxCallDataHex = claimTargetProject.isLegacyLaunchFeeProject
+      ? buildPrismClaimTxCallData({
+          claimAmountSats,
+          geyserFeesAmount: getGeyserFeesAmount(fees),
+          contributorAddress,
+          projectRskEoa: claimTargetProject.rskEoa || '',
+          refundAddress: swap.claimDetails.refundAddress,
+          timelock: swap.claimDetails.timeoutBlockHeight,
+          preimage: preImages.preimageHex,
+          privateKey,
+        })
+      : buildAonClaimTxCallData({
+          claimAmountSats,
+          fees,
+          contributorAddress,
+          aonContractAddress: claimTargetProject.aonContractAddress || '',
+          refundAddress: swap.claimDetails.refundAddress,
+          timelock: swap.claimDetails.timeoutBlockHeight,
+          preimage: preImages.preimageHex,
+          privateKey,
+        })
 
     await setPaymentSwapClaimTx({
       paymentId: payment.paymentId,
@@ -1144,10 +1127,6 @@ export const satsToWei = (sats: number) => {
   }
 
   return BigInt(sats) * 10000000000n
-}
-
-export const satsToWeiBigInt = (sats: number) => {
-  return satsToWei(sats)
 }
 
 export const weiToSats = (wei: bigint) => {

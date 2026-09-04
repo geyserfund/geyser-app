@@ -1,7 +1,5 @@
 import type { TFunction } from 'i18next'
 
-import { getLaunchPlansData } from '../../launch/constants/launchPlansData.ts'
-
 export type KeyValueRow = {
   title: string
   description: string
@@ -10,14 +8,6 @@ export type KeyValueRow = {
 export type QuestionAnswerRow = {
   question: string
   answer: string
-}
-
-export type LaunchPlanRow = {
-  title: string
-  subtitle: string
-  price: string
-  points: string[]
-  badge?: string
 }
 
 export const getFundamentals = (translate: TFunction): KeyValueRow[] => [
@@ -81,15 +71,6 @@ export const getMomentumSteps = (translate: TFunction): KeyValueRow[] => [
   },
 ]
 
-export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] =>
-  getLaunchPlansData(translate).map((plan) => ({
-    title: plan.title,
-    subtitle: plan.subtitle,
-    price: plan.price,
-    points: plan.points.map((point) => (point.description ? `${point.title}: ${point.description}` : point.title)),
-    badge: plan.highlightedText,
-  }))
-
 export const getResources = (translate: TFunction): KeyValueRow[] => [
   {
     title: translate('Launch on Geyser'),
@@ -119,9 +100,9 @@ export const getFaqItems = (translate: TFunction): QuestionAnswerRow[] => [
     answer: translate('No. Start with a clear story and complete setup, then improve with updates and feedback.'),
   },
   {
-    question: translate('Which fundraiser type should I pick first'),
+    question: translate('What kind of project can I create'),
     answer: translate(
-      'Open Fundraiser fits ongoing work. All-or-Nothing is best when delivery depends on a minimum goal.',
+      'Field Partners can create managed Recoverable Grant projects through Geyser. Contact support if you need help with eligibility.',
     ),
   },
   {
@@ -134,7 +115,7 @@ export const getFaqItems = (translate: TFunction): QuestionAnswerRow[] => [
   },
   {
     question: translate('How do I get more visibility after launch'),
-    answer: translate('Post updates, share milestones, and choose a launch plan that matches the reach you need.'),
+    answer: translate('Post updates, share milestones, and invite your community to follow the project.'),
   },
 ]
 

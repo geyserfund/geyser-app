@@ -17,12 +17,11 @@ import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
 
 type PaymentRecoveryKeyProps = {
   contributionId: string
-  isPrismContribution?: boolean
   onComplete: () => void
 }
 
 /** PaymentRecoveryKey: lets anonymous contributors copy the key needed to recover refunds later. */
-export const PaymentRecoveryKey = ({ contributionId, isPrismContribution, onComplete }: PaymentRecoveryKeyProps) => {
+export const PaymentRecoveryKey = ({ contributionId, onComplete }: PaymentRecoveryKeyProps) => {
   const toast = useNotification()
   const recoveryCode = useAtomValue(anonymousRecoveryCodeAtom)
   const downloadDisclosure = useDisclosure()
@@ -47,7 +46,7 @@ export const PaymentRecoveryKey = ({ contributionId, isPrismContribution, onComp
   }
 
   if (showRefundFileDownload) {
-    return <PaymentDownloadRefundFile isPrismContribution={isPrismContribution} onComplete={onComplete} />
+    return <PaymentDownloadRefundFile onComplete={onComplete} />
   }
 
   return (
@@ -58,13 +57,9 @@ export const PaymentRecoveryKey = ({ contributionId, isPrismContribution, onComp
             {t('Copy your recovery key before proceeding')}
           </Body>
           <Body size="sm">
-            {isPrismContribution
-              ? t(
-                  'If the contribution fails, this recovery key lets you claim a refund without downloading a refund file.',
-                )
-              : t(
-                  'If this project does not reach its goal, this recovery key lets you claim a refund without downloading a refund file.',
-                )}{' '}
+            {t(
+              'If this project does not reach its goal, this recovery key lets you claim a refund without downloading a refund file.',
+            )}{' '}
             <Link isExternal href={GeyserOnChainGuideUrl} color="primary1.11">
               {t('More info')}.
             </Link>

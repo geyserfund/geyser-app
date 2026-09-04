@@ -9,3 +9,4 @@
 | [0005](0005-keep-build-secrets-out-of-browser-bundles.md) | Accepted | Keep build secrets out of browser bundles |
 | [0006](0006-retire-nostr-project-integrations.md) | Accepted | Retire Nostr project integrations while retaining authentication |
 | [0007](0007-retire-reward-writes-and-purchases.md) | Accepted | Retire reward writes and purchases while preserving historical reads |
+| [0008](0008-retire-prism-and-ordinary-tia-funding.md) | Accepted | Retire Prism and ordinary TIA funding |

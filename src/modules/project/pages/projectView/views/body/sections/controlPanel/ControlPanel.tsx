@@ -11,6 +11,7 @@ import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
@@ -20,7 +21,6 @@ import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotific
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import {
-  ProjectFundingStrategy,
   ProjectReviewStatus,
   ProjectStatus,
   useProjectLaunchReviewsQuery,
@@ -330,7 +330,7 @@ export const ControlPanel = () => {
   const resubmitConfirmModal = useModal()
   const toast = useNotification()
   const isDraftUrl = location.pathname.includes('/draft')
-  const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isTiaProject = isLegacyTiaProject(project)
   const isRecoverableGrant = isRecoverableGrantProject(project)
 
   const [stripeConnectNoticeClosedByProject, setStripeConnectNoticeClosedByProject] = useAtom(
@@ -493,7 +493,7 @@ export const ControlPanel = () => {
         </Button>
       </HStack>
 
-      <TiaRskEoaSetupNotice compact />
+      {isTiaProject && <TiaRskEoaSetupNotice compact />}
 
       {isReviewPending && (
         <ControlPanelNotification

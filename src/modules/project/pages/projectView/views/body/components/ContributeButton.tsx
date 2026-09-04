@@ -26,8 +26,8 @@ import { PiCopy, PiHandHeartBold, PiLink } from 'react-icons/pi'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { QRCodeComponent } from '@/modules/project/pages/projectFunding/views/fundingPayment/components/QRCodeComponent.tsx'
 import { type AnimatedNavBarItem, AnimatedNavBar } from '@/shared/components/navigation/AnimatedNavBar'
@@ -116,9 +116,15 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   const activeDirectPaymentMethodIndex = directPaymentMethods.findIndex(
     (method) => method.key === activeDirectPaymentMethod,
   )
+  const fundingDisabled = isFundingDisabled()
 
   useEffect(() => {
-    if (!usesTemporaryDirectPayments || !hasDirectPaymentDetails || searchParams.get('direct-payment') !== '1') {
+    if (
+      fundingDisabled ||
+      !usesTemporaryDirectPayments ||
+      !hasDirectPaymentDetails ||
+      searchParams.get('direct-payment') !== '1'
+    ) {
       return
     }
 
@@ -126,13 +132,25 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     const nextSearchParams = new URLSearchParams(searchParams)
     nextSearchParams.delete('direct-payment')
     setSearchParams(nextSearchParams, { replace: true })
-  }, [directPaymentModal, hasDirectPaymentDetails, searchParams, setSearchParams, usesTemporaryDirectPayments])
+  }, [
+    directPaymentModal,
+    fundingDisabled,
+    hasDirectPaymentDetails,
+    searchParams,
+    setSearchParams,
+    usesTemporaryDirectPayments,
+  ])
 
   if (!project) {
     return null
   }
 
   const handleWidgetClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (fundingDisabled) {
+      event.preventDefault()
+      return
+    }
+
     if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
       event.preventDefault()
       directPaymentModal.onOpen()
@@ -147,6 +165,11 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   }
 
   const handleInlineClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (fundingDisabled) {
+      event.preventDefault()
+      return
+    }
+
     if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
       event.preventDefault()
       directPaymentModal.onOpen()
@@ -178,11 +201,13 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     size: 'lg',
     variant: 'solid',
     colorScheme: 'primary1',
-    isDisabled: managedRecoverableGrant
-      ? !hasManagedPaymentMethod || isFundingDisabled()
-      : usesTemporaryDirectPayments && !hasStripePaymentMethod
-      ? !hasDirectPaymentDetails
-      : isFundingDisabled(),
+    isDisabled:
+      fundingDisabled ||
+      (managedRecoverableGrant
+        ? !hasManagedPaymentMethod
+        : usesTemporaryDirectPayments && !hasStripePaymentMethod
+        ? !hasDirectPaymentDetails
+        : false),
     position: 'relative',
     sx: {
       transition: 'transform 0.1s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s',
@@ -202,7 +227,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
         />
       )}
 
-      {usesTemporaryDirectPayments && hasDirectPaymentDetails && (
+      {!fundingDisabled && usesTemporaryDirectPayments && hasDirectPaymentDetails && (
         <DirectPaymentModal
           isOpen={directPaymentModal.isOpen}
           onClose={directPaymentModal.onClose}

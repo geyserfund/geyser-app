@@ -6,6 +6,7 @@ const getEnv = (key: string, fallback?: string): string => {
   if (!value && !fallback) {
     throw new Error(`Environment variable ${key} is required but not set`)
   }
+
   return value || fallback || ''
 }
 
@@ -28,25 +29,32 @@ export const config = {
 
   /** API URL used for direct GraphQL calls from tests */
   apiUrl: getOptionalEnv('API_URL', getApiOriginFromAppUrl(getEnv('APP_URL', 'https://dev.geyser.fund'))),
-  
+
   /** Lightning Network Daemon (LND) configuration */
   lnd: {
     endpoint: getEnv('CONTRIBUTOR_LND_ENDPOINT', 'https://localhost:8081'),
     macaroonHex: getEnv('CONTRIBUTOR_LND_ADMIN_MACAROON_HEX'),
   },
-  
+
   /** Bitcoin regtest configuration */
   bitcoin: {
     endpoint: getEnv('BITCOIND_ENDPOINT', 'http://regtest.geyser.fund:18443'),
     auth: getEnv('BITCOIND_AUTH', 'cmVndGVzdDpyZWd0ZXN0'),
     mineBlockAddress: getEnv('MINE_BLOCK_ADDRESS', 'bcrt1qkfxpvljhfmj93vjjdfzl24ww8yx8hrq4hllnfn'),
   },
-  
+
   /** Project-creation test configuration */
   projectCreation: {
     reviewSubmitJwt: getOptionalEnv('PROJECT_REVIEW_SUBMIT_JWT'),
     accountPassword: getOptionalEnv('PROJECT_CREATION_ACCOUNT_PASSWORD'),
     launchPaymentProjectId: getOptionalEnv('VITE_APP_GEYSER_LAUNCH_PROJECT_ID', '939'),
+    aonProjectName: getOptionalEnv('AON_PROJECT_NAME'),
+    aonProjectGoalAmountSats: getOptionalEnv('AON_PROJECT_GOAL_AMOUNT_SATS'),
+  },
+
+  /** Existing project used for generic contribution error-state tests. */
+  funding: {
+    projectName: getOptionalEnv('FUNDING_PROJECT_NAME'),
   },
 } as const
 

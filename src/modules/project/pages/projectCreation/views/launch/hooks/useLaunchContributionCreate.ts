@@ -32,7 +32,7 @@ import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { ProjectLaunchStrategy } from '../launchStrategy.ts'
 import { LaunchPaymentMethod } from '../views/LaunchPaymentMethodSelection.tsx'
 
-type LaunchPrismAccountKeys = {
+type LaunchRskAccountKeys = {
   publicKey: string
   address: string
   privateKey: string
@@ -44,13 +44,13 @@ type LaunchPreImage = {
 }
 
 type LaunchRequestContext = {
-  accountKeys?: LaunchPrismAccountKeys
+  accountKeys?: LaunchRskAccountKeys
   lightningPreImage?: LaunchPreImage
   onChainPreImage?: LaunchPreImage
 }
 
 type LaunchAccountKeyResolution =
-  | { status: 'ok'; accountKeys: LaunchPrismAccountKeys }
+  | { status: 'ok'; accountKeys: LaunchRskAccountKeys }
   | { status: 'prompt' }
   | { status: 'error'; error: string; retryable?: boolean }
 
@@ -58,7 +58,7 @@ export type ContributionResult =
   | { ok: true; contribution: FundingContributionFragment; payments: FundingContributionPaymentDetailsFragment }
   | { ok: false; error: string; reason?: 'password_required' }
 
-/** Encapsulates launch-fee contribution creation across Lightning, on-chain, Prism, and Stripe payment paths. */
+/** Encapsulates launch-fee contribution creation across Lightning, on-chain, and Stripe payment paths. */
 export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => {
   const toast = useNotification()
   const { user } = useAuthContext()
@@ -97,7 +97,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
     return `${ORIGIN}/`
   }, [project.name])
 
-  const defaultAccountKeys = useMemo<LaunchPrismAccountKeys>(
+  const defaultAccountKeys = useMemo<LaunchRskAccountKeys>(
     () => ({
       publicKey: userAccountKeys?.rskKeyPair?.publicKey || userAccountKeyPair?.publicKey || '',
       address: userAccountKeys?.rskKeyPair?.address || '',
@@ -113,7 +113,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
 
   const [contributionCreate, { loading }] = useContributionCreateMutation()
 
-  const resolvePrismAccountKeys = useCallback(
+  const resolveRskAccountKeys = useCallback(
     async (passwordOverride?: string): Promise<LaunchAccountKeyResolution> => {
       if (hasValidRskAccountKeys(defaultAccountKeys)) {
         return {
@@ -277,7 +277,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       }
 
       if (method === LaunchPaymentMethod.Lightning || method === LaunchPaymentMethod.Onchain) {
-        const accountKeyResolution = await resolvePrismAccountKeys(passwordOverride)
+        const accountKeyResolution = await resolveRskAccountKeys(passwordOverride)
 
         if (accountKeyResolution.status === 'prompt') {
           return {
@@ -356,7 +356,7 @@ export const useLaunchContributionCreate = (strategy: ProjectLaunchStrategy) => 
       launchPaymentProject,
       processContributionResponse,
       project?.id,
-      resolvePrismAccountKeys,
+      resolveRskAccountKeys,
       returnUrl,
       strategy,
       stripeEmbeddedTheme,

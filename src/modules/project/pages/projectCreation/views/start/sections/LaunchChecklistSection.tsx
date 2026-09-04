@@ -21,9 +21,9 @@ export const LaunchChecklistSection = () => {
   const checklistItems = useMemo(
     () => [
       t('Project story complete'),
-      t('Fundraiser type selected'),
-      t('Wallet configured'),
-      t('Goals and rewards added'),
+      t('Recoverable Grant details confirmed'),
+      t('Managed payment readiness reviewed'),
+      t('Project details and updates prepared'),
       t('Launch announcement drafted'),
     ],
     [],

@@ -3,7 +3,7 @@ import { t } from 'i18next'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
-import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
+import { useRootstockBalance } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/useRootstockBalance.ts'
 import {
   PaymentStatus,
   UserWalletWithdrawStatus,
@@ -11,8 +11,8 @@ import {
   useUserWalletWithdrawLatestQuery,
 } from '@/types/index.ts'
 
-/** One PRISM unit is represented as 10,000,000,000 sats on Rootstock. */
-const SATS_PER_PRISM_UNIT = 10000000000n
+/** One satoshi is represented as 10,000,000,000 wei on Rootstock. */
+const WEI_PER_SAT = 10000000000n
 const MIN_BITCOIN_PAYOUT_SATS_BIGINT = BigInt(MIN_BITCOIN_PAYOUT_SATS)
 const ACTIVE_STATUSES = [UserWalletWithdrawStatus.Pending, UserWalletWithdrawStatus.Processing]
 const WITHDRAW_POLL_INTERVAL_MS = 10_000
@@ -27,10 +27,10 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
   const previousActiveStatusRef = useRef<UserWalletWithdrawStatus | null | undefined>(undefined)
 
   const {
-    withdrawable,
+    balance,
     isLoading: isWithdrawableLoading,
     refetch: refetchWithdrawable,
-  } = usePrismWithdrawable({ rskAddress })
+  } = useRootstockBalance({ rskAddress })
 
   const {
     data: activeData,
@@ -52,7 +52,7 @@ export const useUserWalletWithdrawState = ({ rskAddress, hasWalletConfigured }: 
     skip: !hasWalletConfigured,
   })
 
-  const withdrawableSats = withdrawable ? withdrawable / SATS_PER_PRISM_UNIT : 0n
+  const withdrawableSats = balance ? balance / WEI_PER_SAT : 0n
   const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats)
   const withdrawableUsd = withdrawableUsdCents / 100
   const isBelowMinimumWithdrawal = withdrawableSats > 0n && withdrawableSats < MIN_BITCOIN_PAYOUT_SATS_BIGINT

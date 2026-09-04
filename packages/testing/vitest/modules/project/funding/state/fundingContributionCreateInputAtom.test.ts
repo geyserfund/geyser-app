@@ -45,7 +45,7 @@ const createProjectState = (params: {
   } as unknown as ProjectState)
 
 describe('fiatOnlyPaymentsInputAtom', () => {
-  it('returns stripe fiat payload for TIA projects with stripe enabled', () => {
+  it('returns managed Stripe payload for Recoverable Grants', () => {
     const store = createStore()
     store.set(
       projectAtom,
@@ -53,6 +53,8 @@ describe('fiatOnlyPaymentsInputAtom', () => {
         fundingStrategy: ProjectFundingStrategy.TakeItAll,
         stripeEnabled: true,
         projectName: 'tia-with-stripe',
+        isRecoverableGrant: true,
+        managedStripeReady: true,
       }),
     )
 
@@ -213,7 +215,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
     expect(store.get(formattedFundingInputAtom).referrerHeroId).toBe('ambassador-hero')
   })
 
-  it('includes swap payment inputs when logged out with no account keys', () => {
+  it('does not create legacy TIA payment inputs when logged out', () => {
     const store = createStore()
     store.set(
       projectAtom,
@@ -252,10 +254,6 @@ describe('fiatOnlyPaymentsInputAtom', () => {
 
     const contributionInput = store.get(formattedFundingInputAtom)
 
-    expect(contributionInput.paymentsInput?.lightningToRskSwap?.create).toBe(true)
-    expect(contributionInput.paymentsInput?.onChainToRskSwap?.create).toBe(true)
-    expect(contributionInput.paymentsInput?.lightningToRskSwap).not.toBe(
-      contributionInput.paymentsInput?.onChainToRskSwap,
-    )
+    expect(contributionInput.paymentsInput).toEqual({})
   })
 })
