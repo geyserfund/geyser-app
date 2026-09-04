@@ -1,3 +1,15 @@
+## [0.57.0](https://github.com/geyserfund/geyser-app/compare/v0.56.0...v0.57.0) (2026-09-04)
+
+
+### Bug Fixes
+
+* **project-creation:** explain circular grant flow ([df13e91](https://github.com/geyserfund/geyser-app/commit/df13e91b312799eab4112edcc393dfa9c3d90bc5))
+
+### Refactors
+
+* rename recoverable grants to circular grants and retire paid launch flow ([1fb31c6](https://github.com/geyserfund/geyser-app/commit/1fb31c69049dcf3220d8df0990e4d1b99128d9e2))
+* retire Prism and legacy TIA funding ([68a842b](https://github.com/geyserfund/geyser-app/commit/68a842b5c2fd500df01ba0112d83c72f4f7dd10f))
+
 ## [0.56.0](https://github.com/geyserfund/geyser-app/compare/v0.55.0...v0.56.0) (2026-09-01)
 
 
