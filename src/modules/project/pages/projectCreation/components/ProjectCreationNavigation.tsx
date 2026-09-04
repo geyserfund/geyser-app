@@ -52,7 +52,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
-      { title: 'Funding Strategy', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
+      { title: 'Circular Grant', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },

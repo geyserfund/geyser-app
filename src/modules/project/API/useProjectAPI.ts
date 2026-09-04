@@ -249,6 +249,13 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
   useEffect(() => {
     if (!load || (!projectId && !projectName)) {
       initialProjectLoadKeyRef.current = null
+
+      // A new project has no persisted project to query. Mark this context as
+      // ready so creation pages can render before the first create mutation.
+      if (load) {
+        setProjectLoading(false)
+      }
+
       return
     }
 
