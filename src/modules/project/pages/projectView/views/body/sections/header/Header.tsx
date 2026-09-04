@@ -24,7 +24,7 @@ import { PiArrowsClockwiseBold, PiFlag, PiMapPin } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { ProjectStatusBar } from '@/components/ui'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -55,7 +55,7 @@ import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { FollowButton } from '../../components/FollowButton.tsx'
 import { ProjectLinks } from '../../components/ProjectLinks.tsx'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
-import { ManagedRecoverableGrantBalanceDisplay } from '../contributionSummary/components/ManagedRecoverableGrantBalanceDisplay.tsx'
+import { ManagedCircularGrantBalanceDisplay } from '../contributionSummary/components/ManagedCircularGrantBalanceDisplay.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { ProjectShareModal } from './shareModal/ProjectShareModal.tsx'
 
@@ -71,7 +71,7 @@ interface HeaderDetailsProps extends StackProps {
 const HeaderDetails = ({ onOpen, summaryLoading, summaryError, isProjectOwner, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner } = useProjectAtom()
   const projectImages = project.images || []
-  const isRecoverableGrant = Boolean((project as typeof project & { isRecoverableGrant?: boolean }).isRecoverableGrant)
+  const isCircularGrant = Boolean((project as typeof project & { isCircularGrant?: boolean }).isCircularGrant)
 
   const thumbnailOutlineColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
   const [subscribers, setSubscribers] = useState(0)
@@ -140,7 +140,7 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, isProjectOwner, .
         <ProjectHeaderSummary
           summaryLoading={summaryLoading}
           summaryError={summaryError}
-          isRecoverableGrant={isRecoverableGrant}
+          isCircularGrant={isCircularGrant}
           subscribers={subscribers}
         />
 
@@ -200,23 +200,23 @@ const ReportProjectButton = () => {
 type ProjectHeaderSummaryProps = {
   summaryLoading: boolean
   summaryError: boolean
-  isRecoverableGrant: boolean
+  isCircularGrant: boolean
   subscribers: number
 }
 
 const ProjectHeaderSummary = ({
   summaryLoading,
   summaryError,
-  isRecoverableGrant,
+  isCircularGrant,
   subscribers,
 }: ProjectHeaderSummaryProps) => {
   const { project } = useProjectAtom()
 
-  if (summaryLoading && !isRecoverableGrant) {
+  if (summaryLoading && !isCircularGrant) {
     return <SkeletonLayout height="20px" w="250px" />
   }
 
-  if (summaryError && !isRecoverableGrant) {
+  if (summaryError && !isCircularGrant) {
     return (
       <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
         <Body size="md" medium light>
@@ -226,7 +226,7 @@ const ProjectHeaderSummary = ({
     )
   }
 
-  if (isRecoverableGrant) {
+  if (isCircularGrant) {
     return null
   }
 
@@ -257,7 +257,7 @@ type ProjectHeaderTag = {
 }
 
 type ProjectHeaderTagProject = ReturnType<typeof useProjectAtom>['project'] & {
-  isRecoverableGrant?: boolean
+  isCircularGrant?: boolean
 }
 
 const getProjectHeaderLocationFilter = (project: ProjectHeaderTagProject) => {
@@ -391,15 +391,15 @@ const MobileBalanceInfo = () => {
   const { formatAmount } = useCurrencyFormatter()
   const { project } = useProjectAtom()
   const isAON = isAllOrNothing(project)
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
 
   const renderBalanceInfo = () => {
     if (isAON) {
       return <AonProjectBalanceDisplay />
     }
 
-    if (isManagedRecoverableGrant) {
-      return <ManagedRecoverableGrantBalanceDisplay />
+    if (isManagedCircularGrant) {
+      return <ManagedCircularGrantBalanceDisplay />
     }
 
     return (

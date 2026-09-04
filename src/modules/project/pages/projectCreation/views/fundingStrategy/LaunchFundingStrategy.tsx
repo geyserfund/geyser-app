@@ -5,7 +5,7 @@ import { useRef, useState } from 'react'
 import { PiCheck, PiQuestion } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
-import { canCreateManagedRecoverableGrant } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { canCreateManagedCircularGrant } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
@@ -18,7 +18,7 @@ import {
   getProjectFundingStrategyInput,
   ProjectCreationFundingOption,
   projectCreationFundingOptionAtom,
-  RecoverableGrantFundingOption,
+  CircularGrantFundingOption,
 } from '../../states/fundingStrategyAtom.ts'
 
 const options: Record<
@@ -43,8 +43,8 @@ const options: Record<
     recommendedFor: t('Projects that need a minimum amount to start, build, or deliver something.'),
     benefit: t('Builds trust with contributors.'),
   },
-  [RecoverableGrantFundingOption]: {
-    title: t('Recoverable Grant'),
+  [CircularGrantFundingOption]: {
+    title: t('Circular Grant'),
     body: t(
       '0% interest grants that are repaid over time, then reused to fund the next local project without creating a debt burden.',
     ),
@@ -57,19 +57,19 @@ const options: Record<
 
 const resolveProjectFundingOption = ({
   fundingStrategy,
-  isRecoverableGrant,
+  isCircularGrant,
   storedFundingOption,
 }: {
   fundingStrategy?: ProjectFundingStrategy | null
-  isRecoverableGrant?: boolean
+  isCircularGrant?: boolean
   storedFundingOption: ProjectCreationFundingOption | null
 }): ProjectCreationFundingOption => {
-  if (fundingStrategy === undefined && isRecoverableGrant === undefined && storedFundingOption === null) {
-    return RecoverableGrantFundingOption
+  if (fundingStrategy === undefined && isCircularGrant === undefined && storedFundingOption === null) {
+    return CircularGrantFundingOption
   }
 
-  if (isRecoverableGrant) {
-    return RecoverableGrantFundingOption
+  if (isCircularGrant) {
+    return CircularGrantFundingOption
   }
 
   return fundingStrategy || storedFundingOption || ProjectFundingStrategy.TakeItAll
@@ -88,15 +88,15 @@ export const LaunchFundingStrategy = () => {
   )
 
   const isNewProject = !params.projectId || params.projectId === 'new'
-  const { isRecoverableGrant } = project as { isRecoverableGrant?: boolean }
-  const showRecoverableGrantOption = canCreateManagedRecoverableGrant(isFieldPartner)
+  const { isCircularGrant } = project as { isCircularGrant?: boolean }
+  const showCircularGrantOption = canCreateManagedCircularGrant(isFieldPartner)
 
   const resolvedFundingOption = resolveProjectFundingOption({
     fundingStrategy: project.fundingStrategy,
-    isRecoverableGrant,
+    isCircularGrant,
     storedFundingOption,
   })
-  const fundingOptionFromProject = isNewProject ? RecoverableGrantFundingOption : resolvedFundingOption
+  const fundingOptionFromProject = isNewProject ? CircularGrantFundingOption : resolvedFundingOption
 
   const [selectedOption, setSelectedOption] = useState<ProjectCreationFundingOption>(() => fundingOptionFromProject)
   const prevFundingOptionFromProjectRef = useRef(fundingOptionFromProject)
@@ -128,7 +128,7 @@ export const LaunchFundingStrategy = () => {
         )
       }
     },
-    isDisabled: isNewProject && !showRecoverableGrantOption,
+    isDisabled: isNewProject && !showCircularGrantOption,
   }
 
   const backButtonProps = {
@@ -149,10 +149,10 @@ export const LaunchFundingStrategy = () => {
         <VStack w="full" alignItems="stretch" spacing={4}>
           {isNewProject ? (
             <OptionButton
-              fundingStrategy={RecoverableGrantFundingOption}
+              fundingStrategy={CircularGrantFundingOption}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
-              isDisabled={!showRecoverableGrantOption}
+              isDisabled={!showCircularGrantOption}
             />
           ) : (
             <OptionButton
@@ -191,9 +191,9 @@ const HelpCard = ({ isFieldPartner }: { isFieldPartner: boolean }) => {
         <Body>
           {isFieldPartner
             ? t(
-                'Create a Recoverable Grant to provide working capital for a local project through Geyser-managed payment methods.',
+                'Create a Circular Grant to provide working capital for a local project through Geyser-managed payment methods.',
               )
-            : t('Only Field Partners can create Recoverable Grant projects.')}
+            : t('Only Field Partners can create Circular Grant projects.')}
         </Body>
       </VStack>
     </HStack>

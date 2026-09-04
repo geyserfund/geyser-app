@@ -10,7 +10,6 @@ import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/index.ts'
 import { SocialConfig } from '@/modules/auth/SocialConfig.tsx'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -43,20 +42,19 @@ export const LaunchAboutYou = () => {
   }, [user.bio])
 
   const { project, loading } = useProjectAtom()
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
 
   const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
 
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.AboutYou,
-    getPath(isManagedRecoverableGrant ? 'launchFinalize' : 'launchPayment', project.id),
+    getPath('launchFinalize', project.id),
   )
 
   const continueAfterAboutYou = () =>
     updateProjectWithLastCreationStep(
       undefined,
       undefined,
-      isManagedRecoverableGrant ? ProjectCreationStep.Launch : undefined,
+      ProjectCreationStep.Launch,
     )
 
   const onLeave = () => {

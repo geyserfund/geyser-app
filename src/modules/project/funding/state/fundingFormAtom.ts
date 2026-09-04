@@ -49,7 +49,7 @@ export type FundingProject = Pick<
   | 'paymentMethods'
   | 'subCategory'
   | 'fundingStrategy'
-  | 'isRecoverableGrant'
+  | 'isCircularGrant'
   | 'rskEoa'
   | 'activeMatching'
   | 'rewardCurrency'
@@ -636,9 +636,6 @@ export const canUseRecurringFundingAtom = atom((get) => {
   return project.fundingStrategy === ProjectFundingStrategy.TakeItAll
 })
 
-/** Atom to store the launch project id */
-export const launchContributionProjectIdAtom = atom<string>('')
-
 /** Reset Funding Form */
 export const resetFundingFormAtom = atom(null, (_, set) => {
   set(fundingFormStateAtom, initialState)
@@ -648,5 +645,4 @@ export const resetFundingFormAtom = atom(null, (_, set) => {
   set(fiatPaymentMethodAtom, fiatCheckoutMethods.creditCard)
   set(fundingFormErrorAtom, {} as { [key in keyof FundFormType]: string })
   set(fundingFormWarningAtom, {} as { [key in keyof FundFormType]: string })
-  set(launchContributionProjectIdAtom, '')
 })

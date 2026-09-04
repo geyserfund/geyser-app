@@ -28,7 +28,7 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
     paymentMethods.push(MasterCardPaymentImageUrl)
   }
 
-  const { isFundingDisabled, isRecoverableGrantGoalReached } = useProjectToolkit(project)
+  const { isFundingDisabled, isCircularGrantGoalReached } = useProjectToolkit(project)
 
   return (
     <VStack
@@ -51,7 +51,7 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
       <VStack w="full" spacing={5} px={6} pt={5} pb={5}>
         <ProjectBalanceDisplay />
 
-        {(!isFundingDisabled() || isRecoverableGrantGoalReached()) && (
+        {(!isFundingDisabled() || isCircularGrantGoalReached()) && (
           <VStack w="full" spacing={4}>
             <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
             <ProjectPaymentMethodsHint justifyContent="center" />

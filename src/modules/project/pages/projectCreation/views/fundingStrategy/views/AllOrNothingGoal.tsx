@@ -43,7 +43,7 @@ export const AllOrNothingGoal = () => {
   const usdRate = useAtomValue(usdRateAtom)
 
   const { project } = useProjectAtom()
-  const isRecoverableGrant = Boolean(project.isRecoverableGrant)
+  const isCircularGrant = Boolean(project.isCircularGrant)
 
   const { getSatoshisFromUSDCents, getUSDAmount } = useBTCConverter()
 
@@ -54,7 +54,7 @@ export const AllOrNothingGoal = () => {
     defaultValues: {
       amount: project.aonGoal?.goalAmount || 0,
       amountUSD: project.aonGoal?.goalAmount ? getUSDAmount(project.aonGoal?.goalAmount as Satoshis) : 0,
-      duration: getProjectAonGoalDurationInDays(isRecoverableGrant, project.aonGoal?.goalDurationInDays || 0),
+      duration: getProjectAonGoalDurationInDays(isCircularGrant, project.aonGoal?.goalDurationInDays || 0),
       launchDate: project.launchScheduledAt ? DateTime.fromMillis(project.launchScheduledAt).toJSDate() : undefined,
     },
   })
@@ -85,7 +85,7 @@ export const AllOrNothingGoal = () => {
           aonGoalInSats: data.amount,
           aonGoalUsdQuote: toInt(usdRate),
         },
-        aonGoalDurationInDays: getProjectAonGoalDurationInDays(isRecoverableGrant, data.duration),
+        aonGoalDurationInDays: getProjectAonGoalDurationInDays(isCircularGrant, data.duration),
       },
       launchScheduledAt: data.launchDate ? DateTime.fromJSDate(data.launchDate).toMillis() : undefined,
     })
@@ -150,7 +150,7 @@ export const AllOrNothingGoal = () => {
               onToggle={onToggle}
             />
           </FieldContainer>
-          {!isRecoverableGrant ? (
+          {!isCircularGrant ? (
             <FieldContainer
               title={t('Project duration')}
               subtitle={
@@ -194,7 +194,7 @@ export const AllOrNothingGoal = () => {
               </InputGroup>
             </FieldContainer>
           ) : null}
-          {!isRecoverableGrant ? (
+          {!isCircularGrant ? (
             <FieldContainer
               title={t('Schedule launch (optional)')}
               subtitle={

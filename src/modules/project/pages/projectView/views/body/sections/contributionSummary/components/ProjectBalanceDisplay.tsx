@@ -1,9 +1,9 @@
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import { AonProjectBalanceDisplay } from './AonProjectBalanceDisplay.tsx'
-import { ManagedRecoverableGrantBalanceDisplay } from './ManagedRecoverableGrantBalanceDisplay.tsx'
+import { ManagedCircularGrantBalanceDisplay } from './ManagedCircularGrantBalanceDisplay.tsx'
 import { TiaProjectBalanceDisplay } from './TiaProjectBalanceDisplay.tsx'
 
 export const ProjectBalanceDisplay = () => {
@@ -13,8 +13,8 @@ export const ProjectBalanceDisplay = () => {
     return <AonProjectBalanceDisplay />
   }
 
-  if (isManagedRecoverableGrantProject(project)) {
-    return <ManagedRecoverableGrantBalanceDisplay />
+  if (isManagedCircularGrantProject(project)) {
+    return <ManagedCircularGrantBalanceDisplay />
   }
 
   return <TiaProjectBalanceDisplay />

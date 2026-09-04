@@ -4,11 +4,11 @@ import { join } from 'path'
 
 /** Default test project values */
 export const DEFAULT_PROJECT_DETAILS = {
-  title: 'Test Recoverable Grant Project',
-  name: `test-recoverable-grant-project-${Date.now()}`, // Unique name using timestamp
-  shortDescription: 'This is a test project created by Playwright E2E tests for managed Recoverable Grants.',
+  title: 'Test Circular Grant Project',
+  name: `test-circular-grant-project-${Date.now()}`, // Unique name using timestamp
+  shortDescription: 'This is a test project created by Playwright E2E tests for managed Circular Grants.',
   description:
-    'This is a comprehensive test project description that meets the minimum length requirement of 210 characters. It describes the purpose of this test project which is to validate the managed Recoverable Grant creation flow in our E2E test suite. This project will be used to test various funding scenarios and ensure the platform works correctly.',
+    'This is a comprehensive test project description that meets the minimum length requirement of 210 characters. It describes the purpose of this test project which is to validate the managed Circular Grant creation flow in our E2E test suite. This project will be used to test various funding scenarios and ensure the platform works correctly.',
   category: 'Tool',
   subCategory: 'App',
   location: 'United States', // Country name as shown in UI

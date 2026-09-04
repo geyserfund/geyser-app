@@ -27,7 +27,7 @@ import { useNavigate, useSearchParams } from 'react-router'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { QRCodeComponent } from '@/modules/project/pages/projectFunding/views/fundingPayment/components/QRCodeComponent.tsx'
 import { type AnimatedNavBarItem, AnimatedNavBar } from '@/shared/components/navigation/AnimatedNavBar'
@@ -76,9 +76,9 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   const hasDirectPaymentDetails = Boolean(
     project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
   )
-  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
-  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedRecoverableGrant
-  const managedPaymentMethods = project?.paymentMethods?.managedRecoverableGrant
+  const managedCircularGrant = isManagedCircularGrantProject(project)
+  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant
+  const managedPaymentMethods = project?.paymentMethods?.managedCircularGrant
   const hasManagedPaymentMethod = Boolean(
     managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,
   )
@@ -203,7 +203,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     colorScheme: 'primary1',
     isDisabled:
       fundingDisabled ||
-      (managedRecoverableGrant
+      (managedCircularGrant
         ? !hasManagedPaymentMethod
         : usesTemporaryDirectPayments && !hasStripePaymentMethod
         ? !hasDirectPaymentDetails

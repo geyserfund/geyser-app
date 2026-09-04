@@ -20,20 +20,20 @@ describe('getProjectStatus', () => {
         project: {
           ...project,
           fundingStrategy: ProjectFundingStrategy.TakeItAll,
-          isRecoverableGrant: false,
+          isCircularGrant: false,
         },
         wallet: inactiveWallet,
       }),
     ).toBe(ProjectStatusLabels.INACTIVE_WALLET)
   })
 
-  it('does not require a creator wallet for managed Recoverable Grants', () => {
+  it('does not require a creator wallet for managed Circular Grants', () => {
     expect(
       getProjectStatus({
         project: {
           ...project,
           fundingStrategy: ProjectFundingStrategy.TakeItAll,
-          isRecoverableGrant: true,
+          isCircularGrant: true,
         },
         wallet: inactiveWallet,
       }),

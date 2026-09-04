@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectCreationEditGuard } from '@/modules/project/hooks/useProjectCreationEditGuard.ts'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -46,7 +46,7 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
   const { guardProjectEditAttempt } = useProjectCreationEditGuard()
 
   const { project, loading: projectLoading } = useProjectAtom()
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
 
   const { queryInProgressGoals, queryCompletedGoals } = useProjectGoalsAPI(true)
 
@@ -163,7 +163,7 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
         <VStack alignItems="flex-start" spacing={4} width="100%">
           {!creationMode && (
             <Body size="2xl" bold>
-              {isManagedRecoverableGrant ? t('Funding Goal') : t('Goals')}
+              {isManagedCircularGrant ? t('Funding Goal') : t('Goals')}
             </Body>
           )}
           <DndContext
@@ -180,7 +180,7 @@ export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
                   goal={goal}
                   editMode={isGoalinEditMode || Boolean(creationMode)}
                   handleEditGoalModalOpen={handleEditGoalModalOpen}
-                  disableSorting={isManagedRecoverableGrant}
+                  disableSorting={isManagedCircularGrant}
                   isPriorityGoal={goal.id === priorityGoal?.id}
                 />
               ))}

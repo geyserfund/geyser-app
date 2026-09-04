@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'vitest'
 
-import { canCreateManagedRecoverableGrant } from '../../../../../../../../src/modules/project/domain/managedRecoverableGrant.ts'
+import { canCreateManagedCircularGrant } from '../../../../../../../../src/modules/project/domain/managedCircularGrant.ts'
 import {
   getProjectAonGoalDurationInDays,
-  RECOVERABLE_GRANT_DURATION_IN_DAYS,
+  CIRCULAR_GRANT_DURATION_IN_DAYS,
   shouldShowAllOrNothingGoalInCreation,
 } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
 import { ProjectFundingStrategy } from '../../../../../../../../src/types/index.ts'
 
-describe('canCreateManagedRecoverableGrant', () => {
+describe('canCreateManagedCircularGrant', () => {
   it('allows Field Partners', () => {
-    expect(canCreateManagedRecoverableGrant(true)).toBe(true)
+    expect(canCreateManagedCircularGrant(true)).toBe(true)
   })
 
-  it('does not expose managed Recoverable Grants to other creators', () => {
-    expect(canCreateManagedRecoverableGrant(false)).toBe(false)
+  it('does not expose managed Circular Grants to other creators', () => {
+    expect(canCreateManagedCircularGrant(false)).toBe(false)
   })
 })
 
@@ -23,7 +23,7 @@ describe('shouldShowAllOrNothingGoalInCreation', () => {
     expect(
       shouldShowAllOrNothingGoalInCreation({
         fundingStrategy: ProjectFundingStrategy.AllOrNothing,
-        isRecoverableGrant: false,
+        isCircularGrant: false,
       }),
     ).toBe(true)
   })
@@ -32,7 +32,7 @@ describe('shouldShowAllOrNothingGoalInCreation', () => {
     expect(
       shouldShowAllOrNothingGoalInCreation({
         fundingStrategy: undefined,
-        isRecoverableGrant: undefined,
+        isCircularGrant: undefined,
       }),
     ).toBe(false)
   })
@@ -41,15 +41,15 @@ describe('shouldShowAllOrNothingGoalInCreation', () => {
     expect(
       shouldShowAllOrNothingGoalInCreation({
         fundingStrategy: ProjectFundingStrategy.TakeItAll,
-        isRecoverableGrant: false,
+        isCircularGrant: false,
       }),
     ).toBe(false)
   })
 })
 
 describe('getProjectAonGoalDurationInDays', () => {
-  it('uses the fixed 14-day duration for Recoverable Grants', () => {
-    expect(getProjectAonGoalDurationInDays(true, 30)).toBe(RECOVERABLE_GRANT_DURATION_IN_DAYS)
+  it('uses the fixed 14-day duration for Circular Grants', () => {
+    expect(getProjectAonGoalDurationInDays(true, 30)).toBe(CIRCULAR_GRANT_DURATION_IN_DAYS)
   })
 
   it('preserves the selected duration for other All-or-Nothing projects', () => {

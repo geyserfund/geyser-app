@@ -16,7 +16,7 @@ import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
 import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
@@ -52,7 +52,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isInactive = project.status === ProjectStatus.Inactive
   const isActive = project.status === ProjectStatus.Active
   const isTiaProject = isLegacyTiaProject(project)
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isCircularGrant = isCircularGrantProject(project)
 
   const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
   const { status: withdrawalStatus, withdrawableSats, withdrawableUsd } = useProjectWithdrawalStatus({ project })
@@ -78,8 +78,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   /** Get project type badge configuration */
   const getProjectTypeBadge = () => {
-    if (isRecoverableGrant) {
-      return { label: t('Recoverable Grant'), colorScheme: 'primary1', icon: PiRecycle }
+    if (isCircularGrant) {
+      return { label: t('Circular Grant'), colorScheme: 'primary1', icon: PiRecycle }
     }
 
     if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
@@ -126,12 +126,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
   const needsWalletConfig =
     !TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
-    !isRecoverableGrant &&
+    !isCircularGrant &&
     !effectiveRskEoa &&
     project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
-  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isRecoverableGrant)
+  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant)
 
   /** Get context message or action */
   const renderContextContent = () => {
@@ -199,7 +199,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     if (
       isActive &&
       project.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-      !isRecoverableGrant &&
+      !isCircularGrant &&
       !needsWalletConfig
     ) {
       return (
@@ -240,7 +240,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
     // Show withdraw button for active projects with funds
     const canWithdraw =
-      !isRecoverableGrant && isActive && (withdrawalStatus === 'ready' || withdrawalStatus === 'below_threshold')
+      !isCircularGrant && isActive && (withdrawalStatus === 'ready' || withdrawalStatus === 'below_threshold')
     const isWithdrawDisabled = withdrawalStatus === 'below_threshold'
 
     return (
@@ -338,7 +338,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         {/* Row 3: Context message or action */}
         {!needsWalletConfig && renderContextContent()}
 
-        {shouldShowDirectPaymentNotification && !isRecoverableGrant && (
+        {shouldShowDirectPaymentNotification && !isCircularGrant && (
           <ControlPanelNotification
             icon={<Icon as={PiInfo} color="warning.9" boxSize="24px" flexShrink={0} />}
             title={t('Add payment details to keep receiving contributions in Bitcoin')}
@@ -366,7 +366,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           />
         )}
 
-        {shouldShowStripeConnectNotification && !isRecoverableGrant && (
+        {shouldShowStripeConnectNotification && !isCircularGrant && (
           <ControlPanelNotification
             icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
             title={

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { getPath } from '@/shared/constants'
@@ -41,9 +41,9 @@ export const GoalContributeButton = ({
   const hasDirectPaymentDetails = Boolean(
     project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
   )
-  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
-  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedRecoverableGrant
-  const managedPaymentMethods = project.paymentMethods?.managedRecoverableGrant
+  const managedCircularGrant = isManagedCircularGrantProject(project)
+  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant
+  const managedPaymentMethods = project.paymentMethods?.managedCircularGrant
   const hasManagedPaymentMethod = Boolean(
     managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,
   )
@@ -81,7 +81,7 @@ export const GoalContributeButton = ({
       onClick={handleContributeClick}
       isDisabled={
         isFundingDisabled() ||
-        (managedRecoverableGrant
+        (managedCircularGrant
           ? !hasManagedPaymentMethod
           : usesTemporaryDirectPayments && !hasStripePaymentMethod
           ? !hasDirectPaymentDetails
@@ -100,7 +100,7 @@ export const GoalContributeButton = ({
       onClick={handleContributeClick}
       isDisabled={
         isFundingDisabled() ||
-        (managedRecoverableGrant
+        (managedCircularGrant
           ? !hasManagedPaymentMethod
           : usesTemporaryDirectPayments && !hasStripePaymentMethod
           ? !hasDirectPaymentDetails

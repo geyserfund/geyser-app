@@ -539,7 +539,6 @@ type Project {
   preLaunchedAt: Date
   preLaunchExpiresAt: Date
   launchScheduledAt: Date
-  paidLaunch: Boolean
   thumbnailImage: String
   category: ProjectCategory
   subCategory: ProjectSubCategory
@@ -602,10 +601,8 @@ type Project {
   Funding strategy
   """
   fundingStrategy: ProjectFundingStrategy
-  isRecoverableGrant: Boolean!
+  isCircularGrant: Boolean!
   fieldPartner: User
-  launchStrategy: String
-  feedbackSuggestion: ProjectFeedbackSuggestion
   fundingSummary: ProjectFundingSummary!
   aonGoal: ProjectAonGoal
   impactFundRecipient: ProjectImpactFundRecipient
@@ -639,24 +636,6 @@ type ProjectRskEoa {
   replacedAt: Date
 }
 
-type ProjectFeedbackSuggestion {
-  launchStrategy: String!
-  status: ProjectFeedbackSuggestionStatus!
-  summary: String
-  mainIssue: String
-  feedbackPoints: [String!]!
-  emailSubject: String
-  emailBodyText: String
-  generatedAt: Date
-  failureReason: String
-}
-
-enum ProjectFeedbackSuggestionStatus {
-  PENDING
-  READY
-  FAILED
-}
-
 type ProjectImpactFundRecipient {
   applicationId: BigInt!
   impactFundId: BigInt!
@@ -669,7 +648,7 @@ type ProjectImpactFundRecipient {
 
 type ProjectFundingSummary {
   fundingStrategy: ProjectFundingStrategy!
-  isRecoverableGrant: Boolean!
+  isCircularGrant: Boolean!
   raisedSats: BigInt!
   raisedUsdCent: Int!
   goalSats: BigInt
@@ -882,7 +861,7 @@ input CreateProjectInput {
   tagIds: [Int!]
   referrerHeroId: String
   fundingStrategy: ProjectFundingStrategy
-  isRecoverableGrant: Boolean
+  isCircularGrant: Boolean
 }
 
 input UpdateProjectInput {
@@ -1042,10 +1021,9 @@ input ProjectsGetWhereInput {
   subCategory: ProjectSubCategory
   fundingStrategy: ProjectFundingStrategy
   fieldPartnerUserId: BigInt
-  isRecoverableGrant: Boolean
+  isCircularGrant: Boolean
   aonGoalReached: Boolean
   ownerId: BigInt
-  hasFeedbackSuggestion: Boolean
 }
 
 input ProjectsOrderByInput {
@@ -4539,7 +4517,6 @@ input ProjectReviewSubmitInput {
   status: ProjectReviewStatusInput!
   rejectionReasons: [RejectionReason!]
   reviewNotes: String
-  waveFee: Boolean
 }
 
 enum ProjectReviewStatusInput {
@@ -4859,10 +4836,10 @@ input UpdateProjectSubscriptionPlanInput {
 type PaymentMethods {
   fiat: FiatPaymentMethods!
   bitcoin: BitcoinPaymentMethods!
-  managedRecoverableGrant: ManagedRecoverableGrantPaymentMethods!
+  managedCircularGrant: ManagedCircularGrantPaymentMethods!
 }
 
-type ManagedRecoverableGrantPaymentMethods {
+type ManagedCircularGrantPaymentMethods {
   stripe: Boolean!
   strikeLightning: Boolean!
   strikeOnChain: Boolean!

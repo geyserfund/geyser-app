@@ -30,7 +30,7 @@ export const ProjectPrelaunchStatus = ({
   project,
   onlyTimeLeft = false,
 }: {
-  project: Pick<ProjectState, 'preLaunchExpiresAt' | 'balanceUsdCent' | 'paidLaunch'>
+  project: Pick<ProjectState, 'preLaunchExpiresAt' | 'balanceUsdCent'>
   onlyTimeLeft?: boolean
 }) => {
   const isMobile = useMobileMode()

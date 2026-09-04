@@ -86,14 +86,14 @@ export const ProjectStatusTooltip = {
 export type GetProjectStatusProps = {
   project: Pick<
     ProjectState,
-    'status' | 'id' | 'name' | 'rejectionReason' | 'fundingStrategy' | 'isRecoverableGrant' | 'rskEoa'
+    'status' | 'id' | 'name' | 'rejectionReason' | 'fundingStrategy' | 'isCircularGrant' | 'rskEoa'
   >
   wallet: Pick<ProjectWalletFragment, 'state'>
 }
 
 export const getProjectStatus = ({ project, wallet }: GetProjectStatusProps) => {
   const projectUsesManagedWallet =
-    project.isRecoverableGrant === true && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+    project.isCircularGrant === true && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
   const getStatus = () => {
     if (isDraft(project.status)) {

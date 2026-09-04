@@ -27,4 +27,4 @@ The deployed Prism contract is permissionless and has no application shutdown me
 
 ## Status
 
-Accepted
+Superseded by ADR-0009

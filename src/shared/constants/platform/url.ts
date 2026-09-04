@@ -33,22 +33,6 @@ export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-pro
 // LOGO URLS
 export const GeyserBannerLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/app/Geyser-banner-logo.png'
 
-// LAUNCH PROJECT URLS
-export const LaunchProjectCoinsUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
-export const LaunchProjectPaymentMethodsUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/payment-methods-illustrations.png'
-export const LaunchProjectEntryUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-entry.webp'
-export const LaunchProjectFeesUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-fees.webp'
-export const LaunchProjectGiftUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-gift.webp'
-export const LaunchProjectKeyUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-key.webp'
-export const LaunchProjectWorldUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-world.webp'
-
 export const LiveProjectsImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/accepted_illustration1.png'
 export const InReviewProjectsImageUrl =

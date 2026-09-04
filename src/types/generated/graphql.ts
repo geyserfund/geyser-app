@@ -339,6 +339,7 @@ export type ContributionCreateInput = {
   /** The percentage of the donation that will be tipped to Geyser, between 0 and 100. */
   geyserTipPercentage?: InputMaybe<Scalars['Float']['input']>;
   metadataInput?: InputMaybe<ContributionMetadataInput>;
+  orderInput?: InputMaybe<OrderContributionInput>;
   /** Optional payment instructions. If omitted or if no payment methods are requested, no payments will be created. */
   paymentsInput?: InputMaybe<ContributionPaymentsInput>;
   projectGoalId?: InputMaybe<Scalars['BigInt']['input']>;
@@ -439,8 +440,6 @@ export type ContributionMetadataInput = {
   guardianBadges?: InputMaybe<Array<GuardianType>>;
   media?: InputMaybe<Scalars['String']['input']>;
   privateComment?: InputMaybe<Scalars['String']['input']>;
-  /** @deprecated Newsletter subscriptions are handled by the frontend Beehiiv integration. */
-  subscribeToGeyserEmails?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ContributionMutationResponse = {
@@ -619,7 +618,7 @@ export type CreateProjectInput = {
   fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
   /** Project header images */
   images: Array<Scalars['String']['input']>;
-  isRecoverableGrant?: InputMaybe<Scalars['Boolean']['input']>;
+  isCircularGrant?: InputMaybe<Scalars['Boolean']['input']>;
   /** Project links */
   links?: InputMaybe<Array<Scalars['String']['input']>>;
   name: Scalars['String']['input'];
@@ -637,6 +636,14 @@ export type CreateProjectInput = {
   /** Public title of the project. */
   title: Scalars['String']['input'];
   type?: InputMaybe<ProjectType>;
+};
+
+export type CreateProjectShippingConfigInput = {
+  globalShipping: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  projectId: Scalars['BigInt']['input'];
+  shippingRates: Array<UpdateProjectShippingFeeRateInput>;
+  type: ProjectShippingConfigType;
 };
 
 export type CreateProjectSubscriptionPlanInput = {
@@ -1673,8 +1680,8 @@ export enum MfaAction {
   UserEmailVerification = 'USER_EMAIL_VERIFICATION'
 }
 
-export type ManagedRecoverableGrantPaymentMethods = {
-  __typename?: 'ManagedRecoverableGrantPaymentMethods';
+export type ManagedCircularGrantPaymentMethods = {
+  __typename?: 'ManagedCircularGrantPaymentMethods';
   strikeLightning: Scalars['Boolean']['output'];
   strikeOnChain: Scalars['Boolean']['output'];
   stripe: Scalars['Boolean']['output'];
@@ -2486,6 +2493,11 @@ export type Order = {
   user?: Maybe<User>;
 };
 
+export type OrderBitcoinQuoteInput = {
+  quote: Scalars['Float']['input'];
+  quoteCurrency: QuoteCurrency;
+};
+
 export enum OrderByDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -2496,11 +2508,38 @@ export enum OrderByOptions {
   Desc = 'desc'
 }
 
+export type OrderContributionInput = {
+  /**
+   * Quote used client-side to compute the order total. That quote will be used unless the slippage exceeds
+   * a pre-defined threshold.
+   */
+  bitcoinQuote?: InputMaybe<OrderBitcoinQuoteInput>;
+  items: Array<OrderItemInput>;
+  shippingAddressId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type OrderItem = {
   __typename?: 'OrderItem';
   item: ProjectReward;
   quantity: Scalars['Int']['output'];
   unitPriceInSats: Scalars['Int']['output'];
+};
+
+export type OrderItemInput = {
+  itemId: Scalars['BigInt']['input'];
+  itemType: OrderItemType;
+  /** Number of times a reward was selected. */
+  quantity: Scalars['Int']['input'];
+};
+
+export enum OrderItemType {
+  ProjectReward = 'PROJECT_REWARD',
+  ProjectSubscriptionPlan = 'PROJECT_SUBSCRIPTION_PLAN'
+}
+
+export type OrderStatusUpdateInput = {
+  orderId?: InputMaybe<Scalars['BigInt']['input']>;
+  status?: InputMaybe<UpdatableOrderStatus>;
 };
 
 export type OrdersGetInput = {
@@ -2747,7 +2786,7 @@ export type PaymentMethods = {
   __typename?: 'PaymentMethods';
   bitcoin: BitcoinPaymentMethods;
   fiat: FiatPaymentMethods;
-  managedRecoverableGrant: ManagedRecoverableGrantPaymentMethods;
+  managedCircularGrant: ManagedCircularGrantPaymentMethods;
 };
 
 export type PaymentPendInput = {
@@ -3397,7 +3436,6 @@ export type Project = {
   description?: Maybe<Scalars['String']['output']>;
   directPaymentDetails?: Maybe<DirectPaymentDetails>;
   entriesCount?: Maybe<Scalars['Int']['output']>;
-  feedbackSuggestion?: Maybe<ProjectFeedbackSuggestion>;
   fieldPartner?: Maybe<User>;
   followers: Array<User>;
   followersCount?: Maybe<Scalars['Int']['output']>;
@@ -3413,10 +3451,9 @@ export type Project = {
   /** Project header images. */
   images: Array<Scalars['String']['output']>;
   impactFundRecipient?: Maybe<ProjectImpactFundRecipient>;
-  isRecoverableGrant: Scalars['Boolean']['output'];
+  isCircularGrant: Scalars['Boolean']['output'];
   lastCreationStep: ProjectCreationStep;
   launchScheduledAt?: Maybe<Scalars['Date']['output']>;
-  launchStrategy?: Maybe<Scalars['String']['output']>;
   launchedAt?: Maybe<Scalars['Date']['output']>;
   links: Array<Scalars['String']['output']>;
   location?: Maybe<Location>;
@@ -3426,7 +3463,6 @@ export type Project = {
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['String']['output'];
   owners: Array<Owner>;
-  paidLaunch?: Maybe<Scalars['Boolean']['output']>;
   paymentMethods: PaymentMethods;
   /**
    * By default, returns all the posts of a project, both published and unpublished but not deleted.
@@ -3666,25 +3702,6 @@ export type ProjectDeleteResponse = MutationResponse & {
   success: Scalars['Boolean']['output'];
 };
 
-export type ProjectFeedbackSuggestion = {
-  __typename?: 'ProjectFeedbackSuggestion';
-  emailBodyText?: Maybe<Scalars['String']['output']>;
-  emailSubject?: Maybe<Scalars['String']['output']>;
-  failureReason?: Maybe<Scalars['String']['output']>;
-  feedbackPoints: Array<Scalars['String']['output']>;
-  generatedAt?: Maybe<Scalars['Date']['output']>;
-  launchStrategy: Scalars['String']['output'];
-  mainIssue?: Maybe<Scalars['String']['output']>;
-  status: ProjectFeedbackSuggestionStatus;
-  summary?: Maybe<Scalars['String']['output']>;
-};
-
-export enum ProjectFeedbackSuggestionStatus {
-  Failed = 'FAILED',
-  Pending = 'PENDING',
-  Ready = 'READY'
-}
-
 export type ProjectFollowMutationInput = {
   projectId: Scalars['BigInt']['input'];
 };
@@ -3719,9 +3736,9 @@ export type ProjectFundingSummary = {
   fundingStrategy: ProjectFundingStrategy;
   goalSats?: Maybe<Scalars['BigInt']['output']>;
   goals: ProjectGoalFundingSummary;
+  isCircularGrant: Scalars['Boolean']['output'];
   isFundingFailed: Scalars['Boolean']['output'];
   isFundingOpen: Scalars['Boolean']['output'];
-  isRecoverableGrant: Scalars['Boolean']['output'];
   matching: ProjectMatchingFundingSummary;
   percentageFunded?: Maybe<Scalars['Int']['output']>;
   raisedSats: Scalars['BigInt']['output'];
@@ -4061,7 +4078,6 @@ export type ProjectReviewSubmitInput = {
   rejectionReasons?: InputMaybe<Array<RejectionReason>>;
   reviewNotes?: InputMaybe<Scalars['String']['input']>;
   status: ProjectReviewStatusInput;
-  waveFee?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ProjectReward = {
@@ -4412,10 +4428,9 @@ export type ProjectsGetWhereInput = {
   countryCode?: InputMaybe<Scalars['String']['input']>;
   fieldPartnerUserId?: InputMaybe<Scalars['BigInt']['input']>;
   fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
-  hasFeedbackSuggestion?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;
   ids?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  isRecoverableGrant?: InputMaybe<Scalars['Boolean']['input']>;
+  isCircularGrant?: InputMaybe<Scalars['Boolean']['input']>;
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['String']['input']>;
   /** Unique names for projects. Used to batch project lookups by project URL names. */
@@ -5444,6 +5459,12 @@ export type UniqueProjectQueryInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+export enum UpdatableOrderStatus {
+  Confirmed = 'CONFIRMED',
+  Delivered = 'DELIVERED',
+  Shipped = 'SHIPPED'
+}
+
 export type UpdateProjectInput = {
   /** AON goal update inputs */
   aonGoal?: InputMaybe<ProjectAonGoalUpdateInput>;
@@ -5482,6 +5503,21 @@ export type UpdateProjectInput = {
   /** Public title of the project. */
   title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<ProjectType>;
+};
+
+export type UpdateProjectShippingConfigInput = {
+  globalShipping: Scalars['Boolean']['input'];
+  id: Scalars['BigInt']['input'];
+  name: Scalars['String']['input'];
+  shippingRates: Array<UpdateProjectShippingFeeRateInput>;
+  type: ProjectShippingConfigType;
+};
+
+export type UpdateProjectShippingFeeRateInput = {
+  baseRate: Scalars['Int']['input'];
+  country: Scalars['String']['input'];
+  incrementRate: Scalars['Int']['input'];
+  sameAsDefault: Scalars['Boolean']['input'];
 };
 
 export type UpdateProjectSubscriptionPlanInput = {
@@ -6184,6 +6220,7 @@ export type ResolversTypes = {
   ContributorStats: ResolverTypeWrapper<ContributorStats>;
   Country: ResolverTypeWrapper<Country>;
   CreateProjectInput: CreateProjectInput;
+  CreateProjectShippingConfigInput: CreateProjectShippingConfigInput;
   CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
   CreateWalletInput: CreateWalletInput;
   CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>;
@@ -6336,7 +6373,7 @@ export type ResolversTypes = {
   LightningToRskSwapPaymentDetails: ResolverTypeWrapper<LightningToRskSwapPaymentDetails>;
   Location: ResolverTypeWrapper<Location>;
   MFAAction: MfaAction;
-  ManagedRecoverableGrantPaymentMethods: ResolverTypeWrapper<ManagedRecoverableGrantPaymentMethods>;
+  ManagedCircularGrantPaymentMethods: ResolverTypeWrapper<ManagedCircularGrantPaymentMethods>;
   Milestone: ResolverTypeWrapper<Milestone>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>;
@@ -6354,9 +6391,14 @@ export type ResolversTypes = {
   OnChainToLightningSwapPaymentDetails: ResolverTypeWrapper<OnChainToLightningSwapPaymentDetails>;
   OnChainToRskSwapPaymentDetails: ResolverTypeWrapper<OnChainToRskSwapPaymentDetails>;
   Order: ResolverTypeWrapper<Omit<Order, 'contribution' | 'project' | 'user'> & { contribution: ResolversTypes['Contribution'], project: ResolversTypes['Project'], user?: Maybe<ResolversTypes['User']> }>;
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
   OrderByDirection: OrderByDirection;
   OrderByOptions: OrderByOptions;
+  OrderContributionInput: OrderContributionInput;
   OrderItem: ResolverTypeWrapper<OrderItem>;
+  OrderItemInput: OrderItemInput;
+  OrderItemType: OrderItemType;
+  OrderStatusUpdateInput: OrderStatusUpdateInput;
   OrdersGetInput: OrdersGetInput;
   OrdersGetOrderByField: OrdersGetOrderByField;
   OrdersGetOrderByInput: OrdersGetOrderByInput;
@@ -6502,8 +6544,6 @@ export type ResolversTypes = {
   ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
   ProjectCreationStep: ProjectCreationStep;
   ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>;
-  ProjectFeedbackSuggestion: ResolverTypeWrapper<ProjectFeedbackSuggestion>;
-  ProjectFeedbackSuggestionStatus: ProjectFeedbackSuggestionStatus;
   ProjectFollowMutationInput: ProjectFollowMutationInput;
   ProjectFollowerStats: ResolverTypeWrapper<ProjectFollowerStats>;
   ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>;
@@ -6672,7 +6712,10 @@ export type ResolversTypes = {
   TwoFAInput: TwoFaInput;
   UniqueOrderInput: UniqueOrderInput;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
+  UpdatableOrderStatus: UpdatableOrderStatus;
   UpdateProjectInput: UpdateProjectInput;
+  UpdateProjectShippingConfigInput: UpdateProjectShippingConfigInput;
+  UpdateProjectShippingFeeRateInput: UpdateProjectShippingFeeRateInput;
   UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
@@ -6807,6 +6850,7 @@ export type ResolversParentTypes = {
   ContributorStats: ContributorStats;
   Country: Country;
   CreateProjectInput: CreateProjectInput;
+  CreateProjectShippingConfigInput: CreateProjectShippingConfigInput;
   CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
   CreateWalletInput: CreateWalletInput;
   CreatorNotificationSettings: CreatorNotificationSettings;
@@ -6934,7 +6978,7 @@ export type ResolversParentTypes = {
   LightningPaymentMethods: LightningPaymentMethods;
   LightningToRskSwapPaymentDetails: LightningToRskSwapPaymentDetails;
   Location: Location;
-  ManagedRecoverableGrantPaymentMethods: ManagedRecoverableGrantPaymentMethods;
+  ManagedCircularGrantPaymentMethods: ManagedCircularGrantPaymentMethods;
   Milestone: Milestone;
   Mutation: {};
   MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse'];
@@ -6951,7 +6995,11 @@ export type ResolversParentTypes = {
   OnChainToLightningSwapPaymentDetails: OnChainToLightningSwapPaymentDetails;
   OnChainToRskSwapPaymentDetails: OnChainToRskSwapPaymentDetails;
   Order: Omit<Order, 'contribution' | 'project' | 'user'> & { contribution: ResolversParentTypes['Contribution'], project: ResolversParentTypes['Project'], user?: Maybe<ResolversParentTypes['User']> };
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
+  OrderContributionInput: OrderContributionInput;
   OrderItem: OrderItem;
+  OrderItemInput: OrderItemInput;
+  OrderStatusUpdateInput: OrderStatusUpdateInput;
   OrdersGetInput: OrdersGetInput;
   OrdersGetOrderByInput: OrdersGetOrderByInput;
   OrdersGetResponse: OrdersGetResponse;
@@ -7076,7 +7124,6 @@ export type ResolversParentTypes = {
   ProjectCountriesGetInput: ProjectCountriesGetInput;
   ProjectCountriesGetResult: ProjectCountriesGetResult;
   ProjectDeleteResponse: ProjectDeleteResponse;
-  ProjectFeedbackSuggestion: ProjectFeedbackSuggestion;
   ProjectFollowMutationInput: ProjectFollowMutationInput;
   ProjectFollowerStats: ProjectFollowerStats;
   ProjectFunderRewardStats: ProjectFunderRewardStats;
@@ -7208,6 +7255,8 @@ export type ResolversParentTypes = {
   UniqueOrderInput: UniqueOrderInput;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateProjectInput: UpdateProjectInput;
+  UpdateProjectShippingConfigInput: UpdateProjectShippingConfigInput;
+  UpdateProjectShippingFeeRateInput: UpdateProjectShippingFeeRateInput;
   UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
@@ -8105,7 +8154,7 @@ export type LocationResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ManagedRecoverableGrantPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ManagedRecoverableGrantPaymentMethods'] = ResolversParentTypes['ManagedRecoverableGrantPaymentMethods']> = {
+export type ManagedCircularGrantPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ManagedCircularGrantPaymentMethods'] = ResolversParentTypes['ManagedCircularGrantPaymentMethods']> = {
   strikeLightning?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   strikeOnChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   stripe?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -8452,7 +8501,7 @@ export type PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType = any
 export type PaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentMethods'] = ResolversParentTypes['PaymentMethods']> = {
   bitcoin?: Resolver<ResolversTypes['BitcoinPaymentMethods'], ParentType, ContextType>;
   fiat?: Resolver<ResolversTypes['FiatPaymentMethods'], ParentType, ContextType>;
-  managedRecoverableGrant?: Resolver<ResolversTypes['ManagedRecoverableGrantPaymentMethods'], ParentType, ContextType>;
+  managedCircularGrant?: Resolver<ResolversTypes['ManagedCircularGrantPaymentMethods'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8747,7 +8796,6 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   directPaymentDetails?: Resolver<Maybe<ResolversTypes['DirectPaymentDetails']>, ParentType, ContextType>;
   entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  feedbackSuggestion?: Resolver<Maybe<ResolversTypes['ProjectFeedbackSuggestion']>, ParentType, ContextType>;
   fieldPartner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
   followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -8760,10 +8808,9 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   impactFundRecipient?: Resolver<Maybe<ResolversTypes['ProjectImpactFundRecipient']>, ParentType, ContextType>;
-  isRecoverableGrant?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isCircularGrant?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastCreationStep?: Resolver<ResolversTypes['ProjectCreationStep'], ParentType, ContextType>;
   launchScheduledAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  launchStrategy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
@@ -8771,7 +8818,6 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
-  paidLaunch?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   paymentMethods?: Resolver<ResolversTypes['PaymentMethods'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<ProjectPostsArgs>>;
   preLaunchExpiresAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -8901,19 +8947,6 @@ export type ProjectDeleteResponseResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectFeedbackSuggestionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectFeedbackSuggestion'] = ResolversParentTypes['ProjectFeedbackSuggestion']> = {
-  emailBodyText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  emailSubject?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  failureReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  feedbackPoints?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  generatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  launchStrategy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mainIssue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['ProjectFeedbackSuggestionStatus'], ParentType, ContextType>;
-  summary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type ProjectFollowerStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectFollowerStats'] = ResolversParentTypes['ProjectFollowerStats']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -8935,9 +8968,9 @@ export type ProjectFundingSummaryResolvers<ContextType = any, ParentType extends
   fundingStrategy?: Resolver<ResolversTypes['ProjectFundingStrategy'], ParentType, ContextType>;
   goalSats?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   goals?: Resolver<ResolversTypes['ProjectGoalFundingSummary'], ParentType, ContextType>;
+  isCircularGrant?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isFundingFailed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isFundingOpen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isRecoverableGrant?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   matching?: Resolver<ResolversTypes['ProjectMatchingFundingSummary'], ParentType, ContextType>;
   percentageFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   raisedSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -10018,7 +10051,7 @@ export type Resolvers<ContextType = any> = {
   LightningPaymentMethods?: LightningPaymentMethodsResolvers<ContextType>;
   LightningToRskSwapPaymentDetails?: LightningToRskSwapPaymentDetailsResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
-  ManagedRecoverableGrantPaymentMethods?: ManagedRecoverableGrantPaymentMethodsResolvers<ContextType>;
+  ManagedCircularGrantPaymentMethods?: ManagedCircularGrantPaymentMethodsResolvers<ContextType>;
   Milestone?: MilestoneResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationResponse?: MutationResponseResolvers<ContextType>;
@@ -10102,7 +10135,6 @@ export type Resolvers<ContextType = any> = {
   ProjectContributionsStatsGraphDataAmount?: ProjectContributionsStatsGraphDataAmountResolvers<ContextType>;
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>;
   ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>;
-  ProjectFeedbackSuggestion?: ProjectFeedbackSuggestionResolvers<ContextType>;
   ProjectFollowerStats?: ProjectFollowerStatsResolvers<ContextType>;
   ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>;
   ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>;
@@ -10406,7 +10438,7 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isRecoverableGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isCircularGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: (
         { __typename?: 'ProjectMatching' }
         & ProjectMatchingFragment
       ) | null } }, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, paymentMethods: { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
@@ -10419,7 +10451,7 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, n
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, paymentMethods: { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } }, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, lastCreationStep: ProjectCreationStep, fundingStrategy?: ProjectFundingStrategy | null, isCircularGrant: boolean, launchedAt?: any | null, rskEoa?: string | null, subCategory?: ProjectSubCategory | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, paymentMethods: { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } }, location?: { __typename?: 'Location', region?: string | null } | null, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }>, reviews: Array<(
@@ -10708,7 +10740,7 @@ export type LeaderboardGlobalProjectsQuery = { __typename?: 'Query', leaderboard
     & TopProjectsFragmentFragment
   )> };
 
-export type LandingProjectCardProjectFragment = { __typename?: 'Project', id: any, name: string, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isRecoverableGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number } | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type LandingProjectCardProjectFragment = { __typename?: 'Project', id: any, name: string, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, fundingSummary: { __typename?: 'ProjectFundingSummary', fundingStrategy: ProjectFundingStrategy, isCircularGrant: boolean, raisedSats: any, raisedUsdCent: number, goalSats?: any | null, percentageFunded?: number | null, status: string, endsAt?: any | null, isFundingOpen: boolean, isFundingFailed: boolean, matching: { __typename?: 'ProjectMatchingFundingSummary', activeMatching?: { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number } | null } }, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
 export type LandingPostCardPostFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null } | null };
 
@@ -10758,10 +10790,10 @@ export type LandingAnnouncementsQuery = { __typename?: 'Query', geyserAnnounceme
     & LandingPostCardPostFragment
   )>, acelerandoVipLeaderboard: { __typename?: 'AcelerandoVipLeaderboardResponse', endAt: any } };
 
-export type LandingRecoverableGrantProjectsSectionQueryVariables = Exact<{ [key: string]: never; }>;
+export type LandingCircularGrantProjectsSectionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LandingRecoverableGrantProjectsSectionQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
+export type LandingCircularGrantProjectsSectionQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
       { __typename?: 'Project' }
       & LandingProjectCardProjectFragment
     )> } };
@@ -10978,7 +11010,7 @@ export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificat
       & NotificationSettingsFragment
     )> } };
 
-export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, fundingStrategy?: ProjectFundingStrategy | null, isCircularGrant: boolean, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
 export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, status?: ProjectStatus | null, aonGoal?: { __typename?: 'ProjectAonGoal', balance?: number | null, goalAmount: number, status?: ProjectAonGoalStatus | null } | null };
 
@@ -11440,7 +11472,7 @@ export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, 
     & RskToOnChainSwapPaymentDetailsFragment
   ) | { __typename?: 'StrikePaymentDetails' } };
 
-export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', enabled: boolean, stripe: boolean }, managedRecoverableGrant: { __typename?: 'ManagedRecoverableGrantPaymentMethods', stripe: boolean, strikeLightning: boolean, strikeOnChain: boolean } };
+export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', enabled: boolean, stripe: boolean }, managedCircularGrant: { __typename?: 'ManagedCircularGrantPaymentMethods', stripe: boolean, strikeLightning: boolean, strikeOnChain: boolean } };
 
 export type PayoutFragment = { __typename?: 'Payout', id: any, uuid: string, status: PayoutStatus, amount: number, expiresAt: any };
 
@@ -11474,7 +11506,7 @@ export type ProjectAvatarFragment = { __typename?: 'Project', id: any, name: str
 
 export type ProjectLocationFragment = { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isCircularGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -11488,7 +11520,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectReviewPublicFragment
   )> };
 
-export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, launchStrategy?: string | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, isCircularGrant: boolean, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, fieldPartner?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, bio?: string | null, guardianType?: GuardianType | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null, rskEoas: Array<{ __typename?: 'ProjectRskEoa', id: any, rskAddress: string, rskPublicKey?: string | null, derivationPath?: string | null, isCurrent: boolean, createdAt: any, replacedAt?: any | null }>, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -11504,7 +11536,7 @@ export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, 
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, isCircularGrant: boolean, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, directPaymentDetails?: { __typename?: 'DirectPaymentDetails', btcAddress?: string | null, lightningAddress?: string | null } | null };
 
 export type ProjectMatchingFragment = { __typename?: 'ProjectMatching', id: any, projectId: any, sponsorName: string, sponsorUrl?: string | null, referenceCurrency: ProjectMatchingCurrency, matchingType: ProjectMatchingType, maxCapAmount: number, status: ProjectMatchingStatus, startDate: any, totalMatchedAmount: number, totalMatchedAmountSats: number, totalMatchedAmountUsdCent: number, remainingCapAmount: number };
 
@@ -12232,13 +12264,6 @@ export type ProjectGoalQuery = { __typename?: 'Query', projectGoal: (
     { __typename?: 'ProjectGoal', posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> }
     & ProjectGoalsFragment
   ) };
-
-export type LaunchPaymentProjectQueryVariables = Exact<{
-  where: UniqueProjectQueryInput;
-}>;
-
-
-export type LaunchPaymentProjectQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, fundingStrategy?: ProjectFundingStrategy | null, isRecoverableGrant: boolean, rskEoa?: string | null, aonGoal?: { __typename?: 'ProjectAonGoal', contractAddress?: string | null } | null } | null };
 
 export type OrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -13149,7 +13174,7 @@ export const ProjectForLandingPageFragmentDoc = gql`
   fundingStrategy
   fundingSummary {
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     raisedSats
     raisedUsdCent
     goalSats
@@ -13263,7 +13288,7 @@ export const ProjectForMyProjectsFragmentDoc = gql`
   balanceUsdCent
   lastCreationStep
   fundingStrategy
-  isRecoverableGrant
+  isCircularGrant
   launchedAt
   rskEoa
   directPaymentDetails {
@@ -13463,7 +13488,7 @@ export const LandingProjectCardProjectFragmentDoc = gql`
   status
   fundingSummary {
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     raisedSats
     raisedUsdCent
     goalSats
@@ -13767,7 +13792,7 @@ export const ProjectForProfilePageFragmentDoc = gql`
   rejectionReason
   rewardsCount
   fundingStrategy
-  isRecoverableGrant
+  isCircularGrant
   wallets {
     id
     name
@@ -14724,7 +14749,7 @@ export const ProjectPaymentMethodsFragmentDoc = gql`
     enabled
     stripe
   }
-  managedRecoverableGrant {
+  managedCircularGrant {
     stripe
     strikeLightning
     strikeOnChain
@@ -14758,7 +14783,6 @@ export const ProjectPageBodyFragmentDoc = gql`
   launchedAt
   preLaunchedAt
   preLaunchExpiresAt
-  paidLaunch
   goalsCount
   rewardsCount
   entriesCount
@@ -14766,7 +14790,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   followersCount
   rejectionReason
   fundingStrategy
-  isRecoverableGrant
+  isCircularGrant
   fieldPartner {
     id
     username
@@ -14834,8 +14858,6 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   launchedAt
   preLaunchedAt
   preLaunchExpiresAt
-  paidLaunch
-  launchStrategy
   goalsCount
   rewardsCount
   entriesCount
@@ -14843,7 +14865,7 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   followersCount
   rejectionReason
   fundingStrategy
-  isRecoverableGrant
+  isCircularGrant
   fieldPartner {
     id
     username
@@ -14939,7 +14961,7 @@ export const ProjectUpdateFragmentDoc = gql`
   subCategory
   rewardCurrency
   fundingStrategy
-  isRecoverableGrant
+  isCircularGrant
   directPaymentDetails {
     btcAddress
     lightningAddress
@@ -17507,10 +17529,10 @@ export type LandingAnnouncementsQueryHookResult = ReturnType<typeof useLandingAn
 export type LandingAnnouncementsLazyQueryHookResult = ReturnType<typeof useLandingAnnouncementsLazyQuery>;
 export type LandingAnnouncementsSuspenseQueryHookResult = ReturnType<typeof useLandingAnnouncementsSuspenseQuery>;
 export type LandingAnnouncementsQueryResult = Apollo.QueryResult<LandingAnnouncementsQuery, LandingAnnouncementsQueryVariables>;
-export const LandingRecoverableGrantProjectsSectionDocument = gql`
-    query LandingRecoverableGrantProjectsSection {
+export const LandingCircularGrantProjectsSectionDocument = gql`
+    query LandingCircularGrantProjectsSection {
   projectsGet(
-    input: {orderBy: [{direction: desc, field: launchedAt}], where: {status: active, isRecoverableGrant: true}, pagination: {take: 3}}
+    input: {orderBy: [{direction: desc, field: launchedAt}], where: {status: active, isCircularGrant: true}, pagination: {take: 3}}
   ) {
     projects {
       ...LandingProjectCardProject
@@ -17520,36 +17542,36 @@ export const LandingRecoverableGrantProjectsSectionDocument = gql`
     ${LandingProjectCardProjectFragmentDoc}`;
 
 /**
- * __useLandingRecoverableGrantProjectsSectionQuery__
+ * __useLandingCircularGrantProjectsSectionQuery__
  *
- * To run a query within a React component, call `useLandingRecoverableGrantProjectsSectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useLandingRecoverableGrantProjectsSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLandingCircularGrantProjectsSectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLandingCircularGrantProjectsSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLandingRecoverableGrantProjectsSectionQuery({
+ * const { data, loading, error } = useLandingCircularGrantProjectsSectionQuery({
  *   variables: {
  *   },
  * });
  */
-export function useLandingRecoverableGrantProjectsSectionQuery(baseOptions?: Apollo.QueryHookOptions<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>) {
+export function useLandingCircularGrantProjectsSectionQuery(baseOptions?: Apollo.QueryHookOptions<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>(LandingRecoverableGrantProjectsSectionDocument, options);
+        return Apollo.useQuery<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>(LandingCircularGrantProjectsSectionDocument, options);
       }
-export function useLandingRecoverableGrantProjectsSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>) {
+export function useLandingCircularGrantProjectsSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>(LandingRecoverableGrantProjectsSectionDocument, options);
+          return Apollo.useLazyQuery<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>(LandingCircularGrantProjectsSectionDocument, options);
         }
-export function useLandingRecoverableGrantProjectsSectionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>) {
+export function useLandingCircularGrantProjectsSectionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>(LandingRecoverableGrantProjectsSectionDocument, options);
+          return Apollo.useSuspenseQuery<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>(LandingCircularGrantProjectsSectionDocument, options);
         }
-export type LandingRecoverableGrantProjectsSectionQueryHookResult = ReturnType<typeof useLandingRecoverableGrantProjectsSectionQuery>;
-export type LandingRecoverableGrantProjectsSectionLazyQueryHookResult = ReturnType<typeof useLandingRecoverableGrantProjectsSectionLazyQuery>;
-export type LandingRecoverableGrantProjectsSectionSuspenseQueryHookResult = ReturnType<typeof useLandingRecoverableGrantProjectsSectionSuspenseQuery>;
-export type LandingRecoverableGrantProjectsSectionQueryResult = Apollo.QueryResult<LandingRecoverableGrantProjectsSectionQuery, LandingRecoverableGrantProjectsSectionQueryVariables>;
+export type LandingCircularGrantProjectsSectionQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionQuery>;
+export type LandingCircularGrantProjectsSectionLazyQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionLazyQuery>;
+export type LandingCircularGrantProjectsSectionSuspenseQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionSuspenseQuery>;
+export type LandingCircularGrantProjectsSectionQueryResult = Apollo.QueryResult<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>;
 export const LandingRegionalProjectsSectionDocument = gql`
     query LandingRegionalProjectsSection($countryCode: String!) {
   projectsGet(
@@ -22357,52 +22379,6 @@ export type ProjectGoalQueryHookResult = ReturnType<typeof useProjectGoalQuery>;
 export type ProjectGoalLazyQueryHookResult = ReturnType<typeof useProjectGoalLazyQuery>;
 export type ProjectGoalSuspenseQueryHookResult = ReturnType<typeof useProjectGoalSuspenseQuery>;
 export type ProjectGoalQueryResult = Apollo.QueryResult<ProjectGoalQuery, ProjectGoalQueryVariables>;
-export const LaunchPaymentProjectDocument = gql`
-    query LaunchPaymentProject($where: UniqueProjectQueryInput!) {
-  projectGet(where: $where) {
-    id
-    fundingStrategy
-    isRecoverableGrant
-    rskEoa
-    aonGoal {
-      contractAddress
-    }
-  }
-}
-    `;
-
-/**
- * __useLaunchPaymentProjectQuery__
- *
- * To run a query within a React component, call `useLaunchPaymentProjectQuery` and pass it any options that fit your needs.
- * When your component renders, `useLaunchPaymentProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLaunchPaymentProjectQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useLaunchPaymentProjectQuery(baseOptions: Apollo.QueryHookOptions<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables> & ({ variables: LaunchPaymentProjectQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables>(LaunchPaymentProjectDocument, options);
-      }
-export function useLaunchPaymentProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables>(LaunchPaymentProjectDocument, options);
-        }
-export function useLaunchPaymentProjectSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables>(LaunchPaymentProjectDocument, options);
-        }
-export type LaunchPaymentProjectQueryHookResult = ReturnType<typeof useLaunchPaymentProjectQuery>;
-export type LaunchPaymentProjectLazyQueryHookResult = ReturnType<typeof useLaunchPaymentProjectLazyQuery>;
-export type LaunchPaymentProjectSuspenseQueryHookResult = ReturnType<typeof useLaunchPaymentProjectSuspenseQuery>;
-export type LaunchPaymentProjectQueryResult = Apollo.QueryResult<LaunchPaymentProjectQuery, LaunchPaymentProjectQueryVariables>;
 export const OrdersGetDocument = gql`
     query OrdersGet($input: OrdersGetInput!) {
   ordersGet(input: $input) {

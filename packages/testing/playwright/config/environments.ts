@@ -47,7 +47,6 @@ export const config = {
   projectCreation: {
     reviewSubmitJwt: getOptionalEnv('PROJECT_REVIEW_SUBMIT_JWT'),
     accountPassword: getOptionalEnv('PROJECT_CREATION_ACCOUNT_PASSWORD'),
-    launchPaymentProjectId: getOptionalEnv('VITE_APP_GEYSER_LAUNCH_PROJECT_ID', '939'),
     aonProjectName: getOptionalEnv('AON_PROJECT_NAME'),
     aonProjectGoalAmountSats: getOptionalEnv('AON_PROJECT_GOAL_AMOUNT_SATS'),
   },

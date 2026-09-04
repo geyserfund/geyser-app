@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { PiWarning } from 'react-icons/pi'
 import { Navigate, useLocation, useNavigate } from 'react-router'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
@@ -27,7 +27,7 @@ export const PaymentOnchainPrompt = () => {
     navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
   }
 
-  const shouldSkipRefundPrompt = isAllOrNothing(project) || isManagedRecoverableGrantProject(project)
+  const shouldSkipRefundPrompt = isAllOrNothing(project) || isManagedCircularGrantProject(project)
 
   useEffect(() => {
     if (shouldSkipRefundPrompt) setOnchainRefundDownloadAtom(true)

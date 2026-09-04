@@ -23,7 +23,6 @@ export const ENV = {
   MINE_BLOCK_ADDRESS: config.bitcoin.mineBlockAddress,
   PROJECT_REVIEW_SUBMIT_JWT: config.projectCreation.reviewSubmitJwt,
   PROJECT_CREATION_ACCOUNT_PASSWORD: config.projectCreation.accountPassword,
-  GEYSER_LAUNCH_PROJECT_ID: config.projectCreation.launchPaymentProjectId,
   AON_PROJECT_NAME: config.projectCreation.aonProjectName,
   AON_PROJECT_GOAL_AMOUNT_SATS: config.projectCreation.aonProjectGoalAmountSats,
   FUNDING_PROJECT_NAME: config.funding.projectName,

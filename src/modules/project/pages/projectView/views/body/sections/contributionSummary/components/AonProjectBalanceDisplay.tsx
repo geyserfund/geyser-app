@@ -5,14 +5,14 @@ import { PiInfo } from 'react-icons/pi'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft, getFormattedAonGoalUserFacingDeadline } from '@/shared/utils/project/getAonData.ts'
 import { ProjectAonGoalStatus } from '@/types/index.ts'
 
-import { RecoverableGrantTooltipLabel } from '../../recoverableGrant/RecoverableGrantExplainer.tsx'
+import { CircularGrantTooltipLabel } from '../../circularGrant/CircularGrantExplainer.tsx'
 import { GoalCampaignBalanceDisplay } from './GoalCampaignBalanceDisplay.tsx'
 
 const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus.Cancelled]
@@ -35,7 +35,7 @@ export const AonProjectBalanceDisplay = () => {
   const percent = getAonGoalPercentage()
 
   const fundingDisabled = isFundingDisabled()
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isCircularGrant = isCircularGrantProject(project)
 
   const failedStatus = project.aonGoal?.status && aonGoalFailedStatuses.includes(project.aonGoal.status)
   if (!project.aonGoal && (projectAonGoalLoading || projectAonGoalError)) {
@@ -82,11 +82,11 @@ export const AonProjectBalanceDisplay = () => {
   return (
     <GoalCampaignBalanceDisplay
       label={
-        isRecoverableGrant ? (
+        isCircularGrant ? (
           <HStack spacing={1}>
-            <span>{t('Recoverable Grant')}</span>
-            <Tooltip label={<RecoverableGrantTooltipLabel />} hasArrow placement="top">
-              <span aria-label={t('Recoverable grant information')}>
+            <span>{t('Circular Grant')}</span>
+            <Tooltip label={<CircularGrantTooltipLabel />} hasArrow placement="top">
+              <span aria-label={t('Circular grant information')}>
                 <PiInfo />
               </span>
             </Tooltip>

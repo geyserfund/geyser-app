@@ -102,7 +102,7 @@ export const getFaqItems = (translate: TFunction): QuestionAnswerRow[] => [
   {
     question: translate('What kind of project can I create'),
     answer: translate(
-      'Field Partners can create managed Recoverable Grant projects through Geyser. Contact support if you need help with eligibility.',
+      'Field Partners can create managed Circular Grant projects through Geyser. Contact support if you need help with eligibility.',
     ),
   },
   {
@@ -121,6 +121,4 @@ export const getFaqItems = (translate: TFunction): QuestionAnswerRow[] => [
 
 export const getFinalStats = (translate: TFunction): KeyValueRow[] => [
   { title: translate('50,000+'), description: translate('Bitcoiners in the Geyser ecosystem') },
-  { title: translate('5,000+'), description: translate('Monthly newsletter reach for Growth Launch') },
-  { title: translate('15k+'), description: translate('Followers reached through Growth social support') },
 ]

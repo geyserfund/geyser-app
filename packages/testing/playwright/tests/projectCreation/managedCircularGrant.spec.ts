@@ -1,4 +1,4 @@
-/** Managed Recoverable Grant project-creation flow */
+/** Managed Circular Grant project-creation flow */
 
 import { expect, test } from '@playwright/test'
 
@@ -8,7 +8,7 @@ import { DEFAULT_PROJECT_DETAILS, TEST_IMAGE_PATHS } from '../../domains/project
 import { completeProjectDetails, navigateToProjectCreation } from '../../domains/projectCreation/flows'
 import { checkLiveBackendAvailability } from '../../domains/shared/backend'
 
-test.describe('Managed Recoverable Grant Project Creation', () => {
+test.describe('Managed Circular Grant Project Creation', () => {
   test.setTimeout(120000)
 
   test.beforeEach(async ({ page }) => {
@@ -20,7 +20,7 @@ test.describe('Managed Recoverable Grant Project Creation', () => {
     await loginWithRealNostr(page)
   })
 
-  test('offers only Recoverable Grant as the creation funding option', async ({ page }) => {
+  test('offers only Circular Grant as the creation funding option', async ({ page }) => {
     await navigateToProjectCreation(page)
     await expectProjectDetailsPage(page)
 
@@ -33,7 +33,7 @@ test.describe('Managed Recoverable Grant Project Creation', () => {
     })
 
     await expectFundingStrategyPage(page)
-    await expect(page.getByRole('heading', { name: 'Recoverable Grant' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Circular Grant' })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Open Funding' })).toHaveCount(0)
     await expect(page.getByRole('heading', { name: 'All-or-Nothing' })).toHaveCount(0)
   })
@@ -44,5 +44,18 @@ test.describe('Managed Recoverable Grant Project Creation', () => {
 
     await page.getByRole('button', { name: 'Continue' }).first().click()
     await expectProjectDetailsPage(page)
+  })
+
+  test('serves Circular Grants from the renamed discovery route', async ({ page }) => {
+    await page.goto('/circular-grants')
+
+    await expect(page).toHaveURL(/\/circular-grants\/?$/)
+    await expect(page.getByRole('heading', { name: 'Circular Grants' })).toBeVisible({ timeout: 10000 })
+  })
+
+  test('does not redirect the retired Recoverable Grants route', async ({ page }) => {
+    await page.goto('/recoverable-grants')
+
+    await expect(page).toHaveURL(/\/recoverable-grants\/?$/)
   })
 })

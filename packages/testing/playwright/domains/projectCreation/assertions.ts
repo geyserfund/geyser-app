@@ -30,7 +30,7 @@ export const expectProjectDetailsPage = async (page: Page) => {
 /** Verify funding strategy selection page is visible */
 export const expectFundingStrategyPage = async (page: Page) => {
   await expect(page).toHaveURL(/\/launch\/\d+\/funding\/strategy/)
-  await expect(page.getByText(/Recoverable Grant/i)).toBeVisible({ timeout: 10000 })
+  await expect(page.getByText(/Circular Grant/i)).toBeVisible({ timeout: 10000 })
 }
 
 /** Verify project was created successfully */

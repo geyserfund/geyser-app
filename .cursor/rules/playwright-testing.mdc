@@ -624,7 +624,7 @@ await expect(page.getByText('Your transaction is being processed')).toBeVisible(
 
 ### Separate Tests for Different Configurations
 
-- **Managed Recoverable Grants**: Creation coverage is in `projectCreation/managedRecoverableGrant.spec.ts`. New projects must expose only this option.
+- **Managed Circular Grants**: Creation coverage is in `projectCreation/managedCircularGrant.spec.ts`. New projects must expose only this option.
 - **Legacy AON Projects**: Funding and creator-claim coverage uses existing configured AON projects; the creation flow no longer creates AON projects.
 - **Legacy ordinary TIA Projects**: Retained only for historical/read compatibility and must not be used as active funding-test fixtures.
 

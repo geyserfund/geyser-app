@@ -17,7 +17,7 @@ const createProjectState = (params: {
   fundingStrategy: ProjectFundingStrategy
   stripeEnabled: boolean
   projectName: string
-  isRecoverableGrant?: boolean
+  isCircularGrant?: boolean
   managedStripeReady?: boolean
 }): ProjectState =>
   ({
@@ -32,7 +32,7 @@ const createProjectState = (params: {
         enabled: true,
         stripe: params.stripeEnabled,
       },
-      managedRecoverableGrant: {
+      managedCircularGrant: {
         stripe: params.managedStripeReady ?? false,
         strikeLightning: false,
         strikeOnChain: false,
@@ -40,12 +40,12 @@ const createProjectState = (params: {
     },
     subCategory: null,
     fundingStrategy: params.fundingStrategy,
-    isRecoverableGrant: params.isRecoverableGrant ?? false,
+    isCircularGrant: params.isCircularGrant ?? false,
     rskEoa: null,
   } as unknown as ProjectState)
 
 describe('fiatOnlyPaymentsInputAtom', () => {
-  it('returns managed Stripe payload for Recoverable Grants', () => {
+  it('returns managed Stripe payload for Circular Grants', () => {
     const store = createStore()
     store.set(
       projectAtom,
@@ -53,7 +53,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
         fundingStrategy: ProjectFundingStrategy.TakeItAll,
         stripeEnabled: true,
         projectName: 'tia-with-stripe',
-        isRecoverableGrant: true,
+        isCircularGrant: true,
         managedStripeReady: true,
       }),
     )
@@ -110,7 +110,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
         fundingStrategy: ProjectFundingStrategy.TakeItAll,
         stripeEnabled: false,
         managedStripeReady: true,
-        isRecoverableGrant: true,
+        isCircularGrant: true,
         projectName: 'managed-grant',
       }),
     )
@@ -173,7 +173,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
     expect(contributionInput.referrerHeroId).toBeUndefined()
   })
 
-  it('preserves referrer attribution for managed Recoverable Grants', () => {
+  it('preserves referrer attribution for managed Circular Grants', () => {
     const store = createStore()
     store.set(
       projectAtom,
@@ -181,7 +181,7 @@ describe('fiatOnlyPaymentsInputAtom', () => {
         fundingStrategy: ProjectFundingStrategy.TakeItAll,
         stripeEnabled: false,
         managedStripeReady: true,
-        isRecoverableGrant: true,
+        isCircularGrant: true,
         projectName: 'managed-grant-referral',
       }),
     )

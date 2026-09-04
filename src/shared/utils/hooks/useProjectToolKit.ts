@@ -28,7 +28,7 @@ export const useProjectToolkit = (
     ProjectForLandingPageFragment,
     'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'
   > & {
-    isRecoverableGrant?: boolean | null
+    isCircularGrant?: boolean | null
     fundingSummary?: Pick<ProjectFundingSummary, 'isFundingOpen'> | null
   },
 ) => {
@@ -72,9 +72,9 @@ export const useProjectToolkit = (
     return 0
   }
 
-  const isRecoverableGrantGoalReached = () => {
-    const { isRecoverableGrant } = project
-    if (!isRecoverableGrant || !project.aonGoal?.goalAmount) {
+  const isCircularGrantGoalReached = () => {
+    const { isCircularGrant } = project
+    if (!isCircularGrant || !project.aonGoal?.goalAmount) {
       return false
     }
 
@@ -88,11 +88,11 @@ export const useProjectToolkit = (
 
     // Keep the client fail-closed while older project payloads are still being
     // served without the canonical funding summary.
-    if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.isRecoverableGrant) {
+    if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.isCircularGrant) {
       return true
     }
 
-    if (isRecoverableGrantGoalReached()) {
+    if (isCircularGrantGoalReached()) {
       return true
     }
 
@@ -110,7 +110,7 @@ export const useProjectToolkit = (
   return {
     getProjectBalance,
     getAonGoalPercentage,
-    isRecoverableGrantGoalReached,
+    isCircularGrantGoalReached,
     isFundingDisabled,
   }
 }

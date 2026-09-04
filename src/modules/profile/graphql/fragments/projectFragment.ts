@@ -14,7 +14,7 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     rejectionReason
     rewardsCount
     fundingStrategy
-    isRecoverableGrant
+    isCircularGrant
     wallets {
       id
       name

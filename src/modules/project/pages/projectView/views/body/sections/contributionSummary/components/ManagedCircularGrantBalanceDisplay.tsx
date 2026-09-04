@@ -3,18 +3,18 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { PiInfo } from 'react-icons/pi'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
-import { RecoverableGrantTooltipLabel } from '../../recoverableGrant/RecoverableGrantExplainer.tsx'
+import { CircularGrantTooltipLabel } from '../../circularGrant/CircularGrantExplainer.tsx'
 import { GoalCampaignBalanceDisplay } from './GoalCampaignBalanceDisplay.tsx'
 
-/** AON-style presentation for an Open-Funding Recoverable Grant's protected goal. */
-export const ManagedRecoverableGrantBalanceDisplay = () => {
+/** AON-style presentation for an Open-Funding Circular Grant's protected goal. */
+export const ManagedCircularGrantBalanceDisplay = () => {
   const { project } = useProjectAtom()
 
-  if (!isManagedRecoverableGrantProject(project)) return null
+  if (!isManagedCircularGrantProject(project)) return null
 
   const { fundingSummary } = project
   const goalSats = fundingSummary?.goalSats
@@ -27,9 +27,9 @@ export const ManagedRecoverableGrantBalanceDisplay = () => {
     <GoalCampaignBalanceDisplay
       label={
         <HStack spacing={1}>
-          <span>{t('Recoverable Grant')}</span>
-          <Tooltip label={<RecoverableGrantTooltipLabel />} hasArrow placement="top">
-            <span aria-label={t('Recoverable grant information')}>
+          <span>{t('Circular Grant')}</span>
+          <Tooltip label={<CircularGrantTooltipLabel />} hasArrow placement="top">
+            <span aria-label={t('Circular grant information')}>
               <PiInfo />
             </span>
           </Tooltip>

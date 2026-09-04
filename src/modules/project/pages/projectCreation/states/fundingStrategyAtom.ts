@@ -2,28 +2,28 @@ import { atom } from 'jotai'
 
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
-export const RecoverableGrantFundingOption = 'RECOVERABLE_GRANT' as const
-export const RECOVERABLE_GRANT_DURATION_IN_DAYS = 14
+export const CircularGrantFundingOption = 'CIRCULAR_GRANT' as const
+export const CIRCULAR_GRANT_DURATION_IN_DAYS = 14
 
-export type ProjectCreationFundingOption = ProjectFundingStrategy | typeof RecoverableGrantFundingOption
+export type ProjectCreationFundingOption = ProjectFundingStrategy | typeof CircularGrantFundingOption
 
 export type ProjectCreationFundingContext = {
   fundingStrategy?: ProjectFundingStrategy | null
-  isRecoverableGrant?: boolean | null
+  isCircularGrant?: boolean | null
 }
 
-export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(RecoverableGrantFundingOption)
+export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(CircularGrantFundingOption)
 
 export const getProjectFundingStrategyInput = (option: ProjectCreationFundingOption) =>
-  option === RecoverableGrantFundingOption ? ProjectFundingStrategy.TakeItAll : option
+  option === CircularGrantFundingOption ? ProjectFundingStrategy.TakeItAll : option
 
-export const getProjectRecoverableGrantInput = (option: ProjectCreationFundingOption) =>
-  option === RecoverableGrantFundingOption
+export const getProjectCircularGrantInput = (option: ProjectCreationFundingOption) =>
+  option === CircularGrantFundingOption
 
-/** Returns the fixed Recoverable Grant duration or the selected All-or-Nothing duration. */
-export const getProjectAonGoalDurationInDays = (isRecoverableGrant: boolean, duration: number) =>
-  isRecoverableGrant ? RECOVERABLE_GRANT_DURATION_IN_DAYS : duration
+/** Returns the fixed Circular Grant duration or the selected All-or-Nothing duration. */
+export const getProjectAonGoalDurationInDays = (isCircularGrant: boolean, duration: number) =>
+  isCircularGrant ? CIRCULAR_GRANT_DURATION_IN_DAYS : duration
 
 /** Whether an existing legacy AON project should render its goal editor. */
 export const shouldShowAllOrNothingGoalInCreation = (project: ProjectCreationFundingContext) =>
-  project.isRecoverableGrant !== true && project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+  project.isCircularGrant !== true && project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
