@@ -33,9 +33,9 @@ import { useProjectForm } from '../hooks/useProjectForm'
 import type { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
 import {
   getProjectFundingStrategyInput,
-  getProjectRecoverableGrantInput,
+  getProjectCircularGrantInput,
   projectCreationFundingOptionAtom,
-  RecoverableGrantFundingOption,
+  CircularGrantFundingOption,
 } from '../states/fundingStrategyAtom.ts'
 import { getProjectCreationDescription } from '../utils/getProjectCreationDescription.ts'
 
@@ -56,14 +56,14 @@ export const LaunchProjectDetails = () => {
 
   const exitModal = useModal()
 
-  const isRecoverableGrant = isEdit
-    ? Boolean((project as { isRecoverableGrant?: boolean }).isRecoverableGrant)
-    : selectedFundingOption === RecoverableGrantFundingOption
+  const isCircularGrant = isEdit
+    ? Boolean((project as { isCircularGrant?: boolean }).isCircularGrant)
+    : selectedFundingOption === CircularGrantFundingOption
 
   const form = useProjectForm({
     isEdit,
     project,
-    isRecoverableGrant,
+    isCircularGrant,
   })
   const referrerHeroId = form.watch('referrerHeroId')
 
@@ -142,7 +142,7 @@ export const LaunchProjectDetails = () => {
         subCategory: subCategory as ProjectSubCategory,
         tagIds: tags,
         fundingStrategy: getProjectFundingStrategyInput(selectedFundingOption),
-        isRecoverableGrant: getProjectRecoverableGrantInput(selectedFundingOption),
+        isCircularGrant: getProjectCircularGrantInput(selectedFundingOption),
         description: getProjectCreationDescription(selectedFundingOption, values.description),
         ...(normalizedReferrerHeroId ? { referrerHeroId: normalizedReferrerHeroId } : {}),
       } as CreateProjectInput

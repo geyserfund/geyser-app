@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import { useGoalsModal } from '../../../hooks/useGoalsModal.tsx'
@@ -14,7 +14,7 @@ export const Goals = () => {
   const { t } = useTranslation()
 
   const { project, isProjectOwner } = useProjectAtom()
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isCircularGrant = isCircularGrantProject(project)
 
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
 
@@ -24,7 +24,7 @@ export const Goals = () => {
         <RenderGoals />
         {isProjectOwner && (
           <HStack w="full" justifyContent="end">
-            {isGoalinEditMode && !isRecoverableGrant && (
+            {isGoalinEditMode && !isCircularGrant && (
               <Button
                 size="sm"
                 variant="solid"

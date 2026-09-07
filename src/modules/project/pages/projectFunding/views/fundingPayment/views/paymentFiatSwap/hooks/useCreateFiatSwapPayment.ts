@@ -20,7 +20,6 @@ import { rskAccountKeysAtom } from '@/modules/project/funding/state/swapRskAtom.
 import { createSwapRecoveryMetadata, generateRecoveryCode } from '@/modules/project/funding/utils/recoveryKey.ts'
 import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionFiatToLightningSwapPaymentDetailsBanxaInput,
   ProjectFundingStrategy,
@@ -53,8 +52,7 @@ export const useCreateFiatSwapPayment = () => {
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)
   const currentUser = useAtomValue(authUserAtom)
   const { generateTransactionForLightningToRskSwap } = useGenerateTransactionDataForClaimingRBTCToContract()
-  const requiresLightningToRskSwap =
-    project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing || isPrismEnabled(project)
+  const requiresLightningToRskSwap = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
 
   const [createFiatSwapPaymentMutation, { loading }] = useFundingFiatSwapPaymentCreateMutation()
 

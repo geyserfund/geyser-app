@@ -30,24 +30,7 @@ export const expectProjectDetailsPage = async (page: Page) => {
 /** Verify funding strategy selection page is visible */
 export const expectFundingStrategyPage = async (page: Page) => {
   await expect(page).toHaveURL(/\/launch\/\d+\/funding\/strategy/)
-  // Check for funding strategy options
-  await expect(page.getByText(/All-or-nothing|All-or-Nothing/i)).toBeVisible({ timeout: 10000 })
-  await expect(page.getByText(/Open Funding|Open Fundraiser/i)).toBeVisible()
-}
-
-/** Verify AON funding goal form page is visible */
-export const expectFundingGoalPage = async (page: Page) => {
-  await expect(page).toHaveURL(/\/launch\/\d+\/funding\/goal/)
-  await expect(page.getByRole('heading', { name: /Funding Goal|Funding Goals/i })).toBeVisible({ timeout: 10000 })
-
-  const hasLegacyGoalInputs = await page.getByTestId('donation-input').first().isVisible().catch(() => false)
-  const hasGoalsModalEntry = await page.getByRole('button', { name: /Add a goal/i }).first().isVisible().catch(() => false)
-
-  if (!hasLegacyGoalInputs && !hasGoalsModalEntry) {
-    throw new Error(`Funding goal page did not render expected controls. Current URL: ${page.url()}`)
-  }
-
-  await expect(page.getByRole('button', { name: /Continue|Skip for now/i })).toBeVisible()
+  await expect(page.getByText(/Circular Grant/i)).toBeVisible({ timeout: 10000 })
 }
 
 /** Verify project was created successfully */

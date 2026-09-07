@@ -11,24 +11,19 @@ import { useDownloadRefund } from '../paymentOnchain/hooks/useDownloadRefund.ts'
 import { onChainRefundDownloadedAtom } from '../paymentOnchain/states/onChainStatus.ts'
 
 type PaymentDownloadRefundFileProps = {
-  isPrismContribution?: boolean
   onComplete: () => void
 }
 
-export const PaymentDownloadRefundFile = ({ isPrismContribution, onComplete }: PaymentDownloadRefundFileProps) => {
+export const PaymentDownloadRefundFile = ({ onComplete }: PaymentDownloadRefundFileProps) => {
   const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
   const { buttonProps, isReady } = useDownloadRefund({
     isAllOrNothing: true,
   })
 
-  const refundNoticeText = isPrismContribution
-    ? t(
-        'If the contribution fails you can claim a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
-      )
-    : t(
-        'If this project does not reach its goal, or you change your mind before it is completed, you can request a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
-      )
+  const refundNoticeText = t(
+    'If this project does not reach its goal, or you change your mind before it is completed, you can request a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
+  )
 
   const handleClick = () => {
     if (!isReady) return

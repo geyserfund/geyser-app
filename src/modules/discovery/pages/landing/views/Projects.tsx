@@ -62,7 +62,7 @@ import { RenderProjectList } from './navView/components/RenderProjectList.tsx'
 import { ProjectsRegionCountryFilter } from './ProjectsRegionCountryFilter.tsx'
 
 type SortOption = 'most_funded_this_month' | 'most_funded' | 'most_recent'
-type ProjectTypeFilter = 'all' | 'fundraisers' | 'campaigns' | 'recoverable-grants'
+type ProjectTypeFilter = 'all' | 'fundraisers' | 'campaigns' | 'circular-grants'
 type CategoryFilterOptionValue = 'all' | `category:${ProjectCategory}` | `subCategory:${ProjectSubCategory}`
 type FilterDropdownOption<T extends string> = {
   dividerBefore?: boolean
@@ -97,8 +97,8 @@ const getBaseProjectsPath = (projectTypeFilter: ProjectTypeFilter) => {
     return getPath('discoveryFundraisers')
   }
 
-  if (projectTypeFilter === 'recoverable-grants') {
-    return getPath('discoveryRecoverableGrantProjects')
+  if (projectTypeFilter === 'circular-grants') {
+    return getPath('discoveryCircularGrantProjects')
   }
 
   return getPath('discoveryProjects')
@@ -113,8 +113,8 @@ const getProjectsCategoryPath = (projectTypeFilter: ProjectTypeFilter, category:
     return getPath('discoveryFundraisersCategory', category)
   }
 
-  if (projectTypeFilter === 'recoverable-grants') {
-    return getPath('discoveryRecoverableGrantProjectsCategory', category)
+  if (projectTypeFilter === 'circular-grants') {
+    return getPath('discoveryCircularGrantProjectsCategory', category)
   }
 
   return getPath('discoveryProjectsCategory', category)
@@ -129,8 +129,8 @@ const getProjectsSubCategoryPath = (projectTypeFilter: ProjectTypeFilter, subCat
     return getPath('discoveryFundraisersSubCategory', subCategory)
   }
 
-  if (projectTypeFilter === 'recoverable-grants') {
-    return getPath('discoveryRecoverableGrantProjectsSubCategory', subCategory)
+  if (projectTypeFilter === 'circular-grants') {
+    return getPath('discoveryCircularGrantProjectsSubCategory', subCategory)
   }
 
   return getPath('discoveryProjectsSubCategory', subCategory)
@@ -151,8 +151,8 @@ const getProjectTypeFilter = (pathname: string): ProjectTypeFilter => {
     return 'fundraisers'
   }
 
-  if (rootSegment === PathName.recoverableGrants) {
-    return 'recoverable-grants'
+  if (rootSegment === PathName.circularGrants) {
+    return 'circular-grants'
   }
 
   return 'all'
@@ -170,8 +170,8 @@ const getFundingStrategy = (projectTypeFilter: ProjectTypeFilter) => {
   return undefined
 }
 
-const getIsRecoverableGrantFilter = (projectTypeFilter: ProjectTypeFilter) =>
-  projectTypeFilter === 'recoverable-grants' ? true : undefined
+const getIsCircularGrantFilter = (projectTypeFilter: ProjectTypeFilter) =>
+  projectTypeFilter === 'circular-grants' ? true : undefined
 
 const getProjectTypeLabel = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
   if (projectTypeFilter === 'campaigns') {
@@ -182,8 +182,8 @@ const getProjectTypeLabel = (projectTypeFilter: ProjectTypeFilter, t: TranslateF
     return t('fundraisers')
   }
 
-  if (projectTypeFilter === 'recoverable-grants') {
-    return t('recoverable grants')
+  if (projectTypeFilter === 'circular-grants') {
+    return t('circular grants')
   }
 
   return t('projects')
@@ -208,10 +208,10 @@ const getHeadContent = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) =>
     }
   }
 
-  if (projectTypeFilter === 'recoverable-grants') {
+  if (projectTypeFilter === 'circular-grants') {
     return {
-      title: t('Recoverable Grants'),
-      description: t('Discover recoverable grant projects on Geyser. Support reusable capital for local entrepreneurs.'),
+      title: t('Circular Grants'),
+      description: t('Discover circular grant projects on Geyser. Support reusable capital for local entrepreneurs.'),
       image: GeyserMainSeoImageUrl,
     }
   }
@@ -317,8 +317,8 @@ const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) =
           ? getPath('discoveryCampaignsInYourRegion')
           : projectTypeFilter === 'fundraisers'
           ? getPath('discoveryFundraisersInYourRegion')
-          : projectTypeFilter === 'recoverable-grants'
-          ? getPath('discoveryRecoverableGrantProjectsInYourRegion')
+          : projectTypeFilter === 'circular-grants'
+          ? getPath('discoveryCircularGrantProjectsInYourRegion')
           : getPath('discoveryProjectsInYourRegion'),
     },
     {
@@ -406,8 +406,8 @@ const getProjectTypePath = ({
       return getPath('discoveryFundraisersInYourRegion')
     }
 
-    if (nextProjectTypeFilter === 'recoverable-grants') {
-      return getPath('discoveryRecoverableGrantProjectsInYourRegion')
+    if (nextProjectTypeFilter === 'circular-grants') {
+      return getPath('discoveryCircularGrantProjectsInYourRegion')
     }
 
     return getPath('discoveryProjectsInYourRegion')
@@ -446,9 +446,9 @@ export const Projects = () => {
       { key: 'fundraisers', label: t('Fundraisers'), path: getPath('discoveryFundraisers') },
       { key: 'campaigns', label: t('Campaigns'), path: getPath('discoveryCampaigns') },
       {
-        key: 'recoverable-grants',
-        label: t('Recoverable Grants'),
-        path: getPath('discoveryRecoverableGrantProjects'),
+        key: 'circular-grants',
+        label: t('Circular Grants'),
+        path: getPath('discoveryCircularGrantProjects'),
       },
     ],
     [t],
@@ -457,7 +457,7 @@ export const Projects = () => {
     location.pathname === getPath('discoveryProjectsInYourRegion') ||
     location.pathname === getPath('discoveryFundraisersInYourRegion') ||
     location.pathname === getPath('discoveryCampaignsInYourRegion') ||
-    location.pathname === getPath('discoveryRecoverableGrantProjectsInYourRegion')
+    location.pathname === getPath('discoveryCircularGrantProjectsInYourRegion')
   const pathSegments = location.pathname.split('/').filter(Boolean)
   const isCategoryRoute = pathSegments.includes(PathName.category)
   const isSubCategoryRoute = pathSegments.includes(PathName.subCategory)
@@ -508,7 +508,7 @@ export const Projects = () => {
   const tagFiltersCount = tagIds?.length ?? 0
   const supportsMostFundedThisMonth =
     !isSuccessfullyFundedCampaignsRoute &&
-    projectTypeFilter !== 'recoverable-grants' &&
+    projectTypeFilter !== 'circular-grants' &&
     !hasSearchFilter &&
     tagFiltersCount === 0
   const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM), supportsMostFundedThisMonth, projectTypeFilter)
@@ -533,7 +533,7 @@ export const Projects = () => {
       category: category as ProjectCategory | undefined,
       countryCode: countryCode ?? filterCountryCode,
       fundingStrategy: getFundingStrategy(projectTypeFilter),
-      isRecoverableGrant: getIsRecoverableGrantFilter(projectTypeFilter),
+      isCircularGrant: getIsCircularGrantFilter(projectTypeFilter),
       aonGoalReached: isSuccessfullyFundedCampaignsRoute || undefined,
       region,
       search,
@@ -909,7 +909,7 @@ export const Projects = () => {
       }
     }
 
-    if (projectTypeFilter === 'recoverable-grants') {
+    if (projectTypeFilter === 'circular-grants') {
       return {
         ctaLabel: t('Fundraisers'),
         to: getSuggestedViewDestination({ nextProjectTypeFilter: 'fundraisers' }),

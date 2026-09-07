@@ -10,7 +10,8 @@ import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/p
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
@@ -20,7 +21,6 @@ import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotific
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import {
-  ProjectFundingStrategy,
   ProjectReviewStatus,
   ProjectStatus,
   useProjectLaunchReviewsQuery,
@@ -330,8 +330,8 @@ export const ControlPanel = () => {
   const resubmitConfirmModal = useModal()
   const toast = useNotification()
   const isDraftUrl = location.pathname.includes('/draft')
-  const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isTiaProject = isLegacyTiaProject(project)
+  const isCircularGrant = isCircularGrantProject(project)
 
   const [stripeConnectNoticeClosedByProject, setStripeConnectNoticeClosedByProject] = useAtom(
     stripeConnectNoticeClosedByProjectAtom,
@@ -493,7 +493,7 @@ export const ControlPanel = () => {
         </Button>
       </HStack>
 
-      <TiaRskEoaSetupNotice compact />
+      {isTiaProject && <TiaRskEoaSetupNotice compact />}
 
       {isReviewPending && (
         <ControlPanelNotification
@@ -551,7 +551,7 @@ export const ControlPanel = () => {
         {...resubmitConfirmModal}
       />
 
-      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isRecoverableGrant && (
+      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant && (
         <ControlPanelNotification
           icon={<Icon as={PiWarning} color="warning.9" boxSize="24px" flexShrink={0} />}
           title={t('Add payment details to keep receiving contributions in Bitcoin')}
@@ -581,9 +581,9 @@ export const ControlPanel = () => {
 
       {/* Financial Actions Section */}
       <ControlPanelFinancialActions
-        showClaim={isRecoverableGrant ? false : showClaim}
-        showClaimedWithdraw={isRecoverableGrant ? false : showClaimedWithdraw}
-        showWithdrawableBalance={isRecoverableGrant ? false : showWithdrawableBalance}
+        showClaim={isCircularGrant ? false : showClaim}
+        showClaimedWithdraw={isCircularGrant ? false : showClaimedWithdraw}
+        showWithdrawableBalance={isCircularGrant ? false : showWithdrawableBalance}
         aonPayoutModal={aonPayoutModal}
         onOpenClaimedWithdraw={openClaimedWithdraw}
         payoutRskModal={payoutRskModal}
@@ -631,7 +631,7 @@ export const ControlPanel = () => {
         />
       )}
 
-      {shouldShowStripeConnectNotice && !isRecoverableGrant && (
+      {shouldShowStripeConnectNotice && !isCircularGrant && (
         <ControlPanelNotification
           icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
           title={
@@ -714,7 +714,7 @@ export const ControlPanel = () => {
         <ControlPanelButtons />
       </HStack>
 
-      {showWithdraw && !isRecoverableGrant && (
+      {showWithdraw && !isCircularGrant && (
         <PayoutRsk
           {...payoutRskModal}
           project={project}
@@ -724,7 +724,7 @@ export const ControlPanel = () => {
         />
       )}
 
-      {showClaim && !isRecoverableGrant && (
+      {showClaim && !isCircularGrant && (
         <PayoutRsk {...aonPayoutModal} project={project} onCompleted={onAonCompleted} />
       )}
     </CardLayout>

@@ -1,9 +1,9 @@
 import { t } from 'i18next'
 
-import { RecoverableGrantFundingOption } from '../states/fundingStrategyAtom.ts'
+import { CircularGrantFundingOption } from '../states/fundingStrategyAtom.ts'
 import type { ProjectCreationFundingOption } from '../states/fundingStrategyAtom.ts'
 
-const RECOVERABLE_GRANT_STORY_TEMPLATE = `[Business name] is a [type of business] located in [area, city/country], run by [founder or owner’s name]. For [length of time], the business has been serving [customers or community] with [brief description of its value or offering].
+const CIRCULAR_GRANT_STORY_TEMPLATE = `[Business name] is a [type of business] located in [area, city/country], run by [founder or owner’s name]. For [length of time], the business has been serving [customers or community] with [brief description of its value or offering].
 
 ## What we offer
 
@@ -19,7 +19,7 @@ const RECOVERABLE_GRANT_STORY_TEMPLATE = `[Business name] is a [type of business
 
 ## How this grant helps
 
-[Explain how the recoverable grant will be used. Mention the main purchases, improvements, or activities it will fund and how these will strengthen the business.]
+[Explain how the circular grant will be used. Mention the main purchases, improvements, or activities it will fund and how these will strengthen the business.]
 
 ## 12-month vision
 
@@ -34,12 +34,12 @@ export const getProjectCreationDescription = (
   fundingOption: ProjectCreationFundingOption,
   description: string,
 ): string => {
-  if (fundingOption !== RecoverableGrantFundingOption) {
+  if (fundingOption !== CircularGrantFundingOption) {
     return description
   }
 
   return (
-    t(RECOVERABLE_GRANT_STORY_TEMPLATE, { defaultValue: RECOVERABLE_GRANT_STORY_TEMPLATE }) ||
-    RECOVERABLE_GRANT_STORY_TEMPLATE
+    t(CIRCULAR_GRANT_STORY_TEMPLATE, { defaultValue: CIRCULAR_GRANT_STORY_TEMPLATE }) ||
+    CIRCULAR_GRANT_STORY_TEMPLATE
   )
 }

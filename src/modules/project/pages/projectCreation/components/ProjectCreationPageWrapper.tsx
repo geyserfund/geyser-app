@@ -20,6 +20,7 @@ type ProjectCreationPageWrapperProps = PropsWithChildren<{
   buttonContainerProps?: StackProps
   hideContinueButton?: boolean
   hideBackButton?: boolean
+  hideHeader?: boolean
 }> &
   StackProps
 
@@ -32,6 +33,7 @@ export const ProjectCreationPageWrapper = ({
   buttonContainerProps,
   hideContinueButton = false,
   hideBackButton = false,
+  hideHeader = false,
   ...rest
 }: ProjectCreationPageWrapperProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
@@ -54,38 +56,40 @@ export const ProjectCreationPageWrapper = ({
       }}
       {...rest}
     >
-      <HStack w="full" justifyContent="space-between">
-        <HStack spacing={2}>
-          {isMobile && (
-            <IconButton
-              aria-label="creation-menu"
-              variant="ghost"
-              as={Link}
-              size="sm"
-              to={getPath('launchProject', params.projectId || '')}
-              icon={<Icon as={PiListBullets} fontSize={28} />}
-            />
-          )}
-          <Fade in={true}>
-            <H1 fontSize="2xl" medium id={id}>
-              {title}
-            </H1>
-          </Fade>
-        </HStack>
+      {!hideHeader && (
+        <HStack w="full" justifyContent="space-between">
+          <HStack spacing={2}>
+            {isMobile && (
+              <IconButton
+                aria-label="creation-menu"
+                variant="ghost"
+                as={Link}
+                size="sm"
+                to={getPath('launchProject', params.projectId || '')}
+                icon={<Icon as={PiListBullets} fontSize={28} />}
+              />
+            )}
+            <Fade in={true}>
+              <H1 fontSize="2xl" medium id={id}>
+                {title}
+              </H1>
+            </Fade>
+          </HStack>
 
-        <HStack>
-          {project?.id && project.name && (
-            <Button
-              as={Link}
-              to={getPath('projectDraft', project?.name)}
-              variant="ghost"
-              leftIcon={<Icon as={PiEye} />}
-            >
-              {t('View preview')}
-            </Button>
-          )}
+          <HStack>
+            {project?.id && project.name && (
+              <Button
+                as={Link}
+                to={getPath('projectDraft', project?.name)}
+                variant="ghost"
+                leftIcon={<Icon as={PiEye} />}
+              >
+                {t('View preview')}
+              </Button>
+            )}
+          </HStack>
         </HStack>
-      </HStack>
+      )}
       {children}
       <HStack
         w="full"

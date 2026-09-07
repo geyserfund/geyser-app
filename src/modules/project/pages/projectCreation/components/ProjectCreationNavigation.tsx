@@ -16,7 +16,6 @@ import {
 import { useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
 
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -50,26 +49,15 @@ export const ProjectCreationNavigationDesktop = () => {
 const ProjectCreationNavigation = (props: StackProps) => {
   const { project } = useProjectAtom()
   const location = useLocation()
-  const isManagedRecoverableGrant = project?.isRecoverableGrant === true
-
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
-      { title: 'Funding Strategy', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
+      { title: 'Circular Grant', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
-      ...(!isManagedRecoverableGrant
-        ? [
-            {
-              title: TEMPORARY_BOLTZ_CONTINGENCY_ENABLED ? 'Payment Settings' : 'Wallet',
-              path: getPath('launchPayment', project?.id),
-              isDisabled: !project.id,
-            },
-          ]
-        : []),
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
-    [isManagedRecoverableGrant, project?.id],
+    [project?.id],
   )
 
   const activeButtonIndex = useMemo(() => {
@@ -85,12 +73,8 @@ const ProjectCreationNavigation = (props: StackProps) => {
   const activeStepIndex = useMemo(() => {
     const stepIndex = projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep] || 0
 
-    const paymentStepSkipped = isManagedRecoverableGrant
-    const skippedPayment =
-      paymentStepSkipped && stepIndex > projectCreationStepIndex[ProjectCreationStep.Wallet] ? 1 : 0
-
-    return stepIndex - skippedPayment
-  }, [isManagedRecoverableGrant, project?.lastCreationStep])
+    return Math.min(stepIndex, projectCreationStepIndex[ProjectCreationStep.Launch])
+  }, [project?.lastCreationStep])
 
   return (
     <HStack w="150px" height="350px" alignItems={'stretch'} paddingTop={1} {...props}>

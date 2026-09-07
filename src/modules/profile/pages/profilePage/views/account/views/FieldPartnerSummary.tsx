@@ -79,7 +79,7 @@ export const FieldPartnerSummary = () => {
               </Body>
             </HStack>
             <Body size="sm" color="neutral1.10">
-              {t('Access to 0% capital, recoverable grants, and partner rewards.')}
+              {t('Access to 0% capital, circular grants, and partner rewards.')}
             </Body>
           </VStack>
           <Icon as={PiArrowUpRight} boxSize={5} color="primary1.9" flexShrink={0} />

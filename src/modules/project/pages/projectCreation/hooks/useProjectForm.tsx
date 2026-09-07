@@ -97,16 +97,16 @@ const schema = yup
   })
   .required()
 
-const getDefaultPromotionsEnabled = (isRecoverableGrant?: boolean) => !isRecoverableGrant
+const getDefaultPromotionsEnabled = (isCircularGrant?: boolean) => !isCircularGrant
 
 type UseProjectFormProps = {
   isEdit: boolean
   project: ProjectPageBodyFragment | undefined | null
-  isRecoverableGrant?: boolean
+  isCircularGrant?: boolean
 }
 
-export const useProjectForm = ({ isEdit, project, isRecoverableGrant = false }: UseProjectFormProps) => {
-  const defaultPromotionsEnabled = getDefaultPromotionsEnabled(isRecoverableGrant)
+export const useProjectForm = ({ isEdit, project, isCircularGrant = false }: UseProjectFormProps) => {
+  const defaultPromotionsEnabled = getDefaultPromotionsEnabled(isCircularGrant)
 
   const form = useForm<ProjectCreationVariables>({
     resolver: yupResolver(schema) as any,

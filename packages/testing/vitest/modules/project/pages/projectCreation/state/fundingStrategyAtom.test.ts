@@ -1,65 +1,55 @@
 import { describe, expect, it } from 'vitest'
 
-import { canCreateManagedRecoverableGrant } from '../../../../../../../../src/modules/project/domain/managedRecoverableGrant.ts'
+import { canCreateManagedCircularGrant } from '../../../../../../../../src/modules/project/domain/managedCircularGrant.ts'
 import {
   getProjectAonGoalDurationInDays,
-  RECOVERABLE_GRANT_DURATION_IN_DAYS,
-  RecoverableGrantFundingOption,
+  CIRCULAR_GRANT_DURATION_IN_DAYS,
   shouldShowAllOrNothingGoalInCreation,
 } from '../../../../../../../../src/modules/project/pages/projectCreation/states/fundingStrategyAtom.ts'
 import { ProjectFundingStrategy } from '../../../../../../../../src/types/index.ts'
 
-describe('canCreateManagedRecoverableGrant', () => {
+describe('canCreateManagedCircularGrant', () => {
   it('allows Field Partners', () => {
-    expect(canCreateManagedRecoverableGrant(true)).toBe(true)
+    expect(canCreateManagedCircularGrant(true)).toBe(true)
   })
 
-  it('does not expose managed Recoverable Grants to other creators', () => {
-    expect(canCreateManagedRecoverableGrant(false)).toBe(false)
+  it('does not expose managed Circular Grants to other creators', () => {
+    expect(canCreateManagedCircularGrant(false)).toBe(false)
   })
 })
 
 describe('shouldShowAllOrNothingGoalInCreation', () => {
-  it('shows AON goal UI for recoverable grant projects', () => {
+  it('shows AON goal UI for legacy AON projects', () => {
     expect(
-      shouldShowAllOrNothingGoalInCreation(
-        {
-          fundingStrategy: ProjectFundingStrategy.AllOrNothing,
-          isRecoverableGrant: true,
-        },
-        ProjectFundingStrategy.TakeItAll,
-      ),
+      shouldShowAllOrNothingGoalInCreation({
+        fundingStrategy: ProjectFundingStrategy.AllOrNothing,
+        isCircularGrant: false,
+      }),
     ).toBe(true)
   })
 
-  it('shows AON goal UI while project data is loading after selecting recoverable grant', () => {
+  it('shows the managed Open Funding goal while project data is loading', () => {
     expect(
-      shouldShowAllOrNothingGoalInCreation(
-        {
-          fundingStrategy: undefined,
-          isRecoverableGrant: undefined,
-        },
-        RecoverableGrantFundingOption,
-      ),
-    ).toBe(true)
+      shouldShowAllOrNothingGoalInCreation({
+        fundingStrategy: undefined,
+        isCircularGrant: undefined,
+      }),
+    ).toBe(false)
   })
 
   it('shows open funding UI for take-it-all projects even if atom is stale', () => {
     expect(
-      shouldShowAllOrNothingGoalInCreation(
-        {
-          fundingStrategy: ProjectFundingStrategy.TakeItAll,
-          isRecoverableGrant: false,
-        },
-        RecoverableGrantFundingOption,
-      ),
+      shouldShowAllOrNothingGoalInCreation({
+        fundingStrategy: ProjectFundingStrategy.TakeItAll,
+        isCircularGrant: false,
+      }),
     ).toBe(false)
   })
 })
 
 describe('getProjectAonGoalDurationInDays', () => {
-  it('uses the fixed 14-day duration for Recoverable Grants', () => {
-    expect(getProjectAonGoalDurationInDays(true, 30)).toBe(RECOVERABLE_GRANT_DURATION_IN_DAYS)
+  it('uses the fixed 14-day duration for Circular Grants', () => {
+    expect(getProjectAonGoalDurationInDays(true, 30)).toBe(CIRCULAR_GRANT_DURATION_IN_DAYS)
   })
 
   it('preserves the selected duration for other All-or-Nothing projects', () => {

@@ -29,13 +29,10 @@ export const isPrelaunch = (status?: Maybe<ProjectStatus>) => {
 }
 
 export const isAllOrNothing = (
-  project: Pick<ProjectPageBodyFragment, 'fundingStrategy'> & { isRecoverableGrant?: boolean | null },
+  project: Pick<ProjectPageBodyFragment, 'fundingStrategy'> & { isCircularGrant?: boolean | null },
 ) => {
   return project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
 }
-
-export const isLaunchFeeWaived = (project: { paidLaunch?: boolean | null; isRecoverableGrant?: boolean | null }) =>
-  Boolean(project.paidLaunch || project.isRecoverableGrant)
 
 export const isTakeItAll = (project: Pick<ProjectPageBodyFragment, 'fundingStrategy'>) => {
   return project.fundingStrategy === ProjectFundingStrategy.TakeItAll

@@ -17,11 +17,9 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.AboutYou:
       return getPath('launchAboutYou', projectId)
     case ProjectCreationStep.Wallet:
-      return getPath('launchPayment', projectId)
     case ProjectCreationStep.TaxId:
-      return getPath('launchPaymentTaxId', projectId)
     case ProjectCreationStep.IdentityVerification:
-      return getPath('launchPaymentAccountPassword', projectId)
+      return getPath('launchProjectDetails', projectId)
     case ProjectCreationStep.Launch:
       return getPath('launchFinalize', projectId)
     default:

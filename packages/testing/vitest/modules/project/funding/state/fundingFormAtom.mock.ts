@@ -42,15 +42,15 @@ export const mockProjectDataUsd: FundingProjectState = {
   id: 1,
   name: 'usd-project',
   title: 'USD Project',
-  isRecoverableGrant: false,
+  isCircularGrant: false,
   rewardCurrency: RewardCurrency.Usdcent,
   paymentMethods: {
     fiat: { enabled: false, stripe: false, __typename: 'FiatPaymentMethods' },
-    managedRecoverableGrant: {
+    managedCircularGrant: {
       stripe: false,
       strikeLightning: false,
       strikeOnChain: false,
-      __typename: 'ManagedRecoverableGrantPaymentMethods',
+      __typename: 'ManagedCircularGrantPaymentMethods',
     },
     __typename: 'PaymentMethods',
   },

@@ -13,7 +13,7 @@ export enum PathName {
   impactFunds = 'impact-fund',
   legacyImpactFunds = 'impact-funds',
   microLending = 'micro-loans',
-  recoverableGrants = 'recoverable-grants',
+  circularGrants = 'circular-grants',
   afribitCaseStudy = 'afribit-case-study',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
@@ -85,14 +85,7 @@ export enum PathName {
   launchFundingStrategy = 'strategy',
   launchFundingGoal = 'goal',
   launchStory = 'story',
-  launchProjectStrategy = 'strategy',
   launchAboutYou = 'about-you',
-  launchPayment = 'payment',
-  launchPaymentWallet = 'wallet',
-  launchPaymentAccountPassword = 'account-password',
-  launchPaymentSeedWords = 'seed-words',
-  launchPaymentTaxId = 'tax-id',
-  launchPaymentFiatContributions = 'fiat-contributions',
   launchFinalize = 'finalize',
 
   userProfile = 'user',
@@ -141,7 +134,6 @@ export enum PathName {
   fundingGuardians = 'support',
   fundingSubscription = 'subscription',
   fundingPayment = 'payment',
-  fundingLaunchPayment = 'launch',
   fundingStart = 'start',
   fundingPaymentFailed = 'failed',
   fundingPaymentLightning = 'lightning',
@@ -220,13 +212,13 @@ const pathsMap = {
   discoveryFundraisersCategory: (category: string) => `/${PathName.fundraisers}/${PathName.category}/${category}`,
   discoveryFundraisersSubCategory: (subCategory: string) =>
     `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
-  discoveryRecoverableGrantProjects: () => `/${PathName.recoverableGrants}`,
-  discoveryRecoverableGrantProjectsLatest: () => `/${PathName.recoverableGrants}/${PathName.latest}`,
-  discoveryRecoverableGrantProjectsInYourRegion: () => `/${PathName.recoverableGrants}/${PathName.inYourRegion}`,
-  discoveryRecoverableGrantProjectsCategory: (category: string) =>
-    `/${PathName.recoverableGrants}/${PathName.category}/${category}`,
-  discoveryRecoverableGrantProjectsSubCategory: (subCategory: string) =>
-    `/${PathName.recoverableGrants}/${PathName.subCategory}/${subCategory}`,
+  discoveryCircularGrantProjects: () => `/${PathName.circularGrants}`,
+  discoveryCircularGrantProjectsLatest: () => `/${PathName.circularGrants}/${PathName.latest}`,
+  discoveryCircularGrantProjectsInYourRegion: () => `/${PathName.circularGrants}/${PathName.inYourRegion}`,
+  discoveryCircularGrantProjectsCategory: (category: string) =>
+    `/${PathName.circularGrants}/${PathName.category}/${category}`,
+  discoveryCircularGrantProjectsSubCategory: (subCategory: string) =>
+    `/${PathName.circularGrants}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
   discoveryProductsCategory: (category: string) => `/${PathName.products}/${PathName.category}/${category}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
@@ -242,14 +234,12 @@ const pathsMap = {
   discoveryImpactFunds: () => `/${PathName.impactFunds}`,
   discoveryImpactFundsWorkshops: () => `/${PathName.impactFunds}/crowdfunding-workshops`,
   discoveryMicroLending: () => `/${PathName.microLending}`,
-  discoveryRecoverableGrants: () => `/${PathName.impactFunds}/${PathName.recoverableGrants}`,
-  discoveryRecoverableGrantsAfribitCaseStudy: () =>
-    `/${PathName.impactFunds}/${PathName.recoverableGrants}/${PathName.afribitCaseStudy}`,
+  discoveryCircularGrants: () => `/${PathName.impactFunds}/${PathName.circularGrants}`,
+  discoveryCircularGrantsAfribitCaseStudy: () =>
+    `/${PathName.impactFunds}/${PathName.circularGrants}/${PathName.afribitCaseStudy}`,
   legacyDiscoveryImpactFunds: () => `/${PathName.legacyImpactFunds}`,
   legacyDiscoveryImpactFundsWorkshops: () => `/${PathName.legacyImpactFunds}/crowdfunding-workshops`,
   legacyDiscoveryImpactFund: (impactFundName: string) => `/${PathName.legacyImpactFunds}/${impactFundName}`,
-  legacyDiscoveryRecoverableGrants: () => `/${PathName.recoverableGrants}`,
-  legacyDiscoveryRecoverableGrantsAfribitCaseStudy: () => `/${PathName.recoverableGrants}/${PathName.afribitCaseStudy}`,
   discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
   discoveryCreator: () => `/${PathName.creator}`,
   discoveryNews: () => `/${PathName.news}`,
@@ -360,9 +350,6 @@ const pathsMap = {
   fundingGuardians: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingGuardians}`,
 
-  fundingLaunchPayment: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingLaunchPayment}`,
-
   fundingStart: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}`,
 
@@ -444,21 +431,7 @@ const pathsMap = {
   launchStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchStory}`,
   launchAboutYou: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchAboutYou}`,
 
-  launchPayment: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}`,
-  launchPaymentWallet: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentWallet}`,
-  launchPaymentAccountPassword: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentAccountPassword}`,
-  launchPaymentSeedWords: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentSeedWords}`,
-  launchPaymentTaxId: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
-  launchPaymentFiatContributions: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentFiatContributions}`,
   launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,
-
-  launchProjectStrategy: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStrategy}`,
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,

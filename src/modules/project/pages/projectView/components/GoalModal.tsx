@@ -23,7 +23,7 @@ import {
 import { Body } from '../../../../../shared/components/typography/Body.tsx'
 import { CloseButton } from '../../../../../shared/molecules/CloseButton.tsx'
 import { ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../types/generated/graphql.ts'
-import { isManagedRecoverableGrantProject } from '../../../domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '../../../domain/managedCircularGrant.ts'
 import { useProjectAtom } from '../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../hooks/useGoalsModal'
 import { useProjectGoalForm } from '../hooks/useProjectGoalForm'
@@ -38,18 +38,18 @@ export const GoalModal = ({ onGoalCreated }: { onGoalCreated?: () => void }) => 
   const { t } = useTranslation()
 
   const { project } = useProjectAtom()
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
-  const isManagedGoalLocked = isManagedRecoverableGrant && Boolean(project.launchedAt)
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
+  const isManagedGoalLocked = isManagedCircularGrant && Boolean(project.launchedAt)
 
   const { currentGoal, isGoalModalOpen, onGoalModalClose, onGoalDeleteModalOpen } = useGoalsModal()
-  const blocksManagedGoalCreation = isManagedRecoverableGrant && !currentGoal
+  const blocksManagedGoalCreation = isManagedCircularGrant && !currentGoal
 
   const { control, handleSubmit, loading, watch, errors, enableSubmit, setValue } = useProjectGoalForm({
     goal: currentGoal,
     projectId: project.id,
     onClose: onGoalModalClose,
     onGoalCreated,
-    managedRecoverableGrant: isManagedRecoverableGrant,
+    managedCircularGrant: isManagedCircularGrant,
   })
   const isCompleted = currentGoal && currentGoal.status === ProjectGoalStatus.Completed
 
@@ -78,7 +78,7 @@ export const GoalModal = ({ onGoalCreated }: { onGoalCreated?: () => void }) => 
   const renderActions = () => {
     return (
       <VStack width="100%">
-        {currentGoal && !isManagedRecoverableGrant && (
+        {currentGoal && !isManagedCircularGrant && (
           <HStack width="100%">
             <Button flexGrow={1} variant="solid" colorScheme="error" onClick={handleOpenDeleteModal}>
               {t('Delete Goal')}
@@ -146,14 +146,14 @@ export const GoalModal = ({ onGoalCreated }: { onGoalCreated?: () => void }) => 
                         control={control}
                         name="emojiUnifiedCode"
                         onOpenEmojiPicker={handleOpenEmojiPicker}
-                        isDisabled={Boolean(isCompleted) || isManagedRecoverableGrant}
+                        isDisabled={Boolean(isCompleted) || isManagedCircularGrant}
                       />
                       <ControlledTextInput
                         control={control}
                         name="title"
                         placeholder="Episode 21 with Hal Finney"
                         label={''}
-                        isDisabled={Boolean(isCompleted) || isManagedRecoverableGrant}
+                        isDisabled={Boolean(isCompleted) || isManagedCircularGrant}
                         error={errors.title?.message}
                       />
                     </HStack>
@@ -164,7 +164,7 @@ export const GoalModal = ({ onGoalCreated }: { onGoalCreated?: () => void }) => 
                     name="description"
                     placeholder="We will release this episode following the completion of this goal, this is a great one"
                     label={t('Description')}
-                    isDisabled={Boolean(isCompleted) || isManagedRecoverableGrant}
+                    isDisabled={Boolean(isCompleted) || isManagedCircularGrant}
                     error={errors.description?.message}
                   />
                   <ControlledGoalAmount
@@ -183,8 +183,8 @@ export const GoalModal = ({ onGoalCreated }: { onGoalCreated?: () => void }) => 
                     label={t('Denomination')}
                     options={denominationOptions}
                     description={t('Denominate your goal in Bitcoin or USD')}
-                    defaultValue={isManagedRecoverableGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent}
-                    isDisabled={isManagedRecoverableGrant || Boolean(currentGoal?.hasReceivedContribution)}
+                    defaultValue={isManagedCircularGrant ? ProjectGoalCurrency.Btcsat : ProjectGoalCurrency.Usdcent}
+                    isDisabled={isManagedCircularGrant || Boolean(currentGoal?.hasReceivedContribution)}
                   />
                   <HStack mt={4} width="100%" justifyContent="space-between">
                     {renderActions()}

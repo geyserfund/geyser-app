@@ -1,9 +1,7 @@
-import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { launchContributionProjectIdAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { derivedDimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -13,8 +11,6 @@ import { FundingPaymentBottomContent, FundingPaymentSideContent } from './sectio
 
 export const Funding = () => {
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
-  const launchContributionProjectId = useAtomValue(launchContributionProjectIdAtom)
-
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -25,8 +21,8 @@ export const Funding = () => {
 
   return (
     <FundingLayout
-      sideContent={!launchContributionProjectId ? <FundingPaymentSideContent /> : undefined}
-      bottomContent={!launchContributionProjectId ? <FundingPaymentBottomContent /> : undefined}
+      sideContent={<FundingPaymentSideContent />}
+      bottomContent={<FundingPaymentBottomContent />}
       containerProps={{
         minHeight: derivedDimensions.heightAfterTopNavBar,
       }}

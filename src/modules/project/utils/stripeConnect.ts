@@ -71,8 +71,3 @@ export const isStripeConnectSupportedForProject = (project?: StripeConnectProjec
 
   return STRIPE_CONNECT_SUPPORTED_COUNTRIES.has(countryCode)
 }
-
-/** Returns whether the creation flow should show the fiat contributions step for a project. */
-export const shouldShowCreationFiatStep = (project?: StripeConnectProject | null): boolean => {
-  return isStripeConnectSupportedForProject(project)
-}

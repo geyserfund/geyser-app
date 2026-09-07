@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { useNavigate } from 'react-router'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { AonProgressData } from '@/shared/molecules/project/AonProgressData.tsx'
@@ -57,8 +57,8 @@ export const FeaturedProjectCard = ({
   }
 
   const isAON = isAllOrNothing(project)
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
-  const isGoalCampaign = isAON || isManagedRecoverableGrant
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
+  const isGoalCampaign = isAON || isManagedCircularGrant
 
   return (
     <>

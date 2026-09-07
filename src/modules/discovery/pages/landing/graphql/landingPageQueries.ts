@@ -11,7 +11,7 @@ export const FRAGMENT_LANDING_PROJECT_CARD_PROJECT = gql`
     status
     fundingSummary {
       fundingStrategy
-      isRecoverableGrant
+      isCircularGrant
       raisedSats
       raisedUsdCent
       goalSats
@@ -170,13 +170,13 @@ export const QUERY_LANDING_ANNOUNCEMENTS = gql`
   }
 `
 
-export const QUERY_LANDING_RECOVERABLE_GRANT_PROJECTS_SECTION = gql`
+export const QUERY_LANDING_CIRCULAR_GRANT_PROJECTS_SECTION = gql`
   ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
-  query LandingRecoverableGrantProjectsSection {
+  query LandingCircularGrantProjectsSection {
     projectsGet(
       input: {
         orderBy: [{ direction: desc, field: launchedAt }]
-        where: { status: active, isRecoverableGrant: true }
+        where: { status: active, isCircularGrant: true }
         pagination: { take: 3 }
       }
     ) {

@@ -1,7 +1,7 @@
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -13,7 +13,7 @@ import { isOnchainMethodStartedAtom, paymentMethodAtom, PaymentMethods } from '.
 
 const getManagedRailAvailability = (
   paymentDetails: FundingContributionPaymentDetailsFragment,
-  managedRails: ProjectPaymentMethodsFragment['managedRecoverableGrant'],
+  managedRails: ProjectPaymentMethodsFragment['managedCircularGrant'],
 ) => {
   const hasPayment = Boolean(
     paymentDetails.strikeLightning?.paymentId ||
@@ -32,8 +32,8 @@ const getManagedRailAvailability = (
 export const PaymentMethodSelection = () => {
   const { onChainAmountWarning } = useFundingFormAtom()
   const { project } = useProjectAtom()
-  const isManaged = isManagedRecoverableGrantProject(project)
-  const managedRails = project.paymentMethods?.managedRecoverableGrant
+  const isManaged = isManagedCircularGrantProject(project)
+  const managedRails = project.paymentMethods?.managedCircularGrant
 
   const paymentMethod = useAtomValue(paymentMethodAtom)
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)

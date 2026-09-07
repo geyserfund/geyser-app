@@ -48,7 +48,7 @@ export const DiscoveryBottomNav = () => {
         matchesRoute(location.pathname, getPath('discoveryCampaigns')) ||
         matchesRoute(location.pathname, getPath('discoveryImpactFunds')) ||
         matchesRoute(location.pathname, getPath('discoveryMicroLending')) ||
-        matchesRoute(location.pathname, getPath('discoveryRecoverableGrants')),
+        matchesRoute(location.pathname, getPath('discoveryCircularGrants')),
     },
     {
       label: t('Fundraise'),

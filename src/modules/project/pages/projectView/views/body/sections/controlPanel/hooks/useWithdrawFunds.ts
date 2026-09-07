@@ -5,9 +5,10 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { MIN_BITCOIN_PAYOUT_SATS } from '@/modules/project/constants/payout.ts'
 import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
-import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
+import { useRootstockBalance } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/useRootstockBalance.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { PaymentStatus, PayoutStatus, ProjectFundingStrategy, Satoshis } from '@/types'
+import { PaymentStatus, PayoutStatus, Satoshis } from '@/types'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
@@ -66,15 +67,15 @@ export const useWithdrawFunds = () => {
   const previousPayoutStatusRef = useRef<PayoutStatus | null | undefined>(undefined)
 
   const projectRskEoa = project?.rskEoa || ''
-  const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
+  const { balance, isLoading, refetch: refetchBalance } = useRootstockBalance({ rskAddress: projectRskEoa })
 
-  const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
+  const withdrawableSats = balance ? Number(balance / 10000000000n) : 0
   const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats as Satoshis)
   const withdrawableUsd = withdrawableUsdCents / 100
 
-  const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isTiaProject = isLegacyTiaProject(project)
   const showWithdrawableBalance = isTiaProject && Boolean(projectRskEoa) && !isLoading
-  const hasWithdrawableBalance = withdrawable !== null && withdrawable > 0n
+  const hasWithdrawableBalance = balance !== null && balance > 0n
   const isBelowMinWithdrawThreshold = withdrawableSats < MIN_BITCOIN_PAYOUT_SATS
   const canResumeOrRetryWithdraw = hasOngoingWithdraw || hasFailedWithdraw
   const showWithdraw =
@@ -153,17 +154,17 @@ export const useWithdrawFunds = () => {
       nextStatus &&
       !isActivePayoutStatus(nextStatus)
     ) {
-      refetchWithdrawable().catch(() => undefined)
+      refetchBalance().catch(() => undefined)
       queryProject.execute()
     }
-  }, [latestPayout?.status, queryProject, refetchWithdrawable, shouldTrackLatestPayout])
+  }, [latestPayout?.status, queryProject, refetchBalance, shouldTrackLatestPayout])
 
   const onCompleted = () => {
     setHasOngoingWithdraw(false)
     setHasFailedWithdraw(false)
     refetchQueriesOnPayoutSuccess()
     queryProject.execute()
-    refetchWithdrawable().catch(() => undefined)
+    refetchBalance().catch(() => undefined)
     refetchLatestPayout().catch(() => undefined)
   }
 

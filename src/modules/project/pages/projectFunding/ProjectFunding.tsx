@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useResetFundingFlow } from '@/modules/project/funding/hooks/useResetFundingFlow.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -25,7 +25,7 @@ export const ProjectFunding = () => {
   const location = useLocation()
 
   useEffect(() => {
-    const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
+    const managedCircularGrant = isManagedCircularGrantProject(project)
     const hasStripePaymentMethod = Boolean(project.paymentMethods?.fiat?.stripe)
     const hasDirectPaymentDetails = Boolean(
       project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
@@ -33,7 +33,7 @@ export const ProjectFunding = () => {
     const isStripeSelectedFromDirectPayment = new URLSearchParams(location.search).get('direct-payment-stripe') === '1'
     const shouldOpenDirectPayment =
       TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
-      !managedRecoverableGrant &&
+      !managedCircularGrant &&
       hasDirectPaymentDetails &&
       !isStripeSelectedFromDirectPayment
 
@@ -41,12 +41,12 @@ export const ProjectFunding = () => {
       project.id &&
       (isFundingDisabled() ||
         (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
-          !managedRecoverableGrant &&
+          !managedCircularGrant &&
           (!hasStripePaymentMethod || shouldOpenDirectPayment)))
     ) {
       const projectPath = getPath('project', project.name)
       navigate(
-        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedRecoverableGrant && hasDirectPaymentDetails
+        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant && hasDirectPaymentDetails
           ? `${projectPath}?direct-payment=1`
           : projectPath,
       )

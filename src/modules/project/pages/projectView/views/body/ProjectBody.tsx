@@ -28,8 +28,8 @@ import { Header } from './sections/header/Header.tsx'
 import { LeaderboardSummary } from './sections/leaderboardSummary/LeaderboardSummary.tsx'
 import { PausedRecurringContributionNotice } from './sections/PausedRecurringContributionNotice.tsx'
 import { Posts } from './sections/Posts.tsx'
-import { FieldPartnerSection } from './sections/recoverableGrant/FieldPartnerSection.tsx'
-import { RecoverableGrantExplainer } from './sections/recoverableGrant/RecoverableGrantExplainer.tsx'
+import { FieldPartnerSection } from './sections/circularGrant/FieldPartnerSection.tsx'
+import { CircularGrantExplainer } from './sections/circularGrant/CircularGrantExplainer.tsx'
 import { Rewards } from './sections/Rewards.tsx'
 import { Story } from './sections/Story.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
@@ -44,7 +44,7 @@ export const ProjectBody = () => {
   const { impactFundRecipient } = project as typeof project & {
     impactFundRecipient?: ProjectImpactFundRecipient | null
   }
-  const isRecoverableGrant = Boolean(project.isRecoverableGrant)
+  const isCircularGrant = Boolean(project.isCircularGrant)
   const hasFieldPartner = Boolean(project.fieldPartner)
 
   useEffect(() => {
@@ -82,10 +82,10 @@ export const ProjectBody = () => {
 
         <Header />
         <FieldPartnerVerificationBanner />
-        {!isRecoverableGrant && <Creator />}
+        {!isCircularGrant && <Creator />}
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
-        {isRecoverableGrant && <RecoverableGrantExplainer />}
+        {isCircularGrant && <CircularGrantExplainer />}
 
         <Story />
 

@@ -356,9 +356,9 @@ export const LandingCardBase = ({
   const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const { fundingSummary } = project
   const isAonProject = fundingSummary.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-  const isManagedRecoverableGrant =
-    fundingSummary.isRecoverableGrant && fundingSummary.fundingStrategy === ProjectFundingStrategy.TakeItAll
-  const isGoalCampaign = isAonProject || isManagedRecoverableGrant
+  const isManagedCircularGrant =
+    fundingSummary.isCircularGrant && fundingSummary.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const isGoalCampaign = isAonProject || isManagedCircularGrant
   const fundingState = getLandingCardFundingState({ fundingSummary, isAonProject })
 
   const raisedUsd = isGoalCampaign

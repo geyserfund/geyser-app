@@ -1,7 +1,7 @@
 import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import {
   ProjectSubscriptionStartMutationVariables,
   RecurringContributionRenewalCreateMutationVariables,
@@ -33,6 +33,8 @@ import { fundingFormStateAtom } from './fundingFormAtom'
 import type { FundFormType, FundingProjectState } from './fundingFormAtom.ts'
 import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
+
+const EMPTY_CONTRIBUTION_PAYMENTS_INPUT: ContributionPaymentsInput = {}
 
 type BuildContributionCreateInputArgs = {
   formState: FundFormType
@@ -103,7 +105,7 @@ const buildContributionCreateInput = ({
     paymentsInput,
   }
 
-  if (isManagedRecoverableGrantProject(fundingProject)) {
+  if (isManagedCircularGrantProject(fundingProject)) {
     if (input.metadataInput) input.metadataInput.guardianBadges = undefined
   }
 
@@ -270,15 +272,13 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   const fundingProject = get(fundingProjectAtom)
 
   if (fundingProject.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
-    return {}
+    return EMPTY_CONTRIBUTION_PAYMENTS_INPUT
   }
 
-  const stripeReady = isManagedRecoverableGrantProject(fundingProject)
-    ? fundingProject.paymentMethods?.managedRecoverableGrant?.stripe
-    : fundingProject.paymentMethods?.fiat?.stripe
+  const stripeReady = fundingProject.paymentMethods?.managedCircularGrant?.stripe
 
   if (!stripeReady) {
-    return {}
+    return EMPTY_CONTRIBUTION_PAYMENTS_INPUT
   }
 
   return {
@@ -343,12 +343,11 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const claimAddress = userAccountKeys?.rskKeyPair?.address
   const lightningBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
   const onChainBoltzSwapInput = buildBoltzSwapInput(claimPublicKey, claimAddress)
-  const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
-  const managedRecoverableGrant = isManagedRecoverableGrantProject(fundingProject)
+  const managedCircularGrant = isManagedCircularGrantProject(fundingProject)
 
-  if (managedRecoverableGrant) {
+  if (managedCircularGrant) {
     if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
-      if (fundingProject.paymentMethods?.managedRecoverableGrant?.stripe) {
+      if (fundingProject.paymentMethods?.managedCircularGrant?.stripe) {
         paymentsInput.fiat = {
           create: true,
           stripe: { returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject.name)}` },
@@ -356,12 +355,12 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       }
     } else if (
       intendedPaymentMethod === PaymentMethods.lightning &&
-      fundingProject.paymentMethods?.managedRecoverableGrant?.strikeLightning
+      fundingProject.paymentMethods?.managedCircularGrant?.strikeLightning
     ) {
       paymentsInput.strike = { create: true, rail: StrikePaymentRail.Lightning }
     } else if (
       intendedPaymentMethod === PaymentMethods.onChain &&
-      fundingProject.paymentMethods?.managedRecoverableGrant?.strikeOnChain
+      fundingProject.paymentMethods?.managedCircularGrant?.strikeOnChain
     ) {
       paymentsInput.strike = { create: true, rail: StrikePaymentRail.OnChain }
     }
@@ -369,24 +368,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     return paymentsInput
   }
 
-  const supportsPrismSwaps =
-    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll ||
-    fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-
-  if (
-    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-    intendedPaymentMethod === PaymentMethods.fiatSwap &&
-    stripeEnabled
-  ) {
-    paymentsInput.fiat = {
-      create: true,
-      stripe: {
-        returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
-      },
-    }
-  }
-
-  if (supportsPrismSwaps) {
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
     paymentsInput.lightningToRskSwap = lightningBoltzSwapInput
     paymentsInput.onChainToRskSwap = onChainBoltzSwapInput
   }

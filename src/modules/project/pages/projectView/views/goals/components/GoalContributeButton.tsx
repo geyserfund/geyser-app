@@ -3,13 +3,13 @@ import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { getPath } from '@/shared/constants'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 
-import { isActive } from '../../../../../../../utils/validations/project'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 type GoalContributeButtonProps = ButtonProps & {
@@ -32,18 +32,18 @@ export const GoalContributeButton = ({
   const { project } = useProjectAtom()
   const setSelectedGoalId = useSetAtom(selectedGoalIdAtom)
   const { handleBlockedContribution } = useBlockedProjectContribution(project)
+  const { isFundingDisabled } = useProjectToolkit(project)
 
   if (!project) {
     return null
   }
 
-  const isFundingDisabled = !isActive(project.status)
   const hasDirectPaymentDetails = Boolean(
     project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
   )
-  const managedRecoverableGrant = isManagedRecoverableGrantProject(project)
-  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedRecoverableGrant
-  const managedPaymentMethods = project.paymentMethods?.managedRecoverableGrant
+  const managedCircularGrant = isManagedCircularGrantProject(project)
+  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant
+  const managedPaymentMethods = project.paymentMethods?.managedCircularGrant
   const hasManagedPaymentMethod = Boolean(
     managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,
   )
@@ -52,6 +52,8 @@ export const GoalContributeButton = ({
   const handleContributeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
+
+    if (isFundingDisabled()) return
 
     if (isPriorityGoal) {
       setSelectedGoalId(null)
@@ -78,11 +80,12 @@ export const GoalContributeButton = ({
       display={{ base: displayOnMobile ? 'flex' : 'none', lg: 'flex' }}
       onClick={handleContributeClick}
       isDisabled={
-        managedRecoverableGrant
-          ? !hasManagedPaymentMethod || isFundingDisabled
+        isFundingDisabled() ||
+        (managedCircularGrant
+          ? !hasManagedPaymentMethod
           : usesTemporaryDirectPayments && !hasStripePaymentMethod
           ? !hasDirectPaymentDetails
-          : isFundingDisabled
+          : false)
       }
       {...props}
     >
@@ -96,11 +99,12 @@ export const GoalContributeButton = ({
       width={{ base: '100%', lg: '192px' }}
       onClick={handleContributeClick}
       isDisabled={
-        managedRecoverableGrant
-          ? !hasManagedPaymentMethod || isFundingDisabled
+        isFundingDisabled() ||
+        (managedCircularGrant
+          ? !hasManagedPaymentMethod
           : usesTemporaryDirectPayments && !hasStripePaymentMethod
           ? !hasDirectPaymentDetails
-          : isFundingDisabled
+          : false)
       }
       {...props}
     >

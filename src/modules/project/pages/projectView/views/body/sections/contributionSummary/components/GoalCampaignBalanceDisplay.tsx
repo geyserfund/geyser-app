@@ -1,4 +1,4 @@
-import { HStack, Tooltip, VStack } from '@chakra-ui/react'
+import { Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import type { ReactNode } from 'react'
 
@@ -7,6 +7,8 @@ import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.
 import type { TimeLeft } from '@/shared/utils/project/getAonData.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
+import { BalanceSummaryRow } from './BalanceSummaryRow.tsx'
+import { RaisedAmountDisplay } from './RaisedAmountDisplay.tsx'
 
 type GoalCampaignBalanceDisplayProps = {
   label: ReactNode
@@ -59,19 +61,16 @@ export const GoalCampaignBalanceDisplay = ({
         removeLiveDot={!isFundingOpen}
       />
 
-      <HStack w="full" justifyContent="space-between">
+      <BalanceSummaryRow>
         <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
-          <Body size="2xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
-            {formatAmount(raisedSats, 'BTCSAT')}
-          </Body>
-          <Body size="md" light display="inline">
-            <Body as="span" dark medium sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {raisedUsdCent === null || raisedUsdCent === undefined
+          <RaisedAmountDisplay
+            amount={formatAmount(raisedSats, 'BTCSAT')}
+            usdAmount={
+              raisedUsdCent === null || raisedUsdCent === undefined
                 ? formatUsdAmount(raisedSats)
-                : formatAmount(raisedUsdCent, 'USDCENT')}
-            </Body>{' '}
-            {t('raised')}
-          </Body>
+                : formatAmount(raisedUsdCent, 'USDCENT')
+            }
+          />
           <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
             <Body size="xl" bold dark lineHeight={1} sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {fundersCount}
@@ -105,7 +104,7 @@ export const GoalCampaignBalanceDisplay = ({
             </Tooltip>
           )}
         </VStack>
-      </HStack>
+      </BalanceSummaryRow>
     </VStack>
   )
 }

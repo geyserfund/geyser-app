@@ -5,7 +5,6 @@ import { isAllOrNothing } from '@/utils/index.ts'
 import { completedGoalsAtom, goalsLoadingAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
 import { hasPostsAtom, postsAtom, unpublishedPostsAtom } from '../state/postsAtom'
 import {
-  isPrismEnabledAtom,
   isProjectOwnerAtom,
   partialUpdateProjectAtom,
   projectAonGoalErrorAtom,
@@ -33,8 +32,6 @@ export const useProjectAtom = () => {
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
   const projectOwner = useAtomValue(projectOwnerAtom)
   const isAon = isAllOrNothing(project)
-  const isPrismEnabled = useAtomValue(isPrismEnabledAtom)
-
   return {
     loading,
     project,
@@ -44,7 +41,6 @@ export const useProjectAtom = () => {
     projectOwner,
     partialUpdateProject,
     isAon,
-    isPrismEnabled,
   }
 }
 

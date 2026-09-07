@@ -12,9 +12,9 @@ import { ProjectShareContribute } from './ProjectShareContribute.tsx'
 type BannerType = 'project' | 'lightning'
 
 export const ProjectBanners = () => {
-  const { isAon, isPrismEnabled } = useProjectAtom()
+  const { isAon, project } = useProjectAtom()
   const [selectedType, setSelectedType] = useState<BannerType>('project')
-  const hideLightningBanner = isAon || isPrismEnabled
+  const hideLightningBanner = isAon || project.fundingStrategy === 'TAKE_IT_ALL'
 
   const options = useMemo(
     () =>

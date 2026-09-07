@@ -1,28 +1,40 @@
-import { Box, HStack, useBreakpointValue } from '@chakra-ui/react'
-import { VStack } from '@chakra-ui/react'
+import { Box, HStack, VStack, useBreakpointValue } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Outlet } from 'react-router'
 
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 import { ProjectCreationNavigationMobile } from '../components/ProjectCreationNavigation.tsx'
 import { ProjectCreationNavigationDesktop } from '../components/ProjectCreationNavigation.tsx'
+import { DeprecatedProjectCreation } from '../views/DeprecatedProjectCreation.tsx'
 
 export const ProjectCreationLayoutMain = () => {
   const isMobile = useBreakpointValue({ base: true, md: false })
+  const { project, loading } = useProjectAtom()
 
   const params = useParams<{ projectId: string }>()
 
   const navigate = useNavigate()
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!loading && !isMobile && (!project.id || isManagedCircularGrant)) {
       navigate(getPath('launchFundingStrategy', params.projectId || 'new'))
     }
-  }, [isMobile, navigate, params.projectId])
+  }, [isManagedCircularGrant, isMobile, loading, navigate, params.projectId, project.id])
+
+  if (loading) {
+    return null
+  }
+
+  if (project.id && !isManagedCircularGrant) {
+    return <DeprecatedProjectCreation />
+  }
 
   if (isMobile) {
     return <ProjectCreationNavigationMobile />
@@ -32,6 +44,16 @@ export const ProjectCreationLayoutMain = () => {
 }
 
 export const ProjectCreationLayoutDesktop = () => {
+  const { project, loading } = useProjectAtom()
+
+  if (loading) {
+    return null
+  }
+
+  if (project.id && !isManagedCircularGrantProject(project)) {
+    return <DeprecatedProjectCreation />
+  }
+
   return (
     <VStack width="100%" height="100%" paddingX={standardPadding} alignItems="center">
       <HStack

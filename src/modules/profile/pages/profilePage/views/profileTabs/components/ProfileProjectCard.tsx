@@ -4,7 +4,7 @@ import { PiHandHeart, PiRecycle, PiRocketLaunch, PiStorefront } from 'react-icon
 import { Link } from 'react-router'
 
 import { FollowButton } from '@/modules/project/pages/projectView/views/body/components'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
@@ -115,8 +115,8 @@ export const ProfileProjectCard = ({
 }
 
 const getProjectTypeBadge = (project: ProjectForProfilePageFragment, t: (key: string) => string) => {
-  if (isRecoverableGrantProject(project)) {
-    return { label: t('Recoverable Grant'), colorScheme: 'primary1', icon: PiRecycle }
+  if (isCircularGrantProject(project)) {
+    return { label: t('Circular Grant'), colorScheme: 'primary1', icon: PiRecycle }
   }
 
   if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {

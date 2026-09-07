@@ -6,7 +6,7 @@ import { AiFillApple } from 'react-icons/ai'
 import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router'
 
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
@@ -58,8 +58,8 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
   const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
-  const isManagedRecoverableGrant = isManagedRecoverableGrantProject(project)
-  const managedRails = project.paymentMethods?.managedRecoverableGrant
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
+  const managedRails = project.paymentMethods?.managedCircularGrant
   const hasManagedBitcoin = Boolean(managedRails?.strikeLightning || managedRails?.strikeOnChain)
   const [notifyStripeInterest, notifyStripeInterestOptions] = useProjectStripeInterestNotifyMutation()
   const [isStripeUnavailableDisabled, setIsStripeUnavailableDisabled] = useState(false)
@@ -68,7 +68,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const isApplePayVisible = hasFiatPaymentMethod && !hasStripePaymentMethod && getIsApplePayVisible()
   const showOnlyBitcoin = recurringContributionRenewal?.paymentMethod === 'BITCOIN'
   const showOnlyFiat = Boolean(recurringContributionRenewal && recurringContributionRenewal.paymentMethod !== 'BITCOIN')
-  const showOnlyStripe = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasStripePaymentMethod && !isManagedRecoverableGrant
+  const showOnlyStripe = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && hasStripePaymentMethod && !isManagedCircularGrant
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
   const stripeButtonBg = '#635BFF'
@@ -152,7 +152,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
 
   const handleBitcoinClick = () => {
     setIntendedPaymentMethod(
-      isManagedRecoverableGrant && !managedRails?.strikeLightning && managedRails?.strikeOnChain
+      isManagedCircularGrant && !managedRails?.strikeLightning && managedRails?.strikeOnChain
         ? PaymentMethods.onChain
         : PaymentMethods.lightning,
     )
@@ -233,7 +233,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           {t('Fiat renewal unavailable')}
         </Button>
       )}
-      {!showOnlyFiat && (!isManagedRecoverableGrant || hasManagedBitcoin) && (
+      {!showOnlyFiat && (!isManagedCircularGrant || hasManagedBitcoin) && (
         <Button
           id="continue-with-bitcoin"
           size="lg"
@@ -242,7 +242,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           colorScheme="primary1"
           onClick={handleBitcoinClick}
           type={useFormSubmit ? 'submit' : 'button'}
-          isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isManagedRecoverableGrant}
+          isDisabled={TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isManagedCircularGrant}
           data-payment-method={PaymentMethods.lightning}
           rightIcon={isMobile ? undefined : bitcoinIcon}
           aria-label={t('Continue with Bitcoin')}
@@ -250,7 +250,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
         >
           {isMobile
             ? bitcoinIcon
-            : TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isManagedRecoverableGrant
+            : TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isManagedCircularGrant
             ? t('Temporarily unavailable')
             : t('Continue with Bitcoin')}
         </Button>

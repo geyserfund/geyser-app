@@ -42,7 +42,8 @@ const IMPACT_REPORTS_2022_2024_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Impact%20Reports%20-%202022-2024.pdf'
 const FIELD_PARTNERS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
-const RECOVERABLE_GRANTS_PRESENTATION_URL =
+// The externally managed storage object keeps its historical name for continuity.
+const CIRCULAR_GRANTS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-booklet.pdf'
 const ABOUT_SECTION_STATS = [
   {
@@ -126,7 +127,7 @@ const howItWorksSteps = [
   {
     label: '03 Allocate',
     title: 'Allocate capital for grassroots impact',
-    description: 'Recoverable grants help projects grow, return capital, and keep sats circulating.',
+    description: 'Circular grants help projects grow, return capital, and keep sats circulating.',
   },
 ] as const
 
@@ -168,8 +169,8 @@ const resourceCards = {
     },
     {
       eyebrow: 'Reusable capital',
-      title: 'Recoverable Grants Booklet',
-      url: RECOVERABLE_GRANTS_PRESENTATION_URL,
+      title: 'Circular Grants Booklet',
+      url: CIRCULAR_GRANTS_PRESENTATION_URL,
     },
   ],
 } as const
@@ -536,7 +537,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
           </H1>
           <Body size={{ base: 'md', lg: 'lg' }} medium lineHeight={{ base: '26px', lg: '28px' }} color="whiteAlpha.900">
             {t(
-              'Creating local impact through Field Partners - our local trust network that helps projects launch, raise funds, run workshops, and access recoverable grant capital.',
+              'Creating local impact through Field Partners - our local trust network that helps projects launch, raise funds, run workshops, and access circular grant capital.',
             )}
           </Body>
           <HStack spacing={3} flexWrap="wrap" pt="8px">
@@ -597,7 +598,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
           </VStack>
           <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={topSectionTextColor}>
             {t(
-              'The Geyser Impact Fund backs the Field Partners and the fundraisers, campaigns or recoverable grant projects they onboard.',
+              'The Geyser Impact Fund backs the Field Partners and the fundraisers, campaigns or circular grant projects they onboard.',
             )}
           </Body>
         </VStack>
@@ -760,7 +761,7 @@ const LeaderboardSection = ({
         >
           <Body size="sm" medium color={colors.secondaryText}>
             {t(
-              'Ranked by funding enabled for local projects through onboarding, workshops, promotion, and recoverable grant support.',
+              'Ranked by funding enabled for local projects through onboarding, workshops, promotion, and circular grant support.',
             )}
           </Body>
           {!isShowingAllPartners && totalRows > rows.length ? (

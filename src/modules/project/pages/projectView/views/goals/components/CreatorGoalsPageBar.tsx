@@ -5,7 +5,7 @@ import { PiNotePencil, PiPlus } from 'react-icons/pi'
 
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { isRecoverableGrantProject } from '@/modules/project/utils/isRecoverableGrantProject.ts'
+import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import { useGoalsModal } from '../../../hooks/useGoalsModal.tsx'
@@ -40,7 +40,7 @@ export const CreateGoalButtons = () => {
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
   const { inProgressGoals } = useGoalsAtom()
   const { project } = useProjectAtom()
-  const isRecoverableGrant = isRecoverableGrantProject(project)
+  const isCircularGrant = isCircularGrantProject(project)
 
   useEffect(() => {
     return () => {
@@ -61,7 +61,7 @@ export const CreateGoalButtons = () => {
       >
         {!isGoalinEditMode ? t('Edit') : t('Finish editing')}
       </Button>
-      {!isRecoverableGrant && (
+      {!isCircularGrant && (
         <Button
           flex={1}
           size="lg"

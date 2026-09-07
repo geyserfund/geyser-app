@@ -17,7 +17,7 @@ import {
   CATEGORY_OPTIONS,
   clearImpactFundDonateSessionPref,
   LATAM_IMPACT_FUND_SLUG,
-  RECOVERABLE_GRANTS_CATEGORY_ID,
+  CIRCULAR_GRANTS_CATEGORY_ID,
   REGION_OPTIONS,
   WORKSHOPS_OPERATIONS_CATEGORY_ID,
   writeImpactFundDonateSessionPref,
@@ -32,8 +32,8 @@ type ImpactFundsDonatePreferencesModalProps = {
 
 const TOPIC_SECTIONS = [
   {
-    id: RECOVERABLE_GRANTS_CATEGORY_ID,
-    titleKey: 'Grow Recoverable Grants' as const,
+    id: CIRCULAR_GRANTS_CATEGORY_ID,
+    titleKey: 'Grow Circular Grants' as const,
     descriptionKey:
       'Grow reusable capital pool deployed through Field Partners to local projects that can return capital and recycle sats' as const,
   },

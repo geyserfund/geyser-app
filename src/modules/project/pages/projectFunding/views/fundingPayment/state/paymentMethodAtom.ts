@@ -12,7 +12,7 @@ import {
   projectFundingPaymentOnchainStartedRoutes,
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
-import { isManagedRecoverableGrantProject } from '@/modules/project/domain/managedRecoverableGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
@@ -82,8 +82,8 @@ export const isFiatSwapMethodStartedAtom = atom((get) => {
 export const hasStripePaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
-  if (isManagedRecoverableGrantProject(project)) {
-    return Boolean(project.paymentMethods?.managedRecoverableGrant?.stripe)
+  if (isManagedCircularGrantProject(project)) {
+    return Boolean(project.paymentMethods?.managedCircularGrant?.stripe)
   }
 
   if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
@@ -108,7 +108,7 @@ export const hasStripePaymentMethodAtom = atom((get) => {
 export const hasFiatPaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
-  if (isManagedRecoverableGrantProject(project)) return false
+  if (isManagedCircularGrantProject(project)) return false
 
   return Boolean(project.paymentMethods?.fiat?.enabled)
 })

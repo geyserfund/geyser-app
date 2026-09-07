@@ -19,11 +19,7 @@ import {
   RecurringDonationCreateMutationVariables,
   recurringFundingModes,
 } from '@/modules/project/recurring/graphql'
-import {
-  ORIGIN,
-  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
-  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
-} from '@/shared/constants/config/env.ts'
+import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 import {
   ContributionCreateInput,
@@ -33,7 +29,6 @@ import {
   ContributionPaymentsInput,
   FundingContributionFragment,
   PaymentFeePayer,
-  PaymentFeeType,
   ProjectFundingStrategy,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
@@ -47,11 +42,7 @@ import {
   isValidRskPrivateKey,
 } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import {
-  createCallDataForBoltzClaimCall,
-  createCallDataForBoltzClaimCallWithCallee,
-} from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
-import { createCallDataForPrismDepositFor } from '../../pages/projectFunding/utils/createCallDataForPrismDepositFor.ts'
+import { createCallDataForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
 import { type FundingFlowGraphQLError, fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state/errorAtom.ts'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
@@ -88,6 +79,65 @@ const isRetryableClaimTxSetError = (error: unknown) => {
   return error.graphQLErrors.some(
     ({ message }) => message.includes('version conflict detected') || message.includes('OptimisticLockError'),
   )
+}
+
+export const satsToWei = (sats: number) => {
+  if (!Number.isSafeInteger(sats)) {
+    throw new Error('Invalid sat amount for wei conversion')
+  }
+
+  return BigInt(sats) * 10000000000n
+}
+
+type AonClaimTxCallDataParams = {
+  claimAmountSats: number
+  fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']
+  contributorAddress: string
+  aonContractAddress: string
+  refundAddress: string
+  timelock: number
+  preimage: string
+  privateKey: string
+}
+
+const buildAonClaimTxCallData = ({
+  claimAmountSats,
+  fees,
+  contributorAddress,
+  aonContractAddress,
+  refundAddress,
+  timelock,
+  preimage,
+  privateKey,
+}: AonClaimTxCallDataParams) => {
+  const creatorFeesAmount = fees.reduce((acc, fee) => {
+    if (fee.feePayer === PaymentFeePayer.Creator) {
+      return acc + fee.feeAmount
+    }
+
+    return acc
+  }, 0)
+
+  const contributorFeesAmount = fees.reduce((acc, fee) => {
+    // Swap fees never make it to the contract, so should not be counted inside the contract
+    if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
+      return acc + fee.feeAmount
+    }
+
+    return acc
+  }, 0)
+
+  return createCallDataForBoltzClaimCall({
+    contributorAddress,
+    creatorFees: satsToWei(creatorFeesAmount),
+    contributorFees: satsToWei(contributorFeesAmount),
+    preimage,
+    amount: satsToWei(claimAmountSats),
+    refundAddress,
+    timelock,
+    privateKey,
+    aonContractAddress,
+  })
 }
 
 const hasAnyPaymentDetails = (payments: RecurringContributionCheckoutPayload['payments']) =>
@@ -822,7 +872,9 @@ export const useFundingAPI = () => {
 }
 
 type ClaimTargetProject = {
+  id: string | number
   fundingStrategy?: ProjectFundingStrategy | null
+  isCircularGrant?: boolean | null
   rskEoa?: string | null
   aonGoal?: {
     contractAddress?: string | null
@@ -838,154 +890,17 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
 
   const [paymentSwapClaimTxSet] = usePaymentSwapClaimTxSetMutation()
 
-  const geyserFeeTypes = new Set([
-    PaymentFeeType.Platform,
-    PaymentFeeType.Promotion,
-    PaymentFeeType.Ambassador,
-    PaymentFeeType.Tip,
-  ])
-
-  const getGeyserFeesAmount = (fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']) => {
-    return fees.reduce((acc, fee) => {
-      if (!fee.feeType) return acc
-      if (!geyserFeeTypes.has(fee.feeType)) return acc
-      return acc + fee.feeAmount
-    }, 0)
-  }
-
   const getValidatedClaimTargetProject = () => {
-    if (!project?.fundingStrategy) {
-      throw new Error('Missing project funding strategy for claim generation')
+    if (project?.fundingStrategy !== ProjectFundingStrategy.AllOrNothing) {
+      throw new Error('Rootstock swap claims are only supported for All-or-Nothing projects')
     }
 
-    if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-      const aonContractAddress = project.aonGoal?.contractAddress
-
-      if (!aonContractAddress) {
-        throw new Error('Missing AON contract address for claim generation')
-      }
-
-      return {
-        fundingStrategy: project.fundingStrategy,
-        aonContractAddress,
-        rskEoa: project.rskEoa ?? null,
-      }
-    }
-
-    if (!project.rskEoa) {
-      throw new Error('Missing project RSK EOA for claim generation')
-    }
+    const aonContractAddress = project.aonGoal?.contractAddress
+    if (!aonContractAddress) throw new Error('Missing AON contract address for claim generation')
 
     return {
-      fundingStrategy: project.fundingStrategy,
-      aonContractAddress: null,
-      rskEoa: project.rskEoa,
-    }
-  }
-
-  const buildPrismClaimTxCallData = (params: {
-    claimAmountSats: number
-    geyserFeesAmount: number
-    contributorAddress: string
-    projectRskEoa: string
-    refundAddress: string
-    timelock: number
-    preimage: string
-    privateKey: string
-  }) => {
-    const {
-      claimAmountSats,
-      geyserFeesAmount,
-      contributorAddress,
-      projectRskEoa,
-      refundAddress,
-      timelock,
-      preimage,
-      privateKey,
-    } = params
-
-    console.log('VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS', VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS)
-    console.log('VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS', VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS)
-
-    if (!VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS || !VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
-      throw new Error('Missing Prism contract or Geyser operational address configuration')
-    }
-
-    const creatorAmountSats = claimAmountSats - geyserFeesAmount
-    if (creatorAmountSats < 0) {
-      throw new Error('Prism split amount is negative for creator')
-    }
-
-    if (creatorAmountSats + geyserFeesAmount !== claimAmountSats) {
-      throw new Error('Prism split amounts do not sum to claim amount')
-    }
-
-    const depositCallData = createCallDataForPrismDepositFor({
-      payer: contributorAddress as `0x${string}`,
-      receivers: [projectRskEoa as `0x${string}`, VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`],
-      amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
-    })
-
-    return createCallDataForBoltzClaimCallWithCallee({
-      preimage,
-      amount: satsToWei(claimAmountSats),
-      refundAddress,
-      timelock,
-      privateKey,
-      callee: VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS as string,
-      callData: depositCallData,
-    })
-  }
-
-  const buildAonClaimTxCallData = (params: {
-    claimAmountSats: number
-    fees: ContributionLightningToRskSwapPaymentDetailsFragment['fees']
-    contributorAddress: string
-    aonContractAddress: string
-    refundAddress: string
-    timelock: number
-    preimage: string
-    privateKey: string
-  }) => {
-    const {
-      claimAmountSats,
-      fees,
-      contributorAddress,
       aonContractAddress,
-      refundAddress,
-      timelock,
-      preimage,
-      privateKey,
-    } = params
-
-    const creatorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Creator) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
-    const contributorFeesAmount = fees.reduce((acc, fee) => {
-      // Swap fees never make it to the contract, so should not be counted inside the contract
-      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
-    return createCallDataForBoltzClaimCall({
-      contributorAddress,
-      creatorFees: satsToWei(creatorFeesAmount),
-      contributorFees: satsToWei(contributorFeesAmount),
-      preimage,
-      amount: satsToWei(claimAmountSats),
-      refundAddress,
-      timelock,
-      privateKey,
-      aonContractAddress,
-    })
+    }
   }
 
   const setPaymentSwapClaimTx = async (params: { paymentId: string; claimTxCallDataHex: string }) => {
@@ -1043,34 +958,17 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
     }
 
     const claimTargetProject = getValidatedClaimTargetProject()
-    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const projectRskEoa = claimTargetProject.rskEoa || ''
-    const geyserFeesAmount = getGeyserFeesAmount(fees)
-
-    let claimTxCallDataHex = ''
-    if (!isAonProject && projectRskEoa) {
-      claimTxCallDataHex = buildPrismClaimTxCallData({
-        claimAmountSats,
-        geyserFeesAmount,
-        contributorAddress,
-        projectRskEoa,
-        refundAddress: swap.refundAddress,
-        timelock: swap.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    } else {
-      claimTxCallDataHex = buildAonClaimTxCallData({
-        claimAmountSats,
-        fees,
-        contributorAddress,
-        aonContractAddress: claimTargetProject.aonContractAddress || '',
-        refundAddress: swap.refundAddress,
-        timelock: swap.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    }
+    const privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || ''
+    const claimTxCallDataHex = buildAonClaimTxCallData({
+      claimAmountSats,
+      fees,
+      contributorAddress,
+      aonContractAddress: claimTargetProject.aonContractAddress,
+      refundAddress: swap.refundAddress,
+      timelock: swap.timeoutBlockHeight,
+      preimage: preImages.preimageHex,
+      privateKey,
+    })
 
     await setPaymentSwapClaimTx({
       paymentId: payment.paymentId,
@@ -1097,34 +995,17 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
     }
 
     const claimTargetProject = getValidatedClaimTargetProject()
-    const isAonProject = claimTargetProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const projectRskEoa = claimTargetProject.rskEoa || ''
-    const geyserFeesAmount = getGeyserFeesAmount(fees)
-
-    let claimTxCallDataHex = ''
-    if (!isAonProject && projectRskEoa) {
-      claimTxCallDataHex = buildPrismClaimTxCallData({
-        claimAmountSats,
-        geyserFeesAmount,
-        contributorAddress,
-        projectRskEoa,
-        refundAddress: swap.claimDetails.refundAddress,
-        timelock: swap.claimDetails.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    } else {
-      claimTxCallDataHex = buildAonClaimTxCallData({
-        claimAmountSats,
-        fees,
-        contributorAddress,
-        aonContractAddress: claimTargetProject.aonContractAddress || '',
-        refundAddress: swap.claimDetails.refundAddress,
-        timelock: swap.claimDetails.timeoutBlockHeight,
-        preimage: preImages.preimageHex,
-        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      })
-    }
+    const privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || ''
+    const claimTxCallDataHex = buildAonClaimTxCallData({
+      claimAmountSats,
+      fees,
+      contributorAddress,
+      aonContractAddress: claimTargetProject.aonContractAddress,
+      refundAddress: swap.claimDetails.refundAddress,
+      timelock: swap.claimDetails.timeoutBlockHeight,
+      preimage: preImages.preimageHex,
+      privateKey,
+    })
 
     await setPaymentSwapClaimTx({
       paymentId: payment.paymentId,
@@ -1136,18 +1017,6 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = (projectOverr
     generateTransactionForLightningToRskSwap,
     generateTransactionForOnChainToRskSwap,
   }
-}
-
-export const satsToWei = (sats: number) => {
-  if (!Number.isSafeInteger(sats)) {
-    throw new Error('Invalid sat amount for wei conversion')
-  }
-
-  return BigInt(sats) * 10000000000n
-}
-
-export const satsToWeiBigInt = (sats: number) => {
-  return satsToWei(sats)
 }
 
 export const weiToSats = (wei: bigint) => {

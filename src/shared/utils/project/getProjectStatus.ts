@@ -3,10 +3,8 @@ import { PiCheckCircle, PiEyeglasses, PiMinusCircle, PiNoteBlank, PiWarning, PiX
 
 import { ProjectState } from '@/modules/project/state/projectAtom'
 import { lightModeColors } from '@/shared/styles'
-import { ProjectWalletFragment, WalletStatus } from '@/types'
+import { ProjectFundingStrategy, ProjectWalletFragment, WalletStatus } from '@/types'
 import { isActive, isClosed, isDraft, isInactive, isInReview } from '@/utils'
-
-import { isPrismEnabled } from './isPrismEnabled'
 
 export enum ProjectStatusLabels {
   UNSTABLE_WALLET = 'Unstable Wallet',
@@ -86,12 +84,16 @@ export const ProjectStatusTooltip = {
 }
 
 export type GetProjectStatusProps = {
-  project: Pick<ProjectState, 'status' | 'id' | 'name' | 'rejectionReason' | 'fundingStrategy' | 'rskEoa'>
+  project: Pick<
+    ProjectState,
+    'status' | 'id' | 'name' | 'rejectionReason' | 'fundingStrategy' | 'isCircularGrant' | 'rskEoa'
+  >
   wallet: Pick<ProjectWalletFragment, 'state'>
 }
 
 export const getProjectStatus = ({ project, wallet }: GetProjectStatusProps) => {
-  const prismEnabled = isPrismEnabled(project)
+  const projectUsesManagedWallet =
+    project.isCircularGrant === true && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
   const getStatus = () => {
     if (isDraft(project.status)) {
@@ -114,11 +116,11 @@ export const getProjectStatus = ({ project, wallet }: GetProjectStatusProps) => 
       return ProjectStatusLabels.PRE_LAUNCH_CLOSED
     }
 
-    if (!prismEnabled && wallet?.state.status === WalletStatus.Inactive) {
+    if (!projectUsesManagedWallet && wallet?.state.status === WalletStatus.Inactive) {
       return ProjectStatusLabels.INACTIVE_WALLET
     }
 
-    if (!prismEnabled && wallet?.state.status === WalletStatus.Unstable) {
+    if (!projectUsesManagedWallet && wallet?.state.status === WalletStatus.Unstable) {
       return ProjectStatusLabels.UNSTABLE_WALLET
     }
 

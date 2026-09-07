@@ -1,5 +1,0 @@
-export enum ProjectLaunchStrategy {
-  STARTER_LAUNCH = 'STARTER_LAUNCH',
-  GROWTH_LAUNCH = 'GROWTH_LAUNCH',
-  PRO_LAUNCH = 'PRO_LAUNCH',
-}
