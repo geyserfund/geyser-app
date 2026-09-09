@@ -116,15 +116,11 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   const activeDirectPaymentMethodIndex = directPaymentMethods.findIndex(
     (method) => method.key === activeDirectPaymentMethod,
   )
+  const canUseTemporaryDirectPayments = usesTemporaryDirectPayments && hasDirectPaymentDetails
   const fundingDisabled = isFundingDisabled()
 
   useEffect(() => {
-    if (
-      fundingDisabled ||
-      !usesTemporaryDirectPayments ||
-      !hasDirectPaymentDetails ||
-      searchParams.get('direct-payment') !== '1'
-    ) {
+    if (!canUseTemporaryDirectPayments || searchParams.get('direct-payment') !== '1') {
       return
     }
 
@@ -132,26 +128,19 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     const nextSearchParams = new URLSearchParams(searchParams)
     nextSearchParams.delete('direct-payment')
     setSearchParams(nextSearchParams, { replace: true })
-  }, [
-    directPaymentModal,
-    fundingDisabled,
-    hasDirectPaymentDetails,
-    searchParams,
-    setSearchParams,
-    usesTemporaryDirectPayments,
-  ])
+  }, [canUseTemporaryDirectPayments, directPaymentModal, searchParams, setSearchParams])
 
   if (!project) {
     return null
   }
 
   const handleWidgetClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (fundingDisabled) {
+    if (fundingDisabled && !canUseTemporaryDirectPayments) {
       event.preventDefault()
       return
     }
 
-    if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
+    if (canUseTemporaryDirectPayments) {
       event.preventDefault()
       directPaymentModal.onOpen()
       return
@@ -165,12 +154,12 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
   }
 
   const handleInlineClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (fundingDisabled) {
+    if (fundingDisabled && !canUseTemporaryDirectPayments) {
       event.preventDefault()
       return
     }
 
-    if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
+    if (canUseTemporaryDirectPayments) {
       event.preventDefault()
       directPaymentModal.onOpen()
       return
@@ -202,7 +191,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     variant: 'solid',
     colorScheme: 'primary1',
     isDisabled:
-      fundingDisabled ||
+      (fundingDisabled && !canUseTemporaryDirectPayments) ||
       (managedCircularGrant
         ? !hasManagedPaymentMethod
         : usesTemporaryDirectPayments && !hasStripePaymentMethod
@@ -227,7 +216,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
         />
       )}
 
-      {!fundingDisabled && usesTemporaryDirectPayments && hasDirectPaymentDetails && (
+      {canUseTemporaryDirectPayments && (
         <DirectPaymentModal
           isOpen={directPaymentModal.isOpen}
           onClose={directPaymentModal.onClose}

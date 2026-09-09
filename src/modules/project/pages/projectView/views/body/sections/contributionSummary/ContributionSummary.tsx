@@ -1,5 +1,7 @@
 import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
@@ -29,6 +31,11 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
   }
 
   const { isFundingDisabled, isCircularGrantGoalReached } = useProjectToolkit(project)
+  const hasDirectPaymentDetails = Boolean(
+    project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
+  )
+  const canUseTemporaryDirectPayments =
+    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isManagedCircularGrantProject(project) && hasDirectPaymentDetails
 
   return (
     <VStack
@@ -51,7 +58,7 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
       <VStack w="full" spacing={5} px={6} pt={5} pb={5}>
         <ProjectBalanceDisplay />
 
-        {(!isFundingDisabled() || isCircularGrantGoalReached()) && (
+        {(!isFundingDisabled() || isCircularGrantGoalReached() || canUseTemporaryDirectPayments) && (
           <VStack w="full" spacing={4}>
             <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
             <ProjectPaymentMethodsHint justifyContent="center" />

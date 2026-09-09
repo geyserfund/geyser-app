@@ -48,12 +48,13 @@ export const GoalContributeButton = ({
     managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,
   )
   const hasStripePaymentMethod = Boolean(project.paymentMethods?.fiat?.stripe)
+  const canUseTemporaryDirectPayments = usesTemporaryDirectPayments && hasDirectPaymentDetails
 
   const handleContributeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (isFundingDisabled()) return
+    if (isFundingDisabled() && !canUseTemporaryDirectPayments) return
 
     if (isPriorityGoal) {
       setSelectedGoalId(null)
@@ -61,7 +62,7 @@ export const GoalContributeButton = ({
       setSelectedGoalId(projectGoalId)
     }
 
-    if (usesTemporaryDirectPayments && hasDirectPaymentDetails) {
+    if (canUseTemporaryDirectPayments) {
       navigate(`${getPath('project', project.name)}?direct-payment=1`)
       return
     }
@@ -80,7 +81,7 @@ export const GoalContributeButton = ({
       display={{ base: displayOnMobile ? 'flex' : 'none', lg: 'flex' }}
       onClick={handleContributeClick}
       isDisabled={
-        isFundingDisabled() ||
+        (isFundingDisabled() && !canUseTemporaryDirectPayments) ||
         (managedCircularGrant
           ? !hasManagedPaymentMethod
           : usesTemporaryDirectPayments && !hasStripePaymentMethod
@@ -99,7 +100,7 @@ export const GoalContributeButton = ({
       width={{ base: '100%', lg: '192px' }}
       onClick={handleContributeClick}
       isDisabled={
-        isFundingDisabled() ||
+        (isFundingDisabled() && !canUseTemporaryDirectPayments) ||
         (managedCircularGrant
           ? !hasManagedPaymentMethod
           : usesTemporaryDirectPayments && !hasStripePaymentMethod
