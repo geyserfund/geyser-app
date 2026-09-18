@@ -33,25 +33,22 @@ export const VerifyOneTimePassword = ({
   const { queryCurrentUser } = useAuthContext()
 
   const [otpCode, setOptCode] = useState('')
-
-  const [timeLeft, setTimeLeft] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(DEFAULT_WAIT_SECONDS_FOR_RESEND)
+  const isWaitingToResend = timeLeft > 0
 
   useEffect(() => {
-    handleIntervalTimeLeft()
-  }, [])
+    if (!isWaitingToResend) {
+      return
+    }
 
-  const handleIntervalTimeLeft = () => {
-    setTimeLeft(DEFAULT_WAIT_SECONDS_FOR_RESEND)
-    const interval = setInterval(() => {
-      setTimeLeft((current) => {
-        if (current === 1) {
-          clearInterval(interval)
-        }
-
-        return current - 1
-      })
+    const interval = window.setInterval(() => {
+      setTimeLeft((current) => (current <= 1 ? 0 : current - 1))
     }, 1000)
-  }
+
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [isWaitingToResend])
 
   const [verifyUserEmail, { loading }] = useUserEmailVerifyMutation({
     onError() {
@@ -88,7 +85,7 @@ export const VerifyOneTimePassword = ({
   const handleSendCodeAgain = () => {
     if (inputEmail) {
       handleSendOtpByEmail(inputEmail)
-      handleIntervalTimeLeft()
+      setTimeLeft(DEFAULT_WAIT_SECONDS_FOR_RESEND)
     }
   }
 

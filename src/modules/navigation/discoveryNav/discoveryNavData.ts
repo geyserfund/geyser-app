@@ -1,12 +1,10 @@
 import { IconType } from 'react-icons'
-import { PiBag, PiClockCountdown, PiHandCoins, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
+import { PiBag, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
 
 import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { ImpactFundsIconUrl, PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
-  Campaigns = 'campaigns',
-  Fundraisers = 'fundraisers',
   MyProjects = 'myProjects',
   ImpactFunds = 'impactFunds',
   Activity = 'activity',
@@ -34,20 +32,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.landing,
     path: 'discoveryLanding',
     icon: PiHouse,
-    bottomNav: true,
-  },
-  {
-    label: 'Campaigns',
-    key: DiscoveryNavItemKey.Campaigns,
-    path: 'discoveryAllOrNothing',
-    icon: PiClockCountdown,
-    bottomNav: true,
-  },
-  {
-    label: 'Fundraisers',
-    key: DiscoveryNavItemKey.Fundraisers,
-    path: 'discoveryFundraisers',
-    icon: PiHandCoins,
     bottomNav: true,
   },
   {

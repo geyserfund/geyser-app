@@ -347,8 +347,10 @@ export const ControlPanel = () => {
     fetchPolicy: 'network-only',
   })
   const hasStripeConnectConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
-  const stripeConnectNoticeKey = `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}`
-  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject[stripeConnectNoticeKey])
+  const stripeConnectNoticeKey = project.id
+    ? `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}`
+    : ''
+  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject?.[stripeConnectNoticeKey])
   const shouldShowStripeConnectNotice =
     isTiaProject &&
     !isStripeConnectNoticeClosed &&
@@ -664,7 +666,7 @@ export const ControlPanel = () => {
               ? undefined
               : () =>
                   setStripeConnectNoticeClosedByProject((current) => ({
-                    ...current,
+                    ...(current ?? {}),
                     [stripeConnectNoticeKey]: true,
                   }))
           }

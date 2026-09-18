@@ -214,6 +214,11 @@ export const discoveryRoutes = [
   getPath('legalTerms'),
   getPath('legalPrivacy'),
   getPath('discoveryNews'),
+  getPath('about'),
+  getPath('aboutFieldPartners'),
+  getPath('aboutWhereGeyserWorks'),
+  getPath('aboutImpact'),
+  getPath('aboutDueDiligence'),
 ]
 
 export const platformNavBarShadowRoutes = [

@@ -1,7 +1,6 @@
 import type {
   ContributionsSummary,
   PostForLandingPageFragment,
-  ProjectCategory,
   ProjectForLandingPageFragment,
 } from '@/types/index.ts'
 
@@ -45,26 +44,6 @@ export type LandingAboveFoldQueryData = {
   projectsGet: {
     projects: LandingProjectCardProject[]
   }
-}
-
-export type LandingCategorySectionQueryData = {
-  latest: {
-    projects: LandingProjectCardProject[]
-  }
-  posts: LandingPostCardPost[]
-  trending: LandingMostFundedGroup[]
-}
-
-export type LandingCategorySectionQueryVariables = {
-  category: ProjectCategory
-  mostFundedCategory: string
-}
-
-export type LandingOtherSectionQueryData = {
-  latest: {
-    projects: LandingProjectCardProject[]
-  }
-  posts: LandingPostCardPost[]
 }
 
 export type LandingAnnouncementsQueryData = {

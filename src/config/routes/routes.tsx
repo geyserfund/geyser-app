@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate, RouteObject, useLocation, useParams } from 'react-router'
 
+import { loadAboutPages } from '@/modules/about/loader.ts'
 import { SignOut } from '@/modules/auth/pages/SignOut.tsx'
 import { loadDiscoveryModule } from '@/modules/discovery/loader.ts'
 import { ActivityDirection } from '@/modules/discovery/pages/activity/components/ActivityDirection'
@@ -15,6 +16,7 @@ import {
   loadImpactFundsWorkshopsPage,
   loadLegacyGrantRedirectPage,
 } from '@/modules/impactFunds/loader.ts'
+import { loadOpsFundPage } from '@/modules/opsFund/loader.ts'
 import { loadProfileModule } from '@/modules/profile/loader.ts'
 import { loadProfileSettingsModule } from '@/modules/profile/pages/profileSettings/loader.ts'
 import { loadProjectModule } from '@/modules/project/loader.ts'
@@ -56,6 +58,48 @@ const LegacyImpactFundRedirect = () => {
 }
 
 export const platformRoutes: RouteObject[] = [
+  {
+    path: getPath('about'),
+    async lazy() {
+      const { AboutOverviewPage } = await loadAboutPages()
+      return { Component: AboutOverviewPage }
+    },
+  },
+  {
+    path: getPath('aboutFieldPartners'),
+    async lazy() {
+      const { AboutFieldPartnersPage } = await loadAboutPages()
+      return { Component: AboutFieldPartnersPage }
+    },
+  },
+  {
+    path: getPath('aboutWhereGeyserWorks'),
+    async lazy() {
+      const { AboutWhereGeyserWorksPage } = await loadAboutPages()
+      return { Component: AboutWhereGeyserWorksPage }
+    },
+  },
+  {
+    path: getPath('aboutImpact'),
+    async lazy() {
+      const { AboutImpactPage } = await loadAboutPages()
+      return { Component: AboutImpactPage }
+    },
+  },
+  {
+    path: getPath('aboutDueDiligence'),
+    async lazy() {
+      const { AboutDueDiligencePage } = await loadAboutPages()
+      return { Component: AboutDueDiligencePage }
+    },
+  },
+  {
+    path: getPath('opsFund'),
+    async lazy() {
+      const { OpsFundPage } = await loadOpsFundPage()
+      return { Component: OpsFundPage }
+    },
+  },
   {
     path: getPath('launchStart'),
     async lazy() {
@@ -1187,6 +1231,14 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryCircularGrantsAfrica'),
+        element: <Navigate to={`${getPath('discoveryCircularGrants')}?region=africa`} replace />,
+      },
+      {
+        path: getPath('discoveryCircularGrantsLatinAmerica'),
+        element: <Navigate to={`${getPath('discoveryCircularGrants')}?region=latin-america`} replace />,
+      },
+      {
         path: getPath('discoveryCircularGrantsAfribitCaseStudy'),
         async lazy() {
           const { AfribitCaseStudyPage } = await import('@/modules/microLending/pages/AfribitCaseStudyPage.tsx')
@@ -1340,6 +1392,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: App,
+    ErrorBoundary,
     children: MAINTENANCE_MODE
       ? [
           {
@@ -1357,7 +1410,6 @@ export const router = createBrowserRouter([
             Component: AppLayout,
             children: platformRoutes,
             ErrorBoundary,
-            // ,
           },
           {
             path: getPath('logout'),

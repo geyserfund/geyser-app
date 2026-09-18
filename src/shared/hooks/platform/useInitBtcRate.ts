@@ -44,56 +44,60 @@ export const useInitBtcRate = () => {
   const setUsdRate = useSetAtom(usdRateAtom)
 
   useEffect(() => {
-    let isActive = true
+    let cancelled = false
     let retries = 0
-    const pendingTimeouts = new Set<ReturnType<typeof setTimeout>>()
+    let succeeded = false
 
-    const clearPendingTimeouts = () => {
-      pendingTimeouts.forEach((timeoutId) => clearTimeout(timeoutId))
-      pendingTimeouts.clear()
-    }
-
-    const scheduleRetry = () => {
-      const timeoutId = setTimeout(() => {
-        pendingTimeouts.delete(timeoutId)
-        if (!isActive) return
-
-        retries += 1
-        getBitcoinRates()
-      }, RETRY_FETCH_BTC_RATE_AFTER_MILIS)
-
-      pendingTimeouts.add(timeoutId)
+    const applyUsdRate = (usdRate: number) => {
+      const satoshirate = usdRate * BTC_IN_SATOSHI
+      setBtcRate(satoshirate)
+      setUsdRate(usdRate)
     }
 
     const getBitcoinRates = async () => {
+      if (cancelled || succeeded) return
+
       const usdRate = await fetchBitcoinRates({ currency: 'usd' })
-      if (!isActive) return
+      if (cancelled || succeeded) return
 
-      if (!usdRate) {
-        const localValues = getRateFromLocalStorage()
-
-        if (localValues.usdRate) {
-          const satoshirate = localValues.usdRate * BTC_IN_SATOSHI
-          setBtcRate(satoshirate)
-          setUsdRate(localValues.usdRate)
-        }
-
-        if ((localValues.isOld && retries < MAX_RETRIES) || !localValues.usdRate) {
-          scheduleRetry()
-        }
-      } else {
-        const satoshirate = usdRate * BTC_IN_SATOSHI
-        setBtcRate(satoshirate)
-        setUsdRate(usdRate)
+      if (usdRate) {
+        succeeded = true
+        applyUsdRate(usdRate)
         storeRateToLocalStorage(usdRate)
+        clearInterval(intervalId)
+        return
+      }
+
+      const localValues = getRateFromLocalStorage()
+      if (localValues.usdRate) {
+        applyUsdRate(localValues.usdRate)
+      }
+
+      if (!((localValues.isOld && retries < MAX_RETRIES) || !localValues.usdRate)) {
+        clearInterval(intervalId)
       }
     }
 
-    getBitcoinRates()
+    const intervalId = setInterval(() => {
+      if (cancelled || succeeded) {
+        clearInterval(intervalId)
+        return
+      }
+
+      retries += 1
+      if (retries > MAX_RETRIES) {
+        clearInterval(intervalId)
+        return
+      }
+
+      void getBitcoinRates()
+    }, RETRY_FETCH_BTC_RATE_AFTER_MILIS)
+
+    void getBitcoinRates()
 
     return () => {
-      isActive = false
-      clearPendingTimeouts()
+      cancelled = true
+      clearInterval(intervalId)
     }
   }, [setBtcRate, setUsdRate])
 }

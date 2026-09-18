@@ -1,12 +1,10 @@
-import { type ButtonProps, Box, Button, useColorModeValue } from '@chakra-ui/react'
+import { type ButtonProps, Box, Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretUp } from 'react-icons/pi'
 import { Link, useLocation } from 'react-router'
 
-import {
-  getDonateNavDropdownItems,
-  getFundraiseNavDropdownItems,
-} from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
+import { DonateNavMenuContent } from '@/modules/navigation/components/navDropdown/DonateNavMenuContent.tsx'
+import { getAboutNavDropdownSections } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
@@ -15,8 +13,8 @@ import { BottomNavBarContainer } from '../components/bottomNav/BottomNavContaine
 
 export enum BottomNavItemKey {
   donate = 'donate',
-  fundraise = 'fundraise',
-  news = 'news',
+  about = 'about',
+  ops = 'ops',
 }
 
 export type BottomNavItem = {
@@ -32,11 +30,10 @@ const matchesRoute = (pathname: string, route: string) => pathname === route || 
 export const DiscoveryBottomNav = () => {
   const location = useLocation()
 
-  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+  const bottomNavLabelColor = 'black'
   const bottomNavLabelFontSize = 'sm'
   const bottomNavLabelFontWeight = 600
-  const donateItems = getDonateNavDropdownItems(t)
-  const fundraiseItems = getFundraiseNavDropdownItems(t, 'mobile')
+  const aboutSections = getAboutNavDropdownSections(t)
 
   const bottomNavItems: BottomNavItem[] = [
     {
@@ -46,39 +43,55 @@ export const DiscoveryBottomNav = () => {
         matchesRoute(location.pathname, getPath('discoveryProjects')) ||
         matchesRoute(location.pathname, getPath('discoveryFundraisers')) ||
         matchesRoute(location.pathname, getPath('discoveryCampaigns')) ||
+        matchesRoute(location.pathname, getPath('discoveryCircularGrantProjects')) ||
         matchesRoute(location.pathname, getPath('discoveryImpactFunds')) ||
         matchesRoute(location.pathname, getPath('discoveryMicroLending')) ||
-        matchesRoute(location.pathname, getPath('discoveryCircularGrants')),
+        matchesRoute(location.pathname, getPath('discoveryCircularGrants')) ||
+        matchesRoute(location.pathname, getPath('opsFund')),
     },
     {
-      label: t('Fundraise'),
-      key: BottomNavItemKey.fundraise,
-      isActive:
-        matchesRoute(location.pathname, getPath('discoveryCreator')) ||
-        matchesRoute(location.pathname, getPath('launchStart')),
+      label: t('About'),
+      key: BottomNavItemKey.about,
+      isActive: matchesRoute(location.pathname, getPath('about')),
     },
     {
-      label: t('News'),
-      key: BottomNavItemKey.news,
-      path: getPath('discoveryNews'),
-      isActive: matchesRoute(location.pathname, getPath('discoveryNews')),
+      label: t('Support Geyser'),
+      key: BottomNavItemKey.ops,
+      path: getPath('fundingStart', 'geyser'),
+      isActive: matchesRoute(location.pathname, getPath('fundingStart', 'geyser')),
     },
   ]
 
   return (
     <BottomNavBarContainer spacing={2} w="full" marginX={0} padding={2} paddingBottom={3}>
       {bottomNavItems.map((item) => {
-        if (item.key === BottomNavItemKey.donate || item.key === BottomNavItemKey.fundraise) {
-          const navItems = item.key === BottomNavItemKey.donate ? donateItems : fundraiseItems
-
+        if (item.key === BottomNavItemKey.donate || item.key === BottomNavItemKey.about) {
           return (
             <Box key={item.key} flex={1.2}>
               <NavDropdownMenu
                 label={item.label}
-                items={navItems}
+                sections={item.key === BottomNavItemKey.about ? aboutSections : undefined}
+                renderContent={
+                  item.key === BottomNavItemKey.donate
+                    ? ({ onNavigate }) => <DonateNavMenuContent compact onNavigate={onNavigate} />
+                    : undefined
+                }
                 mode="mobile"
                 isActive={item.isActive}
                 triggerIcon={<PiCaretUp />}
+                menuProps={
+                  item.key === BottomNavItemKey.donate
+                    ? {
+                        width: 'calc(100vw - 16px)',
+                        maxWidth: 'calc(100vw - 16px)',
+                        minWidth: 'auto',
+                        maxHeight: '70vh',
+                        overflowY: 'auto',
+                        px: 4,
+                        py: 4,
+                      }
+                    : undefined
+                }
                 triggerProps={{
                   variant: 'ghost',
                   width: 'full',
@@ -95,7 +108,14 @@ export const DiscoveryBottomNav = () => {
           )
         }
 
-        return <DiscoveryBottomNavButton key={item.label} item={item} />
+        return (
+          <DiscoveryBottomNavButton
+            key={item.label}
+            item={item}
+            variant={item.key === BottomNavItemKey.ops ? 'outline' : 'ghost'}
+            colorScheme={item.key === BottomNavItemKey.ops ? 'neutral1' : undefined}
+          />
+        )
       })}
     </BottomNavBarContainer>
   )
@@ -106,7 +126,7 @@ type DiscoveryBottomNavButtonProps = {
 } & ButtonProps
 
 const DiscoveryBottomNavButton = ({ item, ...rest }: DiscoveryBottomNavButtonProps) => {
-  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+  const bottomNavLabelColor = 'black'
 
   return (
     <Button

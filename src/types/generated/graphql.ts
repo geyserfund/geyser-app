@@ -4426,8 +4426,10 @@ export type ProjectsGetWhereInput = {
   categories?: InputMaybe<Array<ProjectCategory>>;
   category?: InputMaybe<ProjectCategory>;
   countryCode?: InputMaybe<Scalars['String']['input']>;
+  countryCodes?: InputMaybe<Array<Scalars['String']['input']>>;
   fieldPartnerUserId?: InputMaybe<Scalars['BigInt']['input']>;
   fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
+  goalReached?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;
   ids?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   isCircularGrant?: InputMaybe<Scalars['Boolean']['input']>;
@@ -10794,6 +10796,17 @@ export type LandingCircularGrantProjectsSectionQueryVariables = Exact<{ [key: st
 
 
 export type LandingCircularGrantProjectsSectionQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
+      { __typename?: 'Project' }
+      & LandingProjectCardProjectFragment
+    )> } };
+
+export type LandingCircularGrantsByFilterQueryVariables = Exact<{
+  where: ProjectsGetWhereInput;
+  take: Scalars['Int']['input'];
+}>;
+
+
+export type LandingCircularGrantsByFilterQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
       { __typename?: 'Project' }
       & LandingProjectCardProjectFragment
     )> } };
@@ -17572,6 +17585,51 @@ export type LandingCircularGrantProjectsSectionQueryHookResult = ReturnType<type
 export type LandingCircularGrantProjectsSectionLazyQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionLazyQuery>;
 export type LandingCircularGrantProjectsSectionSuspenseQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionSuspenseQuery>;
 export type LandingCircularGrantProjectsSectionQueryResult = Apollo.QueryResult<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>;
+export const LandingCircularGrantsByFilterDocument = gql`
+    query LandingCircularGrantsByFilter($where: ProjectsGetWhereInput!, $take: Int!) {
+  projectsGet(
+    input: {orderBy: [{direction: desc, field: launchedAt}], where: $where, pagination: {take: $take}}
+  ) {
+    projects {
+      ...LandingProjectCardProject
+    }
+  }
+}
+    ${LandingProjectCardProjectFragmentDoc}`;
+
+/**
+ * __useLandingCircularGrantsByFilterQuery__
+ *
+ * To run a query within a React component, call `useLandingCircularGrantsByFilterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLandingCircularGrantsByFilterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLandingCircularGrantsByFilterQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      take: // value for 'take'
+ *   },
+ * });
+ */
+export function useLandingCircularGrantsByFilterQuery(baseOptions: Apollo.QueryHookOptions<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables> & ({ variables: LandingCircularGrantsByFilterQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>(LandingCircularGrantsByFilterDocument, options);
+      }
+export function useLandingCircularGrantsByFilterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>(LandingCircularGrantsByFilterDocument, options);
+        }
+export function useLandingCircularGrantsByFilterSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>(LandingCircularGrantsByFilterDocument, options);
+        }
+export type LandingCircularGrantsByFilterQueryHookResult = ReturnType<typeof useLandingCircularGrantsByFilterQuery>;
+export type LandingCircularGrantsByFilterLazyQueryHookResult = ReturnType<typeof useLandingCircularGrantsByFilterLazyQuery>;
+export type LandingCircularGrantsByFilterSuspenseQueryHookResult = ReturnType<typeof useLandingCircularGrantsByFilterSuspenseQuery>;
+export type LandingCircularGrantsByFilterQueryResult = Apollo.QueryResult<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>;
 export const LandingRegionalProjectsSectionDocument = gql`
     query LandingRegionalProjectsSection($countryCode: String!) {
   projectsGet(

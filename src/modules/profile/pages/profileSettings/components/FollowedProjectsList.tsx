@@ -52,8 +52,9 @@ export const FollowedProjectsList = () => {
             {filteredProjects.map((project) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
+                layout
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 style={{ width: '100%' }}
               >

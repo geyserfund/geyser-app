@@ -15,15 +15,7 @@ export const NewsletterSignup = (props: StackProps) => {
   const bodyColor = 'neutralAlpha.11'
 
   return (
-    <CardLayout
-      w="full"
-      alignSelf="center"
-      spacing={6}
-      padding={8}
-      borderColor={borderColor}
-      bg={bgColor}
-      {...props}
-    >
+    <CardLayout w="full" alignSelf="center" spacing={6} padding={8} borderColor={borderColor} bg={bgColor} {...props}>
       <VStack spacing={3} textAlign="left" align="flex-start" w="full">
         <HStack spacing={3} align="center" justify="flex-start" w="full">
           <Icon as={PiEnvelopeSimple} boxSize={9} color={iconColor} />
@@ -33,7 +25,7 @@ export const NewsletterSignup = (props: StackProps) => {
         </HStack>
         <Body size="md" color={bodyColor} textAlign="left" w="full">
           {t(
-            'Join our newsletter to stay up to date with latest adoption news across education, culture, art, circular economies and a lot more. Your weekly breath of fresh air and hope right in your inbox.',
+            'Join our newsletter for stories about trusted local partners, Circular Grants, Regional Partner Funds, and the people building stronger local economies with Bitcoin.',
           )}
         </Body>
       </VStack>

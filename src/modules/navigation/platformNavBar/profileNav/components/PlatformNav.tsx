@@ -4,27 +4,15 @@ import { useLocation } from 'react-router'
 
 import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { AnimatedNavSlide, AnimatedNavSlideItem } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
-import { CampaignIconUrl, FundraiserIconUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
+import { ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 
 export const PlatformNav = () => {
   const location = useLocation()
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonDimension = '50px'
-    const campaignButtonDimension = buttonDimension
     const marketplaceButtonDimension = '55px'
     const buttonList = [
-      {
-        name: 'Fundraisers',
-        path: '/fundraisers',
-        icon: <Image src={FundraiserIconUrl} height={buttonDimension} width={buttonDimension} />,
-      },
-      {
-        name: 'Campaigns',
-        path: '/campaigns',
-        icon: <Image src={CampaignIconUrl} height={campaignButtonDimension} width={campaignButtonDimension} />,
-      },
-
       {
         name: 'Shops',
         path: '/products',

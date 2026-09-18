@@ -11,6 +11,12 @@ export enum PathName {
   contributor = 'contributor',
   grants = 'grants',
   impactFunds = 'impact-fund',
+  opsFund = 'ops-fund',
+  about = 'about',
+  aboutFieldPartners = 'field-partners',
+  aboutWhereGeyserWorks = 'where-geyser-works',
+  aboutImpact = 'impact',
+  aboutDueDiligence = 'due-diligence',
   legacyImpactFunds = 'impact-funds',
   microLending = 'micro-loans',
   circularGrants = 'circular-grants',
@@ -155,8 +161,6 @@ export enum PathName {
   fundingSuccess = 'success',
   fundingFailedCallback = 'failed-callback',
   badges = 'badges',
-  about = 'about',
-
   category = 'category',
   subCategory = 'subcategory',
 
@@ -236,6 +240,8 @@ const pathsMap = {
   discoveryImpactFundsWorkshops: () => `/${PathName.impactFunds}/crowdfunding-workshops`,
   discoveryMicroLending: () => `/${PathName.microLending}`,
   discoveryCircularGrants: () => `/${PathName.impactFunds}/${PathName.circularGrants}`,
+  discoveryCircularGrantsAfrica: () => `/${PathName.impactFunds}/${PathName.circularGrants}/africa`,
+  discoveryCircularGrantsLatinAmerica: () => `/${PathName.impactFunds}/${PathName.circularGrants}/latin-america`,
   discoveryCircularGrantsAfribitCaseStudy: () =>
     `/${PathName.impactFunds}/${PathName.circularGrants}/${PathName.afribitCaseStudy}`,
   legacyDiscoveryImpactFunds: () => `/${PathName.legacyImpactFunds}`,
@@ -471,7 +477,12 @@ const pathsMap = {
 
   badges: () => `/${PathName.badges}`,
 
-  about: () => `${AboutGeyserOrigin}`,
+  about: () => `/${PathName.about}`,
+  aboutFieldPartners: () => `/${PathName.about}/${PathName.aboutFieldPartners}`,
+  aboutWhereGeyserWorks: () => `/${PathName.about}/${PathName.aboutWhereGeyserWorks}`,
+  aboutImpact: () => `/${PathName.about}/${PathName.aboutImpact}`,
+  aboutDueDiligence: () => `/${PathName.about}/${PathName.aboutDueDiligence}`,
+  opsFund: () => `/${PathName.opsFund}`,
   legalTerms: () => `/${PathName.legal}/terms`,
   legalPrivacy: () => `/${PathName.legal}/privacy`,
 }

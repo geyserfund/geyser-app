@@ -27,7 +27,7 @@ const AFRIBIT_WORKSHOP_DESCRIPTION =
   'Afribit workshop activity shows the next step after education: meeting entrepreneurs, capturing their stories, and helping local businesses become fundable campaigns.'
 const BITCOIN_KAMPALA_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/embed/LlnZiT4DpuY'
 const AFRIBIT_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/embed/pU1KxP0ddng'
-const workshopDecks = [
+export const impactFundWorkshopDecks = [
   {
     title: 'Bitcoin Crowdfunding Workshops - EN.pdf',
     description: 'English workshop deck',
@@ -193,7 +193,7 @@ export const ImpactFundsWorkshopsPage = () => {
               </Body>
             </VStack>
             <VStack align="stretch" spacing={4}>
-              {workshopDecks.map((deck) => (
+              {impactFundWorkshopDecks.map((deck) => (
                 <WorkshopDownloadRow key={deck.title} colors={colors} deck={deck} />
               ))}
             </VStack>
@@ -458,7 +458,13 @@ const WorkshopVideoCard = ({
   </Flex>
 )
 
-const WorkshopDownloadRow = ({ colors, deck }: { colors: WorkshopColors; deck: (typeof workshopDecks)[number] }) => (
+const WorkshopDownloadRow = ({
+  colors,
+  deck,
+}: {
+  colors: WorkshopColors
+  deck: (typeof impactFundWorkshopDecks)[number]
+}) => (
   <Flex
     align="center"
     justify="space-between"

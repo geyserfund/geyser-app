@@ -1,73 +1,35 @@
 import { useQuery } from '@apollo/client'
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { fetchCharityProjectsData, fetchFeaturedProject } from '@/api/airtable.ts'
+import { fetchFeaturedProject } from '@/api/airtable.ts'
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
+import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import type { USDCents } from '@/types/index.ts'
-import {
-  LeaderboardPeriod,
-  ProjectCategory,
-  useGetUserIpCountryQuery,
-  useImpactFundsQuery,
-  useLandingRegionalProjectsSectionQuery,
-  useLeaderboardGlobalProjectsQuery,
-} from '@/types/index.ts'
+import { ProjectsGetWhereInputStatus, useImpactFundsQuery } from '@/types/index.ts'
 import { getShortAmountLabel } from '@/utils/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
-import {
-  QUERY_LANDING_ABOVE_FOLD,
-  QUERY_LANDING_ANNOUNCEMENTS,
-  QUERY_LANDING_CATEGORY_SECTION,
-  QUERY_LANDING_OTHER_SECTION,
-} from '../../../graphql/landingPageQueries.ts'
-import {
-  LandingAboveFoldQueryData,
-  LandingAnnouncementsQueryData,
-  LandingCategorySectionQueryData,
-  LandingCategorySectionQueryVariables,
-  LandingOtherSectionQueryData,
-} from '../../../graphql/landingPageTypes.ts'
-import { TopProjects } from './components/TopProjects.tsx'
+import { QUERY_LANDING_ABOVE_FOLD, QUERY_LANDING_ANNOUNCEMENTS } from '../../../graphql/landingPageQueries.ts'
+import { LandingAboveFoldQueryData, LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
 import { ActiveImpactFunds } from './sections/ActiveImpactFunds.tsx'
-import { CharityProjects } from './sections/CharityProjects.tsx'
-import { CategoryKey, CuratedProjects } from './sections/CuratedProjects.tsx'
+import { type CircularGrantLandingFilter, CircularGrantFilterBar } from './sections/CircularGrantFilterBar.tsx'
+import { CircularGrantProjects } from './sections/CircularGrantProjects.tsx'
+import { CircularGrantSuccessStory } from './sections/CircularGrantSuccessStory.tsx'
+import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
 import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
-import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
-import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
-import { CircularGrantProjects } from './sections/CircularGrantProjects.tsx'
-
-const CATEGORY_SECTION_GROUP_SIZE = 2
-const LANDING_CATEGORY_ORDER = [
-  ProjectCategory.Education,
-  ProjectCategory.Community,
-  ProjectCategory.Culture,
-  ProjectCategory.Tool,
-  ProjectCategory.Cause,
-] as const
 
 const CURATED_PROJECTS_COUNT = 6
-const CURATED_CATEGORY_INPUT: Record<Exclude<CategoryKey, 'featured'>, ProjectCategory> = {
-  community: ProjectCategory.Community,
-  culture: ProjectCategory.Culture,
-  education: ProjectCategory.Education,
-  tools: ProjectCategory.Tool,
-}
 
 type FeaturedAirtableResponse = {
   records: Array<{ fields: { Name?: string; Type?: string } }>
-}
-
-type CharityAirtableResponse = {
-  records: Array<{ fields: { projectId?: number } }>
 }
 
 const normalizeProjectName = (name: string) => name.replace(/[^a-z0-9]/gi, '')
@@ -82,43 +44,16 @@ const sortProjectsByNames = <T extends { name: string }>(projects: T[], names: s
   )
 }
 
-const sortProjectsByIds = <T extends { id: string | number }>(projects: T[], ids: number[]) => {
-  const order = new Map(ids.map((id, index) => [String(id), index]))
-
-  return [...projects].sort(
-    (firstProject, secondProject) =>
-      (order.get(String(firstProject.id)) ?? Number.MAX_SAFE_INTEGER) -
-      (order.get(String(secondProject.id)) ?? Number.MAX_SAFE_INTEGER),
-  )
-}
-
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
-  const [activeCuratedCategory, setActiveCuratedCategory] = useState<CategoryKey>('featured')
+  const [circularGrantFilter, setCircularGrantFilter] = useState<CircularGrantLandingFilter>('featured')
   const [featuredProjectNames, setFeaturedProjectNames] = useState<string[]>([])
   const [featuredProjectsLoading, setFeaturedProjectsLoading] = useState(true)
   const [featuredProjectsError, setFeaturedProjectsError] = useState(false)
-  const [charityProjectIds, setCharityProjectIds] = useState<number[]>([])
-  const [charityProjectsLoading, setCharityProjectsLoading] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
   const { donateModalElement } = useImpactFundsDonateModal()
   const { getSatoshisFromUSDCents } = useBTCConverter()
   const { data: impactFundsData } = useImpactFundsQuery()
-
-  const categoryGroups = LANDING_CATEGORY_ORDER.reduce<(typeof LANDING_CATEGORY_ORDER)[number][][]>(
-    (groups, category, index) => {
-      const groupIndex = Math.floor(index / CATEGORY_SECTION_GROUP_SIZE)
-
-      if (!groups[groupIndex]) {
-        groups[groupIndex] = []
-      }
-
-      groups[groupIndex].push(category)
-
-      return groups
-    },
-    [],
-  )
 
   const latinAmericaImpactFund = impactFundsData?.impactFunds.find((fund) => fund.name === 'latam-impact-fund')
   const labifCommittedAmount = (() => {
@@ -157,25 +92,6 @@ export const DefaultView = () => {
     }
   }, [])
 
-  const loadCharityProjects = useCallback(async () => {
-    setCharityProjectsLoading(true)
-
-    try {
-      const response = (await fetchCharityProjectsData()) as CharityAirtableResponse
-      const projectIds = response.records
-        .map((record) => record.fields.projectId)
-        .filter((projectId): projectId is number => Boolean(projectId))
-
-      setCharityProjectIds(
-        projectIds.length > CURATED_PROJECTS_COUNT
-          ? [...projectIds].sort(() => Math.random() - 0.5).slice(0, CURATED_PROJECTS_COUNT)
-          : projectIds,
-      )
-    } finally {
-      setCharityProjectsLoading(false)
-    }
-  }, [])
-
   useEffect(() => {
     loadFeaturedProjects()
   }, [loadFeaturedProjects])
@@ -189,12 +105,6 @@ export const DefaultView = () => {
     return () => clearTimeout(timer)
   }, [])
 
-  useEffect(() => {
-    if (showBelowTheFold && charityProjectIds.length === 0 && !charityProjectsLoading) {
-      loadCharityProjects()
-    }
-  }, [charityProjectIds.length, charityProjectsLoading, loadCharityProjects, showBelowTheFold])
-
   const {
     data: featuredProjectsData,
     error: featuredProjectsQueryError,
@@ -204,67 +114,20 @@ export const DefaultView = () => {
     skip: featuredProjectNames.length === 0,
     variables: {
       input: {
-        where: { names: featuredProjectNames },
+        where: {
+          names: featuredProjectNames,
+          isCircularGrant: true,
+          statuses: [ProjectsGetWhereInputStatus.Active, ProjectsGetWhereInputStatus.Closed],
+        },
         pagination: { take: featuredProjectNames.length },
       },
     },
   })
 
-  const activeCuratedCategoryInput =
-    activeCuratedCategory === 'featured' ? undefined : CURATED_CATEGORY_INPUT[activeCuratedCategory]
-  const {
-    data: categoryRowsData,
-    error: categoryRowsError,
-    loading: categoryRowsLoading,
-    refetch: refetchCategoryRows,
-  } = useLeaderboardGlobalProjectsQuery({
-    skip: !activeCuratedCategoryInput,
-    variables: {
-      input: {
-        top: CURATED_PROJECTS_COUNT,
-        period: LeaderboardPeriod.Month,
-        category: activeCuratedCategoryInput,
-      },
-    },
-  })
-  const categoryProjectRows = useMemo(
-    () => categoryRowsData?.leaderboardGlobalProjectsGet ?? [],
-    [categoryRowsData?.leaderboardGlobalProjectsGet],
-  )
-  const categoryProjectNames = useMemo(
-    () => categoryProjectRows.map((projectRow) => projectRow.projectName),
-    [categoryProjectRows],
-  )
-  const {
-    data: categoryProjectsData,
-    error: categoryProjectsError,
-    loading: categoryProjectsLoading,
-    refetch: refetchCategoryProjects,
-  } = useQuery<LandingAboveFoldQueryData>(QUERY_LANDING_ABOVE_FOLD, {
-    skip: categoryProjectNames.length === 0,
-    variables: {
-      input: {
-        where: { names: categoryProjectNames },
-        pagination: { take: categoryProjectNames.length },
-      },
-    },
-  })
   const featuredProjects = useMemo(
     () => sortProjectsByNames(featuredProjectsData?.projectsGet.projects ?? [], featuredProjectNames),
     [featuredProjectNames, featuredProjectsData?.projectsGet.projects],
   )
-  const categoryProjects = useMemo(
-    () => sortProjectsByNames(categoryProjectsData?.projectsGet.projects ?? [], categoryProjectNames),
-    [categoryProjectNames, categoryProjectsData?.projectsGet.projects],
-  )
-  const {
-    data: otherSectionData,
-    error: otherSectionError,
-    loading: otherSectionLoading,
-    refetch: refetchOtherSection,
-  } = useQuery<LandingOtherSectionQueryData>(QUERY_LANDING_OTHER_SECTION, {
-    skip: !showBelowTheFold,
-  })
   const {
     data: announcementsData,
     error: announcementsError,
@@ -273,30 +136,6 @@ export const DefaultView = () => {
   } = useQuery<LandingAnnouncementsQueryData>(QUERY_LANDING_ANNOUNCEMENTS, {
     skip: !showBelowTheFold,
   })
-  const { data: charityProjectsData, loading: charityProjectsQueryLoading } = useQuery<LandingAboveFoldQueryData>(
-    QUERY_LANDING_ABOVE_FOLD,
-    {
-      skip: !showBelowTheFold || charityProjectIds.length === 0,
-      variables: {
-        input: {
-          where: { ids: charityProjectIds },
-          pagination: { take: charityProjectIds.length },
-        },
-      },
-    },
-  )
-  const charityProjects = useMemo(
-    () => sortProjectsByIds(charityProjectsData?.projectsGet.projects ?? [], charityProjectIds),
-    [charityProjectIds, charityProjectsData?.projectsGet.projects],
-  )
-  const { data: userIpCountryData, loading: userIpCountryLoading } = useGetUserIpCountryQuery({
-    skip: !showBelowTheFold,
-  })
-  const { data: regionalProjectsData, loading: regionalProjectsLoading } = useLandingRegionalProjectsSectionQuery({
-    skip: !showBelowTheFold || userIpCountryLoading || !userIpCountryData?.userIpCountry,
-    variables: { countryCode: userIpCountryData?.userIpCountry ?? '' },
-  })
-
   return (
     <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
       {donateModalElement}
@@ -316,131 +155,66 @@ export const DefaultView = () => {
             keywords: defaultSeoContent.keywords,
             items: [
               {
-                name: 'Bitcoin Campaigns',
-                path: getPath('discoveryCampaigns'),
-                description: 'Discover new and upcoming all-or-nothing Bitcoin project ideas.',
+                name: 'Circular Grants',
+                path: getPath('discoveryCircularGrants'),
+                description: 'Back vetted local projects with reusable, debt-free capital.',
               },
               {
-                name: 'Bitcoin Fundraisers',
-                path: getPath('discoveryFundraisers'),
-                description: 'Support creator and humanitarian fundraisers worldwide.',
-              },
-              {
-                name: 'Impact Funds',
+                name: 'Regional Partner Fund',
                 path: getPath('discoveryImpactFunds'),
-                description: 'Explore impact-focused Bitcoin funding programs and outcomes.',
+                description: 'Explore regional partner funding programs and outcomes.',
               },
             ],
           })}
         </script>
       </Head>
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <CuratedProjects
-          activeCategory={activeCuratedCategory}
-          categoryError={Boolean(categoryRowsError || categoryProjectsError)}
-          categoryLoading={categoryRowsLoading || categoryProjectsLoading}
-          categoryProjectRows={categoryProjectRows}
-          categoryProjects={categoryProjects}
-          featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
-          featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
-          featuredProjects={featuredProjects}
-          onCategoryChange={setActiveCuratedCategory}
-          onRetryCategory={() => {
-            refetchCategoryRows()
-            if (categoryProjectNames.length > 0) {
-              refetchCategoryProjects()
-            }
-          }}
-          onRetryFeatured={() => {
-            loadFeaturedProjects()
-            if (featuredProjectNames.length > 0) {
-              refetchFeaturedProjects()
-            }
-          }}
-        />
+        <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
 
-        <CircularGrantProjects />
+        {circularGrantFilter === 'featured' ? (
+          <CuratedProjects
+            featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
+            featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
+            featuredProjects={featuredProjects}
+            onRetryFeatured={() => {
+              loadFeaturedProjects()
+              if (featuredProjectNames.length > 0) {
+                refetchFeaturedProjects()
+              }
+            }}
+          />
+        ) : (
+          <CircularGrantProjects
+            title={circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'}
+            take={6}
+            where={{
+              ...(circularGrantFilter === 'africa'
+                ? { region: 'Africa' }
+                : { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }),
+            }}
+            includeSuccessful
+          />
+        )}
+
+        <CircularGrantSuccessStory />
 
         <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} />
 
         {showBelowTheFold && (
           <>
-            {categoryGroups.map((categoryGroup, index) => (
-              <Fragment key={`landing-category-group-${index}`}>
-                {categoryGroup.map((category) => (
-                  <LandingCategorySectionContainer key={category} category={category} />
-                ))}
-                {index === categoryGroups.length - 1 && (
-                  <ProjectsDisplayMostFundedThisWeek
-                    title={t('Other fundraisers')}
-                    categories={[ProjectCategory.Advocacy, ProjectCategory.Other]}
-                    noRightContent
-                    error={Boolean(otherSectionError)}
-                    latestProjects={otherSectionData?.latest.projects}
-                    loading={otherSectionLoading}
-                    onRetry={() => refetchOtherSection()}
-                    posts={otherSectionData?.posts}
-                  />
-                )}
-                {index === 0 && (
-                  <>
-                    <GeyserNewsAndAnnouncements
-                      giveawayEndAt={announcementsData?.acelerandoVipLeaderboard.endAt}
-                      giveawayError={Boolean(announcementsError)}
-                      giveawayLoading={announcementsLoading}
-                      onGiveawayRetry={() => refetchAnnouncements()}
-                      projectAnnouncements={announcementsData?.geyserAnnouncements ?? []}
-                    />
-                    <NewsletterSignup />
-                  </>
-                )}
-                {index === 1 && (
-                  <CharityProjects
-                    loading={charityProjectsLoading || charityProjectsQueryLoading}
-                    projects={charityProjects}
-                  />
-                )}
-                {index === 2 && (
-                  <>
-                    <ProjectsInYourRegion
-                      loading={userIpCountryLoading || regionalProjectsLoading}
-                      projects={regionalProjectsData?.projectsGet.projects}
-                    />
-                    <HowGeyserWorks />
-                    <HeroesMainPage />
-                  </>
-                )}
-                {index === 3 && <TopProjects />}
-              </Fragment>
-            ))}
+            <HowGeyserWorks />
+            <HeroesMainPage />
+            <GeyserNewsAndAnnouncements
+              giveawayEndAt={announcementsData?.acelerandoVipLeaderboard.endAt}
+              giveawayError={Boolean(announcementsError)}
+              giveawayLoading={announcementsLoading}
+              onGiveawayRetry={() => refetchAnnouncements()}
+              projectAnnouncements={announcementsData?.geyserAnnouncements ?? []}
+            />
             <NewsletterSignup />
           </>
         )}
       </VStack>
     </VStack>
-  )
-}
-
-const LandingCategorySectionContainer = ({ category }: { category: ProjectCategory }) => {
-  const { data, error, loading, refetch } = useQuery<
-    LandingCategorySectionQueryData,
-    LandingCategorySectionQueryVariables
-  >(QUERY_LANDING_CATEGORY_SECTION, {
-    variables: {
-      category,
-      mostFundedCategory: category,
-    },
-  })
-
-  return (
-    <ProjectsDisplayMostFundedThisWeek
-      category={category}
-      error={Boolean(error)}
-      latestProjects={data?.latest.projects}
-      loading={loading}
-      onRetry={() => refetch()}
-      posts={data?.posts}
-      trendingGroups={data?.trending}
-    />
   )
 }

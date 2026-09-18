@@ -1,28 +1,27 @@
-import { Badge, Box, Divider, HStack, Link as ChakraLink, MenuItem, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Divider, HStack, Icon, Link as ChakraLink, MenuItem, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import { Fragment } from 'react'
 import type { IconType } from 'react-icons'
-import {
-  PiArrowUpRight,
-  PiClockCountdown,
-  PiHandCoins,
-  PiHouse,
-  PiNewspaper,
-  PiRocket,
-  PiTrophy,
-  PiUserCircle,
-} from 'react-icons/pi'
+import { PiArrowUpRight, PiHandHeart, PiHandshake, PiHouse, PiRocket, PiStack, PiUserCircle } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import {
+  getAboutNavDropdownSections,
+  getDonateNavDropdownSections,
+} from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { FAQUrl, getPath, GeyserHackathonsUrl } from '@/shared/constants/index.ts'
+import { FAQUrl, getPath, GeyserHackathonsUrl, ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/index.ts'
 
-import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
+import type { NavDropdownMenuItem, NavDropdownMenuSection } from '../../components/navDropdown/NavDropdownMenu.tsx'
 import { ModeChange } from './components/ModeChange'
+
+const HAMBURGER_ICON_SIZE = '18px'
+const HAMBURGER_ICON_COLOR = 'black'
 
 type ProfileNavContentProps = {
   onNavigate?: () => void
@@ -30,34 +29,35 @@ type ProfileNavContentProps = {
 }
 
 type MobileNavigationItem = {
-  badge?: {
-    backgroundColor: string
-    label: string
-    textColor: string
-  }
+  emphasized?: boolean
+  href?: string
   icon: IconType
   label: string
-  path: string
+  path?: string
 }
 
 export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNavContentProps) => {
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
-  const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
-  const createProjectButtonColor = useColorModeValue('black', 'white')
+  const donateSections = getDonateNavDropdownSections(t)
+  const aboutSections = getAboutNavDropdownSections(t).map((section) => ({
+    ...section,
+    items: section.items
+      .filter((item) => !item.to?.includes('#field-partners') && !item.to?.includes('#impact'))
+      .map((item) => ({ ...item, trailingIcon: undefined })),
+  }))
+  const hamburgerSections = [...donateSections, ...aboutSections]
   const mobileNavigationItems: MobileNavigationItem[] = [
     { label: 'Home', path: getPath('discoveryLanding'), icon: PiHouse },
     { label: 'My projects', path: getPath('discoveryMyProjects'), icon: PiRocket },
-    { label: 'Fundraisers', path: getPath('discoveryFundraisers'), icon: PiHandCoins },
-    { label: 'Campaigns', path: getPath('discoveryCampaigns'), icon: PiClockCountdown },
     {
-      label: 'Impact funds',
-      path: getPath('discoveryImpactFunds'),
-      icon: PiTrophy,
-      badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
+      label: 'Support Geyser',
+      path: getPath('fundingStart', 'geyser'),
+      icon: PiHandHeart,
+      emphasized: true,
     },
-    { label: 'News', path: getPath('discoveryNews'), icon: PiNewspaper },
+    { label: 'Become a Field Partner', href: ImpactFundsFieldPartnerApplicationUrl, icon: PiHandshake },
   ]
 
   return (
@@ -79,7 +79,7 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
           {isLoggedIn && (
             <MenuItem as={Link} to={getPath('heroProfile', user.heroId)} onClick={onNavigate}>
               <HStack position="relative">
-                <PiUserCircle fontSize="18px" />
+                <Icon as={PiUserCircle} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
                 <Body size="md">{t('Profile')}</Body>
               </HStack>
             </MenuItem>
@@ -87,56 +87,57 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
 
           {mobileNavigationItems.map((item) => {
             const activityDot = item.label === 'My projects' ? myProjectActivityDot : false
+            const itemContent = (
+              <HStack position="relative" w="full" justify="space-between" spacing={3}>
+                <HStack spacing={2.5}>
+                  <Icon as={item.icon} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
+                  <Body size="md">{t(item.label)}</Body>
+                </HStack>
+                {activityDot ? (
+                  <Box
+                    position="absolute"
+                    top={2}
+                    right={'-4'}
+                    borderRadius="50%"
+                    backgroundColor="error.9"
+                    height="6px"
+                    width="6px"
+                  />
+                ) : null}
+              </HStack>
+            )
+            const itemStyle = item.emphasized
+              ? {
+                  backgroundColor: 'primary1.3',
+                  borderRadius: 'lg',
+                  _hover: { backgroundColor: 'primary1.4' },
+                }
+              : undefined
+
+            if (item.href) {
+              return (
+                <MenuItem
+                  key={item.label}
+                  as={ChakraLink}
+                  href={item.href}
+                  isExternal
+                  onClick={onNavigate}
+                  {...itemStyle}
+                >
+                  {itemContent}
+                </MenuItem>
+              )
+            }
 
             return (
-              <MenuItem key={item.label} as={Link} to={item.path} onClick={onNavigate}>
-                <HStack position="relative" w="full" justify="space-between" spacing={3}>
-                  <HStack spacing={2.5}>
-                    <item.icon fontSize="18px" />
-                    <Body size="md">{t(item.label)}</Body>
-                  </HStack>
-                  {item.badge ? (
-                    <Badge
-                      px={2.5}
-                      py={0.5}
-                      minWidth="54px"
-                      textAlign="center"
-                      borderRadius="5px"
-                      textTransform="lowercase"
-                      fontSize="xs"
-                      fontWeight={600}
-                      backgroundColor={item.badge.backgroundColor}
-                      color={item.badge.textColor}
-                    >
-                      {item.badge.label}
-                    </Badge>
-                  ) : null}
-                  {activityDot ? (
-                    <Box
-                      position="absolute"
-                      top={2}
-                      right={'-4'}
-                      borderRadius="50%"
-                      backgroundColor="error.9"
-                      height="6px"
-                      width="6px"
-                    />
-                  ) : null}
-                </HStack>
+              <MenuItem key={item.label} as={Link} to={item.path} onClick={onNavigate} {...itemStyle}>
+                {itemContent}
               </MenuItem>
             )
           })}
         </VStack>
         <Divider borderColor="neutral1.6" />
-        <MenuItem _active={{}} _focus={{}} _hover={{}}>
-          <CreateProjectButton
-            w="full"
-            color={createProjectButtonColor}
-            borderColor={createProjectButtonColor}
-            _hover={{ color: createProjectButtonColor, borderColor: createProjectButtonColor }}
-            _active={{ color: createProjectButtonColor, borderColor: createProjectButtonColor }}
-          />
-        </MenuItem>
+        <SideNavigationSections sections={hamburgerSections} onNavigate={onNavigate} />
         {isLoggedIn ? (
           <>
             <Divider borderColor="neutral1.6" />
@@ -170,11 +171,17 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={FAQUrl} _focusVisible={{}} gap={2}>
           <Body size="md">{t('FAQ')}</Body>
-          <PiArrowUpRight fontSize="18px" />
+          <Icon as={PiArrowUpRight} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserHackathonsUrl} _focusVisible={{}} gap={2}>
           <Body size="md">{t('Hackathons')}</Body>
-          <PiArrowUpRight fontSize="18px" />
+          <Icon as={PiArrowUpRight} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
+        </MenuItem>
+        <MenuItem as={Link} to={getPath('discoveryProjects')} onClick={onNavigate}>
+          <HStack spacing={2.5}>
+            <Icon as={PiStack} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
+            <Body size="md">{t('Browse legacy projects')}</Body>
+          </HStack>
         </MenuItem>
       </VStack>
 
@@ -186,3 +193,44 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
     </VStack>
   )
 }
+
+const SideNavigationSections = ({
+  sections,
+  onNavigate,
+}: {
+  sections: NavDropdownMenuSection[]
+  onNavigate?: () => void
+}) => (
+  <VStack w="full" spacing={4} align="stretch">
+    {sections.map((section, sectionIndex) => (
+      <Fragment key={section.title ?? `section-${sectionIndex}`}>
+        {sectionIndex > 0 ? <Divider borderColor="neutral1.6" /> : null}
+        <VStack w="full" spacing={2} align="stretch">
+          {section.items.map((item: NavDropdownMenuItem) => {
+            const itemContent = (
+              <HStack spacing={2.5} width="full">
+                {item.leadingIcon ? (
+                  <Icon as={item.leadingIcon} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
+                ) : null}
+                <Body size="md">{item.title}</Body>
+                {item.trailingIcon ? (
+                  <Icon as={item.trailingIcon} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
+                ) : null}
+              </HStack>
+            )
+
+            return item.href ? (
+              <MenuItem key={item.title} as={ChakraLink} href={item.href} isExternal onClick={onNavigate}>
+                {itemContent}
+              </MenuItem>
+            ) : (
+              <MenuItem key={item.title} as={Link} to={item.to} onClick={onNavigate}>
+                {itemContent}
+              </MenuItem>
+            )
+          })}
+        </VStack>
+      </Fragment>
+    ))}
+  </VStack>
+)

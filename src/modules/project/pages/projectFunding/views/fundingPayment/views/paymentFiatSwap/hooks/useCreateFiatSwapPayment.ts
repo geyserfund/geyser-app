@@ -109,7 +109,7 @@ export const useCreateFiatSwapPayment = () => {
       throw new Error('Could not initialize fiat swap payment')
     }
 
-    window.open(checkoutUrl, '_blank')
+    window.open(checkoutUrl, '_blank', 'noopener,noreferrer')
     updateFundingPaymentDetails({
       fiatToLightningSwap,
       ...(requiresLightningToRskSwap && { lightningToRskSwap }),

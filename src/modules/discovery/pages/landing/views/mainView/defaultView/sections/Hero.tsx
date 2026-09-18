@@ -94,10 +94,12 @@ export const Hero = (props: BoxProps): React.ReactNode => {
             color="white"
             w="full"
           >
-            {t('Accelerate global Bitcoin adoption')}
+            {t('Back stronger local economies with Bitcoin')}
           </H1>
           <Body size={{ base: 'lg', lg: 'xl' }} color="whiteAlpha.900" lineHeight={1.6} w="full">
-            {t('Contribute to causes, initiatives and creators that push Bitcoin adoption around the world.')}
+            {t(
+              'Support trusted local partners and projects with reusable capital that keeps working in the community.',
+            )}
           </Body>
         </VStack>
       </Box>

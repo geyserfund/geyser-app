@@ -1014,6 +1014,7 @@ input ProjectsGetWhereInput {
   type: ProjectType
   region: String
   countryCode: String
+  countryCodes: [String!]
   tagIds: [Int!]
   search: String
   category: ProjectCategory
@@ -1023,6 +1024,7 @@ input ProjectsGetWhereInput {
   fieldPartnerUserId: BigInt
   isCircularGrant: Boolean
   aonGoalReached: Boolean
+  goalReached: Boolean
   ownerId: BigInt
 }
 

@@ -78,7 +78,7 @@ export const ProjectBody = () => {
         <TiaContributionRefundNotification />
         <PausedRecurringContributionNotice />
 
-        <ControlPanel />
+        {!loading && Boolean(project.id) && <ControlPanel />}
 
         <Header />
         <FieldPartnerVerificationBanner />
