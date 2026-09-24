@@ -51,9 +51,16 @@ export const MAX_PROJECT_HEADERS = 7
 type ProjectFormProps = {
   form: UseFormReturn<ProjectCreationVariables>
   isEdit: boolean
+  requireLabifCountry?: boolean
+  onLabifCountryBlockedChange?: (blocked: boolean) => void
 }
 
-export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
+export const ProjectForm = ({
+  form,
+  isEdit,
+  requireLabifCountry = false,
+  onLabifCountryBlockedChange,
+}: ProjectFormProps) => {
   const { t } = useTranslation()
 
   const countriesData = useAtomValue(countriesAtom)
@@ -88,11 +95,26 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   )
 
   const projectName = watch('name')
+  const selectedCountryCode = watch('location')
   const debouncedProjectName = useDebounce(projectName, 500)
-  const [getLabifEligibility, { data: labifEligibility }] = useLazyQuery<LabifCountryEligibilityQuery>(
-    QUERY_LABIF_COUNTRY_ELIGIBILITY,
-    { fetchPolicy: 'network-only' },
+  const [getLabifEligibility, { data: labifEligibility, loading: labifEligibilityLoading }] =
+    useLazyQuery<LabifCountryEligibilityQuery>(QUERY_LABIF_COUNTRY_ELIGIBILITY, { fetchPolicy: 'network-only' })
+  const labifCountryIsEligible = labifEligibility?.impactFundLabifCountryEligibility.isEligible
+  const labifCountryBlocked = Boolean(
+    requireLabifCountry && selectedCountryCode && (labifEligibilityLoading || labifCountryIsEligible !== true),
   )
+
+  useEffect(() => {
+    if (!selectedCountryCode) {
+      return
+    }
+
+    getLabifEligibility({ variables: { countryCode: selectedCountryCode } })
+  }, [getLabifEligibility, selectedCountryCode])
+
+  useEffect(() => {
+    onLabifCountryBlockedChange?.(labifCountryBlocked)
+  }, [labifCountryBlocked, onLabifCountryBlockedChange])
 
   useEffect(() => {
     if (debouncedProjectName) {
@@ -374,14 +396,18 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           getOptionLabel={(option: Country) => option.name}
           getOptionValue={(option: Country) => option.code}
           onFocus={() => clearErrors('location')}
-          onChange={(country) => {
-            const countryCode = (country as Country | null)?.code || null
-            getLabifEligibility({ variables: { countryCode } })
-          }}
         />
       </FieldContainer>
 
-      {labifEligibility?.impactFundLabifCountryEligibility.isEligible ? (
+      {requireLabifCountry && selectedCountryCode && labifCountryIsEligible === false ? (
+        <Feedback variant={FeedBackVariant.WARNING} noIcon>
+          <Body size="sm" color="inherit">
+            {t('Projects outside of Latin America cannot apply to the Latin America Bitcoin Impact Fund')}
+          </Body>
+        </Feedback>
+      ) : null}
+
+      {!requireLabifCountry && labifCountryIsEligible ? (
         <Feedback variant={FeedBackVariant.INFO} noIcon>
           <Body size="sm" color="inherit">
             {t('This project may be eligible to receive funding from the Latin America Bitcoin Impact Fund. ')}

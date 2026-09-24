@@ -8,4 +8,12 @@ export const isManagedCircularGrantProject = (project: {
   fundingStrategy?: ProjectFundingStrategy | null
 }) => Boolean(project.isCircularGrant && project.fundingStrategy === ProjectFundingStrategy.TakeItAll)
 
+/** Unlaunched Take-it-all projects that are not Circular Grants. */
+export const isOpenFundingCreationProject = (project: {
+  isCircularGrant?: boolean | null
+  fundingStrategy?: ProjectFundingStrategy | null
+  launchedAt?: string | number | null
+}) =>
+  project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.isCircularGrant && !project.launchedAt
+
 export const canCreateManagedCircularGrant = (isFieldPartner: boolean) => isFieldPartner

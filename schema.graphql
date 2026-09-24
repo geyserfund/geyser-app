@@ -862,6 +862,12 @@ input CreateProjectInput {
   referrerHeroId: String
   fundingStrategy: ProjectFundingStrategy
   isCircularGrant: Boolean
+
+  """
+  True when this project is being created so the owner can apply to LABIF.
+  Open Funding creation is allowed only for that application path.
+  """
+  labifApplication: Boolean
 }
 
 input UpdateProjectInput {

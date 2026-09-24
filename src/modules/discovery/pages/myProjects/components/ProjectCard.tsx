@@ -131,7 +131,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
-  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant)
+  const shouldShowDirectPaymentNotification = Boolean(
+    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+      !isCircularGrant &&
+      !project.directPaymentDetails?.btcAddress &&
+      !project.directPaymentDetails?.lightningAddress,
+  )
 
   /** Get context message or action */
   const renderContextContent = () => {

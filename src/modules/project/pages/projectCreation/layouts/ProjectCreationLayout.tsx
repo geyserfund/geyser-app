@@ -3,7 +3,10 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Outlet } from 'react-router'
 
-import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import {
+  isManagedCircularGrantProject,
+  isOpenFundingCreationProject,
+} from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -20,19 +23,20 @@ export const ProjectCreationLayoutMain = () => {
   const params = useParams<{ projectId: string }>()
 
   const navigate = useNavigate()
-  const isManagedCircularGrant = isManagedCircularGrantProject(project)
+  const canUseCreationFlow =
+    !project.id || isManagedCircularGrantProject(project) || isOpenFundingCreationProject(project)
 
   useEffect(() => {
-    if (!loading && !isMobile && (!project.id || isManagedCircularGrant)) {
+    if (!loading && !isMobile && canUseCreationFlow) {
       navigate(getPath('launchFundingStrategy', params.projectId || 'new'))
     }
-  }, [isManagedCircularGrant, isMobile, loading, navigate, params.projectId, project.id])
+  }, [canUseCreationFlow, isMobile, loading, navigate, params.projectId])
 
   if (loading) {
     return null
   }
 
-  if (project.id && !isManagedCircularGrant) {
+  if (project.id && !canUseCreationFlow) {
     return <DeprecatedProjectCreation />
   }
 
@@ -50,7 +54,7 @@ export const ProjectCreationLayoutDesktop = () => {
     return null
   }
 
-  if (project.id && !isManagedCircularGrantProject(project)) {
+  if (project.id && !isManagedCircularGrantProject(project) && !isOpenFundingCreationProject(project)) {
     return <DeprecatedProjectCreation />
   }
 

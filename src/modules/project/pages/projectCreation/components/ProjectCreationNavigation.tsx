@@ -16,6 +16,10 @@ import {
 import { useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
 
+import {
+  isManagedCircularGrantProject,
+  isOpenFundingCreationProject,
+} from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -52,12 +56,19 @@ const ProjectCreationNavigation = (props: StackProps) => {
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
-      { title: 'Circular Grant', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
+      {
+        title: isManagedCircularGrantProject(project) ? 'Circular Grant' : 'Funding Goal',
+        path: getPath('launchFundingGoal', project?.id),
+        isDisabled: !project.id,
+      },
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
+      ...(isOpenFundingCreationProject(project)
+        ? [{ title: 'Payment details', path: getPath('launchPaymentDetails', project?.id), isDisabled: !project.id }]
+        : []),
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
-    [project?.id],
+    [project],
   )
 
   const activeButtonIndex = useMemo(() => {

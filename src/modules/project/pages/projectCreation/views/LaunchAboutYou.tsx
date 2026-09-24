@@ -10,6 +10,7 @@ import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/index.ts'
 import { SocialConfig } from '@/modules/auth/SocialConfig.tsx'
+import { isOpenFundingCreationProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -45,17 +46,18 @@ export const LaunchAboutYou = () => {
 
   const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
 
+  const requiresPaymentDetails = isOpenFundingCreationProject(project)
+  const nextPath = requiresPaymentDetails
+    ? getPath('launchPaymentDetails', project.id)
+    : getPath('launchFinalize', project.id)
+  const nextStep = requiresPaymentDetails ? ProjectCreationStep.Wallet : ProjectCreationStep.Launch
+
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.AboutYou,
-    getPath('launchFinalize', project.id),
+    nextPath,
   )
 
-  const continueAfterAboutYou = () =>
-    updateProjectWithLastCreationStep(
-      undefined,
-      undefined,
-      ProjectCreationStep.Launch,
-    )
+  const continueAfterAboutYou = () => updateProjectWithLastCreationStep(undefined, undefined, nextStep)
 
   const onLeave = () => {
     if (!project) {

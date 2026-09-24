@@ -344,7 +344,8 @@ export function ImpactFundDetailPage(): React.ReactNode | null {
   )
   const projectDescriptionError = getImpactFundProjectDescriptionError(projectDescription)
   const hasAvailableProjects = availableOwnedProjects.length > 0
-  const shouldDisableApply = isLoggedIn && !hasAvailableProjects
+  const hasOwnedProjects = ownedProjects.length > 0
+  const shouldDisableApply = isLoggedIn && hasOwnedProjects && !hasAvailableProjects
 
   useEffect(() => {
     if (availableOwnedProjects.length === 0) {
@@ -376,14 +377,14 @@ export function ImpactFundDetailPage(): React.ReactNode | null {
       return
     }
 
-    if (!hasAvailableProjects) {
+    if (hasOwnedProjects && !hasAvailableProjects) {
       return
     }
 
     const firstOwnedProjectId = String(availableOwnedProjects[0]?.id || '')
     setSelectedProjectId(firstOwnedProjectId)
     onProjectModalOpen()
-  }, [availableOwnedProjects, hasAvailableProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
+  }, [availableOwnedProjects, hasAvailableProjects, hasOwnedProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
 
   const handleApplyClick = useCallback(() => {
     setImpactFundActionHash(APPLY_HASH)
@@ -2081,7 +2082,13 @@ function ApplicationSubmissionModal({
                       : t("You don't have any projects yet. Create a project to apply for funding.")}
                   </Body>
                   {!hasOwnedProjects && (
-                    <Button as={Link} to={getPath('launchStart')} colorScheme="primary1" size="md" onClick={onClose}>
+                    <Button
+                      as={Link}
+                      to={{ pathname: getPath('launchFundingStrategy', 'new'), search: '?labifApplication=1' }}
+                      colorScheme="primary1"
+                      size="md"
+                      onClick={onClose}
+                    >
                       {t('Create a Project')}
                     </Button>
                   )}

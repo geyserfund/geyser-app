@@ -551,7 +551,10 @@ export const ControlPanel = () => {
         {...resubmitConfirmModal}
       />
 
-      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant && (
+      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+        !isCircularGrant &&
+        !project.directPaymentDetails?.btcAddress &&
+        !project.directPaymentDetails?.lightningAddress && (
         <ControlPanelNotification
           icon={<Icon as={PiWarning} color="warning.9" boxSize="24px" flexShrink={0} />}
           title={t('Add payment details to keep receiving contributions in Bitcoin')}

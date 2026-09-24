@@ -18,6 +18,7 @@ export const routeMatchForAtom =
 
 export const projectCreationRoutesThatNeedStory = [
   getPath('launchAboutYou', PathName.projectId),
+  getPath('launchPaymentDetails', PathName.projectId),
   getPath('launchFinalize', PathName.projectId),
 ]
 

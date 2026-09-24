@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { ProjectStatus } from '@/types/index.ts'
 
 import { getProjectCreationRoute } from '../../../../projectCreation/utils/getProjectCreationRoute.ts'
 
@@ -11,7 +12,7 @@ export const useProjectDraftRedirect = () => {
 
   const { project, loading, isProjectOwner } = useProjectAtom()
 
-  const isDraftProject = !project.launchedAt
+  const isDraftProject = !project.launchedAt && project.status !== ProjectStatus.Active
   const isDraftUrl = location.pathname.includes('/draft')
 
   useEffect(() => {

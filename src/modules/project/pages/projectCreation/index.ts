@@ -5,6 +5,7 @@ import { LaunchFundingGoal } from './views/fundingStrategy/LaunchFundingGoal.tsx
 import { LaunchFundingStrategy } from './views/fundingStrategy/LaunchFundingStrategy.tsx'
 import { Launch } from './views/launch/Launch.tsx'
 import { LaunchAboutYou } from './views/LaunchAboutYou.tsx'
+import { LaunchPaymentDetails } from './views/LaunchPaymentDetails.tsx'
 import { DeprecatedProjectCreation } from './views/DeprecatedProjectCreation.tsx'
 import { LaunchProducts } from './views/LaunchProducts.tsx'
 import { LaunchProjectDetails } from './views/LaunchProjectDetails.tsx'
@@ -14,6 +15,7 @@ import { LaunchStart } from './views/start/LaunchStart.tsx'
 export {
   Launch,
   LaunchAboutYou,
+  LaunchPaymentDetails,
   LaunchFundingGoal,
   LaunchFundingStrategy,
   DeprecatedProjectCreation,

@@ -619,6 +619,8 @@ export type CreateProjectInput = {
   /** Project header images */
   images: Array<Scalars['String']['input']>;
   isCircularGrant?: InputMaybe<Scalars['Boolean']['input']>;
+  /** True when this project is being created so the owner can apply to LABIF. Open Funding creation is allowed only for that application path. */
+  labifApplication?: InputMaybe<Scalars['Boolean']['input']>;
   /** Project links */
   links?: InputMaybe<Array<Scalars['String']['input']>>;
   name: Scalars['String']['input'];
