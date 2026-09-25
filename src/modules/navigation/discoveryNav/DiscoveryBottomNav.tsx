@@ -8,6 +8,7 @@ import {
   getFundraiseNavDropdownItems,
 } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 
@@ -31,12 +32,15 @@ const matchesRoute = (pathname: string, route: string) => pathname === route || 
 
 export const DiscoveryBottomNav = () => {
   const location = useLocation()
+  const canStartProject = useCanStartProject()
 
   const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
   const bottomNavLabelFontSize = 'sm'
   const bottomNavLabelFontWeight = 600
   const donateItems = getDonateNavDropdownItems(t)
-  const fundraiseItems = getFundraiseNavDropdownItems(t, 'mobile')
+  const fundraiseItems = getFundraiseNavDropdownItems(t, 'mobile', {
+    includeStartYourProject: canStartProject,
+  })
 
   const bottomNavItems: BottomNavItem[] = [
     {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router'
 
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { getPath } from '@/shared/constants'
 
 type CreateProjectButtonProps = {
@@ -13,6 +14,12 @@ type CreateProjectButtonProps = {
 
 export const CreateProjectButton = ({ iconOnly, label, noIcon, ...props }: CreateProjectButtonProps) => {
   const { t } = useTranslation()
+  const canStartProject = useCanStartProject()
+
+  if (!canStartProject) {
+    return null
+  }
+
   return (
     <Button
       as={Link}

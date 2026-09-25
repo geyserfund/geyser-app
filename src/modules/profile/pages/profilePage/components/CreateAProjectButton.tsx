@@ -3,10 +3,17 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { getPath } from '../../../../../shared/constants'
 
 export const CreateAProjectButton = (props: ButtonProps) => {
   const { t } = useTranslation()
+  const canStartProject = useCanStartProject()
+
+  if (!canStartProject) {
+    return null
+  }
+
   return (
     <Button
       variant="solid"

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiRocket } from 'react-icons/pi'
 import { Link } from 'react-router'
 
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -11,6 +12,7 @@ export const LaunchNewProjectBanner = () => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
+  const canStartProject = useCanStartProject()
 
   const Direction = isMobile ? VStack : HStack
 
@@ -34,17 +36,19 @@ export const LaunchNewProjectBanner = () => {
           <Body size="sm">{t('Transform your idea into real world projects backed by your community.')}</Body>
         </VStack>
       </HStack>
-      <Button
-        as={Link}
-        to={getPath('launchStart')}
-        size="md"
-        variant="solid"
-        colorScheme="primary1"
-        rightIcon={<PiRocket size="12px" />}
-        width={{ base: '100%', lg: 'auto' }}
-      >
-        {t('Create project')}
-      </Button>
+      {canStartProject ? (
+        <Button
+          as={Link}
+          to={getPath('launchStart')}
+          size="md"
+          variant="solid"
+          colorScheme="primary1"
+          rightIcon={<PiRocket size="12px" />}
+          width={{ base: '100%', lg: 'auto' }}
+        >
+          {t('Create project')}
+        </Button>
+      ) : null}
     </Direction>
   )
 }

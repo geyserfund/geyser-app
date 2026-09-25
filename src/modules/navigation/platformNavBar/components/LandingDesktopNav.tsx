@@ -10,10 +10,12 @@ import {
   getFundraiseNavDropdownItems,
 } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
 /** LandingDesktopNav renders the shared desktop platform navigation cluster. */
 export const LandingDesktopNav = ({ transparentMode = false }: { transparentMode?: boolean }) => {
+  const canStartProject = useCanStartProject()
   const navButtonRadius = { base: '8px', lg: '10px' }
   const navButtonSize = { base: 'md', lg: 'lg' }
   const navButtonFontSize = { lg: 'sm', xl: 'md' }
@@ -59,7 +61,9 @@ export const LandingDesktopNav = ({ transparentMode = false }: { transparentMode
   }, [clearSearchRevealTimeout])
 
   const donateItems = getDonateNavDropdownItems(t)
-  const fundraiseItems = getFundraiseNavDropdownItems(t)
+  const fundraiseItems = getFundraiseNavDropdownItems(t, 'desktop', {
+    includeStartYourProject: canStartProject,
+  })
 
   return (
     <HStack flex={1} spacing={0} minWidth={0} justify="center">

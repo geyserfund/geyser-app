@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { useMemo } from 'react'
 import { PiChartLine, PiRocketLaunch } from 'react-icons/pi'
 
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 
@@ -14,6 +15,7 @@ import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 /** Final conversion section for the launch start playbook page. */
 export const FinalCTASection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
+  const canStartProject = useCanStartProject()
 
   const stats = useMemo(() => getFinalStats(t), [])
 
@@ -37,16 +39,18 @@ export const FinalCTASection = () => {
           </Body>
 
           <HStack spacing={3} flexWrap="wrap" justifyContent="center" width="100%">
-            <Button
-              size="lg"
-              colorScheme="primary1"
-              onClick={handleLauchNowClick}
-              rightIcon={<PiRocketLaunch />}
-              borderRadius="12px"
-              width={{ base: '100%', sm: 'auto' }}
-            >
-              {t('Start your project')}
-            </Button>
+            {canStartProject ? (
+              <Button
+                size="lg"
+                colorScheme="primary1"
+                onClick={handleLauchNowClick}
+                rightIcon={<PiRocketLaunch />}
+                borderRadius="12px"
+                width={{ base: '100%', sm: 'auto' }}
+              >
+                {t('Start your project')}
+              </Button>
+            ) : null}
             <Button
               size="lg"
               variant="outline"

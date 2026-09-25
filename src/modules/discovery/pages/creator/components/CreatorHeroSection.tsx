@@ -2,6 +2,7 @@ import { Box, Button, HStack, useColorModeValue, VStack } from '@chakra-ui/react
 import { t } from 'i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { useLaunchNow } from '@/modules/project/pages/projectCreation/views/start/utils/useLaunchNow.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
@@ -17,6 +18,7 @@ const STATIC_COUNTRIES_REPRESENTED = '100+'
 /** Hero section that introduces the creator community and primary call to action. */
 export const CreatorHeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
+  const canStartProject = useCanStartProject()
   const { data } = useProjectsSummaryQuery()
 
   const overlayGradient = useColorModeValue(
@@ -127,15 +129,17 @@ export const CreatorHeroSection = () => {
             </Body>
 
             <HStack spacing={3} flexWrap="wrap">
-              <Button
-                onClick={handleLauchNowClick}
-                size="lg"
-                colorScheme="primary1"
-                rightIcon={<PiRocketLaunch />}
-                borderRadius="12px"
-              >
-                {t('Start your project')}
-              </Button>
+              {canStartProject ? (
+                <Button
+                  onClick={handleLauchNowClick}
+                  size="lg"
+                  colorScheme="primary1"
+                  rightIcon={<PiRocketLaunch />}
+                  borderRadius="12px"
+                >
+                  {t('Start your project')}
+                </Button>
+              ) : null}
               <Button
                 variant="outline"
                 size="lg"

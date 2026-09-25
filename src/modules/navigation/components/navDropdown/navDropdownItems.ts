@@ -37,6 +37,7 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
 export const getFundraiseNavDropdownItems = (
   t: TFunction,
   mode: 'desktop' | 'mobile' = 'desktop',
+  options?: { includeStartYourProject?: boolean },
 ): NavDropdownMenuItem[] => {
   const whoGeyserIsForItem: NavDropdownMenuItem = {
     title: t('Who Geyser is for'),
@@ -62,9 +63,21 @@ export const getFundraiseNavDropdownItems = (
     href: GuideUrl,
   }
 
+  const includeStartYourProject = options?.includeStartYourProject === true
+
   if (mode === 'mobile') {
-    return [whoGeyserIsForItem, howToLaunchItem, lookAtGuidesItem, startYourProjectItem]
+    return [
+      whoGeyserIsForItem,
+      howToLaunchItem,
+      lookAtGuidesItem,
+      ...(includeStartYourProject ? [startYourProjectItem] : []),
+    ]
   }
 
-  return [whoGeyserIsForItem, startYourProjectItem, howToLaunchItem, lookAtGuidesItem]
+  return [
+    whoGeyserIsForItem,
+    ...(includeStartYourProject ? [startYourProjectItem] : []),
+    howToLaunchItem,
+    lookAtGuidesItem,
+  ]
 }

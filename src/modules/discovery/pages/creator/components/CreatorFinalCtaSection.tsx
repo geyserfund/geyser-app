@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { FaBolt } from 'react-icons/fa'
 import { PiRocketLaunch } from 'react-icons/pi'
 
+import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { useLaunchNow } from '@/modules/project/pages/projectCreation/views/start/utils/useLaunchNow.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
@@ -13,6 +14,7 @@ import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 /** Final call-to-action section closing the creator landing page narrative. */
 export const CreatorFinalCtaSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
+  const canStartProject = useCanStartProject()
 
   const sectionBackground = useColorModeValue('neutral1.12', 'neutral1.1')
   const primaryGradient = useColorModeValue(
@@ -118,18 +120,20 @@ export const CreatorFinalCtaSection = () => {
               )}
             </Body>
 
-            <HStack spacing={3} flexWrap="wrap" justify="center" pt={1}>
-              <Button
-                onClick={handleLauchNowClick}
-                size="lg"
-                colorScheme="primary1"
-                rightIcon={<PiRocketLaunch />}
-                borderRadius="12px"
-                px={8}
-              >
-                {t('Start your project')}
-              </Button>
-            </HStack>
+            {canStartProject ? (
+              <HStack spacing={3} flexWrap="wrap" justify="center" pt={1}>
+                <Button
+                  onClick={handleLauchNowClick}
+                  size="lg"
+                  colorScheme="primary1"
+                  rightIcon={<PiRocketLaunch />}
+                  borderRadius="12px"
+                  px={8}
+                >
+                  {t('Start your project')}
+                </Button>
+              </HStack>
+            ) : null}
 
             <HStack spacing={{ base: 4, md: 6 }} flexWrap="wrap" justify="center" pt={2}>
               {creatorFinalCtaTrustPoints.map((item) => (
