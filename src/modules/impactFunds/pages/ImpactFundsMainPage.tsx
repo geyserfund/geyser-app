@@ -18,10 +18,13 @@ import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks
 import { standardPadding } from '@/shared/styles/index.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import {
-  type ImpactFundsFieldPartnerLeaderboardQuery,
+  type ImpactFundsCircularGrantFieldPartnersQuery,
   type ImpactFundsQuery,
+  OrderByDirection,
+  ProjectsGetWhereInputStatus,
+  ProjectsOrderByField,
   ProjectSubCategory,
-  useImpactFundsFieldPartnerLeaderboardQuery,
+  useImpactFundsCircularGrantFieldPartnersQuery,
   useImpactFundsQuery,
 } from '@/types'
 import type { USDCents } from '@/types/index.ts'
@@ -31,6 +34,7 @@ const LATIN_AMERICA_IMPACT_FUND_NAME = 'latam-impact-fund'
 const FALLBACK_FIELD_PARTNER_COUNT = 100
 const LEADERBOARD_INITIAL_ROW_COUNT = 7
 const LEADERBOARD_MAX_ROW_COUNT = 20
+const CIRCULAR_GRANT_PROJECT_QUERY_LIMIT = 100
 const IMPACT_FUNDS_PAPER_HERO_IMAGE_URL =
   'https://app.paper.design/file-assets/01KT2DBTZTEZXFBD7X82K0GAKQ/01KT9B8FMANZ6KR4BJWZ6F7W0V.jpg'
 const AFRIBIT_WORKSHOP_DESCRIPTION =
@@ -67,11 +71,16 @@ export const impactFundsAboutStats = [
     isDark: true,
   },
 ] as const
-const LEADERBOARD_HEADERS = ['Rank', 'Field Partner', 'Country', 'Projects enabled', 'Enabled contribution'] as const
+const LEADERBOARD_HEADERS = [
+  'Rank',
+  'Field Partner',
+  'Country',
+  'Circular Grant projects',
+  'Circular Grant funding',
+] as const
 
 type ImpactFundListItem = ImpactFundsQuery['impactFunds'][number]
-type FieldPartnerLeaderboardItem =
-  ImpactFundsFieldPartnerLeaderboardQuery['impactFundFieldPartnerLeaderboard']['rows'][number]
+type CircularGrantFieldPartnerProject = ImpactFundsCircularGrantFieldPartnersQuery['projectsGet']['projects'][number]
 type SponsorListItem = { id: string; name: string; image?: string | null; url?: string | null }
 type FieldPartnerLeaderboardRow = {
   rank: number
@@ -181,10 +190,20 @@ export const ImpactFundsMainPage = () => {
   const [isShowingAllPartners, setIsShowingAllPartners] = useState(false)
   const location = useLocation()
   const { data } = useImpactFundsQuery()
-  const { data: fieldPartnerLeaderboardData } = useImpactFundsFieldPartnerLeaderboardQuery({
+  const {
+    data: circularGrantFieldPartnerData,
+    error: circularGrantFieldPartnerError,
+    loading: circularGrantFieldPartnerLoading,
+    refetch: refetchCircularGrantFieldPartners,
+  } = useImpactFundsCircularGrantFieldPartnersQuery({
     variables: {
       input: {
-        limit: LEADERBOARD_MAX_ROW_COUNT,
+        where: {
+          isCircularGrant: true,
+          statuses: [ProjectsGetWhereInputStatus.Active, ProjectsGetWhereInputStatus.Closed],
+        },
+        orderBy: [{ field: ProjectsOrderByField.LaunchedAt, direction: OrderByDirection.Desc }],
+        pagination: { take: CIRCULAR_GRANT_PROJECT_QUERY_LIMIT },
       },
     },
   })
@@ -302,9 +321,9 @@ export const ImpactFundsMainPage = () => {
   const latinAmericaImpactFund = impactFunds.find((fund) => fund.name === LATIN_AMERICA_IMPACT_FUND_NAME)
   const aggregatedSponsors = getAggregatedSponsors(impactFunds)
   const sponsors = aggregatedSponsors
-  const fieldPartnerLeaderboardRows = getFieldPartnerLeaderboardRows(
-    fieldPartnerLeaderboardData?.impactFundFieldPartnerLeaderboard.rows || [],
-  )
+  const fieldPartnerLeaderboardRows = getCircularGrantFieldPartnerRows(
+    circularGrantFieldPartnerData?.projectsGet.projects || [],
+  ).slice(0, LEADERBOARD_MAX_ROW_COUNT)
   const rowsToShow = isShowingAllPartners
     ? fieldPartnerLeaderboardRows
     : fieldPartnerLeaderboardRows.slice(0, LEADERBOARD_INITIAL_ROW_COUNT)
@@ -374,6 +393,9 @@ export const ImpactFundsMainPage = () => {
           rows={rowsToShow}
           totalRows={fieldPartnerLeaderboardRows.length}
           isShowingAllPartners={isShowingAllPartners}
+          isLoading={circularGrantFieldPartnerLoading}
+          hasError={Boolean(circularGrantFieldPartnerError)}
+          onRetry={() => refetchCircularGrantFieldPartners()}
           onShowAll={() => setIsShowingAllPartners(true)}
         />
         <SponsorsAndFundsSection
@@ -421,15 +443,50 @@ const formatLeaderboardSats = (sats: number) => {
   return `${compactSatsFormatter.format(sats).replace('K', 'k')} sats`
 }
 
-const getFieldPartnerLeaderboardRows = (rows: FieldPartnerLeaderboardItem[]): FieldPartnerLeaderboardRow[] => {
-  return rows.map((row) => ({
-    rank: row.rank,
-    fieldPartnerId: String(row.fieldPartnerId),
-    fieldPartner: row.fieldPartner,
-    country: row.country,
-    projectsLaunched: String(row.projectsLaunched),
-    enabledContribution: formatLeaderboardSats(row.enabledContributionSats),
-  }))
+const getCircularGrantFieldPartnerRows = (
+  projects: CircularGrantFieldPartnerProject[],
+): FieldPartnerLeaderboardRow[] => {
+  const partnerActivity = new Map<
+    string,
+    {
+      country: string
+      enabledContributionSats: number
+      fieldPartner: string
+      fieldPartnerId: string
+      projectsLaunched: number
+    }
+  >()
+
+  for (const project of projects) {
+    if (!project.fieldPartner) {
+      continue
+    }
+
+    const fieldPartnerId = String(project.fieldPartner.id)
+    const current = partnerActivity.get(fieldPartnerId)
+    partnerActivity.set(fieldPartnerId, {
+      country: project.fieldPartner.location || project.location?.country?.name || current?.country || '—',
+      enabledContributionSats: (current?.enabledContributionSats ?? 0) + project.balance,
+      fieldPartner: project.fieldPartner.username,
+      fieldPartnerId,
+      projectsLaunched: (current?.projectsLaunched ?? 0) + 1,
+    })
+  }
+
+  return Array.from(partnerActivity.values())
+    .sort((firstPartner, secondPartner) =>
+      secondPartner.enabledContributionSats === firstPartner.enabledContributionSats
+        ? firstPartner.fieldPartner.localeCompare(secondPartner.fieldPartner)
+        : secondPartner.enabledContributionSats - firstPartner.enabledContributionSats,
+    )
+    .map((partner, index) => ({
+      rank: index + 1,
+      fieldPartnerId: partner.fieldPartnerId,
+      fieldPartner: partner.fieldPartner,
+      country: partner.country,
+      projectsLaunched: String(partner.projectsLaunched),
+      enabledContribution: formatLeaderboardSats(partner.enabledContributionSats),
+    }))
 }
 
 const PageShell = ({ children, colors }: { children: React.ReactNode; colors: SectionColors }) => {
@@ -460,7 +517,10 @@ const PageSection = ({
   return (
     <Box
       id={id}
-      scrollMarginTop={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}
+      scrollMarginTop={{
+        base: `${dimensions.topNavBar.mobile.height}px`,
+        lg: `${dimensions.topNavBar.desktop.height}px`,
+      }}
       w="full"
       bg={bg || colors.pageBg}
       paddingTop={pt ?? py}
@@ -724,12 +784,18 @@ const LeaderboardSection = ({
   rows,
   totalRows,
   isShowingAllPartners,
+  isLoading,
+  hasError,
+  onRetry,
   onShowAll,
 }: {
   colors: SectionColors
   rows: FieldPartnerLeaderboardRow[]
   totalRows: number
   isShowingAllPartners: boolean
+  isLoading: boolean
+  hasError: boolean
+  onRetry: () => void
   onShowAll: () => void
 }) => (
   <PageSection id="field-partners" colors={colors}>
@@ -740,7 +806,7 @@ const LeaderboardSection = ({
 
       <Body size="md" lineHeight="26px" color={colors.secondaryText} w="full">
         {t(
-          'Field Partners are vetted, local community leaders who are closest to the work happening on the ground. They onboard local projects that need funding, provide them with support and share impact reports.',
+          'Field Partners are vetted local leaders. This table shows only their Circular Grant projects and the funding those projects have received.',
         )}
       </Body>
 
@@ -751,48 +817,67 @@ const LeaderboardSection = ({
         overflow="hidden"
         bg={colors.surfaceBg}
       >
-        <Box display={{ base: 'none', md: 'block' }}>
-          <Box w="full">
-            <LeaderboardHeader colors={colors} />
-            <VStack align="stretch" spacing={0}>
-              {rows.length > 0 ? (
-                rows.map((row) => <LeaderboardRow key={`${row.rank}-${row.fieldPartner}`} colors={colors} row={row} />)
-              ) : (
-                <Flex
-                  minH="84px"
-                  align="center"
-                  justify="center"
-                  borderBottomWidth="1px"
-                  borderColor={colors.borderColor}
-                >
-                  <Body size="sm" color={colors.secondaryText}>
-                    {t('No Field Partner projects found yet.')}
-                  </Body>
-                </Flex>
-              )}
-            </VStack>
-          </Box>
-        </Box>
-        <MobileLeaderboardRows colors={colors} rows={rows} />
-        <Flex
-          direction={{ base: 'column', md: 'row' }}
-          align={{ base: 'stretch', md: 'center' }}
-          justify="space-between"
-          gap={4}
-          bg={colors.mutedSurfaceBg}
-          p={4}
-        >
-          <Body size="sm" medium color={colors.secondaryText}>
-            {t(
-              'Ranked by funding enabled for local projects through onboarding, workshops, promotion, and circular grant support.',
-            )}
-          </Body>
-          {!isShowingAllPartners && totalRows > rows.length ? (
-            <Button size="sm" colorScheme="neutral1" onClick={onShowAll} flexShrink={0}>
-              {t('Show more: view top 20')}
+        {isLoading ? (
+          <Flex minH="140px" align="center" justify="center" p={5}>
+            <Body size="sm" color={colors.secondaryText}>
+              {t('Loading Circular Grant activity...')}
+            </Body>
+          </Flex>
+        ) : hasError ? (
+          <VStack minH="140px" align="center" justify="center" spacing={3} p={5}>
+            <Body size="sm" color={colors.secondaryText}>
+              {t('Circular Grant activity could not be loaded.')}
+            </Body>
+            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={onRetry}>
+              {t('Retry')}
             </Button>
-          ) : null}
-        </Flex>
+          </VStack>
+        ) : (
+          <>
+            <Box display={{ base: 'none', md: 'block' }}>
+              <Box w="full">
+                <LeaderboardHeader colors={colors} />
+                <VStack align="stretch" spacing={0}>
+                  {rows.length > 0 ? (
+                    rows.map((row) => (
+                      <LeaderboardRow key={`${row.rank}-${row.fieldPartner}`} colors={colors} row={row} />
+                    ))
+                  ) : (
+                    <Flex
+                      minH="84px"
+                      align="center"
+                      justify="center"
+                      borderBottomWidth="1px"
+                      borderColor={colors.borderColor}
+                    >
+                      <Body size="sm" color={colors.secondaryText}>
+                        {t('No Circular Grant Field Partner activity found yet.')}
+                      </Body>
+                    </Flex>
+                  )}
+                </VStack>
+              </Box>
+            </Box>
+            <MobileLeaderboardRows colors={colors} rows={rows} />
+            <Flex
+              direction={{ base: 'column', md: 'row' }}
+              align={{ base: 'stretch', md: 'center' }}
+              justify="space-between"
+              gap={4}
+              bg={colors.mutedSurfaceBg}
+              p={4}
+            >
+              <Body size="sm" medium color={colors.secondaryText}>
+                {t('Ranked by funding received across each Field Partner’s Circular Grant projects.')}
+              </Body>
+              {!isShowingAllPartners && totalRows > rows.length ? (
+                <Button size="sm" colorScheme="neutral1" onClick={onShowAll} flexShrink={0}>
+                  {t('Show more: view top 20')}
+                </Button>
+              ) : null}
+            </Flex>
+          </>
+        )}
       </Box>
       <Flex
         direction={{ base: 'column', md: 'row' }}
@@ -867,7 +952,7 @@ const MobileLeaderboardRows = ({ colors, rows }: { colors: SectionColors; rows: 
     return (
       <Flex display={{ base: 'flex', md: 'none' }} minH="84px" align="center" justify="center" p={4}>
         <Body size="sm" color={colors.secondaryText} textAlign="center">
-          {t('No Field Partner projects found yet.')}
+          {t('No Circular Grant Field Partner activity found yet.')}
         </Body>
       </Flex>
     )
@@ -917,7 +1002,7 @@ const MobileLeaderboardRows = ({ colors, rows }: { colors: SectionColors; rows: 
           </Flex>
           <SimpleGrid columns={2} spacing={3}>
             <LeaderboardMetric label={t('Country')} value={row.country} colors={colors} />
-            <LeaderboardMetric label={t('Projects enabled')} value={row.projectsLaunched} colors={colors} />
+            <LeaderboardMetric label={t('Circular Grant projects')} value={row.projectsLaunched} colors={colors} />
           </SimpleGrid>
         </VStack>
       ))}

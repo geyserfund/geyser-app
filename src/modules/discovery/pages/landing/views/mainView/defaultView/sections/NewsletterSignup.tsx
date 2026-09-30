@@ -20,12 +20,12 @@ export const NewsletterSignup = (props: StackProps) => {
         <HStack spacing={3} align="center" justify="flex-start" w="full">
           <Icon as={PiEnvelopeSimple} boxSize={9} color={iconColor} />
           <H2 size="2xl" medium color={titleColor}>
-            {t("Don't miss a thing")}
+            {t('Circular Grant updates, in your inbox')}
           </H2>
         </HStack>
         <Body size="md" color={bodyColor} textAlign="left" w="full">
           {t(
-            'Join our newsletter for stories about trusted local partners, Circular Grants, Regional Partner Funds, and the people building stronger local economies with Bitcoin.',
+            'Follow Field Partner stories, campaign progress, and what Circular Grants make possible in local communities.',
           )}
         </Body>
       </VStack>

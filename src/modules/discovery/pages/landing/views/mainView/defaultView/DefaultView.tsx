@@ -1,29 +1,25 @@
 import { useQuery } from '@apollo/client'
 import { VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { fetchFeaturedProject } from '@/api/airtable.ts'
 import { Head } from '@/config/Head.tsx'
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
+import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
 import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
-import type { USDCents } from '@/types/index.ts'
-import { ProjectsGetWhereInputStatus, useImpactFundsQuery } from '@/types/index.ts'
-import { getShortAmountLabel } from '@/utils/index.ts'
+import { ProjectsGetWhereInputStatus } from '@/types/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { QUERY_LANDING_ABOVE_FOLD, QUERY_LANDING_ANNOUNCEMENTS } from '../../../graphql/landingPageQueries.ts'
 import { LandingAboveFoldQueryData, LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
-import { ActiveImpactFunds } from './sections/ActiveImpactFunds.tsx'
 import { type CircularGrantLandingFilter, CircularGrantFilterBar } from './sections/CircularGrantFilterBar.tsx'
 import { CircularGrantProjects } from './sections/CircularGrantProjects.tsx'
-import { CircularGrantSuccessStory } from './sections/CircularGrantSuccessStory.tsx'
+import { CircularGrantsMission } from './sections/CircularGrantsMission.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
-import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
+import { LatamImpactFundApplication } from './sections/LatamImpactFundApplication.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 
 const CURATED_PROJECTS_COUNT = 6
@@ -51,25 +47,7 @@ export const DefaultView = () => {
   const [featuredProjectsLoading, setFeaturedProjectsLoading] = useState(true)
   const [featuredProjectsError, setFeaturedProjectsError] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
-  const { donateModalElement } = useImpactFundsDonateModal()
-  const { getSatoshisFromUSDCents } = useBTCConverter()
-  const { data: impactFundsData } = useImpactFundsQuery()
-
-  const latinAmericaImpactFund = impactFundsData?.impactFunds.find((fund) => fund.name === 'latam-impact-fund')
-  const labifCommittedAmount = (() => {
-    if (latinAmericaImpactFund?.amountCommitted === null || latinAmericaImpactFund?.amountCommitted === undefined) {
-      return t('120,000,000 sats')
-    }
-
-    const amountSats =
-      latinAmericaImpactFund.amountCommitted === 0
-        ? latinAmericaImpactFund.metrics.awardedTotalSats
-        : latinAmericaImpactFund.amountCommittedCurrency === 'USDCENT'
-        ? getSatoshisFromUSDCents(latinAmericaImpactFund.amountCommitted as USDCents)
-        : latinAmericaImpactFund.amountCommitted
-
-    return `${getShortAmountLabel(amountSats, true)} sats`
-  })()
+  const { donateModalElement, openDonateModal } = useImpactFundsDonateModal()
 
   const loadFeaturedProjects = useCallback(async () => {
     setFeaturedProjectsLoading(true)
@@ -172,17 +150,26 @@ export const DefaultView = () => {
         <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
 
         {circularGrantFilter === 'featured' ? (
-          <CuratedProjects
-            featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
-            featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
-            featuredProjects={featuredProjects}
-            onRetryFeatured={() => {
-              loadFeaturedProjects()
-              if (featuredProjectNames.length > 0) {
-                refetchFeaturedProjects()
-              }
-            }}
-          />
+          <>
+            <CuratedProjects
+              featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
+              featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
+              featuredProjects={featuredProjects}
+              onRetryFeatured={() => {
+                loadFeaturedProjects()
+                if (featuredProjectNames.length > 0) {
+                  refetchFeaturedProjects()
+                }
+              }}
+            />
+            <CircularGrantProjects
+              title="Recent Circular Grants"
+              description=""
+              take={3}
+              emptyStateText="No recent Circular Grants found"
+              showDiscoverMore={false}
+            />
+          </>
         ) : (
           <CircularGrantProjects
             title={circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'}
@@ -196,13 +183,20 @@ export const DefaultView = () => {
           />
         )}
 
-        <CircularGrantSuccessStory />
+        <VStack w="full" spacing={{ base: 8, lg: 10 }}>
+          <CircularGrantsMission
+            onSupportImpactFund={() =>
+              openDonateModal({
+                defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID],
+              })
+            }
+          />
 
-        <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} />
+          <LatamImpactFundApplication />
+        </VStack>
 
         {showBelowTheFold && (
           <>
-            <HowGeyserWorks />
             <HeroesMainPage />
             <GeyserNewsAndAnnouncements
               giveawayEndAt={announcementsData?.acelerandoVipLeaderboard.endAt}

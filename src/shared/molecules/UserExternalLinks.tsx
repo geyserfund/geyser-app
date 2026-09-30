@@ -52,7 +52,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
         w="full"
         flexWrap="wrap"
         paddingX={4}
-        spacing={{ base: 2, lg: spread ? 2 : 0, xl: 2 }}
+        spacing={{ base: 1, lg: spread ? 3 : 2, xl: 3 }}
         justifyContent="center"
         {...props}
       >
@@ -74,7 +74,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
           isExternal
           href={getPath('legalTerms')}
           color="neutral1.9"
-          marginLeft={4}
+          marginLeft={{ base: 0, lg: 4 }}
         >
           {t('Terms of Service')}
         </UserNavExternalButton>
@@ -111,7 +111,7 @@ const UserNavExternalButton: ComponentWithAs<'button', ButtonProps> = (props) =>
       colorScheme="neutral1"
       size="sm"
       textDecoration={'none'}
-      paddingX={0}
+      paddingX={2}
       _hover={{ backgroundColor: 'none', textDecoration: 'underline' }}
       {...props}
     />

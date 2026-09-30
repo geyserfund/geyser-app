@@ -1231,6 +1231,15 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryCircularGrantsTransparency'),
+        async lazy() {
+          const { CircularGrantsTransparencyPage } = await import(
+            '@/modules/microLending/pages/CircularGrantsTransparencyPage.tsx'
+          )
+          return { Component: CircularGrantsTransparencyPage }
+        },
+      },
+      {
         path: getPath('discoveryCircularGrantsAfrica'),
         element: <Navigate to={`${getPath('discoveryCircularGrants')}?region=africa`} replace />,
       },

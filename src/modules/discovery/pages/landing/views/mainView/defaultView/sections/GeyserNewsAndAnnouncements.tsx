@@ -6,6 +6,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { PiArrowLeft, PiArrowRight } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
+import { useOgPreview } from '@/modules/project/pages/projectView/views/posts/hooks/useOgPreview.ts'
+import { isValidUrl } from '@/modules/project/pages/projectView/views/posts/utils/postUrlUtils.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
@@ -44,7 +46,8 @@ type AnnouncementCardProps = {
   footer: ReactNode
   href?: string
   imagePosition?: { base: string; lg: string }
-  imageUrl: string
+  imageUrl?: string
+  previewUrl?: string
   title: string
   to?: string
 }
@@ -79,14 +82,20 @@ const AnnouncementCard = ({
   href,
   imagePosition,
   imageUrl,
+  previewUrl,
   title,
   to,
 }: AnnouncementCardProps) => {
   const navigate = useNavigate()
+  const { data: previewData } = useOgPreview(previewUrl, { enabled: Boolean(previewUrl) })
   const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
   const descriptionColor = 'neutralAlpha.11'
   const eyebrowBackground = useColorModeValue('utils.pbg', 'neutral1.2')
   const eyebrowColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const previewImage = previewData?.image && !previewData.image.includes('default') ? previewData.image : undefined
+  const resolvedImageUrl = imageUrl || previewImage
+  const resolvedTitle = previewUrl ? previewData?.title || title : title
+  const resolvedDescription = previewUrl ? previewData?.description || description : description
 
   const handleNavigate = () => {
     if (href) {
@@ -123,8 +132,8 @@ const AnnouncementCard = ({
       <Box width="100%" padding={2}>
         <Box width="100%" position="relative">
           <ImageWithReload
-            src={imageUrl}
-            alt={title}
+            src={resolvedImageUrl}
+            alt={resolvedTitle}
             width="100%"
             aspectRatio={1.45}
             borderRadius="innerCard"
@@ -151,7 +160,7 @@ const AnnouncementCard = ({
 
       <VStack width="100%" alignItems="start" spacing={3} paddingX={4} paddingTop={1} paddingBottom={4}>
         <H3 size="md" medium width="100%" noOfLines={2}>
-          {title}
+          {resolvedTitle}
         </H3>
         <Body
           size="md"
@@ -162,7 +171,7 @@ const AnnouncementCard = ({
           whiteSpace="normal"
           wordBreak="break-word"
         >
-          {description}
+          {resolvedDescription}
         </Body>
         <Box width="100%" marginTop="auto">
           {footer}
@@ -375,7 +384,8 @@ export const GeyserNewsAndAnnouncements = ({
           </Body>
         ),
         id: `project-announcement-${post.id}`,
-        imageUrl: post.image || post.project?.thumbnailImage || '',
+        imageUrl: post.image || undefined,
+        previewUrl: isValidUrl(post.description) ? post.description : undefined,
         sortTimestamp: getSortTimestampFromPublishedAt(post.publishedAt),
         title: post.title,
         to: getPath('projectPostView', post.project?.name || '', post.id),

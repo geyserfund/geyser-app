@@ -15,7 +15,8 @@ import {
 } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { FAQUrl, getPath, GeyserHackathonsUrl, ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/config/routerPaths.ts'
+import { FAQUrl, ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 
 import type { NavDropdownMenuItem, NavDropdownMenuSection } from '../../components/navDropdown/NavDropdownMenu.tsx'
 import { ModeChange } from './components/ModeChange'
@@ -171,10 +172,6 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={FAQUrl} _focusVisible={{}} gap={2}>
           <Body size="md">{t('FAQ')}</Body>
-          <Icon as={PiArrowUpRight} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
-        </MenuItem>
-        <MenuItem as={ChakraLink} isExternal href={GeyserHackathonsUrl} _focusVisible={{}} gap={2}>
-          <Body size="md">{t('Hackathons')}</Body>
           <Icon as={PiArrowUpRight} boxSize={HAMBURGER_ICON_SIZE} color={HAMBURGER_ICON_COLOR} />
         </MenuItem>
         <MenuItem as={Link} to={getPath('discoveryProjects')} onClick={onNavigate}>

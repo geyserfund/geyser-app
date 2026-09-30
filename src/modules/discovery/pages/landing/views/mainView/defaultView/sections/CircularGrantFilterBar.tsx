@@ -4,7 +4,7 @@ import { t } from 'i18next'
 export type CircularGrantLandingFilter = 'featured' | 'latin-america' | 'africa'
 
 const filters: Array<{ emoji: string; label: string; value: CircularGrantLandingFilter }> = [
-  { label: 'Featured', value: 'featured', emoji: '⭐' },
+  { label: 'Live', value: 'featured', emoji: '🔴' },
   { label: 'In Latin America', value: 'latin-america', emoji: '🌎' },
   { label: 'In Africa', value: 'africa', emoji: '🌍' },
 ]

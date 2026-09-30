@@ -8,6 +8,7 @@ import {
   Button,
   Flex,
   HStack,
+  Icon,
   Link as ChakraLink,
   SimpleGrid,
   useColorModeValue,
@@ -15,19 +16,20 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { PiCaretRightBold } from 'react-icons/pi'
+import { PiArrowRight, PiCaretRightBold, PiChartLineUp } from 'react-icons/pi'
 import { Link as RouterLink, useSearchParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { CircularGrantProjects } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/CircularGrantProjects.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
-import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
+import { GeyserTwitterUrl, ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { VideoPlayer } from '@/shared/molecules/VideoPlayer.tsx'
 import { standardPadding } from '@/shared/styles/index.ts'
@@ -44,14 +46,13 @@ type CircularGrantsColors = {
   surfaceBg: string
   darkSurfaceBg: string
   onAmberText: string
-  heroAccentBg: string
+  eyebrow: string
 }
 
 const radius = {
   section: '16px',
   card: 'card',
   inner: 'innerCard',
-  button: 'innerCard',
 }
 
 // The externally managed storage object keeps its historical name for continuity.
@@ -59,13 +60,13 @@ const CIRCULAR_GRANTS_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-hero.png'
 const AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL = 'https://youtu.be/pU1KxP0ddng'
 const FIELD_PARTNER_BOOKLET_URL =
-  'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
+  'https://www.figma.com/deck/uNXI6qZWMee1UjC28MrY9K/Field-Partner-Booklet--EXT-?node-id=92-260&t=km4JTKHId4nKnd6S-1'
 
-export const circularGrantInfoPills = ['0% interest', 'No debt obligation', 'Capital reused locally'] as const
+export const circularGrantInfoPills = ['0% interest', 'No debt obligation', 'No shaming'] as const
 
 const modelIssues = [
-  'Predatory informal debt and exploitative capital traps',
-  'Debt shaming and trauma when capital does not return',
+  'Formal banking remains inaccessible for many local entrepreneurs',
+  'Debt can bring pressure, stigma, trauma and exclusion',
   'Outside funders lack trusted local context',
 ] as const
 
@@ -80,30 +81,34 @@ type FlowStepItem = {
 type FaqItem = {
   question: string
   answer: string
-  link?: string
+  links?: readonly {
+    label: string
+    href: string
+    isExternal?: boolean
+  }[]
 }
 
 export const circularGrantFlowSteps: readonly FlowStepItem[] = [
   {
     number: '1',
-    title: 'Geyser capital pool',
-    description: 'Capital allocation and funding format',
+    title: 'Approve the Field Partner',
+    description: 'Geyser interviews, approves, and onboards a trusted local organisation.',
     isDark: true,
   },
   {
     number: '2',
-    title: 'Field partner validation',
-    description: 'Project sourcing, trust layer, and local operations',
+    title: 'Verify a local business',
+    description: 'The Field Partner checks the entrepreneur, business, budget, and local benefit.',
   },
   {
     number: '3',
-    title: 'Chama cohort',
-    description: 'Peer accountability and readiness checks',
+    title: 'Create and launch the campaign',
+    description: 'The Field Partner builds the story and media; Geyser reviews and amplifies it.',
   },
   {
     number: '4',
-    title: 'Capital return loop',
-    description: 'Returned capital funds the next project',
+    title: 'Support delivery and reuse',
+    description: 'Partners guide reporting, while voluntary contributions can support the next grant.',
     isGold: true,
   },
 ]
@@ -122,12 +127,15 @@ export const circularGrantFaqItems: readonly FaqItem[] = [
   {
     question: 'Where can I learn more about becoming a Field Partner?',
     answer: 'Read the Field Partner Booklet for an overview of the program and how to apply.',
-    link: FIELD_PARTNER_BOOKLET_URL,
+    links: [{ label: 'Open the Field Partner Booklet', href: FIELD_PARTNER_BOOKLET_URL, isExternal: true }],
   },
   {
     question: 'Where can I follow progress and reporting?',
-    answer:
-      'Progress, pilot learning, and allocation updates will be shared through Geyser quarterly reports and field-partner case studies.',
+    answer: 'The best way to stay in touch is to follow Geyser on X and subscribe to our newsletter.',
+    links: [
+      { label: 'Follow Geyser on X', href: GeyserTwitterUrl, isExternal: true },
+      { label: 'Subscribe to the newsletter', href: getPath('newsletter') },
+    ],
   },
 ] as const
 
@@ -137,7 +145,7 @@ export const CircularGrantsPage = () => {
   const onDonateClick = () => openDonateModal({ defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID] })
   const pageBg = useColorModeValue('white', 'utils.pbg')
   const ink = useColorModeValue('#17120C', 'neutral1.12')
-  const muted = useColorModeValue('#5F6268', 'neutral1.10')
+  const muted = useColorModeValue('#5F6268', 'neutralAlpha.11')
   const line = useColorModeValue('#E9E2D4', 'neutral1.6')
   const cream = useColorModeValue('#FFF8EA', 'neutral1.2')
   const pale = useColorModeValue('#F8F9F8', 'neutral1.3')
@@ -146,7 +154,7 @@ export const CircularGrantsPage = () => {
   const surfaceBg = useColorModeValue('white', 'neutral1.3')
   const darkSurfaceBg = useColorModeValue('#17120C', 'neutral1.1')
   const onAmberText = useColorModeValue('#17120C', '#17120C')
-  const heroAccentBg = useColorModeValue('#F7931A', 'orange.400')
+  const eyebrow = useColorModeValue('primary1.11', 'primary1.9')
   const colors = useMemo<CircularGrantsColors>(
     () => ({
       pageBg,
@@ -160,9 +168,9 @@ export const CircularGrantsPage = () => {
       surfaceBg,
       darkSurfaceBg,
       onAmberText,
-      heroAccentBg,
+      eyebrow,
     }),
-    [amber, cream, darkSurfaceBg, gold, heroAccentBg, ink, line, muted, onAmberText, pageBg, pale, surfaceBg],
+    [amber, cream, darkSurfaceBg, eyebrow, gold, ink, line, muted, onAmberText, pageBg, pale, surfaceBg],
   )
 
   return (
@@ -216,14 +224,10 @@ const CircularGrantProjectsSection = ({ region }: { region: string | null }) => 
 const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
     <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 5, lg: 6 }}>
-      <InfoCard
-        colors={colors}
-        eyebrow="01 What are circular grants"
-        title="Debt-free capital that comes back to the community"
-      >
+      <InfoCard colors={colors} eyebrow="01 What are circular grants" title="Ethical capital without debt or pressure">
         <Body color={colors.muted} lineHeight="27px">
           {t(
-            'Circular grants fund local entrepreneurs with debt-free circular grant capital and no debt obligation. When capital returns through community agreements, it can be deployed again in the same circular economy.',
+            'A Circular Grant provides capital to an approved local business, with no repayment required. If they choose and are able, recipients can contribute to a Community Fund that supports other local entrepreneurs.',
           )}
         </Body>
         <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3} pt={2}>
@@ -245,7 +249,7 @@ const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
       <InfoCard colors={colors} eyebrow="02 Why circular grants" title="Why this model matters">
         <Body color={colors.muted} lineHeight="27px">
           {t(
-            'It reduces dependence on predatory informal debt, opens fairer access to capital, and lets trusted local partners decide who is ready.',
+            'Circular Grants create a humane path to capital while Field Partners provide the local knowledge and trusted relationships that outside funders cannot.',
           )}
         </Body>
         <VStack align="stretch" spacing={3} pt={2}>
@@ -270,12 +274,12 @@ const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
 const HowItWorksSection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
     <Eyebrow colors={colors}>03 How it works</Eyebrow>
-    <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold maxW="620px">
-      {t('Capital flows through trusted local partners')}
+    <H2 size={{ base: '2xl', lg: '3xl' }} bold maxW="720px" mt={2}>
+      {t('From local need to lasting community impact')}
     </H2>
-    <Body color={colors.muted} maxW="670px" lineHeight="27px" mt={3}>
+    <Body size={{ base: 'md', lg: 'lg' }} color={colors.muted} maxW="760px" lineHeight="1.6" mt={3}>
       {t(
-        'Geyser provides the capital pool and operating format. Field partners source projects, manage local operations, and support capital return through chamas and community agreements.',
+        'Geyser governs the programme while Field Partners operate locally: sourcing trusted businesses, building campaigns, supporting delivery, and documenting outcomes.',
       )}
     </Body>
     <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={4} mt={6}>
@@ -289,10 +293,10 @@ const HowItWorksSection = ({ colors }: { colors: CircularGrantsColors }) => (
 const CaseStudySection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
     <Eyebrow colors={colors}>04 Afribit case study</Eyebrow>
-    <H2 size={{ base: '34px', lg: '44px' }} lineHeight={{ base: '40px', lg: '48px' }} bold>
+    <H2 size={{ base: '2xl', lg: '3xl' }} bold mt={2}>
       {t('Afribit Kibera shows the model in motion')}
     </H2>
-    <Body color={colors.muted} maxW="690px" lineHeight="27px" mt={3}>
+    <Body size={{ base: 'md', lg: 'lg' }} color={colors.muted} maxW="690px" lineHeight="1.6" mt={3}>
       {t(
         "In Kibera, circular grants are already being piloted through Afribit's trusted local network, participant validation, and capital return follow-up.",
       )}
@@ -304,16 +308,12 @@ const CaseStudySection = ({ colors }: { colors: CircularGrantsColors }) => (
         <Button
           as={RouterLink}
           to={getPath('discoveryCircularGrantsAfribitCaseStudy')}
-          h="54px"
-          borderRadius={radius.button}
-          bg={colors.darkSurfaceBg}
-          color="white"
+          size="lg"
+          colorScheme="primary1"
           justifyContent="flex-start"
-          px={6}
-          fontSize="md"
-          fontWeight="900"
+          rightIcon={<Icon as={PiArrowRight} />}
         >
-          {t('View full case study >')}
+          {t('View full case study')}
         </Button>
       </VStack>
     </SimpleGrid>
@@ -322,40 +322,32 @@ const CaseStudySection = ({ colors }: { colors: CircularGrantsColors }) => (
 
 const TransparencySection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
-    <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 12 }}>
-      <InfoCard colors={colors} eyebrow="05 Transparency" title="How the pilot stays visible and accountable">
-        <Body color={colors.muted} lineHeight="27px">
-          {t(
-            'Circular grants are still being refined in the open. We share how capital is allocated, what Geyser covers operationally, and what we are learning as the pilot grows.',
-          )}
-        </Body>
-      </InfoCard>
-      <VStack align="stretch" spacing={5} justify="center">
-        <HStack spacing={5} align="stretch">
-          <Box bg={colors.pale} borderRadius={radius.card} borderWidth="1px" borderColor={colors.line} p={5}>
-            <Eyebrow colors={colors} color={colors.muted}>
-              Local allocation
-            </Eyebrow>
-            <H3 size="32px" bold>
-              {t('100%')}
-            </H3>
-          </Box>
-        </HStack>
-        <Body bold lineHeight="27px">
-          {t('Geyser is currently supporting field-partner operations while the model is tested')}
-        </Body>
-        <Body bold lineHeight="27px">
-          {t('Quarterly reports will share progress, capital return patterns, and pilot learning')}
-        </Body>
-        <Box bg={colors.cream} borderRadius={radius.card} borderWidth="1px" borderColor={colors.line} p={5}>
-          <Body bold color={colors.muted}>
+    <CardLayout bg={colors.pale} borderColor={colors.line} borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
+      <Flex direction={{ base: 'column', sm: 'row' }} gap={4} align="flex-start">
+        <Flex align="center" justify="center" boxSize={12} borderRadius="full" bg="primary1.3" flexShrink={0}>
+          <Icon as={PiChartLineUp} boxSize={6} color="primary1.11" aria-hidden />
+        </Flex>
+        <VStack align="flex-start" spacing={4} maxW="820px">
+          <H2 size={{ base: '2xl', lg: '3xl' }} bold>
+            {t('05 Transparency: where the pilot stands today')}
+          </H2>
+          <Body size={{ base: 'md', lg: 'lg' }} color={colors.muted} lineHeight="1.6">
             {t(
-              'The goal is to grow a sustainable reusable-capital model without losing local trust and accountability',
+              'Circular Grants are still being refined in the open. Review the current pilot, the outcomes we are working toward, and the reporting we plan to add next.',
             )}
           </Body>
-        </Box>
-      </VStack>
-    </SimpleGrid>
+          <Button
+            as={RouterLink}
+            to={getPath('discoveryCircularGrantsTransparency')}
+            size="lg"
+            colorScheme="primary1"
+            rightIcon={<Icon as={PiArrowRight} />}
+          >
+            {t('View Circular Grants transparency')}
+          </Button>
+        </VStack>
+      </Flex>
+    </CardLayout>
   </PageSection>
 )
 
@@ -375,17 +367,12 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
       >
         <VStack align="flex-start" spacing={{ base: 4, lg: 5 }} maxW="760px">
           <Eyebrow colors={colors} color={colors.onAmberText}>
-            07 Donate
+            06 Donate
           </Eyebrow>
-          <H2
-            size={{ base: '30px', lg: '40px' }}
-            lineHeight={{ base: '36px', lg: '47px' }}
-            bold
-            color={colors.onAmberText}
-          >
+          <H2 size={{ base: '2xl', lg: '3xl' }} bold color={colors.onAmberText}>
             {t('Help grow the shared capital pool')}
           </H2>
-          <Body size={{ base: 'md', lg: '20px' }} lineHeight={{ base: '27px', lg: '31px' }} color={colors.onAmberText}>
+          <Body size={{ base: 'md', lg: 'lg' }} lineHeight="1.6" color={colors.onAmberText}>
             {t(
               'We are allocating 3M sats per quarter to circular economy hubs. Donate to the Geyser Impact Fund to help expand this pilot and its reach.',
             )}
@@ -409,15 +396,7 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
           <H3 size={{ base: '48px', lg: '56px' }} lineHeight={{ base: '52px', lg: '60px' }} bold color="white">
             {t('3M sats')}
           </H3>
-          <Button
-            h="54px"
-            borderRadius={radius.button}
-            bg={colors.surfaceBg}
-            color={colors.ink}
-            fontSize={{ base: 'md', lg: '18px' }}
-            fontWeight="900"
-            onClick={onDonateClick}
-          >
+          <Button size="lg" colorScheme="primary1" onClick={onDonateClick}>
             {t('Donate')}
           </Button>
         </VStack>
@@ -436,12 +415,12 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
       >
         <VStack align="flex-start" spacing={2} maxW="710px">
           <Eyebrow colors={colors} color={colors.muted}>
-            06 Play a part
+            07 Play a part
           </Eyebrow>
-          <H2 size={{ base: '30px', lg: '40px' }} lineHeight={{ base: '36px', lg: '46px' }} bold color={colors.ink}>
+          <H2 size={{ base: '2xl', lg: '3xl' }} bold color={colors.ink}>
             {t('Launch your own Circular Grant pilot in your local community')}
           </H2>
-          <Body size={{ base: 'md', lg: '20px' }} lineHeight={{ base: '26px', lg: '31px' }} color={colors.muted}>
+          <Body size={{ base: 'md', lg: 'lg' }} lineHeight="1.6" color={colors.muted}>
             {t(
               'Help local circular economy hubs launch circular grants, reach more entrepreneurs, and turn recycled capital into visible local impact.',
             )}
@@ -452,15 +431,10 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
           href={ImpactFundsFieldPartnerApplicationUrl}
           target="_blank"
           rel="noreferrer"
-          h="54px"
-          borderRadius={radius.button}
-          px={8}
-          bg={colors.darkSurfaceBg}
-          color="white"
-          fontSize={{ base: 'md', lg: '18px' }}
-          fontWeight="900"
+          size="lg"
+          colorScheme="primary1"
+          rightIcon={<Icon as={PiArrowRight} />}
           flexShrink={0}
-          _hover={{ bg: colors.darkSurfaceBg }}
         >
           {t('Apply to become a Field Partner')}
         </Button>
@@ -472,18 +446,9 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
 const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
     <VStack align="stretch" spacing={{ base: 6, lg: 8 }} w="full">
-      <Body
-        size={{ base: 'lg', lg: '28px' }}
-        bold
-        color={colors.ink}
-        lineHeight={{ base: '24px', lg: '32px' }}
-        letterSpacing="0.18em"
-        textTransform="uppercase"
-        textAlign="center"
-        w="full"
-      >
+      <H2 size={{ base: '2xl', lg: '3xl' }} bold color={colors.ink} textAlign="center" w="full">
         {t('FAQ')}
-      </Body>
+      </H2>
       <Accordion
         allowToggle
         w="full"
@@ -520,18 +485,34 @@ const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
               <Body color={colors.muted} lineHeight="25px">
                 {t(item.answer)}
               </Body>
-              {item.link && (
-                <ChakraLink
-                  href={item.link}
-                  isExternal
-                  display="inline-block"
-                  color={colors.ink}
-                  fontWeight="700"
-                  mt={3}
-                  textDecor="underline"
-                >
-                  {t('Open the Field Partner Booklet')}
-                </ChakraLink>
+              {item.links && (
+                <HStack spacing={4} mt={3} flexWrap="wrap">
+                  {item.links.map((link) =>
+                    link.isExternal ? (
+                      <ChakraLink
+                        key={link.label}
+                        href={link.href}
+                        isExternal
+                        color={colors.ink}
+                        fontWeight="700"
+                        textDecor="underline"
+                      >
+                        {t(link.label)}
+                      </ChakraLink>
+                    ) : (
+                      <ChakraLink
+                        key={link.label}
+                        as={RouterLink}
+                        to={link.href}
+                        color={colors.ink}
+                        fontWeight="700"
+                        textDecor="underline"
+                      >
+                        {t(link.label)}
+                      </ChakraLink>
+                    ),
+                  )}
+                </HStack>
               )}
             </AccordionPanel>
           </AccordionItem>
@@ -621,26 +602,18 @@ const HeroSection = ({ colors, onDonateClick }: { colors: CircularGrantsColors; 
             href={ImpactFundsFieldPartnerApplicationUrl}
             target="_blank"
             rel="noreferrer"
-            h="42px"
-            px="18px"
-            borderRadius={radius.button}
-            bg={colors.surfaceBg}
-            color={colors.ink}
-            fontSize="sm"
-            fontWeight="600"
+            size="lg"
+            colorScheme="primary1"
+            rightIcon={<Icon as={PiArrowRight} />}
           >
             {t('Apply as partner')}
           </Button>
           <Button
-            h="42px"
-            px="18px"
-            borderRadius={radius.button}
-            bg={colors.heroAccentBg}
-            color={colors.onAmberText}
-            fontSize="sm"
-            fontWeight="600"
+            size="lg"
+            bg={colors.surfaceBg}
+            color={colors.ink}
             onClick={onDonateClick}
-            _hover={{ bg: colors.heroAccentBg }}
+            _hover={{ bg: colors.surfaceBg }}
           >
             {t('Donate')}
           </Button>
@@ -673,7 +646,7 @@ const Eyebrow = ({
   colors: CircularGrantsColors
   color?: string
 }) => (
-  <Body size="xs" bold color={color ?? colors.gold} letterSpacing="0.18em" textTransform="uppercase">
+  <Body size="xs" bold color={color ?? colors.eyebrow} letterSpacing="0.18em" textTransform="uppercase">
     {children}
   </Body>
 )
@@ -701,11 +674,7 @@ const InfoCard = ({
     p={{ base: 6, lg: 7 }}
   >
     <Eyebrow colors={colors}>{t(eyebrow)}</Eyebrow>
-    <H2
-      size={compact ? { base: '26px', lg: '32px' } : { base: '32px', lg: '40px' }}
-      lineHeight={compact ? { base: '32px', lg: '38px' } : { base: '38px', lg: '46px' }}
-      bold
-    >
+    <H2 size={compact ? { base: 'xl', lg: '2xl' } : { base: '2xl', lg: '3xl' }} bold>
       {t(title)}
     </H2>
     {children}
@@ -728,10 +697,10 @@ const FlowStep = ({ colors, step }: { colors: CircularGrantsColors; step: FlowSt
       p={5}
       minH="170px"
     >
-      <Body size="xs" bold color={step.isDark ? colors.gold : step.isGold ? colors.onAmberText : colors.ink}>
+      <Body size="xs" bold color={step.isDark ? colors.gold : step.isGold ? colors.onAmberText : colors.eyebrow}>
         {step.number}
       </Body>
-      <H3 size="24px" lineHeight="30px" bold color="inherit">
+      <H3 size={{ base: 'md', lg: 'lg' }} bold color="inherit">
         {t(step.title)}
       </H3>
       <Body
