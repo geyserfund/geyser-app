@@ -43,7 +43,7 @@ export const LatamImpactFundApplication = () => {
           </Body>
           <Button
             as={Link}
-            to={`${getPath('discoveryImpactFund', 'latam-impact-fund')}#apply`}
+            to={getPath('discoveryImpactFund', 'latam-impact-fund')}
             size="lg"
             colorScheme="amber"
             rightIcon={<Icon as={PiArrowRight} />}

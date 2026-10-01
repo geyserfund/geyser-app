@@ -4,21 +4,19 @@ import {
   Divider,
   HStack,
   Icon,
-  IconButton,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Tab,
-  TabList,
-  Tabs,
+  Stack,
   useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiCaretDown, PiCaretLeft, PiCaretRight, PiCheck } from 'react-icons/pi'
+import type { IconType } from 'react-icons'
+import { PiArrowsDownUp, PiCaretDown, PiCheck, PiStack, PiTag } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
@@ -69,12 +67,6 @@ type FilterDropdownOption<T extends string> = {
   dividerBefore?: boolean
   label: string
   value: T
-}
-type CategoryTab = {
-  category?: ProjectCategory
-  label: string
-  path: string
-  subCategory?: ProjectSubCategory
 }
 type EmptyStateSuggestion = {
   ctaLabel: string
@@ -259,126 +251,6 @@ const isCampaignProjectStillRaising = (project: ProjectForLandingPageFragment) =
   return isActive(project.status) && getIsAonActive(project)
 }
 
-const ProjectCategoryEmoji: Record<ProjectCategory, string> = {
-  [ProjectCategory.Education]: '🎓',
-  [ProjectCategory.Community]: '🤝',
-  [ProjectCategory.Culture]: '🎨',
-  [ProjectCategory.Advocacy]: '⚖️',
-  [ProjectCategory.Tool]: '🛠',
-  [ProjectCategory.Cause]: '🤲',
-  [ProjectCategory.Other]: '✨',
-}
-
-const ProjectSubCategoryEmoji: Record<ProjectSubCategory, string> = {
-  [ProjectSubCategory.Course]: '📚',
-  [ProjectSubCategory.ContentCreator]: '🎥',
-  [ProjectSubCategory.Journalism]: '📰',
-  [ProjectSubCategory.Podcast]: '🎙️',
-  [ProjectSubCategory.Book]: '📖',
-  [ProjectSubCategory.Event]: '🎉',
-  [ProjectSubCategory.Meetup]: '🍻',
-  [ProjectSubCategory.HackerSpace]: '💻',
-  [ProjectSubCategory.CircularEconomy]: '🌊',
-  [ProjectSubCategory.Film]: '🎬',
-  [ProjectSubCategory.Collectible]: '🧩',
-  [ProjectSubCategory.Game]: '🎮',
-  [ProjectSubCategory.Art]: '🎨',
-  [ProjectSubCategory.Music]: '🎵',
-  [ProjectSubCategory.Lobby]: '📣',
-  [ProjectSubCategory.LegalFund]: '⚖️',
-  [ProjectSubCategory.Promotion]: '🚀',
-  [ProjectSubCategory.OsSoftware]: '🛠',
-  [ProjectSubCategory.Hardware]: '🔧',
-  [ProjectSubCategory.App]: '📱',
-  [ProjectSubCategory.Humanitarian]: '🌍',
-  [ProjectSubCategory.Fundraiser]: '💸',
-  [ProjectSubCategory.Travel]: '✈️',
-  [ProjectSubCategory.Medical]: '🩺',
-  [ProjectSubCategory.Other]: '✨',
-}
-
-const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
-  const featuredTabs: CategoryTab[] = [
-    {
-      label: `🔥 ${t('Trending')}`,
-      path: getBaseProjectsPath(projectTypeFilter),
-    },
-    ...(projectTypeFilter === 'campaigns'
-      ? [
-          {
-            label: `🏆 ${t('Successfully Funded')}`,
-            path: getPath('discoveryCampaignsSuccessfullyFunded'),
-          },
-        ]
-      : []),
-    {
-      label: `📍 ${t('In your region')}`,
-      path:
-        projectTypeFilter === 'campaigns'
-          ? getPath('discoveryCampaignsInYourRegion')
-          : projectTypeFilter === 'fundraisers'
-          ? getPath('discoveryFundraisersInYourRegion')
-          : projectTypeFilter === 'circular-grants'
-          ? getPath('discoveryCircularGrantProjectsInYourRegion')
-          : getPath('discoveryProjectsInYourRegion'),
-    },
-    {
-      label: `🌊 ${t('Circular Economies')}`,
-      path: getProjectsSubCategoryPath(projectTypeFilter, ProjectSubCategory.CircularEconomy),
-      subCategory: ProjectSubCategory.CircularEconomy,
-    },
-    {
-      label: `🎓 ${t('Education')}`,
-      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Education),
-      category: ProjectCategory.Education,
-    },
-    {
-      label: `🛠 ${t('Open Source')}`,
-      path: getProjectsSubCategoryPath(projectTypeFilter, ProjectSubCategory.OsSoftware),
-      subCategory: ProjectSubCategory.OsSoftware,
-    },
-    {
-      label: `🌍 ${t('Humanitarian')}`,
-      path: getProjectsSubCategoryPath(projectTypeFilter, ProjectSubCategory.Humanitarian),
-      subCategory: ProjectSubCategory.Humanitarian,
-    },
-    {
-      label: `🤲 ${t('Causes')}`,
-      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Cause),
-      category: ProjectCategory.Cause,
-    },
-    {
-      label: `⚖️ ${t('Legal & Advocacy')}`,
-      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Advocacy),
-      category: ProjectCategory.Advocacy,
-    },
-    {
-      label: `🤝 ${t('Community')}`,
-      path: getProjectsCategoryPath(projectTypeFilter, ProjectCategory.Community),
-      category: ProjectCategory.Community,
-    },
-  ]
-
-  const existingPaths = new Set(featuredTabs.map((tab) => tab.path))
-  const getProjectCategoryLabel = (category: ProjectCategory) => ProjectCategoryLabel[category] ?? category
-  const getProjectSubCategoryLabel = (subCategory: ProjectSubCategory) =>
-    ProjectSubCategoryLabel[subCategory] ?? subCategory
-  const remainingTabs: CategoryTab[] = [
-    ...ProjectCategoryList.map((category) => ({
-      label: `${ProjectCategoryEmoji[category]} ${t(getProjectCategoryLabel(category))}`,
-      path: getProjectsCategoryPath(projectTypeFilter, category),
-      category,
-    })),
-    ...ProjectSubCategoryList.map((subCategory) => ({
-      label: `${ProjectSubCategoryEmoji[subCategory]} ${t(getProjectSubCategoryLabel(subCategory))}`,
-      path: getProjectsSubCategoryPath(projectTypeFilter, subCategory),
-      subCategory,
-    })),
-  ].filter((tab) => !existingPaths.has(tab.path))
-
-  return [...featuredTabs, ...remainingTabs]
-}
-
 const getParentCategoryForSubCategory = (subCategory: ProjectSubCategory) => {
   return ProjectCategoryList.find((category) => ProjectSubCategoryMap[category].includes(subCategory))
 }
@@ -431,10 +303,6 @@ export const Projects = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const tabListRef = useRef<HTMLDivElement | null>(null)
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(false)
   const {
     filters: { category, countryCode: filterCountryCode, region, search, subCategory, tagIds },
   } = useFilterContext()
@@ -443,7 +311,7 @@ export const Projects = () => {
   const isSuccessfullyFundedCampaignsRoute = getIsSuccessfullyFundedCampaignsRoute(location.pathname)
   const projectTypeFilters = useMemo<Array<{ key: ProjectTypeFilter; label: string; path: string }>>(
     () => [
-      { key: 'all', label: t('All project types'), path: getPath('discoveryProjects') },
+      { key: 'all', label: t('Projects'), path: getPath('discoveryProjects') },
       {
         key: 'circular-grants',
         label: t('Circular Grants'),
@@ -460,11 +328,6 @@ export const Projects = () => {
   const pathSegments = location.pathname.split('/').filter(Boolean)
   const isCategoryRoute = pathSegments.includes(PathName.category)
   const isSubCategoryRoute = pathSegments.includes(PathName.subCategory)
-  const categoryTabs = useMemo(() => getCategoryTabs(projectTypeFilter, t), [projectTypeFilter, t])
-  const currentTabIndex = Math.max(
-    categoryTabs.findIndex((tab) => tab.path === location.pathname),
-    0,
-  )
   const selectedCategoryFilterValue = useMemo<CategoryFilterOptionValue>(() => {
     if (subCategory) {
       return `subCategory:${subCategory as ProjectSubCategory}`
@@ -626,36 +489,6 @@ export const Projects = () => {
   const projectFilter =
     projectTypeFilter === 'campaigns' && !isSuccessfullyFundedCampaignsRoute ? isCampaignProjectStillRaising : undefined
   const toolbarDividerColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
-
-  useEffect(() => {
-    const element = tabListRef.current
-    if (!element) return
-
-    const updateScrollState = () => {
-      setCanScrollLeft(element.scrollLeft > 0)
-      setCanScrollRight(element.scrollLeft + element.clientWidth < element.scrollWidth - 1)
-    }
-
-    updateScrollState()
-    element.addEventListener('scroll', updateScrollState)
-    window.addEventListener('resize', updateScrollState)
-
-    return () => {
-      element.removeEventListener('scroll', updateScrollState)
-      window.removeEventListener('resize', updateScrollState)
-    }
-  }, [categoryTabs, location.pathname])
-
-  useEffect(() => {
-    const activeTab = tabRefs.current[currentTabIndex]
-    if (!activeTab) return
-
-    activeTab.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center',
-    })
-  }, [currentTabIndex])
 
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
@@ -962,16 +795,6 @@ export const Projects = () => {
     t,
   ])
 
-  const scrollTabs = (direction: 'left' | 'right') => {
-    const element = tabListRef.current
-    if (!element) return
-
-    element.scrollBy({
-      left: direction === 'left' ? -280 : 280,
-      behavior: 'smooth',
-    })
-  }
-
   const handleRetry = () => {
     if (shouldFilterByUserRegion && !countryCode) {
       refetchUserIpCountry()
@@ -995,89 +818,13 @@ export const Projects = () => {
       <VStack w="full" spacing={7} alignItems="start">
         <PageSectionHeader title={headContent.title} subtitle={headContent.description} />
 
-        <Tabs
-          w="full"
-          variant="secondary"
-          index={currentTabIndex}
-          onChange={(index) => {
-            const nextTab = categoryTabs[index] ?? categoryTabs[0]
-            const nextSearchParams = getNextSearchParamsWithCategorySelection({
-              category: nextTab?.category,
-              subCategory: nextTab?.subCategory,
-            })
-
-            navigate(
-              {
-                pathname: nextTab?.path ?? getBaseProjectsPath(projectTypeFilter),
-                search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
-              },
-              {
-                preventScrollReset: true,
-              },
-            )
-          }}
-        >
-          <HStack w="full" spacing={2} alignItems="center">
-            {canScrollLeft ? (
-              <IconButton
-                aria-label={t('Scroll categories left')}
-                icon={<PiCaretLeft />}
-                variant="ghost"
-                colorScheme="neutral1"
-                onClick={() => scrollTabs('left')}
-              />
-            ) : null}
-
-            <TabList
-              ref={tabListRef}
-              gap={4}
-              overflowX="auto"
-              sx={{
-                '&::-webkit-scrollbar': { display: 'none' },
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-              }}
-            >
-              {categoryTabs.map((tab, index) => (
-                <Tab
-                  key={tab.path}
-                  ref={(element) => {
-                    tabRefs.current[index] = element
-                  }}
-                  fontSize={{ base: 'xs', sm: 'md' }}
-                  color="neutral1.11"
-                  _selected={{
-                    color: 'neutral1.11',
-                    borderColor: 'neutral1.8',
-                  }}
-                  whiteSpace="nowrap"
-                  overflow="visible"
-                  maxW="none"
-                  title={tab.label}
-                >
-                  {tab.label}
-                </Tab>
-              ))}
-            </TabList>
-
-            {canScrollRight ? (
-              <IconButton
-                aria-label={t('Scroll categories right')}
-                icon={<PiCaretRight />}
-                variant="ghost"
-                colorScheme="neutral1"
-                onClick={() => scrollTabs('right')}
-              />
-            ) : null}
-          </HStack>
-        </Tabs>
-
         <HStack
           w="full"
           spacing={2}
           whiteSpace="nowrap"
           flexShrink={0}
-          overflowX="auto"
+          flexWrap={{ base: 'wrap', md: 'nowrap' }}
+          overflowX={{ base: 'visible', md: 'auto' }}
           sx={{
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none',
@@ -1086,6 +833,7 @@ export const Projects = () => {
         >
           <HStack spacing={2} whiteSpace="nowrap" flexShrink={0}>
             <ProjectsToolbarSelect
+              icon={PiStack}
               options={projectTypeFilters.map((filter) => ({
                 label: filter.label,
                 value: filter.key,
@@ -1101,6 +849,7 @@ export const Projects = () => {
             />
             <ProjectsToolbarSelect
               defaultLabel={t('All Categories')}
+              icon={PiTag}
               options={categoryFilterOptions}
               value={selectedCategoryFilterValue}
               onChange={handleCategoryFilterChange}
@@ -1125,7 +874,12 @@ export const Projects = () => {
               height="24px"
               borderColor={toolbarDividerColor}
             />
-            <ProjectsToolbarSelect options={sortOptions} value={sort} onChange={handleSortChange} />
+            <ProjectsToolbarSelect
+              icon={PiArrowsDownUp}
+              options={sortOptions}
+              value={sort}
+              onChange={handleSortChange}
+            />
           </HStack>
         </HStack>
 
@@ -1180,18 +934,18 @@ const ProjectsFilterEmptyState = ({ message, suggestion }: ProjectsFilterEmptySt
 
   return (
     <VStack w="full" borderWidth="0.5px" borderColor={borderColor} borderRadius="card" padding={{ base: 4, md: 5 }}>
-      <HStack
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
         w="full"
         justifyContent="center"
         spacing={1}
-        whiteSpace="nowrap"
-        overflowX="auto"
         color="neutral1.11"
         fontSize="sm"
+        textAlign="center"
       >
-        <Body>{message}.</Body>
+        <Body w={{ base: 'full', md: 'auto' }}>{message}.</Body>
         {suggestion ? (
-          <>
+          <HStack justifyContent="center" spacing={1} flexWrap="wrap">
             <Body>{t('See')}</Body>
             <Button
               as={Link}
@@ -1212,17 +966,18 @@ const ProjectsFilterEmptyState = ({ message, suggestion }: ProjectsFilterEmptySt
               {suggestion.ctaLabel}
             </Button>
             <Body>{t('instead')}.</Body>
-          </>
+          </HStack>
         ) : (
-          <Body>{t('Try a broader filter or clear your current selection')}.</Body>
+          <Body w={{ base: 'full', md: 'auto' }}>{t('Try a broader filter or clear your current selection')}.</Body>
         )}
-      </HStack>
+      </Stack>
     </VStack>
   )
 }
 
 type ProjectsToolbarSelectProps<T extends string> = {
   defaultLabel?: string
+  icon: IconType
   onChange: (value: T) => void
   options: Array<FilterDropdownOption<T>>
   value: T
@@ -1230,6 +985,7 @@ type ProjectsToolbarSelectProps<T extends string> = {
 
 const ProjectsToolbarSelect = <T extends string>({
   defaultLabel,
+  icon,
   onChange,
   options,
   value,
@@ -1245,6 +1001,7 @@ const ProjectsToolbarSelect = <T extends string>({
           variant="ghost"
           colorScheme="neutral1"
           size="sm"
+          leftIcon={<Icon as={icon} />}
           rightIcon={<Icon as={PiCaretDown} />}
           fontSize="sm"
           fontWeight={400}

@@ -28,7 +28,7 @@ export const CuratedProjects = ({
   const navigate = useNavigate()
 
   const handleDiscoverMore = () => {
-    navigate(getPath('discoveryCircularGrantProjects'))
+    navigate(getPath('discoveryProjects'))
   }
 
   return (

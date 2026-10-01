@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
-import { PiCaretDown, PiCheck, PiGlobe, PiMagnifyingGlass, PiX } from 'react-icons/pi'
+import { PiCaretDown, PiCheck, PiGlobe, PiMagnifyingGlass, PiMapPin, PiX } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useProjectCountriesGetQuery, useProjectRegionsGetQuery } from '@/types'
@@ -80,7 +80,6 @@ export const ProjectsRegionCountryFilter = ({ countryCode, region, onChange }: P
   }, [region, regions, searchValue])
 
   const selectedCountry = countryCode ? countries.find((entry) => entry.country.code === countryCode) : undefined
-  const isWorldwideSelected = !selectedCountry && !region
   const buttonLabel = selectedCountry?.country.name ?? region ?? t('Worldwide')
   const isLoading = countriesLoading || regionsLoading
 
@@ -121,7 +120,7 @@ export const ProjectsRegionCountryFilter = ({ countryCode, region, onChange }: P
           variant="ghost"
           colorScheme="neutral1"
           size="sm"
-          leftIcon={isWorldwideSelected ? <Icon as={PiGlobe} /> : undefined}
+          leftIcon={<Icon as={PiMapPin} />}
           rightIcon={<Icon as={PiCaretDown} />}
           fontSize="sm"
           fontWeight={400}
