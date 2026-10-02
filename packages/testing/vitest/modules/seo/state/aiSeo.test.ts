@@ -6,9 +6,9 @@ describe('ai seo content mapping', () => {
   it('returns rich default metadata aligned to the platform narrative', () => {
     const content = getAiSeoPageContent('default')
 
-    expect(content.title.toLowerCase()).toContain('bitcoin')
-    expect(content.description.toLowerCase()).toContain('humanitarian')
-    expect(content.keywords.toLowerCase()).toContain('bitcoin crowdfunding')
+    expect(content.title.toLowerCase()).toContain('circular grants')
+    expect(content.description.toLowerCase()).toContain('bitcoin capital')
+    expect(content.keywords.toLowerCase()).toContain('bitcoin impact funds')
     expect(content.about.length).toBeGreaterThan(0)
   })
 
