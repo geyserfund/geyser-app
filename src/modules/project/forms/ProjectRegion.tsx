@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import { UseFormReturn } from 'react-hook-form'
 
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
-import { countriesAtom } from '@/shared/state/countriesAtom.ts'
+import { countriesAtom, countriesLoadingAtom } from '@/shared/state/countriesAtom.ts'
 
 import { Country } from '../../../types'
 import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
@@ -15,6 +15,7 @@ interface ProjectRegionProps extends StackProps {
 
 export const ProjectRegion = ({ form }: ProjectRegionProps) => {
   const countriesData = useAtomValue(countriesAtom)
+  const countriesLoading = useAtomValue(countriesLoadingAtom)
 
   return (
     <ControlledCustomSelect<ProjectCreationVariables, Country, false>
@@ -26,6 +27,7 @@ export const ProjectRegion = ({ form }: ProjectRegionProps) => {
       required
       control={form.control}
       options={countriesData}
+      isLoading={countriesLoading}
       getOptionLabel={(option: Country) => option.name}
       getOptionValue={(option: Country) => option.code}
       onFocus={() => form.clearErrors('location')}

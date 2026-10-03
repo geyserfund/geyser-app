@@ -107,22 +107,23 @@ export const AmountInput = (props: {
       </InputGroup>
 
       <motion.p
-        animate={{
-          left: props.isSatoshi ? `${satsPosition}px` : '14px',
-        }}
-        transition={{
-          type: 'spring',
-          damping: 20,
-          stiffness: 200,
-        }}
         style={{
           fontSize: unitFontSize,
           fontWeight: unitFontWeight,
           color: 'var(--chakra-colors-neutral1-9)',
           position: 'absolute',
-          top: '49%',
-          transform: 'translateY(-50%)',
+          top: '50%',
+          left: 0,
           pointerEvents: 'none',
+        }}
+        animate={{
+          x: props.isSatoshi ? satsPosition : 14,
+          y: '-50%',
+        }}
+        transition={{
+          type: 'spring',
+          damping: 20,
+          stiffness: 200,
         }}
       >
         {props.isSatoshi ? 'sats' : '$'}
@@ -130,24 +131,25 @@ export const AmountInput = (props: {
 
       {props.suffix ? (
         <motion.p
+          style={{
+            fontSize: unitFontSize,
+            fontWeight: unitFontWeight,
+            color: 'var(--chakra-colors-neutral1-9)',
+            position: 'absolute',
+            top: '50%',
+            left: 0,
+            pointerEvents: 'none',
+            whiteSpace: 'nowrap',
+          }}
           animate={{
-            left: `${suffixPosition}px`,
+            x: suffixPosition,
+            y: '-50%',
             opacity: props.satoshi > 0 || props.dollar > 0 ? 1 : 0.7,
           }}
           transition={{
             type: 'spring',
             damping: 20,
             stiffness: 200,
-          }}
-          style={{
-            fontSize: unitFontSize,
-            fontWeight: unitFontWeight,
-            color: 'var(--chakra-colors-neutral1-9)',
-            position: 'absolute',
-            top: '49%',
-            transform: 'translateY(-50%)',
-            pointerEvents: 'none',
-            whiteSpace: 'nowrap',
           }}
         >
           {props.suffix}

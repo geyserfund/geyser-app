@@ -181,7 +181,7 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
 
     hasOpenedExistingCheckout.current = true
     window.sessionStorage.setItem(existingCheckoutAutoOpenKey, '1')
-    window.open(existingFiatSwapCheckoutUrl, '_blank')
+    window.open(existingFiatSwapCheckoutUrl, '_blank', 'noopener,noreferrer')
     setFiatSwapStatus(FiatSwapStatus.pending)
     setFiatFailureReason(null)
   }, [

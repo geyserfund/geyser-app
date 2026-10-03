@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { getPath } from '@/shared/constants'
@@ -42,7 +43,8 @@ export const GoalContributeButton = ({
     project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
   )
   const managedCircularGrant = isManagedCircularGrantProject(project)
-  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant
+  const usesTemporaryDirectPayments =
+    (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFundingProject(project)) && !managedCircularGrant
   const managedPaymentMethods = project.paymentMethods?.managedCircularGrant
   const hasManagedPaymentMethod = Boolean(
     managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,

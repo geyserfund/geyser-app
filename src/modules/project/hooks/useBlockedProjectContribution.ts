@@ -3,6 +3,7 @@ import type { MouseEvent } from 'react'
 import { useCallback, useRef } from 'react'
 
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import {
   Project,
@@ -35,11 +36,15 @@ export const useBlockedProjectContribution = (project?: ProjectContributionGate 
     project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
   )
   const managedCircularGrant = Boolean(project && isManagedCircularGrantProject(project))
+  const directPaymentsEnabled = Boolean(project && isLabifOpenFundingProject(project))
+  const hasAllowedPaymentMethod = directPaymentsEnabled
+    ? hasDirectPaymentDetails
+    : hasStripePaymentMethod || hasDirectPaymentDetails
   const isContributionBlocked = Boolean(
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
       !project?.rskEoa &&
       !managedCircularGrant &&
-      !(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (hasStripePaymentMethod || hasDirectPaymentDetails)),
+      !((TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || directPaymentsEnabled) && hasAllowedPaymentMethod),
   )
 
   const handleBlockedContribution = useCallback(
@@ -75,7 +80,7 @@ export const useBlockedProjectContribution = (project?: ProjectContributionGate 
 
       return true
     },
-    [isContributionBlocked, notifyCreator, project, toast],
+    [directPaymentsEnabled, isContributionBlocked, notifyCreator, project, toast],
   )
 
   return { isContributionBlocked, handleBlockedContribution }

@@ -3,10 +3,8 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Outlet } from 'react-router'
 
-import {
-  isManagedCircularGrantProject,
-  isOpenFundingCreationProject,
-} from '@/modules/project/domain/managedCircularGrant.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingDraft } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -23,20 +21,20 @@ export const ProjectCreationLayoutMain = () => {
   const params = useParams<{ projectId: string }>()
 
   const navigate = useNavigate()
-  const canUseCreationFlow =
-    !project.id || isManagedCircularGrantProject(project) || isOpenFundingCreationProject(project)
+  const isManagedCircularGrant = isManagedCircularGrantProject(project)
+  const isActiveCreationProject = isManagedCircularGrant || isLabifOpenFundingDraft(project)
 
   useEffect(() => {
-    if (!loading && !isMobile && canUseCreationFlow) {
+    if (!loading && !isMobile && (!project.id || isActiveCreationProject)) {
       navigate(getPath('launchFundingStrategy', params.projectId || 'new'))
     }
-  }, [canUseCreationFlow, isMobile, loading, navigate, params.projectId])
+  }, [isActiveCreationProject, isMobile, loading, navigate, params.projectId, project.id])
 
   if (loading) {
     return null
   }
 
-  if (project.id && !canUseCreationFlow) {
+  if (project.id && !isActiveCreationProject) {
     return <DeprecatedProjectCreation />
   }
 
@@ -54,7 +52,7 @@ export const ProjectCreationLayoutDesktop = () => {
     return null
   }
 
-  if (project.id && !isManagedCircularGrantProject(project) && !isOpenFundingCreationProject(project)) {
+  if (project.id && !isManagedCircularGrantProject(project) && !isLabifOpenFundingDraft(project)) {
     return <DeprecatedProjectCreation />
   }
 

@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, HStack, Link, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import * as yup from 'yup'
@@ -32,7 +32,7 @@ type DirectPaymentDetailsFormProps = {
   formId?: string
   hideSubmitButton?: boolean
   allowStripeOnly?: boolean
-  onLoadingChange?: (loading: boolean) => void
+  requireDirectPaymentDetails?: boolean
 }
 
 type DirectPaymentDetailsFormValues = {
@@ -74,7 +74,7 @@ export const DirectPaymentDetailsForm = ({
   formId,
   hideSubmitButton = false,
   allowStripeOnly = false,
-  onLoadingChange,
+  requireDirectPaymentDetails = false,
 }: DirectPaymentDetailsFormProps) => {
   const toast = useNotification()
   const { updateProject } = useProjectAPI()
@@ -83,11 +83,10 @@ export const DirectPaymentDetailsForm = ({
     'idle',
   )
   const [isStripeReady, setIsStripeReady] = useState(allowStripeOnly)
-
-  useEffect(() => {
-    onLoadingChange?.(updateProject.loading)
-  }, [onLoadingChange, updateProject.loading])
-  const directPaymentDetailsSchema = useMemo(() => createDirectPaymentDetailsSchema(isStripeReady), [isStripeReady])
+  const directPaymentDetailsSchema = useMemo(
+    () => createDirectPaymentDetailsSchema(!requireDirectPaymentDetails && isStripeReady),
+    [isStripeReady, requireDirectPaymentDetails],
+  )
   const {
     control,
     handleSubmit,

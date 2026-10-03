@@ -1,8 +1,13 @@
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep } from '@/types/index.ts'
+import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 
 /** Returns the creation-flow route for a given persisted creation step. */
-export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, projectId: string) => {
+export const getProjectCreationRoute = (
+  lastCreationStep: ProjectCreationStep,
+  projectId: string,
+  project?: { isCircularGrant?: boolean | null; fundingStrategy?: ProjectFundingStrategy | null },
+) => {
   switch (lastCreationStep) {
     case ProjectCreationStep.FundingType:
       return getPath('launchProjectDetails', projectId)
@@ -17,7 +22,9 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.AboutYou:
       return getPath('launchAboutYou', projectId)
     case ProjectCreationStep.Wallet:
-      return getPath('launchPaymentDetails', projectId)
+      return isManagedCircularGrantProject(project || {})
+        ? getPath('launchProjectDetails', projectId)
+        : getPath('launchPayment', projectId)
     case ProjectCreationStep.TaxId:
     case ProjectCreationStep.IdentityVerification:
       return getPath('launchProjectDetails', projectId)

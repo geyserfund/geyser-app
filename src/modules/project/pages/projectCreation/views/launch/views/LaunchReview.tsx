@@ -4,6 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
@@ -30,6 +31,7 @@ interface ReviewStatusInfo {
 
 export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   const { project } = useProjectAtom()
+  const isLabifOpenFunding = isLabifOpenFundingProject(project)
   const navigate = useNavigate()
   const toast = useNotification()
   const submitReviewConfirmModal = useModal()
@@ -254,7 +256,8 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   const continueButtonProps = getButtonConfig()
 
   const backButtonProps = {
-    onClick: () => navigate(getPath('launchAboutYou', project.id)),
+    onClick: () =>
+      navigate(getPath(isLabifOpenFunding ? 'launchPayment' : 'launchAboutYou', project.id)),
   }
 
   return (

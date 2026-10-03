@@ -10,7 +10,9 @@ type LandingSearchInputProps = {
   autoFocus?: boolean
   compact?: boolean
   onBlur?: React.FocusEventHandler<HTMLInputElement>
+  onFocus?: React.FocusEventHandler<HTMLInputElement>
   showContent?: boolean
+  size?: 'md' | 'lg'
   transparentMode?: boolean
   width?: string | Record<string, string>
 }
@@ -45,12 +47,12 @@ const getLandingSearchInputStyleTokens = ({
   }
 
   return {
-    iconColor: 'whiteAlpha.900',
+    iconColor: 'black',
     inputBackground: 'whiteAlpha.220',
     inputBorderColor: 'whiteAlpha.500',
     inputHoverBorderColor: 'whiteAlpha.700',
-    inputPlaceholderColor: 'whiteAlpha.800',
-    inputTextColor: 'white',
+    inputPlaceholderColor: 'blackAlpha.700',
+    inputTextColor: 'black',
   }
 }
 
@@ -59,7 +61,9 @@ export const LandingSearchInput = ({
   autoFocus,
   compact = false,
   onBlur,
+  onFocus,
   showContent = true,
+  size = 'md',
   transparentMode = false,
   width = { base: 'full', lg: '280px' },
 }: LandingSearchInputProps) => {
@@ -109,7 +113,7 @@ export const LandingSearchInput = ({
   return (
     <InputGroup
       as="form"
-      size="md"
+      size={size}
       width={width}
       onSubmit={(event) => {
         event.preventDefault()
@@ -126,6 +130,7 @@ export const LandingSearchInput = ({
         value={search}
         onChange={handleSearchUpdate}
         onBlur={onBlur}
+        onFocus={onFocus}
         placeholder={t('Search projects')}
         aria-label={t('Search projects')}
         borderRadius={{ base: '8px', lg: '10px' }}

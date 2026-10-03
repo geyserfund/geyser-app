@@ -1,11 +1,10 @@
 import { VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
-import { isOpenFundingCreationProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import type {
   Country,
@@ -21,7 +20,6 @@ import { useAuthContext } from '../../../../../context/auth'
 import { FieldContainer } from '../../../../../shared/components/form/FieldContainer.tsx'
 import { getPath } from '../../../../../shared/constants/config/routerPaths'
 import { useModal } from '../../../../../shared/hooks/useModal.tsx'
-import { labifApplicationAtom } from '../../../../../shared/state/labifApplicationAtom.ts'
 import { projectCreationReferrerHeroIdAtom } from '../../../../../shared/state/projectReferralAtom.ts'
 import { ProjectForm } from '../../../forms/ProjectForm'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectDashboard/common/ProjectUnsavedModal'
@@ -30,6 +28,7 @@ import { ProjectCreationReferralCapture } from '../components/ProjectCreationRef
 import { ProjectExitConfirmModal } from '../components/ProjectExitConfirmModal'
 import { ProjectReferrerSelect } from '../components/ProjectReferrerSelect.tsx'
 import { useCurrentUserIsFieldPartner } from '../hooks/useCurrentUserIsFieldPartner.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectForm } from '../hooks/useProjectForm'
 import type { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
@@ -47,7 +46,6 @@ export const LaunchProjectDetails = () => {
   const navigate = useNavigate()
   const toast = useNotification()
   const [projectReferrerHeroId, setProjectReferrerHeroId] = useAtom(projectCreationReferrerHeroIdAtom)
-  const [isLabifApplication, setIsLabifApplication] = useAtom(labifApplicationAtom)
   const selectedFundingOption = useAtomValue(projectCreationFundingOptionAtom)
   const { isFieldPartner } = useCurrentUserIsFieldPartner()
 
@@ -62,15 +60,17 @@ export const LaunchProjectDetails = () => {
   const isCircularGrant = isEdit
     ? Boolean((project as { isCircularGrant?: boolean }).isCircularGrant)
     : selectedFundingOption === CircularGrantFundingOption
+  const isLabifOpenFunding = isEdit
+    ? isLabifOpenFundingProject(project)
+    : selectedFundingOption !== CircularGrantFundingOption
 
   const form = useProjectForm({
     isEdit,
     project,
     isCircularGrant,
+    isLabifOpenFunding,
   })
   const referrerHeroId = form.watch('referrerHeroId')
-  const [labifCountryBlocked, setLabifCountryBlocked] = useState(false)
-  const requireLabifCountry = (isLabifApplication && !isCircularGrant) || (isEdit && isOpenFundingCreationProject(project))
 
   const { createProject, updateProject } = useProjectAPI()
 
@@ -118,10 +118,6 @@ export const LaunchProjectDetails = () => {
     referrerHeroId,
     ...values
   }: ProjectCreationVariables) => {
-    if (requireLabifCountry && labifCountryBlocked) {
-      return
-    }
-
     const normalizedReferrerHeroId = isFieldPartner ? undefined : referrerHeroId.trim() || undefined
 
     if (isEdit && project.id) {
@@ -152,7 +148,6 @@ export const LaunchProjectDetails = () => {
         tagIds: tags,
         fundingStrategy: getProjectFundingStrategyInput(selectedFundingOption),
         isCircularGrant: getProjectCircularGrantInput(selectedFundingOption),
-        labifApplication: isLabifApplication && !getProjectCircularGrantInput(selectedFundingOption),
         description: getProjectCreationDescription(selectedFundingOption, values.description),
         ...(normalizedReferrerHeroId ? { referrerHeroId: normalizedReferrerHeroId } : {}),
       } as CreateProjectInput
@@ -163,7 +158,6 @@ export const LaunchProjectDetails = () => {
         },
         onCompleted({ createProject }) {
           setProjectReferrerHeroId(null)
-          setIsLabifApplication(false)
           queryCurrentUser()
           updateProject.execute({
             variables: {
@@ -187,7 +181,7 @@ export const LaunchProjectDetails = () => {
 
   const continueProps = {
     isLoading: (isEdit && loading) || createProject.loading || updateProject.loading || updateProjectLoading,
-    isDisabled: createProject.loading || updateProject.loading || labifCountryBlocked,
+    isDisabled: createProject.loading || updateProject.loading,
     type: 'submit' as const,
   }
 
@@ -218,12 +212,7 @@ export const LaunchProjectDetails = () => {
         backButtonProps={backButtonProps}
       >
         <VStack width="100%" alignItems="flex-start" spacing={6}>
-          <ProjectForm
-            form={form}
-            isEdit={isEdit}
-            requireLabifCountry={requireLabifCountry}
-            onLabifCountryBlockedChange={setLabifCountryBlocked}
-          />
+          <ProjectForm form={form} isEdit={isEdit} />
           {!isEdit && !isFieldPartner ? (
             <FieldContainer
               title={t('Referral code')}

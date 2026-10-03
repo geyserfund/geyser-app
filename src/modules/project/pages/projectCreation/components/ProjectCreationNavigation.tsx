@@ -13,19 +13,18 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
 
-import {
-  isManagedCircularGrantProject,
-  isOpenFundingCreationProject,
-} from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
+import { CircularGrantFundingOption, projectCreationFundingOptionAtom } from '../states/fundingStrategyAtom.ts'
 import { projectCreationStepIndex } from '../utils/projectCreationSteps.ts'
 
 export { getProjectCreationRoute } from '../utils/getProjectCreationRoute.ts'
@@ -52,23 +51,29 @@ export const ProjectCreationNavigationDesktop = () => {
 
 const ProjectCreationNavigation = (props: StackProps) => {
   const { project } = useProjectAtom()
+  const selectedFundingOption = useAtomValue(projectCreationFundingOptionAtom)
   const location = useLocation()
+  const isLabifOpenFunding = isLabifOpenFundingProject(project)
+  const fundingGoalTitle =
+    project?.id && project.isCircularGrant
+      ? 'Circular Grant'
+      : selectedFundingOption === CircularGrantFundingOption
+      ? 'Circular Grant'
+      : 'Funding Goal'
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
-      {
-        title: isManagedCircularGrantProject(project) ? 'Circular Grant' : 'Funding Goal',
-        path: getPath('launchFundingGoal', project?.id),
-        isDisabled: !project.id,
-      },
+      { title: fundingGoalTitle, path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id },
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
-      ...(isOpenFundingCreationProject(project)
-        ? [{ title: 'Payment details', path: getPath('launchPaymentDetails', project?.id), isDisabled: !project.id }]
-        : []),
+      {
+        title: 'Payment Settings',
+        path: getPath('launchPayment', project?.id),
+        isDisabled: !project.id || !isLabifOpenFunding,
+      },
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
-    [project],
+    [fundingGoalTitle, isLabifOpenFunding, project?.id],
   )
 
   const activeButtonIndex = useMemo(() => {

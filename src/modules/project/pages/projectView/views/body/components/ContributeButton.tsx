@@ -28,6 +28,7 @@ import { useNavigate, useSearchParams } from 'react-router'
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useBlockedProjectContribution } from '@/modules/project/hooks/useBlockedProjectContribution.ts'
 import { QRCodeComponent } from '@/modules/project/pages/projectFunding/views/fundingPayment/components/QRCodeComponent.tsx'
 import { type AnimatedNavBarItem, AnimatedNavBar } from '@/shared/components/navigation/AnimatedNavBar'
@@ -77,7 +78,8 @@ export const ContributeButton = ({ isWidget, paymentMethods, onClick, ...rest }:
     project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
   )
   const managedCircularGrant = isManagedCircularGrantProject(project)
-  const usesTemporaryDirectPayments = TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant
+  const usesTemporaryDirectPayments =
+    (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFundingProject(project)) && !managedCircularGrant
   const managedPaymentMethods = project?.paymentMethods?.managedCircularGrant
   const hasManagedPaymentMethod = Boolean(
     managedPaymentMethods?.stripe || managedPaymentMethods?.strikeLightning || managedPaymentMethods?.strikeOnChain,

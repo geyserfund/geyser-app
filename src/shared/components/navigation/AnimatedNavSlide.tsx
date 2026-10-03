@@ -87,11 +87,12 @@ export const AnimatedNavSlide = ({
   const measuredRef = useCallback((node: HTMLButtonElement | null, index: number) => {
     if (node !== null) {
       setButtonPropsArray((current) => {
-        current[index] = {
+        const nextButtonProps = [...current]
+        nextButtonProps[index] = {
           left: node.offsetLeft,
           width: node.offsetWidth,
         }
-        return current
+        return nextButtonProps
       })
     }
   }, [])

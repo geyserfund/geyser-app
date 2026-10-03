@@ -10,8 +10,8 @@ import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/index.ts'
 import { SocialConfig } from '@/modules/auth/SocialConfig.tsx'
-import { isOpenFundingCreationProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -43,21 +43,21 @@ export const LaunchAboutYou = () => {
   }, [user.bio])
 
   const { project, loading } = useProjectAtom()
+  const isLabifOpenFunding = isLabifOpenFundingProject(project)
 
   const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
 
-  const requiresPaymentDetails = isOpenFundingCreationProject(project)
-  const nextPath = requiresPaymentDetails
-    ? getPath('launchPaymentDetails', project.id)
-    : getPath('launchFinalize', project.id)
-  const nextStep = requiresPaymentDetails ? ProjectCreationStep.Wallet : ProjectCreationStep.Launch
-
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.AboutYou,
-    nextPath,
+    isLabifOpenFunding ? getPath('launchPayment', project.id) : getPath('launchFinalize', project.id),
   )
 
-  const continueAfterAboutYou = () => updateProjectWithLastCreationStep(undefined, undefined, nextStep)
+  const continueAfterAboutYou = () =>
+    updateProjectWithLastCreationStep(
+      undefined,
+      undefined,
+      isLabifOpenFunding ? undefined : ProjectCreationStep.Launch,
+    )
 
   const onLeave = () => {
     if (!project) {

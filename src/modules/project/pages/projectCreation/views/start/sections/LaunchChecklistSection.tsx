@@ -3,7 +3,6 @@ import { t } from 'i18next'
 import { useMemo } from 'react'
 import { PiCheckCircle } from 'react-icons/pi'
 
-import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 
@@ -14,7 +13,6 @@ import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 /** Launch checklist section shown in place of launch plan cards. */
 export const LaunchChecklistSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
-  const canStartProject = useCanStartProject()
 
   const iconBackground = 'primary1.9'
   const primaryContentColor = 'utils.blackContrast'
@@ -83,11 +81,9 @@ export const LaunchChecklistSection = () => {
               ))}
             </VStack>
 
-            {canStartProject ? (
-              <Button colorScheme="primary1" onClick={handleLauchNowClick} alignSelf="flex-start">
-                {t('Start your project')}
-              </Button>
-            ) : null}
+            <Button colorScheme="primary1" onClick={handleLauchNowClick} alignSelf="flex-start">
+              {t('Start your project')}
+            </Button>
           </VStack>
         </PlaybookCard>
       </StartPageSectionShell>

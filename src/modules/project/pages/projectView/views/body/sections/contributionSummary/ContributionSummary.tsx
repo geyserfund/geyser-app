@@ -2,6 +2,7 @@ import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakr
 
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
@@ -35,7 +36,9 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
     project?.directPaymentDetails?.btcAddress || project?.directPaymentDetails?.lightningAddress,
   )
   const canUseTemporaryDirectPayments =
-    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isManagedCircularGrantProject(project) && hasDirectPaymentDetails
+    (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFundingProject(project)) &&
+    !isManagedCircularGrantProject(project) &&
+    hasDirectPaymentDetails
 
   return (
     <VStack

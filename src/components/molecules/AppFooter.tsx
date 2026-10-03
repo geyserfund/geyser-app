@@ -1,6 +1,6 @@
 import { HStack, IconButton, Link, Stack, Text, useDisclosure, VStack, Wrap } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
+import { FaGithub, FaPodcast } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 import { Link as ReactLink } from 'react-router'
 
@@ -10,7 +10,6 @@ import {
   GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserPodcastUrl,
-  GeyserTelegramUrl,
   GeyserTwitterUrl,
 } from '../../shared/constants'
 import { useMobileMode } from '../../utils'
@@ -61,16 +60,6 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               background={'none'}
               aria-label="Geyser on Twitter"
               icon={<RiTwitterXLine fontSize="20px" />}
-            />
-          </Link>
-
-          <Link href={GeyserTelegramUrl} isExternal>
-            <IconButton
-              size="sm"
-              background={'none'}
-              aria-label="Geyser on Telegram"
-              icon={<FaTelegramPlane fontSize="20px" />}
-              marginLeft="5px"
             />
           </Link>
 

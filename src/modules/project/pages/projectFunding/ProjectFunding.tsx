@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useResetFundingFlow } from '@/modules/project/funding/hooks/useResetFundingFlow.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -26,13 +27,14 @@ export const ProjectFunding = () => {
 
   useEffect(() => {
     const managedCircularGrant = isManagedCircularGrantProject(project)
+    const isLabifOpenFunding = isLabifOpenFundingProject(project)
     const hasStripePaymentMethod = Boolean(project.paymentMethods?.fiat?.stripe)
     const hasDirectPaymentDetails = Boolean(
       project.directPaymentDetails?.btcAddress || project.directPaymentDetails?.lightningAddress,
     )
     const isStripeSelectedFromDirectPayment = new URLSearchParams(location.search).get('direct-payment-stripe') === '1'
     const shouldOpenDirectPayment =
-      TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+      (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFunding) &&
       !managedCircularGrant &&
       hasDirectPaymentDetails &&
       !isStripeSelectedFromDirectPayment
@@ -40,13 +42,13 @@ export const ProjectFunding = () => {
     if (
       project.id &&
       (isFundingDisabled() ||
-        (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
+        ((TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFunding) &&
           !managedCircularGrant &&
           (!hasStripePaymentMethod || shouldOpenDirectPayment)))
     ) {
       const projectPath = getPath('project', project.name)
       navigate(
-        TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !managedCircularGrant && hasDirectPaymentDetails
+        (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFunding) && !managedCircularGrant && hasDirectPaymentDetails
           ? `${projectPath}?direct-payment=1`
           : projectPath,
       )

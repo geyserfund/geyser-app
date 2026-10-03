@@ -17,7 +17,7 @@ export const ActiveImpactFunds = ({ labifCommittedAmount }: ActiveImpactFundsPro
     <VStack w="full" align="stretch" spacing={5}>
       <HStack w="full" justify="space-between" align="center" gap={4}>
         <H3 size={{ base: 'md', lg: '2xl' }} bold sx={{ textWrap: 'balance' }}>
-          {t('Regional Partner in Geyser Impact Fund')}
+          {t('Regional Partner Fund')}
         </H3>
         <DiscoverMoreButton as={Link} to={getPath('impactFunds')} />
       </HStack>

@@ -11,6 +11,12 @@ export enum PathName {
   contributor = 'contributor',
   grants = 'grants',
   impactFunds = 'impact-fund',
+  opsFund = 'ops-fund',
+  about = 'about',
+  aboutFieldPartners = 'field-partners',
+  aboutWhereGeyserWorks = 'where-geyser-works',
+  aboutImpact = 'impact',
+  aboutDueDiligence = 'due-diligence',
   legacyImpactFunds = 'impact-funds',
   microLending = 'micro-loans',
   circularGrants = 'circular-grants',
@@ -86,7 +92,7 @@ export enum PathName {
   launchFundingGoal = 'goal',
   launchStory = 'story',
   launchAboutYou = 'about-you',
-  launchPaymentDetails = 'payment-details',
+  launchPayment = 'payment',
   launchFinalize = 'finalize',
 
   userProfile = 'user',
@@ -155,8 +161,6 @@ export enum PathName {
   fundingSuccess = 'success',
   fundingFailedCallback = 'failed-callback',
   badges = 'badges',
-  about = 'about',
-
   category = 'category',
   subCategory = 'subcategory',
 
@@ -236,6 +240,8 @@ const pathsMap = {
   discoveryImpactFundsWorkshops: () => `/${PathName.impactFunds}/crowdfunding-workshops`,
   discoveryMicroLending: () => `/${PathName.microLending}`,
   discoveryCircularGrants: () => `/${PathName.impactFunds}/${PathName.circularGrants}`,
+  discoveryCircularGrantsAfrica: () => `/${PathName.impactFunds}/${PathName.circularGrants}/africa`,
+  discoveryCircularGrantsLatinAmerica: () => `/${PathName.impactFunds}/${PathName.circularGrants}/latin-america`,
   discoveryCircularGrantsAfribitCaseStudy: () =>
     `/${PathName.impactFunds}/${PathName.circularGrants}/${PathName.afribitCaseStudy}`,
   legacyDiscoveryImpactFunds: () => `/${PathName.legacyImpactFunds}`,
@@ -431,8 +437,7 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingGoal}`,
   launchStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchStory}`,
   launchAboutYou: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchAboutYou}`,
-  launchPaymentDetails: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchPaymentDetails}`,
+  launchPayment: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}`,
 
   launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,
 
@@ -472,7 +477,12 @@ const pathsMap = {
 
   badges: () => `/${PathName.badges}`,
 
-  about: () => `${AboutGeyserOrigin}`,
+  about: () => `/${PathName.about}`,
+  aboutFieldPartners: () => `/${PathName.about}/${PathName.aboutFieldPartners}`,
+  aboutWhereGeyserWorks: () => `/${PathName.about}/${PathName.aboutWhereGeyserWorks}`,
+  aboutImpact: () => `/${PathName.about}/${PathName.aboutImpact}`,
+  aboutDueDiligence: () => `/${PathName.about}/${PathName.aboutDueDiligence}`,
+  opsFund: () => `/${PathName.opsFund}`,
   legalTerms: () => `/${PathName.legal}/terms`,
   legalPrivacy: () => `/${PathName.legal}/privacy`,
 }

@@ -14,9 +14,7 @@ const MOBILE_SIDEBAR_SEARCH_PATTERNS = [
   { path: `${getPath('discoveryProjects')}/*`, end: false },
   { path: getPath('discoveryProjectCategory', PathName.categoryName), end: true },
   { path: getPath('discoveryProjectSubCategory', PathName.subCategoryName), end: true },
-  { path: `${getPath('discoveryAllOrNothing')}/*`, end: false },
-  { path: `${getPath('discoveryCampaigns')}/*`, end: false },
-  { path: `${getPath('discoveryFundraisers')}/*`, end: false },
+  { path: `${getPath('discoveryCircularGrantProjects')}/*`, end: false },
   { path: `${getPath('discoveryProducts')}/*`, end: false },
 ] as const
 

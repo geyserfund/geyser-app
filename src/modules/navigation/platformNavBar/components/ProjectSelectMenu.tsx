@@ -46,7 +46,7 @@ export const ProjectSelectMenu = ({ transparentMode = false }: { transparentMode
       size={{ base: 'md', lg: 'lg' }}
       variant="outline"
       colorScheme="neutral1"
-      color={transparentMode ? 'white' : undefined}
+      color="black"
       bg={transparentMode ? transparentBackground : undefined}
       borderColor={transparentMode ? transparentBorderColor : undefined}
       _hover={transparentMode ? { backgroundColor: transparentHoverBackground } : undefined}

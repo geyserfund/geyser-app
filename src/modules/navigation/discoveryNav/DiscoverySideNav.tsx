@@ -25,11 +25,10 @@ import { useMobileMode } from '@/utils'
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
-const InsertDividerAfterIndex = [2, 4, 6]
+const InsertDividerAfterIndex = [1, 3]
 const marketplaceIconHeight = '26.62px'
 const defaultNavIconHeight = '19.8px'
 const defaultNavIconFontSize = '19.8px'
-const campaignNavIconFontSize = '16px'
 
 const glowAnimation = keyframes`
   0% { filter: drop-shadow(0 0 0px #3182ce); }
@@ -107,7 +106,7 @@ type DiscoverySideNavButtonProps = {
 const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
-  const navIconFontSize = item.key === DiscoveryNavItemKey.Campaigns ? campaignNavIconFontSize : defaultNavIconFontSize
+  const navIconFontSize = defaultNavIconFontSize
 
   if (isTabletSize) {
     return (

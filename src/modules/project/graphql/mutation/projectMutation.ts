@@ -44,7 +44,6 @@ export const MUTATION_PROJECT_PUBLISH = gql`
     projectPublish(input: $input) {
       id
       status
-      launchedAt
     }
   }
 `

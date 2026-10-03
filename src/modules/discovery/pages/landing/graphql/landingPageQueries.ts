@@ -95,63 +95,6 @@ export const QUERY_LANDING_ABOVE_FOLD = gql`
   }
 `
 
-export const QUERY_LANDING_CATEGORY_SECTION = gql`
-  ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
-  ${FRAGMENT_LANDING_POST_CARD_POST}
-  query LandingCategorySection($category: ProjectCategory!, $mostFundedCategory: String!) {
-    latest: projectsGet(
-      input: {
-        orderBy: [{ direction: desc, field: launchedAt }]
-        where: { category: $category, status: active }
-        pagination: { take: 5 }
-      }
-    ) {
-      projects {
-        ...LandingProjectCardProject
-      }
-    }
-    trending: projectsMostFundedByCategory(input: { category: $mostFundedCategory, range: WEEK, take: 5 }) {
-      category
-      subCategory
-      projects {
-        project {
-          ...LandingProjectCardProject
-        }
-        contributionsSummary {
-          contributionsTotal
-          contributionsTotalUsd
-        }
-      }
-    }
-    posts(input: { orderBy: { publishedAt: desc }, pagination: { take: 10 }, where: { category: $category } }) {
-      ...LandingPostCardPost
-    }
-  }
-`
-
-export const QUERY_LANDING_OTHER_SECTION = gql`
-  ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
-  ${FRAGMENT_LANDING_POST_CARD_POST}
-  query LandingOtherSection {
-    latest: projectsGet(
-      input: {
-        orderBy: [{ direction: desc, field: launchedAt }]
-        where: { categories: [ADVOCACY, OTHER], status: active }
-        pagination: { take: 5 }
-      }
-    ) {
-      projects {
-        ...LandingProjectCardProject
-      }
-    }
-    posts(
-      input: { orderBy: { publishedAt: desc }, pagination: { take: 10 }, where: { categories: [ADVOCACY, OTHER] } }
-    ) {
-      ...LandingPostCardPost
-    }
-  }
-`
-
 export const QUERY_LANDING_ANNOUNCEMENTS = gql`
   ${FRAGMENT_LANDING_POST_CARD_POST}
   query LandingAnnouncements {
@@ -170,15 +113,11 @@ export const QUERY_LANDING_ANNOUNCEMENTS = gql`
   }
 `
 
-export const QUERY_LANDING_CIRCULAR_GRANT_PROJECTS_SECTION = gql`
+export const QUERY_LANDING_CIRCULAR_GRANTS_BY_FILTER = gql`
   ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
-  query LandingCircularGrantProjectsSection {
+  query LandingCircularGrantsByFilter($where: ProjectsGetWhereInput!, $take: Int!) {
     projectsGet(
-      input: {
-        orderBy: [{ direction: desc, field: launchedAt }]
-        where: { status: active, isCircularGrant: true }
-        pagination: { take: 3 }
-      }
+      input: { orderBy: [{ direction: desc, field: launchedAt }], where: $where, pagination: { take: $take } }
     ) {
       projects {
         ...LandingProjectCardProject
@@ -187,19 +126,3 @@ export const QUERY_LANDING_CIRCULAR_GRANT_PROJECTS_SECTION = gql`
   }
 `
 
-export const QUERY_LANDING_REGIONAL_PROJECTS_SECTION = gql`
-  ${FRAGMENT_LANDING_PROJECT_CARD_PROJECT}
-  query LandingRegionalProjectsSection($countryCode: String!) {
-    projectsGet(
-      input: {
-        where: { fundingStrategy: TAKE_IT_ALL, countryCode: $countryCode, status: active }
-        orderBy: [{ direction: desc, field: launchedAt }, { direction: desc, field: balance }]
-        pagination: { take: 6 }
-      }
-    ) {
-      projects {
-        ...LandingProjectCardProject
-      }
-    }
-  }
-`

@@ -8,6 +8,7 @@ import { noUrlRegex, validUrl } from '@/utils/validations/regex.ts'
 import { ProjectValidations } from '../../../../../shared/constants/validations/project'
 import { ProjectPageBodyFragment, ProjectType } from '../../../../../types/generated/graphql'
 import { ProjectCountryCodesThatAreRestricted } from '../utils/constants.ts'
+import { isLabifEligibleCountry } from '@/modules/project/domain/labifOpenFunding.ts'
 
 export type ProjectCreationVariables = {
   title: string
@@ -42,7 +43,7 @@ const DEFAULT_VALUES: ProjectCreationVariables = {
   promotionsEnabled: true,
 }
 
-const schema = yup
+const createSchema = (isLabifOpenFunding: boolean) => yup
   .object({
     shortDescription: yup
       .string()
@@ -89,7 +90,14 @@ const schema = yup
         return true
       }),
     subCategory: yup.string().required('Subcategory is a required field.'),
-    location: yup.string().required('Country is a required field.'),
+    location: yup
+      .string()
+      .required('Country is a required field.')
+      .test(
+        'is-labif-country',
+        'Only countries in South America, Central America, and the Caribbean can create Open Funding projects.',
+        (value) => !isLabifOpenFunding || isLabifEligibleCountry(value),
+      ),
     links: yup.array().of(yup.string().matches(validUrl, 'Please enter a valid URL')),
     tags: yup.array().of(yup.number()),
     referrerHeroId: yup.string(),
@@ -103,10 +111,17 @@ type UseProjectFormProps = {
   isEdit: boolean
   project: ProjectPageBodyFragment | undefined | null
   isCircularGrant?: boolean
+  isLabifOpenFunding?: boolean
 }
 
-export const useProjectForm = ({ isEdit, project, isCircularGrant = false }: UseProjectFormProps) => {
+export const useProjectForm = ({
+  isEdit,
+  project,
+  isCircularGrant = false,
+  isLabifOpenFunding = false,
+}: UseProjectFormProps) => {
   const defaultPromotionsEnabled = getDefaultPromotionsEnabled(isCircularGrant)
+  const schema = useMemo(() => createSchema(isLabifOpenFunding), [isLabifOpenFunding])
 
   const form = useForm<ProjectCreationVariables>({
     resolver: yupResolver(schema) as any,

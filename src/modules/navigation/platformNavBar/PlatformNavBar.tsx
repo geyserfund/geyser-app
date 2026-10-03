@@ -1,25 +1,26 @@
-import { Box, HStack, IconButton, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, useBreakpointValue, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { PiX } from 'react-icons/pi'
-import { Location, useLocation, useNavigate } from 'react-router'
+import { Link, Location, useLocation, useNavigate } from 'react-router'
 
 import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/modules/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
+import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ID } from '@/shared/constants/components/id.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
-import { BrandLogoFull } from './components/BrandLogo'
-import { CreateProjectButton } from './components/CreateProjectButton.tsx'
+import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
 import { LandingDesktopNav } from './components/LandingDesktopNav.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
@@ -42,17 +43,7 @@ export const PlatformNavBar = () => {
   const creatorNavScrollThreshold = 20
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
-  const landingButtonSurface = useColorModeValue('white', 'neutral1.3')
-  const landingButtonForeground = useColorModeValue('black', 'white')
-  const landingButtonBorder = useColorModeValue('black', 'neutral1.6')
-  const landingButtonHover = useColorModeValue('gray.50', 'neutral1.2')
-  const landingButtonActive = useColorModeValue('gray.100', 'neutral1.2')
-  const transparentButtonSurface = 'whiteAlpha.220'
-  const transparentButtonForeground = 'white'
-  const transparentButtonBorder = 'whiteAlpha.500'
-  const transparentButtonHover = 'whiteAlpha.320'
-  const transparentButtonActive = 'whiteAlpha.420'
-  const landingNavMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
+  const landingContentMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   const isMobileMode = useMobileMode()
 
@@ -121,7 +112,7 @@ export const PlatformNavBar = () => {
       rootElement?.removeEventListener('scroll', handleScroll)
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [creatorNavScrollThreshold, isCreatorPage])
+  }, [creatorNavScrollThreshold, isCreatorPage, isMobileMode])
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -143,8 +134,12 @@ export const PlatformNavBar = () => {
       return <ProjectLogo />
     }
 
+    if (isMobileMode) {
+      return <BrandLogo />
+    }
+
     return <BrandLogoFull forceLightLogo={isCreatorPage && !creatorNavScrolled} />
-  }, [creatorNavScrolled, isCreatorPage, isProjectFundingRoutes])
+  }, [creatorNavScrolled, isCreatorPage, isMobileMode, isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
     (isPlatformRoutes ||
@@ -154,8 +149,11 @@ export const PlatformNavBar = () => {
       isAmbassadorProgramPage ||
       isLaunchStartPage) &&
     !isProjectFundingRoutes &&
-    !isProjectDashboardRoutes &&
-    !isMobileMode
+    !isProjectDashboardRoutes
+  const shouldShowDesktopNav = Boolean(shouldShowPlatformNav && !isMobileMode)
+  const shouldShowMobileSearch = Boolean(shouldShowPlatformNav && isMobileMode)
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const shouldUseWideNavLayout = Boolean(useBreakpointValue({ base: false, '2xl': true }, { ssr: false }))
   const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
   const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
 
@@ -164,69 +162,80 @@ export const PlatformNavBar = () => {
       return <CloseGoBackButton />
     }
 
-    const shouldShowLandingCreateButton = shouldShowPlatformNav && (!isLoggedIn || !isUserAProjectCreator)
-    const shouldShowProjectSelectMenu = isLoggedIn && (!shouldShowPlatformNav || isUserAProjectCreator)
+    const shouldShowProjectSelectMenu = isLoggedIn && (!shouldShowDesktopNav || isUserAProjectCreator)
 
-    const actionButtonSurface = isCreatorTransparentNav ? transparentButtonSurface : landingButtonSurface
-    const actionButtonForeground = isCreatorTransparentNav ? transparentButtonForeground : landingButtonForeground
-    const actionButtonBorder = isCreatorTransparentNav ? transparentButtonBorder : landingButtonBorder
-    const actionButtonHover = isCreatorTransparentNav ? transparentButtonHover : landingButtonHover
-    const actionButtonActive = isCreatorTransparentNav ? transparentButtonActive : landingButtonActive
+    const becomeFieldPartnerButton = shouldShowDesktopNav ? (
+      <Button
+        as="a"
+        href={ImpactFundsFieldPartnerApplicationUrl}
+        target="_blank"
+        rel="noreferrer"
+        display={{ base: 'none', xl: 'flex' }}
+        size={{ base: 'md', lg: 'lg' }}
+        variant="ghost"
+        color="black"
+        fontWeight={600}
+        borderRadius={{ base: '8px', lg: '10px' }}
+        _hover={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.200' } : undefined}
+        _active={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.300' } : undefined}
+      >
+        {t('Become a Field Partner')}
+      </Button>
+    ) : null
 
-    const landingCreateButton = shouldShowLandingCreateButton ? (
-      <>
-        <CreateProjectButton
-          display={{ base: 'none', lg: 'flex', xl: 'none' }}
-          iconOnly
-          aria-label={t('Start your project')}
-          size="md"
-          width="40px"
-          minWidth="40px"
-          paddingX={0}
-          variant="outline"
-          bg={actionButtonSurface}
-          color={actionButtonForeground}
-          borderColor={actionButtonBorder}
-          borderWidth="1px"
-          _hover={{ bg: actionButtonHover }}
-          _active={{ bg: actionButtonActive }}
-          borderRadius="8px"
-        />
-        <CreateProjectButton
-          display={{ base: 'none', xl: 'flex' }}
-          label={t('Start your project')}
-          noIcon
-          size={{ base: 'md', lg: 'lg' }}
-          minWidth="190px"
-          variant="outline"
-          bg={actionButtonSurface}
-          color={actionButtonForeground}
-          borderColor={actionButtonBorder}
-          borderWidth="1px"
-          _hover={{ bg: actionButtonHover }}
-          _active={{ bg: actionButtonActive }}
-          borderRadius={{ base: '8px', lg: '10px' }}
-        />
-      </>
+    const supportGeyserButton = shouldShowDesktopNav ? (
+      <Button
+        as={Link}
+        to={getPath('fundingStart', 'geyser')}
+        display={{ base: 'none', lg: 'flex' }}
+        size={{ base: 'md', lg: 'lg' }}
+        variant="outline"
+        colorScheme="neutral1"
+        bg="white"
+        color="black"
+        borderColor="neutral1.6"
+        fontWeight={600}
+        borderRadius={{ base: '8px', lg: '10px' }}
+        _hover={{ bg: 'neutral1.2', borderColor: 'neutral1.7' }}
+      >
+        {t('Support Geyser')}
+      </Button>
     ) : null
 
     return (
-      <HStack position="relative">
+      <HStack position="relative" spacing={{ base: 1, lg: 2 }}>
+        {shouldShowDesktopNav && !shouldUseWideNavLayout ? (
+          <Box
+            width={isSearchExpanded ? '240px' : '48px'}
+            minWidth={isSearchExpanded ? '240px' : '48px'}
+            transition="width 0.2s ease, min-width 0.2s ease"
+          >
+            <LandingSearchInput
+              compact={!isSearchExpanded}
+              size="lg"
+              width="full"
+              autoFocus={isSearchExpanded}
+              transparentMode={isCreatorTransparentNav}
+              onFocus={() => setIsSearchExpanded(true)}
+              onBlur={() => setIsSearchExpanded(false)}
+            />
+          </Box>
+        ) : null}
         {!isLoggedIn ? (
           <>
-            {landingCreateButton}
+            {becomeFieldPartnerButton}
+            {supportGeyserButton}
             <LoginButton
-              color={isCreatorTransparentNav ? 'white' : undefined}
+              color="black"
+              paddingX={{ base: 2, lg: 4 }}
               _hover={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.220' } : undefined}
               _active={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.320' } : undefined}
             />
-            {!shouldShowPlatformNav && (
-              <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
-            )}
           </>
         ) : (
           <>
-            {landingCreateButton}
+            {becomeFieldPartnerButton}
+            {supportGeyserButton}
             {shouldShowProjectSelectMenu ? <ProjectSelectMenu transparentMode={isCreatorTransparentNav} /> : null}
           </>
         )}
@@ -237,18 +246,10 @@ export const PlatformNavBar = () => {
     isLoggedIn,
     isCreatorTransparentNav,
     isManifestoPage,
+    isSearchExpanded,
     isUserAProjectCreator,
-    landingButtonActive,
-    landingButtonBorder,
-    landingButtonForeground,
-    landingButtonHover,
-    landingButtonSurface,
-    shouldShowPlatformNav,
-    transparentButtonActive,
-    transparentButtonBorder,
-    transparentButtonForeground,
-    transparentButtonHover,
-    transparentButtonSurface,
+    shouldShowDesktopNav,
+    shouldUseWideNavLayout,
   ])
 
   return (
@@ -280,40 +281,64 @@ export const PlatformNavBar = () => {
             justifyContent={'space-between'}
             spacing={{ base: 2, lg: 4 }}
             position="relative"
-            zIndex={3}
+            zIndex={5}
             pointerEvents="none"
           >
-            <HStack height="full" flexShrink={0} pointerEvents="auto">
+            <HStack height="full" flexShrink={0} pointerEvents="auto" spacing={{ base: 1, lg: 2 }}>
               {renderLeftSide()}
+              {shouldShowDesktopNav && !shouldUseWideNavLayout ? (
+                <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
+              ) : null}
             </HStack>
-            <Box pointerEvents="auto">{renderRightSide()}</Box>
+            {shouldShowMobileSearch ? (
+              <Box flex={1} minWidth={0} px={1} pointerEvents="auto">
+                <LandingSearchInput size="md" width="full" transparentMode={isCreatorTransparentNav} />
+              </Box>
+            ) : null}
+            <Box flexShrink={0} pointerEvents="auto">
+              {renderRightSide()}
+            </Box>
           </HStack>
-
-          {shouldShowPlatformNav ? (
-            <HStack
-              position="absolute"
-              inset={0}
-              justifyContent="center"
-              alignItems="center"
-              pointerEvents="none"
-              zIndex={2}
-            >
-              <HStack
-                w="100%"
-                maxWidth={landingNavMaxWidth}
-                paddingX={standardPadding}
-                height={{ base: '40px', lg: '48px' }}
-                pointerEvents="none"
-                justifyContent="center"
-              >
-                <Box pointerEvents="auto">
-                  <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
-                </Box>
-              </HStack>
-            </HStack>
-          ) : null}
         </VStack>
       </VStack>
+
+      {shouldShowDesktopNav && shouldUseWideNavLayout ? (
+        <>
+          <HStack
+            position="absolute"
+            inset={0}
+            justifyContent="center"
+            alignItems="center"
+            pointerEvents="none"
+            zIndex={4}
+          >
+            <HStack
+              w="100%"
+              maxWidth={landingContentMaxWidth}
+              paddingX={standardPadding}
+              height={{ base: '40px', lg: '48px' }}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Box pointerEvents="auto">
+                <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
+              </Box>
+            </HStack>
+          </HStack>
+          <HStack
+            position="absolute"
+            inset={0}
+            justifyContent="center"
+            alignItems="center"
+            pointerEvents="none"
+            zIndex={4}
+          >
+            <Box pointerEvents="auto" width={{ lg: '280px', xl: '360px' }}>
+              <LandingSearchInput size="lg" width="full" transparentMode={isCreatorTransparentNav} />
+            </Box>
+          </HStack>
+        </>
+      ) : null}
 
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />
 

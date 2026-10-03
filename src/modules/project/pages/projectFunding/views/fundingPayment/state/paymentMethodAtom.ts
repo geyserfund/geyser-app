@@ -13,6 +13,7 @@ import {
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
@@ -90,7 +91,7 @@ export const hasStripePaymentMethodAtom = atom((get) => {
     return false
   }
 
-  if (TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && project.paymentMethods.fiat.stripe) {
+  if ((TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFundingProject(project)) && project.paymentMethods.fiat.stripe) {
     return true
   }
 

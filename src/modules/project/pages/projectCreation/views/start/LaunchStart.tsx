@@ -2,7 +2,6 @@ import { VStack } from '@chakra-ui/react'
 
 import { DiscoveryBottomNav } from '@/modules/navigation/discoveryNav/DiscoveryBottomNav.tsx'
 
-import { LabifApplicationCapture } from '../../components/LabifApplicationCapture.tsx'
 import { ProjectCreationReferralCapture } from '../../components/ProjectCreationReferralCapture.tsx'
 import { CreatorToolsSection } from './sections/CreatorToolsSection.tsx'
 import { FAQSection } from './sections/FAQSection.tsx'
@@ -19,7 +18,6 @@ export const LaunchStart = () => {
   return (
     <>
       <ProjectCreationReferralCapture />
-      <LabifApplicationCapture />
       <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 28, lg: 20 }}>
         <HeroSection />
         <FundamentalsSection />

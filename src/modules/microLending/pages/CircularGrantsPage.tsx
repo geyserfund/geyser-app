@@ -16,7 +16,7 @@ import {
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { PiCaretRightBold } from 'react-icons/pi'
-import { Link as RouterLink } from 'react-router'
+import { Link as RouterLink, useSearchParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { CircularGrantProjects } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/CircularGrantProjects.tsx'
@@ -26,6 +26,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { VideoPlayer } from '@/shared/molecules/VideoPlayer.tsx'
@@ -60,7 +61,7 @@ const AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL = 'https://youtu.be/pU1KxP0ddng'
 const FIELD_PARTNER_BOOKLET_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
 
-const infoPills = ['0% interest', 'No debt obligation', 'Capital reused locally'] as const
+export const circularGrantInfoPills = ['0% interest', 'No debt obligation', 'Capital reused locally'] as const
 
 const modelIssues = [
   'Predatory informal debt and exploitative capital traps',
@@ -82,7 +83,7 @@ type FaqItem = {
   link?: string
 }
 
-const flowSteps: readonly FlowStepItem[] = [
+export const circularGrantFlowSteps: readonly FlowStepItem[] = [
   {
     number: '1',
     title: 'Geyser capital pool',
@@ -107,7 +108,7 @@ const flowSteps: readonly FlowStepItem[] = [
   },
 ]
 
-const faqItems: readonly FaqItem[] = [
+export const circularGrantFaqItems: readonly FaqItem[] = [
   {
     question: 'How is capital return handled without debt enforcement?',
     answer:
@@ -131,6 +132,7 @@ const faqItems: readonly FaqItem[] = [
 ] as const
 
 export const CircularGrantsPage = () => {
+  const [searchParams] = useSearchParams()
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
   const onDonateClick = () => openDonateModal({ defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID] })
   const pageBg = useColorModeValue('white', 'utils.pbg')
@@ -182,7 +184,7 @@ export const CircularGrantsPage = () => {
             <Breadcrumb colors={colors} />
           </PageSection>
           <HeroSection colors={colors} onDonateClick={onDonateClick} />
-          <CircularGrantProjectsSection />
+          <CircularGrantProjectsSection region={searchParams.get('region')} />
           <OverviewSection colors={colors} />
           <HowItWorksSection colors={colors} />
           <CaseStudySection colors={colors} />
@@ -196,11 +198,20 @@ export const CircularGrantsPage = () => {
   )
 }
 
-const CircularGrantProjectsSection = () => (
-  <PageSection>
-    <CircularGrantProjects />
-  </PageSection>
-)
+const CircularGrantProjectsSection = ({ region }: { region: string | null }) => {
+  const where =
+    region === 'africa'
+      ? { region: 'Africa' }
+      : region === 'latin-america'
+      ? { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }
+      : undefined
+
+  return (
+    <PageSection>
+      <CircularGrantProjects title="Circular Grants" where={where} take={6} />
+    </PageSection>
+  )
+}
 
 const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
@@ -216,7 +227,7 @@ const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
           )}
         </Body>
         <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3} pt={2}>
-          {infoPills.map((pill) => (
+          {circularGrantInfoPills.map((pill) => (
             <Box
               key={pill}
               bg={colors.surfaceBg}
@@ -268,7 +279,7 @@ const HowItWorksSection = ({ colors }: { colors: CircularGrantsColors }) => (
       )}
     </Body>
     <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={4} mt={6}>
-      {flowSteps.map((step) => (
+      {circularGrantFlowSteps.map((step) => (
         <FlowStep key={step.number} colors={colors} step={step} />
       ))}
     </SimpleGrid>
@@ -481,7 +492,7 @@ const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
         gap={{ base: 2, lg: 3 }}
         sx={{ '& > *:last-child': { borderBottom: '0 !important' } }}
       >
-        {faqItems.map((item) => (
+        {circularGrantFaqItems.map((item) => (
           <AccordionItem
             key={item.question}
             borderWidth="0"

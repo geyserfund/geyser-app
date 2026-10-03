@@ -40,6 +40,7 @@ import {
   ProjectSubCategoryList,
   ProjectSubCategoryMap,
 } from '@/shared/constants/platform/projectCategory.ts'
+import { getCircularGrantGeoWhere } from '@/shared/constants/platform/regionCountryCodes.ts'
 import { useQueryWithPagination } from '@/shared/hooks/useQueryWithPagination.tsx'
 import { getIsAonActive } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import {
@@ -443,8 +444,6 @@ export const Projects = () => {
   const projectTypeFilters = useMemo<Array<{ key: ProjectTypeFilter; label: string; path: string }>>(
     () => [
       { key: 'all', label: t('All project types'), path: getPath('discoveryProjects') },
-      { key: 'fundraisers', label: t('Fundraisers'), path: getPath('discoveryFundraisers') },
-      { key: 'campaigns', label: t('Campaigns'), path: getPath('discoveryCampaigns') },
       {
         key: 'circular-grants',
         label: t('Circular Grants'),
@@ -535,7 +534,7 @@ export const Projects = () => {
       fundingStrategy: getFundingStrategy(projectTypeFilter),
       isCircularGrant: getIsCircularGrantFilter(projectTypeFilter),
       aonGoalReached: isSuccessfullyFundedCampaignsRoute || undefined,
-      region,
+      ...(projectTypeFilter === 'circular-grants' ? getCircularGrantGeoWhere(region) : { region }),
       search,
       status: ProjectsGetWhereInputStatus.Active,
       subCategory: subCategory as ProjectSubCategory | undefined,

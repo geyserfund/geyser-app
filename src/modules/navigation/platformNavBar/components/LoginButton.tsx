@@ -6,7 +6,7 @@ import { useAuthModal } from '../../../../modules/auth/hooks'
 export const LoginButton = (props: ButtonProps) => {
   const { loginOnOpen } = useAuthModal()
   const { t } = useTranslation()
-  const textColor = useColorModeValue('black', 'white')
+  const textColor = 'black'
   const hoverBg = useColorModeValue('blackAlpha.50', 'neutral1.3')
   const activeBg = useColorModeValue('blackAlpha.100', 'neutral1.2')
 

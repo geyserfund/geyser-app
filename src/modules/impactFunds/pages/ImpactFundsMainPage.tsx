@@ -1,8 +1,8 @@
 import { Box, Button, Flex, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { PiArrowRightBold } from 'react-icons/pi'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
@@ -45,7 +45,7 @@ const FIELD_PARTNERS_PRESENTATION_URL =
 // The externally managed storage object keeps its historical name for continuity.
 const CIRCULAR_GRANTS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-booklet.pdf'
-const ABOUT_SECTION_STATS = [
+export const impactFundsAboutStats = [
   {
     value: '279M sats',
     label: 'allocated through Impact Fund projects',
@@ -113,7 +113,7 @@ type SectionColors = {
   resourceEyebrow: string
 }
 
-const howItWorksSteps = [
+export const impactFundsHowItWorksSteps = [
   {
     label: '01 Discover',
     title: 'Discover trusted local projects',
@@ -131,7 +131,7 @@ const howItWorksSteps = [
   },
 ] as const
 
-const resourceCards = {
+export const impactFundsResourceCards = {
   caseStudies: [
     {
       eyebrow: 'Field story',
@@ -179,6 +179,7 @@ const resourceCards = {
 export const ImpactFundsMainPage = () => {
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
   const [isShowingAllPartners, setIsShowingAllPartners] = useState(false)
+  const location = useLocation()
   const { data } = useImpactFundsQuery()
   const { data: fieldPartnerLeaderboardData } = useImpactFundsFieldPartnerLeaderboardQuery({
     variables: {
@@ -189,6 +190,19 @@ export const ImpactFundsMainPage = () => {
   })
   const impactFundsSeoContent = getAiSeoPageContent('impactFunds')
   const { getSatoshisFromUSDCents } = useBTCConverter()
+
+  useEffect(() => {
+    const sectionId = location.hash.replace('#', '')
+    if (!sectionId) {
+      return
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [location.hash])
 
   const pageBg = useColorModeValue('white', 'utils.pbg')
   const surfaceBg = useColorModeValue('white', 'neutral1.4')
@@ -431,18 +445,27 @@ const PageShell = ({ children, colors }: { children: React.ReactNode; colors: Se
 const PageSection = ({
   children,
   colors,
+  id,
   py = dimensions.impactLendingSection.paddingY,
   pt,
   bg,
 }: {
   children: React.ReactNode
   colors: SectionColors
+  id?: string
   py?: object
   pt?: object | number
   bg?: string
 }) => {
   return (
-    <Box w="full" bg={bg || colors.pageBg} paddingTop={pt ?? py} paddingBottom={py}>
+    <Box
+      id={id}
+      scrollMarginTop={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}
+      w="full"
+      bg={bg || colors.pageBg}
+      paddingTop={pt ?? py}
+      paddingBottom={py}
+    >
       <Box w="full" maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto" px={standardPadding}>
         {children}
       </Box>
@@ -581,7 +604,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
   const statMutedTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
 
   return (
-    <PageSection colors={colors}>
+    <PageSection id="impact" colors={colors}>
       <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
         <VStack align="stretch" spacing={{ base: 6, lg: 8 }}>
           <VStack align="flex-start" spacing="14px">
@@ -604,7 +627,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
         </VStack>
 
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing="14px">
-          {ABOUT_SECTION_STATS.map((stat) => (
+          {impactFundsAboutStats.map((stat) => (
             <VStack
               key={stat.label}
               align="flex-start"
@@ -664,7 +687,7 @@ const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
           </H2>
         </VStack>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing="14px">
-          {howItWorksSteps.map((step) => (
+          {impactFundsHowItWorksSteps.map((step) => (
             <VStack
               key={step.label}
               align="flex-start"
@@ -709,7 +732,7 @@ const LeaderboardSection = ({
   isShowingAllPartners: boolean
   onShowAll: () => void
 }) => (
-  <PageSection colors={colors}>
+  <PageSection id="field-partners" colors={colors}>
     <VStack align="stretch" spacing={6}>
       <H2 size={{ base: '32px', lg: '36px' }} lineHeight={{ base: '38px', lg: '42px' }} bold color={colors.primaryText}>
         {t('Field Partners')}
@@ -1127,7 +1150,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
           {t('Case Studies')}
         </H3>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }}>
-          {resourceCards.caseStudies.map((card) => (
+          {impactFundsResourceCards.caseStudies.map((card) => (
             <ResourceCard
               key={card.title}
               colors={colors}
@@ -1167,7 +1190,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
           {t('Impact Reports')}
         </H3>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
-          {resourceCards.reports.map((card) => (
+          {impactFundsResourceCards.reports.map((card) => (
             <ResourceCard key={card.title} colors={colors} {...card} variant="guide" isReport />
           ))}
         </SimpleGrid>
@@ -1189,7 +1212,7 @@ const BookletsSection = ({ colors }: { colors: SectionColors }) => (
         {t('Booklets')}
       </H2>
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
-        {resourceCards.guides.map((card) => (
+        {impactFundsResourceCards.guides.map((card) => (
           <ResourceCard
             key={card.title}
             colors={colors}

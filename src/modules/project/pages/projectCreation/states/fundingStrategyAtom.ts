@@ -12,7 +12,7 @@ export type ProjectCreationFundingContext = {
   isCircularGrant?: boolean | null
 }
 
-export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(CircularGrantFundingOption)
+export const projectCreationFundingOptionAtom = atom<ProjectCreationFundingOption>(ProjectFundingStrategy.TakeItAll)
 
 export const getProjectFundingStrategyInput = (option: ProjectCreationFundingOption) =>
   option === CircularGrantFundingOption ? ProjectFundingStrategy.TakeItAll : option

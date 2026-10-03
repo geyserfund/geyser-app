@@ -54,7 +54,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isTiaProject = isLegacyTiaProject(project)
   const isCircularGrant = isCircularGrantProject(project)
 
-  const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
+  const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id, project)
   const { status: withdrawalStatus, withdrawableSats, withdrawableUsd } = useProjectWithdrawalStatus({ project })
   const {
     isReady: isStripeConnectReady,
@@ -131,12 +131,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     project.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const shouldShowStripeConnectNotification =
     isTiaProject && !isStripeConnectReady && (!isStripeConnectStatusLoading || isStripeConnectIncomplete)
-  const shouldShowDirectPaymentNotification = Boolean(
-    TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
-      !isCircularGrant &&
-      !project.directPaymentDetails?.btcAddress &&
-      !project.directPaymentDetails?.lightningAddress,
-  )
+  const shouldShowDirectPaymentNotification = Boolean(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant)
 
   /** Get context message or action */
   const renderContextContent = () => {

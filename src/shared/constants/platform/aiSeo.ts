@@ -1,12 +1,6 @@
 export const AI_SEO_SITE_ORIGIN = 'https://geyser.fund'
 
-export type AiSeoPageContext =
-  | 'default'
-  | 'campaigns'
-  | 'fundraisers'
-  | 'grants'
-  | 'impactFunds'
-  | 'microLending'
+export type AiSeoPageContext = 'default' | 'campaigns' | 'fundraisers' | 'grants' | 'impactFunds' | 'microLending'
 
 export type AiSeoPageContent = {
   title: string
@@ -16,25 +10,21 @@ export type AiSeoPageContent = {
 }
 
 const BASE_KEYWORDS = [
-  'bitcoin crowdfunding platform',
-  'bitcoin donations',
-  'bitcoin campaigns',
-  'fund bitcoin projects and causes',
-  'launch bitcoin campaigns',
-  'bitcoin fundraising',
-  'pledge with bitcoin',
-  'global donations',
-  'open-source bitcoin funding',
-  'bitcoin adoption projects',
+  'circular grants',
+  'bitcoin impact funds',
+  'bitcoin field partners',
+  'reusable capital for local economies',
+  'debt-free project funding',
+  'bitcoin local economy projects',
 ]
 
 const pageContentByContext: Record<AiSeoPageContext, AiSeoPageContent> = {
   default: {
-    title: 'Geyser - Fund Bitcoin Projects, Ideas, and Causes',
+    title: 'Geyser - Circular Grants, Impact Funds, and Field Partners',
     description:
-      'Geyser is the home of Bitcoin crowdfunding and donations. Launch projects, fund ideas, and support humanitarian causes worldwide using Bitcoin and Lightning rails.',
+      'Geyser connects trusted Field Partners, Circular Grants, and Impact Funds to move Bitcoin capital into stronger local economies.',
     keywords: BASE_KEYWORDS.join(', '),
-    about: ['Bitcoin crowdfunding', 'Donations', 'Projects and causes'],
+    about: ['Circular Grants', 'Impact Funds', 'Field Partners'],
   },
   campaigns: {
     title: 'Launch Bitcoin Campaigns for Projects, Ideas, and Causes',

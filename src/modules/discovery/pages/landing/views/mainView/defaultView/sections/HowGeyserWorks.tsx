@@ -1,6 +1,6 @@
-import { Button, HStack, Icon, Tag, VStack, useBreakpointValue, useColorModeValue } from '@chakra-ui/react'
+import { Button, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowDown, PiArrowRight } from 'react-icons/pi'
+import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -10,98 +10,28 @@ import { getPath } from '@/shared/constants/index.ts'
 
 import { LandingPageSectionTitle } from '../components/LandingPageSectionTitle.tsx'
 
-const FundProjectsSteps = () => {
-  const arrowColor = useColorModeValue('neutral1.9', 'neutral1.8')
-  const stepColor = 'neutralAlpha.11'
-  const isMobile = useBreakpointValue({ base: true, md: false })
+const pathways = [
+  {
+    title: 'Support Circular Grants',
+    description: 'Back vetted local projects with reusable, debt-free capital.',
+    action: 'Explore Circular Grants',
+    to: getPath('discoveryCircularGrants'),
+  },
+  {
+    title: 'Contribute to a Regional Partner Fund',
+    description: 'Help allocate capital across high-impact local projects and follow the outcomes.',
+    action: 'Explore Regional Partner Funds',
+    to: getPath('discoveryImpactFunds'),
+  },
+  {
+    title: 'Become a Field Partner',
+    description: 'Help local projects launch, access capital, and share their impact.',
+    action: 'Become a Field Partner',
+    to: `${getPath('discoveryImpactFunds')}#field-partners`,
+  },
+] as const
 
-  const steps = [
-    t('Discover projects'),
-    t('Contribute once or monthly'),
-    t('Accelerate Bitcoin adoption'),
-  ]
-
-  if (isMobile) {
-    return (
-      <VStack w="full" spacing={2} align="center">
-        {steps.map((step, index) => (
-          <VStack key={step} spacing={2} align="center">
-            <Body size="sm" fontWeight={600} color={stepColor} textAlign="center">
-              {step}
-            </Body>
-            {index < steps.length - 1 && <Icon as={PiArrowDown} color={arrowColor} boxSize={4} />}
-          </VStack>
-        ))}
-      </VStack>
-    )
-  }
-
-  return (
-    <HStack w="full" spacing={6} justify="center">
-      {steps.map((step, index) => (
-        <HStack key={step} spacing={6}>
-          <Body size="md" fontWeight={600} color={stepColor} textAlign="center">
-            {step}
-          </Body>
-          {index < steps.length - 1 && <Icon as={PiArrowRight} color={arrowColor} boxSize={5} flexShrink={0} />}
-        </HStack>
-      ))}
-    </HStack>
-  )
-}
-
-const ImpactFundPills = () => {
-  const pillBorderColor = useColorModeValue('neutral1.6', 'neutral1.5')
-  const pillColor = 'neutralAlpha.11'
-  const isMobile = useBreakpointValue({ base: true, md: false })
-
-  const features = [t('Support vetted projects'), t('Back more than 20 projects at once'), t('Receive impact reports')]
-
-  if (isMobile) {
-    return (
-      <VStack w="full" spacing={3} align="stretch">
-        {features.map((feature) => (
-          <Tag
-            key={feature}
-            size="md"
-            variant="outline"
-            borderColor={pillBorderColor}
-            color={pillColor}
-          borderRadius="lg"
-          fontWeight={600}
-          px={4}
-          py={2}
-          justifyContent="center"
-          >
-            {feature}
-          </Tag>
-        ))}
-      </VStack>
-    )
-  }
-
-  return (
-    <HStack w="full" spacing={4} flexWrap="wrap" justify="center">
-      {features.map((feature) => (
-        <Tag
-          key={feature}
-          size="lg"
-          variant="outline"
-          borderColor={pillBorderColor}
-          color={pillColor}
-          borderRadius="lg"
-          fontWeight={600}
-          px={6}
-          py={3}
-        >
-          {feature}
-        </Tag>
-      ))}
-    </HStack>
-  )
-}
-
-/** Section explaining the two ways to support Bitcoin adoption on Geyser. */
+/** Section explaining the three ways to participate in Geyser's local funding network. */
 export const HowGeyserWorks = () => {
   const cardBg = useColorModeValue(undefined, 'neutral1.3')
   const subtitleColor = 'neutralAlpha.11'
@@ -111,78 +41,45 @@ export const HowGeyserWorks = () => {
       <VStack spacing={2} align="start">
         <LandingPageSectionTitle>{t('How Geyser works')}</LandingPageSectionTitle>
         <H2 size={{ base: 'xl', lg: '3xl' }} bold>
-          {t('Support Bitcoin adoption in 2 simple ways')}
+          {t('Build stronger local economies together')}
         </H2>
       </VStack>
 
-      <VStack w="full" spacing={5}>
-        {/* Fund individual projects card */}
-        <CardLayout
-          w="full"
-          align={{ base: 'start', md: 'center' }}
-          spacing={{ base: 5, md: 8 }}
-          px={{ base: 5, md: 8, lg: 10 }}
-          py={{ base: 4, md: 6, lg: 7 }}
-          bg={cardBg}
-        >
-          <VStack w="full" align="start" spacing={1}>
-            <H3 size={{ base: 'md', lg: 'xl' }} bold>
-              {t('Fund individual projects')}
-            </H3>
-            <Body size={{ base: 'md', lg: 'lg' }} color={subtitleColor}>
-              {t('Support creators directly and choose where your sats go.')}
-            </Body>
-          </VStack>
-
-          <FundProjectsSteps />
-
-          <Button
-            as={Link}
-            to={getPath('discoveryProjects')}
-            size="lg"
-            w={{ base: 'full', md: 'auto' }}
-            variant="solid"
-            colorScheme="primary1"
-            fontWeight={700}
+      <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={5}>
+        {pathways.map((pathway) => (
+          <CardLayout
+            key={pathway.title}
+            w="full"
+            h="full"
+            align="start"
+            spacing={5}
+            px={{ base: 5, md: 6 }}
+            py={{ base: 5, md: 6 }}
+            bg={cardBg}
           >
-            {t('Explore projects')}
-          </Button>
-        </CardLayout>
-
-        {/* Contribute to an Impact Fund card */}
-        <CardLayout
-          w="full"
-          align={{ base: 'start', md: 'center' }}
-          spacing={{ base: 5, md: 8 }}
-          px={{ base: 5, md: 8, lg: 10 }}
-          py={{ base: 4, md: 6, lg: 7 }}
-          bg={cardBg}
-        >
-          <VStack w="full" align="start" spacing={1}>
-            <H3 size={{ base: 'md', lg: 'xl' }} bold>
-              {t('Contribute to an Impact Fund')}
-            </H3>
-            <Body size={{ base: 'md', lg: 'lg' }} color={subtitleColor}>
-              {t('Let us allocate your funds across high-impact projects.')}
-            </Body>
-          </VStack>
-
-          <ImpactFundPills />
-
-          <Button
-            as={Link}
-            to={getPath('discoveryImpactFunds')}
-            size="lg"
-            w={{ base: 'full', md: 'auto' }}
-            variant="solid"
-            colorScheme="primary1"
-            fontWeight={700}
-            rightIcon={<Icon as={PiArrowRight} />}
-          >
-            {t('Fund an impact fund')}
-          </Button>
-        </CardLayout>
-      </VStack>
+            <VStack w="full" align="start" spacing={2} flex={1}>
+              <H3 size={{ base: 'md', lg: 'xl' }} bold>
+                {t(pathway.title)}
+              </H3>
+              <Body size={{ base: 'md', lg: 'lg' }} color={subtitleColor}>
+                {t(pathway.description)}
+              </Body>
+            </VStack>
+            <Button
+              as={Link}
+              to={pathway.to}
+              size="lg"
+              w="full"
+              variant="solid"
+              colorScheme="primary1"
+              fontWeight={700}
+              rightIcon={<Icon as={PiArrowRight} />}
+            >
+              {t(pathway.action)}
+            </Button>
+          </CardLayout>
+        ))}
+      </SimpleGrid>
     </VStack>
   )
 }

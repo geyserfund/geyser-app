@@ -18,7 +18,6 @@ export const routeMatchForAtom =
 
 export const projectCreationRoutesThatNeedStory = [
   getPath('launchAboutYou', PathName.projectId),
-  getPath('launchPaymentDetails', PathName.projectId),
   getPath('launchFinalize', PathName.projectId),
 ]
 
@@ -215,6 +214,11 @@ export const discoveryRoutes = [
   getPath('legalTerms'),
   getPath('legalPrivacy'),
   getPath('discoveryNews'),
+  getPath('about'),
+  getPath('aboutFieldPartners'),
+  getPath('aboutWhereGeyserWorks'),
+  getPath('aboutImpact'),
+  getPath('aboutDueDiligence'),
 ]
 
 export const platformNavBarShadowRoutes = [

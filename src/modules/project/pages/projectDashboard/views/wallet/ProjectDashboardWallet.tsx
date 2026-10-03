@@ -10,6 +10,7 @@ import {
 import { DirectPaymentDetailsForm } from '@/modules/project/components/DirectPaymentDetailsForm.tsx'
 import { ManagedCircularGrantPaymentStatus } from '@/modules/project/components/ManagedCircularGrantPaymentStatus.tsx'
 import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
@@ -46,6 +47,7 @@ const CreatorManagedPayments = () => {
   const { t } = useTranslation()
 
   const { project } = useProjectAtom()
+  const isLabifOpenFunding = isLabifOpenFundingProject(project)
   const seedWordsModal = useModal()
   const [selectedRecoveryData, setSelectedRecoveryData] = useState<{
     accountKeys: RecoveryAccountKeys
@@ -101,7 +103,7 @@ const CreatorManagedPayments = () => {
   return (
     <DashboardLayout desktopTitle={t('Payment Settings')}>
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
-        {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (
+        {(TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFunding) && (
           <DirectPaymentDetailsForm
             projectId={project.id}
             directPaymentDetails={project.directPaymentDetails}
@@ -110,14 +112,14 @@ const CreatorManagedPayments = () => {
             allowStripeOnly={Boolean(project.paymentMethods?.fiat?.stripe)}
           />
         )}
-        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && <TiaRskEoaSetupNotice />}
+        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isLabifOpenFunding && <TiaRskEoaSetupNotice />}
         <ProjectRskEoaHistory
           projectId={project.id}
           currentRskEoa={walletProject?.rskEoa ?? project.rskEoa}
           rskEoas={walletProject?.rskEoas}
           onOpenSeedWords={handleOpenRecoveryData}
           withdraw={
-            TEMPORARY_BOLTZ_CONTINGENCY_ENABLED
+            TEMPORARY_BOLTZ_CONTINGENCY_ENABLED || isLabifOpenFunding
               ? undefined
               : {
                   showWithdrawableBalance,
@@ -128,7 +130,7 @@ const CreatorManagedPayments = () => {
                 }
           }
         />
-        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && (
+        {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isLabifOpenFunding && (
           <EnableFiatContributions
             isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
             projectId={project.id}
@@ -136,7 +138,7 @@ const CreatorManagedPayments = () => {
         )}
       </VStack>
 
-      {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && showWithdraw && (
+      {!TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isLabifOpenFunding && showWithdraw && (
         <PayoutRsk
           {...payoutRskModal}
           project={project}

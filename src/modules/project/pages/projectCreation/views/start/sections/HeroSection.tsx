@@ -2,7 +2,6 @@ import { Box, Button, HStack, Image, SimpleGrid, useColorModeValue, VStack } fro
 import { t } from 'i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 
-import { useCanStartProject } from '@/modules/project/pages/projectCreation/hooks/useCanStartProject.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 
@@ -12,7 +11,6 @@ import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 /** Hero section for the launch start page with conversion CTA and flow preview. */
 export const HeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
-  const canStartProject = useCanStartProject()
 
   const heroSurface = useColorModeValue('white', 'neutral1.2')
 
@@ -52,18 +50,16 @@ export const HeroSection = () => {
           </VStack>
 
           <HStack spacing={3} flexWrap="wrap" width="100%">
-            {canStartProject ? (
-              <Button
-                size="lg"
-                colorScheme="primary1"
-                onClick={handleLauchNowClick}
-                rightIcon={<PiRocketLaunch />}
-                borderRadius="12px"
-                width={{ base: '100%', sm: 'auto' }}
-              >
-                {t('Start your project')}
-              </Button>
-            ) : null}
+            <Button
+              size="lg"
+              colorScheme="primary1"
+              onClick={handleLauchNowClick}
+              rightIcon={<PiRocketLaunch />}
+              borderRadius="12px"
+              width={{ base: '100%', sm: 'auto' }}
+            >
+              {t('Start your project')}
+            </Button>
             <Button
               size="lg"
               variant="outline"

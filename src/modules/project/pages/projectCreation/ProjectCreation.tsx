@@ -12,7 +12,6 @@ import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '@/mo
 import { toInt } from '@/utils'
 
 import { ProjectProvider } from '../../context/ProjectProvider.tsx'
-import { LabifApplicationCapture } from './components/LabifApplicationCapture.tsx'
 import { projectCreationFundingOptionAtom } from './states/fundingStrategyAtom.ts'
 import { creationReviewLockEnabledAtom, projectReviewsAtom } from './states/projectReviewAtom.ts'
 
@@ -57,7 +56,6 @@ const ProjectCreationScopedContent = ({ projectId }: { projectId?: number }) => 
 
   return (
     <ProjectProvider projectId={projectId}>
-      <LabifApplicationCapture />
       <Outlet />
     </ProjectProvider>
   )

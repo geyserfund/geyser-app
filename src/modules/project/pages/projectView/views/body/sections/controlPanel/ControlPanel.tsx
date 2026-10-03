@@ -347,8 +347,10 @@ export const ControlPanel = () => {
     fetchPolicy: 'network-only',
   })
   const hasStripeConnectConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
-  const stripeConnectNoticeKey = `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}`
-  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject[stripeConnectNoticeKey])
+  const stripeConnectNoticeKey = project.id
+    ? `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}`
+    : ''
+  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject?.[stripeConnectNoticeKey])
   const shouldShowStripeConnectNotice =
     isTiaProject &&
     !isStripeConnectNoticeClosed &&
@@ -551,10 +553,7 @@ export const ControlPanel = () => {
         {...resubmitConfirmModal}
       />
 
-      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED &&
-        !isCircularGrant &&
-        !project.directPaymentDetails?.btcAddress &&
-        !project.directPaymentDetails?.lightningAddress && (
+      {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant && (
         <ControlPanelNotification
           icon={<Icon as={PiWarning} color="warning.9" boxSize="24px" flexShrink={0} />}
           title={t('Add payment details to keep receiving contributions in Bitcoin')}
@@ -667,7 +666,7 @@ export const ControlPanel = () => {
               ? undefined
               : () =>
                   setStripeConnectNoticeClosedByProject((current) => ({
-                    ...current,
+                    ...(current ?? {}),
                     [stripeConnectNoticeKey]: true,
                   }))
           }
