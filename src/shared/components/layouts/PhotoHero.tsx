@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { brandColors, heroForestOverlayGradient } from '@/shared/styles/brandPalette.ts'
+import { heroFieldColor, heroForestOverlayGradient } from '@/shared/styles/brandPalette.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 /** Shared minimum height for photo heroes. */
@@ -16,6 +16,8 @@ type PhotoHeroProps = Omit<BoxProps, 'title'> & {
   lead: ReactNode
   imageUrl: string
   imagePosition: ResponsiveValue<string>
+  /** Where the photo starts at desktop widths, as a CSS length from the left edge. Defaults to 28%. */
+  imageLeft?: string
   /** Keeps the headline on the lines given by its own markup at desktop widths. */
   noWrapTitle?: boolean
 }
@@ -25,7 +27,15 @@ type PhotoHeroProps = Omit<BoxProps, 'title'> & {
  * with a white display headline and lead paragraph.
  * @param imagePosition - CSS background-position that keeps the photo's subject clear of the text.
  */
-export const PhotoHero = ({ title, lead, imageUrl, imagePosition, noWrapTitle, ...props }: PhotoHeroProps) => {
+export const PhotoHero = ({
+  title,
+  lead,
+  imageUrl,
+  imagePosition,
+  imageLeft = '28%',
+  noWrapTitle,
+  ...props
+}: PhotoHeroProps) => {
   return (
     <Box
       w="full"
@@ -33,7 +43,7 @@ export const PhotoHero = ({ title, lead, imageUrl, imagePosition, noWrapTitle, .
       overflow="hidden"
       borderRadius={0}
       minHeight={HERO_MIN_HEIGHT}
-      bg={brandColors.deepForest}
+      bg={heroFieldColor}
       {...props}
     >
       <Box
@@ -41,7 +51,7 @@ export const PhotoHero = ({ title, lead, imageUrl, imagePosition, noWrapTitle, .
         top={0}
         right={0}
         bottom={0}
-        left={{ base: 0, lg: '28%' }}
+        left={{ base: 0, lg: imageLeft }}
         backgroundImage={`url('${imageUrl}')`}
         backgroundPosition={imagePosition}
         backgroundSize="cover"

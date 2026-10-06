@@ -8,8 +8,9 @@ import { PhotoHero } from '@/shared/components/layouts/PhotoHero.tsx'
 export const Hero = (props: BoxProps): React.ReactNode => {
   return (
     <PhotoHero
-      imageUrl="/images/landing-hero-market-portrait.webp"
-      imagePosition={{ base: '85% center', lg: 'right 25%' }}
+      imageUrl="/images/landing-hero-street-vendor.webp"
+      imagePosition={{ base: 'center 10%', lg: 'center 12%' }}
+      imageLeft="40%"
       noWrapTitle
       title={
         <Trans

@@ -1,4 +1,4 @@
-import { Button, Flex, SimpleGrid, useColorModeValue, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Button, Flex, SimpleGrid, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -18,6 +18,7 @@ import {
   CIRCULAR_GRANTS_CATEGORY_ID,
   clearImpactFundDonateSessionPref,
   LATAM_IMPACT_FUND_SLUG,
+  LATIN_AMERICA_REGION_ID,
   REGION_OPTIONS,
   WORKSHOPS_OPERATIONS_CATEGORY_ID,
   writeImpactFundDonateSessionPref,
@@ -59,14 +60,6 @@ export function ImpactFundsDonatePreferencesModal({
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<ImpactFundDonateCategoryId>>(() => new Set())
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const muted = useColorModeValue('neutral1.9', 'neutral1.11')
-  const chipBorder = 'neutral1.6'
-  const chipBg = useColorModeValue('utils.pbg', 'neutral1.3')
-  const sectionTitleColor = useColorModeValue('neutral1.11', 'neutral1.12')
-  const selectedCardBg = useColorModeValue('primary1.2', 'primary1.3')
-  const cardHoverBg = useColorModeValue('neutral1.2', 'neutral1.4')
-  const cardActiveBg = useColorModeValue('neutral1.3', 'neutral1.5')
-
   const resetForm = useCallback(() => {
     setSelectedRegionId(null)
     setSelectedCategoryIds(new Set())
@@ -96,7 +89,7 @@ export function ImpactFundsDonatePreferencesModal({
   }, [])
 
   const targetSlug = useMemo(() => {
-    return selectedRegionId === 'south-america' ? LATAM_IMPACT_FUND_SLUG : BITCOIN_ADOPTION_IMPACT_FUND_SLUG
+    return selectedRegionId === LATIN_AMERICA_REGION_ID ? LATAM_IMPACT_FUND_SLUG : BITCOIN_ADOPTION_IMPACT_FUND_SLUG
   }, [selectedRegionId])
 
   const handleContinue = useCallback(async () => {
@@ -144,20 +137,6 @@ export function ImpactFundsDonatePreferencesModal({
     }
   }, [handleClose, impactFunds, navigate, selectedCategoryIds, selectedRegionId, targetSlug, notifyError])
 
-  const chipButtonProps = {
-    size: 'lg' as const,
-    variant: 'outline' as const,
-    minH: '52px',
-    px: 6,
-    py: 3,
-    fontSize: 'md',
-    fontWeight: 'semibold' as const,
-    borderWidth: '1px',
-    borderColor: chipBorder,
-    bg: chipBg,
-    colorScheme: 'neutral1' as const,
-  }
-
   return (
     <Modal
       isOpen={isOpen}
@@ -171,20 +150,22 @@ export function ImpactFundsDonatePreferencesModal({
       wrapperProps={{ paddingY: { base: 6, md: 8 } }}
       bodyProps={{ gap: 0, alignItems: 'stretch', paddingBottom: 2 }}
     >
-      <VStack align="stretch" spacing={{ base: 7, md: 9 }}>
-        <VStack align="stretch" spacing={4}>
-          <Body color={muted} size="md" lineHeight={1.6}>
+      <VStack align="stretch" spacing={{ base: 6, md: 8 }}>
+        <VStack align="stretch" spacing={3}>
+          <Body id="impact-fund-donate-region-label" size="md" light>
             {t('Are there any regions you want to support more specifically?')}
           </Body>
-          <Wrap spacing={{ base: 3, md: 4 }} shouldWrapChildren>
+          <Wrap spacing={3} shouldWrapChildren role="group" aria-labelledby="impact-fund-donate-region-label">
             {REGION_OPTIONS.map((r) => {
               const isSelected = selectedRegionId === r.id
               return (
                 <WrapItem key={r.id}>
                   <Button
                     type="button"
-                    {...chipButtonProps}
-                    isActive={isSelected}
+                    size="lg"
+                    variant="outline"
+                    colorScheme="neutral1"
+                    aria-pressed={isSelected}
                     onClick={() => setSelectedRegionId((prev) => (prev === r.id ? null : r.id))}
                   >
                     {t(r.labelKey)}
@@ -195,11 +176,16 @@ export function ImpactFundsDonatePreferencesModal({
           </Wrap>
         </VStack>
 
-        <VStack align="stretch" spacing={5}>
-          <Body color={muted} size="md" lineHeight={1.6}>
+        <VStack align="stretch" spacing={3}>
+          <Body id="impact-fund-donate-area-label" size="md" light>
             {t('Which areas of the Impact Fund do you want to support?')}
           </Body>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 3, md: 4 }}>
+          <SimpleGrid
+            columns={{ base: 1, md: 2 }}
+            spacing={{ base: 3, md: 4 }}
+            role="group"
+            aria-labelledby="impact-fund-donate-area-label"
+          >
             {TOPIC_SECTIONS.map((section) => {
               const isSelected = selectedCategoryIds.has(section.id)
               return (
@@ -207,13 +193,9 @@ export function ImpactFundsDonatePreferencesModal({
                   key={section.id}
                   type="button"
                   variant="outline"
+                  colorScheme="neutral1"
                   aria-pressed={isSelected}
-                  borderWidth="1px"
-                  borderColor={isSelected ? 'primary1.9' : chipBorder}
-                  bg={isSelected ? selectedCardBg : chipBg}
-                  color={sectionTitleColor}
                   borderRadius="innerCard"
-                  minH={{ base: '148px', md: '164px' }}
                   h="auto"
                   px={{ base: 4, md: 5 }}
                   py={{ base: 4, md: 5 }}
@@ -221,20 +203,13 @@ export function ImpactFundsDonatePreferencesModal({
                   alignItems="flex-start"
                   textAlign="left"
                   whiteSpace="normal"
-                  _hover={{
-                    borderColor: 'primary1.9',
-                    bg: cardHoverBg,
-                  }}
-                  _active={{
-                    bg: cardActiveBg,
-                  }}
                   onClick={() => toggleCategory(section.id)}
                 >
-                  <VStack align="flex-start" spacing={3}>
-                    <Body size="md" bold color={sectionTitleColor}>
+                  <VStack align="flex-start" spacing={2}>
+                    <Body size="md" bold color={isSelected ? 'primary1.11' : 'utils.text'}>
                       {t(section.titleKey)}
                     </Body>
-                    <Body color={muted} size="sm" lineHeight={1.5}>
+                    <Body size="sm" light fontWeight={400}>
                       {t(section.descriptionKey)}
                     </Body>
                   </VStack>
@@ -244,15 +219,12 @@ export function ImpactFundsDonatePreferencesModal({
           </SimpleGrid>
         </VStack>
 
-        <Flex justify="flex-end" pt={{ base: 2, md: 4 }}>
+        <Flex justify="flex-end">
           <Button
             type="button"
-            colorScheme="amber"
+            colorScheme="primary1"
             size="lg"
-            borderRadius="8px"
-            fontWeight="bold"
-            px={8}
-            minH="48px"
+            w={{ base: 'full', md: 'auto' }}
             isLoading={isSubmitting}
             loadingText={t('Continue')}
             onClick={handleContinue}

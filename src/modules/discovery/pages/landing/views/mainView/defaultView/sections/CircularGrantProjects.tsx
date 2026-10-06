@@ -23,6 +23,43 @@ type CircularGrantProjectsProps = {
   showDiscoverMore?: boolean
 }
 
+type CircularGrantProjectsQueryOptions = Pick<CircularGrantProjectsProps, 'where' | 'take' | 'includeSuccessful'>
+
+/**
+ * Builds the query variables for a Circular Grant project row.
+ * Exported so callers can prefetch a filter with exactly the variables the row will request.
+ */
+export const getCircularGrantProjectsQueryVariables = ({
+  where,
+  take = 3,
+  includeSuccessful = false,
+}: CircularGrantProjectsQueryOptions) => {
+  const baseWhere = {
+    isCircularGrant: true,
+    ...where,
+  }
+
+  return {
+    ongoing: {
+      take,
+      where: {
+        ...(includeSuccessful
+          ? baseWhere
+          : { ...baseWhere, ...(!where?.statuses && { status: ProjectsGetWhereInputStatus.Active }) }),
+        ...(includeSuccessful ? { status: ProjectsGetWhereInputStatus.Active } : {}),
+      },
+    },
+    successful: {
+      take,
+      where: {
+        ...baseWhere,
+        goalReached: true,
+        statuses: [ProjectsGetWhereInputStatus.Active, ProjectsGetWhereInputStatus.Closed],
+      },
+    },
+  }
+}
+
 export const CircularGrantProjects = ({
   title = 'Circular Grants',
   description = 'Back vetted local projects with reusable, debt-free capital that can return to the next local entrepreneur.',
@@ -33,31 +70,11 @@ export const CircularGrantProjects = ({
   showDiscoverMore = true,
 }: CircularGrantProjectsProps) => {
   const { t } = useTranslation()
-  const baseWhere = {
-    isCircularGrant: true,
-    ...where,
-  }
-  const ongoingQuery = useLandingCircularGrantsByFilterQuery({
-    variables: {
-      take,
-      where: {
-        ...(includeSuccessful
-          ? baseWhere
-          : { ...baseWhere, ...(!where?.statuses && { status: ProjectsGetWhereInputStatus.Active }) }),
-        ...(includeSuccessful ? { status: ProjectsGetWhereInputStatus.Active } : {}),
-      },
-    },
-  })
+  const variables = getCircularGrantProjectsQueryVariables({ where, take, includeSuccessful })
+  const ongoingQuery = useLandingCircularGrantsByFilterQuery({ variables: variables.ongoing })
   const successfulQuery = useLandingCircularGrantsByFilterQuery({
     skip: !includeSuccessful,
-    variables: {
-      take,
-      where: {
-        ...baseWhere,
-        goalReached: true,
-        statuses: [ProjectsGetWhereInputStatus.Active, ProjectsGetWhereInputStatus.Closed],
-      },
-    },
+    variables: variables.successful,
   })
 
   const loading = ongoingQuery.loading || (includeSuccessful && successfulQuery.loading)
@@ -91,8 +108,9 @@ export const CircularGrantProjects = ({
     <DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />
   ) : undefined
 
-  if (loading) {
-    return <ProjectDisplayBodySkeleton />
+  // Only show placeholders when there is nothing to show yet; cached or prefetched results render straight away.
+  if (loading && projects.length === 0) {
+    return <ProjectDisplayBodySkeleton title={sectionTitle} count={take} rightContent={discoverMoreButton} />
   }
 
   if (projects.length === 0) {

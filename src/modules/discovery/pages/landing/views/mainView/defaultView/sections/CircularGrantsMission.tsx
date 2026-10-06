@@ -7,17 +7,24 @@ import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
+import { displayHeadingProps, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
-
-import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
 const CIRCULAR_GRANTS_FOCUS_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/geyser-focus-circular-grants-image.png'
 const AFRIBIT_CASE_STUDY_HERO_IMAGE_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/afribit-case-study-hero.png'
+
+/** Outline button for sections that sit directly on the ochre band: white label and border. */
+const onBandOutlineButtonProps = {
+  variant: 'outline',
+  color: 'utils.whiteContrast',
+  borderColor: 'whiteAlpha.700',
+  _hover: { backgroundColor: 'whiteAlpha.300', borderColor: 'utils.whiteContrast' },
+  _active: { backgroundColor: 'whiteAlpha.400' },
+} as const
 
 /** Shared image ratio so the paired landing feature cards line up. */
 export const LANDING_FEATURE_IMAGE_RATIO = 2376 / 1080
@@ -46,20 +53,6 @@ const missionPrinciples: readonly MissionPrinciple[] = [
   },
 ] as const
 
-const LearnMoreButton = (props: ButtonProps) => (
-  <Button
-    as={Link}
-    to={getPath('discoveryCircularGrants')}
-    size="lg"
-    variant="outline"
-    colorScheme="neutral1"
-    rightIcon={<Icon as={PiArrowRight} />}
-    {...props}
-  >
-    {t('Learn more about Circular Grants')}
-  </Button>
-)
-
 const BecomeFieldPartnerButton = (props: ButtonProps) => (
   <Button
     as={ChakraLink}
@@ -78,42 +71,54 @@ const BecomeFieldPartnerButton = (props: ButtonProps) => (
 /** Explains why Geyser focuses on Circular Grants and links to the full explainer. */
 export const CircularGrantsFocus = () => {
   return (
-    <ProjectRowLayout
-      w="full"
-      title={t('Geyser is focusing all its efforts on Circular Grants')}
-      headerProps={{ gap: 3 }}
-      rightContent={<LearnMoreButton display={{ base: 'none', lg: 'inline-flex' }} />}
-    >
-      <SimpleGrid w="full" columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 12 }} alignItems="start">
+    <SimpleGrid w="full" columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 12 }} alignItems="stretch">
+      <VStack align="flex-start" justify="space-between" spacing={{ base: 5, lg: 3 }}>
+        <H3
+          size={{ base: 'xl', lg: '3xl' }}
+          fontWeight={600}
+          lineHeight={1.2}
+          {...displayHeadingProps}
+          color="utils.whiteContrast"
+          sx={{ textWrap: 'balance' }}
+        >
+          {t('Geyser is focusing on Circular Grants')}
+        </H3>
+
         <VStack spacing={3} align="stretch">
-          <Body size={{ base: 'md', lg: 'lg' }} dark>
+          <Body size={{ base: 'md', lg: 'lg' }} medium color="utils.whiteContrast">
             {t(
-              'Circular Grants fund approved local businesses through Field Partners, with no repayment required. When able, recipients can contribute to a Community Fund supporting others.',
+              'Circular Grants fund local businesses through Field Partners, with no repayment required. Recipients who can pay it forward into a Community Fund.',
             )}
           </Body>
-          <Body size="md" light>
-            {t(
-              'They address a critical gap where banks are inaccessible and microfinance debt can cause pressure, stigma, trauma and exclusion.',
-            )}
+          <Body size="md" medium color="utils.whiteContrast">
+            {t('They reach people banks do not, without the pressure and stigma of microfinance debt.')}
           </Body>
-          <Body size="md" light>
-            {t(
-              'After years building Geyser, we believe Circular Grants are the most direct way to turn Bitcoin’s principles into lasting, positive impact.',
-            )}
+          <Body size="md" medium color="utils.whiteContrast">
+            {t('We believe they are the most direct way to turn Bitcoin’s principles into lasting impact.')}
           </Body>
         </VStack>
 
-        <Image
-          src={CIRCULAR_GRANTS_FOCUS_IMAGE_URL}
-          alt={t('Geyser Impact Fund Circular Grants community')}
-          w="full"
-          aspectRatio={1672 / 941}
-          objectFit="cover"
-          borderRadius="card"
-        />
-      </SimpleGrid>
-      <LearnMoreButton display={{ base: 'inline-flex', lg: 'none' }} alignSelf="flex-end" />
-    </ProjectRowLayout>
+        <Button
+          as={Link}
+          to={getPath('discoveryCircularGrants')}
+          size="lg"
+          {...onBandOutlineButtonProps}
+          rightIcon={<Icon as={PiArrowRight} />}
+        >
+          {t('Learn more about Circular Grants')}
+        </Button>
+      </VStack>
+
+      <Image
+        src={CIRCULAR_GRANTS_FOCUS_IMAGE_URL}
+        alt={t('Geyser Impact Fund Circular Grants community')}
+        w="full"
+        aspectRatio={1672 / 941}
+        objectFit="cover"
+        borderRadius="card"
+        alignSelf="center"
+      />
+    </SimpleGrid>
   )
 }
 
@@ -211,34 +216,33 @@ type SupportMovementBandProps = {
 /** Closing call to action that opens the Geyser Impact Fund donation flow. */
 export const SupportMovementBand = ({ onSupportImpactFund }: SupportMovementBandProps) => {
   return (
-    <CardLayout w="full">
-      <Flex
-        direction={{ base: 'column', lg: 'row' }}
-        align={{ base: 'flex-start', lg: 'center' }}
-        justify="space-between"
-        gap={{ base: 5, lg: 10 }}
+    <Flex
+      w="full"
+      direction={{ base: 'column', lg: 'row' }}
+      align={{ base: 'flex-start', lg: 'center' }}
+      justify="space-between"
+      gap={{ base: 5, lg: 12 }}
+    >
+      <VStack align="flex-start" spacing={3} maxW="3xl">
+        <H2 size={{ base: 'xl', lg: '3xl' }} fontWeight={600} lineHeight={1.2} color="utils.whiteContrast">
+          {t('Help fund this movement')}
+        </H2>
+        <Body size={{ base: 'md', lg: 'lg' }} medium color="utils.whiteContrast">
+          {t(
+            'Help us grow from 2 Field Partners and 10 Circular Grants to our target 12 Field Partners and 24 Circular Grants in 2027!',
+          )}
+        </Body>
+      </VStack>
+      <Button
+        size="lg"
+        {...onBandOutlineButtonProps}
+        onClick={onSupportImpactFund}
+        rightIcon={<Icon as={PiArrowRight} />}
+        flexShrink={0}
+        w={{ base: 'full', lg: 'auto' }}
       >
-        <VStack align="flex-start" spacing={2} maxW="3xl">
-          <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-            {t('Help fund this movement')}
-          </H2>
-          <Body size={{ base: 'md', lg: 'lg' }} light>
-            {t(
-              'Help us grow from 2 Field Partners and 10 Circular Grants to our target 12 Field Partners and 24 Circular Grants in 2027!',
-            )}
-          </Body>
-        </VStack>
-        <Button
-          size="lg"
-          colorScheme="primary1"
-          onClick={onSupportImpactFund}
-          rightIcon={<Icon as={PiArrowRight} />}
-          flexShrink={0}
-          w={{ base: 'full', lg: 'auto' }}
-        >
-          {t('Support Geyser Impact Fund')}
-        </Button>
-      </Flex>
-    </CardLayout>
+        {t('Support Geyser Impact Fund')}
+      </Button>
+    </Flex>
   )
 }

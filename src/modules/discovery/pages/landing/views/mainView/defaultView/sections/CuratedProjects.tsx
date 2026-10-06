@@ -11,7 +11,7 @@ import { LandingProjectCard } from '../../../../components/LandingProjectCard.ts
 import { LandingProjectCardProject } from '../../../../graphql/landingPageTypes.ts'
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
-const CURATED_PROJECTS_COUNT = 6
+const CURATED_PROJECTS_COUNT = 3
 
 type CuratedProjectsProps = {
   featuredError?: boolean

@@ -11,6 +11,7 @@ export const brandColors = {
   parchmentRaised: '#FBF8F1',
   charcoalBrown: '#292925',
   burntOchre: '#D98A3D',
+  burntOchrePressed: '#C67A2E',
   clayTerracotta: '#B9644A',
   sage: '#9DAF91',
   sageTint: '#DCE4D6',
@@ -76,10 +77,13 @@ export const forestAlphaDark = {
   '12': '#d6ebe0',
 }
 
-/** Hero overlay shared by photo heroes: solid Deep Forest to 45%, faded out by 65% (see DESIGN.md). */
+/** Hero field colour; `--geyser-hero-field` lets the temporary landing colour picker override it. */
+export const heroFieldColor = `var(--geyser-hero-field, ${brandColors.deepForest})`
+
+/** Hero overlay shared by photo heroes: solid field colour to 45%, faded out by 65% (see DESIGN.md). */
 export const heroForestOverlayGradient = `linear-gradient(
   90deg,
-  ${brandColors.deepForest} 0%,
-  ${brandColors.deepForest} 45%,
-  rgba(38, 72, 61, 0) 65%
+  ${heroFieldColor} 0%,
+  ${heroFieldColor} 45%,
+  color-mix(in srgb, ${heroFieldColor} 0%, transparent) 65%
 )`
