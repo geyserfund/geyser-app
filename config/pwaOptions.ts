@@ -8,7 +8,8 @@ export const pwaOptions: Partial<VitePWAOptions> = {
   injectRegister: 'auto',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
   injectManifest: {
-    maximumFileSizeToCacheInBytes: 5242880,
+    // The main bundle is about 5.25 MB; the build fails if any precached asset exceeds this limit.
+    maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
   },
   manifest: {
     start_url: '.',
