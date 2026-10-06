@@ -1,3 +1,25 @@
+## [1.0.0](https://github.com/geyserfund/geyser-app/compare/v0.60.0...v1.0.0) (2026-10-06)
+
+
+### Features
+
+* **brand:** adopt `#223829` as the primary green and remove the colour try-out ([0efc9f3](https://github.com/geyserfund/geyser-app/commit/0efc9f382d86f7e1a8698e6359066e1ecfdb97b5))
+* **brand:** adopt grassroots forest identity and retire legacy creator pages ([f536c8a](https://github.com/geyserfund/geyser-app/commit/f536c8a097430daf2fba3142d50288bca8b11c8b))
+* **brand:** use the new inline Geyser logo and let the colour try-out recolour it ([f0e8ce0](https://github.com/geyserfund/geyser-app/commit/f0e8ce056f96fe4ee10043c7a73e63c937a18283))
+* **landing:** ochre section bands, smoother grant filters and a primary colour try-out ([fbb3a5d](https://github.com/geyserfund/geyser-app/commit/fbb3a5d9e07d98d3c1c58096656e8f5b07da5ad6))
+* refine Circular Grants experience ([d6b978c](https://github.com/geyserfund/geyser-app/commit/d6b978c0bc9fc6d7ee7bd7043b9f9498d244b8ba))
+
+
+### Bug Fixes
+
+* **build:** raise pwa precache size limit above the main bundle size ([40ef93a](https://github.com/geyserfund/geyser-app/commit/40ef93a69e59eaf237fc6f31672c16be4dd1986f))
+* **discovery:** simplify project search filters ([d8dc618](https://github.com/geyserfund/geyser-app/commit/d8dc618eb3b7f1556c473e7b33ea5b3dc3bffeb9))
+
+
+### Performance Improvements
+
+* **brand:** round the inline logo svg path values to two decimals ([53bf83d](https://github.com/geyserfund/geyser-app/commit/53bf83d9eb48f4eef019710dd7bd0a8cd1064062))
+
 ## [0.60.0](https://github.com/geyserfund/geyser-app/compare/v0.59.3...v0.60.0) (2026-10-02)
 
 
