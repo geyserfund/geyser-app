@@ -1,24 +1,28 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Icon } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { PiPlus } from 'react-icons/pi'
 
-import { getPath } from '../../../../../shared/constants'
+import { useLaunchNow } from '@/modules/project/pages/projectCreation/hooks/useLaunchNow.tsx'
 
+/** Starts the project creation flow from the profile page. */
 export const CreateAProjectButton = (props: ButtonProps) => {
   const { t } = useTranslation()
+  const { handleLauchNowClick, renderModal } = useLaunchNow()
+
   return (
-    <Button
-      variant="solid"
-      colorScheme="primary1"
-      marginTop="20px"
-      px="10px"
-      as={Link}
-      to={getPath('launchStart')}
-      {...props}
-      leftIcon={<AddIcon fontSize={'12px'} />}
-    >
-      {t('Create a project')}
-    </Button>
+    <>
+      <Button
+        variant="solid"
+        colorScheme="primary1"
+        marginTop="20px"
+        px="10px"
+        onClick={handleLauchNowClick}
+        {...props}
+        leftIcon={<Icon as={PiPlus} fontSize={'12px'} />}
+      >
+        {t('Create a project')}
+      </Button>
+      {renderModal()}
+    </>
   )
 }

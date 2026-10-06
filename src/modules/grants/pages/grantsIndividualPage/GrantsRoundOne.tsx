@@ -1,7 +1,6 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { Box, Button, Grid, GridItem, Image, Link, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Grid, GridItem, Icon, Image, Link, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaArrowLeft } from 'react-icons/fa'
+import { PiArrowLeft, PiArrowSquareOut } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { AppFooter } from '../../../../components/molecules'
@@ -70,7 +69,7 @@ export const GrantsRoundOne = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'utils.pbg'}
+        bg={'utils.pageBg'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}
@@ -78,7 +77,7 @@ export const GrantsRoundOne = ({
       >
         <Box my={5} width={isMobile ? '100%' : '909px'} px={isMobile ? '1rem' : ''}>
           <Button size={'sm'} bg="utils.pbg" variant={'outline'} gap={2} onClick={() => navigate(-1)} fontSize="sm">
-            <FaArrowLeft /> {t('See all Grants')}
+            <PiArrowLeft /> {t('See all Grants')}
           </Button>
           <Text fontSize={isMobile ? '4xl' : '47px'} fontWeight="medium" textAlign="center">
             🧊
@@ -87,7 +86,7 @@ export const GrantsRoundOne = ({
             fontSize={'27px'}
             fontWeight="900"
             textAlign="center"
-            textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
+            textShadow={' 0px 0px 25.7663px var(--chakra-colors-primaryAlpha-3)'}
             color={'primary.500'}
           >
             {t('Geyser Grants')}
@@ -175,7 +174,7 @@ export const GrantsRoundOne = ({
               >
                 <ButtonComponent fontSize="lg">
                   {t('Announcement')}
-                  <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
+                  <Icon as={PiArrowSquareOut} w={4} h={4} ml={1} mt={0.5} />
                 </ButtonComponent>
               </Link>
             </VStack>

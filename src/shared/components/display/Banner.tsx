@@ -51,7 +51,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
               size={{ base: 'md', lg: 'xl' }}
               textAlign={{ base: 'left', lg: 'center' }}
               width="100%"
-              dark
+              color="utils.primaryContrast"
               zIndex={2}
             >
               {title}
@@ -66,7 +66,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
               size={{ base: 'lg', lg: 'xl' }}
               textAlign={{ base: 'left', lg: 'center' }}
               width="100%"
-              dark
+              color="utils.primaryContrast"
               zIndex={2}
             >
               {title}
@@ -123,14 +123,14 @@ const BannerItem = ({
 
   return (
     <HStack>
-      <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold zIndex={2}>
+      <Body fontSize={{ base: 'lg', lg: '3xl' }} color="utils.primaryContrast" bold zIndex={2}>
         {value}
       </Body>
-      <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold zIndex={2}>
+      <Body fontSize={{ base: 'lg', lg: '3xl' }} color="utils.primaryContrast" bold zIndex={2}>
         {label}
       </Body>
       {suffix && (
-        <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold zIndex={2}>
+        <Body fontSize={{ base: 'lg', lg: '3xl' }} color="utils.primaryContrast" bold zIndex={2}>
           {suffix}
         </Body>
       )}

@@ -14,18 +14,9 @@ export const CircularGrantExplainer = () => {
   const circularGrantIconSrc = useColorModeValue('/icons/circular-grant.png', '/icons/circular-grant-dark.png')
 
   return (
-    <CardLayout
-      w="full"
-      direction="row"
-      dense
-      spacing={3}
-      paddingX={{ base: 3, lg: 4 }}
-      paddingY={{ base: 3, lg: 3 }}
-      borderColor="primary1.8"
-      backgroundColor="primary1.1"
-    >
+    <CardLayout w="full" direction="row" dense spacing={3} paddingX={{ base: 3, lg: 4 }} paddingY={{ base: 3, lg: 3 }}>
       <Center boxSize={{ base: '44px', lg: '52px' }} flexShrink={0}>
-        <Image src={circularGrantIconSrc} alt="" boxSize={{ base: '38px', lg: '46px' }} />
+        <Image src={circularGrantIconSrc} alt="" boxSize={{ base: '44px', lg: '52px' }} />
       </Center>
       <VStack alignItems="start" spacing={0}>
         <Body size="sm">

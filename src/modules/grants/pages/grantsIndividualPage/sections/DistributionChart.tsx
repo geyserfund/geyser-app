@@ -189,7 +189,7 @@ const ChartBar = ({
         justifyContent={'end'}
         alignItems="center"
       >
-        <Body size="xs" bold color={['primary.100', 'primary.400'].includes(`${bg}`) ? 'neutral.1000' : 'neutral.0'}>
+        <Body size="xs" bold color={['primary.100'].includes(`${bg}`) ? 'neutral.1000' : 'neutral.0'}>
           {isMobile ? Math.round(percentage) : percentage.toFixed(1)}%
         </Body>
       </HStack>

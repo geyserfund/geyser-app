@@ -1,7 +1,7 @@
 import { Box, Text } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { LiaVoteYeaSolid } from 'react-icons/lia'
+import { PiCheckSquare } from 'react-icons/pi'
 
 import { centsToDollars, getShortAmountLabel } from '@/utils/index.ts'
 
@@ -109,7 +109,7 @@ export const ContributionsWidget = ({ grant }: Props) => {
               </>
             ) : (
               <>
-                <LiaVoteYeaSolid style={{ marginTop: 4, marginRight: 2 }} size={36} color={primaryColorsLight[500]} />
+                <PiCheckSquare style={{ marginTop: 4, marginRight: 2 }} size={36} color={primaryColorsLight[500]} />
                 <WidgetItem isSatLogo={false} subtitle={t('Votes sent')}>
                   {contributions}
                 </WidgetItem>

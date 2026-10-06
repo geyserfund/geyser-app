@@ -1,6 +1,6 @@
 import { Box, Button, Container, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaArrowLeft } from 'react-icons/fa'
+import { PiArrowLeft } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -36,8 +36,8 @@ export const BadgesPage = () => {
 
   return (
     <Container maxWidth="5xl" pt={10}>
-      <Button mt={4} size="sm" bg="neutral.0" variant="outline" gap={2} onClick={() => navigate(-1)} fontSize="sm">
-        <FaArrowLeft /> {t('Back')}
+      <Button mt={4} size="sm" bg="utils.pbg" variant="outline" gap={2} onClick={() => navigate(-1)} fontSize="sm">
+        <PiArrowLeft /> {t('Back')}
       </Button>
       <VStack spacing={4} justify="center" textAlign="center" mb={12}>
         <Container maxWidth="xl">

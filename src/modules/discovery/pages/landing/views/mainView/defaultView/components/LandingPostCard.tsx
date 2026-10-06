@@ -82,7 +82,7 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
           borderRadius="md"
           paddingX={2}
           paddingY={1}
-          boxShadow="sm"
+          boxShadow="card"
           maxWidth={compact ? 'calc(100% - 16px)' : 'calc(100% - 32px)'}
         >
           <Body size="xs" medium isTruncated>

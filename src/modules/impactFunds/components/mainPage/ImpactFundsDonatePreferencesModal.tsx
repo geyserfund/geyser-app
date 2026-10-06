@@ -15,9 +15,9 @@ import {
   type ImpactFundDonateRegionId,
   BITCOIN_ADOPTION_IMPACT_FUND_SLUG,
   CATEGORY_OPTIONS,
+  CIRCULAR_GRANTS_CATEGORY_ID,
   clearImpactFundDonateSessionPref,
   LATAM_IMPACT_FUND_SLUG,
-  CIRCULAR_GRANTS_CATEGORY_ID,
   REGION_OPTIONS,
   WORKSHOPS_OPERATIONS_CATEGORY_ID,
   writeImpactFundDonateSessionPref,
@@ -60,8 +60,8 @@ export function ImpactFundsDonatePreferencesModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const muted = useColorModeValue('neutral1.9', 'neutral1.11')
-  const chipBorder = useColorModeValue('neutral1.4', 'whiteAlpha.300')
-  const chipBg = useColorModeValue('white', 'neutral1.3')
+  const chipBorder = 'neutral1.6'
+  const chipBg = useColorModeValue('utils.pbg', 'neutral1.3')
   const sectionTitleColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const selectedCardBg = useColorModeValue('primary1.2', 'primary1.3')
   const cardHoverBg = useColorModeValue('neutral1.2', 'neutral1.4')

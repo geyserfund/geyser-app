@@ -59,7 +59,7 @@ export const AppLayout = () => {
             display="flex"
             alignItems="center"
             flexDir="column"
-            backgroundColor="utils.pbg"
+            backgroundColor="utils.pageBg"
           >
             <PlatformNavBar />
             <Box

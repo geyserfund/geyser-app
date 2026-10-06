@@ -117,7 +117,7 @@ export const WalletLimitsAndVerification = () => {
             position="relative"
             width="100%"
             height="20px"
-            bgGradient="linear(to-r, neutral1.3 95%, transparent 100%)"
+            bgGradient="linear(to-r, neutralAlpha.3 95%, transparent 100%)"
             borderRadius="full"
             borderTopRightRadius={0}
             borderBottomRightRadius={0}

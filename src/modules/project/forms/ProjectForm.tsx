@@ -32,6 +32,15 @@ const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
 export const MAX_PROJECT_HEADERS = 7
 
+/** Hairline, unfilled upload tile (overrides the grey fill of the legacy UploadBox). */
+const uploadBoxSurfaceProps = {
+  borderRadius: 'card',
+  backgroundColor: 'transparent',
+  border: '1px solid',
+  borderColor: 'neutral1.6',
+  _hover: { backgroundColor: 'neutralAlpha.3' },
+}
+
 type ProjectFormProps = {
   form: UseFormReturn<ProjectCreationVariables>
   isEdit: boolean
@@ -167,16 +176,16 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           />
           <VStack
             w="full"
-            backgroundColor="neutral.100"
-            border="2px solid"
-            borderColor="neutral.200"
+            backgroundColor="neutralAlpha.3"
+            border="1px solid"
+            borderColor="neutral1.6"
             borderTop="none"
-            borderRadius="0 0 12px 12px"
+            borderBottomRadius="innerCard"
             alignItems="start"
             p="10px"
             spacing={2}
           >
-            <Body color="neutral1.9">
+            <Body color="neutral1.11">
               {`${t('Project URL')}: `}
               <Box as="span" color="neutral1.11">
                 geyser.fund/project/
@@ -278,13 +287,13 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   caption={t('For best fit, select horizontal 16:9 image. Image size limit: 10MB.')}
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
-                  childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} borderRadius="12px" />}
+                  childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} {...uploadBoxSurfaceProps} />}
                   imageCrop={ImageCropAspectRatio.Header}
                   isDisabled={maxReached}
                 >
                   <UploadBox
                     h={{ base: '40px', lg: '64px' }}
-                    borderRadius="12px"
+                    {...uploadBoxSurfaceProps}
                     flex={1}
                     title={
                       maxReached

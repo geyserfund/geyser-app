@@ -1,7 +1,7 @@
-import { CloseIcon } from '@chakra-ui/icons'
-import { Box, HStack, IconButton, StackProps, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, IconButton, StackProps, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { PiX } from 'react-icons/pi'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 
@@ -121,7 +121,7 @@ export const FileUpload = ({
                   aria-label="remove image"
                   onClick={onDeleteClick}
                 >
-                  <CloseIcon fontSize="xs" />
+                  <Icon as={PiX} fontSize="xs" />
                 </IconButton>
               ) : null}
             </HStack>

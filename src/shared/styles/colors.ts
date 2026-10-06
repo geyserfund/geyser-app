@@ -1,3 +1,4 @@
+import { brandColors, forestAlphaDark, forestAlphaLight, forestDark, forestLight } from './brandPalette.ts'
 import { darkPalette, lightPalette } from './palette'
 
 export const neutralColorsLight = {
@@ -30,30 +31,31 @@ export const neutralColorsDark = {
   0: '#0D0D0D',
 }
 
+/** Legacy 50-900 primary scale, remapped to the forest brand colour. Prefer `primary1.*` for new work. */
 export const primaryColorsLight = {
-  50: '#E9FFFB',
-  100: '#B7FFF2',
-  200: '#86FFE9',
-  300: '#54FFE0',
-  400: '#20ECC7',
-  500: '#10CAA8',
-  600: '#03A88A',
-  700: '#00866D',
-  800: '#006452',
-  900: '#004236',
+  50: forestLight['2'],
+  100: forestLight['3'],
+  200: forestLight['5'],
+  300: forestLight['7'],
+  400: forestLight['9'],
+  500: forestLight['9'],
+  600: forestLight['10'],
+  700: forestLight['10'],
+  800: forestLight['12'],
+  900: forestLight['12'],
 }
 
 export const primaryColorsDark = {
-  50: '#004236',
-  100: '#006452',
-  200: '#00866D',
-  300: '#03A88A',
-  400: '#20ECC7',
-  500: '#2CF9D3',
-  600: '#54FFE0',
-  700: '#86FFE9',
-  800: '#B7FFF2',
-  900: '#E9FFFB',
+  50: forestDark['2'],
+  100: forestDark['3'],
+  200: forestDark['5'],
+  300: forestDark['7'],
+  400: forestDark['9'],
+  500: forestDark['9'],
+  600: forestDark['10'],
+  700: forestDark['10'],
+  800: forestDark['12'],
+  900: forestDark['12'],
 }
 
 export const nostrColorsLight = {
@@ -118,22 +120,32 @@ export const socialColorsDark = {
 
 export const utilColors = {
   light: {
-    pbg: '#FFFFFF',
+    pageBg: brandColors.warmParchment,
+    pbg: brandColors.parchmentRaised,
     surface: '#FFFFFF',
-    primarySurface: 'rgba(0, 225, 180, 0.07)',
+    primarySurface: 'rgba(38, 72, 61, 0.07)',
     overlay: 'rgba(25, 21, 1, 0.29)',
-    primaryContrast: '#FFFFFF',
+    primaryContrast: brandColors.warmParchment,
+    primarySolid: brandColors.deepForest,
+    primarySolidHover: brandColors.deepForestPressed,
+    primarySolidContrast: brandColors.warmParchment,
+    heading: brandColors.deepForest,
     whiteContrast: '#FFFFFF',
     blackContrast: '#1C2024',
-    text: '#21201C',
+    text: brandColors.charcoalBrown,
     invertText: '#FFFFFF',
   },
   dark: {
-    pbg: '#111110',
+    pageBg: '#111110',
+    pbg: '#191918',
     surface: '#00000040',
-    primarySurface: 'rgba(0, 249, 203, 0.04)',
+    primarySurface: 'rgba(143, 191, 166, 0.05)',
     overlay: 'rgba(0, 0, 0, 0.75)',
-    primaryContrast: '#FFFFFF',
+    primaryContrast: '#10201A',
+    primarySolid: brandColors.deepForest,
+    primarySolidHover: forestDark['7'],
+    primarySolidContrast: '#FFFFFF',
+    heading: '#FFFFFF',
     whiteContrast: '#FFFFFF',
     blackContrast: '#1C2024',
     text: '#FFFFFF',
@@ -143,9 +155,9 @@ export const utilColors = {
 
 export const panelColors = {
   light: {
-    default: 'rgba(255, 255, 255, 0.8)',
-    solid: '#FFFFFF',
-    translucent: 'rgba(255, 255, 255, 0.8)',
+    default: 'rgba(251, 248, 241, 0.8)',
+    solid: brandColors.parchmentRaised,
+    translucent: 'rgba(251, 248, 241, 0.8)',
   },
   dark: {
     default: 'rgba(29, 29, 33, 0.7)',
@@ -271,8 +283,8 @@ export const lightModeColors = {
   secondary: secondaryColors,
   social: socialColors,
 
-  primary1: lightPalette.geyser,
-  primaryAlpha: lightPalette.geyserAlpha,
+  primary1: forestLight,
+  primaryAlpha: forestAlphaLight,
   neutral1: lightPalette.sand,
   neutralAlpha: lightPalette.sandAlpha,
   error: lightPalette.red,
@@ -297,8 +309,8 @@ export const darkModeColors = {
   secondary: secondaryColors,
   social: socialColorsDark,
 
-  primary1: darkPalette.geyser,
-  primaryAlpha: darkPalette.geyserAlpha,
+  primary1: forestDark,
+  primaryAlpha: forestAlphaDark,
   neutral1: darkPalette.sand,
   neutralAlpha: darkPalette.sandAlpha,
   error: darkPalette.red,

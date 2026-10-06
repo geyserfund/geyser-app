@@ -63,20 +63,20 @@ export const DonationInput = () => {
   const isDollar = !isSatoshi
   const selectedBorderColor = useColorModeValue(lightModeColors.primary1[6], darkModeColors.primary1[8])
   const selectedInnerGradient = useColorModeValue(
-    'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.58))',
+    `linear(to-br, ${lightModeColors.primary1[2]}, ${lightModeColors.primary1[3]})`,
     `linear(to-br, ${darkModeColors.primary1[4]}, ${darkModeColors.primary1[3]})`,
   )
   const selectedHoverGradient = useColorModeValue(
-    'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.7))',
+    `linear(to-br, ${lightModeColors.primary1[2]}, ${lightModeColors.primary1[4]})`,
     `linear(to-br, ${darkModeColors.primary1[5]}, ${darkModeColors.primary1[4]})`,
   )
   const unselectedBorderColor = useColorModeValue(lightModeColors.neutral1[4], darkModeColors.neutral1[4])
   const unselectedInnerGradient = useColorModeValue(
-    `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[1]})`,
+    `linear(to-br, ${lightModeColors.utils.pbg}, ${lightModeColors.neutral1[1]})`,
     `linear(to-br, ${darkModeColors.neutral1[2]}, ${darkModeColors.neutral1[1]})`,
   )
   const unselectedHoverGradient = useColorModeValue(
-    `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[2]})`,
+    `linear(to-br, ${lightModeColors.utils.pbg}, ${lightModeColors.neutral1[2]})`,
     `linear(to-br, ${darkModeColors.neutral1[3]}, ${darkModeColors.neutral1[2]})`,
   )
   const unselectedActiveGradient = useColorModeValue(
@@ -158,7 +158,7 @@ export const DonationInput = () => {
                 variant="ghost"
                 bgGradient={!isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
                 color={!isRecurringMode ? selectedTextColor : unselectedTextColor}
-                boxShadow={!isRecurringMode ? 'sm' : 'none'}
+                boxShadow={!isRecurringMode ? 'card' : 'none'}
                 _hover={{
                   bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
                 }}
@@ -192,7 +192,7 @@ export const DonationInput = () => {
                 leftIcon={<Icon as={PiHeartFill} color="primary1.9" boxSize={4} />}
                 bgGradient={isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
                 color={isRecurringMode ? selectedTextColor : unselectedTextColor}
-                boxShadow={isRecurringMode ? 'sm' : 'none'}
+                boxShadow={isRecurringMode ? 'card' : 'none'}
                 _hover={{
                   bgGradient: isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
                 }}

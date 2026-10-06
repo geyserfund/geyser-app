@@ -44,7 +44,7 @@ export const EnableFiatContributions = ({
           <Body size="md" medium>
             {t('Choose a configuration')}
           </Body>
-          <Body size="sm" light color="neutral1.7">
+          <Body size="sm" light color="neutral1.11">
             {t('(only one can be selected)')}
           </Body>
         </HStack>
@@ -52,8 +52,8 @@ export const EnableFiatContributions = ({
         <VStack
           w="full"
           borderWidth="1px"
-          borderColor={isBitcoinMode ? 'primary1.8' : 'neutral1.4'}
-          borderRadius="16px"
+          borderColor={isBitcoinMode ? 'primary1.8' : 'neutral1.6'}
+          borderRadius="card"
           p={6}
           alignItems="start"
           spacing={3}

@@ -20,6 +20,7 @@ export enum PathName {
   legacyImpactFunds = 'impact-funds',
   microLending = 'micro-loans',
   circularGrants = 'circular-grants',
+  transparency = 'transparency',
   afribitCaseStudy = 'afribit-case-study',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
@@ -240,6 +241,8 @@ const pathsMap = {
   discoveryImpactFundsWorkshops: () => `/${PathName.impactFunds}/crowdfunding-workshops`,
   discoveryMicroLending: () => `/${PathName.microLending}`,
   discoveryCircularGrants: () => `/${PathName.impactFunds}/${PathName.circularGrants}`,
+  discoveryCircularGrantsTransparency: () =>
+    `/${PathName.impactFunds}/${PathName.circularGrants}/${PathName.transparency}`,
   discoveryCircularGrantsAfrica: () => `/${PathName.impactFunds}/${PathName.circularGrants}/africa`,
   discoveryCircularGrantsLatinAmerica: () => `/${PathName.impactFunds}/${PathName.circularGrants}/latin-america`,
   discoveryCircularGrantsAfribitCaseStudy: () =>

@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, Link as ChakraLink, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -108,7 +108,7 @@ export const AboutDueDiligencePage = () => <AboutPage topic="dueDiligence" />
 
 export const AboutPage = ({ topic }: { topic: AboutTopic }) => {
   const content = topicContent[topic]
-  const pageBg = useColorModeValue('white', 'utils.pbg')
+  const pageBg = 'utils.pageBg'
   const mutedColor = 'neutralAlpha.11'
 
   return (
@@ -175,7 +175,7 @@ const SectionHeader = ({ eyebrow, title, description }: { eyebrow?: string; titl
 
 const OverviewContent = () => {
   const mutedColor = 'neutralAlpha.11'
-  const cardBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const cardBg = 'utils.pbg'
 
   return (
     <VStack align="stretch" spacing={{ base: 12, lg: 16 }}>
@@ -201,11 +201,9 @@ const OverviewContent = () => {
                 to={pathway.to}
                 size="md"
                 variant="solid"
-                bg="neutral1.12"
-                color="white"
+                colorScheme="primary1"
                 fontWeight={600}
                 rightIcon={<Icon as={PiArrowRight} />}
-                _hover={{ bg: 'neutral1.11', color: 'white' }}
               >
                 {t(pathway.action)}
               </Button>
@@ -268,7 +266,12 @@ const FieldPartnersContent = () => (
       <Button as={ChakraLink} href={ImpactFundsFieldPartnerApplicationUrl} isExternal colorScheme="primary1" size="lg">
         {t('Apply to become a Field Partner')}
       </Button>
-      <Button as={Link} to={`${getPath('discoveryImpactFunds')}#field-partners`} variant="outline" colorScheme="neutral1">
+      <Button
+        as={Link}
+        to={`${getPath('discoveryImpactFunds')}#field-partners`}
+        variant="outline"
+        colorScheme="neutral1"
+      >
         {t('See Field Partners')}
       </Button>
     </HStack>
@@ -358,7 +361,7 @@ const ImpactContent = () => {
 
 const DueDiligenceContent = () => {
   const mutedColor = 'neutralAlpha.11'
-  const cardBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const cardBg = 'utils.pbg'
 
   return (
     <VStack align="stretch" spacing={{ base: 12, lg: 16 }}>
@@ -423,11 +426,10 @@ const DueDiligenceContent = () => {
         <Button
           as={Link}
           to={`${getPath('discoveryImpactFunds')}#field-partners`}
-          bg="neutral1.12"
-          color="white"
+          variant="solid"
+          colorScheme="primary1"
           fontWeight={600}
           rightIcon={<Icon as={PiArrowRight} />}
-          _hover={{ bg: 'neutral1.11', color: 'white' }}
         >
           {t('Meet Field Partners')}
         </Button>
@@ -438,7 +440,7 @@ const DueDiligenceContent = () => {
 
 const CircularGrantModelSection = () => {
   const mutedColor = 'neutralAlpha.11'
-  const cardBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const cardBg = 'utils.pbg'
 
   return (
     <VStack align="stretch" spacing={6} w="full">
@@ -475,7 +477,7 @@ const CircularGrantModelSection = () => {
 
 const ProgramResourcesSection = () => {
   const mutedColor = 'neutralAlpha.11'
-  const cardBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const cardBg = 'utils.pbg'
 
   return (
     <VStack align="stretch" spacing={6} w="full">
@@ -498,7 +500,7 @@ const ProgramResourcesSection = () => {
                 {t(resource.description)}
               </Body>
             ) : null}
-            <HStack spacing={1} color="black" pt={1}>
+            <HStack spacing={1} color="primary1.11" pt={1}>
               <Body size="sm" fontWeight={600}>
                 {t('Read resource')}
               </Body>

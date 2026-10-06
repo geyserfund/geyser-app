@@ -8,6 +8,7 @@ import { RankMedal } from '@/shared/components/display/RankMedal'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
+import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
@@ -40,7 +41,7 @@ export const GeyserHeroes = () => {
     <ProjectRowLayout w="full" title={t('Top Heroes')}>
       <VStack w="full" flex={1}>
         <SponsorshipBanner />
-        <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems="start" spacing={4}>
+        <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems="stretch" spacing={4}>
           <HeroSectionWrapper
             title={t('Field Partners')}
             description={t('Trusted local partners help projects launch, access capital, and share their impact.')}
@@ -82,14 +83,16 @@ const HeroSectionWrapper = ({
   linkTo: string
   children: React.ReactNode
 }) => (
-  <CardLayout w="full" flex={1} h="full" dense paddingY={4}>
+  <CardLayout w="full" flex={1} dense paddingY={4}>
     <VStack w="full" alignItems="start" paddingX={4}>
       <Link to={linkTo} style={{ textDecoration: 'none' }}>
-        <Body size="xl" light bold>
+        <H3 size="lg" bold>
           {title}
-        </Body>
+        </H3>
       </Link>
-      <Body size="sm light">{description}</Body>
+      <Body size="sm" light>
+        {description}
+      </Body>
     </VStack>
     {children}
   </CardLayout>
@@ -121,8 +124,6 @@ const RenderFieldPartnerList = ({
             flex={1}
             overflow="hidden"
             key={row.fieldPartnerId}
-            minWidth="250px"
-            maxWidth="335px"
             _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
           >
             <RankMedal rank={row.rank} />
@@ -132,8 +133,15 @@ const RenderFieldPartnerList = ({
                 {row.fieldPartner}
               </ProfileText>
               <Body size="xs" medium isTruncated>
-                {`${row.country} · ${row.projectsLaunched} projects`}
-                <Body as="span" light>{` · ${getShortAmountLabel(row.enabledContributionSats)} sats enabled`}</Body>
+                {t('{{country}} · {{count}} projects', {
+                  country: row.country,
+                  count: row.projectsLaunched,
+                  interpolation: { escapeValue: false },
+                })}
+                <Body as="span" light>
+                  {' · '}
+                  {t('{{amount}} sats enabled', { amount: getShortAmountLabel(row.enabledContributionSats) })}
+                </Body>
               </Body>
             </VStack>
           </HStack>
@@ -166,8 +174,6 @@ const RenderHeroList = ({
               flex={1}
               overflow="hidden"
               key={`${datum[labels.username]}-${index}`}
-              minWidth="250px"
-              maxWidth="335px"
               _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
             >
               <RankMedal rank={index + 1} />
@@ -184,7 +190,9 @@ const RenderHeroList = ({
                 </ProfileText>
                 <Body size="xs" medium isTruncated>
                   {`${formatAmount(datum[labels.usdAmount], FormatCurrencyType.Usd)} `}
-                  <Body as="span" light>{`(${getShortAmountLabel(datum[labels.amount])} sats)`}</Body>
+                  <Body as="span" light>
+                    ({t('{{amount}} sats', { amount: getShortAmountLabel(datum[labels.amount]) })})
+                  </Body>
                 </Body>
               </VStack>
             </HStack>
@@ -199,8 +207,6 @@ const HeroesListitemSkeleton = () => (
     w="full"
     flex={1}
     overflow="hidden"
-    minWidth="250px"
-    maxWidth="335px"
     _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
   >
     <SkeletonLayout height="16px" width="16px" />

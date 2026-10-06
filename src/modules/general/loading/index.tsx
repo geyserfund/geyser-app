@@ -1,13 +1,13 @@
 import { Image, VStack } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
-import { LogoNameBrand } from '@/shared/constants'
-import { neutralColorsDark, neutralColorsLight } from '@/shared/styles'
+import LogoNameDark from '@/assets/logo-name-dark.svg'
+import LogoNameLight from '@/assets/logo-name-light.svg'
+import { darkModeColors, lightModeColors } from '@/shared/styles'
 import { getLocalStorageItem } from '@/shared/utils/browserStorage.ts'
 
-function useColor(light = neutralColorsLight[0], dark = neutralColorsDark[0]) {
-  return getLocalStorageItem('chakra-ui-color-mode') === 'dark' ? dark : light
-}
+/** Reads the stored colour mode directly: the splash can render before the Chakra provider resolves it. */
+const isStoredDarkMode = () => getLocalStorageItem('chakra-ui-color-mode') === 'dark'
 
 const useStyles = createUseStyles({
   '@-webkit-keyframes pulsate-fwd ': {
@@ -48,20 +48,22 @@ export const LoadingPage = () => {
   const classes = useStyles()
   return (
     <VStack
+      position="fixed"
+      top={0}
+      left={0}
       height="100vh"
-      width="100%"
-      color="primary.400"
+      width="100vw"
       justifyContent="center"
       alignItems="center"
       spacing="20px"
       zIndex={9999}
-      position="fixed"
-      backgroundColor={useColor()}
+      backgroundColor={isStoredDarkMode() ? darkModeColors.utils.pageBg : lightModeColors.utils.pageBg}
     >
       <Image
         className={classes.pulsateFwd}
-        height="75px"
-        src={LogoNameBrand}
+        height="120px"
+        maxWidth="90vw"
+        src={isStoredDarkMode() ? LogoNameLight : LogoNameDark}
         alt="geyser logo image"
         objectFit="contain"
       />

@@ -227,7 +227,7 @@ export const NavigationNewBadge = (props: BoxProps) => {
       lineHeight="1.1"
       {...props}
     >
-      <Body as="span" fontSize="9px" fontWeight={700} color="black !important">
+      <Body as="span" fontSize="9px" fontWeight={700} color="utils.blackContrast !important">
         {t('New')}
       </Body>
     </Box>

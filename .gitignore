@@ -58,3 +58,6 @@ caddy/certificate/root.crt
 
 *storybook.log
 .app.env
+
+# Impeccable critique snapshots are local working notes
+.impeccable/critique/

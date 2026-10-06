@@ -22,11 +22,11 @@ const variants = {
       borderRadius: '8px',
       _hover: {
         bg: 'primary1.9',
-        color: 'utils.blackContrast',
+        color: 'utils.primaryContrast',
       },
       _active: {
         bg: 'primary1.10',
-        color: 'utils.blackContrast',
+        color: 'utils.primaryContrast',
       },
       _selected: {
         bg: 'neutral1.3',

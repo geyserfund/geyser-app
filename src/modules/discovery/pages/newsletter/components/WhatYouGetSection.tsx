@@ -10,10 +10,10 @@ import { CONTENT_PILLARS } from '../constants.ts'
 export const WhatYouGetSection = () => {
   const panelBg = useColorModeValue('neutral1.1', 'neutral1.2')
   const panelBorder = useColorModeValue('neutral1.3', 'neutral1.4')
-  const accentBg = useColorModeValue('primary1.50', 'primary1.900')
-  const accentBorder = useColorModeValue('primary1.200', 'primary1.700')
-  const iconBg = useColorModeValue('primary1.100', 'primary1.900')
-  const iconColor = useColorModeValue('primary1.700', 'primary1.200')
+  const accentBg = 'primary1.3'
+  const accentBorder = 'primary1.6'
+  const iconBg = 'primary1.3'
+  const iconColor = 'primary1.11'
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const bodyColor = useColorModeValue('neutral1.9', 'neutral1.10')
 

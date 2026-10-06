@@ -17,7 +17,7 @@ import {
 import { t } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsCheckLg } from 'react-icons/bs'
+import { PiCheckBold } from 'react-icons/pi'
 import { Navigate } from 'react-router'
 
 import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
@@ -216,7 +216,7 @@ export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
         justifyContent="center"
         alignItems="center"
       >
-        <BsCheckLg fontSize="35px" color={colors.neutral[1000]} />
+        <PiCheckBold fontSize="35px" color={colors.utils.primaryContrast} />
       </HStack>
       <Body>You successfully applied to be part of the Geyser Grant. You should be receiving a notification soon.</Body>
       <Button w="full" variant="solid" colorScheme="primary1" onClick={onClose}>

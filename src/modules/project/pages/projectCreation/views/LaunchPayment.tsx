@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -28,9 +29,9 @@ export const LaunchPayment = () => {
 
   return (
     <ProjectCreationPageWrapper
-      title="Payment Settings"
+      title={t('Payment Settings')}
       backButtonProps={{ onClick: () => navigate(getPath('launchAboutYou', project.id)) }}
-      continueButtonProps={{ type: 'submit', form: PAYMENT_FORM_ID, label: 'Continue' }}
+      continueButtonProps={{ type: 'submit', form: PAYMENT_FORM_ID, label: t('Continue') }}
     >
       <DirectPaymentDetailsForm
         projectId={project.id}
@@ -41,7 +42,7 @@ export const LaunchPayment = () => {
         showStripeConfiguration
         stripeConfigurationAfterDirectPayments
         lastCreationStep={ProjectCreationStep.Launch}
-        submitLabel="Continue"
+        submitLabel={t('Continue')}
         onSaved={() => navigate(getPath('launchFinalize', project.id))}
       />
     </ProjectCreationPageWrapper>

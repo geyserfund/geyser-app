@@ -8,7 +8,6 @@ import { components, MenuListProps } from 'react-select'
 
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 
-import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
 import { TagsGetResult, useProjectTagCreateMutation, useTagsGetQuery } from '../../../types'
@@ -17,16 +16,12 @@ import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProj
 
 const MAX_TAGS_ALLOWED = 4
 
-const useStyles = createUseStyles(({ colors }: AppTheme) => ({
+const useStyles = createUseStyles({
   select: {
     width: '100%',
     borderRadius: '8px',
   },
-
-  menuGroup: {
-    backgroundColor: colors.secondary.red,
-  },
-}))
+})
 
 interface ProjectTagsCreateEditProps extends StackProps {
   form: UseFormReturn<ProjectCreationVariables>

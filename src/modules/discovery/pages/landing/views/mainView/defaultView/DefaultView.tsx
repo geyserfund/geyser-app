@@ -1,29 +1,30 @@
 import { useQuery } from '@apollo/client'
-import { VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
+import { SimpleGrid, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { fetchFeaturedProject } from '@/api/airtable.ts'
 import { Head } from '@/config/Head.tsx'
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
+import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
 import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
-import type { USDCents } from '@/types/index.ts'
-import { ProjectsGetWhereInputStatus, useImpactFundsQuery } from '@/types/index.ts'
-import { getShortAmountLabel } from '@/utils/index.ts'
+import { ProjectsGetWhereInputStatus } from '@/types/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { QUERY_LANDING_ABOVE_FOLD, QUERY_LANDING_ANNOUNCEMENTS } from '../../../graphql/landingPageQueries.ts'
 import { LandingAboveFoldQueryData, LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
-import { ActiveImpactFunds } from './sections/ActiveImpactFunds.tsx'
 import { type CircularGrantLandingFilter, CircularGrantFilterBar } from './sections/CircularGrantFilterBar.tsx'
 import { CircularGrantProjects } from './sections/CircularGrantProjects.tsx'
-import { CircularGrantSuccessStory } from './sections/CircularGrantSuccessStory.tsx'
+import {
+  CircularGrantsFocus,
+  FieldPartnerCaseStudy,
+  FieldPartnersPanel,
+  SupportMovementBand,
+} from './sections/CircularGrantsMission.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
-import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
+import { LatamImpactFundApplication } from './sections/LatamImpactFundApplication.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 
 const CURATED_PROJECTS_COUNT = 6
@@ -51,25 +52,7 @@ export const DefaultView = () => {
   const [featuredProjectsLoading, setFeaturedProjectsLoading] = useState(true)
   const [featuredProjectsError, setFeaturedProjectsError] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
-  const { donateModalElement } = useImpactFundsDonateModal()
-  const { getSatoshisFromUSDCents } = useBTCConverter()
-  const { data: impactFundsData } = useImpactFundsQuery()
-
-  const latinAmericaImpactFund = impactFundsData?.impactFunds.find((fund) => fund.name === 'latam-impact-fund')
-  const labifCommittedAmount = (() => {
-    if (latinAmericaImpactFund?.amountCommitted === null || latinAmericaImpactFund?.amountCommitted === undefined) {
-      return t('120,000,000 sats')
-    }
-
-    const amountSats =
-      latinAmericaImpactFund.amountCommitted === 0
-        ? latinAmericaImpactFund.metrics.awardedTotalSats
-        : latinAmericaImpactFund.amountCommittedCurrency === 'USDCENT'
-        ? getSatoshisFromUSDCents(latinAmericaImpactFund.amountCommitted as USDCents)
-        : latinAmericaImpactFund.amountCommitted
-
-    return `${getShortAmountLabel(amountSats, true)} sats`
-  })()
+  const { donateModalElement, openDonateModal } = useImpactFundsDonateModal()
 
   const loadFeaturedProjects = useCallback(async () => {
     setFeaturedProjectsLoading(true)
@@ -137,7 +120,7 @@ export const DefaultView = () => {
     skip: !showBelowTheFold,
   })
   return (
-    <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
+    <VStack w="full" spacing={10} paddingTop={{ base: 1, lg: 1.5 }}>
       {donateModalElement}
       <Head
         title={defaultSeoContent.title}
@@ -168,41 +151,67 @@ export const DefaultView = () => {
           })}
         </script>
       </Head>
-      <VStack w="full" spacing={20} paddingBottom={40}>
-        <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
+      <VStack w="full" spacing={{ base: 12, lg: 20 }} paddingBottom={{ base: 16, lg: 20 }}>
+        <VStack w="full" spacing={{ base: 4, lg: 6 }} align="stretch">
+          <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
 
-        {circularGrantFilter === 'featured' ? (
-          <CuratedProjects
-            featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
-            featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
-            featuredProjects={featuredProjects}
-            onRetryFeatured={() => {
-              loadFeaturedProjects()
-              if (featuredProjectNames.length > 0) {
-                refetchFeaturedProjects()
+          {circularGrantFilter === 'featured' ? (
+            <VStack w="full" spacing={{ base: 10, lg: 12 }} align="stretch">
+              <CuratedProjects
+                featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
+                featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
+                featuredProjects={featuredProjects}
+                onRetryFeatured={() => {
+                  loadFeaturedProjects()
+                  if (featuredProjectNames.length > 0) {
+                    refetchFeaturedProjects()
+                  }
+                }}
+              />
+              <CircularGrantProjects
+                title="Recent Circular Grants"
+                description=""
+                take={3}
+                emptyStateText="No recent Circular Grants found"
+                showDiscoverMore={false}
+              />
+            </VStack>
+          ) : (
+            <CircularGrantProjects
+              title={
+                circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'
               }
-            }}
-          />
-        ) : (
-          <CircularGrantProjects
-            title={circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'}
-            take={6}
-            where={{
-              ...(circularGrantFilter === 'africa'
-                ? { region: 'Africa' }
-                : { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }),
-            }}
-            includeSuccessful
-          />
-        )}
+              take={6}
+              where={{
+                ...(circularGrantFilter === 'africa'
+                  ? { region: 'Africa' }
+                  : { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }),
+              }}
+              includeSuccessful
+            />
+          )}
+        </VStack>
 
-        <CircularGrantSuccessStory />
+        <CircularGrantsFocus />
 
-        <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} />
+        <VStack w="full" spacing={{ base: 6, lg: 8 }} align="stretch">
+          <FieldPartnersPanel />
+          <SimpleGrid w="full" columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 8 }}>
+            <FieldPartnerCaseStudy />
+            <LatamImpactFundApplication />
+          </SimpleGrid>
+        </VStack>
+
+        <SupportMovementBand
+          onSupportImpactFund={() =>
+            openDonateModal({
+              defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID],
+            })
+          }
+        />
 
         {showBelowTheFold && (
           <>
-            <HowGeyserWorks />
             <HeroesMainPage />
             <GeyserNewsAndAnnouncements
               giveawayEndAt={announcementsData?.acelerandoVipLeaderboard.endAt}
@@ -211,9 +220,10 @@ export const DefaultView = () => {
               onGiveawayRetry={() => refetchAnnouncements()}
               projectAnnouncements={announcementsData?.geyserAnnouncements ?? []}
             />
-            <NewsletterSignup />
           </>
         )}
+
+        <NewsletterSignup />
       </VStack>
     </VStack>
   )

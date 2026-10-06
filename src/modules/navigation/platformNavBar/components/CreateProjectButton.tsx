@@ -1,9 +1,8 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
-import { Link } from 'react-router'
 
-import { getPath } from '@/shared/constants'
+import { useLaunchNow } from '@/modules/project/pages/projectCreation/hooks/useLaunchNow.tsx'
 
 type CreateProjectButtonProps = {
   iconOnly?: boolean
@@ -11,20 +10,25 @@ type CreateProjectButtonProps = {
   noIcon?: boolean
 } & ButtonProps
 
+/** Starts the project creation flow, prompting for sign-in or a social account first when needed. */
 export const CreateProjectButton = ({ iconOnly, label, noIcon, ...props }: CreateProjectButtonProps) => {
   const { t } = useTranslation()
+  const { handleLauchNowClick, renderModal } = useLaunchNow()
+
   return (
-    <Button
-      as={Link}
-      to={getPath('launchStart')}
-      size="lg"
-      variant="outline"
-      fontWeight={600}
-      fontSize={{ lg: 'sm', xl: 'md' }}
-      leftIcon={iconOnly || noIcon ? undefined : <PiRocketLaunch />}
-      {...props}
-    >
-      {iconOnly ? <PiRocketLaunch /> : label || t('Create project')}
-    </Button>
+    <>
+      <Button
+        size="lg"
+        variant="outline"
+        fontWeight={600}
+        fontSize={{ lg: 'sm', xl: 'md' }}
+        leftIcon={iconOnly || noIcon ? undefined : <PiRocketLaunch />}
+        onClick={handleLauchNowClick}
+        {...props}
+      >
+        {iconOnly ? <PiRocketLaunch /> : label || t('Create project')}
+      </Button>
+      {renderModal()}
+    </>
   )
 }

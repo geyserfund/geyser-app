@@ -67,7 +67,7 @@ const PrivateRoute = ({ children }: IPrivateRoute) => {
   }
 
   if (isPrivateProjectLaunchRoute && !isUserCreatorEnabled) {
-    return <Navigate to={getPath('launchStart')} />
+    return <Navigate to={getPath('discoveryLanding')} replace />
   }
 
   if (isProjectCreatorRoute && Boolean(isUserViewingTheirOwnProject) === false && params?.projectName) {

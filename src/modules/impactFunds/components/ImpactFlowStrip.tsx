@@ -30,7 +30,7 @@ export const ImpactFlowStrip = () => {
     },
   ]
 
-  const cardBackground = useColorModeValue('white', 'neutral1.3')
+  const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
   const cardBorderColor = useColorModeValue('neutral1.3', 'neutral1.4')
   const iconColor = useColorModeValue('neutral1.9', 'neutral1.11')
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')

@@ -47,7 +47,7 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
           </Body>
         )}
         {contribution.media && (
-          <Box h={'178px'} bg={'gray.100'} pos={'relative'} borderRadius="8px">
+          <Box h={'178px'} bg="neutral1.3" pos={'relative'} borderRadius="8px">
             <Image
               src={contribution.media}
               alt="Contribution media attachment"

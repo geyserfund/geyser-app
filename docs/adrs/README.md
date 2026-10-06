@@ -12,3 +12,6 @@
 | [0008](0008-retire-prism-and-ordinary-tia-funding.md) | Superseded by ADR-0009 | Retire Prism and ordinary TIA funding |
 | [0009](0009-fully-deprecate-paid-launches.md) | Accepted | Fully deprecate paid launches |
 | [0010](0010-rename-recoverable-grants-to-circular-grants.md) | Accepted | Rename Recoverable Grants to Circular Grants |
+| [0011](0011-adopt-grassroots-brand-theme.md) | Accepted | Adopt the grassroots brand theme app-wide |
+| [0012](0012-retire-project-creation-start-page.md) | Accepted | Retire the project creation start page |
+| [0013](0013-retire-creator-marketing-page.md) | Accepted | Retire the creator marketing page |

@@ -188,7 +188,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
       case EMAIL_VALIDATION_STATE.FAILED:
         return <PiXCircleFill fill={lightModeColors.secondary.red} size="24px" />
       case EMAIL_VALIDATION_STATE.SUCCEEDED:
-        return <PiCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
+        return <PiCheckCircleFill fill="var(--chakra-colors-primary1-11)" size="24px" />
       default:
         return null
     }

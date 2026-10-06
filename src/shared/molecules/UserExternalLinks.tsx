@@ -5,8 +5,8 @@ import { ComponentWithAs } from '@chakra-ui/system'
 import { t } from 'i18next'
 import { Link } from 'react-router'
 
-import { SocialLinks } from '@/modules/project/pages/projectCreation/views/start/components/SocialLinks.tsx'
 import { FAQUrl, FeedbackUrl, getPath, GeyserAboutUrl, GuideUrl } from '@/shared/constants'
+import { SocialLinks } from '@/shared/molecules/SocialLinks.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { Body } from '../components/typography/Body.tsx'
@@ -52,7 +52,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
         w="full"
         flexWrap="wrap"
         paddingX={4}
-        spacing={{ base: 2, lg: spread ? 2 : 0, xl: 2 }}
+        spacing={{ base: 1, lg: spread ? 3 : 2, xl: 3 }}
         justifyContent="center"
         {...props}
       >
@@ -74,7 +74,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
           isExternal
           href={getPath('legalTerms')}
           color="neutral1.9"
-          marginLeft={4}
+          marginLeft={{ base: 0, lg: 4 }}
         >
           {t('Terms of Service')}
         </UserNavExternalButton>
@@ -88,7 +88,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
 
       <VStack spacing={0}>
         <H2 fontStyle="italic" bold>
-          Geyser
+          Geyser Inc.
         </H2>
         <Body fontStyle="italic" medium>
           {t('Back stronger local economies with Bitcoin')}
@@ -97,7 +97,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
       <VStack>
         <SocialLinks />
         <Body fontStyle="italic" medium>
-          {t('2025 GEYSER INC.')}
+          {t('2026 GEYSER INC.')}
         </Body>
       </VStack>
     </VStack>
@@ -111,7 +111,7 @@ const UserNavExternalButton: ComponentWithAs<'button', ButtonProps> = (props) =>
       colorScheme="neutral1"
       size="sm"
       textDecoration={'none'}
-      paddingX={0}
+      paddingX={2}
       _hover={{ backgroundColor: 'none', textDecoration: 'underline' }}
       {...props}
     />

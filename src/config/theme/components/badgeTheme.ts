@@ -1,6 +1,15 @@
 import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
-const contrastColorThemes = ['primary1', 'success', 'warning', 'info']
+const contrastColorThemes = ['success', 'warning', 'info']
+
+/** Label colour for a solid badge of the given scheme. */
+const getSolidLabelColor = (colorScheme: string) => {
+  if (colorScheme === 'primary1') {
+    return 'utils.primaryContrast'
+  }
+
+  return contrastColorThemes.includes(colorScheme) ? 'utils.blackContrast' : 'utils.whiteContrast'
+}
 
 export const badgeTheme: ComponentStyleConfig = {
   baseStyle: {
@@ -39,7 +48,7 @@ export const badgeTheme: ComponentStyleConfig = {
   variants: {
     solid: ({ colorScheme }: StyleFunctionProps) => ({
       backgroundColor: `${colorScheme}.9`,
-      color: contrastColorThemes.includes(colorScheme) ? 'utils.blackContrast' : 'utils.whiteContrast',
+      color: getSolidLabelColor(colorScheme),
     }),
     soft: ({ colorScheme }: StyleFunctionProps) => ({
       backgroundColor: `${colorScheme}.3`,

@@ -27,11 +27,11 @@ export const tabTheme = defineMultiStyleConfig({
         borderColor: 'neutral1.2',
         p: '10px 20px',
         _selected: {
-          bg: 'neutral.0',
+          bg: 'utils.pbg',
           borderColor: 'neutral1.4',
         },
         _hover: {
-          bg: 'neutral.50',
+          bg: 'neutral1.2',
           borderColor: 'neutral1.4',
         },
       },

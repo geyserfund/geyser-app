@@ -36,38 +36,15 @@ const icons = {
 export const Feedback = ({ variant, text, children, icon, noIcon, iconProps, ...props }: FeedbackProps) => {
   const { colors } = useCustomTheme()
 
+  /** Unfilled tiles with a hairline border (see DESIGN.md): the variant shows in the border, icon and text colour. */
   const feedbackColors = useMemo(
     () => ({
-      [FeedBackVariant.WARNING]: {
-        bg: colors.warning[2],
-        border: colors.warning[6],
-        color: colors.warning[11],
-      },
-      [FeedBackVariant.INFO]: {
-        bg: colors.info[2],
-        border: colors.info[6],
-        color: colors.info[11],
-      },
-      [FeedBackVariant.ERROR]: {
-        bg: colors.error[2],
-        border: colors.error[6],
-        color: colors.error[11],
-      },
-      [FeedBackVariant.SUCCESS]: {
-        bg: colors.primary1[2],
-        border: colors.primary1[6],
-        color: colors.primary1[11],
-      },
-      [FeedBackVariant.NEUTRAL]: {
-        bg: colors.neutral1[2],
-        border: colors.neutral1[6],
-        color: colors.neutral1[11],
-      },
-      [FeedBackVariant.PRIORITY]: {
-        bg: colors.cyan[2],
-        border: colors.cyan[6],
-        color: colors.cyan[11],
-      },
+      [FeedBackVariant.WARNING]: { border: colors.warning[6], color: colors.warning[11] },
+      [FeedBackVariant.INFO]: { border: colors.neutral1[6], color: colors.neutral1[11] },
+      [FeedBackVariant.ERROR]: { border: colors.error[6], color: colors.error[11] },
+      [FeedBackVariant.SUCCESS]: { border: colors.primary1[6], color: colors.primary1[11] },
+      [FeedBackVariant.NEUTRAL]: { border: colors.neutral1[6], color: colors.neutral1[11] },
+      [FeedBackVariant.PRIORITY]: { border: colors.primary1[8], color: colors.primary1[11] },
     }),
     [colors],
   )
@@ -77,10 +54,9 @@ export const Feedback = ({ variant, text, children, icon, noIcon, iconProps, ...
   return (
     <HStack
       padding={4}
-      backgroundColor={feedbackColor.bg}
       spacing={3}
       w="full"
-      borderRadius="12px"
+      borderRadius="innerCard"
       alignItems={'start'}
       justifyContent="start"
       border="1px solid"
@@ -91,7 +67,14 @@ export const Feedback = ({ variant, text, children, icon, noIcon, iconProps, ...
       {noIcon ? null : icon ? (
         icon
       ) : (
-        <Icon as={icons[variant]} color={feedbackColor.color} fontSize="30px" {...iconProps} />
+        <Icon
+          as={icons[variant]}
+          color={feedbackColor.color}
+          fontSize="24px"
+          flexShrink={0}
+          aria-hidden
+          {...iconProps}
+        />
       )}
       {children ? (
         children

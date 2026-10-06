@@ -40,10 +40,11 @@ export const NotFoundProject = () => {
         </Button>
         <VStack
           width={{ base: '100%', lg: '600px' }}
-          border="2px solid"
-          borderColor="neutral.400"
-          backgroundColor="neutral.50"
-          borderRadius="8px"
+          border="0.5px solid"
+          borderColor="neutral1.6"
+          backgroundColor="utils.pbg"
+          boxShadow="card"
+          borderRadius="card"
           alignItems="flex-start"
           px={10}
           py={5}

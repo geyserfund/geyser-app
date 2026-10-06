@@ -1,91 +1,69 @@
-import { Box, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { PiChartLineUp, PiMapPinArea, PiUsersThree } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
+import { DEFAULT_NEWSLETTER_PREFERENCES } from '@/shared/constants/newsletter.ts'
 import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
-import { fonts } from '@/shared/styles'
 
-import { NEWSLETTER_SEGMENTS, NewsletterSegmentId } from '../constants.ts'
-import { SegmentCheckboxGroup } from './SegmentCheckboxGroup.tsx'
+const NEWSLETTER_HIGHLIGHTS = [
+  { icon: PiUsersThree, label: 'Field Partner stories' },
+  { icon: PiChartLineUp, label: 'Circular Grant progress' },
+  { icon: PiMapPinArea, label: 'Where capital flows next' },
+] as const
 
 /** Hero section with headline, segment preferences and subscribe form. */
 export const NewsletterHero = () => {
-  const heroBg = useColorModeValue('neutral1.2', 'neutral1.3')
-  const heroPatternBg = useColorModeValue(
-    'radial-gradient(circle at top left, rgba(0, 199, 173, 0.16), transparent 34%), radial-gradient(circle at bottom right, rgba(237, 160, 0, 0.12), transparent 28%)',
-    'radial-gradient(circle at top left, rgba(0, 199, 173, 0.12), transparent 34%), radial-gradient(circle at bottom right, rgba(251, 136, 118, 0.12), transparent 28%)',
-  )
-  const inputBg = useColorModeValue('white', 'neutral1.2')
-  const buttonBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const heroBg = useColorModeValue('neutral1.1', 'neutral1.2')
+  const borderColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const inputBg = useColorModeValue('utils.pbg', 'neutral1.2')
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
-  const bodyColor = useColorModeValue('neutral1.9', 'neutral1.10')
-  const mutedColor = useColorModeValue('neutral1.8', 'neutral1.9')
-
-  const [selectedSegments, setSelectedSegments] = useState<Set<NewsletterSegmentId>>(
-    () => new Set(NEWSLETTER_SEGMENTS.map((s) => s.id)),
-  )
-  const preferences = {
-    newsletterMonthly: selectedSegments.has('newsletterMonthly'),
-    productUpdates: selectedSegments.has('productUpdates'),
-    projectSpotlights: selectedSegments.has('projectSpotlights'),
-  }
+  const bodyColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const mutedColor = useColorModeValue('neutral1.8', 'neutral1.10')
 
   return (
-    <Box w="full" position="relative" overflow="hidden" borderRadius="28px" bg={heroBg}>
-      <Box position="absolute" inset={0} backgroundImage={heroPatternBg} pointerEvents="none" />
-
+    <Box w="full" borderRadius="24px" bg={heroBg} border="1px solid" borderColor={borderColor}>
       <VStack
-        position="relative"
-        spacing={6}
-        px={{ base: 5, md: 8, xl: 10 }}
-        py={{ base: 8, md: 10, xl: 12 }}
-        align="start"
+        spacing={{ base: 7, md: 8 }}
+        px={{ base: 5, md: 10, lg: 14 }}
+        py={{ base: 8, md: 12, lg: 14 }}
+        align="stretch"
       >
-        <Body size="sm" medium color="primary1.9" textTransform="uppercase" letterSpacing="0.12em">
-          {t('Join our Newsletter')}
-        </Body>
-
-        <VStack align="start" spacing={4}>
-          <H1
-            fontFamily={fonts.cormorant}
-            fontSize={{ base: '46px', md: '64px', xl: '80px' }}
-            lineHeight={0.94}
-            letterSpacing="-0.03em"
-            color={titleColor}
-          >
-            {t('Get more grassroots Bitcoin adoption updates')}
+        <VStack align="center" spacing={4} textAlign="center">
+          <Body size="sm" bold color="primary1.9" textTransform="uppercase" letterSpacing="0.12em">
+            {t('Circular Grants newsletter')}
+          </Body>
+          <H1 size={{ base: '3xl', md: '4xl' }} lineHeight={{ base: 1.12, md: 1.08 }} color={titleColor}>
+            {t('Follow Circular Grants in motion')}
           </H1>
 
-          <Body size={{ base: 'md', md: 'lg', xl: 'xl' }} color={bodyColor} lineHeight={1.7}>
+          <Body size={{ base: 'md', md: 'lg' }} color={bodyColor} lineHeight={1.7} maxW="680px">
             {t(
-              "There's a huge amount happening across the Bitcoin ecosystem that most people never see. We surface those stories in one place — adoption, community, new projects, and more.",
+              'Get concise updates from Field Partners, meet the local businesses behind each campaign, and see what Circular Grants make possible.',
             )}
           </Body>
         </VStack>
 
-        <VStack align="start" spacing={3} w="full">
-          <Body size="sm" medium color={mutedColor}>
-            {t('Choose what you want to receive')}:
-          </Body>
-          <SegmentCheckboxGroup selected={selectedSegments} onChange={setSelectedSegments} />
-        </VStack>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 3, md: 5 }}>
+          {NEWSLETTER_HIGHLIGHTS.map((item) => (
+            <HStack key={item.label} spacing={3} justify={{ base: 'flex-start', md: 'center' }}>
+              <Icon as={item.icon} boxSize={5} color="primary1.9" flexShrink={0} />
+              <Body size="sm" medium color={bodyColor}>
+                {t(item.label)}
+              </Body>
+            </HStack>
+          ))}
+        </SimpleGrid>
 
         <VStack align="stretch" spacing={3} w="full">
           <SubscribeForm
             maxWidth="full"
-            preferences={preferences}
+            preferences={DEFAULT_NEWSLETTER_PREFERENCES}
             buttonProps={{
               children: t('Subscribe'),
-              variant: 'solid',
-              bg: 'white',
-              color: 'neutral1.11',
+              colorScheme: 'primary1',
               fontSize: 'md',
-              border: '1px solid',
-              borderColor: buttonBorderColor,
-              _hover: { bg: 'whiteAlpha.900' },
-              _active: { bg: 'whiteAlpha.800' },
             }}
             inputProps={{
               backgroundColor: inputBg,

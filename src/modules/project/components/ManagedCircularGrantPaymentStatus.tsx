@@ -42,7 +42,9 @@ const ProviderStatus = ({ label, isReady }: { label: string; isReady: boolean })
         <Icon as={isReady ? PiCheckCircle : PiWarningCircle} color={isReady ? 'primary1.9' : 'warning.9'} boxSize={6} />
         <Body bold>{label}</Body>
       </HStack>
-      <Badge colorScheme={isReady ? 'primary1' : 'neutral1'}>{isReady ? t('Ready') : t('Unavailable')}</Badge>
+      <Badge colorScheme={isReady ? 'primary1' : 'neutral1'} color={isReady ? 'utils.primaryContrast' : undefined}>
+        {isReady ? t('Ready') : t('Unavailable')}
+      </Badge>
     </HStack>
   )
 }

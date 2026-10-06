@@ -1,7 +1,6 @@
 import { HStack, IconButton, Link, Stack, Text, useDisclosure, VStack, Wrap } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaGithub, FaPodcast } from 'react-icons/fa'
-import { RiTwitterXLine } from 'react-icons/ri'
+import { PiApplePodcastsLogoFill, PiGithubLogoFill, PiXLogo } from 'react-icons/pi'
 import { Link as ReactLink } from 'react-router'
 
 import {
@@ -59,7 +58,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               size="sm"
               background={'none'}
               aria-label="Geyser on Twitter"
-              icon={<RiTwitterXLine fontSize="20px" />}
+              icon={<PiXLogo fontSize="20px" />}
             />
           </Link>
 
@@ -68,7 +67,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               size="sm"
               background={'none'}
               aria-label="Geyser Podcasts"
-              icon={<FaPodcast fontSize="20px" />}
+              icon={<PiApplePodcastsLogoFill fontSize="20px" />}
               marginLeft="5px"
             />
           </Link>
@@ -78,7 +77,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               size="sm"
               background={'none'}
               aria-label="Geyser github"
-              icon={<FaGithub fontSize="20px" />}
+              icon={<PiGithubLogoFill fontSize="20px" />}
               marginLeft="5px"
             />
           </Link>

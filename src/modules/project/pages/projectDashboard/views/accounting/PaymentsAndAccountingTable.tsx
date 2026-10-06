@@ -26,7 +26,7 @@ export const PaymentsAndAccountingTable = ({
         render(val: OrderContributionFragment) {
           const isFunderAnonymous = !val.funder.user?.id
           if (isFunderAnonymous) {
-            return <AnonymousAvatar seed={val.id} imageSize={'20px'} textColor="neutral.900" />
+            return <AnonymousAvatar seed={val.id} imageSize={'20px'} textColor="utils.text" />
           }
 
           return (

@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
   },
   invoiceTotalTitle: {
     fontSize: '18px',
-    color: utilColors.light.text,
+    color: utilColors.light.primaryContrast,
     fontWeight: 600,
   },
   invoiceTotalPrice: {
     fontSize: '16px',
-    color: utilColors.light.text,
+    color: utilColors.light.primaryContrast,
     fontWeight: 500,
   },
   satsFont: {

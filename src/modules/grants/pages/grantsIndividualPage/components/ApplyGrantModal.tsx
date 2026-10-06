@@ -10,8 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
-import { BiLeftArrowAlt } from 'react-icons/bi'
-import { MdClose } from 'react-icons/md'
+import { PiArrowLeft, PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '../../../../../context'
 
@@ -161,19 +160,30 @@ export const ApplyGrantModal = ({ applicant, image, title, subtitle, isClose, ab
                   onClick={() => setApplicationStages(GrantApplicationStages.info)}
                   gap={2}
                   width="50px"
-                  backgroundColor="neutral.0"
+                  backgroundColor="utils.pbg"
+                  color="utils.text"
+                  _hover={{ backgroundColor: 'neutral1.3' }}
                 >
-                  <BiLeftArrowAlt fontSize={'25px'} />
+                  <PiArrowLeft fontSize={'25px'} />
                 </Button>
               )}
             </Box>
 
-            <Button fontSize="sm" rounded={0} onClick={handleClose} gap={2} width="100px" backgroundColor="neutral.0">
-              <MdClose fontSize={'18px'} /> Close
+            <Button
+              fontSize="sm"
+              rounded={0}
+              onClick={handleClose}
+              gap={2}
+              width="100px"
+              backgroundColor="utils.pbg"
+              color="utils.text"
+              _hover={{ backgroundColor: 'neutral1.3' }}
+            >
+              <PiX fontSize={'18px'} /> Close
             </Button>
           </HStack>
 
-          <Box flex="1" bg="neutral.0" pb={3} borderRadius="4px" overflowY="auto">
+          <Box flex="1" bg="utils.pbg" pb={3} borderRadius="4px" overflowY="auto">
             {grantInfo()}
           </Box>
         </ModalContent>

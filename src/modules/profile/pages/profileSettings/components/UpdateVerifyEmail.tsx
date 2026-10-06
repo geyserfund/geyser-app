@@ -1,6 +1,6 @@
-import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps, HStack, InputGroup, InputRightElement, StackProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Icon, InputGroup, InputRightElement, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiCheckCircleFill, PiWarningFill } from 'react-icons/pi'
 
 import { VerifyYourEmail } from '@/modules/auth/otp/VerifyYourEmail.tsx'
 import { Body, H3 } from '@/shared/components/typography'
@@ -56,8 +56,8 @@ export const UpdateVerifyEmail = ({
                 <InputGroup>
                   <TextField required control={control} name="email" />
                   <InputRightElement>
-                    {isSavedEmailVerfied && <CheckCircleIcon color={'primary1.9'} />}
-                    {isSavedEmailUnverified && <WarningIcon color={'neutral1.9'} />}
+                    {isSavedEmailVerfied && <Icon as={PiCheckCircleFill} color={'primary1.9'} />}
+                    {isSavedEmailUnverified && <Icon as={PiWarningFill} color={'neutral1.9'} />}
                   </InputRightElement>
                 </InputGroup>
                 {isSavedEmailVerfied && (

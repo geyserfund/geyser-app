@@ -5,7 +5,7 @@ export const ActiveShapeComponent = (props: any) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill="var(--chakra-colors-utils-text)">
         {payload.name}
       </text>
       <Sector

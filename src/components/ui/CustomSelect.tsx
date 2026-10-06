@@ -67,15 +67,15 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       ...(state.isFocused &&
         !state.isSelected && {
           background: colors.primary1[9],
-          color: colors.utils.blackContrast,
+          color: colors.utils.primaryContrast,
         }),
       '&:hover': {
         background: colors.primary1[9],
-        color: colors.utils.blackContrast,
+        color: colors.utils.primaryContrast,
       },
       '&:active': {
         bg: colors.primary1[10],
-        color: colors.utils.blackContrast,
+        color: colors.utils.primaryContrast,
       },
       '&:disabled': {
         background: colors.panel.solid,

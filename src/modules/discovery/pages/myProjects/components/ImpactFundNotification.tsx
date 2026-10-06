@@ -6,7 +6,8 @@ import { Link } from 'react-router'
 import { getEligibleImpactFund } from '@/modules/project/pages/projectView/views/body/sections/impactFundEligibility.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectForMyProjectsFragment, useImpactFundApplicationsQuery, useImpactFundQuery } from '@/types'
+import type { ProjectForMyProjectsFragment } from '@/types'
+import { useImpactFundApplicationsQuery, useImpactFundQuery } from '@/types'
 
 type ImpactFundNotificationProps = {
   project: ProjectForMyProjectsFragment
@@ -45,15 +46,16 @@ export const ImpactFundNotification = ({ project }: ImpactFundNotificationProps)
       spacing={3}
       px={3}
       py={2}
-      bg="neutral1.2"
-      borderRadius="6px"
+      border="1px solid"
+      borderColor="neutral1.6"
+      borderRadius="innerCard"
       alignItems={{ base: 'stretch', md: 'center' }}
       justifyContent={{ base: 'flex-start', md: 'space-between' }}
     >
       <HStack spacing={2} flex={1} alignItems="start">
-        <Icon as={PiInfo} color="neutral1.11" boxSize="16px" flexShrink={0} mt={0.5} />
+        <Icon as={PiInfo} color="primary1.11" boxSize="20px" flexShrink={0} aria-hidden />
         <VStack align="start" spacing={0} flex={1} minW={0}>
-          <Body size="sm" bold color="neutral1.11">
+          <Body size="sm" bold color="utils.text">
             {t('Eligible for {{fundName}}.', { fundName: eligibleImpactFund.title })}
           </Body>
           <Body size="sm" color="neutral1.11">
@@ -65,7 +67,7 @@ export const ImpactFundNotification = ({ project }: ImpactFundNotificationProps)
         as={Link}
         to={getPath('impactFunds', encodeURIComponent(eligibleImpactFund.name))}
         size="sm"
-        variant="soft"
+        variant="outline"
         colorScheme="neutral1"
         flexShrink={0}
         alignSelf={{ base: 'flex-start', md: 'center' }}

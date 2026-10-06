@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
+import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import type {
   Country,
@@ -28,15 +29,14 @@ import { ProjectCreationReferralCapture } from '../components/ProjectCreationRef
 import { ProjectExitConfirmModal } from '../components/ProjectExitConfirmModal'
 import { ProjectReferrerSelect } from '../components/ProjectReferrerSelect.tsx'
 import { useCurrentUserIsFieldPartner } from '../hooks/useCurrentUserIsFieldPartner.ts'
-import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectForm } from '../hooks/useProjectForm'
 import type { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
 import {
-  getProjectFundingStrategyInput,
-  getProjectCircularGrantInput,
-  projectCreationFundingOptionAtom,
   CircularGrantFundingOption,
+  getProjectCircularGrantInput,
+  getProjectFundingStrategyInput,
+  projectCreationFundingOptionAtom,
 } from '../states/fundingStrategyAtom.ts'
 import { getProjectCreationDescription } from '../utils/getProjectCreationDescription.ts'
 
@@ -79,7 +79,7 @@ export const LaunchProjectDetails = () => {
     getPath('launchFundingGoal', project.id),
   )
 
-  const onLeave = () => navigate(isEdit ? getPath('launchStart') : getPath('launchFundingStrategy', 'new'))
+  const onLeave = () => navigate(isEdit ? getPath('discoveryLanding') : getPath('launchFundingStrategy', 'new'))
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: form.formState.isDirty,

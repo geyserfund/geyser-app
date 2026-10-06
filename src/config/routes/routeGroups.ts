@@ -32,7 +32,7 @@ export const privateCreatorProjectCreationRoutes = [
   ...projectCreationRoutesThatNeedStory,
 ]
 
-export const allCreatorProjectCreationRoutes = [getPath('launchStart'), ...privateCreatorProjectCreationRoutes]
+export const allCreatorProjectCreationRoutes = [...privateCreatorProjectCreationRoutes]
 
 export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAnalytics', PathName.projectName),
@@ -202,7 +202,6 @@ export const discoveryRoutes = [
   getPath('discoveryCircularGrants'),
   getPath('discoveryCircularGrantsAfribitCaseStudy'),
   getPath('discoveryImpactFund', PathName.impactFundName),
-  getPath('discoveryCreator'),
   // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),

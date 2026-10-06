@@ -363,12 +363,12 @@ const ImageUploadUi = ({ isLoading, ...props }: ImageUploadUiProps) => {
       width="100%"
       height="330px"
       borderRadius="8px"
-      backgroundColor="neutral1.3"
+      backgroundColor="neutralAlpha.3"
       justifyContent="center"
       transition="background-color 0.5s ease"
       _hover={{
         cursor: 'pointer',
-        backgroundColor: 'neutral1.6',
+        backgroundColor: 'neutralAlpha.5',
         transition: 'background-color 0.5s ease',
       }}
       {...props}

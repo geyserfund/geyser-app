@@ -61,14 +61,14 @@ export const ImpactFundsWorkshopsPage = () => {
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
   const onDonateClick = () => openDonateModal(openWorkshopsDonateOptions)
   const colors: WorkshopColors = {
-    pageBg: useColorModeValue('white', 'utils.pbg'),
-    surfaceBg: useColorModeValue('white', 'neutral1.3'),
+    pageBg: 'utils.pageBg',
+    surfaceBg: useColorModeValue('utils.pbg', 'neutral1.3'),
     mutedSurfaceBg: useColorModeValue('#F5F6F6', 'neutral1.3'),
     darkSurfaceBg: useColorModeValue('#17120C', 'neutral1.1'),
     primaryText: useColorModeValue('black', 'utils.text'),
     secondaryText: useColorModeValue('#626872', 'neutral1.11'),
     borderColor: useColorModeValue('#E2E4E6', 'neutral1.5'),
-    accentText: useColorModeValue('#3F8F7C', 'primary1.200'),
+    accentText: 'primary1.11',
     amberBg: useColorModeValue('#F09A34', 'amber.9'),
   }
 
@@ -271,6 +271,7 @@ const HeroSection = ({ colors, onDonateClick }: { colors: WorkshopColors; onDona
             color={colors.darkSurfaceBg}
             fontSize="sm"
             fontWeight="600"
+            _hover={{ bg: 'white' }}
           >
             {t('Apply now')}
           </Button>
@@ -543,7 +544,15 @@ const CalloutCard = ({
         {t(buttonText)}
       </Button>
     ) : (
-      <Button onClick={onClick} mt="auto" bg={colors.surfaceBg} color={colors.primaryText} borderRadius="0" px={7}>
+      <Button
+        onClick={onClick}
+        mt="auto"
+        bg={colors.surfaceBg}
+        color={colors.primaryText}
+        borderRadius="0"
+        px={7}
+        _hover={{ bg: colors.surfaceBg }}
+      >
         {t(buttonText)}
       </Button>
     )}

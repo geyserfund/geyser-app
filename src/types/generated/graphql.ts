@@ -10756,34 +10756,6 @@ export type LandingAboveFoldQuery = { __typename?: 'Query', projectsGet: { __typ
       & LandingProjectCardProjectFragment
     )> } };
 
-export type LandingCategorySectionQueryVariables = Exact<{
-  category: ProjectCategory;
-  mostFundedCategory: Scalars['String']['input'];
-}>;
-
-
-export type LandingCategorySectionQuery = { __typename?: 'Query', latest: { __typename?: 'ProjectsResponse', projects: Array<(
-      { __typename?: 'Project' }
-      & LandingProjectCardProjectFragment
-    )> }, trending: Array<{ __typename?: 'ProjectMostFundedByCategory', category?: string | null, subCategory?: string | null, projects: Array<{ __typename?: 'ProjectMostFunded', project: (
-        { __typename?: 'Project' }
-        & LandingProjectCardProjectFragment
-      ), contributionsSummary?: { __typename?: 'ContributionsSummary', contributionsTotal: number, contributionsTotalUsd: number } | null }> }>, posts: Array<(
-    { __typename?: 'Post' }
-    & LandingPostCardPostFragment
-  )> };
-
-export type LandingOtherSectionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LandingOtherSectionQuery = { __typename?: 'Query', latest: { __typename?: 'ProjectsResponse', projects: Array<(
-      { __typename?: 'Project' }
-      & LandingProjectCardProjectFragment
-    )> }, posts: Array<(
-    { __typename?: 'Post' }
-    & LandingPostCardPostFragment
-  )> };
-
 export type LandingAnnouncementsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -10792,14 +10764,6 @@ export type LandingAnnouncementsQuery = { __typename?: 'Query', geyserAnnounceme
     & LandingPostCardPostFragment
   )>, acelerandoVipLeaderboard: { __typename?: 'AcelerandoVipLeaderboardResponse', endAt: any } };
 
-export type LandingCircularGrantProjectsSectionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LandingCircularGrantProjectsSectionQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
-      { __typename?: 'Project' }
-      & LandingProjectCardProjectFragment
-    )> } };
-
 export type LandingCircularGrantsByFilterQueryVariables = Exact<{
   where: ProjectsGetWhereInput;
   take: Scalars['Int']['input'];
@@ -10807,16 +10771,6 @@ export type LandingCircularGrantsByFilterQueryVariables = Exact<{
 
 
 export type LandingCircularGrantsByFilterQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
-      { __typename?: 'Project' }
-      & LandingProjectCardProjectFragment
-    )> } };
-
-export type LandingRegionalProjectsSectionQueryVariables = Exact<{
-  countryCode: Scalars['String']['input'];
-}>;
-
-
-export type LandingRegionalProjectsSectionQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
       { __typename?: 'Project' }
       & LandingProjectCardProjectFragment
     )> } };
@@ -10947,6 +10901,13 @@ export type ImpactFundApplicationNoteUpdateMutationVariables = Exact<{
 
 
 export type ImpactFundApplicationNoteUpdateMutation = { __typename?: 'Mutation', impactFundApplicationNoteUpdate: { __typename?: 'ImpactFundApplicationNote', id: any, applicationId: any, authorUserId: any, body: string, createdAt: any, updatedAt: any, canEdit: boolean, author: { __typename?: 'ImpactFundApplicationNoteAuthor', id: any, username: string, imageUrl?: string | null } } };
+
+export type ImpactFundsCircularGrantFieldPartnersQueryVariables = Exact<{
+  input: ProjectsGetQueryInput;
+}>;
+
+
+export type ImpactFundsCircularGrantFieldPartnersQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<{ __typename?: 'Project', id: any, balance: number, status?: ProjectStatus | null, fieldPartner?: { __typename?: 'User', id: any, username: string, location?: string | null } | null, location?: { __typename?: 'Location', country?: { __typename?: 'Country', name: string } | null } | null }> } };
 
 export type ImpactFundsFieldPartnerLeaderboardQueryVariables = Exact<{
   input?: InputMaybe<ImpactFundFieldPartnerLeaderboardInput>;
@@ -17383,121 +17344,6 @@ export type LandingAboveFoldQueryHookResult = ReturnType<typeof useLandingAboveF
 export type LandingAboveFoldLazyQueryHookResult = ReturnType<typeof useLandingAboveFoldLazyQuery>;
 export type LandingAboveFoldSuspenseQueryHookResult = ReturnType<typeof useLandingAboveFoldSuspenseQuery>;
 export type LandingAboveFoldQueryResult = Apollo.QueryResult<LandingAboveFoldQuery, LandingAboveFoldQueryVariables>;
-export const LandingCategorySectionDocument = gql`
-    query LandingCategorySection($category: ProjectCategory!, $mostFundedCategory: String!) {
-  latest: projectsGet(
-    input: {orderBy: [{direction: desc, field: launchedAt}], where: {category: $category, status: active}, pagination: {take: 5}}
-  ) {
-    projects {
-      ...LandingProjectCardProject
-    }
-  }
-  trending: projectsMostFundedByCategory(
-    input: {category: $mostFundedCategory, range: WEEK, take: 5}
-  ) {
-    category
-    subCategory
-    projects {
-      project {
-        ...LandingProjectCardProject
-      }
-      contributionsSummary {
-        contributionsTotal
-        contributionsTotalUsd
-      }
-    }
-  }
-  posts(
-    input: {orderBy: {publishedAt: desc}, pagination: {take: 10}, where: {category: $category}}
-  ) {
-    ...LandingPostCardPost
-  }
-}
-    ${LandingProjectCardProjectFragmentDoc}
-${LandingPostCardPostFragmentDoc}`;
-
-/**
- * __useLandingCategorySectionQuery__
- *
- * To run a query within a React component, call `useLandingCategorySectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useLandingCategorySectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLandingCategorySectionQuery({
- *   variables: {
- *      category: // value for 'category'
- *      mostFundedCategory: // value for 'mostFundedCategory'
- *   },
- * });
- */
-export function useLandingCategorySectionQuery(baseOptions: Apollo.QueryHookOptions<LandingCategorySectionQuery, LandingCategorySectionQueryVariables> & ({ variables: LandingCategorySectionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LandingCategorySectionQuery, LandingCategorySectionQueryVariables>(LandingCategorySectionDocument, options);
-      }
-export function useLandingCategorySectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingCategorySectionQuery, LandingCategorySectionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LandingCategorySectionQuery, LandingCategorySectionQueryVariables>(LandingCategorySectionDocument, options);
-        }
-export function useLandingCategorySectionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingCategorySectionQuery, LandingCategorySectionQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LandingCategorySectionQuery, LandingCategorySectionQueryVariables>(LandingCategorySectionDocument, options);
-        }
-export type LandingCategorySectionQueryHookResult = ReturnType<typeof useLandingCategorySectionQuery>;
-export type LandingCategorySectionLazyQueryHookResult = ReturnType<typeof useLandingCategorySectionLazyQuery>;
-export type LandingCategorySectionSuspenseQueryHookResult = ReturnType<typeof useLandingCategorySectionSuspenseQuery>;
-export type LandingCategorySectionQueryResult = Apollo.QueryResult<LandingCategorySectionQuery, LandingCategorySectionQueryVariables>;
-export const LandingOtherSectionDocument = gql`
-    query LandingOtherSection {
-  latest: projectsGet(
-    input: {orderBy: [{direction: desc, field: launchedAt}], where: {categories: [ADVOCACY, OTHER], status: active}, pagination: {take: 5}}
-  ) {
-    projects {
-      ...LandingProjectCardProject
-    }
-  }
-  posts(
-    input: {orderBy: {publishedAt: desc}, pagination: {take: 10}, where: {categories: [ADVOCACY, OTHER]}}
-  ) {
-    ...LandingPostCardPost
-  }
-}
-    ${LandingProjectCardProjectFragmentDoc}
-${LandingPostCardPostFragmentDoc}`;
-
-/**
- * __useLandingOtherSectionQuery__
- *
- * To run a query within a React component, call `useLandingOtherSectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useLandingOtherSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLandingOtherSectionQuery({
- *   variables: {
- *   },
- * });
- */
-export function useLandingOtherSectionQuery(baseOptions?: Apollo.QueryHookOptions<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>(LandingOtherSectionDocument, options);
-      }
-export function useLandingOtherSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>(LandingOtherSectionDocument, options);
-        }
-export function useLandingOtherSectionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>(LandingOtherSectionDocument, options);
-        }
-export type LandingOtherSectionQueryHookResult = ReturnType<typeof useLandingOtherSectionQuery>;
-export type LandingOtherSectionLazyQueryHookResult = ReturnType<typeof useLandingOtherSectionLazyQuery>;
-export type LandingOtherSectionSuspenseQueryHookResult = ReturnType<typeof useLandingOtherSectionSuspenseQuery>;
-export type LandingOtherSectionQueryResult = Apollo.QueryResult<LandingOtherSectionQuery, LandingOtherSectionQueryVariables>;
 export const LandingAnnouncementsDocument = gql`
     query LandingAnnouncements {
   geyserAnnouncements: posts(
@@ -17542,49 +17388,6 @@ export type LandingAnnouncementsQueryHookResult = ReturnType<typeof useLandingAn
 export type LandingAnnouncementsLazyQueryHookResult = ReturnType<typeof useLandingAnnouncementsLazyQuery>;
 export type LandingAnnouncementsSuspenseQueryHookResult = ReturnType<typeof useLandingAnnouncementsSuspenseQuery>;
 export type LandingAnnouncementsQueryResult = Apollo.QueryResult<LandingAnnouncementsQuery, LandingAnnouncementsQueryVariables>;
-export const LandingCircularGrantProjectsSectionDocument = gql`
-    query LandingCircularGrantProjectsSection {
-  projectsGet(
-    input: {orderBy: [{direction: desc, field: launchedAt}], where: {status: active, isCircularGrant: true}, pagination: {take: 3}}
-  ) {
-    projects {
-      ...LandingProjectCardProject
-    }
-  }
-}
-    ${LandingProjectCardProjectFragmentDoc}`;
-
-/**
- * __useLandingCircularGrantProjectsSectionQuery__
- *
- * To run a query within a React component, call `useLandingCircularGrantProjectsSectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useLandingCircularGrantProjectsSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLandingCircularGrantProjectsSectionQuery({
- *   variables: {
- *   },
- * });
- */
-export function useLandingCircularGrantProjectsSectionQuery(baseOptions?: Apollo.QueryHookOptions<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>(LandingCircularGrantProjectsSectionDocument, options);
-      }
-export function useLandingCircularGrantProjectsSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>(LandingCircularGrantProjectsSectionDocument, options);
-        }
-export function useLandingCircularGrantProjectsSectionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>(LandingCircularGrantProjectsSectionDocument, options);
-        }
-export type LandingCircularGrantProjectsSectionQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionQuery>;
-export type LandingCircularGrantProjectsSectionLazyQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionLazyQuery>;
-export type LandingCircularGrantProjectsSectionSuspenseQueryHookResult = ReturnType<typeof useLandingCircularGrantProjectsSectionSuspenseQuery>;
-export type LandingCircularGrantProjectsSectionQueryResult = Apollo.QueryResult<LandingCircularGrantProjectsSectionQuery, LandingCircularGrantProjectsSectionQueryVariables>;
 export const LandingCircularGrantsByFilterDocument = gql`
     query LandingCircularGrantsByFilter($where: ProjectsGetWhereInput!, $take: Int!) {
   projectsGet(
@@ -17630,50 +17433,6 @@ export type LandingCircularGrantsByFilterQueryHookResult = ReturnType<typeof use
 export type LandingCircularGrantsByFilterLazyQueryHookResult = ReturnType<typeof useLandingCircularGrantsByFilterLazyQuery>;
 export type LandingCircularGrantsByFilterSuspenseQueryHookResult = ReturnType<typeof useLandingCircularGrantsByFilterSuspenseQuery>;
 export type LandingCircularGrantsByFilterQueryResult = Apollo.QueryResult<LandingCircularGrantsByFilterQuery, LandingCircularGrantsByFilterQueryVariables>;
-export const LandingRegionalProjectsSectionDocument = gql`
-    query LandingRegionalProjectsSection($countryCode: String!) {
-  projectsGet(
-    input: {where: {fundingStrategy: TAKE_IT_ALL, countryCode: $countryCode, status: active}, orderBy: [{direction: desc, field: launchedAt}, {direction: desc, field: balance}], pagination: {take: 6}}
-  ) {
-    projects {
-      ...LandingProjectCardProject
-    }
-  }
-}
-    ${LandingProjectCardProjectFragmentDoc}`;
-
-/**
- * __useLandingRegionalProjectsSectionQuery__
- *
- * To run a query within a React component, call `useLandingRegionalProjectsSectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useLandingRegionalProjectsSectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLandingRegionalProjectsSectionQuery({
- *   variables: {
- *      countryCode: // value for 'countryCode'
- *   },
- * });
- */
-export function useLandingRegionalProjectsSectionQuery(baseOptions: Apollo.QueryHookOptions<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables> & ({ variables: LandingRegionalProjectsSectionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables>(LandingRegionalProjectsSectionDocument, options);
-      }
-export function useLandingRegionalProjectsSectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables>(LandingRegionalProjectsSectionDocument, options);
-        }
-export function useLandingRegionalProjectsSectionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables>(LandingRegionalProjectsSectionDocument, options);
-        }
-export type LandingRegionalProjectsSectionQueryHookResult = ReturnType<typeof useLandingRegionalProjectsSectionQuery>;
-export type LandingRegionalProjectsSectionLazyQueryHookResult = ReturnType<typeof useLandingRegionalProjectsSectionLazyQuery>;
-export type LandingRegionalProjectsSectionSuspenseQueryHookResult = ReturnType<typeof useLandingRegionalProjectsSectionSuspenseQuery>;
-export type LandingRegionalProjectsSectionQueryResult = Apollo.QueryResult<LandingRegionalProjectsSectionQuery, LandingRegionalProjectsSectionQueryVariables>;
 export const ActivitiesCountGroupedByProjectDocument = gql`
     query ActivitiesCountGroupedByProject($input: ActivitiesCountGroupedByProjectInput!) {
   activitiesCountGroupedByProject(input: $input) {
@@ -18202,6 +17961,60 @@ export function useImpactFundApplicationNoteUpdateMutation(baseOptions?: Apollo.
 export type ImpactFundApplicationNoteUpdateMutationHookResult = ReturnType<typeof useImpactFundApplicationNoteUpdateMutation>;
 export type ImpactFundApplicationNoteUpdateMutationResult = Apollo.MutationResult<ImpactFundApplicationNoteUpdateMutation>;
 export type ImpactFundApplicationNoteUpdateMutationOptions = Apollo.BaseMutationOptions<ImpactFundApplicationNoteUpdateMutation, ImpactFundApplicationNoteUpdateMutationVariables>;
+export const ImpactFundsCircularGrantFieldPartnersDocument = gql`
+    query ImpactFundsCircularGrantFieldPartners($input: ProjectsGetQueryInput!) {
+  projectsGet(input: $input) {
+    projects {
+      id
+      balance
+      status
+      fieldPartner {
+        id
+        username
+        location
+      }
+      location {
+        country {
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useImpactFundsCircularGrantFieldPartnersQuery__
+ *
+ * To run a query within a React component, call `useImpactFundsCircularGrantFieldPartnersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundsCircularGrantFieldPartnersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImpactFundsCircularGrantFieldPartnersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundsCircularGrantFieldPartnersQuery(baseOptions: Apollo.QueryHookOptions<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables> & ({ variables: ImpactFundsCircularGrantFieldPartnersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables>(ImpactFundsCircularGrantFieldPartnersDocument, options);
+      }
+export function useImpactFundsCircularGrantFieldPartnersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables>(ImpactFundsCircularGrantFieldPartnersDocument, options);
+        }
+export function useImpactFundsCircularGrantFieldPartnersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables>(ImpactFundsCircularGrantFieldPartnersDocument, options);
+        }
+export type ImpactFundsCircularGrantFieldPartnersQueryHookResult = ReturnType<typeof useImpactFundsCircularGrantFieldPartnersQuery>;
+export type ImpactFundsCircularGrantFieldPartnersLazyQueryHookResult = ReturnType<typeof useImpactFundsCircularGrantFieldPartnersLazyQuery>;
+export type ImpactFundsCircularGrantFieldPartnersSuspenseQueryHookResult = ReturnType<typeof useImpactFundsCircularGrantFieldPartnersSuspenseQuery>;
+export type ImpactFundsCircularGrantFieldPartnersQueryResult = Apollo.QueryResult<ImpactFundsCircularGrantFieldPartnersQuery, ImpactFundsCircularGrantFieldPartnersQueryVariables>;
 export const ImpactFundsFieldPartnerLeaderboardDocument = gql`
     query ImpactFundsFieldPartnerLeaderboard($input: ImpactFundFieldPartnerLeaderboardInput) {
   impactFundFieldPartnerLeaderboard(input: $input) {

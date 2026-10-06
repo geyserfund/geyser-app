@@ -1,7 +1,7 @@
 import { HStack, Link } from '@chakra-ui/react'
 import { Avatar } from '@chakra-ui/react'
 import { ReactElement } from 'react'
-import { FaUserCircle } from 'react-icons/fa'
+import { PiUserCircleFill } from 'react-icons/pi'
 import { Link as ReactRouterLink } from 'react-router'
 
 import { useMediumScreen, useMobileMode } from '../../utils'
@@ -100,7 +100,7 @@ export const LinkableAvatar = ({
             },
           }}
           color="neutral1.7"
-          icon={<FaUserCircle fontSize="20px" size={'1em'} />}
+          icon={<PiUserCircleFill fontSize="20px" size={'1em'} />}
         />
 
         <Body fontSize={fontSize || '12px'} _hover={{ textDecoration: underlineUsername ? 'underline' : 'none' }}>

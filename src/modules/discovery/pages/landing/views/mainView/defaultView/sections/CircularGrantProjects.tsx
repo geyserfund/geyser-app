@@ -19,6 +19,8 @@ type CircularGrantProjectsProps = {
   where?: ProjectsGetWhereInput
   take?: number
   includeSuccessful?: boolean
+  emptyStateText?: string
+  showDiscoverMore?: boolean
 }
 
 export const CircularGrantProjects = ({
@@ -27,6 +29,8 @@ export const CircularGrantProjects = ({
   where,
   take = 3,
   includeSuccessful = false,
+  emptyStateText,
+  showDiscoverMore = true,
 }: CircularGrantProjectsProps) => {
   const { t } = useTranslation()
   const baseWhere = {
@@ -83,6 +87,9 @@ export const CircularGrantProjects = ({
   )
 
   const sectionTitle = t(title)
+  const discoverMoreButton = showDiscoverMore ? (
+    <DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />
+  ) : undefined
 
   if (loading) {
     return <ProjectDisplayBodySkeleton />
@@ -91,13 +98,21 @@ export const CircularGrantProjects = ({
   if (projects.length === 0) {
     if (error) {
       return (
-        <ProjectRowLayout title={sectionTitle} width="100%">
+        <ProjectRowLayout title={sectionTitle} width="100%" rightContent={discoverMoreButton}>
           <VStack alignItems="start" spacing={4} py={4}>
-            <Body>{t('Failed to load projects')}</Body>
-            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={refetch}>
+            <Body light>{t('Failed to load projects')}</Body>
+            <Button size="md" variant="outline" colorScheme="neutral1" onClick={refetch}>
               {t('Retry')}
             </Button>
           </VStack>
+        </ProjectRowLayout>
+      )
+    }
+
+    if (emptyStateText) {
+      return (
+        <ProjectRowLayout title={sectionTitle} width="100%" rightContent={discoverMoreButton}>
+          <Body light>{t(emptyStateText)}</Body>
         </ProjectRowLayout>
       )
     }
@@ -110,7 +125,7 @@ export const CircularGrantProjects = ({
       title={sectionTitle}
       description={t(description)}
       projects={projects}
-      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />}
+      rightContent={discoverMoreButton}
     />
   )
 }

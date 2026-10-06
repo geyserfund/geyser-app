@@ -2,7 +2,28 @@ import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../../shared/styles'
 
-const darkStyleColorSchemes = ['primary1', 'warning', 'amber', 'orange']
+const darkStyleColorSchemes = ['warning', 'amber', 'orange']
+
+/** Label colour for a filled button of the given scheme. */
+const getSolidLabelColor = (colorScheme: string) => {
+  if (colorScheme === 'primary1') {
+    return 'utils.primarySolidContrast'
+  }
+
+  return darkStyleColorSchemes.includes(colorScheme) ? 'utils.blackContrast' : 'utils.whiteContrast'
+}
+
+/** Fill colours for a filled button: primary stays Deep Forest in both colour modes. */
+const getSolidFillColors = (colorScheme: string) => {
+  if (colorScheme === 'primary1') {
+    return { fill: 'utils.primarySolid', hoverFill: 'utils.primarySolidHover' }
+  }
+
+  return { fill: `${colorScheme}.9`, hoverFill: `${colorScheme}.10` }
+}
+
+/** Neutral and primary buttons share one forest-tinted hover so no grey fill lands on parchment. */
+const usesForestHover = (colorScheme: string) => colorScheme === 'neutral1' || colorScheme === 'primary1'
 
 export const buttonTheme: ComponentStyleConfig = {
   // style object for base or default style
@@ -63,14 +84,14 @@ export const buttonTheme: ComponentStyleConfig = {
   // styles for different visual variants ("outline", "solid")
   variants: {
     solid: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
-      backgroundColor: `${colorScheme}.9`,
-      color: darkStyleColorSchemes.includes(colorScheme) ? 'utils.blackContrast' : 'utils.whiteContrast',
+      backgroundColor: getSolidFillColors(colorScheme).fill,
+      color: getSolidLabelColor(colorScheme),
       _hover: {
-        backgroundColor: `${colorScheme}.10`,
+        backgroundColor: getSolidFillColors(colorScheme).hoverFill,
       },
       _active: {
         opacity: 0.92,
-        backgroundColor: `${colorScheme}.10`,
+        backgroundColor: getSolidFillColors(colorScheme).hoverFill,
       },
       _disabled: {
         backgroundColor: 'neutral1.3',
@@ -128,13 +149,35 @@ export const buttonTheme: ComponentStyleConfig = {
       color: `${colorScheme}.11`,
       border: '1px solid',
       borderColor: `${colorScheme}.8`,
-      _hover: {
-        backgroundColor: `${colorScheme}.2`,
-        borderColor: `${colorScheme}.8`,
-      },
-      _active: {
-        backgroundColor: `${colorScheme}.3`,
-        borderColor: `${colorScheme}.8`,
+      _hover: usesForestHover(colorScheme)
+        ? {
+            backgroundColor: 'primaryAlpha.2',
+            borderColor: 'primary1.8',
+            color: 'primary1.11',
+          }
+        : {
+            backgroundColor: `${colorScheme}.2`,
+            borderColor: `${colorScheme}.8`,
+          },
+      _active: usesForestHover(colorScheme)
+        ? {
+            backgroundColor: 'primaryAlpha.3',
+            borderColor: 'primary1.9',
+            color: 'primary1.11',
+          }
+        : {
+            backgroundColor: `${colorScheme}.3`,
+            borderColor: `${colorScheme}.8`,
+          },
+      // Selected toggle (aria-pressed): forest tint, border and label, whatever the scheme
+      _pressed: {
+        backgroundColor: 'primary1.3',
+        borderColor: 'primary1.9',
+        color: 'primary1.11',
+        _hover: {
+          backgroundColor: 'primary1.4',
+          borderColor: 'primary1.9',
+        },
       },
       _disabled: {
         backgroundColor: 'neutral1.3',
@@ -151,10 +194,10 @@ export const buttonTheme: ComponentStyleConfig = {
       backgroundColor: 'transparent',
       color: `${colorScheme}.11`,
       _hover: {
-        backgroundColor: `${colorScheme}.3`,
+        backgroundColor: usesForestHover(colorScheme) ? 'primaryAlpha.2' : `${colorScheme}.3`,
       },
       _active: {
-        backgroundColor: `${colorScheme}.4`,
+        backgroundColor: usesForestHover(colorScheme) ? 'primaryAlpha.3' : `${colorScheme}.4`,
       },
       _disabled: {
         backgroundColor: 'neutral1.3',
@@ -198,8 +241,8 @@ export const buttonTheme: ComponentStyleConfig = {
       borderRadius: '8px',
       justifyContent: 'flex-start',
       _hover: {
-        bg: `${colorScheme}.9`,
-        color: 'utils.blackContrast',
+        bg: getSolidFillColors(colorScheme).fill,
+        color: colorScheme === 'primary1' ? 'utils.primarySolidContrast' : 'utils.blackContrast',
       },
       _active: {
         bg: `neutral1.3`,
@@ -224,15 +267,20 @@ export const buttonTheme: ComponentStyleConfig = {
     primary: ({ theme }: StyleFunctionProps) => ({
       backgroundColor: theme.colors.primary[400],
       border: 'none',
-      color: lightModeColors.neutral[900],
+      color: 'utils.primaryContrast',
       _hover: {
         backgroundColor: {
           base: theme.colors.primary[400],
           lg: lightModeColors.neutral[200],
         },
+        color: {
+          base: 'utils.primaryContrast',
+          lg: lightModeColors.neutral[900],
+        },
       },
       _active: {
         backgroundColor: lightModeColors.neutral[300],
+        color: lightModeColors.neutral[900],
       },
     }),
     primaryLink: ({ theme }: StyleFunctionProps) => ({
@@ -271,14 +319,16 @@ export const buttonTheme: ComponentStyleConfig = {
       },
     }),
     primaryGradient: ({ theme }: StyleFunctionProps) => ({
-      background: `linear-gradient(270deg, #6BE7CE 0%, #20ECC7 35.42%, #00F388 100%)`,
+      background: `linear-gradient(270deg, ${theme.colors.primary[400]} 0%, ${theme.colors.primary[600]} 100%)`,
       border: 'none',
-      color: lightModeColors.neutral[900],
+      color: 'utils.primaryContrast',
       _hover: {
         background: lightModeColors.neutral[200],
+        color: lightModeColors.neutral[900],
       },
       _active: {
         background: lightModeColors.neutral[300],
+        color: lightModeColors.neutral[900],
       },
     }),
     secondary: ({ theme }: StyleFunctionProps) => ({

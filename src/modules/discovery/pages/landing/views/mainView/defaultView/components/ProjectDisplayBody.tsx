@@ -1,4 +1,4 @@
-import { GridItem, SimpleGrid, Stack } from '@chakra-ui/react'
+import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -57,7 +57,7 @@ export const ProjectDisplayBody = ({
           {description}
         </Body>
       )}
-      <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+      <SimpleGrid w="full" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
         {projects.map((project) => {
           return (
             <GridItem key={project.id}>
@@ -67,7 +67,7 @@ export const ProjectDisplayBody = ({
         })}
       </SimpleGrid>
       {posts && (
-        <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }} paddingTop={4}>
+        <SimpleGrid w="full" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }} paddingTop={4}>
           {posts.map((post) => (
             <LandingPostCard post={post} key={post.id} />
           ))}
@@ -80,11 +80,11 @@ export const ProjectDisplayBody = ({
 export const ProjectDisplayBodySkeleton = () => {
   return (
     <ProjectRowLayout title={<SkeletonLayout height="38px" width="250px" />} width="100%">
-      <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing={4}>
-        {[1, 2, 3, 4].map((id) => {
+      <SimpleGrid w="full" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+        {[1, 2, 3].map((id) => {
           return <LandingCardBaseSkeleton key={id} />
         })}
-      </Stack>
+      </SimpleGrid>
     </ProjectRowLayout>
   )
 }

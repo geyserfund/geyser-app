@@ -1,13 +1,14 @@
-import { Box, Circle, Divider, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, Divider, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { PiCheck } from 'react-icons/pi'
-import type { ReactNode } from 'react'
+import type { KeyboardEvent, ReactNode } from 'react'
+import { PiArrowsClockwise, PiCheckCircleFill, PiCircle } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 
 import { canCreateManagedCircularGrant } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { Body, H2 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 
@@ -33,8 +34,8 @@ export const LaunchFundingStrategy = () => {
   const selectedFundingOption = isNewProject
     ? storedFundingOption
     : project.isCircularGrant
-      ? CircularGrantFundingOption
-      : ProjectFundingStrategy.TakeItAll
+    ? CircularGrantFundingOption
+    : ProjectFundingStrategy.TakeItAll
 
   const continueProps = {
     onClick() {
@@ -58,7 +59,7 @@ export const LaunchFundingStrategy = () => {
 
   const backButtonProps = {
     onClick() {
-      navigate(isNewProject ? getPath('launchStart') : getPath('launchProjectDetails', project.id))
+      navigate(isNewProject ? getPath('discoveryLanding') : getPath('launchProjectDetails', project.id))
     },
   }
 
@@ -68,20 +69,31 @@ export const LaunchFundingStrategy = () => {
       continueButtonProps={continueProps}
       backButtonProps={backButtonProps}
     >
-      <VStack w="full" h="full" align="flex-start" spacing={5}>
-        <FundingOptionCard selected={selectedFundingOption === ProjectFundingStrategy.TakeItAll}>
-          <OpenFundingExplainer onClick={() => setStoredFundingOption(ProjectFundingStrategy.TakeItAll)} />
+      <VStack
+        w="full"
+        h="full"
+        align="flex-start"
+        spacing={5}
+        role="radiogroup"
+        aria-label={t('Choose your funding type')}
+      >
+        <FundingOptionCard
+          selected={selectedFundingOption === ProjectFundingStrategy.TakeItAll}
+          onSelect={() => setStoredFundingOption(ProjectFundingStrategy.TakeItAll)}
+        >
+          <OpenFundingExplainer selected={selectedFundingOption === ProjectFundingStrategy.TakeItAll} />
         </FundingOptionCard>
 
         <FundingOptionCard
           selected={selectedFundingOption === CircularGrantFundingOption}
           disabled={!showCircularGrantOption}
+          onSelect={() => setStoredFundingOption(CircularGrantFundingOption)}
         >
-          <CircularGrantExplainer onClick={() => setStoredFundingOption(CircularGrantFundingOption)} />
+          <CircularGrantExplainer selected={selectedFundingOption === CircularGrantFundingOption} />
         </FundingOptionCard>
 
         {!showCircularGrantOption && isNewProject ? (
-          <Body size="md" light color="neutral1.7">
+          <Body size="md" light>
             {t('Only Field Partners can create Circular Grant projects.')}
           </Body>
         ) : null}
@@ -90,81 +102,92 @@ export const LaunchFundingStrategy = () => {
   )
 }
 
+/** Funding type option tile: plain bordered when idle, forest border and tint when selected. */
 const FundingOptionCard = ({
   children,
   selected,
   disabled = false,
+  onSelect,
 }: {
   children: ReactNode
   selected: boolean
   disabled?: boolean
-}) => (
-  <Box
-    w="full"
-    border="2px solid"
-    borderColor={selected ? 'primary1.9' : 'neutral1.6'}
-    borderRadius="10px"
-    opacity={disabled ? 0.55 : 1}
-    pointerEvents={disabled ? 'none' : 'auto'}
-    cursor={disabled ? 'not-allowed' : 'pointer'}
-  >
-    {children}
-  </Box>
+  onSelect: () => void
+}) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled) return
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onSelect()
+    }
+  }
+
+  return (
+    <Box
+      w="full"
+      role="radio"
+      aria-checked={selected}
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
+      border="1px solid"
+      borderColor={selected ? 'primary1.9' : 'neutral1.6'}
+      backgroundColor={selected ? 'primary1.2' : 'utils.pbg'}
+      borderRadius="card"
+      opacity={disabled ? 0.55 : 1}
+      pointerEvents={disabled ? 'none' : 'auto'}
+      cursor={disabled ? 'not-allowed' : 'pointer'}
+      transition="border-color 0.2s, background-color 0.2s"
+      _hover={{ borderColor: selected ? 'primary1.9' : 'primary1.8' }}
+      _focusVisible={{ outline: '2px solid', outlineColor: 'primary1.8', outlineOffset: '2px' }}
+      onClick={onSelect}
+      onKeyDown={handleKeyDown}
+    >
+      {children}
+    </Box>
+  )
+}
+
+const SelectionIndicator = ({ selected }: { selected: boolean }) => (
+  <Icon
+    as={selected ? PiCheckCircleFill : PiCircle}
+    boxSize="24px"
+    color={selected ? 'primary1.11' : 'neutral1.11'}
+    flexShrink={0}
+    mt="2px"
+    aria-hidden
+  />
 )
 
-const OpenFundingExplainer = ({ onClick }: { onClick: () => void }) => {
+const OpenFundingExplainer = ({ selected }: { selected: boolean }) => {
   return (
-    <VStack
-      w="full"
-      align="stretch"
-      spacing={4}
-      bg="utils.bg"
-      borderRadius="8px"
-      px={{ base: 4, md: 5 }}
-      py={5}
-      onClick={onClick}
-    >
+    <VStack w="full" align="stretch" spacing={4} px={{ base: 4, md: 5 }} py={5}>
       <HStack alignItems="flex-start" spacing={4}>
-        <Circle size="32px" bg="primary1.9" flexShrink={0} mt={1}>
-          <Icon as={PiCheck} fontSize="18px" color="utils.pbg" />
-        </Circle>
+        <SelectionIndicator selected={selected} />
         <VStack w="full" alignItems="flex-start" spacing={1}>
-          <H2 size="xl" bold>{t('Open Funding')}</H2>
-          <Body>
-            {t('Raise funds directly from your community and use them as they come in.')}
-          </Body>
+          <H3 size="lg" bold>
+            {t('Open Funding')}
+          </H3>
+          <Body>{t('Raise funds directly from your community and use them as they come in.')}</Body>
         </VStack>
       </HStack>
-      <Body light color="neutral1.7">
+      <Body light>
         {t('Only applications to LABIF can create Open Funding projects. Other projects will be rejected.')}
       </Body>
     </VStack>
   )
 }
 
-const CircularGrantExplainer = ({ onClick }: { onClick: () => void }) => {
+const CircularGrantExplainer = ({ selected }: { selected: boolean }) => {
   return (
-    <VStack
-      w="full"
-      align="stretch"
-      spacing={4}
-      border="1px solid"
-      borderColor="primary1.9"
-      bg="primary1.1"
-      borderRadius="8px"
-      px={{ base: 4, md: 5 }}
-      py={5}
-      onClick={onClick}
-    >
+    <VStack w="full" align="stretch" spacing={4} px={{ base: 4, md: 5 }} py={5}>
       <HStack alignItems="flex-start" spacing={4}>
-        <Circle size="32px" bg="primary1.9" flexShrink={0} mt={1}>
-          <Icon as={PiCheck} fontSize="18px" color="utils.pbg" />
-        </Circle>
+        <SelectionIndicator selected={selected} />
 
         <VStack w="full" alignItems="flex-start" spacing={1}>
-          <H2 size="xl" bold>
+          <H3 size="lg" bold>
             {t('Circular Grant')}
-          </H2>
+          </H3>
           <Body>
             {t(
               'Circular Grants provide 0% interest working capital that is repaid over time and reused to fund the next local project.',
@@ -173,7 +196,7 @@ const CircularGrantExplainer = ({ onClick }: { onClick: () => void }) => {
         </VStack>
       </HStack>
 
-      <VStack alignItems="flex-start" spacing={1} pl={{ base: 0, md: '48px' }}>
+      <VStack alignItems="flex-start" spacing={1} pl={{ base: 0, md: '40px' }}>
         <Body bold>{t('Best for')}</Body>
         <Body>
           {t(
@@ -182,12 +205,10 @@ const CircularGrantExplainer = ({ onClick }: { onClick: () => void }) => {
         </Body>
       </VStack>
 
-      <Divider />
+      <Divider borderColor="neutral1.6" />
 
-      <HStack spacing={3}>
-        <Circle size="24px" border="2px solid" borderColor="primary1.9" flexShrink={0}>
-          <Icon as={PiCheck} fontSize="14px" color="primary1.9" />
-        </Circle>
+      <HStack spacing={4}>
+        <Icon as={PiArrowsClockwise} boxSize="24px" color="primary1.11" flexShrink={0} aria-hidden />
         <Body>{t('Repayments help fund the next local project without creating a debt burden.')}</Body>
       </HStack>
     </VStack>

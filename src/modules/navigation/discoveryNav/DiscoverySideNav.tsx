@@ -15,10 +15,12 @@ import { useAtomValue } from 'jotai'
 import { Link } from 'react-router'
 
 import { LogoDark, LogoLight } from '@/assets'
+import LogoNameDark from '@/assets/logo-name-dark.svg'
+import LogoNameLight from '@/assets/logo-name-light.svg'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath, LogoNameDark, LogoNameLight } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
 import { useMobileMode } from '@/utils'
 
@@ -31,9 +33,9 @@ const defaultNavIconHeight = '19.8px'
 const defaultNavIconFontSize = '19.8px'
 
 const glowAnimation = keyframes`
-  0% { filter: drop-shadow(0 0 0px #3182ce); }
-  50% { filter: drop-shadow(0 0 6px #63b3ed); }
-  100% { filter: drop-shadow(0 0 0px #3182ce); }
+  0% { filter: drop-shadow(0 0 0px var(--chakra-colors-primary1-9)); }
+  50% { filter: drop-shadow(0 0 6px var(--chakra-colors-primary1-8)); }
+  100% { filter: drop-shadow(0 0 0px var(--chakra-colors-primary1-9)); }
 `
 
 const Image = (props: ImageProps) => {
@@ -72,7 +74,12 @@ export const DiscoverySideNav = () => {
     >
       <VStack w="full" h="full" paddingX={{ lg: 4, xl: 8 }} spacing={8}>
         <Link to={getPath('discoveryLanding')}>
-          <Image src={isTabletSize ? tabletImage : imageUrl} alt={'Brand logo image'} height="48px" width="auto" />
+          <Image
+            src={isTabletSize ? tabletImage : imageUrl}
+            alt={'Brand logo image'}
+            height={isTabletSize ? '48px' : '36px'}
+            width="auto"
+          />
         </Link>
         <VStack w="full" padding={0} spacing={3}>
           {discoveryNavItems.map((item, index) => {

@@ -8,7 +8,9 @@ import { H3 } from '@/shared/components/typography/Heading.tsx'
 import type { UseModalReturn } from '@/shared/hooks/useModal.tsx'
 import type { ProjectReviewFragment, ProjectReviewPublicFragment } from '@/types/index.ts'
 
-type ProjectReviewFeedback = ProjectReviewPublicFragment | Pick<ProjectReviewFragment, 'rejectionReasons' | 'reviewNotes'>
+type ProjectReviewFeedback =
+  | ProjectReviewPublicFragment
+  | Pick<ProjectReviewFragment, 'rejectionReasons' | 'reviewNotes'>
 
 type ProjectReviewFeedbackModalProps = {
   modal: UseModalReturn
@@ -27,7 +29,14 @@ export const ProjectReviewFeedbackModal = ({ modal, review }: ProjectReviewFeedb
         <Body size="sm">{t('The team requested updates before your project can be re-submitted.')}</Body>
 
         {rejectionReasons.length > 0 && (
-          <CardLayout noborder backgroundColor="neutral1.3" w="full" spacing={3}>
+          <CardLayout
+            padding={4}
+            boxShadow="none"
+            backgroundColor="transparent"
+            borderRadius="innerCard"
+            w="full"
+            spacing={3}
+          >
             <Body bold>{t('Requested changes')}</Body>
             <UnorderedList spacing={2} pl={4}>
               {rejectionReasons.map((reason, index) => (
@@ -40,7 +49,14 @@ export const ProjectReviewFeedbackModal = ({ modal, review }: ProjectReviewFeedb
         )}
 
         {reviewNotes && (
-          <CardLayout noborder backgroundColor="neutral1.3" w="full" spacing={2}>
+          <CardLayout
+            padding={4}
+            boxShadow="none"
+            backgroundColor="transparent"
+            borderRadius="innerCard"
+            w="full"
+            spacing={2}
+          >
             <Body bold>{t('Notes')}</Body>
             <Body>{reviewNotes}</Body>
           </CardLayout>

@@ -3,18 +3,11 @@ import { PropsWithChildren } from 'react'
 
 import { TopNavContainer } from './TopNavContainer'
 
-/** Padding UI and background along with TopNavContainer, use it directly if custom ui is required at the position of navbar */
+/** Row layout inside TopNavContainer; use TopNavContainer directly if custom UI is required at the position of the navbar. */
 export const TopNavContainerBar = ({ children, ...props }: PropsWithChildren<StackProps>) => {
   return (
     <TopNavContainer {...props}>
-      <HStack
-        padding="2px"
-        borderRadius={'12px'}
-        backgroundColor="neutral1.3"
-        boxShadow="none"
-        w="full"
-        justifyContent="space-between"
-      >
+      <HStack w="full" justifyContent="space-between">
         {children}
       </HStack>
     </TopNavContainer>

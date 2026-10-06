@@ -7,8 +7,6 @@ import { fetchInfoBannerData } from '@/api/airtable'
 import { GeyserLogoIcon } from '@/components/icons/svg/GeyserLogoIcon'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { lightModeColors } from '@/shared/styles'
-import { BrandCreamGradient } from '@/shared/styles/custom'
 
 import { isProjectFundingRoutesAtom, useIsGuardiansPage } from '../navigation/platformNavBar/platformNavBarAtom'
 import { InfoBannerHistoryDataAtom } from './InfoBannerAtom'
@@ -74,7 +72,7 @@ export const InfoBanner = () => {
   return (
     <Box position="fixed" bottom={20} left={{ base: 0, lg: 10 }} zIndex={10} paddingX={{ base: '10px', lg: 'unset' }}>
       <CardLayout
-        background={BrandCreamGradient}
+        background="primary1.3"
         padding={5}
         position={'relative'}
         width={{ base: '100%', lg: '320px' }}
@@ -87,21 +85,21 @@ export const InfoBanner = () => {
           variant="ghost"
           aria-label="close"
           icon={<PiX />}
-          color={lightModeColors.neutral1[11]}
-          _hover={{ background: lightModeColors.neutral1[3] }}
+          color="neutral1.11"
+          _hover={{ background: 'primary1.4' }}
           onClick={handleInfoBannerHistoryData}
         />
 
         <VStack w="full">
           <HStack w="full" alignItems={'center'}>
-            <GeyserLogoIcon color={lightModeColors.neutral1[11]} />
-            <Body size="lg" medium color={lightModeColors.neutral1[11]}>
+            <GeyserLogoIcon color="neutral1.11" />
+            <Body size="lg" medium color="neutral1.11">
               {data?.title}
             </Body>
           </HStack>
-          <Body size="sm" color={lightModeColors.utils.text}>
+          <Body size="sm" color="utils.text">
             {data?.description}{' '}
-            <Body as="span" color={lightModeColors.primary1[11]} onClick={handleInfoBannerHistoryData}>
+            <Body as="span" color="primary1.11" onClick={handleInfoBannerHistoryData}>
               <Link isExternal href={data?.link} textDecoration={'underline'}>
                 {data?.linkText}
               </Link>
