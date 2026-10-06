@@ -1,3 +1,16 @@
+## [0.60.0](https://github.com/geyserfund/geyser-app/compare/v0.59.3...v0.60.0) (2026-10-02)
+
+
+### Features
+
+* center landing and navigation on Circular Grants ([6eefc58](https://github.com/geyserfund/geyser-app/commit/6eefc582239639034f635aa8ba79039a31f38b88))
+* restore LABIF open funding flow ([5a4ee6a](https://github.com/geyserfund/geyser-app/commit/5a4ee6a020325d7ea9281c0beb193011a55a3d13))
+
+
+### Bug Fixes
+
+* refine open funding creation flow ([ddf6692](https://github.com/geyserfund/geyser-app/commit/ddf66926e290a709e723245bde15085e8472efb4))
+
 ## [0.59.0](https://github.com/geyserfund/geyser-app/compare/v0.55.0...v0.59.0) (2026-09-07)
 
 

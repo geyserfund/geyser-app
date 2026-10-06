@@ -8,6 +8,7 @@ describe('ai seo content mapping', () => {
 
     expect(content.title.toLowerCase()).toContain('circular grants')
     expect(content.description.toLowerCase()).toContain('field partners')
+    expect(content.description.toLowerCase()).toContain('bitcoin capital')
     expect(content.keywords.toLowerCase()).toContain('bitcoin impact funds')
     expect(content.about.length).toBeGreaterThan(0)
   })
