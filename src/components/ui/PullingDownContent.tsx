@@ -1,6 +1,6 @@
 import { HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FiChevronsDown } from 'react-icons/fi'
+import { PiCaretDoubleDown } from 'react-icons/pi'
 
 import { useCustomTheme } from '../../utils'
 
@@ -9,7 +9,7 @@ export const PullingDownContent = (props: any) => {
   const { colors } = useCustomTheme()
 
   const renderNArrows = (n: number) => {
-    return [...Array(n).keys()].map((_, i) => <FiChevronsDown color={colors.neutral[1000]} key={i} />)
+    return [...Array(n).keys()].map((_, i) => <PiCaretDoubleDown color={colors.neutral[1000]} key={i} />)
   }
 
   return (

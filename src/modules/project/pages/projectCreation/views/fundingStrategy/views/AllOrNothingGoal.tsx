@@ -227,7 +227,6 @@ export const AllOrNothingGoal = () => {
                   customInput={
                     <Button
                       size="xl"
-                      borderRadius="8px"
                       color="utils.text"
                       borderColor="neutral1.6"
                       w="full"
@@ -237,13 +236,13 @@ export const AllOrNothingGoal = () => {
                     >
                       {launchDate
                         ? DateTime.fromJSDate(launchDate).toFormat('MMMM dd, yyyy - h:mm a')
-                        : ' Select date and time'}
+                        : t('Select date and time')}
                     </Button>
                   }
                 />
                 {launchDate && (
                   <IconButton
-                    aria-label="clear-launch-date"
+                    aria-label={t('Clear launch date')}
                     variant="outline"
                     colorScheme="error"
                     size="xl"

@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
@@ -62,7 +63,7 @@ export const LaunchSummary = () => {
   return (
     <VStack spacing={6} w="full" alignItems="start">
       {/* Funding Section */}
-      <CardLayout noborder spacing={1} w="full" alignItems="start" backgroundColor="neutral1.3">
+      <CardLayout spacing={1} w="full" alignItems="start">
         <HStack w="full" justifyContent="space-between" alignItems="center" paddingBottom={2}>
           <H3 bold>{t('Launch Summary')}</H3>
           <Button

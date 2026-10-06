@@ -1,5 +1,5 @@
 import { HStack } from '@chakra-ui/react'
-import { BsArrowDown, BsArrowUp } from 'react-icons/bs'
+import { PiArrowDown, PiArrowUp } from 'react-icons/pi'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
@@ -20,24 +20,32 @@ export const StatsBlock = ({ title, value, prevValue, isPercent, ...rest }: Stat
   const isLower = prevValue && value < prevValue ? Math.round(((prevValue - value) / prevValue) * 100) : 0
 
   return (
-    <CardLayout padding={3} spacing={0} minWidth="150px" minHeight="64px" {...rest}>
+    <CardLayout
+      padding={3}
+      spacing={0}
+      minWidth="150px"
+      minHeight="64px"
+      borderRadius="innerCard"
+      boxShadow="none"
+      {...rest}
+    >
       <HStack w="full" justifyContent="space-between">
-        <Body size="sm" light>
+        <Body size="sm" color="neutral1.11">
           {title}:
         </Body>
         <HStack spacing="0">
           {isHigher > 0 && (
             <>
-              <BsArrowUp color={colors.primary1[10]} fontSize="14px" />
-              <Body size="sm" color="primary1.10" bold>
+              <PiArrowUp color={colors.primary1[11]} fontSize="14px" />
+              <Body size="sm" color="primary1.11" bold>
                 {isHigher}%
               </Body>
             </>
           )}
           {isLower > 0 && (
             <>
-              <BsArrowDown color={colors.warning[9]} fontSize="14px" />
-              <Body size="sm" color="warning.9" bold isTruncated>
+              <PiArrowDown color={colors.warning[11]} fontSize="14px" />
+              <Body size="sm" color="warning.11" bold isTruncated>
                 {isLower}%
               </Body>
             </>
@@ -45,7 +53,7 @@ export const StatsBlock = ({ title, value, prevValue, isPercent, ...rest }: Stat
         </HStack>
       </HStack>
 
-      <Body size="sm" dark medium>
+      <Body size="sm" color="utils.text" medium>
         {isPercent ? `${commaFormatted(value) || 0}%` : commaFormatted(value) || 0}
       </Body>
     </CardLayout>

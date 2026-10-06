@@ -2,12 +2,11 @@ import { Button, Icon, Image, useColorModeValue, VStack } from '@chakra-ui/react
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
-import { AiFillApple } from 'react-icons/ai'
-import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
+import { PiAppleLogoFill, PiCreditCardFill, PiCurrencyBtcFill } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router'
 
-import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
+import { isManagedCircularGrantProject } from '@/modules/project/domain/managedCircularGrant.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { isStripeConnectSupportedForProject } from '@/modules/project/utils/stripeConnect.ts'
@@ -73,9 +72,9 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
   const stripeButtonBg = '#635BFF'
   const stripeButtonText = 'white'
-  const creditCardIcon = <Icon as={FaCreditCard} color="currentColor" />
-  const bitcoinIcon = <Icon as={FaBitcoin} color="currentColor" />
-  const applePayIcon = <Icon as={AiFillApple} />
+  const creditCardIcon = <Icon as={PiCreditCardFill} color="currentColor" />
+  const bitcoinIcon = <Icon as={PiCurrencyBtcFill} color="currentColor" />
+  const applePayIcon = <Icon as={PiAppleLogoFill} />
   const stripeIcon = <Image src="/icons/stripe-logo-white.png" alt={t('Stripe')} h="24px" objectFit="contain" />
 
   const handleCreditCardClick = () => {

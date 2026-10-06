@@ -15,3 +15,15 @@ export const IMPACT_FUND_DETAILS_SEO_IMAGES = {
   'circular-economies-impact-fund':
     'https://storage.googleapis.com/geyser-projects-media/app/impactfunds/circular_economies.png',
 }
+
+/**
+ * Hero artwork that replaces the stored hero image on an Impact Fund detail page.
+ * `backgroundColor` matches the artwork's own background so the hero has no seam on wide screens.
+ */
+export const IMPACT_FUND_DETAILS_HERO_IMAGES = {
+  'latam-impact-fund': {
+    imageUrl:
+      'https://storage.googleapis.com/geyser-media/impact-funds/wave-halftone-map-of-latam-right-aligned-beige-bg.png',
+    backgroundColor: '#FEFBED',
+  },
+}

@@ -35,7 +35,7 @@ export const ProjectLayout = () => {
       alignItems="center"
       height="100%"
       position="relative"
-      bg="utils.pbg"
+      bg="utils.pageBg"
     >
       <Head title={seoTitle} description={seoDescription} image={seoImage} type="article" url={seoCanonicalUrl}>
         {shouldRenderJsonLd && <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>}

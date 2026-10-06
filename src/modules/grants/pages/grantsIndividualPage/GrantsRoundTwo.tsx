@@ -1,6 +1,6 @@
 import { Box, Button, Image, Link, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaArrowLeft } from 'react-icons/fa'
+import { PiArrowLeft } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
@@ -43,7 +43,7 @@ export const GrantsRoundTwo = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'neutral.0'}
+        bg={'utils.pageBg'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}
@@ -58,14 +58,14 @@ export const GrantsRoundTwo = ({
         >
           <Button
             size={'sm'}
-            bg="neutral.0"
+            bg="utils.pbg"
             variant={'outline'}
             gap={2}
             onClick={() => navigate(-1)}
             fontSize="sm"
             position={isMobile ? 'relative' : 'absolute'}
           >
-            <FaArrowLeft /> {t('See all Grants')}
+            <PiArrowLeft /> {t('See all Grants')}
           </Button>
           <Box display="flex" justifyContent={'center'}>
             <Image height={'220px'} src={GrantsRound2Url} alt={'Grants round 2 image'} />
@@ -166,7 +166,7 @@ export const GrantsRoundTwo = ({
             borderRadius="12px"
             pb={4}
             pt={6}
-            bg="neutral.0"
+            bg="utils.pbg"
             mt={8}
             mb={3}
             px={4}

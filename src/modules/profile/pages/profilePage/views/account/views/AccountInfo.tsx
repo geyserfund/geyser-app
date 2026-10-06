@@ -75,7 +75,7 @@ export const AccountInfo = () => {
           <Body
             size="sm"
             color={'neutral1.11'}
-            bgColor={'neutral1.4'}
+            bgColor={'neutralAlpha.4'}
             borderRadius={'md'}
             p={1}
             onClick={() => {

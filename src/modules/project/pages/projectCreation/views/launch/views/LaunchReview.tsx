@@ -1,12 +1,15 @@
-import { Badge, Box, HStack, Image, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Badge, HStack, Icon, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
+import type { IconType } from 'react-icons'
+import { PiCheckCircle, PiHourglassMedium, PiPaperPlaneTilt, PiPencilSimpleLine, PiXCircle } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
@@ -26,7 +29,8 @@ interface ReviewStatusInfo {
   label: string
   colorScheme: string
   variant: 'solid' | 'soft' | 'outline'
-  imageUrl: string
+  icon: IconType
+  iconColor: string
 }
 
 export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
@@ -66,36 +70,36 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
       label: t('Pending review'),
       colorScheme: 'info',
       variant: 'soft',
-      imageUrl:
-        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/in_review_illustration.png',
+      icon: PiHourglassMedium,
+      iconColor: 'info.11',
     },
     [ProjectReviewStatus.Accepted]: {
       label: t('Approved'),
       colorScheme: 'success',
       variant: 'soft',
-      imageUrl:
-        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/accepted_illustration1.png',
+      icon: PiCheckCircle,
+      iconColor: 'success.11',
     },
     [ProjectReviewStatus.RevisionsRequested]: {
       label: t('Updates Requested'),
       colorScheme: 'error',
       variant: 'soft',
-      imageUrl:
-        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/rejected_with_reason_illustration.png',
+      icon: PiPencilSimpleLine,
+      iconColor: 'error.11',
     },
     [ProjectReviewStatus.Rejected]: {
       label: t('Rejected'),
       colorScheme: 'error',
       variant: 'solid',
-      imageUrl:
-        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/rejected_illustration.png',
+      icon: PiXCircle,
+      iconColor: 'error.11',
     },
     [NOT_SUBMITTED_REVIEW_STATUS]: {
       label: t('Not submitted yet'),
       colorScheme: 'warning',
       variant: 'soft',
-      imageUrl:
-        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/not_submitted_illustration1.png',
+      icon: PiPaperPlaneTilt,
+      iconColor: 'primary1.11',
     },
   }
 
@@ -130,21 +134,18 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           onClick: submitReviewConfirmModal.onOpen,
           isDisabled: submittingReview,
           isLoading: submittingReview,
-          colorScheme: 'primary1',
         }
 
       case ProjectReviewStatus.Pending:
         return {
           label: t('Submitted'),
           isDisabled: true,
-          colorScheme: 'neutral1',
         }
 
       case ProjectReviewStatus.Rejected:
         return {
           label: t('Cannot proceed'),
           isDisabled: true,
-          colorScheme: 'error',
         }
 
       case ProjectReviewStatus.Accepted:
@@ -152,7 +153,6 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           label: t('Continue'),
           onClick: handleContinue,
           isDisabled: false,
-          colorScheme: 'primary1',
         }
 
       default:
@@ -160,7 +160,6 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           label: t('Submit for review'),
           onClick: submitReviewConfirmModal.onOpen,
           isDisabled: true,
-          colorScheme: 'neutral1',
         }
     }
   }
@@ -209,7 +208,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           <VStack spacing={4} alignItems="start" w="full">
             <Body>{t('The team reviewed your project and requested some revisions.')}</Body>
             {rejectionReasons && rejectionReasons.length > 0 && (
-              <CardLayout noborder backgroundColor="neutral1.3" w="full" spacing={3}>
+              <CardLayout w="full" spacing={3} padding={4} borderRadius="innerCard" boxShadow="none">
                 <Body bold>{t('Rejection Reasons')}</Body>
                 <UnorderedList spacing={2} pl={4}>
                   {rejectionReasons.map((reason, index) => (
@@ -234,7 +233,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           <VStack spacing={4} alignItems="start" w="full">
             <Body>{t('Unfortunately your project failed the review process')}</Body>
             {rejectionReasons && rejectionReasons.length > 0 && (
-              <CardLayout noborder backgroundColor="neutral1.3" w="full" spacing={3}>
+              <CardLayout w="full" spacing={3} padding={4} borderRadius="innerCard" boxShadow="none">
                 <Body bold>{t('Additional Details')}</Body>
                 <UnorderedList spacing={2} pl={4}>
                   {rejectionReasons.map((reason, index) => (
@@ -256,8 +255,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   const continueButtonProps = getButtonConfig()
 
   const backButtonProps = {
-    onClick: () =>
-      navigate(getPath(isLabifOpenFunding ? 'launchPayment' : 'launchAboutYou', project.id)),
+    onClick: () => navigate(getPath(isLabifOpenFunding ? 'launchPayment' : 'launchAboutYou', project.id)),
   }
 
   return (
@@ -267,23 +265,19 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
       continueButtonProps={continueButtonProps}
     >
       <VStack spacing={8} w="full" alignItems="start">
-        {/* Status Illustration */}
-        <Box w="full" display="flex" justifyContent="center">
-          <Image
-            src={reviewStatusConfig[currentStatus].imageUrl}
-            alt={`${reviewStatusConfig[currentStatus].label} illustration`}
-            maxWidth="250px"
-            width="100%"
-            height="auto"
-            objectFit="cover"
-            borderRadius="lg"
-          />
-        </Box>
-
         {/* Review Status Section */}
-        <VStack spacing={4} w="full" alignItems="start">
+        <CardLayout spacing={4} w="full" alignItems="start">
           <HStack w="full" justifyContent="space-between" alignItems="center">
-            <H3 bold>{t('Review Status')}</H3>
+            <HStack spacing={3}>
+              <Icon
+                as={reviewStatusConfig[currentStatus].icon}
+                boxSize="28px"
+                color={reviewStatusConfig[currentStatus].iconColor}
+                flexShrink={0}
+                aria-hidden
+              />
+              <H3 bold>{t('Review Status')}</H3>
+            </HStack>
             <Badge
               size="lg"
               colorScheme={reviewStatusConfig[currentStatus].colorScheme}
@@ -294,7 +288,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           </HStack>
 
           {renderReviewStatusContent()}
-        </VStack>
+        </CardLayout>
       </VStack>
       <AlertDialogue
         title={t('Submit for review')}

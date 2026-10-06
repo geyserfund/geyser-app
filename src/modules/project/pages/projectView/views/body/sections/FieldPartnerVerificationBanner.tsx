@@ -41,7 +41,13 @@ export const FieldPartnerVerificationBanner = () => {
       paddingX={{ base: 3, lg: 4 }}
       paddingY={{ base: 3, lg: 3 }}
     >
-      <Image src={fieldPartnerNetworkIconSrc} alt="" boxSize="44px" objectFit="contain" flexShrink={0} />
+      <Image
+        src={fieldPartnerNetworkIconSrc}
+        alt=""
+        boxSize={{ base: '44px', lg: '52px' }}
+        objectFit="contain"
+        flexShrink={0}
+      />
       <HStack spacing={0} minW={0}>
         <Body size="md" sx={{ textWrap: 'pretty' }}>
           <Trans

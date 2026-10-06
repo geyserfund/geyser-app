@@ -28,12 +28,12 @@ export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
 
         list.push({
           text: `${t('Expected')}: ${dateOfDelivery}`,
-          colorScheme: 'orange',
+          colorScheme: 'warning',
         })
       } else {
         list.push({
           text: t('Preorder'),
-          colorScheme: 'orange',
+          colorScheme: 'warning',
         })
       }
     } else if (reward.estimatedDeliveryInWeeks) {
@@ -48,7 +48,7 @@ export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
         list.push({
           icon: PiPackage,
           text: t('Ships worldwide'),
-          colorScheme: 'gray',
+          colorScheme: 'neutral1',
         })
       } else if (reward.shippingConfig?.shippingRates?.length && reward.shippingConfig?.shippingRates?.length > 1) {
         list.push({
@@ -58,7 +58,7 @@ export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
             ?.map((rate) => country.find((c) => c.code === rate.country)?.name)
             .filter((val) => val)
             .join(', ')}`,
-          colorScheme: 'gray',
+          colorScheme: 'neutral1',
         })
       }
     }

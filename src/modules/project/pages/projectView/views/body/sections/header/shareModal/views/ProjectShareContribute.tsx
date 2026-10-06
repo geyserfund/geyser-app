@@ -81,7 +81,7 @@ export const ProjectShareContribute = () => {
 
       <HStack padding={3} width="100%">
         {generating ? (
-          <Button variant="solid" colorScheme="neutral1" w="full" leftIcon={<Spinner size="sm" />}>
+          <Button variant="solid" colorScheme="neutral1" w="full" leftIcon={<Spinner size="sm" color="currentColor" />}>
             {t('Generating banner...')}
           </Button>
         ) : (

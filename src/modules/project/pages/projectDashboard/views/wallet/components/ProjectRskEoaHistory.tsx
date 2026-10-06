@@ -194,7 +194,15 @@ const ProjectRskEoaHistoryRow = ({
     : t('{{balance}} sats', { balance: balanceSats.toLocaleString(i18n.language) })
 
   return (
-    <VStack align="stretch" spacing={3} borderWidth="1px" borderColor="neutral1.4" borderRadius="8px" p={4} w="full">
+    <VStack
+      align="stretch"
+      spacing={3}
+      borderWidth="1px"
+      borderColor="neutral1.6"
+      borderRadius="innerCard"
+      p={4}
+      w="full"
+    >
       <HStack
         justify="space-between"
         align={{ base: 'flex-start', md: 'center' }}

@@ -1,5 +1,7 @@
 # Style Guidelines
 
+> **Brand identity lives in [`DESIGN.md`](../DESIGN.md).** Colours, typography and component rules there take precedence over anything below; the colour scale described in this file predates the forest/parchment theme (see ADR 0011) and should not be used for new work.
+
 ## Framework
 
 Chakra is the project's UI framework

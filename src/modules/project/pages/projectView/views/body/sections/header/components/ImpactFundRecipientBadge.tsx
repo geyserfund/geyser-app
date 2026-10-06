@@ -21,7 +21,7 @@ type ImpactFundRecipientBannerProps = {
 }
 
 export const ImpactFundRecipientBanner = ({ recipient }: ImpactFundRecipientBannerProps) => {
-  const bg = useColorModeValue('white', 'utils.pbg')
+  const bg = useColorModeValue('utils.pbg', 'utils.pbg')
   const borderColor = useColorModeValue('neutral1.6', 'neutral1.7')
   const textColor = useColorModeValue('neutral1.10', 'neutral1.10')
   const fundTitleColor = useColorModeValue('neutral1.11', 'neutral1.11')

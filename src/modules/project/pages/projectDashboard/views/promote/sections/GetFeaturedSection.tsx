@@ -26,7 +26,7 @@ export const GetFeaturedSection = () => {
             <Body size="lg" medium>
               {t('Featured for a week')}
             </Body>
-            <Body size="md" medium color="neutral1.8">
+            <Body size="md" medium color="neutral1.11">
               {t('$100 per week')}
             </Body>
           </HStack>

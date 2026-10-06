@@ -34,7 +34,7 @@ export const NewsNewsletterSection = () => {
           children: t('Join'),
           size: 'lg',
           variant: 'solid',
-          colorScheme: 'neutral1',
+          colorScheme: 'primary1',
           minWidth: { base: '100%', sm: '120px' },
         }}
         flexDirection={{ base: 'column', sm: 'row' }}

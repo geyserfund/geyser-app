@@ -73,7 +73,7 @@ export const RewardTable = ({
         render(order: OrderFragment) {
           const isFunderAnonymous = !order.user?.id
           if (isFunderAnonymous) {
-            return <AnonymousAvatar seed={order.id} imageSize={'20px'} textColor="neutral.900" />
+            return <AnonymousAvatar seed={order.id} imageSize={'20px'} textColor="utils.text" />
           }
 
           return (

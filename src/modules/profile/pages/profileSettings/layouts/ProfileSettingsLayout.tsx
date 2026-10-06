@@ -1,10 +1,10 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link, Outlet, useParams } from 'react-router'
 
-import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
+import { TopNavContainer } from '@/modules/navigation/components/topNav/TopNavContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -36,18 +36,20 @@ export const ProfileSettings = () => {
       paddingBottom={10}
       alignItems="center"
     >
-      <TopNavContainerBar>
-        <Button
-          as={Link}
-          to={getPath('userProfile', userId)}
-          size="lg"
-          variant="ghost"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowLeft />}
-        >
-          {t('Back to profile')}
-        </Button>
-      </TopNavContainerBar>
+      <TopNavContainer>
+        <HStack w="full">
+          <Button
+            as={Link}
+            to={getPath('userProfile', userId)}
+            size="lg"
+            variant="ghost"
+            colorScheme="neutral1"
+            leftIcon={<PiArrowLeft />}
+          >
+            {t('Back to profile')}
+          </Button>
+        </HStack>
+      </TopNavContainer>
       <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
         {!isMobile && <ProfileSettingsMenuDesktop />}
         <Outlet />

@@ -1,4 +1,4 @@
-import { HStack, Icon, StackProps, useColorModeValue, VStack } from '@chakra-ui/react'
+import { HStack, Icon, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiEnvelopeSimple } from 'react-icons/pi'
 
@@ -8,24 +8,18 @@ import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 
 /** Newsletter subscription section for the landing page with a signup form and supporting copy. */
 export const NewsletterSignup = (props: StackProps) => {
-  const borderColor = useColorModeValue('amber.6', 'amber.7')
-  const bgColor = useColorModeValue('amber.1', 'amber.2')
-  const iconColor = useColorModeValue('black', 'white')
-  const titleColor = useColorModeValue('neutral1.11', 'white')
-  const bodyColor = 'neutralAlpha.11'
-
   return (
-    <CardLayout w="full" alignSelf="center" spacing={6} padding={8} borderColor={borderColor} bg={bgColor} {...props}>
+    <CardLayout w="full" alignSelf="center" spacing={6} {...props}>
       <VStack spacing={3} textAlign="left" align="flex-start" w="full">
         <HStack spacing={3} align="center" justify="flex-start" w="full">
-          <Icon as={PiEnvelopeSimple} boxSize={9} color={iconColor} />
-          <H2 size="2xl" medium color={titleColor}>
-            {t("Don't miss a thing")}
+          <Icon as={PiEnvelopeSimple} boxSize={8} color="utils.text" aria-hidden />
+          <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+            {t('Circular Grant updates, in your inbox')}
           </H2>
         </HStack>
-        <Body size="md" color={bodyColor} textAlign="left" w="full">
+        <Body size="md" light textAlign="left" w="full">
           {t(
-            'Join our newsletter for stories about trusted local partners, Circular Grants, Regional Partner Funds, and the people building stronger local economies with Bitcoin.',
+            'Follow Field Partner stories, campaign progress, and what Circular Grants make possible in local communities.',
           )}
         </Body>
       </VStack>
@@ -34,12 +28,12 @@ export const NewsletterSignup = (props: StackProps) => {
         w="full"
         maxWidth="full"
         inputProps={{
-          placeholder: t('satoshi@gmx.com'),
+          placeholder: 'satoshi@gmx.com',
         }}
         buttonProps={{
           children: t('Join'),
           variant: 'solid',
-          colorScheme: 'amber',
+          colorScheme: 'primary1',
           minWidth: '100px',
         }}
       />

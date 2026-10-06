@@ -30,7 +30,7 @@ const matchesRoute = (pathname: string, route: string) => pathname === route || 
 export const DiscoveryBottomNav = () => {
   const location = useLocation()
 
-  const bottomNavLabelColor = 'black'
+  const bottomNavLabelColor = 'utils.text'
   const bottomNavLabelFontSize = 'sm'
   const bottomNavLabelFontWeight = 600
   const aboutSections = getAboutNavDropdownSections(t)
@@ -126,7 +126,7 @@ type DiscoveryBottomNavButtonProps = {
 } & ButtonProps
 
 const DiscoveryBottomNavButton = ({ item, ...rest }: DiscoveryBottomNavButtonProps) => {
-  const bottomNavLabelColor = 'black'
+  const bottomNavLabelColor = 'utils.text'
 
   return (
     <Button

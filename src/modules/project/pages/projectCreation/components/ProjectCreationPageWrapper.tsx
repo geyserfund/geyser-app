@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { H1 } from '@/shared/components/typography/Heading.tsx'
+import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
@@ -61,7 +61,7 @@ export const ProjectCreationPageWrapper = ({
           <HStack spacing={2}>
             {isMobile && (
               <IconButton
-                aria-label="creation-menu"
+                aria-label={t('Project creation steps')}
                 variant="ghost"
                 as={Link}
                 size="sm"
@@ -70,9 +70,9 @@ export const ProjectCreationPageWrapper = ({
               />
             )}
             <Fade in={true}>
-              <H1 fontSize="2xl" medium id={id}>
+              <H2 bold id={id}>
                 {title}
-              </H1>
+              </H2>
             </Fade>
           </HStack>
 
@@ -98,7 +98,7 @@ export const ProjectCreationPageWrapper = ({
         paddingBottom={20}
         display={removeBottomContainer ? 'none' : 'flex'}
         //  paddingY={8} zIndex={1} position="sticky" bottom={0}
-        bg="utils.bg"
+        bg="utils.pageBg"
         alignItems="flex-end"
         flex={1}
         {...buttonContainerProps}
@@ -107,7 +107,7 @@ export const ProjectCreationPageWrapper = ({
           <Button
             width="200px"
             size="lg"
-            variant="soft"
+            variant="outline"
             colorScheme="neutral1"
             onClick={() => navigate(-1)}
             leftIcon={<Icon as={PiArrowLeft} />}
@@ -120,7 +120,7 @@ export const ProjectCreationPageWrapper = ({
           <Button
             width="200px"
             size="lg"
-            variant="soft"
+            variant="solid"
             colorScheme="primary1"
             rightIcon={<Icon as={PiArrowRight} />}
             {...continueButtonProps}

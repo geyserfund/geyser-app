@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import {
   PiArrowUpRight,
   PiHandHeart,
-  PiInfo,
   PiNotePencil,
   PiRecycle,
   PiRocketLaunch,
   PiStorefront,
+  PiWarning,
 } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
@@ -17,13 +17,15 @@ import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
-import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Body } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
-import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
+import type { ProjectForMyProjectsFragment } from '@/types'
+import { ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { useProjectWithdrawalStatus } from '../hooks/useProjectWithdrawalStatus.ts'
@@ -152,15 +154,16 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             spacing={2}
             px={3}
             py={2}
-            bg="warning.1"
-            borderRadius="6px"
+            border="1px solid"
+            borderColor="warning.6"
+            borderRadius="innerCard"
             alignItems="center"
             justifyContent="space-between"
           >
             <HStack spacing={2} flex={1} alignItems="center">
-              <Icon as={PiInfo} color="warning.11" boxSize="16px" flexShrink={0} />
+              <Icon as={PiWarning} color="warning.11" boxSize="20px" flexShrink={0} aria-hidden />
               <Body size="sm" color="neutral1.11">
-                <Body as="span" bold size="sm">
+                <Body as="span" bold size="sm" color="utils.text">
                   {t('Updates requested.')}
                 </Body>{' '}
                 {t('Review feedback and resubmit your project.')}
@@ -206,10 +209,10 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         <VStack align="start" spacing={1}>
           <Body size="sm" color="neutral1.11">
             {t('Funds available to withdraw')}:{' '}
-            <Body as="span" size="sm" bold color="neutral1.12">
+            <Body as="span" size="sm" bold color="utils.text">
               {commaFormatted(withdrawableSats)} {t('sats')}
             </Body>{' '}
-            <Body as="span" size="sm" color="neutral1.9">
+            <Body as="span" size="sm" color="neutral1.11">
               ≈${withdrawableUsd.toFixed(0)}
             </Body>
           </Body>
@@ -225,8 +228,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     if (shouldRouteToFinalize) {
       return (
         <Button
-          variant="soft"
-          colorScheme="neutral1"
+          variant="solid"
+          colorScheme="primary1"
           as={RouterLink}
           to={hasRevisionsRequested ? getPath('launchFinalize', project.id) : draftRedirectPath}
           size={isMobile ? 'sm' : 'md'}
@@ -272,8 +275,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           </Tooltip>
         )}
         <Button
-          variant="soft"
-          colorScheme="neutral1"
+          variant={canWithdraw ? 'outline' : 'solid'}
+          colorScheme={canWithdraw ? 'neutral1' : 'primary1'}
           as={RouterLink}
           to={getPath('project', project.name)}
           size={isMobile ? 'sm' : 'md'}
@@ -298,20 +301,20 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
                   src={project.thumbnailImage}
                   alt={project.title}
                   boxSize="20px"
-                  borderRadius="md"
+                  borderRadius="innerCard"
                   objectFit="cover"
                   flexShrink={0}
                 />
               )}
-              <Body size="lg" bold>
+              <H3 size="lg" bold color="utils.text">
                 {project.title}
-              </Body>
+              </H3>
             </HStack>
             <Wrap spacing={2}>
               <WrapItem>
                 <Badge colorScheme={projectTypeBadge.colorScheme} variant="soft" size="sm">
                   <HStack spacing={1}>
-                    <Icon as={projectTypeBadge.icon} boxSize="12px" />
+                    <Icon as={projectTypeBadge.icon} boxSize="12px" aria-hidden />
                     <Body as="span" size="sm">
                       {projectTypeBadge.label}
                     </Body>
@@ -340,7 +343,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
         {shouldShowDirectPaymentNotification && !isCircularGrant && (
           <ControlPanelNotification
-            icon={<Icon as={PiInfo} color="warning.9" boxSize="24px" flexShrink={0} />}
+            icon={<Icon as={PiWarning} color="warning.11" boxSize="24px" flexShrink={0} aria-hidden />}
             title={t('Add payment details to keep receiving contributions in Bitcoin')}
             description={
               project.paymentMethods?.fiat?.stripe
@@ -355,7 +358,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               <Button
                 as={RouterLink}
                 to={getPath('dashboardWallet', project.name)}
-                colorScheme="warning"
+                colorScheme="primary1"
                 variant="solid"
                 size="sm"
               >
@@ -386,7 +389,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               <Button
                 as={RouterLink}
                 to={getPath('dashboardWallet', project.name)}
-                variant="soft"
+                variant="outline"
                 colorScheme="neutral1"
                 size="sm"
                 flexShrink={0}

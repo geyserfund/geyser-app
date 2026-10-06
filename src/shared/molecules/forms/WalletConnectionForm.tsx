@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 
 import { BoltIcon } from '@/components/icons'
 import { TextInputBox } from '@/components/ui'
@@ -58,9 +58,9 @@ export const LightningAddressInputField = ({
 
     switch (lightningAddress.state) {
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
+        return <PiXCircleFill fill={lightModeColors.secondary.red} size="24px" />
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
+        return <PiCheckCircleFill fill="var(--chakra-colors-primary1-11)" size="24px" />
       default:
         return null
     }

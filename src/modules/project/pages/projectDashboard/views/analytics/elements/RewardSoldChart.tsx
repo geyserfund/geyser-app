@@ -1,6 +1,5 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Box, HStack, VStack } from '@chakra-ui/react'
 import { useRef } from 'react'
-import { FaGift } from 'react-icons/fa'
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { SkeletonLayout } from '@/shared/components/layouts'
@@ -52,8 +51,8 @@ export const RewardSoldChart = ({
               const color = getColorByIndex(index)
               return (
                 <HStack key={reward.rewardId}>
-                  <FaGift color={color} />
-                  <Body size="sm" color={color}>
+                  <Box boxSize="10px" borderRadius="2px" bg={color} flexShrink={0} aria-hidden />
+                  <Body size="sm" color="neutral1.11">
                     {reward.rewardName}
                   </Body>
                 </HStack>
@@ -68,17 +67,24 @@ export const RewardSoldChart = ({
             barGap={0}
             barSize={10}
           >
-            <CartesianGrid strokeDasharray="4" vertical={false} />
-            <XAxis dataKey="name" tick={<TickComponent dy={10} />} />
-            <YAxis width={isMobile ? 40 : 60} tick={<TickComponent />} domain={[0, 'dataMax']} />
+            <CartesianGrid strokeDasharray="4" vertical={false} stroke={colors.neutral1[6]} />
+            <XAxis dataKey="name" tick={<TickComponent dy={10} />} stroke={colors.neutral1[6]} />
+            <YAxis
+              width={isMobile ? 40 : 60}
+              tick={<TickComponent />}
+              domain={[0, 'dataMax']}
+              stroke={colors.neutral1[6]}
+            />
             <Tooltip
               cursor={{ fill: 'transparent' }}
               shared={false}
               contentStyle={{
-                backgroundColor: colors.neutral[0],
-                borderColor: colors.neutral[200],
+                backgroundColor: colors.utils.pbg,
+                borderColor: colors.neutral1[6],
                 borderRadius: '8px',
               }}
+              labelStyle={{ color: colors.neutral1[11] }}
+              itemStyle={{ color: colors.utils.text }}
               formatter={(value, name, props) => {
                 const rewardId = name.toString().split('.')[1]
                 if (!rewardId) return [value, name]

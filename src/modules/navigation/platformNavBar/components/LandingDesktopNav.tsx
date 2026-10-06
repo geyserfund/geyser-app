@@ -1,4 +1,4 @@
-import { HStack, useColorModeValue } from '@chakra-ui/react'
+import { HStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretDown } from 'react-icons/pi'
 
@@ -7,17 +7,15 @@ import { getAboutNavDropdownSections } from '@/modules/navigation/components/nav
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
 
 /** LandingDesktopNav renders Donate and About, aligned with the landing title. */
-export const LandingDesktopNav = ({ transparentMode = false }: { transparentMode?: boolean }) => {
+export const LandingDesktopNav = () => {
   const navButtonRadius = { base: '8px', lg: '10px' }
   const navButtonSize = { base: 'md', lg: 'lg' }
   const navButtonFontSize = { lg: 'sm', xl: 'md' }
   const navButtonPaddingX = { lg: 2, xl: 4 }
 
-  const buttonColor = 'black'
-  const defaultButtonHoverBackground = useColorModeValue('blackAlpha.50', 'neutral1.3')
-  const buttonHoverBackground = transparentMode ? 'whiteAlpha.200' : defaultButtonHoverBackground
-  const defaultButtonActiveBackground = useColorModeValue('blackAlpha.100', 'neutral1.2')
-  const buttonActiveBackground = transparentMode ? 'whiteAlpha.300' : defaultButtonActiveBackground
+  const buttonColor = 'utils.text'
+  const buttonHoverBackground = 'neutral1.3'
+  const buttonActiveBackground = 'neutral1.4'
 
   const aboutSections = getAboutNavDropdownSections(t)
 

@@ -16,15 +16,15 @@ export const BackToProjectRow = ({ projectName }: BackToProjectRowProps) => {
     <HStack
       as={Link}
       to={getPath('project', projectName)}
-      width="100%"
-      paddingX={{ base: 7, lg: 10 }}
+      width="fit-content"
+      alignSelf="flex-start"
+      paddingX={3}
       paddingY={2}
       spacing={2}
-      borderRadius={8}
+      borderRadius="card"
       alignItems="center"
-      bg="neutral1.3"
       color="neutral1.11"
-      _hover={{ bg: 'neutral1.5' }}
+      _hover={{ bg: 'primary1.2', color: 'primary1.11' }}
     >
       <Icon as={PiArrowLeft} boxSize={4} />
       <Body medium>{t('Back to project')}</Body>

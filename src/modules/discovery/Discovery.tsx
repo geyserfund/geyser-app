@@ -28,8 +28,6 @@ export const Discovery = () => {
   const { user } = useAuthContext()
 
   const usesLandingLayout = LANDING_LAYOUT_PATTERNS.some((pattern) => matchPath(pattern, pathname))
-  const creatorRoute = getPath('discoveryCreator')
-  const isCreatorRoute = pathname === creatorRoute || pathname.startsWith(`${creatorRoute}/`)
   const isImpactFundsMainRoute = matchPath({ path: getPath('discoveryImpactFunds'), end: true }, pathname) !== null
   const isImpactFundsWorkshopsRoute =
     matchPath({ path: getPath('discoveryImpactFundsWorkshops'), end: true }, pathname) !== null
@@ -41,8 +39,7 @@ export const Discovery = () => {
     isImpactFundsMainRoute ||
     isImpactFundsWorkshopsRoute ||
     isMicroLendingMainRoute ||
-    isCircularGrantsRoute ||
-    isCreatorRoute
+    isCircularGrantsRoute
 
   useEffect(() => {
     if (!usesLandingLayout || !user.heroId || searchParams.get('hero')) {

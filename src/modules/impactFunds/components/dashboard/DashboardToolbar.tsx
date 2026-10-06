@@ -160,7 +160,7 @@ export function DashboardToolbar({
             >
               {t('More filters')}
               {statuses.length + fundingModels.length > 0 ? (
-                <Badge ml={2} size="sm" colorScheme="primary1" variant="solid">
+                <Badge ml={2} size="sm" colorScheme="primary1" variant="solid" color="utils.primaryContrast">
                   {statuses.length + fundingModels.length}
                 </Badge>
               ) : null}

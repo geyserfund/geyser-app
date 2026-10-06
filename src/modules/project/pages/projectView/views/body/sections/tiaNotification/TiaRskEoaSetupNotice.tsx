@@ -6,6 +6,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAuthContext } from '@/context/auth.tsx'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import {
   decryptSeed,
   generateProjectKeysFromSeedHex,
@@ -13,17 +14,15 @@ import {
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants/temporaryBoltzContingency.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { GeyserConfigureWalletGuideUrl } from '@/shared/constants/platform/url.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { ProjectFundingStrategy, useProjectRskEoaSetMutation } from '@/types/index.ts'
-import type { UserAccountKeysFragment } from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
-
 import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import type { UserAccountKeysFragment } from '@/types/index.ts'
+import { ProjectFundingStrategy, useProjectRskEoaSetMutation } from '@/types/index.ts'
+import { useNotification } from '@/utils/index.ts'
 
 type TiaRskEoaSetupNoticeProps = {
   compact?: boolean
@@ -68,9 +67,9 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
             <ChakraLink
               href={GeyserConfigureWalletGuideUrl}
               isExternal
-              color="amber1.900"
+              color="warning.11"
               textDecoration="underline"
-              _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
+              _hover={{ color: 'warning.12', textDecoration: 'underline' }}
             >
               {t('Learn more')}
             </ChakraLink>

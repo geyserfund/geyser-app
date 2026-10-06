@@ -1,14 +1,14 @@
-import { Button, Icon, Image, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
-import { PiRocket } from 'react-icons/pi'
+import { PiRocket, PiRocketLaunch } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ProjectCreateLaunchedModal } from '@/modules/project/pages/projectView/components/ProjectCreateLaunchedModal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath, LiveProjectsImageUrl } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ProjectStatus, useProjectForStatusCheckQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/tools/Notification.tsx'
@@ -87,14 +87,14 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
 
   return (
     <ProjectCreationPageWrapper title={t('Ready to launch!')} backButtonProps={backProps} hideContinueButton={true}>
-      <VStack w="full" spacing={0}>
-        <Image src={LiveProjectsImageUrl} alt={t('Launch Now')} height="200px" />
-        <Body alignSelf="stretch" textAlign="left">
+      <HStack w="full" alignItems="flex-start" spacing={3}>
+        <Icon as={PiRocketLaunch} boxSize="28px" color="primary1.11" flexShrink={0} aria-hidden />
+        <Body flex={1} textAlign="left">
           {t(
             'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',
           )}
         </Body>
-      </VStack>
+      </HStack>
 
       <LaunchSummary />
 

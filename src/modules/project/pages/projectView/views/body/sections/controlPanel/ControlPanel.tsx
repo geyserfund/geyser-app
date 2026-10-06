@@ -1,9 +1,17 @@
-import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, Tooltip, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, Link as ChakraLink, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { DateTime } from 'luxon'
 import { useEffect, useMemo } from 'react'
-import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiInfo, PiWarning } from 'react-icons/pi'
+import {
+  PiArrowUpRight,
+  PiCoins,
+  PiCreditCard,
+  PiFlagCheckered,
+  PiGear,
+  PiHandCoins,
+  PiInfo,
+  PiWarning,
+} from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { MIN_BITCOIN_PAYOUT_SATS_FORMATTED } from '@/modules/project/constants/payout.ts'
@@ -11,15 +19,15 @@ import { TEMPORARY_BOLTZ_CONTINGENCY_ENABLED } from '@/modules/project/constants
 import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { isCircularGrantProject } from '@/modules/project/utils/isCircularGrantProject.ts'
-import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
+import { getPath, GuideStepByStepUrl } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 import { ControlPanelNotification } from '@/shared/molecules/ControlPanelNotification.tsx'
 import { getRootstockExplorerAddressUrl } from '@/shared/utils/external/rootstock.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
+import { isLegacyTiaProject } from '@/shared/utils/project/isLegacyTiaProject.ts'
 import {
   ProjectReviewStatus,
   ProjectStatus,
@@ -28,13 +36,11 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
-import { usePostsAtom, useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
-import { useWriteUpdateModal } from '../../../../hooks/useWriteUpdateModal.ts'
+import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
 import { stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
 import { ProjectReviewFeedbackModal } from './components/ProjectReviewFeedbackModal.tsx'
-import { ControlPanelImages } from './constant.ts'
 import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
 import { useImpactFundEligibility } from './hooks/useImpactFundEligibility.ts'
 import { useWithdrawFunds } from './hooks/useWithdrawFunds.ts'
@@ -63,7 +69,7 @@ type OngoingWithdrawNoticeProps = {
 const OngoingWithdrawNotice = ({ onContinue }: OngoingWithdrawNoticeProps) => {
   return (
     <ControlPanelNotification
-      icon={<Icon as={PiInfo} color="neutral1.11" boxSize="16px" flexShrink={0} />}
+      icon={<Icon as={PiInfo} color="primary1.11" boxSize="24px" flexShrink={0} aria-hidden />}
       title={t('Ongoing payout')}
       description={t('You have an ongoing payout. Continue to finish the withdrawal flow.')}
       actionButton={
@@ -100,20 +106,17 @@ const ControlPanelFinancialActions = ({
           w="full"
           justifyContent="space-between"
           alignItems="center"
-          bg="utils.pbg"
           border="1px solid"
           borderColor="neutral1.6"
-          borderRadius="8px"
+          borderRadius="innerCard"
           px={4}
           py={4}
           spacing={4}
         >
           <HStack spacing={3} flex={1} alignItems="center">
-            <Box color="primary1.9" flexShrink={0}>
-              <PiFlagCheckeredDuotone size={28} />
-            </Box>
+            <Icon as={PiFlagCheckered} color="primary1.11" boxSize="28px" flexShrink={0} aria-hidden />
             <VStack align="start" spacing={0}>
-              <Body size="md" bold>
+              <Body size="md" bold color="utils.text">
                 {t('Claim funds')}
               </Body>
               <Body size="sm" color="neutral1.11">
@@ -132,20 +135,17 @@ const ControlPanelFinancialActions = ({
           w="full"
           justifyContent="space-between"
           alignItems="center"
-          bg="utils.pbg"
           border="1px solid"
           borderColor="neutral1.6"
-          borderRadius="8px"
+          borderRadius="innerCard"
           px={4}
           py={4}
           spacing={4}
         >
           <HStack spacing={3} flex={1} alignItems="center">
-            <Box color="primary1.9" flexShrink={0}>
-              <PiFlagCheckeredDuotone size={28} />
-            </Box>
+            <Icon as={PiFlagCheckered} color="primary1.11" boxSize="28px" flexShrink={0} aria-hidden />
             <VStack align="start" spacing={0}>
-              <Body size="md" bold>
+              <Body size="md" bold color="utils.text">
                 {t('Funds in your Rootstock wallet')}
               </Body>
               <Body size="sm" color="neutral1.11">
@@ -164,10 +164,9 @@ const ControlPanelFinancialActions = ({
           w="full"
           spacing={3}
           alignItems="stretch"
-          bg="utils.pbg"
           border="1px solid"
           borderColor="neutral1.6"
-          borderRadius="8px"
+          borderRadius="innerCard"
           px={4}
           py={4}
         >
@@ -179,20 +178,14 @@ const ControlPanelFinancialActions = ({
             alignItems={{ base: 'stretch', md: 'center' }}
           >
             <HStack spacing={3} alignItems="center" flex={{ base: 'none', md: 1 }}>
-              <Image
-                src="/icons/creator_tools_bitcoin_coins.png"
-                alt={t('Coins')}
-                boxSize="52px"
-                objectFit="contain"
-                flexShrink={0}
-              />
+              <Icon as={PiCoins} color="primary1.11" boxSize="28px" flexShrink={0} aria-hidden />
               <VStack align="start" spacing={0}>
                 <Body size="md" color="neutral1.11">
                   {t('Funds available to withdraw')}:{' '}
-                  <Body as="span" size="md" bold color="neutral1.12">
+                  <Body as="span" size="md" bold color="utils.text">
                     {commaFormatted(withdrawableSats)} {t('sats')}
                   </Body>{' '}
-                  <Body as="span" size="md" color="neutral1.9">
+                  <Body as="span" size="md" color="neutral1.11">
                     ≈${withdrawableUsd.toFixed(0)}
                   </Body>
                 </Body>
@@ -203,8 +196,8 @@ const ControlPanelFinancialActions = ({
                     display="inline-flex"
                     alignItems="center"
                     gap={1}
-                    color="neutral1.10"
-                    _hover={{ color: 'neutral1.11', textDecoration: 'underline' }}
+                    color="neutral1.11"
+                    _hover={{ color: 'utils.text', textDecoration: 'underline' }}
                   >
                     <Body as="span" size="sm" color="inherit" medium>
                       {t('View on-chain')}
@@ -228,7 +221,7 @@ const ControlPanelFinancialActions = ({
               isDisabled={hasOngoingWithdraw || !isBelowMinWithdrawThreshold}
             >
               <Button
-                colorScheme={showWithdraw ? 'primary1' : 'neutral1'}
+                colorScheme="primary1"
                 variant="solid"
                 size="md"
                 w={{ base: 'full', md: 'auto' }}
@@ -244,81 +237,6 @@ const ControlPanelFinancialActions = ({
         </VStack>
       )}
     </VStack>
-  )
-}
-
-/** Shown when the project owner has not posted in more than 7 days (or has never posted). */
-const WriteUpdateNudgeCard = () => {
-  const { posts } = usePostsAtom()
-  const { openWriteUpdateModal } = useWriteUpdateModal()
-
-  const latestPost = useMemo(
-    () =>
-      posts.reduce<(typeof posts)[number] | null>((latest, post) => {
-        if (!post.publishedAt) {
-          return latest
-        }
-
-        if (!latest?.publishedAt) {
-          return post
-        }
-
-        return Number(post.publishedAt) > Number(latest.publishedAt) ? post : latest
-      }, null),
-    [posts],
-  )
-
-  const daysSinceLastPost = latestPost
-    ? Math.floor(DateTime.now().diff(DateTime.fromMillis(Number(latestPost.publishedAt)), 'days').days)
-    : null
-
-  const isUrgent = daysSinceLastPost === null || daysSinceLastPost > 7
-
-  const title = isUrgent ? t('Keep your community in the loop') : t('Write an update for your community')
-
-  const subtitle = (() => {
-    if (daysSinceLastPost === null) return t("You haven't posted yet — share your first update!")
-    if (daysSinceLastPost > 7)
-      return t("Your contributors haven't heard from you in {{days}} days — share an update!", {
-        days: daysSinceLastPost,
-      })
-    return t("Keep your supporters informed — share what's happening with your project.")
-  })()
-
-  return (
-    <HStack
-      w="full"
-      justifyContent="space-between"
-      alignItems="center"
-      bg="utils.pbg"
-      border="1px solid"
-      borderColor="neutral1.6"
-      borderRadius="8px"
-      px={4}
-      py={4}
-      spacing={4}
-    >
-      <HStack spacing={3} flex={1} alignItems="center" minWidth={0}>
-        <Image
-          src={ControlPanelImages.update}
-          alt={t('Write update')}
-          boxSize="40px"
-          objectFit="contain"
-          flexShrink={0}
-        />
-        <VStack align="start" spacing={0} minWidth={0}>
-          <Body size="md" bold>
-            {title}
-          </Body>
-          <Body size="sm" color="neutral1.11" noOfLines={2}>
-            {subtitle}
-          </Body>
-        </VStack>
-      </HStack>
-      <Button colorScheme="neutral1" variant="soft" size="md" flexShrink={0} onClick={() => openWriteUpdateModal()}>
-        {t('Start a post')}
-      </Button>
-    </HStack>
   )
 }
 
@@ -347,9 +265,7 @@ export const ControlPanel = () => {
     fetchPolicy: 'network-only',
   })
   const hasStripeConnectConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
-  const stripeConnectNoticeKey = project.id
-    ? `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}`
-    : ''
+  const stripeConnectNoticeKey = project.id ? `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}` : ''
   const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject?.[stripeConnectNoticeKey])
   const shouldShowStripeConnectNotice =
     isTiaProject &&
@@ -456,50 +372,49 @@ export const ControlPanel = () => {
     return null
 
   return (
-    <CardLayout w="full" direction="column" backgroundColor="neutral1.3" spacing={4}>
-      {/* Mobile layout - Dashboard button next to title */}
-      <VStack w="full" spacing={3} display={{ base: 'flex', lg: 'none' }}>
-        <HStack w="full" justifyContent="space-between">
-          <Body size="2xl" bold>
-            {t('Control Panel')}
-          </Body>
+    <CardLayout w="full" direction="column" spacing={4}>
+      <Stack
+        w="full"
+        direction={{ base: 'column', lg: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ base: 'flex-start', lg: 'center' }}
+        spacing={{ base: 1, lg: 4 }}
+      >
+        <Body size="2xl" bold color="utils.text">
+          {t('Control Panel')}
+        </Body>
+        <HStack spacing={1} flexWrap="wrap" marginLeft={{ base: -3, lg: 0 }}>
+          <Button
+            size="md"
+            as={ChakraLink}
+            href={GuideStepByStepUrl}
+            isExternal
+            variant="ghost"
+            colorScheme="neutral1"
+            paddingX={3}
+            rightIcon={<PiArrowUpRight aria-hidden />}
+          >
+            {t('Guides & Checklist')}
+          </Button>
           <Button
             size="md"
             as={Link}
             to={getPath('projectDashboard', project.name)}
-            variant="soft"
+            variant="ghost"
             colorScheme="neutral1"
             paddingX={3}
-            leftIcon={<PiGear />}
+            leftIcon={<PiGear aria-hidden />}
           >
             {t('Go to Dashboard')}
           </Button>
         </HStack>
-      </VStack>
-
-      {/* Desktop layout - all on same line */}
-      <HStack w="full" justifyContent="space-between" display={{ base: 'none', lg: 'flex' }}>
-        <Body size="2xl" bold>
-          {t('Control Panel')}
-        </Body>
-        <Button
-          size="md"
-          as={Link}
-          to={getPath('projectDashboard', project.name)}
-          variant="soft"
-          colorScheme="neutral1"
-          paddingX={3}
-          leftIcon={<PiGear />}
-        >
-          {t('Go to Dashboard')}
-        </Button>
-      </HStack>
+      </Stack>
 
       {isTiaProject && <TiaRskEoaSetupNotice compact />}
 
       {isReviewPending && (
         <ControlPanelNotification
-          icon={<Icon as={PiWarning} color="info.11" boxSize="16px" flexShrink={0} />}
+          icon={<Icon as={PiInfo} color="primary1.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={t('Under review.')}
           description={t('Your project has been re-submitted for review. The team will review it promptly.')}
           variant="info"
@@ -508,14 +423,14 @@ export const ControlPanel = () => {
 
       {hasRevisionsRequested && (
         <ControlPanelNotification
-          icon={<Icon as={PiWarning} color="warning.11" boxSize="16px" flexShrink={0} />}
+          icon={<Icon as={PiWarning} color="warning.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={t('Updates requested.')}
           description={t('Review feedback and resubmit your project.')}
           actionButton={
             <HStack spacing={2} w={{ base: 'full', md: 'auto' }}>
               <Button
                 colorScheme="neutral1"
-                variant="soft"
+                variant="outline"
                 size="sm"
                 px={4}
                 flex={1}
@@ -524,8 +439,8 @@ export const ControlPanel = () => {
                 {t('View feedback')}
               </Button>
               <Button
-                colorScheme="warning"
-                variant="soft"
+                colorScheme="primary1"
+                variant="solid"
                 size="sm"
                 px={4}
                 flex={1}
@@ -555,7 +470,7 @@ export const ControlPanel = () => {
 
       {TEMPORARY_BOLTZ_CONTINGENCY_ENABLED && !isCircularGrant && (
         <ControlPanelNotification
-          icon={<Icon as={PiWarning} color="warning.9" boxSize="24px" flexShrink={0} />}
+          icon={<Icon as={PiWarning} color="warning.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={t('Add payment details to keep receiving contributions in Bitcoin')}
           description={
             project.paymentMethods?.fiat?.stripe
@@ -570,7 +485,7 @@ export const ControlPanel = () => {
             <Button
               as={Link}
               to={getPath('dashboardWallet', project.name)}
-              colorScheme="warning"
+              colorScheme="primary1"
               variant="solid"
               size="sm"
             >
@@ -599,28 +514,19 @@ export const ControlPanel = () => {
       />
 
       {/* Write Update nudge — shown when no post in last 7 days */}
-      <WriteUpdateNudgeCard />
 
       {/* Notifications */}
       {isInactiveProject && (
         <ControlPanelNotification
-          icon={
-            <Image
-              src="/icons/creator_tools_inactive_warning.png"
-              alt={t('Inactive project warning')}
-              width="48px"
-              height="48px"
-              flexShrink={0}
-            />
-          }
+          icon={<Icon as={PiWarning} color="warning.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={t('Inactive Project')}
           description={t(
             'Your project cannot receive contributions but is visible to the public. To reactivate your project go to settings',
           )}
           actionButton={
             <Button
-              colorScheme="warning"
-              variant="soft"
+              colorScheme="primary1"
+              variant="solid"
               size="sm"
               flexShrink={0}
               as={Link}
@@ -635,7 +541,7 @@ export const ControlPanel = () => {
 
       {shouldShowStripeConnectNotice && !isCircularGrant && (
         <ControlPanelNotification
-          icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
+          icon={<Icon as={PiCreditCard} color="primary1.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={
             isStripeConnectIncomplete
               ? t('Complete your Stripe Connect configuration')
@@ -676,7 +582,7 @@ export const ControlPanel = () => {
 
       {eligibleImpactFund && (
         <ControlPanelNotification
-          icon={<Image src={ImpactFundsIconUrl} alt={t('Impact fund')} width="50px" height="50px" flexShrink={0} />}
+          icon={<Icon as={PiHandCoins} color="primary1.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={t('Eligible for {{fundName}}.', { fundName: eligibleImpactFund.title })}
           description={t('Your project may be eligible for funding.')}
           actionButton={
@@ -684,8 +590,8 @@ export const ControlPanel = () => {
               as={Link}
               to={getPath('impactFunds', encodeURIComponent(eligibleImpactFund.name))}
               size="sm"
-              variant="soft"
-              colorScheme="neutral1"
+              variant="solid"
+              colorScheme="primary1"
               flexShrink={0}
             >
               {t('Learn more')}
@@ -694,23 +600,6 @@ export const ControlPanel = () => {
           variant="info"
         />
       )}
-
-      <HStack w="full" justifyContent="space-between" alignItems="center">
-        <Body size="lg" bold>
-          {t('Quick actions')}
-        </Body>
-        <Button
-          size="md"
-          as={ChakraLink}
-          href={GuideStepByStepUrl}
-          isExternal
-          variant="ghost"
-          colorScheme="neutral1"
-          rightIcon={<PiArrowUpRight />}
-        >
-          {t('Guides & Checklist')}
-        </Button>
-      </HStack>
 
       <HStack w="full" spacing={4} alignItems="stretch">
         <ControlPanelButtons />

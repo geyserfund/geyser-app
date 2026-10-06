@@ -13,6 +13,7 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
@@ -49,6 +50,35 @@ export const ProjectCreationNavigationDesktop = () => {
   )
 }
 
+/** Completed and current steps in forest, upcoming steps in sand. */
+const stepIndicatorSx = {
+  '[data-status=complete] &': {
+    background: 'primary1.9',
+    borderColor: 'primary1.9',
+    color: 'utils.primaryContrast',
+  },
+  '[data-status=active] &': {
+    background: 'utils.pageBg',
+    borderColor: 'primary1.9',
+  },
+  '[data-status=incomplete] &': {
+    background: 'utils.pageBg',
+    borderColor: 'neutral1.6',
+  },
+}
+
+const stepSeparatorSx = {
+  '[data-status=complete] &': {
+    background: 'primary1.9',
+  },
+  '[data-status=active] &': {
+    background: 'neutral1.6',
+  },
+  '[data-status=incomplete] &': {
+    background: 'neutral1.6',
+  },
+}
+
 const ProjectCreationNavigation = (props: StackProps) => {
   const { project } = useProjectAtom()
   const selectedFundingOption = useAtomValue(projectCreationFundingOptionAtom)
@@ -60,6 +90,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
       : selectedFundingOption === CircularGrantFundingOption
       ? 'Circular Grant'
       : 'Funding Goal'
+  /** Step titles are translation keys; they are translated at render time. */
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id || 'new') },
@@ -98,6 +129,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
         {steps.map((step, index) => {
           const isActive = index === activeButtonIndex
           const isDisabled = activeStepIndex < index || step.isDisabled
+          const inactiveColor = isDisabled ? 'neutral1.11' : 'primary1.11'
 
           return (
             <Button
@@ -108,10 +140,14 @@ const ProjectCreationNavigation = (props: StackProps) => {
               colorScheme={isActive ? 'primary1' : 'neutral1'}
               key={step.path}
               pointerEvents={isDisabled ? 'none' : 'auto'}
-              color={isDisabled ? 'neutral1.8' : 'neutral1.11'}
+              aria-current={isActive ? 'step' : undefined}
+              aria-disabled={isDisabled || undefined}
+              tabIndex={isDisabled ? -1 : undefined}
+              color={isActive ? 'primary1.11' : inactiveColor}
+              _disabled={{ backgroundColor: 'transparent', color: 'neutral1.8' }}
               justifyContent={{ base: 'flex-start', md: 'center' }}
             >
-              {step.title}
+              {t(step.title)}
             </Button>
           )
         })}
@@ -121,11 +157,11 @@ const ProjectCreationNavigation = (props: StackProps) => {
         {steps.map((step, index) => {
           return (
             <Step key={step.path} display="flex" alignItems="flex-start">
-              <StepIndicator>
+              <StepIndicator sx={stepIndicatorSx}>
                 <StepStatus complete={<StepIcon />} />
               </StepIndicator>
 
-              <StepSeparator />
+              <StepSeparator sx={stepSeparatorSx} />
             </Step>
           )
         })}

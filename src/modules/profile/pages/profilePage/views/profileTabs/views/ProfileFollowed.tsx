@@ -49,7 +49,7 @@ export const ProfileFollowed = () => {
             showFollow
             key={project.id}
             project={project}
-            _hover={{ backgroundColor: 'neutral.50', cursor: 'pointer', transition: 'background-color 0.2s' }}
+            _hover={{ backgroundColor: 'neutralAlpha.3', cursor: 'pointer', transition: 'background-color 0.2s' }}
           />
         )
       })}

@@ -14,7 +14,7 @@ export interface TextColorProps {
   dark?: boolean
   /** Uses color: neutral.11 */
   light?: boolean
-  /** Uses color: neutral.9 */
+  /** Uses color: neutral1.11 (neutral1.9 failed contrast on parchment and cards) */
   muted?: boolean
 }
 
@@ -27,7 +27,7 @@ export const getFontWeight = ({ thin, medium, bold }: TextWeightProps) => {
 
 export const getFontColor = ({ light, muted, dark }: TextColorProps) => {
   if (light) return 'neutral1.11'
-  if (muted) return 'neutral1.9'
+  if (muted) return 'neutral1.11'
   if (dark) return 'utils.text'
   return 'inherit'
 }

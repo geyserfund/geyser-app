@@ -29,7 +29,7 @@ export const Launch = () => {
   if (projectLoading || reviewsLoading) {
     return (
       <HStack h="80%" minH="320px" justify="center" align="center">
-        <Spinner size="xl" color="primary.400" />
+        <Spinner size="xl" color="primary1.9" />
       </HStack>
     )
   }

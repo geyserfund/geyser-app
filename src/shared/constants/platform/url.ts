@@ -4,11 +4,10 @@ export const GuideFundraisingURL =
 export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/resources/project-checklist'
 export const FeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pagtedCU3NPqEjBjR/form'
 export const ImpactFundsFieldPartnerApplicationUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrNXMwb68dmNeMX4'
-export const FAQUrl = 'https://guide.geyser.fund/geyser-docs/resources/faq'
+export const FAQUrl = 'https://guide.geyser.fund/help-and-support/frequently-asked-questions'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
-export const GeyserHackathonsUrl = 'https://loot.fund'
 export const GeyserTermsUrl = 'https://about.geyser.fund/T&C'
 // Geyser footer Links
 

@@ -19,22 +19,28 @@ type CircularGrantProjectsProps = {
   where?: ProjectsGetWhereInput
   take?: number
   includeSuccessful?: boolean
+  emptyStateText?: string
+  showDiscoverMore?: boolean
 }
 
-export const CircularGrantProjects = ({
-  title = 'Circular Grants',
-  description = 'Back vetted local projects with reusable, debt-free capital that can return to the next local entrepreneur.',
+type CircularGrantProjectsQueryOptions = Pick<CircularGrantProjectsProps, 'where' | 'take' | 'includeSuccessful'>
+
+/**
+ * Builds the query variables for a Circular Grant project row.
+ * Exported so callers can prefetch a filter with exactly the variables the row will request.
+ */
+export const getCircularGrantProjectsQueryVariables = ({
   where,
   take = 3,
   includeSuccessful = false,
-}: CircularGrantProjectsProps) => {
-  const { t } = useTranslation()
+}: CircularGrantProjectsQueryOptions) => {
   const baseWhere = {
     isCircularGrant: true,
     ...where,
   }
-  const ongoingQuery = useLandingCircularGrantsByFilterQuery({
-    variables: {
+
+  return {
+    ongoing: {
       take,
       where: {
         ...(includeSuccessful
@@ -43,10 +49,7 @@ export const CircularGrantProjects = ({
         ...(includeSuccessful ? { status: ProjectsGetWhereInputStatus.Active } : {}),
       },
     },
-  })
-  const successfulQuery = useLandingCircularGrantsByFilterQuery({
-    skip: !includeSuccessful,
-    variables: {
+    successful: {
       take,
       where: {
         ...baseWhere,
@@ -54,6 +57,24 @@ export const CircularGrantProjects = ({
         statuses: [ProjectsGetWhereInputStatus.Active, ProjectsGetWhereInputStatus.Closed],
       },
     },
+  }
+}
+
+export const CircularGrantProjects = ({
+  title = 'Circular Grants',
+  description = 'Back vetted local projects with reusable, debt-free capital that can return to the next local entrepreneur.',
+  where,
+  take = 3,
+  includeSuccessful = false,
+  emptyStateText,
+  showDiscoverMore = true,
+}: CircularGrantProjectsProps) => {
+  const { t } = useTranslation()
+  const variables = getCircularGrantProjectsQueryVariables({ where, take, includeSuccessful })
+  const ongoingQuery = useLandingCircularGrantsByFilterQuery({ variables: variables.ongoing })
+  const successfulQuery = useLandingCircularGrantsByFilterQuery({
+    skip: !includeSuccessful,
+    variables: variables.successful,
   })
 
   const loading = ongoingQuery.loading || (includeSuccessful && successfulQuery.loading)
@@ -83,21 +104,33 @@ export const CircularGrantProjects = ({
   )
 
   const sectionTitle = t(title)
+  const discoverMoreButton = showDiscoverMore ? (
+    <DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />
+  ) : undefined
 
-  if (loading) {
-    return <ProjectDisplayBodySkeleton />
+  // Only show placeholders when there is nothing to show yet; cached or prefetched results render straight away.
+  if (loading && projects.length === 0) {
+    return <ProjectDisplayBodySkeleton title={sectionTitle} count={take} rightContent={discoverMoreButton} />
   }
 
   if (projects.length === 0) {
     if (error) {
       return (
-        <ProjectRowLayout title={sectionTitle} width="100%">
+        <ProjectRowLayout title={sectionTitle} width="100%" rightContent={discoverMoreButton}>
           <VStack alignItems="start" spacing={4} py={4}>
-            <Body>{t('Failed to load projects')}</Body>
-            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={refetch}>
+            <Body light>{t('Failed to load projects')}</Body>
+            <Button size="md" variant="outline" colorScheme="neutral1" onClick={refetch}>
               {t('Retry')}
             </Button>
           </VStack>
+        </ProjectRowLayout>
+      )
+    }
+
+    if (emptyStateText) {
+      return (
+        <ProjectRowLayout title={sectionTitle} width="100%" rightContent={discoverMoreButton}>
+          <Body light>{t(emptyStateText)}</Body>
         </ProjectRowLayout>
       )
     }
@@ -110,7 +143,7 @@ export const CircularGrantProjects = ({
       title={sectionTitle}
       description={t(description)}
       projects={projects}
-      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />}
+      rightContent={discoverMoreButton}
     />
   )
 }

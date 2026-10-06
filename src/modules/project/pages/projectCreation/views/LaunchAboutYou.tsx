@@ -10,8 +10,8 @@ import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/index.ts'
 import { SocialConfig } from '@/modules/auth/SocialConfig.tsx'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { isLabifOpenFundingProject } from '@/modules/project/domain/labifOpenFunding.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -53,11 +53,7 @@ export const LaunchAboutYou = () => {
   )
 
   const continueAfterAboutYou = () =>
-    updateProjectWithLastCreationStep(
-      undefined,
-      undefined,
-      isLabifOpenFunding ? undefined : ProjectCreationStep.Launch,
-    )
+    updateProjectWithLastCreationStep(undefined, undefined, isLabifOpenFunding ? undefined : ProjectCreationStep.Launch)
 
   const onLeave = () => {
     if (!project) {
@@ -134,7 +130,8 @@ export const LaunchAboutYou = () => {
           h="full"
           border="1px solid"
           borderColor="neutral1.6"
-          borderRadius="8px"
+          borderRadius="card"
+          backgroundColor="utils.surface"
           overflow="hidden"
           gap={4}
           padding={4}
@@ -148,7 +145,7 @@ export const LaunchAboutYou = () => {
             padding={0}
             border="none"
             placeholder={t('Write a bit more about yourself')}
-            backgroundColor="utils.bg"
+            backgroundColor="transparent"
             value={aboutYou || ''}
             onChange={(e) => setAboutYou(e.target.value)}
           />
@@ -194,7 +191,7 @@ export const ConnectedSocialAccountButton = ({ accountType }: { accountType: Soc
       <Button
         leftIcon={icon}
         size="lg"
-        variant="soft"
+        variant="outline"
         colorScheme="neutral1"
         w="full"
         maxWidth="300px"
@@ -203,7 +200,7 @@ export const ConnectedSocialAccountButton = ({ accountType }: { accountType: Soc
         {label}
       </Button>
       <HStack>
-        <Icon as={PiCheckBold} color="primary1.9" />
+        <Icon as={PiCheckBold} color="primary1.11" aria-hidden />
         <Body> {t('Connected')}</Body>
       </HStack>
     </HStack>

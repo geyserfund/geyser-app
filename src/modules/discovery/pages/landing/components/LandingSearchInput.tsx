@@ -13,47 +13,7 @@ type LandingSearchInputProps = {
   onFocus?: React.FocusEventHandler<HTMLInputElement>
   showContent?: boolean
   size?: 'md' | 'lg'
-  transparentMode?: boolean
   width?: string | Record<string, string>
-}
-
-type LandingSearchInputStyleTokens = {
-  iconColor: string
-  inputBackground: string
-  inputBorderColor: string
-  inputHoverBorderColor: string
-  inputPlaceholderColor?: string
-  inputTextColor?: string
-}
-
-const getLandingSearchInputStyleTokens = ({
-  defaultIconColor,
-  defaultInputBackground,
-  defaultInputBorderColor,
-  transparentMode,
-}: {
-  defaultIconColor: string
-  defaultInputBackground: string
-  defaultInputBorderColor: string
-  transparentMode: boolean
-}): LandingSearchInputStyleTokens => {
-  if (!transparentMode) {
-    return {
-      iconColor: defaultIconColor,
-      inputBackground: defaultInputBackground,
-      inputBorderColor: defaultInputBorderColor,
-      inputHoverBorderColor: defaultInputBorderColor,
-    }
-  }
-
-  return {
-    iconColor: 'black',
-    inputBackground: 'whiteAlpha.220',
-    inputBorderColor: 'whiteAlpha.500',
-    inputHoverBorderColor: 'whiteAlpha.700',
-    inputPlaceholderColor: 'blackAlpha.700',
-    inputTextColor: 'black',
-  }
 }
 
 /** LandingSearchInput syncs the navbar search field with discovery filters. */
@@ -64,7 +24,6 @@ export const LandingSearchInput = ({
   onFocus,
   showContent = true,
   size = 'md',
-  transparentMode = false,
   width = { base: 'full', lg: '280px' },
 }: LandingSearchInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -99,15 +58,9 @@ export const LandingSearchInput = ({
     updateSearchFilterDebounced(event.target.value)
   }
 
-  const defaultIconColor = 'neutral1.9'
-  const defaultInputBorderColor = useColorModeValue('gray.300', 'neutral1.6')
-  const defaultInputBackground = useColorModeValue('utils.surface', 'neutral1.3')
-  const styleTokens = getLandingSearchInputStyleTokens({
-    transparentMode,
-    defaultIconColor,
-    defaultInputBackground,
-    defaultInputBorderColor,
-  })
+  const iconColor = 'neutral1.9'
+  const inputBorderColor = 'neutral1.6'
+  const inputBackground = useColorModeValue('utils.surface', 'neutral1.3')
   const hideContent = compact || !showContent
 
   return (
@@ -121,7 +74,7 @@ export const LandingSearchInput = ({
         inputRef.current?.blur()
       }}
     >
-      <InputLeftElement color={styleTokens.iconColor}>
+      <InputLeftElement color={iconColor} pointerEvents="none">
         <Icon as={PiMagnifyingGlass} fontSize="18px" />
       </InputLeftElement>
       <Input
@@ -134,14 +87,14 @@ export const LandingSearchInput = ({
         placeholder={t('Search projects')}
         aria-label={t('Search projects')}
         borderRadius={{ base: '8px', lg: '10px' }}
-        borderColor={compact ? 'transparent' : styleTokens.inputBorderColor}
-        backgroundColor={compact ? 'transparent' : styleTokens.inputBackground}
-        color={hideContent ? 'transparent' : styleTokens.inputTextColor}
+        borderColor={compact ? 'transparent' : inputBorderColor}
+        backgroundColor={compact ? 'transparent' : inputBackground}
+        color={hideContent ? 'transparent' : undefined}
         cursor={compact ? 'pointer' : 'text'}
         transition="background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease"
-        _placeholder={{ color: hideContent ? 'transparent' : styleTokens.inputPlaceholderColor }}
-        _hover={{ borderColor: compact ? 'transparent' : styleTokens.inputHoverBorderColor }}
-        _focusVisible={{ borderColor: compact ? 'transparent' : styleTokens.inputHoverBorderColor, boxShadow: 'none' }}
+        _placeholder={{ color: hideContent ? 'transparent' : undefined }}
+        _hover={{ borderColor: compact ? 'transparent' : inputBorderColor }}
+        _focusVisible={{ borderColor: compact ? 'transparent' : inputBorderColor, boxShadow: 'none' }}
         sx={{ caretColor: hideContent ? 'transparent' : undefined }}
       />
     </InputGroup>

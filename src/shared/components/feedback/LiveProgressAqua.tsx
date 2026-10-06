@@ -3,6 +3,8 @@ import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
+import { darkModeColors, lightModeColors } from '@/shared/styles/colors.ts'
+
 /* -------------------------------------------------------------------------- */
 /* Types                                                                       */
 /* -------------------------------------------------------------------------- */
@@ -19,11 +21,7 @@ type LiveProgressAquaProps = {
   label?: React.ReactNode
   showPercent?: boolean
   transitionMs?: number
-  flowSpeedSec?: number // stripes speed
-  waveIntensity?: number // subtle displacement on bubbles
-  bubbleCount?: number
-  bubbleSpeed?: number
-  bubbleSize?: [number, number]
+  waveIntensity?: number // subtle displacement on the fill
   sparkleCount?: number
   sparkleDurationMs?: number
   ariaLabel?: string
@@ -38,19 +36,9 @@ type StyleProps = {
   fillCss: string
   glowColor: string
   transitionMs: number
-  flowSpeedSec: number
   width: number | string
 }
 
-type Bubble = {
-  x: number
-  y: number
-  r: number
-  vy: number
-  wobbleA: number
-  wobbleP: number
-  alpha: number
-}
 type Sparkle = {
   x: number
   y: number
@@ -108,16 +96,6 @@ const useStyles = createUseStyles({
     inset: 0,
     background: ({ fillCss }: StyleProps) => fillCss,
   },
-  flowOverlay: {
-    position: 'absolute',
-    inset: 0,
-    background:
-      'repeating-linear-gradient(115deg, rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.12) 8px, rgba(255,255,255,0.0) 8px, rgba(255,255,255,0.0) 22px)',
-    mixBlendMode: 'screen',
-    backgroundSize: '200% 100%',
-    animation: ({ flowSpeedSec }: StyleProps) => `$flow ${flowSpeedSec || 3}s linear infinite`,
-    pointerEvents: 'none',
-  },
   glow: {
     pointerEvents: 'none',
     position: 'absolute',
@@ -128,14 +106,6 @@ const useStyles = createUseStyles({
     borderRadius: ({ radius }: StyleProps) => (typeof radius === 'number' ? `${radius}px` : radius),
   },
   // canvases
-  bubblesCanvas: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    height: '100%',
-    width: '100%',
-    pointerEvents: 'none',
-  },
   sparklesCanvas: {
     position: 'absolute',
     inset: 0,
@@ -163,10 +133,6 @@ const useStyles = createUseStyles({
   },
 
   /* -------------------- Keyframes -------------------- */
-  '@keyframes flow': {
-    '0%': { backgroundPosition: '0% 0%' },
-    '100%': { backgroundPosition: '200% 0%' },
-  },
   '@keyframes pulse': {
     '0%, 100%': { opacity: 0.55, transform: 'scale(0.9)' },
     '50%': { opacity: 1, transform: 'scale(1.15)' },
@@ -176,89 +142,6 @@ const useStyles = createUseStyles({
 /* -------------------------------------------------------------------------- */
 /* Animation Hooks                                                             */
 /* -------------------------------------------------------------------------- */
-
-function useBubbles(
-  canvas: HTMLCanvasElement | null,
-  width: number,
-  height: number,
-  bubbleCount: number,
-  bubbleSpeed: number,
-  bubbleSize: [number, number],
-) {
-  useEffect(() => {
-    if (!canvas || width === 0 || height === 0) return
-    const ctx = canvas.getContext('2d', { alpha: true })
-    if (!ctx) return
-
-    const dpr = Math.min(2, window.devicePixelRatio || 1)
-    canvas.style.width = `${width}px`
-    canvas.style.height = `${height}px`
-    canvas.width = Math.max(1, Math.floor(width * dpr))
-    canvas.height = Math.max(1, Math.floor(height * dpr))
-
-    let running = true
-    let last = performance.now()
-    const bubbles: Bubble[] = []
-
-    const [minR, maxR] = bubbleSize
-    const R = () => minR + Math.random() * (maxR - minR)
-    const gen = (): Bubble => ({
-      x: Math.random() * width,
-      y: height + Math.random() * height * 0.6,
-      r: R(),
-      vy: (0.15 + Math.random() * 0.35) * bubbleSpeed,
-      wobbleA: 4 + Math.random() * 10,
-      wobbleP: Math.random() * Math.PI * 2,
-      alpha: 0.25 + Math.random() * 0.55,
-    })
-
-    for (let i = 0; i < Math.floor(bubbleCount); i++) bubbles.push(gen())
-
-    const loop = (t: number) => {
-      if (!running) return
-      const dt = Math.min(50, t - last)
-      last = t
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.save()
-      ctx.scale(dpr, dpr)
-
-      for (let i = 0; i < bubbles.length; i++) {
-        let b = bubbles[i]
-        if (!b) continue
-        b.y -= b.vy * dt
-        b.wobbleP += 0.006 * dt
-        const wobble = Math.sin(b.wobbleP) * b.wobbleA
-        const x = b.x + wobble * (width / 220)
-
-        if (b.y + b.r < -2) {
-          const nb = gen()
-          nb.y = height + b.r
-          bubbles[i] = nb
-          b = nb
-        }
-
-        const grd = ctx.createRadialGradient(x - b.r * 0.4, b.y - b.r * 0.6, 0.1, x, b.y, b.r * 1.2)
-        grd.addColorStop(0, `rgba(255,255,255,${0.55 * b.alpha})`)
-        grd.addColorStop(0.4, `rgba(255,255,255,${0.25 * b.alpha})`)
-        grd.addColorStop(1, `rgba(255,255,255,0)`)
-        ctx.fillStyle = grd
-        ctx.beginPath()
-        ctx.arc(x, b.y, b.r, 0, Math.PI * 2)
-        ctx.fill()
-      }
-
-      ctx.restore()
-      requestAnimationFrame(loop)
-    }
-
-    const raf = requestAnimationFrame(loop)
-    return () => {
-      running = false
-      cancelAnimationFrame(raf)
-    }
-  }, [canvas, width, height, bubbleCount, bubbleSpeed, bubbleSize])
-}
 
 function useSparklesOnIncrease(
   canvas: HTMLCanvasElement | null,
@@ -473,23 +356,22 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
   label = 'All-or-Nothing',
   showPercent = true,
   transitionMs = 650,
-  flowSpeedSec = 2.8,
   waveIntensity = 2.2,
-  bubbleCount = 36,
-  bubbleSpeed = 1.0,
-  bubbleSize = [2, 6],
   sparkleCount = 22,
   sparkleDurationMs = 900,
   ariaLabel = 'Progress',
   removeLiveDot = false,
 }) => {
   // Hooks called in fixed order (no conditionals)
-  const trackDefault = useColorModeValue('#EDF2F7', '#2D3748')
-  const liveLabelColor = useColorModeValue('#0D9488', '#81E6D9')
+  const trackDefault = useColorModeValue(lightModeColors.neutral1[4], darkModeColors.neutral1[4])
+  const liveLabelColor = useColorModeValue(lightModeColors.primary1[11], darkModeColors.primary1[11])
+  // The fill stays Deep Forest in both colour modes
+  const fillStartDefault = lightModeColors.primary1[8]
+  const fillMidDefault = lightModeColors.primary1[9]
+  const fillEndDefault = lightModeColors.primary1[10]
 
   const trackRef = useRef<HTMLDivElement>(null)
   const fillWrapRef = useRef<HTMLDivElement>(null)
-  const bubblesCanvasRef = useRef<HTMLCanvasElement>(null)
   const sparklesCanvasRef = useRef<HTMLCanvasElement>(null)
   const capCanvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -497,15 +379,18 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
 
   const resolvedTrack = trackColor ?? trackDefault
   const resolvedFill =
-    fillGradient ?? `linear-gradient(90deg, ${fillColor ?? '#00E4FF'} 0%, ${fillColor ?? '#00F5D4'} 50%, #4ADE80 100%)`
-  const resolvedGlow = glowColor ?? (fillColor ? fillColor : '#00E4FF')
+    fillGradient ??
+    `linear-gradient(90deg, ${fillColor ?? fillStartDefault} 0%, ${
+      fillColor ?? fillMidDefault
+    } 50%, ${fillEndDefault} 100%)`
+  const resolvedGlow = glowColor ?? (fillColor ? fillColor : fillMidDefault)
   const percentClamped = Math.max(0, Math.min(100, value))
 
   const removeWaveCap = useMemo(() => {
     return value >= 100
   }, [value])
 
-  // measure only the filled area (for perfect bubble clipping)
+  // measure only the filled area (sizes the wave cap)
   useEffect(() => {
     const ro = new ResizeObserver(() => {
       if (!fillWrapRef.current) return
@@ -517,7 +402,6 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
   }, [])
 
   // animations
-  useBubbles(bubblesCanvasRef.current, wrapSize.w, wrapSize.h, bubbleCount, bubbleSpeed, bubbleSize)
   useSparklesOnIncrease(
     sparklesCanvasRef.current,
     trackRef.current,
@@ -537,7 +421,6 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
     fillCss: resolvedFill,
     glowColor: resolvedGlow,
     transitionMs,
-    flowSpeedSec,
     width,
   } as unknown as StyleProps)
 
@@ -590,11 +473,9 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
         aria-valuemax={100}
         aria-valuenow={percentClamped}
       >
-        {/* Filled region (clips bubbles) */}
+        {/* Filled region */}
         <Box ref={fillWrapRef} className={styles.fillWrap} style={{ filter: 'url(#lp-fluid-filter)' }}>
           <Box className={styles.barFill} />
-          <Box className={styles.flowOverlay} />
-          <canvas ref={bubblesCanvasRef} className={styles.bubblesCanvas} />
 
           {/* NEW: high-contrast canvas wavecap at the right tip */}
           {!removeWaveCap && (

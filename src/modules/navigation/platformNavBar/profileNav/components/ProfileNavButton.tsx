@@ -74,12 +74,14 @@ export const ProfileNavButton = forwardRef<ButtonProps, 'button'>((props, ref) =
         minWidth={{ base: '40px', lg: '46px' }}
         type="button"
         variant="ghost"
-        backgroundColor="utils.pbg"
+        backgroundColor="transparent"
         zIndex={1}
         _hover={{
-          backgroundColor: 'neutral1.3',
+          backgroundColor: 'transparent',
+          opacity: 0.7,
           cursor: 'pointer',
         }}
+        _active={{ backgroundColor: 'transparent' }}
         padding={0}
         borderRadius={'50%'}
         {...props}
@@ -89,10 +91,16 @@ export const ProfileNavButton = forwardRef<ButtonProps, 'button'>((props, ref) =
           icon={<Icon as={PiList} color="neutral1.11" fontSize={'24px'} />}
           height={{ base: '38px', lg: '46px' }}
           width={{ base: '38px', lg: '46px' }}
-          backgroundColor="neutral1.3"
+          backgroundColor="transparent"
         >
           {myProjectActivityDot && (
-            <AvatarBadge placement="bottom-end" borderWidth="3px" borderColor="utils.pbg" bg="error.9" boxSize="16px" />
+            <AvatarBadge
+              placement="bottom-end"
+              borderWidth="3px"
+              borderColor="utils.pageBg"
+              bg="error.9"
+              boxSize="16px"
+            />
           )}
         </Avatar>
       </Button>

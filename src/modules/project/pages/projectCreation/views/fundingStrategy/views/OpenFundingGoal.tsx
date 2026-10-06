@@ -65,7 +65,7 @@ export const OpenFundingGoal = () => {
         </Body>
 
         <RenderGoals creationMode />
-        <Button width="full" size="xl" variant="soft" colorScheme="neutral1" onClick={() => onGoalModalOpen()}>
+        <Button width="full" size="xl" variant="outline" colorScheme="neutral1" onClick={() => onGoalModalOpen()}>
           {t('Add a goal')}
         </Button>
       </VStack>

@@ -58,7 +58,15 @@ export const GrantStatus = ({ status, startDate }: { status: GrantStatusEnum; st
         />
       )
     case GrantStatusEnum.FundingOpen:
-      return <GrantStatusBadge icon={<PiLightning size="18px" />} bgColor="primary1.9" label={t('Open')} />
+      return (
+        <GrantStatusBadge
+          icon={<PiLightning size="18px" />}
+          bgColor="primary1.9"
+          color="utils.primaryContrast"
+          textColor="utils.primaryContrast"
+          label={t('Open')}
+        />
+      )
     default:
       return null
   }

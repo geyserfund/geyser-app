@@ -117,7 +117,7 @@ export const HistoricalComponent = () => {
       <H3 size="xl" medium>
         {t('Historical')}
       </H3>
-      <CardLayout direction="column" padding={1} w="full" alignItems="start" spacing="10px">
+      <CardLayout boxShadow="none" direction="column" padding={1} w="full" alignItems="start" spacing="10px">
         <HistoricalChart data={historyData} loading={loading} />
       </CardLayout>
     </VStack>

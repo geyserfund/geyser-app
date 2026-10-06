@@ -44,15 +44,21 @@ export const HistoricalChart = ({ data, loading }: { data: HistoryDataType[]; lo
         >
           <defs>
             <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colors.indigo[9]} stopOpacity={0.8} />
-              <stop offset="95%" stopColor={colors.indigo[9]} stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="colorVisitor" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colors.primary1[9]} stopOpacity={0.8} />
+              <stop offset="5%" stopColor={colors.primary1[9]} stopOpacity={0.35} />
               <stop offset="95%" stopColor={colors.primary1[9]} stopOpacity={0} />
             </linearGradient>
+            <linearGradient id="colorVisitor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={colors.neutral1[11]} stopOpacity={0.18} />
+              <stop offset="95%" stopColor={colors.neutral1[11]} stopOpacity={0} />
+            </linearGradient>
           </defs>
-          <XAxis className={classes.xaxis} dataKey="name" tickMargin={10} tick={<TickComponent />} />
+          <XAxis
+            className={classes.xaxis}
+            dataKey="name"
+            tickMargin={10}
+            tick={<TickComponent />}
+            stroke={colors.neutral1[6]}
+          />
           <YAxis
             width={isMobile ? 50 : 60}
             yAxisId="visitorCount"
@@ -71,7 +77,7 @@ export const HistoricalChart = ({ data, loading }: { data: HistoryDataType[]; lo
             unit={'sats'}
             tick={<SatsTickComponent />}
           />
-          <CartesianGrid strokeDasharray="6" vertical={false} />
+          <CartesianGrid strokeDasharray="6" vertical={false} stroke={colors.neutral1[6]} />
           <Tooltip
             cursor={{ fill: 'transparent' }}
             contentStyle={{
@@ -79,13 +85,22 @@ export const HistoricalChart = ({ data, loading }: { data: HistoryDataType[]; lo
               borderColor: colors.neutral1[6],
               borderRadius: '8px',
             }}
+            labelStyle={{ color: colors.neutral1[11] }}
+            itemStyle={{ color: colors.utils.text }}
           />
-          <Legend className={classes.legend} verticalAlign="top" height={50} align="left" />
+          <Legend
+            className={classes.legend}
+            verticalAlign="top"
+            height={50}
+            align="left"
+            formatter={(value: string) => <span style={{ color: colors.neutral1[11] }}>{value}</span>}
+          />
           <Area
             name="Contributions"
             type="monotone"
             dataKey="amount"
-            stroke={colors.indigo[9]}
+            stroke={colors.primary1[9]}
+            strokeWidth={2}
             yAxisId={'amount'}
             fillOpacity={1}
             fill="url(#colorAmount)"
@@ -94,7 +109,7 @@ export const HistoricalChart = ({ data, loading }: { data: HistoryDataType[]; lo
             name="Visitors"
             type="monotone"
             dataKey="visitorCount"
-            stroke={colors.primary1[9]}
+            stroke={colors.neutral1[11]}
             yAxisId={'visitorCount'}
             fillOpacity={1}
             fill="url(#colorVisitor)"

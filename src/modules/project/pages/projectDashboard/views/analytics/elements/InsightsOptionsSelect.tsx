@@ -18,7 +18,11 @@ export const InsightsOptionsSelect = () => {
       onChange={handleSelect}
       maxWidth="150px"
       borderRadius="8px"
-      backgroundColor="neutral.100"
+      backgroundColor="utils.surface"
+      borderColor="neutral1.6"
+      color="utils.text"
+      _hover={{ borderColor: 'neutral1.8' }}
+      _focusVisible={{ borderColor: 'primary1.8', boxShadow: 'none' }}
       size="sm"
     >
       <option value={InsightsOptions.lastWeek}>{t(InsightsOptions.lastWeek)}</option>

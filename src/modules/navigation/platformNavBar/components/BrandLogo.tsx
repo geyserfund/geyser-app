@@ -1,10 +1,9 @@
-import { Badge, Box, HStack, Image, useColorModeValue } from '@chakra-ui/react'
+import { Badge, Box, HStack, Image } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Link } from 'react-router'
 
-import LogoDark from '@/assets/logo-dark.svg'
-import LogoLight from '@/assets/logo-light.svg'
-import { __development__, __staging__, getPath, LogoNameDark, LogoNameLight, LogoOutline } from '@/shared/constants'
+import { GeyserMark, GeyserWordmark } from '@/shared/components/display/GeyserLogo.tsx'
+import { __development__, __staging__, getPath, LogoOutline } from '@/shared/constants'
 
 const EnvironmentTag = ({ compact = false }: { compact?: boolean }) => {
   if (!(__development__ || __staging__)) {
@@ -33,19 +32,15 @@ const EnvironmentTag = ({ compact = false }: { compact?: boolean }) => {
 }
 
 export const BrandLogo = ({ showOutline = false }: { showOutline?: boolean }) => {
-  const imagesrc = useColorModeValue(LogoDark, LogoLight)
-
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <HStack h="100%" spacing={{ base: 1, lg: 2 }}>
         <Box h="100%">
-          <Image
-            src={showOutline ? LogoOutline : imagesrc}
-            height="100%"
-            width="auto"
-            objectFit="contain"
-            alt={t('Geyser logo')}
-          />
+          {showOutline ? (
+            <Image src={LogoOutline} height="100%" width="auto" objectFit="contain" alt={t('Geyser logo')} />
+          ) : (
+            <GeyserMark />
+          )}
         </Box>
         <EnvironmentTag />
       </HStack>
@@ -53,17 +48,14 @@ export const BrandLogo = ({ showOutline = false }: { showOutline?: boolean }) =>
   )
 }
 
-export const BrandLogoFull = ({ forceLightLogo = false }: { forceLightLogo?: boolean }) => {
-  const themedImageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
-  const imageUrl = forceLightLogo ? LogoNameLight : themedImageUrl
-
+export const BrandLogoFull = () => {
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <HStack h="100%" spacing={0}>
         <Box h={{ base: '34px', lg: '40px' }}>
-          <Image src={imageUrl} alt={t('Geyser logo')} height="100%" width="auto" objectFit="contain" />
+          <GeyserWordmark />
         </Box>
-        <Box marginLeft={{ base: -2.5, lg: -3.5 }} marginTop={{ base: -3, lg: -4 }} alignSelf="flex-start">
+        <Box marginLeft={1} alignSelf="flex-start">
           <EnvironmentTag compact />
         </Box>
       </HStack>

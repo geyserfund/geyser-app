@@ -1,9 +1,10 @@
 import { Divider, HStack } from '@chakra-ui/react'
 import React from 'react'
-import { BsExclamationSquareFill } from 'react-icons/bs'
+import { PiWarningFill } from 'react-icons/pi'
 
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
-import { H3 } from '@/shared/components/typography'
+import type { CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { H3 } from '@/shared/components/typography/Heading.tsx'
 
 type FeedbackCardVariants = 'primary' | 'warning' | 'neutral' | 'danger'
 
@@ -21,6 +22,7 @@ const feedbackCardVariantColors: { [key in FeedbackCardVariants]: string } = {
   danger: 'error.9',
 }
 
+/** Bordered card with a titled header row, used for inline feedback and warnings. */
 export const FeedbackCard: React.FC<FeedbackCardProps> = ({
   variant = 'neutral',
   title,
@@ -32,10 +34,10 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({
   return (
     <CardLayout borderColor={feedbackCardVariantColors[variant]} padding="20px" spacing="10px" {...rest}>
       <HStack spacing="10px">
-        {noIcon ? null : icon ? icon : <BsExclamationSquareFill size="24" />}
+        {noIcon ? null : icon ? icon : <PiWarningFill size="24" aria-hidden />}
         <H3>{title}</H3>
       </HStack>
-      <Divider borderBottomWidth="2px" borderColor="neutral1." />
+      <Divider borderColor="neutral1.6" />
       {children}
     </CardLayout>
   )

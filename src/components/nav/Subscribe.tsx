@@ -1,6 +1,5 @@
 /* eslint-disable complexity */
 
-import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
   HStack,
@@ -20,8 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { FaTelegramPlane } from 'react-icons/fa'
-import { RiTwitterXLine } from 'react-icons/ri'
+import { PiArrowRight, PiCheck, PiTelegramLogoFill, PiXLogo } from 'react-icons/pi'
 
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../shared/constants'
 import { DEFAULT_NEWSLETTER_PREFERENCES } from '../../shared/constants/newsletter'
@@ -131,7 +129,7 @@ export const Subscribe = ({ isOpen, onClose, style, parentState, titleSize }: IS
                         size="sm"
                         background={'none'}
                         aria-label="twitter"
-                        icon={<RiTwitterXLine fontSize="20px" />}
+                        icon={<PiXLogo fontSize="20px" />}
                         color={'neutral.700'}
                       />
                     </Link>
@@ -140,7 +138,7 @@ export const Subscribe = ({ isOpen, onClose, style, parentState, titleSize }: IS
                         size="sm"
                         background={'none'}
                         aria-label="telegram"
-                        icon={<FaTelegramPlane fontSize="20px" />}
+                        icon={<PiTelegramLogoFill fontSize="20px" />}
                         color={'neutral.700'}
                       />
                     </Link>
@@ -174,7 +172,7 @@ export const Subscribe = ({ isOpen, onClose, style, parentState, titleSize }: IS
               justifyContent="center"
               alignItems="center"
             >
-              <CheckIcon w={7} h={7} />
+              <Icon as={PiCheck} w={7} h={7} color="utils.primaryContrast" />
             </Box>
           )}
           <Text textAlign={isMobile ? 'left' : 'center'} w={isMobile ? '80%' : '400px'}>
@@ -203,7 +201,7 @@ export const Subscribe = ({ isOpen, onClose, style, parentState, titleSize }: IS
                         onClick={handleConfirm}
                         isLoading={submitting}
                       >
-                        <ArrowForwardIcon w={6} h={6} />
+                        <Icon as={PiArrowRight} w={6} h={6} />
                       </ButtonComponent>
                     </InputRightElement>
                   </InputGroup>
@@ -229,7 +227,7 @@ export const Subscribe = ({ isOpen, onClose, style, parentState, titleSize }: IS
               justifyContent="center"
               alignItems="center"
             >
-              <Icon boxSize={6} aria-label="telegram" as={FaTelegramPlane} mr={2} />
+              <Icon boxSize={6} aria-label="telegram" as={PiTelegramLogoFill} mr={2} />
               {t('Join us on Telegram')}
             </Link>
           </Box>

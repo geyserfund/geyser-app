@@ -17,7 +17,7 @@ export const TransactionRegionComponent = (props: CardLayoutProps) => {
       <H3 size="xl" medium>
         {t('Funding by region')}
       </H3>
-      <CardLayout padding={{ base: 3, lg: 6 }} w="full" {...props}>
+      <CardLayout boxShadow="none" padding={{ base: 3, lg: 6 }} w="full" {...props}>
         <FundingRegionsPieChart data={regions} />
       </CardLayout>
     </VStack>

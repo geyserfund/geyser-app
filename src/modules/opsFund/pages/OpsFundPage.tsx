@@ -8,7 +8,7 @@ import { getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 export const OpsFundPage = () => (
-  <Box w="full" minH="100vh" bg="utils.pbg">
+  <Box w="full" minH="100vh" bg="utils.pageBg">
     <Head
       title={t('Geyser Operations Fund')}
       description={t(

@@ -17,14 +17,14 @@ export const UploadBox = ({ loading, title, titleProps, ...rest }: UploadBoxProp
   const { t } = useTranslation()
   return (
     <HStack
-      borderRadius="8px"
-      backgroundColor="neutral1.3"
+      borderRadius="innerCard"
+      backgroundColor="neutralAlpha.3"
       width="100%"
       height="70px"
       justifyContent="center"
       alignItems="center"
       paddingX={3}
-      _hover={{ backgroundColor: 'neutral1.4' }}
+      _hover={{ backgroundColor: 'neutralAlpha.4' }}
       spacing={3}
       {...rest}
     >

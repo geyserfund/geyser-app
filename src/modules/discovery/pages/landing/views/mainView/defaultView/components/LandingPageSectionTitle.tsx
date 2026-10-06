@@ -3,7 +3,7 @@ import { HeaderProps } from '@/shared/components/typography/Heading.tsx'
 
 export const LandingPageSectionTitle = ({ children, ...props }: HeaderProps) => {
   return (
-    <H3 size="sm" bold light textTransform="uppercase" {...props}>
+    <H3 size="sm" bold light {...props}>
       {children}
     </H3>
   )

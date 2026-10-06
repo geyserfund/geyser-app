@@ -127,7 +127,7 @@ export const CampaignsComingSoon = () => {
             <Link
               href="https://github.com/steliosrammos/rootstock-all-or-nothing"
               isExternal
-              color="primary1.500"
+              color="primary1.11"
               textDecoration="underline"
             >
               open-source Rootstock smart contract

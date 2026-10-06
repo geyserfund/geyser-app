@@ -1,19 +1,28 @@
 import { Heading, HeadingProps } from '@chakra-ui/react'
 
+import { fonts } from '@/shared/styles/fonts.ts'
+
 import { getFontColor, getFontWeight, TextColorProps, TextWeightProps } from './common'
 
 export interface HeaderProps extends HeadingProps, TextWeightProps, TextColorProps {
   to?: string
 }
 
+/** Display voice (see DESIGN.md): headlines and section titles only. */
+export const displayHeadingProps = {
+  fontFamily: fonts.display,
+  letterSpacing: '-0.01em',
+  color: 'utils.heading',
+} as const
+
 /** H1 heading, default size: 4xl / 36px */
 export const H1 = (props: HeaderProps) => {
-  return <BaseHeading as="h1" size="4xl" {...props} />
+  return <BaseHeading as="h1" size="4xl" {...displayHeadingProps} {...props} />
 }
 
 /** H2 heading, default size: 2xl / 24px */
 export const H2 = (props: HeaderProps) => {
-  return <BaseHeading as="h2" size="2xl" {...props} />
+  return <BaseHeading as="h2" size="2xl" {...displayHeadingProps} {...props} />
 }
 
 /** H3 heading, default size: lg / 18px */
@@ -33,12 +42,12 @@ export const H6 = (props: HeaderProps) => {
   return <BaseHeading as="h6" {...props} />
 }
 
-export const BaseHeading = ({ thin, medium, bold, light, muted, size = 'md', ...rest }: HeaderProps) => {
+export const BaseHeading = ({ thin, medium, bold, light, muted, color, size = 'md', ...rest }: HeaderProps) => {
   return (
     <Heading
       fontFamily="inherit"
       fontWeight={getFontWeight({ thin, medium, bold })}
-      color={getFontColor({ light, muted })}
+      color={light || muted ? getFontColor({ light, muted }) : color ?? 'inherit'}
       fontSize={size}
       {...rest}
     />

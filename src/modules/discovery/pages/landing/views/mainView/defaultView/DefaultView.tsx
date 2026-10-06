@@ -1,32 +1,54 @@
 import { useQuery } from '@apollo/client'
-import { VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
+import { Box, SimpleGrid, VStack } from '@chakra-ui/react'
+import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { fetchFeaturedProject } from '@/api/airtable.ts'
 import { Head } from '@/config/Head.tsx'
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
+import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
+import { __development__ } from '@/shared/constants/config/env.ts'
 import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
 import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
+import { brandColors } from '@/shared/styles/brandPalette.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
-import type { USDCents } from '@/types/index.ts'
-import { ProjectsGetWhereInputStatus, useImpactFundsQuery } from '@/types/index.ts'
-import { getShortAmountLabel } from '@/utils/index.ts'
+import type { ProjectsGetWhereInput } from '@/types/index.ts'
+import {
+  ProjectsGetWhereInputStatus,
+  useLandingCircularGrantsByFilterLazyQuery,
+  useLandingCircularGrantsByFilterQuery,
+} from '@/types/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { QUERY_LANDING_ABOVE_FOLD, QUERY_LANDING_ANNOUNCEMENTS } from '../../../graphql/landingPageQueries.ts'
 import { LandingAboveFoldQueryData, LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
-import { ActiveImpactFunds } from './sections/ActiveImpactFunds.tsx'
 import { type CircularGrantLandingFilter, CircularGrantFilterBar } from './sections/CircularGrantFilterBar.tsx'
-import { CircularGrantProjects } from './sections/CircularGrantProjects.tsx'
-import { CircularGrantSuccessStory } from './sections/CircularGrantSuccessStory.tsx'
+import { CircularGrantProjects, getCircularGrantProjectsQueryVariables } from './sections/CircularGrantProjects.tsx'
+import {
+  CircularGrantsFocus,
+  FieldPartnerCaseStudy,
+  FieldPartnersPanel,
+  SupportMovementBand,
+} from './sections/CircularGrantsMission.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
-import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
+import { LatamImpactFundApplication } from './sections/LatamImpactFundApplication.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 
-const CURATED_PROJECTS_COUNT = 6
+const CURATED_PROJECTS_COUNT = 3
+const REGION_FILTER_TAKE = 3
+
+/** Region rows keyed by filter; module-level so the query variables keep a stable identity between renders. */
+const REGION_FILTER_ROWS: Record<
+  Exclude<CircularGrantLandingFilter, 'featured'>,
+  { title: string; where: ProjectsGetWhereInput }
+> = {
+  africa: { title: 'Circular Grants in Africa', where: { region: 'Africa' } },
+  'latin-america': {
+    title: 'Circular Grants in Latin America',
+    where: { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] },
+  },
+}
 
 type FeaturedAirtableResponse = {
   records: Array<{ fields: { Name?: string; Type?: string } }>
@@ -44,6 +66,22 @@ const sortProjectsByNames = <T extends { name: string }>(projects: T[], names: s
   )
 }
 
+/** Full-bleed burnt ochre band that raised cards sit on (see DESIGN.md). */
+const OchreBand = ({ children }: { children: ReactNode }) => (
+  <Box
+    w="full"
+    bg={brandColors.burntOchre}
+    paddingY={{ base: 10, lg: 16 }}
+    sx={{
+      // Paints the band edge to edge without widening the page (no horizontal scroll).
+      boxShadow: `0 0 0 100vmax ${brandColors.burntOchre}`,
+      clipPath: 'inset(0 -100vmax)',
+    }}
+  >
+    {children}
+  </Box>
+)
+
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
   const [circularGrantFilter, setCircularGrantFilter] = useState<CircularGrantLandingFilter>('featured')
@@ -51,25 +89,7 @@ export const DefaultView = () => {
   const [featuredProjectsLoading, setFeaturedProjectsLoading] = useState(true)
   const [featuredProjectsError, setFeaturedProjectsError] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
-  const { donateModalElement } = useImpactFundsDonateModal()
-  const { getSatoshisFromUSDCents } = useBTCConverter()
-  const { data: impactFundsData } = useImpactFundsQuery()
-
-  const latinAmericaImpactFund = impactFundsData?.impactFunds.find((fund) => fund.name === 'latam-impact-fund')
-  const labifCommittedAmount = (() => {
-    if (latinAmericaImpactFund?.amountCommitted === null || latinAmericaImpactFund?.amountCommitted === undefined) {
-      return t('120,000,000 sats')
-    }
-
-    const amountSats =
-      latinAmericaImpactFund.amountCommitted === 0
-        ? latinAmericaImpactFund.metrics.awardedTotalSats
-        : latinAmericaImpactFund.amountCommittedCurrency === 'USDCENT'
-        ? getSatoshisFromUSDCents(latinAmericaImpactFund.amountCommitted as USDCents)
-        : latinAmericaImpactFund.amountCommitted
-
-    return `${getShortAmountLabel(amountSats, true)} sats`
-  })()
+  const { donateModalElement, openDonateModal } = useImpactFundsDonateModal()
 
   const loadFeaturedProjects = useCallback(async () => {
     setFeaturedProjectsLoading(true)
@@ -136,8 +156,46 @@ export const DefaultView = () => {
   } = useQuery<LandingAnnouncementsQueryData>(QUERY_LANDING_ANNOUNCEMENTS, {
     skip: !showBelowTheFold,
   })
+  /**
+   * DEV ONLY: the curated list comes from Airtable names that do not exist in the dev database,
+   * so fall back to whatever Circular Grants the dev backend has to fill the featured grid.
+   */
+  const useDevFeaturedProjects = __development__ && featuredProjects.length === 0
+  const { data: devFeaturedData, loading: devFeaturedLoading } = useLandingCircularGrantsByFilterQuery({
+    skip: !useDevFeaturedProjects,
+    variables: { take: CURATED_PROJECTS_COUNT, where: { isCircularGrant: true } },
+  })
+  const devFeaturedProjects = useDevFeaturedProjects ? devFeaturedData?.projectsGet.projects ?? [] : []
+  const hasDevFeaturedProjects = devFeaturedProjects.length > 0
+
+  const isFeaturedFilter = circularGrantFilter === 'featured'
+
+  /** Warm the cache for both region filters after first paint so switching chips renders without a loading state. */
+  const [prefetchRegionProjects] = useLandingCircularGrantsByFilterLazyQuery()
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Object.values(REGION_FILTER_ROWS).forEach(({ where }) => {
+        const variables = getCircularGrantProjectsQueryVariables({
+          where,
+          take: REGION_FILTER_TAKE,
+          includeSuccessful: true,
+        })
+        prefetchRegionProjects({ variables: variables.ongoing })
+        prefetchRegionProjects({ variables: variables.successful })
+      })
+    }, 1500)
+
+    return () => clearTimeout(timer)
+  }, [prefetchRegionProjects])
+
+  const focusBand = (
+    <OchreBand>
+      <CircularGrantsFocus />
+    </OchreBand>
+  )
+
   return (
-    <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
+    <VStack w="full" spacing={10} paddingTop={{ base: 1, lg: 1.5 }}>
       {donateModalElement}
       <Head
         title={defaultSeoContent.title}
@@ -168,41 +226,72 @@ export const DefaultView = () => {
           })}
         </script>
       </Head>
-      <VStack w="full" spacing={20} paddingBottom={40}>
-        <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
+      <VStack w="full" spacing={{ base: 12, lg: 20 }} paddingBottom={{ base: 16, lg: 20 }}>
+        <VStack w="full" spacing={{ base: 4, lg: 6 }} align="stretch">
+          <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
 
-        {circularGrantFilter === 'featured' ? (
-          <CuratedProjects
-            featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
-            featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
-            featuredProjects={featuredProjects}
-            onRetryFeatured={() => {
-              loadFeaturedProjects()
-              if (featuredProjectNames.length > 0) {
-                refetchFeaturedProjects()
-              }
-            }}
+          <VStack w="full" spacing={{ base: 10, lg: 12 }} align="stretch">
+            {isFeaturedFilter ? (
+              <CuratedProjects
+                featuredError={
+                  !hasDevFeaturedProjects && (featuredProjectsError || Boolean(featuredProjectsQueryError))
+                }
+                featuredLoading={
+                  featuredProjectsLoading ||
+                  featuredProjectsQueryLoading ||
+                  (useDevFeaturedProjects && devFeaturedLoading)
+                }
+                featuredProjects={hasDevFeaturedProjects ? devFeaturedProjects : featuredProjects}
+                onRetryFeatured={() => {
+                  loadFeaturedProjects()
+                  if (featuredProjectNames.length > 0) {
+                    refetchFeaturedProjects()
+                  }
+                }}
+              />
+            ) : (
+              <CircularGrantProjects
+                title={REGION_FILTER_ROWS[circularGrantFilter].title}
+                description=""
+                take={REGION_FILTER_TAKE}
+                where={REGION_FILTER_ROWS[circularGrantFilter].where}
+                includeSuccessful
+              />
+            )}
+            {/* Kept at a fixed position in this list so it stays mounted when the filter changes. */}
+            {focusBand}
+            {isFeaturedFilter ? (
+              <CircularGrantProjects
+                title="Recent Circular Grants"
+                description=""
+                take={3}
+                emptyStateText="No recent Circular Grants found"
+                showDiscoverMore={false}
+              />
+            ) : null}
+          </VStack>
+        </VStack>
+
+        <VStack w="full" spacing={{ base: 6, lg: 8 }} align="stretch">
+          <FieldPartnersPanel />
+          <SimpleGrid w="full" columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 8 }}>
+            <FieldPartnerCaseStudy />
+            <LatamImpactFundApplication />
+          </SimpleGrid>
+        </VStack>
+
+        <OchreBand>
+          <SupportMovementBand
+            onSupportImpactFund={() =>
+              openDonateModal({
+                defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID],
+              })
+            }
           />
-        ) : (
-          <CircularGrantProjects
-            title={circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'}
-            take={6}
-            where={{
-              ...(circularGrantFilter === 'africa'
-                ? { region: 'Africa' }
-                : { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }),
-            }}
-            includeSuccessful
-          />
-        )}
-
-        <CircularGrantSuccessStory />
-
-        <ActiveImpactFunds labifCommittedAmount={labifCommittedAmount} />
+        </OchreBand>
 
         {showBelowTheFold && (
           <>
-            <HowGeyserWorks />
             <HeroesMainPage />
             <GeyserNewsAndAnnouncements
               giveawayEndAt={announcementsData?.acelerandoVipLeaderboard.endAt}
@@ -211,9 +300,10 @@ export const DefaultView = () => {
               onGiveawayRetry={() => refetchAnnouncements()}
               projectAnnouncements={announcementsData?.geyserAnnouncements ?? []}
             />
-            <NewsletterSignup />
           </>
         )}
+
+        <NewsletterSignup />
       </VStack>
     </VStack>
   )

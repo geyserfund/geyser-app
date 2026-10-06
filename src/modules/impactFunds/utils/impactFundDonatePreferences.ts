@@ -9,12 +9,12 @@ export type ImpactFundDonateSessionPref = {
   donateProjectName: string
 }
 
+export const LATIN_AMERICA_REGION_ID = 'latin-america' as const
+
+/** Regions a donor can prioritise: the two where Geyser runs Circular Grants. */
 export const REGION_OPTIONS = [
-  { id: 'north-america', labelKey: 'North America' as const },
-  { id: 'south-america', labelKey: 'South America' as const },
-  { id: 'europe', labelKey: 'Europe' as const },
   { id: 'africa', labelKey: 'Africa' as const },
-  { id: 'asia', labelKey: 'Asia' as const },
+  { id: LATIN_AMERICA_REGION_ID, labelKey: 'Latin America' as const },
 ] as const
 
 export type ImpactFundDonateRegionId = (typeof REGION_OPTIONS)[number]['id']

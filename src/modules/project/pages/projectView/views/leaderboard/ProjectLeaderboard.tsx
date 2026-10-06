@@ -44,7 +44,7 @@ export const ProjectLeaderboard = () => {
           paddingX={{ base: 3, lg: 0 }}
           paddingY={{ base: 1, lg: 0 }}
           zIndex={3}
-          backgroundColor="utils.pbg"
+          backgroundColor="utils.pageBg"
         >
           <VStack>
             <H1 size="2xl" bold dark>
