@@ -24,7 +24,7 @@ Geyser is pivoting from Bitcoin crowdfunding to grassroots Circular Grants (see 
 ## Decision outcome
 
 - `primary1` and `primaryAlpha` now resolve to forest-green scales defined in `src/shared/styles/brandPalette.ts`, for both light and dark mode. The legacy `primary` and `brand` 50-900 scales are remapped to the same hue.
-- In light mode `primary1.9` is a dark fill (`#26483D`). Labels on primary fills use the token `utils.primaryContrast`, which is light in light mode and dark in dark mode. The button theme's `solid` variant applies it for the `primary1` scheme.
+- In light mode `primary1.9` is a dark fill (`#223829`). Labels on primary fills use the token `utils.primaryContrast`, which is light in light mode and dark in dark mode. The button theme's `solid` variant applies it for the `primary1` scheme.
 - Surfaces are two-tone: `utils.pageBg` (new) is the page background and `utils.pbg` is the raised card and panel surface. `utils.text` is charcoal brown in light mode.
 - `fonts.display` (Bricolage Grotesque) is the display voice. `H1` and `H2` use it by default, in `primary1.11`, and landing section titles opt in through `displayHeadingProps`. All other text stays in Figtree.
 - Phosphor (`react-icons/pi`) is the only icon set; other `react-icons` packs and `@chakra-ui/icons` were removed from source.

@@ -4,9 +4,6 @@ import { t } from 'i18next'
 
 import { brandColors } from '@/shared/styles/brandPalette.ts'
 
-/** Default logo ink on light surfaces; `--geyser-logo-color` lets the temporary landing colour picker override it. */
-const LOGO_INK_LIGHT = 'var(--geyser-logo-color, #223829)'
-
 type LogoTone = 'onLight' | 'onDark'
 
 type GeyserLogoProps = Omit<BoxProps, 'children'> & {
@@ -21,7 +18,7 @@ const useLogoColors = (tone?: LogoTone) => {
 
   return resolvedTone === 'onDark'
     ? { ink: brandColors.warmParchment, knockout: '#111110' }
-    : { ink: LOGO_INK_LIGHT, knockout: '#FFFFFF' }
+    : { ink: brandColors.deepForest, knockout: '#FFFFFF' }
 }
 
 /** The Geyser "G" block mark, drawn inline so its colour follows the theme. */

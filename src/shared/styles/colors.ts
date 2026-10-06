@@ -123,7 +123,7 @@ export const utilColors = {
     pageBg: brandColors.warmParchment,
     pbg: brandColors.parchmentRaised,
     surface: '#FFFFFF',
-    primarySurface: 'rgba(38, 72, 61, 0.07)',
+    primarySurface: 'rgba(34, 56, 41, 0.07)',
     overlay: 'rgba(25, 21, 1, 0.29)',
     primaryContrast: brandColors.warmParchment,
     primarySolid: brandColors.deepForest,

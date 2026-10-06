@@ -2,8 +2,8 @@
 name: Geyser
 description: Bitcoin capital for local economies, through Circular Grants and trusted Field Partners.
 colors:
-  deep-forest: "#26483D"
-  deep-forest-pressed: "#1D382F"
+  deep-forest: "#223829"
+  deep-forest-pressed: "#1C2E22"
   warm-parchment: "#F4EFE4"
   parchment-raised: "#FBF8F1"
   charcoal-brown: "#292925"
@@ -118,7 +118,7 @@ Rejected, by explicit decision: pastel tinted panels (pale yellow or teal card b
 An earth palette: one deep green for structure, warm paper neutrals, and a small set of warm accents used sparingly.
 
 ### Primary
-- **Deep Forest** (`deep-forest`): the hero overlay, headings and section titles, primary button fills, icons, links and the Live indicator. White or parchment text on it is roughly 9–10:1.
+- **Deep Forest** (`deep-forest`): the hero overlay, headings and section titles, primary button fills, icons, links and the Live indicator. White or parchment text on it is roughly 11–12.5:1.
 - **Deep Forest Pressed** (`deep-forest-pressed`): hover and active state of primary buttons.
 
 ### Secondary

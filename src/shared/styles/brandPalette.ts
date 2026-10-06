@@ -5,8 +5,8 @@
  */
 
 export const brandColors = {
-  deepForest: '#26483D',
-  deepForestPressed: '#1D382F',
+  deepForest: '#223829',
+  deepForestPressed: '#1C2E22',
   warmParchment: '#F4EFE4',
   parchmentRaised: '#FBF8F1',
   charcoalBrown: '#292925',
@@ -33,14 +33,14 @@ export const forestLight = {
 }
 
 export const forestAlphaLight = {
-  '1': 'rgba(38, 72, 61, 0.03)',
-  '2': 'rgba(38, 72, 61, 0.06)',
-  '3': 'rgba(38, 72, 61, 0.12)',
-  '4': 'rgba(38, 72, 61, 0.2)',
-  '5': 'rgba(38, 72, 61, 0.28)',
-  '6': 'rgba(38, 72, 61, 0.38)',
-  '7': 'rgba(38, 72, 61, 0.52)',
-  '8': 'rgba(38, 72, 61, 0.68)',
+  '1': 'rgba(34, 56, 41, 0.03)',
+  '2': 'rgba(34, 56, 41, 0.06)',
+  '3': 'rgba(34, 56, 41, 0.12)',
+  '4': 'rgba(34, 56, 41, 0.2)',
+  '5': 'rgba(34, 56, 41, 0.28)',
+  '6': 'rgba(34, 56, 41, 0.38)',
+  '7': 'rgba(34, 56, 41, 0.52)',
+  '8': 'rgba(34, 56, 41, 0.68)',
   '9': brandColors.deepForest,
   '10': brandColors.deepForestPressed,
   '11': brandColors.deepForest,
@@ -77,8 +77,8 @@ export const forestAlphaDark = {
   '12': '#d6ebe0',
 }
 
-/** Hero field colour; `--geyser-hero-field` lets the temporary landing colour picker override it. */
-export const heroFieldColor = `var(--geyser-hero-field, ${brandColors.deepForest})`
+/** Hero field colour. */
+export const heroFieldColor = brandColors.deepForest
 
 /** Hero overlay shared by photo heroes: solid field colour to 45%, faded out by 65% (see DESIGN.md). */
 export const heroForestOverlayGradient = `linear-gradient(

@@ -7,7 +7,7 @@
       "deep-forest": {
         "role": "primary",
         "displayName": "Deep Forest",
-        "canonical": "#26483D",
+        "canonical": "#223829",
         "tonalRamp": [
           "#1a322a",
           "#2e574a",
@@ -22,7 +22,7 @@
       "deep-forest-pressed": {
         "role": "primary",
         "displayName": "Deep Forest Pressed",
-        "canonical": "#1D382F",
+        "canonical": "#1C2E22",
         "tonalRamp": [
           "#1a322a",
           "#2d5749",
@@ -236,7 +236,7 @@
       "refersTo": "button-primary",
       "description": "Main action in a section; Deep Forest fill with a parchment label.",
       "html": "<button class=\"ds-btn-primary\">Become a Field Partner <span aria-hidden=\"true\">→</span></button>",
-      "css": ".ds-btn-primary{font-family:'Figtree',sans-serif;background:#26483D;color:#F4EFE4;height:40px;padding:0 16px;border:none;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-primary:hover{background:#1D382F}.ds-btn-primary:focus-visible{outline:2px solid #26483D;outline-offset:2px}"
+      "css": ".ds-btn-primary{font-family:'Figtree',sans-serif;background:#223829;color:#F4EFE4;height:40px;padding:0 16px;border:none;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-primary:hover{background:#1C2E22}.ds-btn-primary:focus-visible{outline:2px solid #223829;outline-offset:2px}"
     },
     {
       "name": "Outline Button",
@@ -244,7 +244,7 @@
       "refersTo": "button-outline",
       "description": "Secondary action such as reading a case study.",
       "html": "<button class=\"ds-btn-outline\">Read the case study <span aria-hidden=\"true\">→</span></button>",
-      "css": ".ds-btn-outline{font-family:'Figtree',sans-serif;background:transparent;color:#63635E;height:40px;padding:0 16px;border:1px solid #BCBBB5;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-outline:hover{background:#F1F0EF}.ds-btn-outline:focus-visible{outline:2px solid #26483D;outline-offset:2px}"
+      "css": ".ds-btn-outline{font-family:'Figtree',sans-serif;background:transparent;color:#63635E;height:40px;padding:0 16px;border:1px solid #BCBBB5;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-outline:hover{background:#F1F0EF}.ds-btn-outline:focus-visible{outline:2px solid #223829;outline-offset:2px}"
     },
     {
       "name": "Filter Chip",
@@ -252,7 +252,7 @@
       "refersTo": "chip-filter",
       "description": "Region filter above the grant grid; selected state uses a soft neutral fill.",
       "html": "<button class=\"ds-chip\" aria-pressed=\"true\"><span class=\"ds-chip-dot\"></span>Live</button> <button class=\"ds-chip\" aria-pressed=\"false\">In Africa</button>",
-      "css": ".ds-chip{font-family:'Figtree',sans-serif;display:inline-flex;align-items:center;gap:8px;background:transparent;color:#63635E;height:40px;padding:0 16px;border:1px solid #BCBBB5;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer}.ds-chip[aria-pressed=true]{background:#E9E8E6;border-color:transparent}.ds-chip:hover{background:#F1F0EF}.ds-chip-dot{width:12px;height:12px;border-radius:999px;background:#26483D}"
+      "css": ".ds-chip{font-family:'Figtree',sans-serif;display:inline-flex;align-items:center;gap:8px;background:transparent;color:#63635E;height:40px;padding:0 16px;border:1px solid #BCBBB5;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer}.ds-chip[aria-pressed=true]{background:#E9E8E6;border-color:transparent}.ds-chip:hover{background:#F1F0EF}.ds-chip-dot{width:12px;height:12px;border-radius:999px;background:#223829}"
     },
     {
       "name": "Card",
@@ -260,7 +260,7 @@
       "refersTo": "card",
       "description": "Raised parchment surface with a hairline border and the single card shadow.",
       "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Afribit Kibera shows the model in motion</h3><p class=\"ds-card-body\">Read how Afribit Kibera is pioneering Circular Grants with Geyser in its local community.</p></div>",
-      "css": ".ds-card{background:#FBF8F1;color:#292925;border:0.5px solid #DAD9D6;border-radius:10px;padding:24px;box-shadow:0 1px 2px 0 rgba(0,0,0,.04),0 2px 6px -2px rgba(0,0,0,.04);max-width:420px}.ds-card-title{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:600;font-size:24px;line-height:1.2;letter-spacing:-0.01em;color:#26483D;margin:0 0 12px}.ds-card-body{font-family:'Figtree',sans-serif;font-size:16px;line-height:1.6;color:#63635E;margin:0}"
+      "css": ".ds-card{background:#FBF8F1;color:#292925;border:0.5px solid #DAD9D6;border-radius:10px;padding:24px;box-shadow:0 1px 2px 0 rgba(0,0,0,.04),0 2px 6px -2px rgba(0,0,0,.04);max-width:420px}.ds-card-title{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:600;font-size:24px;line-height:1.2;letter-spacing:-0.01em;color:#223829;margin:0 0 12px}.ds-card-body{font-family:'Figtree',sans-serif;font-size:16px;line-height:1.6;color:#63635E;margin:0}"
     },
     {
       "name": "Hero Headline",
@@ -268,7 +268,7 @@
       "refersTo": "hero",
       "description": "Display headline on the Deep Forest hero field.",
       "html": "<div class=\"ds-hero\"><h1 class=\"ds-hero-title\">Back stronger local economies<br><em>with Bitcoin</em></h1><p class=\"ds-hero-lead\">Every satoshi donated stays in the local economy through circular micro-grants.</p></div>",
-      "css": ".ds-hero{background:#26483D;color:#fff;padding:40px}.ds-hero-title{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-0.015em;margin:0 0 16px}.ds-hero-lead{font-family:'Figtree',sans-serif;font-size:20px;font-weight:500;line-height:1.5;margin:0}"
+      "css": ".ds-hero{background:#223829;color:#fff;padding:40px}.ds-hero-title{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-0.015em;margin:0 0 16px}.ds-hero-lead{font-family:'Figtree',sans-serif;font-size:20px;font-weight:500;line-height:1.5;margin:0}"
     }
   ],
   "narrative": {
