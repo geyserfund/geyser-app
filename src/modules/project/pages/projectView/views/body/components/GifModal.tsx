@@ -1,6 +1,6 @@
-import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Box,
+  Icon,
   Input,
   InputGroup,
   InputLeftElement,
@@ -16,6 +16,7 @@ import { IGif } from '@giphy/js-types'
 import { Grid } from '@giphy/react-components'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiMagnifyingGlass, PiX } from 'react-icons/pi'
 
 import { VITE_APP_GIPHY_API_KEY } from '../../../../../../../shared/constants'
 import { useDebounce } from '../../../../../../../shared/hooks'
@@ -54,7 +55,7 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
         <ModalBody p={2}>
           <InputGroup mb={2}>
             <InputLeftElement>
-              <SearchIcon />
+              <Icon as={PiMagnifyingGlass} />
             </InputLeftElement>
             <Input
               placeholder={t('Search')}
@@ -65,7 +66,7 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
             />
             <InputRightElement mb={2}>
               <ModalCloseButton>
-                <CloseIcon mb={2} />
+                <Icon as={PiX} mb={2} />
               </ModalCloseButton>
             </InputRightElement>
           </InputGroup>

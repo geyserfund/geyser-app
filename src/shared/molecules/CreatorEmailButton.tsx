@@ -1,6 +1,6 @@
-import { CopyIcon } from '@chakra-ui/icons'
-import { Box, Button, ButtonProps } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, Icon } from '@chakra-ui/react'
 import { useState } from 'react'
+import { PiCopy } from 'react-icons/pi'
 
 import { copyTextToClipboard } from '../../utils'
 
@@ -24,7 +24,7 @@ export const CreatorEmailButton = ({ email, ...props }: { email: string } & Butt
       onClick={handleCopyEmail}
       variant="outline"
       colorScheme="primary1"
-      rightIcon={<CopyIcon />}
+      rightIcon={<Icon as={PiCopy} />}
       {...props}
     >
       <Box as="span" flexGrow={1} textAlign="left">

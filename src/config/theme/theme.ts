@@ -37,6 +37,24 @@ export const theme = {
   },
   components: {
     Button: buttonTheme,
+    // Loading placeholders: warm neutral shimmer instead of Chakra's cool grey, in both colour modes
+    Skeleton: {
+      baseStyle: {
+        '--skeleton-start-color': 'colors.neutralAlpha.3',
+        '--skeleton-end-color': 'colors.neutralAlpha.5',
+        _dark: {
+          '--skeleton-start-color': 'colors.neutralAlpha.3',
+          '--skeleton-end-color': 'colors.neutralAlpha.5',
+        },
+        borderRadius: 'innerCard',
+      },
+    },
+    // Bare spinners are forest; pass color="currentColor" when one sits on a filled surface
+    Spinner: {
+      baseStyle: {
+        color: 'primary1.11',
+      },
+    },
     Heading: {
       baseStyle: {
         color: 'utils.text',
@@ -103,7 +121,7 @@ export const theme = {
         primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `utils.blackContrast`,
+              color: colorScheme === 'primary1' ? 'utils.primaryContrast' : 'utils.blackContrast',
               backgroundColor: `${colorScheme}.9`,
               borderColor: `${colorScheme}.9`,
             },
@@ -127,7 +145,7 @@ export const theme = {
             _checked: {
               borderColor: `${colorScheme}.9`,
               backgroundColor: `${colorScheme}.9`,
-              color: `utils.blackContrast`,
+              color: colorScheme === 'primary1' ? 'utils.primaryContrast' : 'utils.blackContrast',
               _before: {
                 width: '50%',
                 height: '50%',
@@ -173,7 +191,7 @@ export const theme = {
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({
       body: {
-        bg: theme.colors.neutral[50],
+        bg: theme.colors.utils.pageBg,
         color: theme.colors.utils.text,
       },
     }),

@@ -74,7 +74,7 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
       <H3 size="xl" medium>
         {t('Funding by method')}
       </H3>
-      <CardLayout padding={{ base: 3, lg: 6 }} w="full" {...props}>
+      <CardLayout boxShadow="none" padding={{ base: 3, lg: 6 }} w="full" {...props}>
         <FundingMethodsPieChart data={methodSum} loading={loading} />
       </CardLayout>
     </VStack>

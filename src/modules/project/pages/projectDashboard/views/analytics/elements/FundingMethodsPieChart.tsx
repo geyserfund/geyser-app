@@ -52,7 +52,10 @@ export const FundingMethodsPieChart = ({ data, loading }: { data: MethodSumType[
               <Cell key={`cell-${index}`} fill={getColorByIndex(index)} min={2} />
             ))}
           </Pie>
-          <Legend iconType="circle" />
+          <Legend
+            iconType="circle"
+            formatter={(value: string) => <span style={{ color: colors.neutral1[11] }}>{value}</span>}
+          />
           <Tooltip
             cursor={{ fill: 'transparent' }}
             contentStyle={{
@@ -60,7 +63,8 @@ export const FundingMethodsPieChart = ({ data, loading }: { data: MethodSumType[
               borderColor: colors.neutral1[6],
               borderRadius: '8px',
             }}
-            itemStyle={{ color: colors.neutral[900] }}
+            labelStyle={{ color: colors.neutral1[11] }}
+            itemStyle={{ color: colors.utils.text }}
             formatter={(value: number) => `${commaFormatted(value)} sats`}
           />
         </PieChart>

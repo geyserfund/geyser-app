@@ -29,7 +29,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     },
     '&.primary': {
       '& .chakra-button__icon': {
-        color: colors.neutral[1000],
+        color: colors.utils.primarySolidContrast,
       },
     },
   },
@@ -47,16 +47,16 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
     ref,
   ) => {
     const classes = useStyles()
-    const bodyColor = color || primary ? lightModeColors.neutral[1000] : 'neutral.1000'
+    const bodyColor = primary ? 'utils.primarySolidContrast' : color ? lightModeColors.neutral[1000] : 'neutral.1000'
     return (
       <Button
         ref={ref}
         className={classNames(className, { [classes.container]: standard }, { primary })}
         variant={variant || 'solid'}
         minWidth={standard ? '200px' : ''}
-        backgroundColor={backgroundColor ? backgroundColor : primary ? 'primary.400' : 'neutral.0'}
+        backgroundColor={backgroundColor ? backgroundColor : primary ? 'utils.primarySolid' : 'neutral.0'}
         borderRadius={circular ? '50px' : standard ? '8px' : undefined}
-        _hover={_hover ? _hover : primary ? { bg: 'primary.600' } : undefined}
+        _hover={_hover ? _hover : primary ? { bg: 'utils.primarySolidHover' } : undefined}
         fontSize="14px"
         fontWeight="medium"
         color={bodyColor}

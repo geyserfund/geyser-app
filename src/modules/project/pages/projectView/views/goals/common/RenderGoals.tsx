@@ -269,7 +269,15 @@ const PresentationalGoalItem = ({ goal }: { goal: ProjectGoalFragment }) => {
 
 export const RenderGoalsSkeleton = () => {
   return (
-    <CardLayout dense noborder flexDirection="column" width="100%" alignItems="flex-start" spacing={6}>
+    <CardLayout
+      dense
+      noborder
+      backgroundColor="transparent"
+      flexDirection="column"
+      width="100%"
+      alignItems="flex-start"
+      spacing={6}
+    >
       <VStack alignItems="flex-start" spacing={4} width="100%">
         {[1, 2].map((i) => {
           return (

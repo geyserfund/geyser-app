@@ -23,10 +23,10 @@ export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackP
     >
       <VStack
         paddingX={standardPadding}
-        paddingBottom={4}
+        paddingBottom={2}
         maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }}
         width="100%"
-        backgroundColor={'utils.pbg'}
+        backgroundColor="utils.pageBg"
         justifySelf={'center'}
         spacing={4}
       >

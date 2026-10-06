@@ -11,7 +11,7 @@ export const GuardiansLayout = () => {
   useGuardianProjectRewards()
 
   return (
-    <Box w="full" bg="utils.pbg">
+    <Box w="full" bg="utils.pageBg">
       <Outlet />
     </Box>
   )

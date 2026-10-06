@@ -14,14 +14,14 @@ export const WalletLimitComponent = ({ limit }: { limit: Limits }) => {
     <FeedbackCard title={t('Wallet limits')} alignItems={'start'}>
       <VStack alignItems={'start'}>
         <HStack>
-          <Body1 color="neutral.600">{t('Minimum Receivable Limit')}:</Body1>
-          <Body1 xBold color="neutral.900">
+          <Body1 color="neutral1.11">{t('Minimum Receivable Limit')}:</Body1>
+          <Body1 xBold color="utils.text">
             {commaFormatted(limit.min || 0)} Sats
           </Body1>
         </HStack>
         <HStack>
-          <Body1 color="neutral.600">{t('Maximum Receivable Limit')}:</Body1>
-          <Body1 xBold color="neutral.900">
+          <Body1 color="neutral1.11">{t('Maximum Receivable Limit')}:</Body1>
+          <Body1 xBold color="utils.text">
             {commaFormatted(limit.max || 0)} Sats
           </Body1>
         </HStack>

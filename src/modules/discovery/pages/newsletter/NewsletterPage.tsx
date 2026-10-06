@@ -1,4 +1,4 @@
-import { Box, useColorModeValue } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { Head } from '@/config/Head'
@@ -13,7 +13,7 @@ const NEWSLETTER_DESCRIPTION = t(
 
 /** Focused newsletter signup page for Circular Grant and Field Partner updates. */
 export const NewsletterPage = () => {
-  const pageBg = useColorModeValue('white', 'utils.pbg')
+  const pageBg = 'utils.pageBg'
 
   return (
     <>

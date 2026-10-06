@@ -11,12 +11,11 @@ import {
   Icon,
   Link as ChakraLink,
   SimpleGrid,
-  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { PiArrowRight, PiCaretRightBold, PiChartLineUp } from 'react-icons/pi'
+import { PiArrowRight, PiChartLineUp } from 'react-icons/pi'
 import { Link as RouterLink, useSearchParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
@@ -24,8 +23,9 @@ import { CircularGrantProjects } from '@/modules/discovery/pages/landing/views/m
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { PhotoHero } from '@/shared/components/layouts/PhotoHero.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
+import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
@@ -39,13 +39,9 @@ type CircularGrantsColors = {
   ink: string
   muted: string
   line: string
-  cream: string
-  pale: string
-  gold: string
-  amber: string
   surfaceBg: string
-  darkSurfaceBg: string
-  onAmberText: string
+  accentBg: string
+  onAccentText: string
   eyebrow: string
 }
 
@@ -143,34 +139,26 @@ export const CircularGrantsPage = () => {
   const [searchParams] = useSearchParams()
   const { openDonateModal, donateModalElement } = useImpactFundsDonateModal()
   const onDonateClick = () => openDonateModal({ defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID] })
-  const pageBg = useColorModeValue('white', 'utils.pbg')
-  const ink = useColorModeValue('#17120C', 'neutral1.12')
-  const muted = useColorModeValue('#5F6268', 'neutralAlpha.11')
-  const line = useColorModeValue('#E9E2D4', 'neutral1.6')
-  const cream = useColorModeValue('#FFF8EA', 'neutral1.2')
-  const pale = useColorModeValue('#F8F9F8', 'neutral1.3')
-  const gold = useColorModeValue('#F6CF4A', 'amber.9')
-  const amber = useColorModeValue('#F09A34', 'amber.9')
-  const surfaceBg = useColorModeValue('white', 'neutral1.3')
-  const darkSurfaceBg = useColorModeValue('#17120C', 'neutral1.1')
-  const onAmberText = useColorModeValue('#17120C', '#17120C')
-  const eyebrow = useColorModeValue('primary1.11', 'primary1.9')
+  const pageBg = 'utils.pageBg'
+  const ink = 'utils.text'
+  const muted = 'neutral1.11'
+  const line = 'neutral1.6'
+  const surfaceBg = 'utils.pbg'
+  const accentBg = 'primary1.9'
+  const onAccentText = 'utils.primaryContrast'
+  const eyebrow = 'neutral1.11'
   const colors = useMemo<CircularGrantsColors>(
     () => ({
       pageBg,
       ink,
       muted,
       line,
-      cream,
-      pale,
-      gold,
-      amber,
       surfaceBg,
-      darkSurfaceBg,
-      onAmberText,
+      accentBg,
+      onAccentText,
       eyebrow,
     }),
-    [amber, cream, darkSurfaceBg, eyebrow, gold, ink, line, muted, onAmberText, pageBg, pale, surfaceBg],
+    [accentBg, eyebrow, ink, line, muted, onAccentText, pageBg, surfaceBg],
   )
 
   return (
@@ -188,10 +176,7 @@ export const CircularGrantsPage = () => {
 
       <Box w="full" bg={colors.pageBg} color={colors.ink}>
         <VStack align="stretch" spacing={0}>
-          <PageSection py={{ base: 4, lg: 5 }}>
-            <Breadcrumb colors={colors} />
-          </PageSection>
-          <HeroSection colors={colors} onDonateClick={onDonateClick} />
+          <HeroSection />
           <CircularGrantProjectsSection region={searchParams.get('region')} />
           <OverviewSection colors={colors} />
           <HowItWorksSection colors={colors} />
@@ -234,7 +219,7 @@ const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
           {circularGrantInfoPills.map((pill) => (
             <Box
               key={pill}
-              bg={colors.surfaceBg}
+              bg={colors.pageBg}
               borderRadius={radius.inner}
               borderWidth="1px"
               borderColor={colors.line}
@@ -256,7 +241,7 @@ const OverviewSection = ({ colors }: { colors: CircularGrantsColors }) => (
           {modelIssues.map((issue) => (
             <Box
               key={issue}
-              bg={colors.surfaceBg}
+              bg={colors.pageBg}
               borderRadius={radius.inner}
               borderWidth="1px"
               borderColor={colors.line}
@@ -322,11 +307,9 @@ const CaseStudySection = ({ colors }: { colors: CircularGrantsColors }) => (
 
 const TransparencySection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
-    <CardLayout bg={colors.pale} borderColor={colors.line} borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
+    <CardLayout borderColor={colors.line} borderRadius={radius.section} p={{ base: 6, lg: 8 }}>
       <Flex direction={{ base: 'column', sm: 'row' }} gap={4} align="flex-start">
-        <Flex align="center" justify="center" boxSize={12} borderRadius="full" bg="primary1.3" flexShrink={0}>
-          <Icon as={PiChartLineUp} boxSize={6} color="primary1.11" aria-hidden />
-        </Flex>
+        <Icon as={PiChartLineUp} boxSize={8} color="primary1.11" flexShrink={0} mt={1} aria-hidden />
         <VStack align="flex-start" spacing={4} maxW="820px">
           <H2 size={{ base: '2xl', lg: '3xl' }} bold>
             {t('05 Transparency: where the pilot stands today')}
@@ -359,20 +342,18 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
         align="center"
         justify="space-between"
         gap={{ base: 6, lg: 8 }}
-        bg={colors.amber}
+        bg={colors.surfaceBg}
         borderRadius={radius.card}
         borderWidth="1px"
         borderColor={colors.line}
         p={{ base: 6, lg: 8 }}
       >
         <VStack align="flex-start" spacing={{ base: 4, lg: 5 }} maxW="760px">
-          <Eyebrow colors={colors} color={colors.onAmberText}>
-            06 Donate
-          </Eyebrow>
-          <H2 size={{ base: '2xl', lg: '3xl' }} bold color={colors.onAmberText}>
+          <Eyebrow colors={colors}>06 Donate</Eyebrow>
+          <H2 size={{ base: '2xl', lg: '3xl' }} bold>
             {t('Help grow the shared capital pool')}
           </H2>
-          <Body size={{ base: 'md', lg: 'lg' }} lineHeight="1.6" color={colors.onAmberText}>
+          <Body size={{ base: 'md', lg: 'lg' }} lineHeight="1.6" color={colors.muted}>
             {t(
               'We are allocating 3M sats per quarter to circular economy hubs. Donate to the Geyser Impact Fund to help expand this pilot and its reach.',
             )}
@@ -381,22 +362,31 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
         <VStack
           align="stretch"
           spacing={{ base: 5, lg: 6 }}
-          bg={colors.darkSurfaceBg}
+          bg={colors.accentBg}
           borderRadius={radius.card}
-          borderWidth="1px"
-          borderColor={colors.line}
           p={{ base: 6, lg: 8 }}
           w={{ base: 'full', lg: '370px' }}
           justify="center"
           flexShrink={0}
         >
-          <Eyebrow colors={colors} color="whiteAlpha.800">
+          <Eyebrow colors={colors} color={colors.onAccentText}>
             {t('GEYSER Quarterly pool')}
           </Eyebrow>
-          <H3 size={{ base: '48px', lg: '56px' }} lineHeight={{ base: '52px', lg: '60px' }} bold color="white">
+          <H3
+            size={{ base: '48px', lg: '56px' }}
+            lineHeight={{ base: '52px', lg: '60px' }}
+            bold
+            color={colors.onAccentText}
+          >
             {t('3M sats')}
           </H3>
-          <Button size="lg" colorScheme="primary1" onClick={onDonateClick}>
+          <Button
+            size="lg"
+            bg={colors.surfaceBg}
+            color={colors.ink}
+            onClick={onDonateClick}
+            _hover={{ bg: colors.surfaceBg, opacity: 0.92 }}
+          >
             {t('Donate')}
           </Button>
         </VStack>
@@ -407,17 +397,15 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
         align={{ base: 'stretch', lg: 'center' }}
         justify="space-between"
         gap={6}
-        bg={colors.pale}
+        bg={colors.surfaceBg}
         borderWidth="1px"
         borderColor={colors.line}
         borderRadius={radius.card}
         p={{ base: 6, lg: 8 }}
       >
         <VStack align="flex-start" spacing={2} maxW="710px">
-          <Eyebrow colors={colors} color={colors.muted}>
-            07 Play a part
-          </Eyebrow>
-          <H2 size={{ base: '2xl', lg: '3xl' }} bold color={colors.ink}>
+          <Eyebrow colors={colors}>07 Play a part</Eyebrow>
+          <H2 size={{ base: '2xl', lg: '3xl' }} bold>
             {t('Launch your own Circular Grant pilot in your local community')}
           </H2>
           <Body size={{ base: 'md', lg: 'lg' }} lineHeight="1.6" color={colors.muted}>
@@ -446,7 +434,7 @@ const ActionSections = ({ colors, onDonateClick }: { colors: CircularGrantsColor
 const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
   <PageSection>
     <VStack align="stretch" spacing={{ base: 6, lg: 8 }} w="full">
-      <H2 size={{ base: '2xl', lg: '3xl' }} bold color={colors.ink} textAlign="center" w="full">
+      <H2 size={{ base: '2xl', lg: '3xl' }} bold textAlign="center" w="full">
         {t('FAQ')}
       </H2>
       <Accordion
@@ -472,7 +460,7 @@ const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
               py={3}
               borderRadius={radius.inner}
               transition="background-color 160ms ease"
-              _hover={{ bg: colors.pale }}
+              _hover={{ bg: 'neutralAlpha.3' }}
             >
               <Box flex="1" textAlign="left">
                 <Body bold sx={{ textWrap: 'pretty' }}>
@@ -522,105 +510,21 @@ const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
   </PageSection>
 )
 
-const Breadcrumb = ({ colors }: { colors: CircularGrantsColors }) => (
-  <HStack spacing={2} color={colors.muted}>
-    <Body
-      as={RouterLink}
-      to={getPath('discoveryImpactFunds')}
-      size="xs"
-      bold
-      letterSpacing="0.18em"
-      textTransform="uppercase"
-      _hover={{ color: colors.ink }}
-    >
-      {t('Impact Fund')}
-    </Body>
-    <PiCaretRightBold size={11} />
-    <Body
-      as={RouterLink}
-      to={getPath('discoveryCircularGrants')}
-      size="xs"
-      bold
-      letterSpacing="0.18em"
-      textTransform="uppercase"
-      color={colors.ink}
-      aria-current="page"
-    >
-      {t('Circular Grants')}
-    </Body>
-  </HStack>
-)
-
-const HeroSection = ({ colors, onDonateClick }: { colors: CircularGrantsColors; onDonateClick: () => void }) => (
-  <Box
+const HeroSection = () => (
+  <PhotoHero
     w="100vw"
     maxW="100vw"
-    position="relative"
     left="50%"
     right="50%"
     ml="-50vw"
     mr="-50vw"
-    overflow="hidden"
-    minH={dimensions.impactLendingHero.minHeight}
-    bg={colors.darkSurfaceBg}
-  >
-    <Box
-      position="absolute"
-      inset={0}
-      backgroundImage={`url('${CIRCULAR_GRANTS_HERO_IMAGE_URL}')`}
-      backgroundPosition={{ base: 'center', lg: '64% 42%' }}
-      backgroundSize="cover"
-      backgroundRepeat="no-repeat"
-    />
-    <Box
-      position="absolute"
-      inset={0}
-      bg="linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.34), rgba(0,0,0,0.08))"
-    />
-    <Flex
-      position="relative"
-      w="full"
-      maxW={`${dimensions.maxWidth + 24 * 2}px`}
-      minH={dimensions.impactLendingHero.minHeight}
-      mx="auto"
-      px={standardPadding}
-      py={{ base: 10, lg: 12 }}
-      align="center"
-    >
-      <VStack align="flex-start" spacing="22px" maxW={{ base: 'full', lg: '760px' }}>
-        <H1 size={{ base: '3xl', md: '4xl', lg: '48px' }} lineHeight={{ base: '1.12', lg: '54px' }} bold color="white">
-          {t('Reusable capital for trusted local economies')}
-        </H1>
-        <Body size={{ base: 'md', lg: 'lg' }} color="whiteAlpha.900" lineHeight={{ base: '26px', lg: '28px' }}>
-          {t(
-            'Circular grants bring debt-free circular grant capital to local entrepreneurs through trusted field partners and reusable capital return loops.',
-          )}
-        </Body>
-        <HStack spacing={3} flexWrap="wrap" pt="8px">
-          <Button
-            as="a"
-            href={ImpactFundsFieldPartnerApplicationUrl}
-            target="_blank"
-            rel="noreferrer"
-            size="lg"
-            colorScheme="primary1"
-            rightIcon={<Icon as={PiArrowRight} />}
-          >
-            {t('Apply as partner')}
-          </Button>
-          <Button
-            size="lg"
-            bg={colors.surfaceBg}
-            color={colors.ink}
-            onClick={onDonateClick}
-            _hover={{ bg: colors.surfaceBg }}
-          >
-            {t('Donate')}
-          </Button>
-        </HStack>
-      </VStack>
-    </Flex>
-  </Box>
+    imageUrl={CIRCULAR_GRANTS_HERO_IMAGE_URL}
+    imagePosition={{ base: '70% center', lg: 'left 42%' }}
+    title={t('Reusable capital for trusted local economies')}
+    lead={t(
+      'Circular grants bring debt-free circular grant capital to local entrepreneurs through trusted field partners and reusable capital return loops.',
+    )}
+  />
 )
 
 const PageSection = ({
@@ -646,7 +550,7 @@ const Eyebrow = ({
   colors: CircularGrantsColors
   color?: string
 }) => (
-  <Body size="xs" bold color={color ?? colors.eyebrow} letterSpacing="0.18em" textTransform="uppercase">
+  <Body size="sm" medium color={color ?? colors.eyebrow}>
     {children}
   </Body>
 )
@@ -667,7 +571,7 @@ const InfoCard = ({
   <VStack
     align="stretch"
     spacing={4}
-    bg={colors.pale}
+    bg={colors.surfaceBg}
     borderRadius={radius.section}
     borderWidth="1px"
     borderColor={colors.line}
@@ -682,8 +586,8 @@ const InfoCard = ({
 )
 
 const FlowStep = ({ colors, step }: { colors: CircularGrantsColors; step: FlowStepItem }) => {
-  const bg = step.isDark ? colors.darkSurfaceBg : step.isGold ? colors.gold : colors.surfaceBg
-  const color = step.isDark ? 'white' : step.isGold ? colors.onAmberText : colors.ink
+  const bg = step.isDark ? colors.accentBg : colors.surfaceBg
+  const color = step.isDark ? colors.onAccentText : colors.ink
 
   return (
     <VStack
@@ -697,18 +601,13 @@ const FlowStep = ({ colors, step }: { colors: CircularGrantsColors; step: FlowSt
       p={5}
       minH="170px"
     >
-      <Body size="xs" bold color={step.isDark ? colors.gold : step.isGold ? colors.onAmberText : colors.eyebrow}>
+      <Body size="xs" bold color={step.isDark ? colors.onAccentText : 'primary1.11'}>
         {step.number}
       </Body>
       <H3 size={{ base: 'md', lg: 'lg' }} bold color="inherit">
         {t(step.title)}
       </H3>
-      <Body
-        size="sm"
-        color={step.isDark ? 'whiteAlpha.800' : step.isGold ? colors.onAmberText : colors.muted}
-        lineHeight="23px"
-        opacity={step.isGold ? 0.85 : undefined}
-      >
+      <Body size="sm" color={step.isDark ? colors.onAccentText : colors.muted} lineHeight="23px">
         {t(step.description)}
       </Body>
     </VStack>
@@ -716,32 +615,23 @@ const FlowStep = ({ colors, step }: { colors: CircularGrantsColors; step: FlowSt
 }
 
 const CaseStudyCard = ({ colors }: { colors: CircularGrantsColors }) => (
-  <Box
-    bg={colors.darkSurfaceBg}
-    color="white"
-    borderRadius={radius.section}
-    borderWidth="1px"
-    borderColor={colors.line}
-    p={5}
-  >
+  <Box bg={colors.accentBg} color={colors.onAccentText} borderRadius={radius.section} p={5}>
     <VStack align="stretch" spacing={4}>
-      <Eyebrow colors={colors} color={colors.gold}>
+      <Eyebrow colors={colors} color={colors.onAccentText}>
         {t('Pilot snapshot')}
       </Eyebrow>
-      <H3 size={{ base: '28px', lg: '34px' }} lineHeight={{ base: '34px', lg: '40px' }} bold color="white">
+      <H3
+        size={{ base: '28px', lg: '34px' }}
+        lineHeight={{ base: '34px', lg: '40px' }}
+        bold
+        color={colors.onAccentText}
+      >
         {t('Afribit Kibera circular grant cohort')}
       </H3>
       <Box overflow="hidden" borderRadius={radius.card}>
         <VideoPlayer url={AFRIBIT_PILOT_SNAPSHOT_VIDEO_URL} />
       </Box>
-      <Box
-        bg={colors.cream}
-        color={colors.ink}
-        borderRadius={radius.card}
-        borderWidth="1px"
-        borderColor={colors.line}
-        p={5}
-      >
+      <Box bg={colors.surfaceBg} color={colors.ink} borderRadius={radius.card} p={5}>
         <Body bold lineHeight="25px">
           {t(
             'Local trust, participant validation, and monthly follow-up keep capital accountable without formal debt enforcement.',

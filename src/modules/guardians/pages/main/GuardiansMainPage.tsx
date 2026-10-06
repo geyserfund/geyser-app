@@ -1,16 +1,16 @@
-import { Box, Button, HStack, Icon, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
+import type { StackProps } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { PiArrowRight } from 'react-icons/pi'
 import type { ReactNode } from 'react'
+import { PiArrowRight } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { Head } from '@/config/Head'
 import { Body, H2 } from '@/shared/components/typography'
-import type { StackProps } from '@chakra-ui/react'
 import type { BodyProps } from '@/shared/components/typography/Body'
-import { H3 } from '@/shared/components/typography/Heading'
 import type { HeaderProps } from '@/shared/components/typography/Heading'
+import { H3 } from '@/shared/components/typography/Heading'
 import {
   getPath,
   GuardiansSeoImageUrl,
@@ -92,69 +92,69 @@ export const GuardiansMainPage = () => {
                 pb={{ base: 4, md: 5, xl: 6 }}
                 minH={{ base: 'auto', xl: '440px' }}
               >
-                  <Body
-                    size="sm"
-                    color="whiteAlpha.800"
-                    textTransform="uppercase"
-                    letterSpacing="0.12em"
+                <Body
+                  size="sm"
+                  color="whiteAlpha.800"
+                  textTransform="uppercase"
+                  letterSpacing="0.12em"
+                  fontWeight={700}
+                >
+                  {t('Geyser Guardians')}
+                </Body>
+
+                <H2
+                  fontFamily={fonts.cormorant}
+                  fontSize={{ base: '44px', md: '60px', xl: '78px' }}
+                  lineHeight={0.92}
+                  letterSpacing="-0.02em"
+                  color="white"
+                >
+                  {t('Collect merch that funds Bitcoin adoption')}
+                </H2>
+
+                <Body size={{ base: 'md', lg: 'lg' }} color="whiteAlpha.900" w="full" lineHeight={1.65}>
+                  {t(
+                    'Limited-edition merch and collectibles made with top Bitcoin brands. 100% of proceeds go to Geyser Impact Funds to back grassroots adoption projects around the world.',
+                  )}
+                </Body>
+
+                <HStack spacing={3} flexWrap="wrap">
+                  <HeroPill>{communityLabel}</HeroPill>
+                  <HeroPill>{t('All prices include shipping')}</HeroPill>
+                  <HeroPill>{t('Badges, cards, jerseys, tees, and Bitaxe')}</HeroPill>
+                </HStack>
+
+                <HStack spacing={3} flexWrap="wrap">
+                  <Button
+                    size="lg"
+                    h={{ base: '52px', lg: '58px' }}
+                    px={{ base: 6, lg: 7 }}
+                    bg="white"
+                    color="gray.900"
                     fontWeight={700}
+                    rightIcon={<Icon as={PiArrowRight} />}
+                    _hover={{ bg: 'whiteAlpha.900', transform: 'translateY(-1px)' }}
+                    transition="all 0.2s ease"
+                    onClick={() => scrollToElement('guardians-merch')}
                   >
-                    {t('Geyser Guardians')}
-                  </Body>
-
-                  <H2
-                    fontFamily={fonts.cormorant}
-                    fontSize={{ base: '44px', md: '60px', xl: '78px' }}
-                    lineHeight={0.92}
-                    letterSpacing="-0.02em"
+                    {t('Browse the collection')}
+                  </Button>
+                  <Button
+                    as={RouterLink}
+                    to={getPath('impactFunds')}
+                    size="lg"
+                    h={{ base: '52px', lg: '58px' }}
+                    px={{ base: 6, lg: 7 }}
+                    bg="whiteAlpha.160"
                     color="white"
+                    border="1px solid"
+                    borderColor="whiteAlpha.300"
+                    backdropFilter="blur(18px)"
+                    _hover={{ bg: secondaryCtaHoverBg, textDecoration: 'none' }}
                   >
-                    {t('Collect merch that funds Bitcoin adoption')}
-                  </H2>
-
-                  <Body size={{ base: 'md', lg: 'lg' }} color="whiteAlpha.900" w="full" lineHeight={1.65}>
-                    {t(
-                      'Limited-edition merch and collectibles made with top Bitcoin brands. 100% of proceeds go to Geyser Impact Funds to back grassroots adoption projects around the world.',
-                    )}
-                  </Body>
-
-                  <HStack spacing={3} flexWrap="wrap">
-                    <HeroPill>{communityLabel}</HeroPill>
-                    <HeroPill>{t('All prices include shipping')}</HeroPill>
-                    <HeroPill>{t('Badges, cards, jerseys, tees, and Bitaxe')}</HeroPill>
-                  </HStack>
-
-                  <HStack spacing={3} flexWrap="wrap">
-                    <Button
-                      size="lg"
-                      h={{ base: '52px', lg: '58px' }}
-                      px={{ base: 6, lg: 7 }}
-                      bg="white"
-                      color="gray.900"
-                      fontWeight={700}
-                      rightIcon={<Icon as={PiArrowRight} />}
-                      _hover={{ bg: 'whiteAlpha.900', transform: 'translateY(-1px)' }}
-                      transition="all 0.2s ease"
-                      onClick={() => scrollToElement('guardians-merch')}
-                    >
-                      {t('Browse the collection')}
-                    </Button>
-                    <Button
-                      as={RouterLink}
-                      to={getPath('impactFunds')}
-                      size="lg"
-                      h={{ base: '52px', lg: '58px' }}
-                      px={{ base: 6, lg: 7 }}
-                      bg="whiteAlpha.160"
-                      color="white"
-                      border="1px solid"
-                      borderColor="whiteAlpha.300"
-                      backdropFilter="blur(18px)"
-                      _hover={{ bg: secondaryCtaHoverBg, textDecoration: 'none' }}
-                    >
-                      {t('Explore Impact Funds')}
-                    </Button>
-                  </HStack>
+                    {t('Explore Impact Funds')}
+                  </Button>
+                </HStack>
               </VStack>
             </Box>
 
@@ -186,7 +186,14 @@ export const GuardiansMainPage = () => {
         </Box>
 
         <Box w="full" px={standardPadding}>
-          <VStack id="guardians-merch" w="full" maxW={dimensions.guardians.textMaxWidth} mx="auto" spacing={6} align="start">
+          <VStack
+            id="guardians-merch"
+            w="full"
+            maxW={dimensions.guardians.textMaxWidth}
+            mx="auto"
+            spacing={6}
+            align="start"
+          >
             <VStack align="start" spacing={2} w="full">
               <SectionEyebrow>{t('Shop the collection')}</SectionEyebrow>
               <GuardianHeader fontSize={{ base: '30px', md: '38px', lg: '46px' }}>
@@ -216,7 +223,9 @@ export const GuardiansMainPage = () => {
                     {t('Meet the Guardians community')}
                   </GuardianHeader>
                   <GuardianBody fontSize={{ base: '16px', md: '18px', lg: '22px' }}>
-                    {t('Collectors across the ecosystem are already wearing the mission and funding the next wave of adoption.')}
+                    {t(
+                      'Collectors across the ecosystem are already wearing the mission and funding the next wave of adoption.',
+                    )}
                   </GuardianBody>
                 </VStack>
 
@@ -265,7 +274,9 @@ export const GuardiansMainPage = () => {
                 />
                 <ImpactCard
                   title={t('Tools and infrastructure')}
-                  description={t('Open-source software, hardware, and public goods that help adoption compound over time.')}
+                  description={t(
+                    'Open-source software, hardware, and public goods that help adoption compound over time.',
+                  )}
                 />
               </SimpleGrid>
             </VStack>
@@ -273,7 +284,13 @@ export const GuardiansMainPage = () => {
         </Box>
 
         <Box w="full" px={standardPadding}>
-          <SimpleGrid w="full" maxW={dimensions.guardians.textMaxWidth} mx="auto" columns={{ base: 1, xl: 2 }} spacing={6}>
+          <SimpleGrid
+            w="full"
+            maxW={dimensions.guardians.textMaxWidth}
+            mx="auto"
+            columns={{ base: 1, xl: 2 }}
+            spacing={6}
+          >
             <SectionCard>
               <VStack align="start" spacing={4} w="full">
                 <SectionEyebrow>{t('Ecosystem partners')}</SectionEyebrow>
@@ -304,14 +321,7 @@ export const GuardiansMainPage = () => {
 
 const HeroPill = ({ children }: { children: ReactNode }) => {
   return (
-    <HStack
-      px={4}
-      py={2}
-      borderRadius="full"
-      bg="whiteAlpha.160"
-      border="1px solid"
-      borderColor="whiteAlpha.200"
-    >
+    <HStack px={4} py={2} borderRadius="full" bg="whiteAlpha.160" border="1px solid" borderColor="whiteAlpha.200">
       <Body size="sm" color="whiteAlpha.900">
         {children}
       </Body>
@@ -330,11 +340,19 @@ const InfoCard = ({
   description: string
   muted?: boolean
 }) => {
-  const background = useColorModeValue(muted ? 'gray.50' : 'white', muted ? 'gray.700' : 'gray.800')
+  const background = useColorModeValue(muted ? 'utils.pageBg' : 'utils.pbg', muted ? 'gray.700' : 'gray.800')
   const borderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.120')
 
   return (
-    <VStack align="start" spacing={3} bg={background} border="1px solid" borderColor={borderColor} borderRadius="2xl" p={5}>
+    <VStack
+      align="start"
+      spacing={3}
+      bg={background}
+      border="1px solid"
+      borderColor={borderColor}
+      borderRadius="2xl"
+      p={5}
+    >
       <Body size="xs" textTransform="uppercase" letterSpacing="0.12em" fontWeight={700} color="neutral1.9">
         {eyebrow}
       </Body>
@@ -349,7 +367,7 @@ const InfoCard = ({
 }
 
 const SectionCard = ({ children, muted = false, ...props }: { children: ReactNode; muted?: boolean } & StackProps) => {
-  const background = useColorModeValue(muted ? 'gray.50' : 'white', muted ? 'gray.700' : 'gray.800')
+  const background = useColorModeValue(muted ? 'utils.pageBg' : 'utils.pbg', muted ? 'gray.700' : 'gray.800')
   const borderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.120')
 
   return (
@@ -377,7 +395,7 @@ const SectionEyebrow = ({ children }: { children: ReactNode }) => {
 }
 
 const ImpactCard = ({ title, description }: { title: string; description: string }) => {
-  const background = useColorModeValue('white', 'gray.800')
+  const background = useColorModeValue('utils.pbg', 'gray.800')
   const borderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.120')
 
   return (
@@ -404,7 +422,12 @@ const ImpactCard = ({ title, description }: { title: string; description: string
 /** Renders a large Guardians section heading with the page typography style. */
 export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
   return (
-    <H2 fontSize={{ base: '28px', md: '32px', lg: '56px', xl: '72px' }} fontWeight={600} fontFamily={fonts.cormorant} {...rest}>
+    <H2
+      fontSize={{ base: '28px', md: '32px', lg: '56px', xl: '72px' }}
+      fontWeight={600}
+      fontFamily={fonts.cormorant}
+      {...rest}
+    >
       {children}
     </H2>
   )

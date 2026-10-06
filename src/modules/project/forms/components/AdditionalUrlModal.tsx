@@ -36,14 +36,13 @@ export const AdditionalUrlModal = ({ onAdd, ...rest }: AdditionalUrlModalProps) 
   return (
     <HStack flex={1} w={{ base: 'full', md: 'unset' }}>
       <Button
-        variant="soft"
+        variant="outline"
         colorScheme="neutral1"
         h={{ base: '40px', lg: '64px' }}
-        borderRadius="12px"
-        backgroundColor="neutral1.3"
+        borderRadius="card"
         justifyContent="center"
         onClick={additionalUrlModal.onOpen}
-        rightIcon={<Icon as={PiYoutubeLogo} fontSize="20px" />}
+        rightIcon={<Icon as={PiYoutubeLogo} fontSize="20px" aria-hidden />}
         {...rest}
       >
         <Body size="lg" light>
@@ -74,7 +73,7 @@ export const AdditionalUrlModal = ({ onAdd, ...rest }: AdditionalUrlModalProps) 
         </FieldContainer>
 
         <HStack width="full">
-          <Button flex={1} variant="soft" colorScheme="neutral1" onClick={additionalUrlModal.onClose}>
+          <Button flex={1} variant="outline" colorScheme="neutral1" onClick={additionalUrlModal.onClose}>
             {t('Cancel')}
           </Button>
           <Button flex={1} variant="solid" colorScheme="primary1" isDisabled={!input} onClick={handleAddClick}>

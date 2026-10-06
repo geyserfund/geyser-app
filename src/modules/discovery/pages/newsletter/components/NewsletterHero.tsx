@@ -17,7 +17,7 @@ const NEWSLETTER_HIGHLIGHTS = [
 export const NewsletterHero = () => {
   const heroBg = useColorModeValue('neutral1.1', 'neutral1.2')
   const borderColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const inputBg = useColorModeValue('white', 'neutral1.2')
+  const inputBg = useColorModeValue('utils.pbg', 'neutral1.2')
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const bodyColor = useColorModeValue('neutral1.9', 'neutral1.11')
   const mutedColor = useColorModeValue('neutral1.8', 'neutral1.10')

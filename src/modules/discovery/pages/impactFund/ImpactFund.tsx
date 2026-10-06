@@ -61,7 +61,6 @@ export const ImpactFund = () => {
             <LiveProgressAqua
               value={PROGRESS_PERCENTAGE}
               height={40}
-              flowSpeedSec={20}
               radius={24}
               label=""
               showPercent={false}

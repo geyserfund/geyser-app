@@ -5,8 +5,8 @@ import { ComponentWithAs } from '@chakra-ui/system'
 import { t } from 'i18next'
 import { Link } from 'react-router'
 
-import { SocialLinks } from '@/modules/project/pages/projectCreation/views/start/components/SocialLinks.tsx'
 import { FAQUrl, FeedbackUrl, getPath, GeyserAboutUrl, GuideUrl } from '@/shared/constants'
+import { SocialLinks } from '@/shared/molecules/SocialLinks.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { Body } from '../components/typography/Body.tsx'
@@ -88,7 +88,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
 
       <VStack spacing={0}>
         <H2 fontStyle="italic" bold>
-          Geyser
+          Geyser Inc.
         </H2>
         <Body fontStyle="italic" medium>
           {t('Back stronger local economies with Bitcoin')}
@@ -97,7 +97,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
       <VStack>
         <SocialLinks />
         <Body fontStyle="italic" medium>
-          {t('2025 GEYSER INC.')}
+          {t('2026 GEYSER INC.')}
         </Body>
       </VStack>
     </VStack>

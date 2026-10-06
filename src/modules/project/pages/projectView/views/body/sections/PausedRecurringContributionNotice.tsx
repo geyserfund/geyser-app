@@ -80,7 +80,7 @@ export const PausedRecurringContributionNotice = () => {
           </Body>
         </VStack>
         <Button
-          colorScheme="cyan"
+          colorScheme="primary1"
           variant="solid"
           size="lg"
           alignSelf={{ base: 'stretch', md: 'center' }}

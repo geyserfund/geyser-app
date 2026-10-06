@@ -3,6 +3,8 @@ import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
+import { darkModeColors, lightModeColors } from '@/shared/styles/colors.ts'
+
 /* -------------------------------------------------------------------------- */
 /* Types                                                                       */
 /* -------------------------------------------------------------------------- */
@@ -19,7 +21,6 @@ type LiveProgressAquaProps = {
   label?: React.ReactNode
   showPercent?: boolean
   transitionMs?: number
-  flowSpeedSec?: number // stripes speed
   waveIntensity?: number // subtle displacement on bubbles
   bubbleCount?: number
   bubbleSpeed?: number
@@ -38,7 +39,6 @@ type StyleProps = {
   fillCss: string
   glowColor: string
   transitionMs: number
-  flowSpeedSec: number
   width: number | string
 }
 
@@ -108,16 +108,6 @@ const useStyles = createUseStyles({
     inset: 0,
     background: ({ fillCss }: StyleProps) => fillCss,
   },
-  flowOverlay: {
-    position: 'absolute',
-    inset: 0,
-    background:
-      'repeating-linear-gradient(115deg, rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.12) 8px, rgba(255,255,255,0.0) 8px, rgba(255,255,255,0.0) 22px)',
-    mixBlendMode: 'screen',
-    backgroundSize: '200% 100%',
-    animation: ({ flowSpeedSec }: StyleProps) => `$flow ${flowSpeedSec || 3}s linear infinite`,
-    pointerEvents: 'none',
-  },
   glow: {
     pointerEvents: 'none',
     position: 'absolute',
@@ -163,10 +153,6 @@ const useStyles = createUseStyles({
   },
 
   /* -------------------- Keyframes -------------------- */
-  '@keyframes flow': {
-    '0%': { backgroundPosition: '0% 0%' },
-    '100%': { backgroundPosition: '200% 0%' },
-  },
   '@keyframes pulse': {
     '0%, 100%': { opacity: 0.55, transform: 'scale(0.9)' },
     '50%': { opacity: 1, transform: 'scale(1.15)' },
@@ -473,7 +459,6 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
   label = 'All-or-Nothing',
   showPercent = true,
   transitionMs = 650,
-  flowSpeedSec = 2.8,
   waveIntensity = 2.2,
   bubbleCount = 36,
   bubbleSpeed = 1.0,
@@ -484,8 +469,12 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
   removeLiveDot = false,
 }) => {
   // Hooks called in fixed order (no conditionals)
-  const trackDefault = useColorModeValue('#EDF2F7', '#2D3748')
-  const liveLabelColor = useColorModeValue('#0D9488', '#81E6D9')
+  const trackDefault = useColorModeValue(lightModeColors.neutral1[4], darkModeColors.neutral1[4])
+  const liveLabelColor = useColorModeValue(lightModeColors.primary1[11], darkModeColors.primary1[11])
+  // The fill stays Deep Forest in both colour modes
+  const fillStartDefault = lightModeColors.primary1[8]
+  const fillMidDefault = lightModeColors.primary1[9]
+  const fillEndDefault = lightModeColors.primary1[10]
 
   const trackRef = useRef<HTMLDivElement>(null)
   const fillWrapRef = useRef<HTMLDivElement>(null)
@@ -497,8 +486,11 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
 
   const resolvedTrack = trackColor ?? trackDefault
   const resolvedFill =
-    fillGradient ?? `linear-gradient(90deg, ${fillColor ?? '#00E4FF'} 0%, ${fillColor ?? '#00F5D4'} 50%, #4ADE80 100%)`
-  const resolvedGlow = glowColor ?? (fillColor ? fillColor : '#00E4FF')
+    fillGradient ??
+    `linear-gradient(90deg, ${fillColor ?? fillStartDefault} 0%, ${
+      fillColor ?? fillMidDefault
+    } 50%, ${fillEndDefault} 100%)`
+  const resolvedGlow = glowColor ?? (fillColor ? fillColor : fillMidDefault)
   const percentClamped = Math.max(0, Math.min(100, value))
 
   const removeWaveCap = useMemo(() => {
@@ -537,7 +529,6 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
     fillCss: resolvedFill,
     glowColor: resolvedGlow,
     transitionMs,
-    flowSpeedSec,
     width,
   } as unknown as StyleProps)
 
@@ -593,7 +584,6 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
         {/* Filled region (clips bubbles) */}
         <Box ref={fillWrapRef} className={styles.fillWrap} style={{ filter: 'url(#lp-fluid-filter)' }}>
           <Box className={styles.barFill} />
-          <Box className={styles.flowOverlay} />
           <canvas ref={bubblesCanvasRef} className={styles.bubblesCanvas} />
 
           {/* NEW: high-contrast canvas wavecap at the right tip */}

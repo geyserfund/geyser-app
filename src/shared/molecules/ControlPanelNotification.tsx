@@ -16,11 +16,12 @@ type ControlPanelNotificationProps = {
   variant?: NotificationVariant
 }
 
-const variantStyles: Record<NotificationVariant, { bg: string; color: string }> = {
-  info: { bg: 'neutral1.2', color: 'neutral1.11' },
-  warning: { bg: 'warning.1', color: 'warning.11' },
-  success: { bg: 'success.1', color: 'success.11' },
-  error: { bg: 'error.1', color: 'error.11' },
+/** Tiles are unfilled with a hairline border; the variant shows in the border and title colour only. */
+const variantStyles: Record<NotificationVariant, { borderColor: string; titleColor: string }> = {
+  info: { borderColor: 'neutral1.6', titleColor: 'utils.text' },
+  warning: { borderColor: 'warning.6', titleColor: 'warning.11' },
+  success: { borderColor: 'success.6', titleColor: 'success.11' },
+  error: { borderColor: 'error.6', titleColor: 'error.11' },
 }
 
 /** Inline notification banner used across the control panel and other project management surfaces. */
@@ -35,11 +36,18 @@ export const ControlPanelNotification = ({
   const styles = variantStyles[variant]
 
   return (
-    <Box w="full" bg={styles.bg} borderRadius="6px" padding={3} position="relative">
+    <Box
+      w="full"
+      border="1px solid"
+      borderColor={styles.borderColor}
+      borderRadius="innerCard"
+      padding={3}
+      position="relative"
+    >
       <HStack w="full" spacing={3} alignItems="start">
         {icon}
         <VStack flex={1} spacing={2} alignItems="start">
-          <Body size="sm" bold color={styles.color}>
+          <Body size="sm" bold color={styles.titleColor}>
             {title}
           </Body>
           <Stack
@@ -49,11 +57,11 @@ export const ControlPanelNotification = ({
             w="full"
           >
             {typeof description === 'string' ? (
-              <Body size="sm" color={styles.color} flex="1">
+              <Body size="sm" color="neutral1.11" flex="1">
                 {description}
               </Body>
             ) : (
-              <Box color={styles.color} flex="1" fontSize="sm">
+              <Box color="neutral1.11" flex="1" fontSize="sm">
                 {description}
               </Box>
             )}
@@ -68,7 +76,7 @@ export const ControlPanelNotification = ({
       {onClose && (
         <IconButton
           variant="ghost"
-          colorScheme="error"
+          colorScheme="neutral1"
           position="absolute"
           right="5px"
           top="5px"

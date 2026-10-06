@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import type { ReactNode } from 'react'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { brandColors, forestLight } from '@/shared/styles/brandPalette.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import type { TimeLeft } from '@/shared/utils/project/getAonData.ts'
 
@@ -39,8 +40,8 @@ export const GoalCampaignBalanceDisplay = ({
   const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
   const fillGradient = failed
     ? 'linear-gradient(90deg, #b9e8fa 0%, #c4d2e2 25%, #d4e6ef 55%, #a1b8ca 100%)'
-    : 'linear-gradient(90deg,#00E4FF 0%,#00F5D4 45%,#4ADE80 100%)'
-  const glowColor = failed ? '#a1b8ca' : '#00E4FF'
+    : `linear-gradient(90deg, ${forestLight['8']} 0%, ${brandColors.deepForest} 100%)`
+  const glowColor = failed ? '#a1b8ca' : forestLight['8']
 
   return (
     <VStack w="full" justifyContent="space-between" minHeight="128px" spacing={4}>
@@ -51,7 +52,6 @@ export const GoalCampaignBalanceDisplay = ({
         label={label}
         fillGradient={fillGradient}
         glowColor={glowColor}
-        flowSpeedSec={15}
         waveIntensity={0.5}
         bubbleCount={Math.floor(1.2 * percentageFunded)}
         bubbleSpeed={0.2}

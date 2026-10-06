@@ -62,7 +62,7 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
         noborder
         hover
         to={getPath('project', project.name)}
-        _hover={{ backgroundColor: 'neutral1.3' }}
+        _hover={{ backgroundColor: 'neutralAlpha.3' }}
         padding="0px"
         w="full"
         overflow={'visible'}

@@ -2,8 +2,7 @@ import { Collapse, HStack, Icon, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
-import { PiQuestion } from 'react-icons/pi'
+import { PiCheckCircleFill, PiQuestion, PiXCircleFill } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
@@ -35,9 +34,9 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({
 
     switch (lightningAddress.state) {
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill color={lightModeColors.secondary.red} size="20px" />
+        return <PiXCircleFill color={lightModeColors.secondary.red} size="20px" />
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill color={lightModeColors.primary[500]} size="20px" />
+        return <PiCheckCircleFill color="var(--chakra-colors-primary1-11)" size="20px" />
       default:
         return null
     }

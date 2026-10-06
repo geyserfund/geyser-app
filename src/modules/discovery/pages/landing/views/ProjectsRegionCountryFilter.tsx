@@ -185,7 +185,7 @@ export const ProjectsRegionCountryFilter = ({ countryCode, region, onChange }: P
               )}
 
               {!regionsError && !countriesError && filteredRegions.length > 0 && filteredCountries.length > 0 ? (
-                <Divider borderColor="blackAlpha.200" />
+                <Divider borderColor="neutral1.6" />
               ) : null}
 
               {countriesError ? (

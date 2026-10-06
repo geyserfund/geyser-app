@@ -72,7 +72,7 @@ const CardItemContent = ({
   descriptionColor: string
 }) => (
   <VStack align="flex-start" spacing={2} width="100%">
-    {item.leadingIcon ? <Icon as={item.leadingIcon} boxSize={7} color="primary1.9" /> : null}
+    {item.leadingIcon ? <Icon as={item.leadingIcon} boxSize={7} color="primary1.11" /> : null}
     <Body size={isDesktop ? 'md' : 'sm'} dark={!item.disabled} color={titleColor} fontWeight={600} lineHeight={1.2}>
       {item.title}
     </Body>
@@ -104,11 +104,11 @@ export const NavDropdownMenu = ({
   menuProps,
 }: NavDropdownMenuProps) => {
   const menuBorderColor = useColorModeValue('neutral1.5', 'neutral1.6')
-  const menuBackgroundColor = useColorModeValue('white', 'neutral1.3')
-  const menuHoverColor = useColorModeValue('gray.50', 'neutral1.2')
-  const cardBackgroundColor = useColorModeValue('gray.50', 'neutral1.2')
-  const disabledColor = useColorModeValue('blackAlpha.400', 'neutral1.8')
-  const newBadgeTextColor = 'gray.900'
+  const menuBackgroundColor = useColorModeValue('utils.pbg', 'neutral1.3')
+  const menuHoverColor = useColorModeValue('utils.primarySurface', 'neutral1.2')
+  const cardBackgroundColor = useColorModeValue('utils.pageBg', 'neutral1.2')
+  const disabledColor = 'neutral1.8'
+  const newBadgeTextColor = 'primary1.11'
   const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
   const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
   const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
@@ -173,7 +173,7 @@ export const NavDropdownMenu = ({
   const getItemContent = (item: NavDropdownMenuItem) => {
     const isCta = item.emphasis === 'cta'
     const hasDescription = Boolean(item.description)
-    const titleColor = item.disabled ? disabledColor : 'black'
+    const titleColor = item.disabled ? disabledColor : 'utils.text'
     const descriptionColor = titleColor
 
     if (item.card) {

@@ -13,7 +13,7 @@ interface GrantWinnerAnnouncementProps extends CardLayoutProps {
 export const GrantWinnerAnnouncement = ({ imageUrl, linkUrl, ...rest }: GrantWinnerAnnouncementProps) => {
   const { t } = useTranslation()
   return (
-    <CardLayout backgroundColor="neutral.0" w="full" alignItems="center" spacing="20px" {...rest}>
+    <CardLayout backgroundColor="utils.pbg" w="full" alignItems="center" spacing="20px" {...rest}>
       <GrantItemTitle>{t('See the winner announcement')}</GrantItemTitle>
 
       <Image borderRadius="8px" maxWidth="350px" alt="grant-3-announcement-url" src={imageUrl} />

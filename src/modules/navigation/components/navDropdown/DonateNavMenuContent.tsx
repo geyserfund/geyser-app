@@ -1,6 +1,5 @@
-import { Box, Button, Center, HStack, Icon, Link as ChakraLink, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Link as ChakraLink, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import type { IconType } from 'react-icons'
 import { PiArrowRight, PiCaretRight } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
@@ -14,27 +13,13 @@ type DonateNavMenuContentProps = {
   onNavigate?: () => void
 }
 
-type IconTileProps = {
-  background: string
-  color: string
-  icon: IconType
-}
-
-const IconTile = ({ background, color, icon }: IconTileProps) => (
-  <Center boxSize="40px" borderRadius="12px" backgroundColor={background} flexShrink={0}>
-    <Icon as={icon} boxSize={5} color={color} />
-  </Center>
-)
-
 /** Donate mega-menu: Circular Grants, Support Geyser, and legacy crowdfunding. */
 export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavMenuContentProps) => {
   const menu = getDonateNavMenu(t)
   const mutedColor = 'neutralAlpha.11'
-  const cardBackground = useColorModeValue('gray.50', 'neutral1.2')
-  const cardHoverBackground = useColorModeValue('white', 'neutral1.3')
+  const cardBackground = useColorModeValue('utils.pageBg', 'neutral1.2')
+  const cardHoverBackground = useColorModeValue('utils.pbg', 'neutral1.3')
   const dividerColor = useColorModeValue('neutral1.5', 'neutral1.6')
-  const grantsIconBackground = useColorModeValue('primary1.3', 'primary1.4')
-  const supportIconBackground = useColorModeValue('violetAlpha.3', 'violetAlpha.4')
   const columnSpacing = compact ? 4 : 5
   const regionGridColumns = compact ? '1fr' : { base: '1fr', md: 'repeat(3, minmax(0, 1fr))' }
   const layoutColumns = compact ? '1fr' : { base: '1fr', lg: 'minmax(0, 1.2fr) 1px minmax(0, 0.95fr)' }
@@ -51,33 +36,39 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
         alignItems="stretch"
       >
         <VStack align="stretch" spacing={columnSpacing} minW={0}>
-          <VStack align="flex-start" spacing={3}>
-            <IconTile icon={menu.circularGrants.icon} background={grantsIconBackground} color="primary1.11" />
-            <VStack align="flex-start" spacing={1.5}>
+          <Box
+            display="grid"
+            gridTemplateColumns={compact ? '1fr' : '1fr auto'}
+            gridTemplateAreas={compact ? `"title" "description" "action"` : `"title title" "description action"`}
+            columnGap={3}
+            rowGap={compact ? 3 : 2}
+            alignItems="center"
+          >
+            <HStack gridArea="title" spacing={2.5} align="center" minW={0}>
+              <Icon as={menu.circularGrants.icon} boxSize={7} color="primary1.11" flexShrink={0} />
               <H3 size={compact ? 'lg' : 'xl'} bold>
                 {menu.circularGrants.title}
               </H3>
-              <Body size={compact ? 'sm' : 'md'} color={mutedColor} lineHeight={1.5}>
-                {menu.circularGrants.description}
-              </Body>
-            </VStack>
+            </HStack>
+            <Body gridArea="description" size={compact ? 'sm' : 'md'} color={mutedColor} lineHeight={1.5}>
+              {menu.circularGrants.description}
+            </Body>
             <Button
+              gridArea="action"
+              justifySelf={compact ? 'start' : 'end'}
               as={RouterLink}
               to={menu.circularGrants.ctaTo}
               onClick={onNavigate}
-              alignSelf="flex-start"
               size={compact ? 'md' : 'lg'}
               variant="solid"
-              bg="neutral1.12"
-              color="white"
+              colorScheme="primary1"
               fontWeight={600}
               borderRadius="10px"
               rightIcon={<Icon as={PiArrowRight} />}
-              _hover={{ bg: 'neutral1.11', color: 'white' }}
             >
               {menu.circularGrants.ctaLabel}
             </Button>
-          </VStack>
+          </Box>
 
           <VStack align="stretch" spacing={3} pt={2} borderTop="1px solid" borderColor={dividerColor}>
             <Body size="xs" color={mutedColor} fontWeight={600}>
@@ -107,9 +98,9 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
                     borderBottomWidth={compact ? (isLastRegion ? 0 : '1px') : { base: isLastRegion ? 0 : '1px', md: 0 }}
                     _hover={{ textDecoration: 'none', opacity: 0.75 }}
                   >
-                    <Icon as={region.icon} boxSize={7} color="primary1.10" flexShrink={0} />
+                    <Icon as={region.icon} boxSize={7} color="primary1.11" flexShrink={0} />
                     <VStack align="flex-start" spacing={0} minW={0} flex={1} overflow="hidden">
-                      <Body size="xs" fontWeight={700} color="black" lineHeight={1.2} whiteSpace="nowrap">
+                      <Body size="xs" fontWeight={700} color="utils.text" lineHeight={1.2} whiteSpace="nowrap">
                         {region.title}
                       </Body>
                       <HStack spacing={1} color={mutedColor} align="center" flexWrap="nowrap" minW={0}>
@@ -126,44 +117,45 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
           </VStack>
         </VStack>
 
-        <Box
-          height="1px"
-          backgroundColor={dividerColor}
-          display={{ base: 'block', lg: compact ? 'block' : 'none' }}
-        />
-        <Box
-          backgroundColor={dividerColor}
-          display={{ base: 'none', lg: compact ? 'none' : 'block' }}
-        />
+        <Box height="1px" backgroundColor={dividerColor} display={{ base: 'block', lg: compact ? 'block' : 'none' }} />
+        <Box backgroundColor={dividerColor} display={{ base: 'none', lg: compact ? 'none' : 'block' }} />
 
         <VStack align="stretch" spacing={columnSpacing} minW={0}>
-          <VStack align="flex-start" spacing={3}>
-            <IconTile icon={menu.supportGeyser.icon} background={supportIconBackground} color="violet.9" />
-            <VStack align="flex-start" spacing={1.5}>
+          <Box
+            display="grid"
+            gridTemplateColumns={compact ? '1fr' : '1fr auto'}
+            gridTemplateAreas={compact ? `"title" "description" "action"` : `"title title" "description action"`}
+            columnGap={3}
+            rowGap={compact ? 3 : 2}
+            alignItems="center"
+          >
+            <HStack gridArea="title" spacing={2.5} align="center" minW={0}>
+              <Icon as={menu.supportGeyser.icon} boxSize={7} color="primary1.11" flexShrink={0} />
               <H3 size={compact ? 'lg' : 'xl'} bold>
                 {menu.supportGeyser.title}
               </H3>
-              <Body size={compact ? 'sm' : 'md'} color={mutedColor} lineHeight={1.5}>
-                {menu.supportGeyser.description}
-              </Body>
-            </VStack>
+            </HStack>
+            <Body gridArea="description" size={compact ? 'sm' : 'md'} color={mutedColor} lineHeight={1.5}>
+              {menu.supportGeyser.description}
+            </Body>
             <Button
+              gridArea="action"
+              justifySelf={compact ? 'start' : 'end'}
               as={RouterLink}
               to={menu.supportGeyser.ctaTo}
               onClick={onNavigate}
-              alignSelf="flex-start"
               size={compact ? 'md' : 'lg'}
               variant="outline"
               colorScheme="neutral1"
-              bg="white"
-              color="black"
+              bg="utils.pbg"
+              color="utils.text"
               fontWeight={600}
               borderRadius="10px"
               rightIcon={<Icon as={PiArrowRight} />}
             >
               {menu.supportGeyser.ctaLabel}
             </Button>
-          </VStack>
+          </Box>
 
           <VStack align="stretch" spacing={1}>
             {menu.supportGeyser.links.map((link) => (
@@ -180,9 +172,9 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
                 borderRadius="10px"
                 _hover={{ backgroundColor: cardBackground, textDecoration: 'none' }}
               >
-                <Icon as={link.icon} boxSize={4} color="black" flexShrink={0} />
+                <Icon as={link.icon} boxSize={4} color="utils.text" flexShrink={0} />
                 <VStack align="flex-start" spacing={0.5} flex={1} minW={0}>
-                  <Body size="xs" fontWeight={600} color="black" lineHeight={1.2}>
+                  <Body size="xs" fontWeight={600} color="utils.text" lineHeight={1.2}>
                     {link.title}
                   </Body>
                   <Body size="xs" color={mutedColor} lineHeight={1.3}>
@@ -213,9 +205,9 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
         _hover={{ backgroundColor: cardHoverBackground, textDecoration: 'none' }}
       >
         <HStack align="flex-start" spacing={3} minW={0}>
-          <Icon as={menu.legacy.icon} boxSize={5} color="black" mt={0.5} flexShrink={0} />
+          <Icon as={menu.legacy.icon} boxSize={5} color="utils.text" mt={0.5} flexShrink={0} />
           <VStack align="flex-start" spacing={0.5} minW={0}>
-            <Body size="xs" fontWeight={600} color="black" lineHeight={1.3}>
+            <Body size="xs" fontWeight={600} color="utils.text" lineHeight={1.3}>
               {menu.legacy.title}
             </Body>
             <Body size="xs" color={mutedColor} lineHeight={1.3}>
@@ -223,8 +215,8 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
             </Body>
           </VStack>
         </HStack>
-        <HStack spacing={1} color="black" flexShrink={0} alignSelf={compact ? 'flex-end' : 'center'}>
-          <Body size="xs" fontWeight={600} color="black">
+        <HStack spacing={1} color="utils.text" flexShrink={0} alignSelf={compact ? 'flex-end' : 'center'}>
+          <Body size="xs" fontWeight={600} color="utils.text">
             {menu.legacy.ctaLabel}
           </Body>
           <Icon as={PiArrowRight} boxSize={3} />

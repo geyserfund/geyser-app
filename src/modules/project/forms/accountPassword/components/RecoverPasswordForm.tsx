@@ -147,19 +147,18 @@ const FundsSummaryGrid = ({ fundsSummary }: { fundsSummary: FundsSummaryType }) 
       <Box
         key={item.label}
         borderWidth="1px"
-        borderColor={item.isWarning ? 'warning.6' : 'neutral1.5'}
-        borderRadius="lg"
-        bg={item.isWarning ? 'warning.1' : 'neutral1.1'}
+        borderColor={item.isWarning ? 'warning.8' : 'neutral1.6'}
+        borderRadius="innerCard"
         p={3}
       >
         <VStack align="flex-start" spacing={1}>
-          <Body size="xs" medium color="neutral1.10">
+          <Body size="xs" medium color="neutral1.11">
             {item.label}
           </Body>
           <Body size="md" medium color="neutral1.12">
             {item.value}
           </Body>
-          <Body size="xs" color="neutral1.10">
+          <Body size="xs" color="neutral1.11">
             {item.detail}
           </Body>
         </VStack>
@@ -177,7 +176,7 @@ const ProjectImpactList = ({ projects, label }: { projects: AccountPasswordProje
         <Body size="sm" bold>
           {label}
         </Body>
-        <Body size="xs" color="neutral1.10" flexShrink={0}>
+        <Body size="xs" color="neutral1.11" flexShrink={0}>
           {t('{{count}} total', { count: projects.length })}
         </Body>
       </HStack>
@@ -187,7 +186,7 @@ const ProjectImpactList = ({ projects, label }: { projects: AccountPasswordProje
             <Body size="sm" color="neutral1.11" noOfLines={1}>
               {project.title}
             </Body>
-            <Body size="sm" color="neutral1.10" flexShrink={0}>
+            <Body size="sm" color="neutral1.11" flexShrink={0}>
               {t('{{balance}} sats', { balance: formatSatsBigInt(toSatsBigInt(project.balanceSats)) })}
             </Body>
           </HStack>
@@ -220,19 +219,19 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
         <VStack w="full" alignItems="stretch" gap={4}>
           <VStack align="stretch" spacing={1}>
             <Body medium>{t('Current password impact')}</Body>
-            <Body size="sm" color="neutral1.10">
+            <Body size="sm" color="neutral1.11">
               {t('Review the funds and project wallets that may depend on your existing seed before continuing.')}
             </Body>
           </VStack>
 
           {loading && (
-            <Box borderWidth="1px" borderColor="neutral1.5" borderRadius="lg" bg="neutral1.1" p={4}>
+            <Box borderWidth="1px" borderColor="neutral1.6" borderRadius="innerCard" p={4}>
               <Body size="sm">{t('Checking current unclaimed and pledged amounts...')}</Body>
             </Box>
           )}
 
           {!loading && error && (
-            <Box borderWidth="1px" borderColor="warning.6" borderRadius="lg" bg="warning.1" p={4}>
+            <Box borderWidth="1px" borderColor="warning.8" borderRadius="innerCard" p={4}>
               <VStack align="stretch" spacing={3}>
                 <Body size="sm">
                   {t(
@@ -242,7 +241,7 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
                 <Button
                   size="sm"
                   variant="outline"
-                  colorScheme="primary1"
+                  colorScheme="neutral1"
                   alignSelf="flex-start"
                   onClick={() => refetch()}
                 >
@@ -273,13 +272,13 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
           gap={4}
           alignItems="stretch"
           borderWidth="1px"
-          borderColor="neutral1.5"
-          borderRadius="lg"
+          borderColor="neutral1.6"
+          borderRadius="innerCard"
           p={4}
         >
           <VStack align="stretch" spacing={1}>
             <Body medium>{t('New password')}</Body>
-            <Body size="sm" color="neutral1.10">
+            <Body size="sm" color="neutral1.11">
               {t('Use a password you can store securely. Geyser cannot recover it for you.')}
             </Body>
           </VStack>

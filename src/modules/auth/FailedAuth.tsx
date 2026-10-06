@@ -1,9 +1,8 @@
-import { CloseIcon } from '@chakra-ui/icons'
-import { Box, Text, VStack } from '@chakra-ui/react'
+import { Box, Icon, Text, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
 import { useTranslation } from 'react-i18next'
-import { BsArrowLeft } from 'react-icons/bs'
+import { PiArrowLeft, PiX } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
@@ -65,7 +64,7 @@ export const FailedAuthComponent = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <CloseIcon w={7} h={7} />
+        <Icon as={PiX} w={7} h={7} />
       </Box>
       <Body1>{t('Authentication failed.')}</Body1>
       <Body1>{t("Please clear your browser's cache & cookies and try again.")}</Body1>
@@ -75,7 +74,7 @@ export const FailedAuthComponent = () => {
         )}
       </Body1>
 
-      <ButtonComponent as={Link} to={'/'} width="full" maxWidth="200px" leftIcon={<BsArrowLeft fontSize="25px" />}>
+      <ButtonComponent as={Link} to={'/'} width="full" maxWidth="200px" leftIcon={<PiArrowLeft fontSize="25px" />}>
         {t('Go back')}
       </ButtonComponent>
     </VStack>

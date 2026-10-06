@@ -99,7 +99,7 @@ export const RewardSoldComponent = () => {
       <H3 size="xl" medium>
         {t('Products sold')}
       </H3>
-      <CardLayout padding={{ base: 3, lg: 6 }} w="full">
+      <CardLayout boxShadow="none" padding={{ base: 3, lg: 6 }} w="full">
         {rewardSoldData.length > 0 ? (
           <RewardSoldChart data={rewardSoldData} rewardList={rewardList} loading={loading} />
         ) : (

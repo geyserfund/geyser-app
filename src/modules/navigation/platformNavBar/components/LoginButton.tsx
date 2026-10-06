@@ -1,4 +1,4 @@
-import { type ButtonProps, Button, useColorModeValue } from '@chakra-ui/react'
+import { type ButtonProps, Button } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuthModal } from '../../../../modules/auth/hooks'
@@ -6,9 +6,9 @@ import { useAuthModal } from '../../../../modules/auth/hooks'
 export const LoginButton = (props: ButtonProps) => {
   const { loginOnOpen } = useAuthModal()
   const { t } = useTranslation()
-  const textColor = 'black'
-  const hoverBg = useColorModeValue('blackAlpha.50', 'neutral1.3')
-  const activeBg = useColorModeValue('blackAlpha.100', 'neutral1.2')
+  const textColor = 'utils.text'
+  const hoverBg = 'neutral1.3'
+  const activeBg = 'neutral1.4'
 
   return (
     <Button

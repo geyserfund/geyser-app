@@ -122,7 +122,7 @@ function getCardActionLabel(
 function StripeStatusIndicator({ statusType }: { statusType: StripeStatusType }) {
   if (statusType === 'enabled') {
     return (
-      <Body size="sm" medium color="primary1.9">
+      <Body size="sm" medium color="primary1.11">
         {t('Enabled')}
       </Body>
     )
@@ -130,9 +130,9 @@ function StripeStatusIndicator({ statusType }: { statusType: StripeStatusType })
 
   if (statusType === 'action_required') {
     return (
-      <HStack spacing={1} color="orange.9">
+      <HStack spacing={1} color="warning.11">
         <Icon as={PiWarningFill} boxSize={4} />
-        <Body size="sm" medium color="orange.9">
+        <Body size="sm" medium color="warning.11">
           {t('Action Required')}
         </Body>
       </HStack>
@@ -141,9 +141,9 @@ function StripeStatusIndicator({ statusType }: { statusType: StripeStatusType })
 
   if (statusType === 'processing') {
     return (
-      <HStack spacing={1} color="orange.9">
+      <HStack spacing={1} color="warning.11">
         <Icon as={PiClock} boxSize={4} />
-        <Body size="sm" medium color="orange.9">
+        <Body size="sm" medium color="warning.11">
           {t('Processing')}
         </Body>
       </HStack>
@@ -159,9 +159,9 @@ function StripeCompactStatus({ statusType }: { statusType: StripeStatusType }) {
   const isEnabled = statusType === 'enabled'
   const isProcessing = statusType === 'processing'
   const icon = isEnabled ? PiCheckCircleFill : isProcessing ? PiClock : PiWarningFill
-  const color = isEnabled ? 'primary1.9' : 'orange.9'
-  const background = isEnabled ? 'primary1.2' : 'orange.2'
-  const borderColor = isEnabled ? 'primary1.5' : 'orange.5'
+  const color = isEnabled ? 'primary1.11' : 'warning.11'
+  const background = isEnabled ? 'primary1.3' : 'warning.3'
+  const borderColor = isEnabled ? 'primary1.6' : 'warning.6'
   const label = isEnabled ? t('Enabled') : isProcessing ? t('Processing') : t('Action Required')
 
   return (
@@ -242,7 +242,7 @@ function StripeCompactContent({
           spacing={4}
           flexWrap={{ base: 'wrap', md: 'nowrap' }}
         >
-          <Body size="xs" color="secondary.red" medium flex={1} minW="220px">
+          <Body size="xs" color="error.11" medium flex={1} minW="220px">
             {disabledReasonLabel}
           </Body>
           <HStack w={{ base: '100%', md: 'auto' }} spacing={3} flexWrap={{ base: 'wrap', md: 'nowrap' }}>
@@ -289,7 +289,7 @@ function StripeCompactContent({
       ) : (
         <>
           {disabledReasonLabel && (
-            <Body size="xs" color="secondary.red" medium>
+            <Body size="xs" color="error.11" medium>
               {disabledReasonLabel}
             </Body>
           )}
@@ -397,7 +397,7 @@ function StripeMainContent({
       )}
 
       {disabledReasonLabel && (
-        <Body size="xs" color="secondary.red" medium>
+        <Body size="xs" color="error.11" medium>
           {disabledReasonLabel}
         </Body>
       )}
@@ -664,8 +664,8 @@ export const StripeConnectOnboardingCard = ({
       <VStack
         w="full"
         borderWidth="1px"
-        borderColor={isSelected ? 'primary1.8' : 'neutral1.4'}
-        borderRadius="16px"
+        borderColor={isSelected ? 'primary1.8' : 'neutral1.6'}
+        borderRadius="card"
         p={6}
         alignItems="start"
         spacing={0}

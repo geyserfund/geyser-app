@@ -1,12 +1,6 @@
 import { t } from 'i18next'
 import { PiArrowsClockwiseBold, PiCalendarBold, PiChartBarBold, PiCoinsBold, PiScalesBold } from 'react-icons/pi'
 
-export type ImpactFundFundingModelIllustration =
-  | 'direct-grants'
-  | 'matching-fund'
-  | 'all-or-nothing'
-  | 'hackathons-eduthons'
-
 export const impactFundHowItWorksItems = [
   {
     title: t('Annual Commitment'),
@@ -44,9 +38,6 @@ export const impactFundFundingModelItems = [
     eyebrow: t('Upfront allocation'),
     description: t('Full requested amount allocated after committee approval.'),
     icon: PiCoinsBold,
-    illustration: 'direct-grants' as ImpactFundFundingModelIllustration,
-    gradientFrom: 'orange.200',
-    gradientTo: 'yellow.200',
   },
   {
     title: t('Capped Matching Fund'),
@@ -55,9 +46,6 @@ export const impactFundFundingModelItems = [
       'The fund matches independently raised capital up to a predefined cap to incentivize traction and community participation.',
     ),
     icon: PiArrowsClockwiseBold,
-    illustration: 'matching-fund' as ImpactFundFundingModelIllustration,
-    gradientFrom: 'green.200',
-    gradientTo: 'teal.200',
   },
   {
     title: t('All-or-Nothing Co-Funding'),
@@ -66,9 +54,6 @@ export const impactFundFundingModelItems = [
       'Conditional commitment released only if full funding is reached within a fixed timeframe (for example, 60 days).',
     ),
     icon: PiScalesBold,
-    illustration: 'all-or-nothing' as ImpactFundFundingModelIllustration,
-    gradientFrom: 'blue.200',
-    gradientTo: 'cyan.200',
   },
   {
     title: t('Hackathons & Eduthons'),
@@ -77,9 +62,6 @@ export const impactFundFundingModelItems = [
       'We periodically organise hackathons to encourage and reward education around Bitcoin and Bitcoin development',
     ),
     icon: PiCalendarBold,
-    illustration: 'hackathons-eduthons' as ImpactFundFundingModelIllustration,
-    gradientFrom: 'pink.200',
-    gradientTo: 'orange.200',
   },
 ] as const
 

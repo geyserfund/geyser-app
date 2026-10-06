@@ -8,7 +8,8 @@ import {
   InputProps,
   InputRightElement,
 } from '@chakra-ui/react'
-import { IconType } from 'react-icons'
+import { t } from 'i18next'
+import type { IconType } from 'react-icons'
 import { PiX } from 'react-icons/pi'
 
 interface ProjectLinkInputProps extends InputGroupProps {
@@ -39,10 +40,6 @@ export const ProjectLinkInput = ({
         value={value}
         onChange={onChange}
         isInvalid={isError}
-        _focusVisible={{
-          borderColor: isError ? 'error.9' : 'neutral1.6',
-          boxShadow: !isError && `0 0 0 1px ${'neutral1.6'}`,
-        }}
         {...inputProps}
       />
       <InputRightElement>
@@ -50,7 +47,7 @@ export const ProjectLinkInput = ({
           size="md"
           variant="ghost"
           colorScheme="error"
-          aria-label="close-icon"
+          aria-label={t('Remove link')}
           color="utils.text"
           onClick={handleClose}
           icon={<Icon as={PiX} />}

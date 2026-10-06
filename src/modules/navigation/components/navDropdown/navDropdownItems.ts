@@ -1,13 +1,19 @@
 import type { TFunction } from 'i18next'
 import type { IconType } from 'react-icons'
-import { GiAfrica, GiSouthAmerica } from 'react-icons/gi'
-import { PiArrowUpRight, PiChartBar, PiGlobe, PiHandshake, PiPlant, PiStack, PiUsersThree } from 'react-icons/pi'
+import {
+  PiArrowUpRight,
+  PiChartBar,
+  PiGlobe,
+  PiGlobeHemisphereEast,
+  PiGlobeHemisphereWest,
+  PiHandshake,
+  PiPlant,
+  PiStack,
+  PiUsersThree,
+} from 'react-icons/pi'
 
 import { getPath } from '@/shared/constants/index.ts'
-import {
-  AFRICA_REGION_FILTER,
-  LATIN_AMERICA_REGION_FILTER,
-} from '@/shared/constants/platform/regionCountryCodes.ts'
+import { AFRICA_REGION_FILTER, LATIN_AMERICA_REGION_FILTER } from '@/shared/constants/platform/regionCountryCodes.ts'
 
 import type { NavDropdownMenuSection } from './NavDropdownMenu.tsx'
 
@@ -61,13 +67,13 @@ export const getDonateNavMenu = (t: TFunction): DonateNavMenuData => {
           to: getPath('discoveryCircularGrantProjects'),
         },
         {
-          icon: GiSouthAmerica,
+          icon: PiGlobeHemisphereWest,
           title: t('Latin America'),
           description: t('Grants in Latam'),
           to: `${getPath('discoveryCircularGrantProjects')}?region=${encodeURIComponent(LATIN_AMERICA_REGION_FILTER)}`,
         },
         {
-          icon: GiAfrica,
+          icon: PiGlobeHemisphereEast,
           title: t('Africa'),
           description: t('Grants in Africa'),
           to: `${getPath('discoveryCircularGrantProjects')}?region=${encodeURIComponent(AFRICA_REGION_FILTER)}`,
@@ -150,7 +156,7 @@ export const getAboutNavDropdownSections = (t: TFunction): NavDropdownMenuSectio
       items: [
         { title: t('What is Geyser?'), to: getPath('about') },
         { title: t('Field Partners'), to: `${getPath('discoveryImpactFunds')}#field-partners` },
-        { title: t('Impact'), to: `${getPath('discoveryImpactFunds')}#impact` },
+        { title: t('Impact'), to: getPath('discoveryImpactFunds') },
         { title: t('Due Diligence'), to: getPath('aboutDueDiligence') },
         { title: t('News'), to: getPath('discoveryNews'), trailingIcon: PiArrowUpRight },
       ],

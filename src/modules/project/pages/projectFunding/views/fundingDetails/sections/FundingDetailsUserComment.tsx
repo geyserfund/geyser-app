@@ -1,8 +1,8 @@
-import { CloseIcon } from '@chakra-ui/icons'
-import { Box, IconButton, Image, Tooltip, useBoolean, useDisclosure } from '@chakra-ui/react'
+import { Box, Icon, IconButton, Image, Tooltip, useBoolean, useDisclosure } from '@chakra-ui/react'
 import { IGif } from '@giphy/js-types'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiX } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { GifModal } from '@/modules/project/pages/projectView/views/body/components'
@@ -74,7 +74,7 @@ export const FundingDetailsUserComment = () => {
               </>
             )}
           </Body>
-          {isHoveringOverGIFButton && selectedGIF && <CloseIcon position="absolute" top="31px" right="29px" />}
+          {isHoveringOverGIFButton && selectedGIF && <Icon as={PiX} position="absolute" top="31px" right="29px" />}
 
           <Box zIndex="2" position="absolute" left={2} top={2}>
             {isAnonymous || !user ? (

@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowLeft, PiChartLineUp, PiClockCounterClockwise, PiTarget } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -37,13 +37,12 @@ const transparencyMetrics = [
 
 /** WIP public snapshot of Circular Grants pilot metrics and reporting goals. */
 export const CircularGrantsTransparencyPage = () => {
-  const mutedSurface = useColorModeValue('neutral1.2', 'neutral1.3')
-  const accentSurface = useColorModeValue('amber.3', 'amber.4')
-  const goalSurface = useColorModeValue('primary1.2', 'primary1.3')
-  const borderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const mutedSurface = 'neutralAlpha.3'
+  const borderColor = 'neutral1.6'
+  const secondaryText = 'neutral1.11'
 
   return (
-    <Box w="full" bg="utils.pbg" color="utils.text">
+    <Box w="full" bg="utils.pageBg" color="utils.text">
       <Head
         title={t('Circular Grants transparency')}
         description={t('A work-in-progress view of Circular Grants pilot metrics, goals, and public reporting.')}
@@ -63,16 +62,10 @@ export const CircularGrantsTransparencyPage = () => {
             {t('Back to Circular Grants')}
           </Button>
 
-          <CardLayout
-            noborder
-            bg={accentSurface}
-            borderRadius="3xl"
-            p={{ base: 6, lg: 10 }}
-            spacing={{ base: 5, lg: 6 }}
-          >
+          <CardLayout borderColor={borderColor} p={{ base: 6, lg: 10 }} spacing={{ base: 5, lg: 6 }}>
             <HStack spacing={3} align="center">
-              <Icon as={PiClockCounterClockwise} boxSize={6} color="amber.11" aria-hidden />
-              <Body size="sm" bold color="amber.11" textTransform="uppercase" letterSpacing="0.08em">
+              <Icon as={PiClockCounterClockwise} boxSize={6} color="primary1.11" aria-hidden />
+              <Body size="sm" medium color={secondaryText}>
                 {t('Work in progress')}
               </Body>
             </HStack>
@@ -88,41 +81,42 @@ export const CircularGrantsTransparencyPage = () => {
 
           <VStack align="stretch" spacing={3}>
             <HStack spacing={3} align="center">
-              <Icon as={PiChartLineUp} boxSize={6} color="primary1.9" aria-hidden />
+              <Icon as={PiChartLineUp} boxSize={6} color="primary1.11" aria-hidden />
               <H2 size={{ base: 'xl', lg: '3xl' }} bold>
                 {t('Where we are and where we are going')}
               </H2>
             </HStack>
-            <Body size={{ base: 'md', lg: 'lg' }} color="neutralAlpha.11" maxW="780px">
+            <Body size={{ base: 'md', lg: 'lg' }} color={secondaryText} maxW="780px">
               {t('These figures describe the current Afribit Kibera pilot and will be updated as reporting matures.')}
             </Body>
           </VStack>
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
             {transparencyMetrics.map((metric) => (
-              <CardLayout
-                key={metric.label}
-                bg={mutedSurface}
-                borderColor={borderColor}
-                p={{ base: 5, lg: 6 }}
-                spacing={5}
-              >
-                <Body size="sm" bold color="neutralAlpha.11" textTransform="uppercase" letterSpacing="0.08em">
+              <CardLayout key={metric.label} borderColor={borderColor} p={{ base: 5, lg: 6 }} spacing={5}>
+                <Body size="sm" medium color={secondaryText}>
                   {t(metric.label)}
                 </Body>
                 <VStack align="stretch" spacing={3}>
-                  <Box bg="utils.pbg" borderRadius="innerCard" p={4}>
-                    <Body size="xs" bold color="neutralAlpha.11" textTransform="uppercase" letterSpacing="0.08em">
+                  <Box bg={mutedSurface} borderRadius="innerCard" p={4}>
+                    <Body size="xs" medium color={secondaryText}>
                       {t('Today')}
                     </Body>
                     <H3 size={{ base: 'xl', lg: '2xl' }} bold mt={1}>
                       {t(metric.current)}
                     </H3>
                   </Box>
-                  <HStack align="flex-start" spacing={3} bg={goalSurface} borderRadius="innerCard" p={4}>
-                    <Icon as={PiTarget} boxSize={5} color="primary1.9" mt={0.5} flexShrink={0} aria-hidden />
+                  <HStack
+                    align="flex-start"
+                    spacing={3}
+                    borderWidth="1px"
+                    borderColor={borderColor}
+                    borderRadius="innerCard"
+                    p={4}
+                  >
+                    <Icon as={PiTarget} boxSize={5} color="primary1.11" mt={0.5} flexShrink={0} aria-hidden />
                     <VStack align="flex-start" spacing={1}>
-                      <Body size="xs" bold color="primary1.11" textTransform="uppercase" letterSpacing="0.08em">
+                      <Body size="xs" medium color="primary1.11">
                         {t('Next goal')}
                       </Body>
                       <Body size="md" bold>
@@ -135,11 +129,11 @@ export const CircularGrantsTransparencyPage = () => {
             ))}
           </SimpleGrid>
 
-          <CardLayout bg={mutedSurface} borderColor={borderColor} p={{ base: 5, lg: 7 }} spacing={3}>
+          <CardLayout borderColor={borderColor} p={{ base: 5, lg: 7 }} spacing={3}>
             <H2 size={{ base: 'lg', lg: '2xl' }} bold>
               {t('What we will add next')}
             </H2>
-            <Body size={{ base: 'md', lg: 'lg' }} color="neutralAlpha.11" lineHeight="1.6">
+            <Body size={{ base: 'md', lg: 'lg' }} color={secondaryText} lineHeight="1.6">
               {t(
                 'Future updates will include capital allocated, capital returned, capital redeployed, participating Field Partners, supported projects, and lessons from each local cohort.',
               )}

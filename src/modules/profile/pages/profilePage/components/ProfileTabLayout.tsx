@@ -37,7 +37,7 @@ export const ProfileTabLayout = ({ heading, headerContent, children, ...rest }: 
             )}
             {headerContent}
           </HStack>
-          <Divider border={'1px solid'} borderColor={'neutral.200'} />
+          <Divider border={'1px solid'} borderColor={'neutral1.6'} />
         </>
       )}
 

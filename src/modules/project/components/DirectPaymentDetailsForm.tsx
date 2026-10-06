@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 import * as yup from 'yup'
 
 import Loader from '@/components/ui/Loader'
@@ -149,9 +149,9 @@ export const DirectPaymentDetailsForm = ({
     lightningValidationState === 'loading' ? (
       <Loader size="md" />
     ) : lightningValidationState === 'valid' ? (
-      <BsFillCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
+      <PiCheckCircleFill fill="var(--chakra-colors-primary1-11)" size="24px" />
     ) : lightningValidationState === 'invalid' ? (
-      <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
+      <PiXCircleFill fill={lightModeColors.secondary.red} size="24px" />
     ) : null
 
   const onSubmit = async (values: DirectPaymentDetailsFormValues) => {

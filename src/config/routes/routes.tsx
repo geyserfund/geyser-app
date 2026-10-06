@@ -45,10 +45,11 @@ const MAINTENANCE_MODE = false
 
 const Badges = () => import('../../modules/general/badges/BadgesPage')
 
+/** Redirects retired creation entry URLs to the first step of the project creation flow, keeping the query string. */
 const LaunchRedirect = () => {
   const { search } = useLocation()
 
-  return <Navigate to={{ pathname: getPath('launchStart'), search }} replace />
+  return <Navigate to={{ pathname: getPath('launchFundingStrategy', 'new'), search }} replace />
 }
 
 const LegacyImpactFundRedirect = () => {
@@ -100,21 +101,22 @@ export const platformRoutes: RouteObject[] = [
       return { Component: OpsFundPage }
     },
   },
+  // The creation start page and the creator marketing page are retired (ADR 0012, ADR 0013); their URLs redirect into the creation flow.
+  {
+    path: getPath('discoveryCreator'),
+    element: <LaunchRedirect />,
+  },
+  {
+    path: `${getPath('discoveryCreator')}/*`,
+    element: <LaunchRedirect />,
+  },
   {
     path: getPath('launchStart'),
-    async lazy() {
-      const LaunchStart = await loadProjectCreationPages().then((m) => m.LaunchStart)
-      return { Component: LaunchStart }
-    },
+    element: <LaunchRedirect />,
   },
-
-  // Keep the historical rules URL as a compatibility alias for the active creation start page.
   {
     path: getPath('launchRules'),
-    async lazy() {
-      const ProjectCreateRules = await loadProjectCreationPages().then((m) => m.LaunchStart)
-      return { Component: ProjectCreateRules }
-    },
+    element: <LaunchRedirect />,
   },
 
   {
@@ -1103,13 +1105,6 @@ export const platformRoutes: RouteObject[] = [
         async lazy() {
           const NewsPage = await loadDiscoveryModule().then((m) => m.NewsPage)
           return { Component: NewsPage }
-        },
-      },
-      {
-        path: getPath('discoveryCreator'),
-        async lazy() {
-          const CreatorPage = await loadDiscoveryModule().then((m) => m.CreatorPage)
-          return { Component: CreatorPage }
         },
       },
 

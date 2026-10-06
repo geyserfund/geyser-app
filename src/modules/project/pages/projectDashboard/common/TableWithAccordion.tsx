@@ -18,8 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Fragment, useMemo } from 'react'
-import { BsCaretDownFill } from 'react-icons/bs'
-import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
+import { PiCaretDown, PiCaretDownFill, PiCaretUp } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
@@ -82,7 +81,7 @@ export function TableWithAccordion<TItem>({ items, schema, accordionContent, foo
                       ml={'10px'}
                       _hover={{}}
                       icon={
-                        <BsCaretDownFill
+                        <PiCaretDownFill
                           transform={item.sort.order === OrderByOptions.Asc ? 'rotate(180)' : undefined}
                         />
                       }

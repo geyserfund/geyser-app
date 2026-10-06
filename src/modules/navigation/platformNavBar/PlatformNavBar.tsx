@@ -11,7 +11,6 @@ import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { ID } from '@/shared/constants/components/id.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
@@ -40,7 +39,6 @@ import { ProfileNav } from './profileNav/ProfileNav'
 
 /** Renders the fixed top platform navigation shared across platform pages. */
 export const PlatformNavBar = () => {
-  const creatorNavScrollThreshold = 20
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
   const landingContentMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
@@ -70,49 +68,12 @@ export const PlatformNavBar = () => {
     }
   } = useLocation()
   const { state } = location
-  const [creatorNavScrolled, setCreatorNavScrolled] = useState(false)
 
   const {
     isOpen: isLoginAlertModalOpen,
     onOpen: onLoginAlertModalOpen,
     onClose: onLoginAlertModalClose,
   } = useDisclosure()
-
-  const creatorRoute = getPath('discoveryCreator')
-  const launchStartRoute = getPath('launchStart')
-  const isCreatorPage = location.pathname === creatorRoute || location.pathname.startsWith(`${creatorRoute}/`)
-  const isLaunchStartPage = location.pathname === launchStartRoute
-
-  useEffect(() => {
-    if (!isCreatorPage) {
-      setCreatorNavScrolled(false)
-      return
-    }
-
-    const rootElement = document.getElementById(ID.root)
-
-    const getScrollTop = () => {
-      if (!isMobileMode && rootElement) {
-        return rootElement.scrollTop
-      }
-
-      return window.scrollY || window.pageYOffset || document.scrollingElement?.scrollTop || 0
-    }
-
-    const handleScroll = () => {
-      setCreatorNavScrolled(getScrollTop() > creatorNavScrollThreshold)
-    }
-
-    handleScroll()
-
-    rootElement?.addEventListener('scroll', handleScroll)
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      rootElement?.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [creatorNavScrollThreshold, isCreatorPage, isMobileMode])
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -138,24 +99,18 @@ export const PlatformNavBar = () => {
       return <BrandLogo />
     }
 
-    return <BrandLogoFull forceLightLogo={isCreatorPage && !creatorNavScrolled} />
-  }, [creatorNavScrolled, isCreatorPage, isMobileMode, isProjectFundingRoutes])
+    return <BrandLogoFull />
+  }, [isMobileMode, isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
-    (isPlatformRoutes ||
-      isProjectRoutes ||
-      isGuardiansPage ||
-      isProfilePage ||
-      isAmbassadorProgramPage ||
-      isLaunchStartPage) &&
+    (isPlatformRoutes || isProjectRoutes || isGuardiansPage || isProfilePage || isAmbassadorProgramPage) &&
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes
   const shouldShowDesktopNav = Boolean(shouldShowPlatformNav && !isMobileMode)
   const shouldShowMobileSearch = Boolean(shouldShowPlatformNav && isMobileMode)
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const shouldUseWideNavLayout = Boolean(useBreakpointValue({ base: false, '2xl': true }, { ssr: false }))
-  const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
-  const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
+  const navBackgroundColor = 'utils.pageBg'
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
@@ -173,11 +128,9 @@ export const PlatformNavBar = () => {
         display={{ base: 'none', xl: 'flex' }}
         size={{ base: 'md', lg: 'lg' }}
         variant="ghost"
-        color="black"
+        color="utils.text"
         fontWeight={600}
         borderRadius={{ base: '8px', lg: '10px' }}
-        _hover={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.200' } : undefined}
-        _active={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.300' } : undefined}
       >
         {t('Become a Field Partner')}
       </Button>
@@ -191,12 +144,11 @@ export const PlatformNavBar = () => {
         size={{ base: 'md', lg: 'lg' }}
         variant="outline"
         colorScheme="neutral1"
-        bg="white"
-        color="black"
+        bg="utils.pbg"
+        color="utils.text"
         borderColor="neutral1.6"
         fontWeight={600}
         borderRadius={{ base: '8px', lg: '10px' }}
-        _hover={{ bg: 'neutral1.2', borderColor: 'neutral1.7' }}
       >
         {t('Support Geyser')}
       </Button>
@@ -206,16 +158,15 @@ export const PlatformNavBar = () => {
       <HStack position="relative" spacing={{ base: 1, lg: 2 }}>
         {shouldShowDesktopNav && !shouldUseWideNavLayout ? (
           <Box
-            width={isSearchExpanded ? '240px' : '48px'}
-            minWidth={isSearchExpanded ? '240px' : '48px'}
+            width={isSearchExpanded ? '240px' : '40px'}
+            minWidth={isSearchExpanded ? '240px' : '40px'}
             transition="width 0.2s ease, min-width 0.2s ease"
           >
             <LandingSearchInput
               compact={!isSearchExpanded}
-              size="lg"
+              size="md"
               width="full"
               autoFocus={isSearchExpanded}
-              transparentMode={isCreatorTransparentNav}
               onFocus={() => setIsSearchExpanded(true)}
               onBlur={() => setIsSearchExpanded(false)}
             />
@@ -225,18 +176,13 @@ export const PlatformNavBar = () => {
           <>
             {becomeFieldPartnerButton}
             {supportGeyserButton}
-            <LoginButton
-              color="black"
-              paddingX={{ base: 2, lg: 4 }}
-              _hover={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.220' } : undefined}
-              _active={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.320' } : undefined}
-            />
+            <LoginButton color="utils.text" paddingX={{ base: 2, lg: 4 }} />
           </>
         ) : (
           <>
             {becomeFieldPartnerButton}
             {supportGeyserButton}
-            {shouldShowProjectSelectMenu ? <ProjectSelectMenu transparentMode={isCreatorTransparentNav} /> : null}
+            {shouldShowProjectSelectMenu ? <ProjectSelectMenu /> : null}
           </>
         )}
         <ProfileNav />
@@ -244,7 +190,6 @@ export const PlatformNavBar = () => {
     )
   }, [
     isLoggedIn,
-    isCreatorTransparentNav,
     isManifestoPage,
     isSearchExpanded,
     isUserAProjectCreator,
@@ -264,8 +209,8 @@ export const PlatformNavBar = () => {
       transition="background-color 0.25s ease"
     >
       <VStack
-        paddingTop={{ base: 3, lg: 5 }}
-        paddingBottom={{ base: 3, lg: 5 }}
+        paddingTop={{ base: 1.5, lg: 2.5 }}
+        paddingBottom={{ base: 1.5, lg: 2.5 }}
         paddingX={{ base: 3, lg: 6, xl: 12 }}
         maxWidth={dimensions.guardians.maxWidth}
         width="100%"
@@ -286,13 +231,11 @@ export const PlatformNavBar = () => {
           >
             <HStack height="full" flexShrink={0} pointerEvents="auto" spacing={{ base: 1, lg: 2 }}>
               {renderLeftSide()}
-              {shouldShowDesktopNav && !shouldUseWideNavLayout ? (
-                <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
-              ) : null}
+              {shouldShowDesktopNav && !shouldUseWideNavLayout ? <LandingDesktopNav /> : null}
             </HStack>
             {shouldShowMobileSearch ? (
               <Box flex={1} minWidth={0} px={1} pointerEvents="auto">
-                <LandingSearchInput size="md" width="full" transparentMode={isCreatorTransparentNav} />
+                <LandingSearchInput size="md" width="full" />
               </Box>
             ) : null}
             <Box flexShrink={0} pointerEvents="auto">
@@ -321,7 +264,7 @@ export const PlatformNavBar = () => {
               alignItems="center"
             >
               <Box pointerEvents="auto">
-                <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
+                <LandingDesktopNav />
               </Box>
             </HStack>
           </HStack>
@@ -334,7 +277,7 @@ export const PlatformNavBar = () => {
             zIndex={4}
           >
             <Box pointerEvents="auto" width={{ lg: '280px', xl: '360px' }}>
-              <LandingSearchInput size="lg" width="full" transparentMode={isCreatorTransparentNav} />
+              <LandingSearchInput size="md" width="full" />
             </Box>
           </HStack>
         </>

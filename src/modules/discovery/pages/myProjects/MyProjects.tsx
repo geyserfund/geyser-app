@@ -4,8 +4,9 @@ import { useMemo } from 'react'
 
 import { useAuthContext } from '@/context'
 import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton.tsx'
-import { Body } from '@/shared/components/typography'
-import { ProjectForMyProjectsFragment, ProjectReviewStatus, ProjectStatus } from '@/types/index.ts'
+import { H2 } from '@/shared/components/typography/Heading.tsx'
+import type { ProjectForMyProjectsFragment } from '@/types/index.ts'
+import { ProjectReviewStatus, ProjectStatus } from '@/types/index.ts'
 
 import { useLastVisitedMyProjects } from '../../hooks/useLastVisited'
 import { LaunchNewProjectBanner } from './components/LaunchNewProjectBanner.tsx'
@@ -73,9 +74,7 @@ export const MyProjects = () => {
             {!hasNoProjects && (
               <>
                 <HStack justifyContent="space-between" alignItems="center" width="100%">
-                  <Body size="2xl" bold>
-                    {t('My Projects')}
-                  </Body>
+                  <H2 bold>{t('My Projects')}</H2>
                   <CreateProjectButton />
                 </HStack>
 
@@ -99,7 +98,7 @@ const ProjectCardSkeleton = () => {
     <Box width="100%" py={4} minHeight="150px">
       <HStack spacing={4} alignItems="center" justifyContent="space-between">
         <HStack>
-          <Skeleton width="20px" height="20px" borderRadius="md" />
+          <Skeleton width="20px" height="20px" borderRadius="innerCard" />
           <Skeleton height="24px" width="200px" />
           <Skeleton height="20px" width="80px" borderRadius="full" />
         </HStack>

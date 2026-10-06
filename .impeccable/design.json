@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-06T14:07:44+00:00",
+  "title": "Design System: Geyser",
+  "extensions": {
+    "colorMeta": {
+      "deep-forest": {
+        "role": "primary",
+        "displayName": "Deep Forest",
+        "canonical": "#26483D",
+        "tonalRamp": [
+          "#1a322a",
+          "#2e574a",
+          "#437f6b",
+          "#58a78d",
+          "#80bca9",
+          "#a8d1c4",
+          "#d0e6df",
+          "#eef6f4"
+        ]
+      },
+      "deep-forest-pressed": {
+        "role": "primary",
+        "displayName": "Deep Forest Pressed",
+        "canonical": "#1D382F",
+        "tonalRamp": [
+          "#1a322a",
+          "#2d5749",
+          "#42806b",
+          "#57a88d",
+          "#7fbda8",
+          "#a8d2c4",
+          "#d0e7df",
+          "#eef6f4"
+        ]
+      },
+      "warm-parchment": {
+        "role": "neutral",
+        "displayName": "Warm Parchment",
+        "canonical": "#F4EFE4",
+        "tonalRamp": [
+          "#362c16",
+          "#5e4d26",
+          "#8a7038",
+          "#b5944a",
+          "#c7ad75",
+          "#d9c7a1",
+          "#eae1cc",
+          "#f8f4ed"
+        ]
+      },
+      "parchment-raised": {
+        "role": "neutral",
+        "displayName": "Parchment Raised",
+        "canonical": "#FBF8F1",
+        "tonalRamp": [
+          "#3b2f11",
+          "#67511d",
+          "#97762b",
+          "#c69c39",
+          "#d4b468",
+          "#e2cb98",
+          "#efe3c7",
+          "#f9f5eb"
+        ]
+      },
+      "charcoal-brown": {
+        "role": "neutral",
+        "displayName": "Charcoal Brown",
+        "canonical": "#292925",
+        "tonalRamp": [
+          "#282824",
+          "#46463f",
+          "#66665c",
+          "#868679",
+          "#a3a399",
+          "#c0c0b9",
+          "#ddddd9",
+          "#f3f3f2"
+        ]
+      },
+      "burnt-ochre": {
+        "role": "secondary",
+        "displayName": "Burnt Ochre",
+        "canonical": "#D98A3D",
+        "tonalRamp": [
+          "#40260d",
+          "#6f4216",
+          "#a26020",
+          "#d57e2a",
+          "#df9d5d",
+          "#e9bc90",
+          "#f3dbc3",
+          "#fbf2ea"
+        ]
+      },
+      "clay-terracotta": {
+        "role": "tertiary",
+        "displayName": "Clay Terracotta",
+        "canonical": "#B9644A",
+        "tonalRamp": [
+          "#371d15",
+          "#603325",
+          "#8c4a36",
+          "#b86247",
+          "#c98773",
+          "#daad9f",
+          "#ebd3cc",
+          "#f8efed"
+        ]
+      },
+      "sage": {
+        "role": "tertiary",
+        "displayName": "Sage",
+        "canonical": "#9DAF91",
+        "tonalRamp": [
+          "#252c20",
+          "#404d38",
+          "#5e7052",
+          "#7b946b",
+          "#9bad8f",
+          "#bbc7b2",
+          "#dae1d6",
+          "#f2f4f0"
+        ]
+      },
+      "sage-tint": {
+        "role": "tertiary",
+        "displayName": "Sage Tint",
+        "canonical": "#DCE4D6",
+        "tonalRamp": [
+          "#252e1e",
+          "#405035",
+          "#5e754d",
+          "#7c9a65",
+          "#9bb28a",
+          "#bbcaaf",
+          "#dae3d4",
+          "#f2f5f0"
+        ]
+      },
+      "sand-border": {
+        "role": "neutral",
+        "displayName": "Sand Border",
+        "canonical": "#DAD9D6",
+        "tonalRamp": [
+          "#282724",
+          "#46443f",
+          "#66635c",
+          "#868379",
+          "#a3a199",
+          "#c0beb9",
+          "#dddcd9",
+          "#f3f3f2"
+        ]
+      },
+      "sand-secondary-text": {
+        "role": "neutral",
+        "displayName": "Sand Secondary Text",
+        "canonical": "#63635E",
+        "tonalRamp": [
+          "#272725",
+          "#444441",
+          "#63635e",
+          "#83837c",
+          "#a1a19c",
+          "#bebebb",
+          "#dcdcda",
+          "#f3f3f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headline only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Landing section titles and panel headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles and item headings inside panels."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Hero sub-title."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Buttons and chips."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 2px 6px -2px rgba(0, 0, 0, 0.04)",
+        "purpose": "Every bordered card; the only elevation in the system."
+      }
+    ],
+    "motion": [
+      {
+        "name": "live-dot-pulse",
+        "value": "1.6s ease-in-out infinite",
+        "purpose": "Pulse of the Live indicator."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "30em"
+      },
+      {
+        "name": "md",
+        "value": "48em"
+      },
+      {
+        "name": "lg",
+        "value": "57em"
+      },
+      {
+        "name": "xl",
+        "value": "80em"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action in a section; Deep Forest fill with a parchment label.",
+      "html": "<button class=\"ds-btn-primary\">Become a Field Partner <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-primary{font-family:'Figtree',sans-serif;background:#26483D;color:#F4EFE4;height:40px;padding:0 16px;border:none;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-primary:hover{background:#1D382F}.ds-btn-primary:focus-visible{outline:2px solid #26483D;outline-offset:2px}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action such as reading a case study.",
+      "html": "<button class=\"ds-btn-outline\">Read the case study <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-outline{font-family:'Figtree',sans-serif;background:transparent;color:#63635E;height:40px;padding:0 16px;border:1px solid #BCBBB5;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;transition:background .15s}.ds-btn-outline:hover{background:#F1F0EF}.ds-btn-outline:focus-visible{outline:2px solid #26483D;outline-offset:2px}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-filter",
+      "description": "Region filter above the grant grid; selected state uses a soft neutral fill.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\"><span class=\"ds-chip-dot\"></span>Live</button> <button class=\"ds-chip\" aria-pressed=\"false\">In Africa</button>",
+      "css": ".ds-chip{font-family:'Figtree',sans-serif;display:inline-flex;align-items:center;gap:8px;background:transparent;color:#63635E;height:40px;padding:0 16px;border:1px solid #BCBBB5;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer}.ds-chip[aria-pressed=true]{background:#E9E8E6;border-color:transparent}.ds-chip:hover{background:#F1F0EF}.ds-chip-dot{width:12px;height:12px;border-radius:999px;background:#26483D}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Raised parchment surface with a hairline border and the single card shadow.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Afribit Kibera shows the model in motion</h3><p class=\"ds-card-body\">Read how Afribit Kibera is pioneering Circular Grants with Geyser in its local community.</p></div>",
+      "css": ".ds-card{background:#FBF8F1;color:#292925;border:0.5px solid #DAD9D6;border-radius:10px;padding:24px;box-shadow:0 1px 2px 0 rgba(0,0,0,.04),0 2px 6px -2px rgba(0,0,0,.04);max-width:420px}.ds-card-title{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:600;font-size:24px;line-height:1.2;letter-spacing:-0.01em;color:#26483D;margin:0 0 12px}.ds-card-body{font-family:'Figtree',sans-serif;font-size:16px;line-height:1.6;color:#63635E;margin:0}"
+    },
+    {
+      "name": "Hero Headline",
+      "kind": "custom",
+      "refersTo": "hero",
+      "description": "Display headline on the Deep Forest hero field.",
+      "html": "<div class=\"ds-hero\"><h1 class=\"ds-hero-title\">Back stronger local economies<br><em>with Bitcoin</em></h1><p class=\"ds-hero-lead\">Every satoshi donated stays in the local economy through circular micro-grants.</p></div>",
+      "css": ".ds-hero{background:#26483D;color:#fff;padding:40px}.ds-hero-title{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-0.015em;margin:0 0 16px}.ds-hero-lead{font-family:'Figtree',sans-serif;font-size:20px;font-weight:500;line-height:1.5;margin:0}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Field Report",
+    "overview": "Geyser should read like a report filed from the place where the money lands: documentary, accountable and specific. Real photographs of real people and partners carry the page. Type and colour stay calm and grounded so that evidence, not decoration, does the persuading. The tone is editorial, never promotional.\n\nThe system is warm and plain. A parchment page, forest-green structure, charcoal text, and a sturdy poster-like display face give it the feel of printed local material. Surfaces are quiet: cards are a slightly lighter paper on paper, with a hairline border and almost no shadow.\n\nRejected, by explicit decision: pastel tinted panels (pale yellow or teal card backgrounds), all-caps kicker labels above headings, and icons sitting in coloured circles. The previous bright-teal crowdfunding look is retired.",
+    "keyCharacteristics": [
+      "Photography of people and places leads; illustration is secondary.",
+      "One green carries structure: hero, headings, primary buttons, icons and links.",
+      "Paper-on-paper surfaces with hairline borders, not coloured panels.",
+      "Display type only on headlines and section titles; everything else stays in the UI sans.",
+      "Buttons sit beside or below the copy they act on, right-aligned."
+    ],
+    "rules": [
+      {
+        "name": "The One Green Rule",
+        "body": "Deep Forest is the only colour that carries structure and action. If a second colour starts filling buttons or headings, the system has drifted.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fill-Not-Text Rule",
+        "body": "Ochre, terracotta and sage never appear as text or icons on parchment. They are fills and accents; they fail contrast as type.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Tinted Panels Rule",
+        "body": "Sections are not distinguished by pastel background colours. Use the raised parchment card, spacing, or a photograph.",
+        "section": "colors"
+      },
+      {
+        "name": "The Voice-Only Rule",
+        "body": "Bricolage Grotesque appears on headlines and section titles only. Body copy, buttons, cards, forms and navigation stay in Figtree.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Kicker Rule",
+        "body": "No all-caps eyebrow labels above headings. The heading carries the section on its own.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Shadow Rule",
+        "body": "Use the card shadow token or none. No one-off `box-shadow` values in feature UI.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** lead sections with real photographs of people, partners and places.",
+      "**Do** use Deep Forest for headings, primary buttons, icons and links.",
+      "**Do** keep cards as Parchment Raised on Warm Parchment with a hairline border.",
+      "**Do** set headlines and section titles in Bricolage Grotesque at weight 600, and everything else in Figtree.",
+      "**Do** right-align action buttons, level with the copy on desktop and below it on mobile.",
+      "**Do** use Phosphor icons only."
+    ],
+    "donts": [
+      "**Don't** use pastel tinted panels (pale yellow, teal or similar) to mark a section.",
+      "**Don't** add all-caps kicker labels above headings.",
+      "**Don't** place icons inside coloured circles.",
+      "**Don't** use ochre, terracotta or sage as text or icon colour on parchment.",
+      "**Don't** fill buttons with ochre.",
+      "**Don't** reintroduce the bright teal primary on rebranded surfaces.",
+      "**Don't** add one-off `box-shadow` values or card radii."
+    ]
+  }
+}

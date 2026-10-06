@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Icon, Image, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { PiArrowRightBold } from 'react-icons/pi'
@@ -9,12 +9,14 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { IMPACT_FUNDS_IMAGE_URL } from '@/modules/impactFunds/utils/constants.ts'
 import { LabifBanner } from '@/shared/components/LabifBanner.tsx'
+import { HERO_MIN_HEIGHT } from '@/shared/components/layouts/PhotoHero.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { getAiSeoPageContent, getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
+import { brandColors, heroForestOverlayGradient } from '@/shared/styles/brandPalette.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import {
@@ -94,14 +96,8 @@ type SectionColors = {
   pageBg: string
   surfaceBg: string
   mutedSurfaceBg: string
-  darkSurfaceBg: string
   emphasisCardBg: string
-  emphasisCardBorder: string
-  emphasisCardText: string
   emphasisCardMutedText: string
-  emphasisCardEyebrow: string
-  emphasisCardAccent: string
-  emphasisCardMetric: string
   emphasisCardButtonBg: string
   emphasisCardButtonText: string
   sponsorTileBg: string
@@ -110,16 +106,10 @@ type SectionColors = {
   surfaceActionButtonText: string
   primaryText: string
   secondaryText: string
-  mutedText: string
   borderColor: string
   accentText: string
   accentBg: string
   accentSurfaceText: string
-  amberBg: string
-  amberText: string
-  amberLinkHover: string
-  reportCardBg: string
-  resourceEyebrow: string
 }
 
 export const impactFundsHowItWorksSteps = [
@@ -223,48 +213,30 @@ export const ImpactFundsMainPage = () => {
     return () => window.cancelAnimationFrame(frame)
   }, [location.hash])
 
-  const pageBg = useColorModeValue('white', 'utils.pbg')
-  const surfaceBg = useColorModeValue('white', 'neutral1.4')
-  const mutedSurfaceBg = useColorModeValue('#F5F6F6', 'neutral1.2')
-  const darkSurfaceBg = useColorModeValue('#17120C', 'neutral1.2')
-  const emphasisCardBg = useColorModeValue('#17120C', 'neutral1.5')
-  const emphasisCardBorder = useColorModeValue('transparent', 'neutral1.6')
-  const emphasisCardText = useColorModeValue('white', 'neutral1.12')
-  const emphasisCardMutedText = useColorModeValue('whiteAlpha.800', 'neutral1.11')
-  const emphasisCardEyebrow = useColorModeValue('whiteAlpha.800', 'neutral1.10')
-  const emphasisCardAccent = useColorModeValue('#00E0B0', 'primary1.9')
-  const emphasisCardMetric = useColorModeValue('#F09A34', 'amber.9')
-  const emphasisCardButtonBg = useColorModeValue('white', 'neutral1.12')
-  const emphasisCardButtonText = useColorModeValue('black', 'neutral1.1')
-  const sponsorTileBg = useColorModeValue('white', 'neutral1.5')
-  const sponsorLogoBackdrop = useColorModeValue('white', 'neutral1.12')
-  const surfaceActionButtonBg = useColorModeValue('#17120C', 'neutral1.12')
-  const surfaceActionButtonText = useColorModeValue('white', 'neutral1.1')
-  const primaryText = useColorModeValue('black', 'utils.text')
-  const secondaryText = useColorModeValue('#626872', 'neutral1.11')
-  const mutedText = useColorModeValue('#626872', 'neutral1.10')
-  const borderColor = useColorModeValue('#E2E4E6', 'neutral1.5')
-  const accentText = useColorModeValue('#3F8F7C', 'primary1.9')
-  const accentBg = useColorModeValue('#00E0B0', 'primary1.9')
-  const accentSurfaceText = useColorModeValue('black', 'neutral1.1')
-  const amberBg = useColorModeValue('#F09A34', 'amber.9')
-  const amberText = useColorModeValue('black', 'neutral1.1')
-  const amberLinkHover = useColorModeValue('#17120C', 'neutral1.1')
-  const reportCardBg = useColorModeValue('#FFF7EC', 'neutral1.4')
-  const resourceEyebrow = useColorModeValue('#A9672C', 'amber.9')
+  const pageBg = 'utils.pageBg'
+  const surfaceBg = 'utils.pbg'
+  const mutedSurfaceBg = 'neutralAlpha.3'
+  const emphasisCardBg = 'primary1.9'
+  const emphasisCardMutedText = 'utils.primaryContrast'
+  const emphasisCardButtonBg = 'utils.pbg'
+  const emphasisCardButtonText = 'utils.text'
+  const sponsorTileBg = 'utils.pbg'
+  const sponsorLogoBackdrop = 'utils.whiteContrast'
+  const surfaceActionButtonBg = 'primary1.9'
+  const surfaceActionButtonText = 'utils.primaryContrast'
+  const primaryText = 'utils.text'
+  const secondaryText = 'neutral1.11'
+  const borderColor = 'neutral1.6'
+  const accentText = 'primary1.11'
+  const accentBg = 'primary1.9'
+  const accentSurfaceText = 'utils.primaryContrast'
   const colors: SectionColors = useMemo(
     () => ({
       pageBg,
       surfaceBg,
       mutedSurfaceBg,
-      darkSurfaceBg,
       emphasisCardBg,
-      emphasisCardBorder,
-      emphasisCardText,
       emphasisCardMutedText,
-      emphasisCardEyebrow,
-      emphasisCardAccent,
-      emphasisCardMetric,
       emphasisCardButtonBg,
       emphasisCardButtonText,
       sponsorTileBg,
@@ -273,29 +245,17 @@ export const ImpactFundsMainPage = () => {
       surfaceActionButtonText,
       primaryText,
       secondaryText,
-      mutedText,
       borderColor,
       accentText,
       accentBg,
       accentSurfaceText,
-      amberBg,
-      amberText,
-      amberLinkHover,
-      reportCardBg,
-      resourceEyebrow,
     }),
     [
       pageBg,
       surfaceBg,
       mutedSurfaceBg,
-      darkSurfaceBg,
       emphasisCardBg,
-      emphasisCardBorder,
-      emphasisCardText,
       emphasisCardMutedText,
-      emphasisCardEyebrow,
-      emphasisCardAccent,
-      emphasisCardMetric,
       emphasisCardButtonBg,
       emphasisCardButtonText,
       sponsorTileBg,
@@ -304,16 +264,10 @@ export const ImpactFundsMainPage = () => {
       surfaceActionButtonText,
       primaryText,
       secondaryText,
-      mutedText,
       borderColor,
       accentText,
       accentBg,
       accentSurfaceText,
-      amberBg,
-      amberText,
-      amberLinkHover,
-      reportCardBg,
-      resourceEyebrow,
     ],
   )
 
@@ -550,31 +504,12 @@ const FullWidthSection = ({
 )
 
 const Eyebrow = ({ children, color }: { children: React.ReactNode; color: string }) => (
-  <Body size="sm" bold color={color} letterSpacing="0.12em" textTransform="uppercase">
+  <Body size="sm" medium color={color}>
     {children}
   </Body>
 )
 
 const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonateClick: () => void }) => {
-  const overlayGradient = useColorModeValue(
-    `linear-gradient(
-      90deg,
-      var(--chakra-colors-blackAlpha-900) 0%,
-      var(--chakra-colors-blackAlpha-900) 24%,
-      var(--chakra-colors-blackAlpha-800) 42%,
-      var(--chakra-colors-blackAlpha-500) 66%,
-      var(--chakra-colors-blackAlpha-200) 100%
-    )`,
-    `linear-gradient(
-      90deg,
-      var(--chakra-colors-blackAlpha-900) 0%,
-      var(--chakra-colors-blackAlpha-800) 24%,
-      var(--chakra-colors-blackAlpha-700) 42%,
-      var(--chakra-colors-blackAlpha-500) 66%,
-      var(--chakra-colors-blackAlpha-200) 100%
-    )`,
-  )
-
   return (
     <Box
       w="100vw"
@@ -585,8 +520,8 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
       ml="-50vw"
       mr="-50vw"
       overflow="hidden"
-      minH={dimensions.impactLendingHero.minHeight}
-      bg={colors.darkSurfaceBg}
+      minH={HERO_MIN_HEIGHT}
+      bg={brandColors.deepForest}
     >
       <Box
         position="absolute"
@@ -596,13 +531,13 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
       />
-      <Box position="absolute" inset={0} bg={overlayGradient} />
+      <Box position="absolute" inset={0} bg={heroForestOverlayGradient} />
 
       <Flex
         position="relative"
         w="full"
         maxW={`${dimensions.maxWidth + 24 * 2}px`}
-        minH={dimensions.impactLendingHero.minHeight}
+        minH={HERO_MIN_HEIGHT}
         mx="auto"
         px={standardPadding}
         py={{ base: 10, lg: 12 }}
@@ -632,10 +567,11 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
               h="42px"
               px="18px"
               borderRadius="6px"
-              bg="white"
-              color={colors.darkSurfaceBg}
+              bg="utils.whiteContrast"
+              color="utils.blackContrast"
               fontSize="sm"
               fontWeight="600"
+              _hover={{ bg: 'utils.whiteContrast' }}
             >
               {t('Become a Field Partner')}
             </Button>
@@ -643,12 +579,14 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
               h="42px"
               px="18px"
               borderRadius="6px"
-              bg="#F7931A"
-              color={colors.darkSurfaceBg}
+              variant="outline"
+              color="utils.whiteContrast"
+              borderColor="whiteAlpha.600"
               onClick={onDonateClick}
               fontSize="sm"
               fontWeight="600"
-              _hover={{ bg: '#F7931A' }}
+              _hover={{ backgroundColor: 'whiteAlpha.200', borderColor: 'whiteAlpha.800' }}
+              _active={{ backgroundColor: 'whiteAlpha.300' }}
             >
               {t('Donate')}
             </Button>
@@ -660,26 +598,19 @@ const HeroSection = ({ colors, onDonateClick }: { colors: SectionColors; onDonat
 }
 
 const AboutSection = ({ colors }: { colors: SectionColors }) => {
-  const topSectionTextColor = useColorModeValue('black', 'white')
-  const statMutedTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
-
   return (
     <PageSection id="impact" colors={colors}>
       <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
         <VStack align="stretch" spacing={{ base: 6, lg: 8 }}>
-          <VStack align="flex-start" spacing="14px">
-            <Eyebrow color={colors.accentText}>{t('About the Impact Fund')}</Eyebrow>
-            <H2
-              size={{ base: '3xl', lg: '40px' }}
-              lineHeight={{ base: '38px', lg: '44px' }}
-              bold
-              color={topSectionTextColor}
-              sx={{ textWrap: 'balance' }}
-            >
-              {t('Impact happens locally. Field Partners bring Bitcoin tooling and capital to local realities.')}
-            </H2>
-          </VStack>
-          <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={topSectionTextColor}>
+          <H2
+            size={{ base: '3xl', lg: '40px' }}
+            lineHeight={{ base: '38px', lg: '44px' }}
+            bold
+            sx={{ textWrap: 'balance' }}
+          >
+            {t('Impact happens locally. Field Partners bring Bitcoin tooling and capital to local realities.')}
+          </H2>
+          <Body size={{ base: 'md', lg: '18px' }} lineHeight={{ base: '26px', lg: '29px' }} color={colors.primaryText}>
             {t(
               'The Geyser Impact Fund backs the Field Partners and the fundraisers, campaigns or circular grant projects they onboard.',
             )}
@@ -695,7 +626,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
               spacing="6px"
               bg={stat.isDark ? colors.emphasisCardBg : colors.mutedSurfaceBg}
               borderWidth="1px"
-              borderColor={stat.isDark ? colors.emphasisCardBorder : colors.borderColor}
+              borderColor={stat.isDark ? 'transparent' : colors.borderColor}
               borderRadius="8px"
               px="22px"
               py="20px"
@@ -705,7 +636,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
                 size="30px"
                 lineHeight="34px"
                 bold
-                color={stat.isDark ? colors.emphasisCardMetric : topSectionTextColor}
+                color={stat.isDark ? colors.emphasisCardMutedText : colors.primaryText}
               >
                 {stat.value}
               </Body>
@@ -713,7 +644,7 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
                 size="sm"
                 lineHeight="20px"
                 medium
-                color={stat.isDark ? colors.emphasisCardMutedText : statMutedTextColor}
+                color={stat.isDark ? colors.emphasisCardMutedText : colors.secondaryText}
               >
                 {t(stat.label)}
               </Body>
@@ -726,21 +657,15 @@ const AboutSection = ({ colors }: { colors: SectionColors }) => {
 }
 
 const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
-  const headingColor = useColorModeValue('black', 'white')
-  const sectionEyebrowColor = useColorModeValue('#0F8B75', 'primary1.9')
-  const stepAccentColor = useColorModeValue('#F7931A', 'orange.400')
-  const cardBorderColor = useColorModeValue('#E6E8EA', 'neutral1.5')
-
   return (
     <FullWidthSection bg={colors.mutedSurfaceBg}>
       <VStack align="stretch" spacing={{ base: 6, lg: 8 }}>
         <VStack align="flex-start" spacing="10px">
-          <Eyebrow color={sectionEyebrowColor}>{t('How it works')}</Eyebrow>
+          <Eyebrow color={colors.secondaryText}>{t('How it works')}</Eyebrow>
           <H2
             size={{ base: '32px', lg: '36px' }}
             lineHeight={{ base: '38px', lg: '40px' }}
             bold
-            color={headingColor}
             sx={{ textWrap: 'balance' }}
           >
             {t('How impact moves through the Field Partner network.')}
@@ -754,17 +679,17 @@ const HowItWorksSection = ({ colors }: { colors: SectionColors }) => {
               spacing="12px"
               bg={colors.surfaceBg}
               borderWidth="1px"
-              borderColor={cardBorderColor}
+              borderColor={colors.borderColor}
               borderRadius="8px"
               p={{ base: 5, lg: 6 }}
               minH={{ base: 'auto', lg: '190px' }}
             >
-              <Eyebrow color={stepAccentColor}>{t(step.label)}</Eyebrow>
+              <Eyebrow color={colors.accentText}>{t(step.label)}</Eyebrow>
               <H3
                 size={{ base: '24px', lg: '22px' }}
                 lineHeight={{ base: '29px', lg: '27px' }}
                 bold
-                color={headingColor}
+                color={colors.primaryText}
               >
                 {t(step.title)}
               </H3>
@@ -800,7 +725,7 @@ const LeaderboardSection = ({
 }) => (
   <PageSection id="field-partners" colors={colors}>
     <VStack align="stretch" spacing={6}>
-      <H2 size={{ base: '32px', lg: '36px' }} lineHeight={{ base: '38px', lg: '42px' }} bold color={colors.primaryText}>
+      <H2 size={{ base: '32px', lg: '36px' }} lineHeight={{ base: '38px', lg: '42px' }} bold>
         {t('Field Partners')}
       </H2>
 
@@ -980,7 +905,12 @@ const MobileLeaderboardRows = ({ colors, rows }: { colors: SectionColors; rows: 
                 borderRadius="full"
                 bg={row.rank === 1 ? colors.accentBg : colors.mutedSurfaceBg}
               >
-                <Body size="xs" bold lineHeight={1} color={colors.primaryText}>
+                <Body
+                  size="xs"
+                  bold
+                  lineHeight={1}
+                  color={row.rank === 1 ? colors.accentSurfaceText : colors.primaryText}
+                >
                   {row.rank}
                 </Body>
               </Flex>
@@ -1069,7 +999,7 @@ const LeaderboardRow = ({ colors, row }: { colors: SectionColors; row: FieldPart
         borderRadius="full"
         bg={row.rank === 1 ? colors.accentBg : colors.mutedSurfaceBg}
       >
-        <Body size="xs" bold lineHeight={1} color={colors.primaryText}>
+        <Body size="xs" bold lineHeight={1} color={row.rank === 1 ? colors.accentSurfaceText : colors.primaryText}>
           {row.rank}
         </Body>
       </Flex>
@@ -1125,7 +1055,6 @@ const SponsorsAndFundsSection = ({
               size={{ base: '32px', lg: '36px' }}
               lineHeight={{ base: '38px', lg: '42px' }}
               bold
-              color={colors.primaryText}
               sx={{ textWrap: 'balance' }}
             >
               {t('Regional Partners')}
@@ -1144,7 +1073,6 @@ const SponsorsAndFundsSection = ({
             size={{ base: '32px', lg: '36px' }}
             lineHeight={{ base: '38px', lg: '42px' }}
             bold
-            color={colors.primaryText}
             sx={{ textWrap: 'balance' }}
           >
             {t('Sponsors')}
@@ -1152,7 +1080,7 @@ const SponsorsAndFundsSection = ({
           <SimpleGrid columns={{ base: 2, sm: 3, lg: 4, xl: 5 }} spacing={4} w="full">
             {sponsors.length === 0 ? (
               <Flex align="center" justify="center" gridColumn="1 / -1" minH={{ base: '120px', lg: '170px' }}>
-                <Body size="md" lineHeight="26px" color={colors.mutedText} textAlign="center" maxW="420px">
+                <Body size="md" lineHeight="26px" color={colors.secondaryText} textAlign="center" maxW="420px">
                   {t('Partner sponsors will appear here as funds grow.')}
                 </Body>
               </Flex>
@@ -1202,15 +1130,14 @@ const SponsorTile = ({ sponsor, colors }: { sponsor: SponsorListItem; colors: Se
 )
 
 const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
-  <FullWidthSection bg={colors.darkSurfaceBg}>
+  <FullWidthSection bg={colors.mutedSurfaceBg}>
     <VStack align="stretch" spacing={{ base: 8, lg: 10 }}>
       <VStack align="flex-start" spacing={{ base: 4, lg: 5 }}>
-        <Eyebrow color={colors.accentBg}>{t('Impact in action')}</Eyebrow>
+        <Eyebrow color={colors.secondaryText}>{t('Impact in action')}</Eyebrow>
         <H2
           size={{ base: '36px', lg: '48px' }}
           lineHeight={{ base: '42px', lg: '56px' }}
           bold
-          color={colors.emphasisCardText}
           sx={{ textWrap: 'balance' }}
         >
           {t('What was our impact so far?')}
@@ -1218,7 +1145,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
         <Body
           size={{ base: 'md', lg: '22px' }}
           lineHeight={{ base: '26px', lg: '32px' }}
-          color={colors.emphasisCardMutedText}
+          color={colors.secondaryText}
           w="full"
         >
           {t('Explore the case studies, workshops, and reports made possible through the Impact Fund.')}
@@ -1230,7 +1157,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
           size={{ base: '28px', lg: '34px' }}
           lineHeight={{ base: '34px', lg: '40px' }}
           bold
-          color={colors.emphasisCardText}
+          color={colors.primaryText}
         >
           {t('Case Studies')}
         </H3>
@@ -1255,7 +1182,7 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
           size={{ base: '28px', lg: '34px' }}
           lineHeight={{ base: '34px', lg: '40px' }}
           bold
-          color={colors.emphasisCardText}
+          color={colors.primaryText}
         >
           {t('Workshops')}
         </H3>
@@ -1270,13 +1197,13 @@ const ResourcesSection = ({ colors }: { colors: SectionColors }) => (
           size={{ base: '28px', lg: '34px' }}
           lineHeight={{ base: '34px', lg: '40px' }}
           bold
-          color={colors.emphasisCardText}
+          color={colors.primaryText}
         >
           {t('Impact Reports')}
         </H3>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 5 }} alignItems="stretch">
           {impactFundsResourceCards.reports.map((card) => (
-            <ResourceCard key={card.title} colors={colors} {...card} variant="guide" isReport />
+            <ResourceCard key={card.title} colors={colors} {...card} variant="guide" />
           ))}
         </SimpleGrid>
       </VStack>
@@ -1291,7 +1218,6 @@ const BookletsSection = ({ colors }: { colors: SectionColors }) => (
         size={{ base: '32px', lg: '42px' }}
         lineHeight={{ base: '38px', lg: '48px' }}
         bold
-        color={colors.primaryText}
         sx={{ textWrap: 'balance' }}
       >
         {t('Booklets')}
@@ -1317,6 +1243,8 @@ const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
   <Flex
     direction={{ base: 'column', lg: 'row' }}
     bg={colors.surfaceBg}
+    borderWidth="1px"
+    borderColor={colors.borderColor}
     borderRadius="card"
     p={{ base: 4, lg: 5 }}
     gap={{ base: 5, lg: 7 }}
@@ -1341,14 +1269,14 @@ const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
         allowFullScreen
         loading="lazy"
       />
-      <Box position="absolute" bottom={4} left={4} bg="black" px={3} py={2}>
-        <Body size="xs" bold color="white">
+      <Box position="absolute" bottom={4} left={4} bg={colors.surfaceBg} px={3} py={2}>
+        <Body size="xs" bold color={colors.primaryText}>
           {t('Afribit Kibera')}
         </Body>
       </Box>
     </Box>
     <VStack align="flex-start" justify="center" spacing={4} flex={1} py={{ base: 0, lg: 4 }}>
-      <Eyebrow color="#E75E4F">{t('Afribit')}</Eyebrow>
+      <Eyebrow color={colors.secondaryText}>{t('Afribit')}</Eyebrow>
       <H3 size={{ base: '26px', lg: '30px' }} lineHeight={{ base: '32px', lg: '36px' }} bold color={colors.primaryText}>
         {t('Kibera projects preparing to fundraise.')}
       </H3>
@@ -1361,7 +1289,7 @@ const WorkshopVideoCard = ({ colors }: { colors: SectionColors }) => (
         target="_blank"
         rel="noreferrer"
         spacing={1.5}
-        color="#E75E4F"
+        color={colors.accentText}
         textDecoration="underline"
         _hover={{ color: colors.primaryText, textDecoration: 'underline' }}
       >
@@ -1406,11 +1334,11 @@ const WorkshopResourcesCard = ({ colors }: { colors: SectionColors }) => (
       to={getPath('discoveryImpactFundsWorkshops')}
       h="52px"
       borderRadius="innerCard"
-      bg={colors.surfaceActionButtonBg}
-      color={colors.surfaceActionButtonText}
+      bg={colors.emphasisCardButtonBg}
+      color={colors.emphasisCardButtonText}
       fontSize="md"
       fontWeight="900"
-      _hover={{ bg: colors.surfaceActionButtonBg, opacity: 0.92 }}
+      _hover={{ bg: colors.emphasisCardButtonBg, opacity: 0.92 }}
     >
       {t('Open workshop resources')}
     </Button>
@@ -1425,7 +1353,6 @@ type ResourceCardProps = {
   imageUrl?: string
   url?: string
   isAccent?: boolean
-  isReport?: boolean
   variant?: 'caseStudy' | 'guide'
 }
 
@@ -1453,12 +1380,14 @@ const CaseStudyResourceCard = ({
     align="stretch"
     spacing={{ base: 5, lg: 6 }}
     bg={colors.surfaceBg}
+    borderWidth="1px"
+    borderColor={colors.borderColor}
     borderRadius="card"
     p={{ base: 5, lg: 7 }}
     minH={{ lg: '300px' }}
-    _hover={url ? { textDecoration: 'none', borderColor: colors.amberBg } : undefined}
+    _hover={url ? { textDecoration: 'none', borderColor: 'neutral1.9' } : undefined}
   >
-    <Eyebrow color="#A9672C">{t(eyebrow)}</Eyebrow>
+    <Eyebrow color={colors.secondaryText}>{t(eyebrow)}</Eyebrow>
     <H3 size={{ base: '26px', lg: '30px' }} lineHeight={{ base: '32px', lg: '36px' }} bold color={colors.primaryText}>
       {t(title)}
     </H3>
@@ -1472,7 +1401,7 @@ const CaseStudyResourceCard = ({
         objectPosition="center"
       />
     ) : (
-      <Box h={{ base: '96px', lg: '108px' }} borderRadius="innerCard" bg="#E6E8EA" />
+      <Box h={{ base: '96px', lg: '108px' }} borderRadius="innerCard" bg={colors.mutedSurfaceBg} />
     )}
     <Body size={{ base: 'md', lg: '20px' }} lineHeight={{ base: '26px', lg: '30px' }} color={colors.secondaryText}>
       {t(description)}
@@ -1480,18 +1409,18 @@ const CaseStudyResourceCard = ({
   </VStack>
 )
 
-const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport }: ResourceCardProps) => (
+const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent }: ResourceCardProps) => (
   <VStack
     align="stretch"
     spacing={{ base: 5, lg: 6 }}
-    bg={isReport ? colors.reportCardBg : isAccent ? colors.accentBg : colors.surfaceBg}
-    borderWidth={isReport || !isAccent ? '1px' : undefined}
-    borderColor={isReport ? colors.amberBg : !isAccent ? colors.borderColor : undefined}
+    bg={isAccent ? colors.accentBg : colors.surfaceBg}
+    borderWidth={isAccent ? undefined : '1px'}
+    borderColor={isAccent ? undefined : colors.borderColor}
     borderRadius="card"
     p={{ base: 5, lg: 7 }}
     minH={{ lg: '280px' }}
   >
-    <Eyebrow color={isAccent ? colors.accentSurfaceText : colors.resourceEyebrow}>{t(eyebrow)}</Eyebrow>
+    <Eyebrow color={isAccent ? colors.accentSurfaceText : colors.secondaryText}>{t(eyebrow)}</Eyebrow>
     <H3
       size={{ base: '24px', lg: '28px' }}
       lineHeight={{ base: '30px', lg: '34px' }}
@@ -1507,12 +1436,12 @@ const DownloadResourceCard = ({ colors, eyebrow, title, url, isAccent, isReport 
       rel={url ? 'noreferrer' : undefined}
       h="52px"
       borderRadius="innerCard"
-      bg={isAccent ? colors.surfaceActionButtonBg : colors.amberBg}
-      color={isAccent ? colors.surfaceActionButtonText : colors.amberText}
+      bg={isAccent ? colors.emphasisCardButtonBg : colors.surfaceActionButtonBg}
+      color={isAccent ? colors.emphasisCardButtonText : colors.surfaceActionButtonText}
       fontSize="md"
       fontWeight="900"
       mt="auto"
-      _hover={{ bg: isAccent ? colors.surfaceActionButtonBg : colors.amberBg, opacity: 0.92 }}
+      _hover={{ bg: isAccent ? colors.emphasisCardButtonBg : colors.surfaceActionButtonBg, opacity: 0.92 }}
     >
       {t('Download PDF')}
     </Button>

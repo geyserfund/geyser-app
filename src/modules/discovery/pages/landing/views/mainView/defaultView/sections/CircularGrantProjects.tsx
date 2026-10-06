@@ -100,8 +100,8 @@ export const CircularGrantProjects = ({
       return (
         <ProjectRowLayout title={sectionTitle} width="100%" rightContent={discoverMoreButton}>
           <VStack alignItems="start" spacing={4} py={4}>
-            <Body>{t('Failed to load projects')}</Body>
-            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={refetch}>
+            <Body light>{t('Failed to load projects')}</Body>
+            <Button size="md" variant="outline" colorScheme="neutral1" onClick={refetch}>
               {t('Retry')}
             </Button>
           </VStack>
@@ -112,7 +112,7 @@ export const CircularGrantProjects = ({
     if (emptyStateText) {
       return (
         <ProjectRowLayout title={sectionTitle} width="100%" rightContent={discoverMoreButton}>
-          <Body color="neutralAlpha.11">{t(emptyStateText)}</Body>
+          <Body light>{t(emptyStateText)}</Body>
         </ProjectRowLayout>
       )
     }

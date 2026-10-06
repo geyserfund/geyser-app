@@ -1,13 +1,15 @@
-import { Button, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Button, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
+import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { LandingCardBaseSkeleton } from '@/shared/components/layouts/index.ts'
-import { Body, H3 } from '@/shared/components/typography/index.ts'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
 import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
 import { LandingProjectCardProject } from '../../../../graphql/landingPageTypes.ts'
+import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
 const CURATED_PROJECTS_COUNT = 6
 
@@ -18,6 +20,7 @@ type CuratedProjectsProps = {
   onRetryFeatured?: () => void
 }
 
+/** Landing section listing the curated Circular Grant projects with loading, error and empty states. */
 export const CuratedProjects = ({
   featuredError,
   featuredLoading,
@@ -25,25 +28,20 @@ export const CuratedProjects = ({
   onRetryFeatured,
 }: CuratedProjectsProps) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-
-  const handleDiscoverMore = () => {
-    navigate(getPath('discoveryProjects'))
-  }
 
   return (
-    <VStack w="full" spacing={8} alignItems="start">
-      <H3 size={{ base: 'md', lg: '2xl' }} dark bold>
-        {t('Featured Circular Grants')}
-      </H3>
-
+    <ProjectRowLayout
+      w="full"
+      title={t('Live Circular Grants')}
+      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryCircularGrantProjects')} />}
+    >
       {featuredLoading ? (
         <CuratedProjectsSkeletonGrid />
       ) : featuredError ? (
-        <VStack w="full" spacing={4} py={8}>
-          <Body color="neutral1.11">{t('Failed to load curated projects')}</Body>
+        <VStack w="full" alignItems="start" spacing={4} py={4}>
+          <Body light>{t('Failed to load curated projects')}</Body>
           {onRetryFeatured ? (
-            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => onRetryFeatured()}>
+            <Button size="md" variant="outline" colorScheme="neutral1" onClick={() => onRetryFeatured()}>
               {t('Retry')}
             </Button>
           ) : null}
@@ -52,25 +50,19 @@ export const CuratedProjects = ({
         <>
           {featuredProjects.length > 0 ? <FeaturedProjectsList projects={featuredProjects} /> : null}
           {featuredProjects.length === 0 && (
-            <VStack w="full" spacing={4} py={8}>
-              <Body color="neutral1.11">{t('No featured projects found')}</Body>
+            <VStack w="full" alignItems="start" spacing={4} py={4}>
+              <Body light>{t('No featured projects found')}</Body>
             </VStack>
           )}
         </>
       )}
-
-      <HStack w="full" justifyContent="center" paddingTop={4}>
-        <Button variant="outline" colorScheme="neutral1" size="lg" onClick={handleDiscoverMore}>
-          {t('Discover more')}
-        </Button>
-      </HStack>
-    </VStack>
+    </ProjectRowLayout>
   )
 }
 
 const CuratedProjectsSkeletonGrid = () => {
   return (
-    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+    <SimpleGrid w="full" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
       {Array.from({ length: CURATED_PROJECTS_COUNT }).map((_, index) => (
         <LandingCardBaseSkeleton key={`curated-skeleton-${index}`} />
       ))}
@@ -80,7 +72,7 @@ const CuratedProjectsSkeletonGrid = () => {
 
 const FeaturedProjectsList = ({ projects }: { projects: LandingProjectCardProject[] }) => {
   return (
-    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+    <SimpleGrid w="full" columns={{ base: 1, md: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
       {projects.map((project) => (
         <LandingProjectCard key={project.name} project={project} />
       ))}

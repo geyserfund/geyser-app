@@ -60,7 +60,7 @@ export const ProjectLinks = ({ form }: ProjectLinksProps) => {
       </FieldContainer>
       <Button
         size="lg"
-        variant="soft"
+        variant="outline"
         colorScheme="neutral1"
         w="full"
         onClick={addNewLink}

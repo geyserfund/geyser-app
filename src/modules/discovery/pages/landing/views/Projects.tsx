@@ -9,7 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
   Stack,
-  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -488,7 +487,7 @@ export const Projects = () => {
   const projectsLoading = shouldUseMostFundedThisMonth ? isMostFundedThisMonthLoading : isLoading
   const projectFilter =
     projectTypeFilter === 'campaigns' && !isSuccessfullyFundedCampaignsRoute ? isCampaignProjectStillRaising : undefined
-  const toolbarDividerColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
+  const toolbarDividerColor = 'neutral1.6'
 
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
@@ -930,7 +929,7 @@ type ProjectsFilterEmptyStateProps = {
 
 const ProjectsFilterEmptyState = ({ message, suggestion }: ProjectsFilterEmptyStateProps) => {
   const { t } = useTranslation()
-  const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
+  const borderColor = 'neutral1.6'
 
   return (
     <VStack w="full" borderWidth="0.5px" borderColor={borderColor} borderRadius="card" padding={{ base: 4, md: 5 }}>
@@ -1021,7 +1020,7 @@ const ProjectsToolbarSelect = <T extends string>({
 
               return (
                 <VStack key={option.value} align="stretch" spacing={1}>
-                  {option.dividerBefore ? <Divider borderColor="blackAlpha.200" /> : null}
+                  {option.dividerBefore ? <Divider borderColor="neutral1.6" /> : null}
                   <Button
                     variant="ghost"
                     justifyContent="space-between"

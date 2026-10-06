@@ -9,9 +9,9 @@ import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { Body } from '@/shared/components/typography'
 
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts/SkeletonLayout.tsx'
+import { getShortAmountLabel } from '../../../../../../../shared/utils/formatData/helperFunctions.ts'
 import type { HeroStats } from '../../../../../../../types/generated/graphql.ts'
 import { useUserHeroStatsQuery } from '../../../../../../../types/generated/graphql.ts'
-import { getShortAmountLabel } from '../../../../../../../shared/utils/formatData/helperFunctions.ts'
 import { useUserProfileAtom } from '../../../../../state/profileAtom.ts'
 import { FieldPartnerSummary } from './FieldPartnerSummary'
 
@@ -144,7 +144,7 @@ type StatBodyProps = {
 
 const StatBody = ({ title, Icon, value, subtitle, rank, rankPillProps }: StatBodyProps) => {
   return (
-    <HStack w="full" paddingX={3} paddingY={2} spacing={3} bgColor={'neutral1.3'} borderRadius="8px">
+    <HStack w="full" paddingX={3} paddingY={2} spacing={3} bgColor={'neutralAlpha.3'} borderRadius="8px">
       <Icon fontSize="32px" color="orange.1" />
       <VStack flex="1" alignItems="start" spacing={0}>
         <HStack>

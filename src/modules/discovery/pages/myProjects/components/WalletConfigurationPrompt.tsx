@@ -1,8 +1,8 @@
-import { Box, Button, Circle, HStack, Icon, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useState } from 'react'
-import { PiCheckCircle, PiWarning } from 'react-icons/pi'
+import { PiCheckCircle, PiWallet, PiWarning } from 'react-icons/pi'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -50,9 +50,14 @@ export const WalletConfigurationPrompt = ({
   })
 
   const importantContent = (
-    <Feedback variant={FeedBackVariant.WARNING} noIcon>
+    <Feedback
+      variant={FeedBackVariant.WARNING}
+      backgroundColor="transparent"
+      borderRadius="innerCard"
+      icon={<Icon as={PiWarning} color="warning.11" boxSize="20px" flexShrink={0} mt={0.5} aria-hidden />}
+    >
       <VStack spacing={1} align="start">
-        <Body size="sm">
+        <Body size="sm" color="utils.text">
           <Body as="span" bold size="sm">
             {t('Important')}
           </Body>
@@ -63,9 +68,9 @@ export const WalletConfigurationPrompt = ({
           <ChakraLink
             href="https://guides.geyser.fund"
             isExternal
-            color="amber1.900"
+            color="warning.11"
             textDecoration="underline"
-            _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
+            _hover={{ color: 'warning.12', textDecoration: 'underline' }}
           >
             {t('Learn more')}
           </ChakraLink>
@@ -193,9 +198,7 @@ export const WalletConfigurationPrompt = ({
         <VStack spacing={5} align="stretch" py={2}>
           {/* Success Icon */}
           <HStack justify="center">
-            <Circle size="60px" bg="success.2" color="success.11">
-              <Icon as={PiCheckCircle} boxSize="32px" />
-            </Circle>
+            <Icon as={PiCheckCircle} boxSize="32px" color="primary1.11" aria-hidden />
           </HStack>
 
           {/* Main Message */}
@@ -204,11 +207,11 @@ export const WalletConfigurationPrompt = ({
           </Body>
 
           {/* Important Notice */}
-          <Box bg="warning.1" borderRadius="8px" p={4} borderLeft="3px solid" borderLeftColor="warning.9">
-            <HStack spacing={2} align="start">
-              <Icon as={PiWarning} color="warning.11" boxSize="20px" flexShrink={0} mt={0.5} />
+          <Box border="1px solid" borderColor="warning.6" borderRadius="innerCard" p={4}>
+            <HStack spacing={3} align="start">
+              <Icon as={PiWarning} color="warning.11" boxSize="24px" flexShrink={0} aria-hidden />
               <VStack spacing={2} align="start" flex={1}>
-                <Body size="sm" bold color="neutral1.12">
+                <Body size="sm" bold color="utils.text">
                   {t('Important')}:
                 </Body>
                 <Body size="sm" color="neutral1.11">
@@ -233,19 +236,11 @@ export const WalletConfigurationPrompt = ({
     return (
       <>
         <ControlPanelNotification
-          icon={
-            <Image
-              src="/icons/creator_tools_wallet.png"
-              alt={t('Wallet')}
-              boxSize="52px"
-              objectFit="contain"
-              flexShrink={0}
-            />
-          }
+          icon={<Icon as={PiWallet} color="error.11" boxSize="24px" flexShrink={0} aria-hidden />}
           title={t('Wallet not configured')}
           description={t('Your project cannot receive any contributions until you configure your project wallet.')}
           actionButton={
-            <Button colorScheme="error" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>
+            <Button colorScheme="primary1" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>
               {t('Configure')}
             </Button>
           }
@@ -258,15 +253,20 @@ export const WalletConfigurationPrompt = ({
 
   return (
     <>
-      <Feedback variant={FeedBackVariant.ERROR}>
-        <VStack spacing={4} align="stretch">
-          <Body size="xl" bold>
+      <Feedback
+        variant={FeedBackVariant.ERROR}
+        backgroundColor="transparent"
+        borderRadius="innerCard"
+        icon={<Icon as={PiWallet} color="error.11" boxSize="24px" flexShrink={0} aria-hidden />}
+      >
+        <VStack spacing={4} align="stretch" flex={1}>
+          <Body size="xl" bold color="error.11">
             {t('Wallet not configured')}
           </Body>
-          <Body dark>
+          <Body color="neutral1.11">
             {t('Your project cannot receive any contributions until you configure your project wallet.')}
           </Body>
-          <Button colorScheme="error" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
+          <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
             {t('Configure project wallet')}
           </Button>
         </VStack>

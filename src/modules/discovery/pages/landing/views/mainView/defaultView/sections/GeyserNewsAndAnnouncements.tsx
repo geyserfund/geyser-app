@@ -1,4 +1,4 @@
-import { Box, Button, HStack, IconButton, Skeleton, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import type { ReactNode } from 'react'
@@ -10,6 +10,7 @@ import { useOgPreview } from '@/modules/project/pages/projectView/views/posts/ho
 import { isValidUrl } from '@/modules/project/pages/projectView/views/posts/utils/postUrlUtils.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -88,7 +89,6 @@ const AnnouncementCard = ({
 }: AnnouncementCardProps) => {
   const navigate = useNavigate()
   const { data: previewData } = useOgPreview(previewUrl, { enabled: Boolean(previewUrl) })
-  const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
   const descriptionColor = 'neutralAlpha.11'
   const eyebrowBackground = useColorModeValue('utils.pbg', 'neutral1.2')
   const eyebrowColor = useColorModeValue('neutral1.11', 'neutral1.12')
@@ -115,7 +115,6 @@ const AnnouncementCard = ({
       alignItems="start"
       spacing={0}
       dense
-      backgroundColor={cardBackground}
       cursor="pointer"
       role="link"
       tabIndex={0}
@@ -264,7 +263,7 @@ export const GeyserNewsAndAnnouncements = ({
   const announcementCards = useMemo<AnnouncementCardData[]>(() => {
     const giveawayFooter = (() => {
       if (resolvedGiveawayLoading && !giveawayEndDate) {
-        return <Skeleton height="20px" width="140px" borderRadius="md" />
+        return <SkeletonLayout height="20px" width="140px" />
       }
 
       if (resolvedGiveawayError) {
@@ -274,7 +273,7 @@ export const GeyserNewsAndAnnouncements = ({
               {t('Giveaway timing unavailable')}
             </Body>
             <Button
-              size="sm"
+              size="md"
               variant="ghost"
               colorScheme="primary1"
               onClick={(event) => {
@@ -428,6 +427,7 @@ export const GeyserNewsAndAnnouncements = ({
             <IconButton
               aria-label={t('Scroll news cards left')}
               icon={<PiArrowLeft />}
+              size="lg"
               variant="ghost"
               colorScheme="neutral1"
               color="utils.text"
@@ -443,6 +443,7 @@ export const GeyserNewsAndAnnouncements = ({
             <IconButton
               aria-label={t('Scroll news cards right')}
               icon={<PiArrowRight />}
+              size="lg"
               variant="ghost"
               colorScheme="neutral1"
               color="utils.text"
@@ -474,7 +475,7 @@ export const GeyserNewsAndAnnouncements = ({
         <Box
           display="grid"
           gridAutoFlow="column"
-          gridAutoColumns={{ base: '85vw', md: '420px', lg: 'calc((100% - 4rem) / 3)' }}
+          gridAutoColumns={{ base: '80%', md: 'calc((100% - 1.5rem) / 2)', lg: 'calc((100% - 4rem) / 3)' }}
           gap={{ base: 6, lg: 8 }}
           width="100%"
           paddingBottom={1}

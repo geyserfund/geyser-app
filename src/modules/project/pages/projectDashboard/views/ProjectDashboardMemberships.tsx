@@ -262,7 +262,7 @@ export const ProjectDashboardMemberships = () => {
                       </Body>
                     )}
                   </VStack>
-                  <Body size="sm" light color={plan.isHidden ? 'orange.9' : 'primary1.9'}>
+                  <Body size="sm" light color={plan.isHidden ? 'neutral1.11' : 'primary1.11'}>
                     {plan.isHidden ? t('Hidden') : t('Live')}
                   </Body>
                 </HStack>

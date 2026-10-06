@@ -22,7 +22,7 @@ import type { NavDropdownMenuItem, NavDropdownMenuSection } from '../../componen
 import { ModeChange } from './components/ModeChange'
 
 const HAMBURGER_ICON_SIZE = '18px'
-const HAMBURGER_ICON_COLOR = 'black'
+const HAMBURGER_ICON_COLOR = 'utils.text'
 
 type ProfileNavContentProps = {
   onNavigate?: () => void
@@ -42,10 +42,12 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const donateSections = getDonateNavDropdownSections(t)
+  const impactFundsPath = getPath('discoveryImpactFunds')
+  /** The Donate sections above already link to Field Partners and impact, so drop the About duplicates. */
   const aboutSections = getAboutNavDropdownSections(t).map((section) => ({
     ...section,
     items: section.items
-      .filter((item) => !item.to?.includes('#field-partners') && !item.to?.includes('#impact'))
+      .filter((item) => item.to?.split('#')[0] !== impactFundsPath)
       .map((item) => ({ ...item, trailingIcon: undefined })),
   }))
   const hamburgerSections = [...donateSections, ...aboutSections]

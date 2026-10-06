@@ -21,9 +21,9 @@ const BUTTONS = [
 
 /** Displays the in-page merch category shortcuts for the Guardians rewards grid. */
 export const ButtonArray = () => {
-  const buttonBg = useColorModeValue('white', 'gray.800')
+  const buttonBg = useColorModeValue('utils.pbg', 'gray.800')
   const buttonBorderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.200')
-  const buttonHoverBg = useColorModeValue('gray.50', 'gray.700')
+  const buttonHoverBg = useColorModeValue('utils.pageBg', 'gray.700')
 
   return (
     <HStack spacing={3} justify="center" w="full" flexWrap="wrap">

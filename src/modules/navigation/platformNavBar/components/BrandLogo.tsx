@@ -4,7 +4,9 @@ import { Link } from 'react-router'
 
 import LogoDark from '@/assets/logo-dark.svg'
 import LogoLight from '@/assets/logo-light.svg'
-import { __development__, __staging__, getPath, LogoNameDark, LogoNameLight, LogoOutline } from '@/shared/constants'
+import LogoNameDark from '@/assets/logo-name-dark.svg'
+import LogoNameLight from '@/assets/logo-name-light.svg'
+import { __development__, __staging__, getPath, LogoOutline } from '@/shared/constants'
 
 const EnvironmentTag = ({ compact = false }: { compact?: boolean }) => {
   if (!(__development__ || __staging__)) {
@@ -53,9 +55,8 @@ export const BrandLogo = ({ showOutline = false }: { showOutline?: boolean }) =>
   )
 }
 
-export const BrandLogoFull = ({ forceLightLogo = false }: { forceLightLogo?: boolean }) => {
-  const themedImageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
-  const imageUrl = forceLightLogo ? LogoNameLight : themedImageUrl
+export const BrandLogoFull = () => {
+  const imageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
 
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
@@ -63,7 +64,7 @@ export const BrandLogoFull = ({ forceLightLogo = false }: { forceLightLogo?: boo
         <Box h={{ base: '34px', lg: '40px' }}>
           <Image src={imageUrl} alt={t('Geyser logo')} height="100%" width="auto" objectFit="contain" />
         </Box>
-        <Box marginLeft={{ base: -2.5, lg: -3.5 }} marginTop={{ base: -3, lg: -4 }} alignSelf="flex-start">
+        <Box marginLeft={1} alignSelf="flex-start">
           <EnvironmentTag compact />
         </Box>
       </HStack>

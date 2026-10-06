@@ -5,9 +5,8 @@ import { darkModeColors, lightModeColors } from '../shared/styles'
 const GlobalStyles = () => (
   <Global
     styles={`
-        @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
-		    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Figtree:ital,wght@0,300..900;1,300..900&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
 
         
         @font-face {
@@ -101,11 +100,11 @@ const GlobalStyles = () => (
           }
         
         .chakra-ui-dark {
-            background: ${darkModeColors.utils.pbg}
+            background: ${darkModeColors.utils.pageBg}
           }
   
           .chakra-ui-light {
-            background: ${lightModeColors.utils.pbg}
+            background: ${lightModeColors.utils.pageBg}
           }
         
         @media (min-width: 57em) {

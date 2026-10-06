@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { VStack } from '@chakra-ui/react'
+import { SimpleGrid, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { fetchFeaturedProject } from '@/api/airtable.ts'
@@ -16,7 +16,12 @@ import { QUERY_LANDING_ABOVE_FOLD, QUERY_LANDING_ANNOUNCEMENTS } from '../../../
 import { LandingAboveFoldQueryData, LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
 import { type CircularGrantLandingFilter, CircularGrantFilterBar } from './sections/CircularGrantFilterBar.tsx'
 import { CircularGrantProjects } from './sections/CircularGrantProjects.tsx'
-import { CircularGrantsMission } from './sections/CircularGrantsMission.tsx'
+import {
+  CircularGrantsFocus,
+  FieldPartnerCaseStudy,
+  FieldPartnersPanel,
+  SupportMovementBand,
+} from './sections/CircularGrantsMission.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
 import { LatamImpactFundApplication } from './sections/LatamImpactFundApplication.tsx'
@@ -115,7 +120,7 @@ export const DefaultView = () => {
     skip: !showBelowTheFold,
   })
   return (
-    <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
+    <VStack w="full" spacing={10} paddingTop={{ base: 1, lg: 1.5 }}>
       {donateModalElement}
       <Head
         title={defaultSeoContent.title}
@@ -146,54 +151,64 @@ export const DefaultView = () => {
           })}
         </script>
       </Head>
-      <VStack w="full" spacing={20} paddingBottom={40}>
-        <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
+      <VStack w="full" spacing={{ base: 12, lg: 20 }} paddingBottom={{ base: 16, lg: 20 }}>
+        <VStack w="full" spacing={{ base: 4, lg: 6 }} align="stretch">
+          <CircularGrantFilterBar activeFilter={circularGrantFilter} onChange={setCircularGrantFilter} />
 
-        {circularGrantFilter === 'featured' ? (
-          <>
-            <CuratedProjects
-              featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
-              featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
-              featuredProjects={featuredProjects}
-              onRetryFeatured={() => {
-                loadFeaturedProjects()
-                if (featuredProjectNames.length > 0) {
-                  refetchFeaturedProjects()
-                }
-              }}
-            />
+          {circularGrantFilter === 'featured' ? (
+            <VStack w="full" spacing={{ base: 10, lg: 12 }} align="stretch">
+              <CuratedProjects
+                featuredError={featuredProjectsError || Boolean(featuredProjectsQueryError)}
+                featuredLoading={featuredProjectsLoading || featuredProjectsQueryLoading}
+                featuredProjects={featuredProjects}
+                onRetryFeatured={() => {
+                  loadFeaturedProjects()
+                  if (featuredProjectNames.length > 0) {
+                    refetchFeaturedProjects()
+                  }
+                }}
+              />
+              <CircularGrantProjects
+                title="Recent Circular Grants"
+                description=""
+                take={3}
+                emptyStateText="No recent Circular Grants found"
+                showDiscoverMore={false}
+              />
+            </VStack>
+          ) : (
             <CircularGrantProjects
-              title="Recent Circular Grants"
-              description=""
-              take={3}
-              emptyStateText="No recent Circular Grants found"
-              showDiscoverMore={false}
+              title={
+                circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'
+              }
+              take={6}
+              where={{
+                ...(circularGrantFilter === 'africa'
+                  ? { region: 'Africa' }
+                  : { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }),
+              }}
+              includeSuccessful
             />
-          </>
-        ) : (
-          <CircularGrantProjects
-            title={circularGrantFilter === 'africa' ? 'Circular Grants in Africa' : 'Circular Grants in Latin America'}
-            take={6}
-            where={{
-              ...(circularGrantFilter === 'africa'
-                ? { region: 'Africa' }
-                : { countryCodes: [...LATIN_AMERICA_COUNTRY_CODES] }),
-            }}
-            includeSuccessful
-          />
-        )}
-
-        <VStack w="full" spacing={{ base: 8, lg: 10 }}>
-          <CircularGrantsMission
-            onSupportImpactFund={() =>
-              openDonateModal({
-                defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID],
-              })
-            }
-          />
-
-          <LatamImpactFundApplication />
+          )}
         </VStack>
+
+        <CircularGrantsFocus />
+
+        <VStack w="full" spacing={{ base: 6, lg: 8 }} align="stretch">
+          <FieldPartnersPanel />
+          <SimpleGrid w="full" columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 8 }}>
+            <FieldPartnerCaseStudy />
+            <LatamImpactFundApplication />
+          </SimpleGrid>
+        </VStack>
+
+        <SupportMovementBand
+          onSupportImpactFund={() =>
+            openDonateModal({
+              defaultCategoryIds: [CIRCULAR_GRANTS_CATEGORY_ID],
+            })
+          }
+        />
 
         {showBelowTheFold && (
           <>
@@ -205,9 +220,10 @@ export const DefaultView = () => {
               onGiveawayRetry={() => refetchAnnouncements()}
               projectAnnouncements={announcementsData?.geyserAnnouncements ?? []}
             />
-            <NewsletterSignup />
           </>
         )}
+
+        <NewsletterSignup />
       </VStack>
     </VStack>
   )

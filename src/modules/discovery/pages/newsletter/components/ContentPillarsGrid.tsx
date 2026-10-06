@@ -8,10 +8,10 @@ import { CONTENT_PILLARS } from '../constants.ts'
 
 /** "Why subscribe" section with a responsive grid of content-pillar cards. */
 export const ContentPillarsGrid = () => {
-  const cardBg = useColorModeValue('white', 'neutral1.2')
+  const cardBg = useColorModeValue('utils.pbg', 'neutral1.2')
   const cardBorder = useColorModeValue('neutral1.3', 'neutral1.4')
-  const accentBg = useColorModeValue('primary1.100', 'primary1.900')
-  const iconColor = useColorModeValue('primary1.700', 'primary1.200')
+  const accentBg = 'primary1.3'
+  const iconColor = 'primary1.11'
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const bodyColor = useColorModeValue('neutral1.9', 'neutral1.10')
 

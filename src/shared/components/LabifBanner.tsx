@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Link } from 'react-router'
 
@@ -11,16 +11,17 @@ type LabifBannerProps = {
   committedAmount: string
 }
 
-const LABIF_MAP_IMAGE_URL = '/images/impact-funds/labif-latin-america-map.png'
+const LABIF_MAP_IMAGE_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/wave-halftone-map-of-latam-center-transparent-bg.png'
 
 /** Promotional banner for the Latin America Bitcoin Impact Fund. */
 export const LabifBanner = ({ learnMoreTo, applicationTo, committedAmount }: LabifBannerProps): JSX.Element => {
-  const surfaceBg = useColorModeValue('utils.pbg', 'neutral1.3')
-  const borderColor = useColorModeValue('neutral1.10', 'neutral1.6')
-  const primaryText = useColorModeValue('neutral1.12', 'neutral1.12')
-  const secondaryText = useColorModeValue('neutral1.11', 'neutral1.10')
-  const metricBg = useColorModeValue('neutral1.12', 'neutral1.2')
-  const metricText = useColorModeValue('white', 'neutral1.12')
+  const surfaceBg = 'utils.pbg'
+  const borderColor = 'neutral1.6'
+  const primaryText = 'utils.text'
+  const secondaryText = 'neutral1.11'
+  const metricBg = 'primary1.9'
+  const metricText = 'utils.primaryContrast'
 
   return (
     <Box
@@ -42,7 +43,7 @@ export const LabifBanner = ({ learnMoreTo, applicationTo, committedAmount }: Lab
         alt={t('Colorful map of Latin America')}
         position="absolute"
         left="auto"
-        right={{ base: 0, md: '28%', lg: '28%' }}
+        right={{ base: 0, md: '15%', lg: '15%' }}
         bottom={{ base: 0, md: 0, lg: 0 }}
         zIndex={0}
         w={{ base: '100%', md: 'auto', lg: 'auto' }}
@@ -122,7 +123,7 @@ export const LabifBanner = ({ learnMoreTo, applicationTo, committedAmount }: Lab
           as={Link}
           to={applicationTo}
           variant="solid"
-          colorScheme="amber"
+          colorScheme="primary1"
           h="48px"
           borderRadius="innerCard"
           flex={{ base: 1, md: 'initial' }}
