@@ -15,7 +15,11 @@ const PRIMARY_COLOR_OPTIONS = [
   '#5A6B45',
 ] as const
 
-const LIGHT_MODE_ONLY_VARIABLES = ['--chakra-colors-primary1-11', '--chakra-colors-utils-heading']
+const LIGHT_MODE_ONLY_VARIABLES = [
+  '--chakra-colors-primary1-11',
+  '--chakra-colors-utils-heading',
+  '--geyser-logo-color',
+]
 const ALL_MODE_VARIABLES = ['--chakra-colors-primary1-9', '--chakra-colors-utils-primarySolid', '--geyser-hero-field']
 const HOVER_VARIABLES = ['--chakra-colors-primary1-10', '--chakra-colors-utils-primarySolidHover']
 
