@@ -2003,5 +2003,7 @@
   "Apply for funding": "Demander un financement",
   "Would you like to apply with an existing project or create a new one?": "Souhaitez-vous postuler avec un projet existant ou en créer un nouveau ?",
   "Existing project": "Projet existant",
-  "New project": "Nouveau projet"
+  "New project": "Nouveau projet",
+  "All of your projects have already applied to this impact fund.": "Tous vos projets ont déjà fait une demande auprès de ce fonds à impact.",
+  "You don't have any projects yet. Create a project to apply for funding.": "Vous n’avez pas encore de projet. Créez-en un pour demander un financement."
 }

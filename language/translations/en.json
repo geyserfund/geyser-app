@@ -2919,5 +2919,7 @@
   "Apply for funding": "Apply for funding",
   "Would you like to apply with an existing project or create a new one?": "Would you like to apply with an existing project or create a new one?",
   "Existing project": "Existing project",
-  "New project": "New project"
+  "New project": "New project",
+  "All of your projects have already applied to this impact fund.": "All of your projects have already applied to this impact fund.",
+  "You don't have any projects yet. Create a project to apply for funding.": "You don't have any projects yet. Create a project to apply for funding."
 }
