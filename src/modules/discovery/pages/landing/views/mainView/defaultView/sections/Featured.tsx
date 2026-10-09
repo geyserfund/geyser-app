@@ -32,6 +32,7 @@ export type FeaturedAirtableResponse = {
   records: FeaturedAirtableRecord[]
 }
 
+/** @deprecated Legacy Airtable showcase; the homepage uses live Circular Grants instead. */
 export const Featured = () => {
   const { t } = useTranslation()
 

@@ -2,6 +2,7 @@ import { VITE_APP_AIR_TABLE_KEY } from '@/shared/constants/config/env'
 
 const AIRTABLE_API = 'https://api.airtable.com/v0/appyM7XlNIWVypuP5'
 
+/** @deprecated Homepage featured projects now come from live Circular Grants ranked by balance. */
 export const fetchFeaturedProject = async () => {
   return fetch(`${AIRTABLE_API}/Featured%20Project?maxRecords=6&view=Grid%20view`, {
     method: 'GET',
