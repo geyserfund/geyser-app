@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { PiArrowRight, PiCaretRight } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
+import { useNavigationDonateModal } from '@/modules/navigation/components/NavigationDonateProvider.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 
@@ -13,8 +14,9 @@ type DonateNavMenuContentProps = {
   onNavigate?: () => void
 }
 
-/** Donate mega-menu: Circular Grants, Support Geyser, and legacy crowdfunding. */
+/** Donate mega-menu: Circular Grants, Geyser Impact Fund, and legacy crowdfunding. */
 export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavMenuContentProps) => {
+  const openDonateModal = useNavigationDonateModal()
   const menu = getDonateNavMenu(t)
   const mutedColor = 'neutralAlpha.11'
   const cardBackground = useColorModeValue('utils.pageBg', 'neutral1.2')
@@ -141,9 +143,10 @@ export const DonateNavMenuContent = ({ compact = false, onNavigate }: DonateNavM
             <Button
               gridArea="action"
               justifySelf={compact ? 'start' : 'end'}
-              as={RouterLink}
-              to={menu.supportGeyser.ctaTo}
-              onClick={onNavigate}
+              onClick={() => {
+                onNavigate?.()
+                openDonateModal()
+              }}
               size={compact ? 'md' : 'lg'}
               variant="outline"
               colorScheme="neutral1"

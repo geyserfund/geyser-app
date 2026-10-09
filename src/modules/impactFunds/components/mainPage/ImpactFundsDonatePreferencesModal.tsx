@@ -31,6 +31,8 @@ type ImpactFundsDonatePreferencesModalProps = {
   defaultCategoryIds?: ImpactFundDonateCategoryId[]
 }
 
+const DEFAULT_CATEGORY_IDS: ImpactFundDonateCategoryId[] = []
+
 const TOPIC_SECTIONS = [
   {
     id: CIRCULAR_GRANTS_CATEGORY_ID,
@@ -51,7 +53,7 @@ export function ImpactFundsDonatePreferencesModal({
   isOpen,
   onClose,
   impactFunds,
-  defaultCategoryIds = [],
+  defaultCategoryIds = DEFAULT_CATEGORY_IDS,
 }: ImpactFundsDonatePreferencesModalProps): React.ReactNode {
   const navigate = useNavigate()
   const { error: notifyError } = useNotification()

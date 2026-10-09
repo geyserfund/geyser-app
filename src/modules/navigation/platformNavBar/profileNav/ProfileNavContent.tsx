@@ -13,6 +13,7 @@ import {
   getAboutNavDropdownSections,
   getDonateNavDropdownSections,
 } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
+import { useNavigationDonateModal } from '@/modules/navigation/components/NavigationDonateProvider.tsx'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
@@ -35,9 +36,11 @@ type MobileNavigationItem = {
   icon: IconType
   label: string
   path?: string
+  onClick?: () => void
 }
 
 export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNavContentProps) => {
+  const openDonateModal = useNavigationDonateModal()
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
@@ -55,8 +58,8 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
     { label: 'Home', path: getPath('discoveryLanding'), icon: PiHouse },
     { label: 'My projects', path: getPath('discoveryMyProjects'), icon: PiRocket },
     {
-      label: 'Support Geyser',
-      path: getPath('fundingStart', 'geyser'),
+      label: 'Donate',
+      onClick: openDonateModal,
       icon: PiHandHeart,
       emphasized: true,
     },
@@ -125,6 +128,21 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
                   href={item.href}
                   isExternal
                   onClick={onNavigate}
+                  {...itemStyle}
+                >
+                  {itemContent}
+                </MenuItem>
+              )
+            }
+
+            if (item.onClick) {
+              return (
+                <MenuItem
+                  key={item.label}
+                  onClick={() => {
+                    onNavigate?.()
+                    item.onClick?.()
+                  }}
                   {...itemStyle}
                 >
                   {itemContent}

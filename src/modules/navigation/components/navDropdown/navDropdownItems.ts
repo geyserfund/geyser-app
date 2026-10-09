@@ -39,7 +39,6 @@ export type DonateNavMenuData = {
   }
   supportGeyser: {
     ctaLabel: string
-    ctaTo: string
     description: string
     icon: IconType
     links: DonateNavLink[]
@@ -82,12 +81,11 @@ export const getDonateNavMenu = (t: TFunction): DonateNavMenuData => {
     },
     supportGeyser: {
       icon: PiUsersThree,
-      title: t('Support Geyser'),
+      title: t('Geyser Impact Fund'),
       description: t(
         'Help fund the people, tools, and infrastructure that make this work possible, including our Field Partner network.',
       ),
-      ctaLabel: t('Support Geyser'),
-      ctaTo: getPath('fundingStart', 'geyser'),
+      ctaLabel: t('Donate'),
       links: [
         {
           icon: PiHandshake,

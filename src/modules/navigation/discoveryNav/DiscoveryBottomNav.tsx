@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router'
 import { DonateNavMenuContent } from '@/modules/navigation/components/navDropdown/DonateNavMenuContent.tsx'
 import { getAboutNavDropdownSections } from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
 import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
+import { useNavigationDonateModal } from '@/modules/navigation/components/NavigationDonateProvider.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 
@@ -28,6 +29,7 @@ export type BottomNavItem = {
 const matchesRoute = (pathname: string, route: string) => pathname === route || pathname.startsWith(`${route}/`)
 
 export const DiscoveryBottomNav = () => {
+  const openDonateModal = useNavigationDonateModal()
   const location = useLocation()
 
   const bottomNavLabelColor = 'utils.text'
@@ -55,10 +57,10 @@ export const DiscoveryBottomNav = () => {
       isActive: matchesRoute(location.pathname, getPath('about')),
     },
     {
-      label: t('Support Geyser'),
+      label: t('Donate'),
       key: BottomNavItemKey.ops,
-      path: getPath('fundingStart', 'geyser'),
-      isActive: matchesRoute(location.pathname, getPath('fundingStart', 'geyser')),
+      onClick: openDonateModal,
+      isActive: false,
     },
   ]
 

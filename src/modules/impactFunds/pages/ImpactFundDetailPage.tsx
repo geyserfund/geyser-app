@@ -71,6 +71,7 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
+import { ApplicationProjectChoiceModal } from '../components/ApplicationProjectChoiceModal.tsx'
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
 import { IMPACT_FUND_DETAILS_HERO_IMAGES, IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 import {
@@ -339,8 +340,7 @@ export function ImpactFundDetailPage(): React.ReactNode | null {
     [availableOwnedProjects, selectedProjectId],
   )
   const projectDescriptionError = getImpactFundProjectDescriptionError(projectDescription)
-  const hasAvailableProjects = availableOwnedProjects.length > 0
-  const shouldDisableApply = isLoggedIn && !hasAvailableProjects
+  const shouldDisableApply = false
 
   useEffect(() => {
     if (availableOwnedProjects.length === 0) {
@@ -372,14 +372,10 @@ export function ImpactFundDetailPage(): React.ReactNode | null {
       return
     }
 
-    if (!hasAvailableProjects) {
-      return
-    }
-
     const firstOwnedProjectId = String(availableOwnedProjects[0]?.id || '')
     setSelectedProjectId(firstOwnedProjectId)
     onProjectModalOpen()
-  }, [availableOwnedProjects, hasAvailableProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
+  }, [availableOwnedProjects, isLoggedIn, loginOnOpen, onProjectModalOpen])
 
   const handleApplyClick = useCallback(() => {
     setImpactFundActionHash(APPLY_HASH)
@@ -1839,10 +1835,28 @@ function ApplicationSubmissionModal({
 }: ApplicationSubmissionModalProps): React.ReactNode {
   const hasProjectDescriptionError = hasSubmittedApplicationForm && Boolean(projectDescriptionError)
   const { handleLauchNowClick, renderModal } = useLaunchNow()
+  const [step, setStep] = useState<'choice' | 'existing'>('choice')
+
+  useEffect(() => {
+    if (!isOpen) {
+      setStep('choice')
+    }
+  }, [isOpen])
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size={{ base: 'full', md: '4xl' }}>
+      <ApplicationProjectChoiceModal
+        isOpen={isOpen && step === 'choice'}
+        onClose={onClose}
+        onExistingProject={() => setStep('existing')}
+        onNewProject={() => {
+          onClose()
+          handleLauchNowClick()
+        }}
+        hasAvailableProjects={ownedProjects.length > 0}
+        hasOwnedProjects={hasOwnedProjects}
+      />
+      <Modal isOpen={isOpen && step === 'existing'} onClose={onClose} size={{ base: 'full', md: '4xl' }}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{t('Submit your application')}</ModalHeader>
@@ -1988,6 +2002,9 @@ function ApplicationSubmissionModal({
             </VStack>
           </ModalBody>
           <ModalFooter>
+            <Button variant="ghost" onClick={() => setStep('choice')} isDisabled={applying} mr={3}>
+              {t('Back')}
+            </Button>
             {ownedProjects.length > 0 && (
               <Button w="full" colorScheme="primary1" isLoading={applying} onClick={onSubmitApplication} size="lg">
                 {t('Submit Application')}

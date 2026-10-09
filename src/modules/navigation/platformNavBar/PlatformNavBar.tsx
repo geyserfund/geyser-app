@@ -3,15 +3,15 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { PiX } from 'react-icons/pi'
-import { Link, Location, useLocation, useNavigate } from 'react-router'
+import { Location, useLocation, useNavigate } from 'react-router'
 
 import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/modules/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
+import { useNavigationDonateModal } from '@/modules/navigation/components/NavigationDonateProvider.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath } from '@/shared/constants/index.ts'
 import { ImpactFundsFieldPartnerApplicationUrl } from '@/shared/constants/platform/url.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
@@ -39,6 +39,7 @@ import { ProfileNav } from './profileNav/ProfileNav'
 
 /** Renders the fixed top platform navigation shared across platform pages. */
 export const PlatformNavBar = () => {
+  const openDonateModal = useNavigationDonateModal()
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
   const landingContentMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
@@ -136,10 +137,9 @@ export const PlatformNavBar = () => {
       </Button>
     ) : null
 
-    const supportGeyserButton = shouldShowDesktopNav ? (
+    const donateButton = shouldShowDesktopNav ? (
       <Button
-        as={Link}
-        to={getPath('fundingStart', 'geyser')}
+        onClick={() => openDonateModal()}
         display={{ base: 'none', lg: 'flex' }}
         size={{ base: 'md', lg: 'lg' }}
         variant="outline"
@@ -150,7 +150,7 @@ export const PlatformNavBar = () => {
         fontWeight={600}
         borderRadius={{ base: '8px', lg: '10px' }}
       >
-        {t('Support Geyser')}
+        {t('Donate')}
       </Button>
     ) : null
 
@@ -175,13 +175,13 @@ export const PlatformNavBar = () => {
         {!isLoggedIn ? (
           <>
             {becomeFieldPartnerButton}
-            {supportGeyserButton}
+            {donateButton}
             <LoginButton color="utils.text" paddingX={{ base: 2, lg: 4 }} />
           </>
         ) : (
           <>
             {becomeFieldPartnerButton}
-            {supportGeyserButton}
+            {donateButton}
             {shouldShowProjectSelectMenu ? <ProjectSelectMenu /> : null}
           </>
         )}
@@ -189,6 +189,7 @@ export const PlatformNavBar = () => {
       </HStack>
     )
   }, [
+    openDonateModal,
     isLoggedIn,
     isManifestoPage,
     isSearchExpanded,
