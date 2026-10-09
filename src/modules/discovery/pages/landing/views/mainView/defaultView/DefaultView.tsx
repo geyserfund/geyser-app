@@ -1,27 +1,27 @@
 import { useQuery } from '@apollo/client'
 import { Box, SimpleGrid, VStack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { fetchFeaturedProject } from '@/api/airtable.ts'
 import { Head } from '@/config/Head.tsx'
 import { useImpactFundsDonateModal } from '@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx'
 import { CIRCULAR_GRANTS_CATEGORY_ID } from '@/modules/impactFunds/utils/impactFundDonatePreferences.ts'
-import { __development__ } from '@/shared/constants/config/env.ts'
 import { getAiSeoPageContent, getPath, GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
 import { LATIN_AMERICA_COUNTRY_CODES } from '@/shared/constants/platform/regionCountryCodes.ts'
 import { brandColors } from '@/shared/styles/brandPalette.ts'
 import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import type { ProjectsGetWhereInput } from '@/types/index.ts'
 import {
+  OrderByDirection,
   ProjectsGetWhereInputStatus,
+  ProjectsOrderByField,
+  useLandingAboveFoldQuery,
   useLandingCircularGrantsByFilterLazyQuery,
-  useLandingCircularGrantsByFilterQuery,
 } from '@/types/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
-import { QUERY_LANDING_ABOVE_FOLD, QUERY_LANDING_ANNOUNCEMENTS } from '../../../graphql/landingPageQueries.ts'
-import { LandingAboveFoldQueryData, LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
+import { QUERY_LANDING_ANNOUNCEMENTS } from '../../../graphql/landingPageQueries.ts'
+import type { LandingAnnouncementsQueryData } from '../../../graphql/landingPageTypes.ts'
 import { type CircularGrantLandingFilter, CircularGrantFilterBar } from './sections/CircularGrantFilterBar.tsx'
 import { CircularGrantProjects, getCircularGrantProjectsQueryVariables } from './sections/CircularGrantProjects.tsx'
 import {
@@ -50,22 +50,6 @@ const REGION_FILTER_ROWS: Record<
   },
 }
 
-type FeaturedAirtableResponse = {
-  records: Array<{ fields: { Name?: string; Type?: string } }>
-}
-
-const normalizeProjectName = (name: string) => name.replace(/[^a-z0-9]/gi, '')
-
-const sortProjectsByNames = <T extends { name: string }>(projects: T[], names: string[]) => {
-  const order = new Map(names.map((name, index) => [normalizeProjectName(name), index]))
-
-  return [...projects].sort(
-    (firstProject, secondProject) =>
-      (order.get(normalizeProjectName(firstProject.name)) ?? Number.MAX_SAFE_INTEGER) -
-      (order.get(normalizeProjectName(secondProject.name)) ?? Number.MAX_SAFE_INTEGER),
-  )
-}
-
 /** Full-bleed burnt ochre band that raised cards sit on (see DESIGN.md). */
 const OchreBand = ({ children }: { children: ReactNode }) => (
   <Box
@@ -85,36 +69,8 @@ const OchreBand = ({ children }: { children: ReactNode }) => (
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
   const [circularGrantFilter, setCircularGrantFilter] = useState<CircularGrantLandingFilter>('featured')
-  const [featuredProjectNames, setFeaturedProjectNames] = useState<string[]>([])
-  const [featuredProjectsLoading, setFeaturedProjectsLoading] = useState(true)
-  const [featuredProjectsError, setFeaturedProjectsError] = useState(false)
   const defaultSeoContent = getAiSeoPageContent('default')
   const { donateModalElement, openDonateModal } = useImpactFundsDonateModal()
-
-  const loadFeaturedProjects = useCallback(async () => {
-    setFeaturedProjectsLoading(true)
-    setFeaturedProjectsError(false)
-
-    try {
-      const response = (await fetchFeaturedProject()) as FeaturedAirtableResponse
-      const projectNames = response.records
-        .map((record) => record.fields)
-        .filter((data) => data.Type === 'project' && data.Name)
-        .map((data) => data.Name as string)
-        .slice(0, CURATED_PROJECTS_COUNT)
-
-      setFeaturedProjectNames(projectNames)
-    } catch (_error) {
-      setFeaturedProjectsError(true)
-      setFeaturedProjectNames([])
-    } finally {
-      setFeaturedProjectsLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    loadFeaturedProjects()
-  }, [loadFeaturedProjects])
 
   useEffect(() => {
     /** Wait for initial content to render before showing below-the-fold content */
@@ -130,24 +86,23 @@ export const DefaultView = () => {
     error: featuredProjectsQueryError,
     loading: featuredProjectsQueryLoading,
     refetch: refetchFeaturedProjects,
-  } = useQuery<LandingAboveFoldQueryData>(QUERY_LANDING_ABOVE_FOLD, {
-    skip: featuredProjectNames.length === 0,
+  } = useLandingAboveFoldQuery({
     variables: {
       input: {
         where: {
-          names: featuredProjectNames,
           isCircularGrant: true,
-          statuses: [ProjectsGetWhereInputStatus.Active, ProjectsGetWhereInputStatus.Closed],
+          status: ProjectsGetWhereInputStatus.Active,
         },
-        pagination: { take: featuredProjectNames.length },
+        pagination: { take: CURATED_PROJECTS_COUNT },
+        orderBy: [
+          { direction: OrderByDirection.Desc, field: ProjectsOrderByField.Balance },
+          { direction: OrderByDirection.Desc, field: ProjectsOrderByField.LaunchedAt },
+        ],
       },
     },
   })
 
-  const featuredProjects = useMemo(
-    () => sortProjectsByNames(featuredProjectsData?.projectsGet.projects ?? [], featuredProjectNames),
-    [featuredProjectNames, featuredProjectsData?.projectsGet.projects],
-  )
+  const featuredProjects = featuredProjectsData?.projectsGet.projects ?? []
   const {
     data: announcementsData,
     error: announcementsError,
@@ -156,18 +111,6 @@ export const DefaultView = () => {
   } = useQuery<LandingAnnouncementsQueryData>(QUERY_LANDING_ANNOUNCEMENTS, {
     skip: !showBelowTheFold,
   })
-  /**
-   * DEV ONLY: the curated list comes from Airtable names that do not exist in the dev database,
-   * so fall back to whatever Circular Grants the dev backend has to fill the featured grid.
-   */
-  const useDevFeaturedProjects = __development__ && featuredProjects.length === 0
-  const { data: devFeaturedData, loading: devFeaturedLoading } = useLandingCircularGrantsByFilterQuery({
-    skip: !useDevFeaturedProjects,
-    variables: { take: CURATED_PROJECTS_COUNT, where: { isCircularGrant: true } },
-  })
-  const devFeaturedProjects = useDevFeaturedProjects ? devFeaturedData?.projectsGet.projects ?? [] : []
-  const hasDevFeaturedProjects = devFeaturedProjects.length > 0
-
   const isFeaturedFilter = circularGrantFilter === 'featured'
 
   /** Warm the cache for both region filters after first paint so switching chips renders without a loading state. */
@@ -233,21 +176,10 @@ export const DefaultView = () => {
           <VStack w="full" spacing={{ base: 10, lg: 12 }} align="stretch">
             {isFeaturedFilter ? (
               <CuratedProjects
-                featuredError={
-                  !hasDevFeaturedProjects && (featuredProjectsError || Boolean(featuredProjectsQueryError))
-                }
-                featuredLoading={
-                  featuredProjectsLoading ||
-                  featuredProjectsQueryLoading ||
-                  (useDevFeaturedProjects && devFeaturedLoading)
-                }
-                featuredProjects={hasDevFeaturedProjects ? devFeaturedProjects : featuredProjects}
-                onRetryFeatured={() => {
-                  loadFeaturedProjects()
-                  if (featuredProjectNames.length > 0) {
-                    refetchFeaturedProjects()
-                  }
-                }}
+                featuredError={Boolean(featuredProjectsQueryError)}
+                featuredLoading={featuredProjectsQueryLoading}
+                featuredProjects={featuredProjects}
+                onRetryFeatured={() => refetchFeaturedProjects()}
               />
             ) : (
               <CircularGrantProjects
