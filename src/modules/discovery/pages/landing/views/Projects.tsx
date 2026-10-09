@@ -163,7 +163,7 @@ const getFundingStrategy = (projectTypeFilter: ProjectTypeFilter) => {
 }
 
 const getIsCircularGrantFilter = (projectTypeFilter: ProjectTypeFilter) =>
-  projectTypeFilter === 'circular-grants' ? true : undefined
+  projectTypeFilter === 'circular-grants' ? true : projectTypeFilter === 'all' ? false : undefined
 
 const getProjectTypeLabel = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
   if (projectTypeFilter === 'campaigns') {
@@ -369,6 +369,7 @@ export const Projects = () => {
   const tagFiltersCount = tagIds?.length ?? 0
   const supportsMostFundedThisMonth =
     !isSuccessfullyFundedCampaignsRoute &&
+    projectTypeFilter !== 'all' &&
     projectTypeFilter !== 'circular-grants' &&
     !hasSearchFilter &&
     tagFiltersCount === 0
