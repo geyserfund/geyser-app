@@ -92,6 +92,7 @@ export const DefaultView = () => {
         where: {
           isCircularGrant: true,
           status: ProjectsGetWhereInputStatus.Active,
+          goalReached: false,
         },
         pagination: { take: CURATED_PROJECTS_COUNT },
         orderBy: [

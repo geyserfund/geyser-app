@@ -100,7 +100,7 @@ describe('Homepage live Circular Grants', () => {
     expect(mocks.query).toHaveBeenCalledWith({
       variables: {
         input: {
-          where: { isCircularGrant: true, status: 'active' },
+          where: { isCircularGrant: true, status: 'active', goalReached: false },
           pagination: { take: 3 },
           orderBy: [
             { direction: 'desc', field: 'balance' },
