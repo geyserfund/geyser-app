@@ -1836,12 +1836,12 @@ function ApplicationSubmissionModal({
   const hasProjectDescriptionError = hasSubmittedApplicationForm && Boolean(projectDescriptionError)
   const { handleLauchNowClick, renderModal } = useLaunchNow()
   const [step, setStep] = useState<'choice' | 'existing'>('choice')
+  const [previousIsOpen, setPreviousIsOpen] = useState(isOpen)
 
-  useEffect(() => {
-    if (!isOpen) {
-      setStep('choice')
-    }
-  }, [isOpen])
+  if (previousIsOpen !== isOpen) {
+    setPreviousIsOpen(isOpen)
+    setStep('choice')
+  }
 
   return (
     <>
