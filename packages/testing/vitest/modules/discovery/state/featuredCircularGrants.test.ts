@@ -7,7 +7,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 const mocks = vi.hoisted(() => ({
   query: vi.fn(),
   retry: vi.fn(),
-  result: {} as { data?: { projectsGet: { projects: { name: string }[] } }; loading?: boolean; error?: Error },
+  result: {} as {
+    data?: { projectsGet: { projects: { name: string; fundingSummary: { percentageFunded: number | null } }[] } }
+    loading?: boolean
+    error?: Error
+  },
 }))
 vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true)
 vi.mock('@/types/index.ts', async (original) => ({
@@ -92,16 +96,27 @@ afterEach(() => {
 const render = () => act(() => root.render(createElement(ChakraProvider, null, createElement(DefaultView))))
 
 describe('Homepage live Circular Grants', () => {
-  it('requests the top three active circular grants and keeps server balance order', () => {
+  it('requests ranked candidates and shows the top three projects below 100% funded', () => {
     mocks.result = {
-      data: { projectsGet: { projects: [{ name: 'z-highest' }, { name: 'a-second' }, { name: 'm-third' }] } },
+      data: {
+        projectsGet: {
+          projects: [
+            { name: 'already-over', fundingSummary: { percentageFunded: 117 } },
+            { name: 'already-funded', fundingSummary: { percentageFunded: 100 } },
+            { name: 'z-highest-open', fundingSummary: { percentageFunded: 80 } },
+            { name: 'a-second-open', fundingSummary: { percentageFunded: 45 } },
+            { name: 'm-third-open', fundingSummary: { percentageFunded: 0 } },
+            { name: 'fourth-open', fundingSummary: { percentageFunded: 12 } },
+          ],
+        },
+      },
     }
     render()
     expect(mocks.query).toHaveBeenCalledWith({
       variables: {
         input: {
           where: { isCircularGrant: true, status: 'active', goalReached: false },
-          pagination: { take: 3 },
+          pagination: { take: 20 },
           orderBy: [
             { direction: 'desc', field: 'balance' },
             { direction: 'desc', field: 'launchedAt' },
@@ -109,7 +124,7 @@ describe('Homepage live Circular Grants', () => {
         },
       },
     })
-    expect(container.textContent).toBe('z-highest,a-second,m-third')
+    expect(container.textContent).toBe('z-highest-open,a-second-open,m-third-open')
   })
 
   it('shows loading while the live projects query is pending', () => {

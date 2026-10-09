@@ -36,6 +36,7 @@ import { LatamImpactFundApplication } from './sections/LatamImpactFundApplicatio
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 
 const CURATED_PROJECTS_COUNT = 3
+const FEATURED_PROJECTS_QUERY_TAKE = 20
 const REGION_FILTER_TAKE = 3
 
 /** Region rows keyed by filter; module-level so the query variables keep a stable identity between renders. */
@@ -94,7 +95,7 @@ export const DefaultView = () => {
           status: ProjectsGetWhereInputStatus.Active,
           goalReached: false,
         },
-        pagination: { take: CURATED_PROJECTS_COUNT },
+        pagination: { take: FEATURED_PROJECTS_QUERY_TAKE },
         orderBy: [
           { direction: OrderByDirection.Desc, field: ProjectsOrderByField.Balance },
           { direction: OrderByDirection.Desc, field: ProjectsOrderByField.LaunchedAt },
@@ -103,7 +104,10 @@ export const DefaultView = () => {
     },
   })
 
-  const featuredProjects = featuredProjectsData?.projectsGet.projects ?? []
+  const featuredProjects =
+    featuredProjectsData?.projectsGet.projects
+      .filter((project) => (project.fundingSummary.percentageFunded ?? 0) < 100)
+      .slice(0, CURATED_PROJECTS_COUNT) ?? []
   const {
     data: announcementsData,
     error: announcementsError,
