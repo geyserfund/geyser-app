@@ -11,8 +11,6 @@ import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
 import { LoadingPage } from './modules/general/loading/index.tsx'
 import { NavigationDonateProvider } from './modules/navigation/components/NavigationDonateProvider.tsx'
 import { PlatformNavBar } from './modules/navigation/platformNavBar/PlatformNavBar'
-import { InfoBanner } from './modules/notification/InfoBanner'
-import { NoticeBanner } from './modules/notification/NoticeBanner'
 import { dimensions } from './shared/constants/components/dimensions.ts'
 import { ID } from './shared/constants/components/id.ts'
 import { useLayoutAnimation } from './shared/hooks'
@@ -77,8 +75,6 @@ export const AppLayout = () => {
               >
                 <Outlet />
               </Box>
-              <InfoBanner />
-              <NoticeBanner />
             </Box>
           </Box>
         </PullToRefresh>
