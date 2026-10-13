@@ -18,7 +18,6 @@ import { getShortAmountLabel } from '@/utils'
 import { ProjectRowLayout } from '../../landing/views/mainView/defaultView/components/ProjectRowLayout.tsx'
 import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
-import { SponsorshipBanner } from './SponsorshipBanner'
 
 const MAX_HEROES = 10
 
@@ -40,7 +39,6 @@ export const GeyserHeroes = () => {
   return (
     <ProjectRowLayout w="full" title={t('Top Heroes')}>
       <VStack w="full" flex={1}>
-        <SponsorshipBanner />
         <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems="stretch" spacing={4}>
           <HeroSectionWrapper
             title={t('Field Partners')}
