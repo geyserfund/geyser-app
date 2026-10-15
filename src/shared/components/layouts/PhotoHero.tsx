@@ -2,11 +2,11 @@ import type { BoxProps, ResponsiveValue } from '@chakra-ui/react'
 import { Box, VStack } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 
+import { InsetSection } from '@/shared/components/layouts/InsetSection.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { heroFieldColor, heroForestOverlayGradient } from '@/shared/styles/brandPalette.ts'
-import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
+import { heroContentPadding, heroMarginY } from '@/shared/styles/reponsiveValues.ts'
 
 /** Shared minimum height for photo heroes. */
 export const HERO_MIN_HEIGHT = { base: '310px', lg: '470px' }
@@ -23,7 +23,7 @@ type PhotoHeroProps = Omit<BoxProps, 'title'> & {
 }
 
 /**
- * Full-bleed photo hero (see DESIGN.md): Deep Forest field on the left fading into a photograph on the right,
+ * Inset photo hero: Deep Forest field on the left fading into a photograph on the right,
  * with a white display headline and lead paragraph.
  * @param imagePosition - CSS background-position that keeps the photo's subject clear of the text.
  */
@@ -37,15 +37,7 @@ export const PhotoHero = ({
   ...props
 }: PhotoHeroProps) => {
   return (
-    <Box
-      w="full"
-      position="relative"
-      overflow="hidden"
-      borderRadius={0}
-      minHeight={HERO_MIN_HEIGHT}
-      bg={heroFieldColor}
-      {...props}
-    >
+    <InsetSection my={heroMarginY} minHeight={HERO_MIN_HEIGHT} bg={heroFieldColor} {...props}>
       <Box
         position="absolute"
         top={0}
@@ -62,10 +54,8 @@ export const PhotoHero = ({
       <Box
         position="relative"
         w="full"
-        maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
         minHeight={HERO_MIN_HEIGHT}
-        mx="auto"
-        paddingX={standardPadding}
+        paddingX={heroContentPadding}
         paddingTop={{ base: 10, lg: 12 }}
         paddingBottom={{ base: 10, lg: 12 }}
         display="flex"
@@ -95,6 +85,6 @@ export const PhotoHero = ({
           </Body>
         </VStack>
       </Box>
-    </Box>
+    </InsetSection>
   )
 }

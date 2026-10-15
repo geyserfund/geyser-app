@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/geyserfund/geyser-app/compare/v1.0.6...v1.1.0) (2026-10-15)
+
+
+### Features
+
+* **ui:** refine marketing sections and card shapes ([732c1ff](https://github.com/geyserfund/geyser-app/commit/732c1ff0be99022a3b46c2a1305233faf0e58b6c))
+
 ## [1.0.0](https://github.com/geyserfund/geyser-app/compare/v0.60.0...v1.0.0) (2026-10-06)
 
 
