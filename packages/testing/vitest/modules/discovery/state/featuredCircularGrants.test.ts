@@ -21,7 +21,6 @@ vi.mock('@/types/index.ts', async (original) => ({
     return { ...mocks.result, refetch: mocks.retry }
   },
   useLandingAnnouncementsQuery: () => ({}),
-  useLandingCircularGrantsByFilterLazyQuery: () => [vi.fn()],
 }))
 // An accidental return to Airtable curation fails immediately, without using a network key.
 vi.mock('@/api/airtable.ts', () => ({}))
@@ -40,9 +39,6 @@ vi.mock('@/modules/impactFunds/hooks/useImpactFundsDonateModal.tsx', () => ({
   useImpactFundsDonateModal: () => ({ openDonateModal: vi.fn(), donateModalElement: null }),
 }))
 vi.mock('@/modules/discovery/pages/heroes/index.ts', () => ({ HeroesMainPage: () => null }))
-vi.mock('@/modules/discovery/pages/landing/views/mainView/defaultView/sections/CircularGrantFilterBar.tsx', () => ({
-  CircularGrantFilterBar: () => null,
-}))
 vi.mock('@/modules/discovery/pages/landing/views/mainView/defaultView/sections/CircularGrantProjects.tsx', () => ({
   CircularGrantProjects: () => null,
 }))

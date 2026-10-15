@@ -200,7 +200,7 @@ const CircularGrantProjectsSection = ({ region }: { region: string | null }) => 
       : undefined
 
   return (
-    <PageSection>
+    <PageSection pt={0}>
       <CircularGrantProjects title="Circular Grants" where={where} take={6} />
     </PageSection>
   )
@@ -512,12 +512,6 @@ const FaqSection = ({ colors }: { colors: CircularGrantsColors }) => (
 
 const HeroSection = () => (
   <PhotoHero
-    w="100vw"
-    maxW="100vw"
-    left="50%"
-    right="50%"
-    ml="-50vw"
-    mr="-50vw"
     imageUrl={CIRCULAR_GRANTS_HERO_IMAGE_URL}
     imagePosition={{ base: '70% center', lg: 'left 42%' }}
     title={t('Reusable capital for trusted local economies')}
@@ -529,12 +523,14 @@ const HeroSection = () => (
 
 const PageSection = ({
   children,
+  pt,
   py = dimensions.impactLendingSection.paddingY,
 }: {
   children: React.ReactNode
   py?: React.ComponentProps<typeof Box>['py']
+  pt?: React.ComponentProps<typeof Box>['pt']
 }) => (
-  <Box w="full" px={standardPadding} py={py}>
+  <Box w="full" px={standardPadding} paddingTop={pt ?? py} paddingBottom={py}>
     <Box maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto">
       {children}
     </Box>

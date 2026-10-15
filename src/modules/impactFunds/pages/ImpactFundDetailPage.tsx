@@ -49,6 +49,7 @@ import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { useLaunchNow } from '@/modules/project/pages/projectCreation/hooks/useLaunchNow.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { InsetSection } from '@/shared/components/layouts/InsetSection.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1, H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -56,6 +57,7 @@ import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
 import { MdxMarkdownEditor } from '@/shared/markdown/MdxMarkdownEditor.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
+import { heroContentPadding, heroMarginY } from '@/shared/styles/reponsiveValues.ts'
 import type { ImpactFundApplicationsQuery, ImpactFundQuery } from '@/types'
 import {
   ImpactFundApplicationFundingModel,
@@ -1097,28 +1099,36 @@ function ImpactFundWideHero({
     'linear-gradient(90deg, var(--chakra-colors-blackAlpha-800) 0%, var(--chakra-colors-blackAlpha-600) 42%, var(--chakra-colors-blackAlpha-200) 100%)',
   )
 
+  const heroMinHeight = heroOverride
+    ? { base: 'auto', lg: dimensions.impactLendingHero.minHeight.lg }
+    : dimensions.impactLendingHero.minHeight
+  const artworkLayout = heroOverride
+    ? ({
+        position: { base: 'relative', lg: 'absolute' },
+        order: { base: 1, lg: 0 },
+        h: { base: '220px', lg: 'auto' },
+        mx: { base: 6, lg: 0 },
+        mb: { base: 6, lg: 0 },
+      } as const)
+    : ({ position: 'absolute' } as const)
+
   return (
-    <Box
-      w="100vw"
-      maxW="100vw"
-      position="relative"
-      left="50%"
-      right="50%"
-      ml="-50vw"
-      mr="-50vw"
-      overflow="hidden"
-      minH={dimensions.impactLendingHero.minHeight}
+    <InsetSection
+      my={heroMarginY}
+      minH={heroMinHeight}
       bg={heroOverride?.backgroundColor ?? 'neutral1.2'}
+      display="flex"
+      flexDirection="column"
     >
       {heroImage && (
         <Box
-          position="absolute"
+          {...artworkLayout}
           inset={0}
           backgroundImage={`url('${heroImage}')`}
           backgroundPosition={
             heroOverride ? { base: 'right center', lg: '85% center' } : { base: 'center', lg: '78% 34%' }
           }
-          backgroundSize={heroOverride ? { base: 'cover', lg: 'auto 100%' } : 'cover'}
+          backgroundSize={heroOverride ? 'auto 100%' : 'cover'}
           backgroundRepeat="no-repeat"
         />
       )}
@@ -1127,11 +1137,10 @@ function ImpactFundWideHero({
       <Flex
         position="relative"
         w="full"
-        maxW={`${dimensions.maxWidth + 24 * 2}px`}
-        minH={dimensions.impactLendingHero.minHeight}
-        mx="auto"
-        px={standardPadding}
-        py={{ base: 10, lg: 12 }}
+        minH={heroMinHeight}
+        px={heroContentPadding}
+        pt={{ base: 10, lg: 12 }}
+        pb={heroOverride ? { base: 6, lg: 12 } : { base: 10, lg: 12 }}
         align="center"
       >
         <VStack align="flex-start" spacing="22px" maxW={{ base: 'full', lg: '760px' }}>
@@ -1180,7 +1189,7 @@ function ImpactFundWideHero({
           </HStack>
         </VStack>
       </Flex>
-    </Box>
+    </InsetSection>
   )
 }
 
@@ -1661,30 +1670,23 @@ function LatamPageSection({
   children,
   colors,
   bg,
+  pt,
   py = dimensions.impactLendingSection.paddingY,
 }: {
   children: React.ReactNode
   colors: LatamSectionColors
   bg?: string
   py?: React.ComponentProps<typeof Box>['py']
+  pt?: React.ComponentProps<typeof Box>['pt']
 }): ReactNode {
+  const Section = bg ? InsetSection : Box
+
   return (
-    <Box
-      w="100vw"
-      maxW="100vw"
-      position="relative"
-      left="50%"
-      right="50%"
-      ml="-50vw"
-      mr="-50vw"
-      bg={bg ?? colors.pageBg}
-      py={py}
-      px={standardPadding}
-    >
+    <Section bg={bg ?? colors.pageBg} paddingTop={pt ?? py} paddingBottom={py} px={standardPadding}>
       <Box maxW={`${dimensions.maxWidth + 24 * 2}px`} mx="auto">
         {children}
       </Box>
-    </Box>
+    </Section>
   )
 }
 
@@ -2248,7 +2250,7 @@ function ImpactFundDetailContent({
             shouldDisableApply={shouldDisableApply}
           />
 
-          <LatamPageSection colors={latamSectionColors} py={dimensions.impactLendingSection.paddingYCompact}>
+          <LatamPageSection colors={latamSectionColors} py={dimensions.impactLendingSection.paddingYCompact} pt={0}>
             <LatamSurface colors={latamSectionColors}>{overviewSection}</LatamSurface>
           </LatamPageSection>
 

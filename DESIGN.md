@@ -170,7 +170,7 @@ Content sits in a centred column with a maximum width of 1200px (1248px includin
 
 Vertical rhythm has three tiers: 24px from a section title to its content, 24–32px between related blocks, and 48px (mobile) or 80px (desktop) between sections.
 
-The hero is full-bleed, 470px tall on desktop and 310px on mobile. A solid Deep Forest field covers the left 45% and fades out by 65%, with the photograph occupying the right 72% on desktop so the subject stays clear of the text.
+Heroes and sections with distinct backgrounds use the shared `InsetSection`: 6px outer gutters on mobile and a minimum of 12px on desktop, with 20px mobile / 28px desktop corners. Background panels and heroes share a width halfway between the viewport and a 1296px capped panel (with 24px minimum desktop gutters), halving the margins of that capped panel. Heroes have matching 24px mobile / 32px desktop top and bottom margins, with no additional top padding on the immediately following section. The hero is inset, 470px tall on desktop and 310px on mobile. A solid Deep Forest field covers the left 45% and fades out by 65%, with the photograph occupying the right 72% on desktop so the subject stays clear of the text.
 
 Section titles are full-width and left-aligned, with any section action on the same row at the right. Inside cards, the title runs full width and the action button sits right-aligned, level with the copy on desktop and below it on mobile.
 
@@ -186,7 +186,7 @@ Nearly flat. Depth comes from tonal layering: a lighter paper card on the parchm
 
 ## Shapes
 
-Gently rounded and consistent. Cards and large buttons use a 10px radius; images and tiles nested inside a card use 6px; medium buttons use 8px. Images that run to a card's edge take the card's top corners and no radius of their own. Circles are reserved for avatars and the Live indicator, not for icon backdrops.
+Gently rounded and consistent. Cards use a 14px radius; images and tiles nested inside a card use 8px. Large buttons retain a 10px radius and medium buttons use 8px. Images that run to a card's edge take the card's top corners and no radius of their own. Circles are reserved for avatars and the Live indicator, not for icon backdrops.
 
 ## Components
 
@@ -197,12 +197,11 @@ Gently rounded and consistent. Cards and large buttons use a 10px radius; images
 - **Outline:** transparent with a 1px sand border and secondary-text label; used for secondary actions such as "Read the case study". On hover the border and label turn forest over a faint forest tint.
 - **Ghost:** text and arrow only; used for "Discover more" in section headers. On hover it gains the same faint forest tint.
 
-### Chips
-- **Style:** the region filter (Live, In Latin America, In Africa) uses outline buttons, centred above the grant grid, each with a leading Phosphor icon.
-- **State:** the selected chip sets `aria-pressed`, which the outline button styles with a forest tint fill, a Deep Forest border and a Deep Forest label. The Live chip carries the animated Live dot.
+### Landing project discovery
+- Show Live Circular Grants and Recent Circular Grants directly beneath the hero and focus panel respectively. The landing page has no Live / region filter button group.
 
 ### Cards / Containers
-- **Corner Style:** 10px.
+- **Corner Style:** 14px.
 - **Background:** Parchment Raised on the Warm Parchment page.
 - **Shadow Strategy:** the single card shadow (see Elevation & Depth).
 - **Border:** 0.5px hairline in sand border.
@@ -215,7 +214,7 @@ Gently rounded and consistent. Cards and large buttons use a 10px radius; images
 - A top bar on the page background (no separate fill or divider) with the Geyser wordmark, text menu triggers, an outline "Support Geyser" button and a text "Log in". Vertical padding is 10px on desktop and 6px on mobile.
 
 ### Hero
-- Full-bleed photograph under a Deep Forest field, with a white display headline that breaks before its emphasised phrase, and a medium-weight white lead paragraph. No buttons.
+- Inset, rounded photograph under a Deep Forest field, with a white display headline that breaks before its emphasised phrase, and a medium-weight white lead paragraph. No buttons.
 
 ### Icons
 - Phosphor (`react-icons/pi`) is the only icon set. Icons are drawn bare, in Deep Forest or the current text colour, never inside a coloured circle.

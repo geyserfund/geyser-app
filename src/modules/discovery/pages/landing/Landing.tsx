@@ -12,7 +12,7 @@ export const Landing = () => {
   const isLandingPage = location.pathname === getPath('discoveryLanding')
 
   return (
-    <VStack w="full" spacing={4}>
+    <VStack w="full" spacing={0}>
       {isLandingPage ? <Hero /> : null}
 
       <Box
