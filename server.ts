@@ -9,6 +9,8 @@ console.log(
 )
 
 const PORT = process.env.PORT || 3000
+// Cap how long a crawler request waits on the prerender service before falling back to the SPA shell
+const PRERENDER_TIMEOUT_MS = Number(process.env.PRERENDER_TIMEOUT_MS) || 20000
 const app = express()
 const SITE_ORIGIN = 'https://geyser.fund'
 const DEFAULT_META_IMAGE = 'https://storage.googleapis.com/geyser-projects-media/app/seo/Geyser_main.png'
@@ -206,6 +208,12 @@ app.use(
   prerender
     .set('prerenderToken', process.env.PRERENDER_TOKEN)
     .set('prerenderServiceUrl', process.env.PRERENDER_SERVICE_URL)
+    // prerender-node copies these options into every upstream request, so the getter yields a fresh deadline each time
+    .set('prerenderServerRequestOptions', {
+      get signal() {
+        return AbortSignal.timeout(PRERENDER_TIMEOUT_MS)
+      },
+    })
     .set('beforeRender', (req, done) => {
       const routeDecision = getPrerenderRouteDecision(req?.url || '/')
       if (routeDecision.allow) return done()

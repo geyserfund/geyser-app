@@ -1,3 +1,11 @@
+## [1.2.0](https://github.com/geyserfund/geyser-app/compare/v1.1.0...v1.2.0) (2026-10-21)
+
+
+### Bug Fixes
+
+* **seo:** cap how long crawler requests wait on the prerender service ([252f64c](https://github.com/geyserfund/geyser-app/commit/252f64c74060b596e77c7b3568686e78226aaa20))
+* **seo:** wait for project data before the prerender snapshot ([8bee36e](https://github.com/geyserfund/geyser-app/commit/8bee36e91b7310cdd50945c35b7e11252237a0ab))
+
 ## [1.1.0](https://github.com/geyserfund/geyser-app/compare/v1.0.6...v1.1.0) (2026-10-15)
 
 
