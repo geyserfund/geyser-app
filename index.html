@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Make the prerender service wait for usePrerenderReady on routes that report readiness,
+      // instead of snapshotting the page before the project data has loaded
+      if (/^\/project\/[^/]+/.test(window.location.pathname)) window.prerenderReady = false
+    </script>
     <link rel="icon" type="image/svg+xml" href="/logo-brand.svg" />
     <link rel="apple-touch-icon" type="image/svg+xml" href="/logo-brand.svg" />
     <link rel="apple-touch-icon" type="image/png" href="/icons/192.png" sizes="192x192" />
