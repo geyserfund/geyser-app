@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/geyserfund/geyser-app/compare/v1.2.0...v1.3.0) (2026-10-22)
+
+
+### Bug Fixes
+
+* **security:** run on Node 22.23.4 to reject compromised eMudhra CAs ([0ad7daa](https://github.com/geyserfund/geyser-app/commit/0ad7daa2b039743c7c12fe232f7c2051f33ff025))
+
 ## [1.2.0](https://github.com/geyserfund/geyser-app/compare/v1.1.0...v1.2.0) (2026-10-21)
 
 
