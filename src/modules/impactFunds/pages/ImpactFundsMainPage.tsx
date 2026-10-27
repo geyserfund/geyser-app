@@ -44,6 +44,8 @@ const AFRIBIT_WORKSHOP_DESCRIPTION =
 const AFRIBIT_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/watch?v=pU1KxP0ddng'
 const CIRCULAR_ECONOMIES_REPORT_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
+const IMPACT_REPORT_Q3_2026_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/Geyser%20Circular%20Grants%20%26%20Impact%20Fund%20%C2%B7%20Q3%202026%20Impact%20Report.pdf'
 const IMPACT_REPORTS_2022_2024_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Impact%20Reports%20-%202022-2024.pdf'
 const FIELD_PARTNERS_PRESENTATION_URL =
@@ -148,6 +150,11 @@ export const impactFundsResourceCards = {
     },
   ],
   reports: [
+    {
+      eyebrow: 'Report',
+      title: 'Circular Grants & Impact Fund · Q3 2026 Impact Report',
+      url: IMPACT_REPORT_Q3_2026_URL,
+    },
     {
       eyebrow: 'Report',
       title: 'Circular Economies Report',
