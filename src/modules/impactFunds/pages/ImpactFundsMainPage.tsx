@@ -44,12 +44,13 @@ const AFRIBIT_WORKSHOP_DESCRIPTION =
 const AFRIBIT_WORKSHOP_VIDEO_URL = 'https://www.youtube.com/watch?v=pU1KxP0ddng'
 const CIRCULAR_ECONOMIES_REPORT_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
+// Reports and the Field Partner booklet link to Figma decks so they can be updated without re-uploading files.
 const IMPACT_REPORT_Q3_2026_URL =
-  'https://storage.googleapis.com/geyser-media/impact-funds/Geyser%20Circular%20Grants%20%26%20Impact%20Fund%20%C2%B7%20Q3%202026%20Impact%20Report.pdf'
+  'https://www.figma.com/deck/k7upGxsmJadhNVkxoqxSpQ/Geyser-Circular-Grants---Impact-Fund-%C2%B7-Q3-2026-Impact-Report?node-id=3-2&t=htzinZIWG7COa3Ol-1'
 const IMPACT_REPORTS_2022_2024_URL =
-  'https://storage.googleapis.com/geyser-media/impact-funds/Impact%20Reports%20-%202022-2024.pdf'
+  'https://www.figma.com/deck/U4VHaM0zCr1uemZGYZ9PQr/Report---Impact-Fund-2022%E2%80%932024?node-id=13-164&t=vZYWgMYCHNt8g1JE-1'
 const FIELD_PARTNERS_PRESENTATION_URL =
-  'https://storage.googleapis.com/geyser-media/impact-funds/Field%20Partners%20-%20Presentation.pdf'
+  'https://www.figma.com/deck/uNXI6qZWMee1UjC28MrY9K/Field-Partner-Booklet--EXT-?node-id=14-2&t=zvwEngw31XZA8hzD-1'
 // The externally managed storage object keeps its historical name for continuity.
 const CIRCULAR_GRANTS_PRESENTATION_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/recoverable-grant-booklet.pdf'
